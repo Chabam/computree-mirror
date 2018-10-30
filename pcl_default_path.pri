@@ -1,0 +1,26 @@
+unix {
+    PCL_BASE_PATH = "/usr/"
+
+    PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib/x86_64-linux-gnu"
+    PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.8"
+    EIGEN_INC_PATH = "$${PCL_BASE_PATH}include/eigen3"
+    QHULL_INC_PATH = "$${PCL_BASE_PATH}include"
+    QHULL_LIBS_PATH = "$${PCL_BASE_PATH}lib/x86_64-linux-gnu"
+    FLANN_INC_PATH = "$${PCL_BASE_PATH}include"
+    BOOST_LIBS_PATH = "$${PCL_BASE_PATH}lib/x86_64-linux-gnu"
+    BOOST_INC_PATH = "$${PCL_BASE_PATH}include"
+}
+
+windows {
+    PCL_BASE_PATH = "$$PWD/../ComputreeDependencies/PCL 1.8.0/"
+    PCL_3RDPARTY_PATH = "$${PCL_BASE_PATH}3rdParty/"
+
+    PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
+    PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.8"
+    EIGEN_INC_PATH = "$${PCL_3RDPARTY_PATH}Eigen/eigen3"
+    QHULL_INC_PATH = "$${PCL_3RDPARTY_PATH}Qhull/include"
+    QHULL_LIBS_PATH = "$${PCL_3RDPARTY_PATH}Qhull/lib"
+    FLANN_INC_PATH = "$${PCL_3RDPARTY_PATH}FLANN/include"
+    BOOST_LIBS_PATH = "$${PCL_3RDPARTY_PATH}Boost/lib"
+    BOOST_INC_PATH = "$${PCL_3RDPARTY_PATH}Boost/include/boost-1_61"
+}

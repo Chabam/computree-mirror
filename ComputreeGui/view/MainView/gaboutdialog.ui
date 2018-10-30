@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GAboutDialog</class>
+ <widget class="QDialog" name="GAboutDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>968</width>
+    <height>571</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>A propos de Computree</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QWidget" name="widget_4" native="true">
+     <property name="styleSheet">
+      <string notr="true">QWidget {background-color: white}</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="widget" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelImage_5">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>75</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../../resource/icones.qrc">:/Icones/Icones/logo_Ecofor.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelImage_4">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>75</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../../resource/icones.qrc">:/Icones/Icones/logo_ONF.jpg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelImage">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>75</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../../resource/icones.qrc">:/Icones/Icones/logo_IGN.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelImage_2">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>75</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../../resource/icones.qrc">:/Icones/Icones/logo_INRA.jpg</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelImage_3">
+           <property name="maximumSize">
+            <size>
+             <width>300</width>
+             <height>75</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../../resource/icones.qrc">:/Icones/Icones/logo_Université_de_Sherbrooke.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>150</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>200</width>
+            <height>71</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../../resource/icones.qrc">:/Icones/Icones/Logo-Computree.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>
+&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+
+&lt;p&gt;&lt;span style=&quot; font-famliy:'Sans'; font-size:10pt; font-weight:600;&quot;&gt;Computree v5.0&lt;/span&gt;&lt;/p&gt;
+
+&lt;p style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;Managed by the Computree Group:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt; GIP Ecofor&lt;/li&gt;
+&lt;li&gt; ONF&lt;/li&gt;
+&lt;li&gt; IGN&lt;/li&gt;
+&lt;li&gt; INRA&lt;/li&gt;
+&lt;li&gt; University of Sherbrooke&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p style=&quot; font-family:'Sans'; font-size:10pt; font-weight:600;&quot;&gt;The use of Computree is subject to the acceptance of the &lt;a href=&quot;http://rdinnovation.onf.fr/projects/computree/wiki/En_charte_v5&quot;&gt;Computree Charter&lt;/a&gt;&lt;/p&gt;
+
+&lt;br&gt;
+&lt;p style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;Computree GUI interface is licenced under GPL license: &lt;a href=&quot;https://opensource.org/licenses/GPL-3.0&quot;&gt;https://opensource.org/licenses/GPL-3.0&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;ComputreeCore, PluginShared and PluginBase are licenced under LGPL license: &lt;a href=&quot;https://opensource.org/licenses/LGPL-3.0&quot;&gt;https://opensource.org/licenses/LGPL-3.0&lt;/a&gt;&lt;/p&gt;
+
+&lt;br&gt;
+&lt;p style=&quot; font-family:'Sans'; font-size:10pt;&quot;&gt;Computree uses following libraries:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt; AMKgl: &lt;a href=&quot;http://www.ic-arts.eu/arts/&quot;&gt;http://www.ic-arts.eu/arts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt; MuParser: &lt;a href=&quot;http://muparser.beltoforion.de&quot;&gt;http://muparser.beltoforion.de&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt; PCL: &lt;a href=&quot;http://pointclouds.or/&quot;&gt;http://pointclouds.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt; OpenCV: &lt;a href=&quot;http://opencv.org&quot;&gt;http://opencv.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt; GDAL: &lt;a href=&quot;http://www.gdal.org&quot;&gt;http://www.gdal.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt; GEOS: &lt;a href=&quot;https://trac.osgeo.org/geos&quot;&gt;https://trac.osgeo.org/geos&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt; GSL: &lt;a href=&quot;https://www.gnu.org/software/gsl&quot;&gt;https://www.gnu.org/software/gsl&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="widget_3" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonFermer">
+           <property name="text">
+            <string>Fermer</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resource/icones.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pushButtonFermer</sender>
+   <signal>clicked()</signal>
+   <receiver>GAboutDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>448</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>136</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

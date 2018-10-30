@@ -1,0 +1,206 @@
+/****************************************************************************
+
+ Copyright (C) 2010-2012 the Office National des Forêts (ONF), France
+                     and the Association de Recherche Technologie et Sciences (ARTS), Ecole Nationale Supérieure d'Arts et Métiers (ENSAM), Cluny, France.
+                     All rights reserved.
+
+ Contact : alexandre.piboule@onf.fr
+
+ Developers : Alexandre PIBOULE (ONF)
+
+ This file is part of PluginShared library 2.0.
+
+ PluginShared is free library: you can redistribute it and/or modify
+ it under the terms of the GNU Lesser General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ PluginShared is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU Lesser General Public License
+ along with PluginShared.  If not, see <http://www.gnu.org/licenses/lgpl.html>.
+
+*****************************************************************************/
+
+#include "ct_scanpath.h"
+
+#include <limits>
+
+const CT_StandardScanPathDrawManager CT_ScanPath::SCANPATH_DRAW_MANAGER;
+
+CT_ScanPath::CT_ScanPath() : CT_AbstractItemDrawableWithoutPointCloud()
+{
+    double max = std::numeric_limits<double>::max();
+    _minCoordinates = Eigen::Vector3d(max,max,max);
+    _maxCoordinates = Eigen::Vector3d(-max,-max,-max);
+    _minGPSTime = max;
+    _maxGPSTime = -max;
+    _sorted = false;
+
+    setBaseDrawManager(&SCANPATH_DRAW_MANAGER);
+}
+
+CT_ScanPath::CT_ScanPath(const CT_OutAbstractSingularItemModel *model,
+                                     const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+{
+    double max = std::numeric_limits<double>::max();
+    _minCoordinates = Eigen::Vector3d(max,max,max);
+    _maxCoordinates = Eigen::Vector3d(-max,-max,-max);
+    _minGPSTime = max;
+    _maxGPSTime = -max;
+    _sorted = false;
+
+    setBaseDrawManager(&SCANPATH_DRAW_MANAGER);
+}
+
+CT_ScanPath::CT_ScanPath(const QString &modelName,
+                        const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
+{
+    double max = std::numeric_limits<double>::max();
+    _minCoordinates = Eigen::Vector3d(max,max,max);
+    _maxCoordinates = Eigen::Vector3d(-max,-max,-max);
+    _minGPSTime = max;
+    _maxGPSTime = -max;
+    _sorted = false;
+
+    setBaseDrawManager(&SCANPATH_DRAW_MANAGER);
+}
+
+
+
+void CT_ScanPath::addPathPoint(double gpsTime, double x, double y, double z)
+{
+    _pathPoints.append(PathPoint(gpsTime, Eigen::Vector3d(x,y,z)));
+    _sorted = false;
+
+    if (x < _minCoordinates(0)) {_minCoordinates(0) = x;}
+    if (y < _minCoordinates(1)) {_minCoordinates(1) = y;}
+    if (z < _minCoordinates(2)) {_minCoordinates(2) = z;}
+    if (gpsTime < _minGPSTime) {_minGPSTime = gpsTime;}
+
+    if (x > _maxCoordinates(0)) {_maxCoordinates(0) = x;}
+    if (y > _maxCoordinates(1)) {_maxCoordinates(1) = y;}
+    if (z > _maxCoordinates(2)) {_maxCoordinates(2) = z;}
+    if (gpsTime > _maxGPSTime) {_maxGPSTime = gpsTime;}
+}
+
+void CT_ScanPath::addPathPoint(double gpsTime, const Eigen::Vector3d &point)
+{
+    addPathPoint(gpsTime, point(0), point(1), point(2));
+}
+
+bool CT_ScanPath::isInScanPath(double gpsTime)
+{
+    if (gpsTime < _minGPSTime) {return false;}
+    if (gpsTime > _maxGPSTime) {return false;}
+    return true;
+}
+
+Eigen::Vector3d CT_ScanPath::getPathPointForGPSTime(double gpsTime)
+{
+    if (!_sorted)
+    {
+        _sorted = true;
+        std::sort(_pathPoints.begin(), _pathPoints.end(), sortPathPointsByGPSTime);
+    }
+
+    double lastGPSTime = -1;
+    Eigen::Vector3d lastPoint(0,0,0);
+    int lastIndex = -1;
+
+    double currentGPSTime = -1;
+    Eigen::Vector3d currentPoint(0,0,0);
+
+    // Début d'optimisation
+    bool found = false;
+    for (int i = 0 ; i < _pathPoints.size() && !found; i += 10000)
+    {
+        const PathPoint& pathpoint = _pathPoints.at(i);
+
+        if (pathpoint._gpsTime < gpsTime) {
+            currentGPSTime = pathpoint._gpsTime;
+            currentPoint   = pathpoint._position;
+            lastIndex = i;
+        } else {
+            found = true;
+        }
+    }
+
+    found = false;
+    for (int i = lastIndex + 1 ; i < _pathPoints.size() && !found; i += 1000)
+    {
+        const PathPoint& pathpoint = _pathPoints.at(i);
+
+        if (pathpoint._gpsTime < gpsTime) {
+            currentGPSTime = pathpoint._gpsTime;
+            currentPoint   = pathpoint._position;
+            lastIndex = i;
+        } else {
+            found = true;
+        }
+    }
+
+    found = false;
+    for (int i = lastIndex + 1 ; i < _pathPoints.size() && !found; i += 100)
+    {
+        const PathPoint& pathpoint = _pathPoints.at(i);
+
+        if (pathpoint._gpsTime < gpsTime) {
+            currentGPSTime = pathpoint._gpsTime;
+            currentPoint   = pathpoint._position;
+            lastIndex = i;
+        } else {
+            found = true;
+        }
+    }
+    // Fin d'optimisation
+
+
+    found = false;
+    for (int i = lastIndex + 1 ; i < _pathPoints.size() && !found; i++)
+    {
+        const PathPoint& pathpoint = _pathPoints.at(i);
+
+        lastGPSTime = currentGPSTime;
+        lastPoint = currentPoint;
+
+        currentGPSTime = pathpoint._gpsTime;
+        currentPoint   = pathpoint._position;
+
+        if (currentGPSTime > gpsTime) {found = true;}
+    }
+
+    if (lastGPSTime == -1 || !found)
+    {
+        return currentPoint;
+    } else {
+        Eigen::Vector3d direction = currentPoint - lastPoint;
+        double ratio = (gpsTime - lastGPSTime) / (currentGPSTime - lastGPSTime);
+
+        Eigen::Vector3d vec = lastPoint + direction*ratio;
+        return vec;
+    }
+}
+
+CT_AbstractItemDrawable* CT_ScanPath::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
+{
+    CT_ScanPath *ref = new CT_ScanPath((const CT_OutAbstractSingularItemModel *)model, result);
+    ref->setAlternativeDrawManager(getAlternativeDrawManager());
+
+    ref->_pathPoints = this->_pathPoints;
+
+    return ref;
+}
+
+CT_AbstractItemDrawable *CT_ScanPath::copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
+{
+    CT_ScanPath *ref = new CT_ScanPath(modelName, result);
+    ref->setAlternativeDrawManager(getAlternativeDrawManager());
+
+    ref->_pathPoints = this->_pathPoints;
+
+    return ref;
+}

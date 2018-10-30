@@ -1,0 +1,137 @@
+#include "pointcloudchunkmanagerbycoordinate.h"
+
+#include "scene/tools/dispatchinformation.h"
+#include "tools/pointcloudattributesprovider.h"
+#include "scene/permanentscene.h"
+
+PointCloudChunkManagerByCoordinate::PointCloudChunkManagerByCoordinate(GLenum glMode,
+                                                                       const quint8 &nVertexPerObject,
+                                                                       const size_t &beginGlobalIndex,
+                                                                       const size_t &cloudSize) : PointCloudChunkManagerByCoordinateSuperClass(glMode,
+                                                                                                             nVertexPerObject,
+                                                                                                             beginGlobalIndex,
+                                                                                                             cloudSize)
+{
+    m_lastDispatchInfos = NULL;
+    m_multiplePointsActivated = false;
+    m_pointCloudProvider = NULL;
+}
+
+void PointCloudChunkManagerByCoordinate::beginAddMultiplePoints()
+{
+    m_lastDispatchInfos = NULL;
+    m_multiplePointsActivated = true;
+}
+
+void PointCloudChunkManagerByCoordinate::endAddMultiplePoints()
+{
+    m_multiplePointsActivated = false;
+}
+
+void PointCloudChunkManagerByCoordinate::addPoint(const size_t &globalIndex,
+                                                  PermanentItemInformation* dispatchInfos)
+{
+    addPoint(globalIndex - getBeginningOfCloud(),
+             globalIndex,
+             dispatchInfos);
+}
+
+void PointCloudChunkManagerByCoordinate::addPoint(const size_t &localIndex,
+                                                  const size_t &globalIndex,
+                                                  PermanentItemInformation* dispatchInfos)
+{
+    GLuint csI = GLuint(getChunkUniqueIndexForObjectAt(globalIndex));
+
+    const ChunkType* currentChunk = m_lastChunkUsed;
+
+    ChunkType& chunk = createOrGetChunkFromUniqueIndex(csI);
+
+    if(dispatchInfos != NULL)
+    {
+        if(m_multiplePointsActivated
+                && (currentChunk == m_lastChunkUsed)
+                && (m_lastDispatchInfos != NULL)) {
+            m_lastDispatchInfos->addObjects(1);
+        } else {
+            m_lastDispatchInfos = &dispatchInfos->createOrGetObjectForChunk(m_lastChunkUsed);
+
+            if(m_lastDispatchInfos->begin() == DispatchInformation::INVALID_BEGIN)
+                m_lastDispatchInfos->setBegin(m_lastChunkUsed->countPoints());
+
+            m_lastDispatchInfos->addObjects(1);
+        }
+    }
+
+    chunk.addPoint(localIndex);
+}
+
+PointCloudChunkManagerByCoordinate::PointCloudChunk* PointCloudChunkManagerByCoordinate::createNewChunk(const size_t &globalBeginIndex,
+                                                                                                        const size_t &size)
+{
+    m_lastDispatchInfos = NULL;
+
+    Eigen::Vector3d offset;
+    uint uniqueKey;
+
+    getCurrentCoordinateSystemInformations(offset, uniqueKey);
+
+    return new PointCloudChunk(uniqueKey,
+                               globalBeginIndex,
+                               size,
+                               offset);
+}
+
+void PointCloudChunkManagerByCoordinate::initChunk(PointCloudChunk *chunk)
+{
+    chunk->setContextAccessor(getContextAccessor());
+    chunk->setAttributesAccessor(getAttributesAccessor());
+    chunk->setDrawModeToUse(getDrawModeToUse());
+
+    chunk->init();
+}
+
+void PointCloudChunkManagerByCoordinate::mustUpdateInfoBO(GenericChunkManager::RendererContext *currentContext)
+{
+    Q_ASSERT(m_pointCloudProvider != NULL);
+
+    ElementInfo* info = &(*m_pointCloudProvider->createOrGetInfoCloud())[getBeginningOfCloud()];
+
+    BufferObjectManager& buffer = currentContext->getBufferObjectManager();
+    buffer.updateInfosBO(info, getCloudSize());
+}
+
+void PointCloudChunkManagerByCoordinate::mustUpdateColorBO(GenericChunkManager::RendererContext *currentContext)
+{
+    Q_ASSERT(m_pointCloudProvider != NULL);
+
+    Basic::LocalColor* color = NULL;
+
+    if(m_pointCloudProvider->getColorCloud() != NULL)
+        color = &(*m_pointCloudProvider->getColorCloud())[getBeginningOfCloud()];
+
+    BufferObjectManager& buffer = currentContext->getBufferObjectManager();
+    currentContext->getShaders().bindPointShader();
+    currentContext->getShaders().setUseColorAttribute(buffer.updateColorsBO(color, getCloudSize()));
+    currentContext->getShaders().releasePointsShader();
+}
+
+void PointCloudChunkManagerByCoordinate::mustUpdateNormalBO(GenericChunkManager::RendererContext *currentContext)
+{
+    Q_ASSERT(m_pointCloudProvider != NULL);
+
+    Basic::LocalNormal* normal = NULL;
+
+    if(m_pointCloudProvider->getNormalCloud() != NULL)
+        normal = &(*m_pointCloudProvider->getNormalCloud())[getBeginningOfCloud()];
+
+    BufferObjectManager& buffer = currentContext->getBufferObjectManager();
+    buffer.updateNormalsBO(normal, getCloudSize());
+}
+
+void PointCloudChunkManagerByCoordinate::attributesAccessorChanged(const GenericChunkManager::AttributesAccessor *aa)
+{
+    m_pointCloudProvider = NULL;
+
+    if(aa != NULL)
+        m_pointCloudProvider = aa->getPermanentScene()->getPointCloudAttributesProvider();
+}

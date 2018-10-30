@@ -1,0 +1,88 @@
+To use this engine you must do some preparations.
+
+--------------
+How it works :
+--------------
+
+- This engine is not templated but use the "typedef" mechanism to enable the user to use classes of her software
+
+	* For example the "point" is declared like this :
+		class PointOfMySoftware;
+		namespace AMKgl {
+			typedef PointOfMySoftware AMKglPoint;
+		}
+		
+	* AMKgl engine use the "AMKglPoint" typedef in all classes that must access to point
+
+- All typedef was declared in files of type "defineXXX.h" where XXX is point, normal, color, etc.... 
+- To include the definition header of the class you must declare the path in files of type "includeXXX.h" where XXX is point, normal, color, etc.... 
+
+	***** You can see an example of files used in "AMKgl/generic" directory *****
+	
+-----------------------------------
+How to compile it for my software :
+-----------------------------------
+
+* Let's say your folders are ordered like this :
+
+	root
+	|-- amkgl_user_definitions.pri
+	|-- AMKgl
+	|	|-- ...
+	|	|-- generic (content to copy in folder "amkgl_defines_for_use_with_my_software")
+	|	|-- ...
+	|
+	|-- mysoftware
+	 	|-- ...
+	 	|-- amkgl_defines_for_use_with_my_software
+		|	|-- definecloudindexes.h	(open it and modify it)
+		|	|-- ....
+		|	|-- includecloudindexes.h 	(open it and modify it)
+		|	|-- ....
+		|
+	 	|-- ...
+
+
+- First copy the content of the "AMKgl/generic" directory in a directory named "amkgl_defines_for_use_with_my_software" in your root software folder
+
+- Create a file in .. directory (from AMKgl directory) with name "amkgl_user_definitions.pri"
+	* This file must declare the variable "AMKGL_DEFINES_DIR" and contains the path to the directory where to find all files of type "defineXXX.h" and "includeXXX.h" like this :
+		AMKGL_DEFINES_DIR = ../mysoftware/amkgl_defines_for_use_with_my_software
+		
+- Open all files of type "defineXXX.h" and change the class "DummyXXXX" by the name of your class
+
+- Open all files of type "includeXXX.h" and change the path "dummyXXXX.h" by the path to your header and add the path to your source file ".cpp" if the class implement methods in a cpp file.
+
+***** You can now open the amkgl.pro file, execute qmake and compile it ***********
+
+A file AMKgl.lib will be create in "compiled" directory. This file must be linked to your software.
+
+------------------------------
+How to use it in my software :
+------------------------------
+
+AMKgl use some interfaces that you must inherit from to be able to use the engine correctly. This interfaces was declared in AMKgl/interfaces folder :
+
+- IAMKglLog : you can inherit from this class if you want but it is not necessary if you don't want log from the engine
+- ICoordinateSystemManager : read the comment to know what your class must do to let the engine use it correctly
+- IEasyAccess : fundamental class ! you must inherit from this class to let the engine to get easy access to necessary elements. This class is used by AMKglApp.
+- IGlobalPointCloudManager : fundamental class ! you must inherit from this class to let the engine to get easy access to the global points cloud and do some others job. This class is used by IEasyAccess.
+- IGraphicsDocument : inherit from this class to make the document that will contains one or more iglviewer
+
+A final element is necessary : the viewer ! You must inherit from it to redefine some methods and after that you can use it in your gui
+
+- See view/amkglviewer.h for more information
+
+When you have inherited from all this class and redefined all methods you must set in your main.cpp file the IEasyAcess object to the engine :
+
+#include "amkglapp.h"
+
+int main() {
+	QApplication app;
+	...
+	MyAMKglEasyAccess ea;
+	....
+	AMKglApp::uniqueInstance()->setEasyAccess( &ea );
+	...
+	return app.exec();
+}

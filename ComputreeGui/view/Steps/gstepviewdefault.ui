@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GStepViewDefault</class>
+ <widget class="QWidget" name="GStepViewDefault">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>907</width>
+    <height>565</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="1">
+      <widget class="QPushButton" name="pushButtonConfigStepName">
+       <property name="text">
+        <string>Configuration</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Nom des étapes</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLineEdit" name="lineEditSearch">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Taper du texte pour rechercher une étape. La recherche ne respecte pas la casse.&lt;/p&gt;&lt;p&gt;Vous pouvez si vous le souhaitez utiliser votre propre expression réguilère en tapant tout d'abord &lt;span style=&quot; font-weight:600;&quot;&gt;r:&lt;/span&gt; suivi de votre expression. Si vous ne souhaitez pas utiliser la casse tapez &lt;span style=&quot; font-weight:600;&quot;&gt;i:&lt;/span&gt; après &lt;span style=&quot; font-weight:600;&quot;&gt;r:&lt;/span&gt; puis votre expression régulière. &lt;/p&gt;&lt;p&gt;Exemple simple : &lt;span style=&quot; font-weight:600;&quot;&gt;grilles&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Exemple d'expression régulière : &lt;span style=&quot; font-weight:600;&quot;&gt;r:i:.*grilles.*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Rechercher des étapes...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButtonConfigSearch">
+       <property name="text">
+        <string>Configuration</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="GStepsTreeViewDefault" name="treeView">
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="horizontalSpacing">
+       <number>0</number>
+      </property>
+      <item row="1" column="4">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="pb_replaceLeft">
+        <property name="text">
+         <string>Replacer à gauche</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="pb_replaceRight">
+        <property name="text">
+         <string>Replacer à droite</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkBoxShowAtLastPosition">
+        <property name="text">
+         <string>Replacer au démarrage à la dernière position connue</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GStepsTreeViewDefault</class>
+   <extends>QTreeView</extends>
+   <header>view/Steps/gstepstreeviewdefault.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

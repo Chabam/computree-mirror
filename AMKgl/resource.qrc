@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/points/simple.vert</file>
+        <file>shaders/points/normaldraw.glsl</file>
+        <file>shaders/points/normaldraw.vert</file>
+        <file>shaders/points/normaldraw.frag</file>
+        <file>shaders/instanced/generic.vert</file>
+        <file>shaders/ellipses/simple.vert</file>
+        <file>shaders/box/simple.vert</file>
+        <file>shaders/quads/simple.vert</file>
+        <file>shaders/generic/simple.vert</file>
+        <file>shaders/common.vert</file>
+        <file>shaders/sphere/simple.vert</file>
+    </qresource>
+</RCC>
