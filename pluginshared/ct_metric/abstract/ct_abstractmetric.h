@@ -27,7 +27,7 @@ public:
     /**
      * @brief Call this method to clear and create attributes (after configuration)
      */
-    void postConfigure();
+    void finalizeConfiguration();
 
     /**
      * @brief Call this method to init attributes models

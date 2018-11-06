@@ -103,7 +103,7 @@ void CT_AbstractMetric::clearAttributes()
     m_attributes.clear();
 }
 
-void CT_AbstractMetric::postConfigure()
+void CT_AbstractMetric::finalizeConfiguration()
 {
     clearAttributes();
     createAttributes();

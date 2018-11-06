@@ -18,7 +18,7 @@ public:
     /**
      * @brief Do nothing by default. You can inherit it if you want to do some change after configuration
      */
-    void postConfigure() override {}
+    void finalizeConfiguration() override {}
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;

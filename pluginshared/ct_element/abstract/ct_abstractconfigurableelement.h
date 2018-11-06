@@ -90,7 +90,7 @@ public:
     /**
      * @brief Called after configuration
      */
-    virtual void postConfigure() = 0;
+    virtual void finalizeConfiguration() = 0;
 };
 
 #endif // CT_ABSTRACTCONFIGURABLEELEMENT_H

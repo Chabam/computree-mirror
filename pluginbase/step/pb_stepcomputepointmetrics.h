@@ -67,6 +67,8 @@ protected:
 
     bool postConfigure();
 
+    bool finalizePostConfiguration() override;
+
     /*! \brief Output results specification
      * 
      * Specification of output results models created by the step (OUT)

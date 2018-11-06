@@ -116,6 +116,18 @@ bool PB_StepComputeRasterMetrics::postConfigure()
     return false;
 }
 
+bool PB_StepComputeRasterMetrics::finalizePostConfiguration()
+{
+    QListIterator<CT_AbstractConfigurableElement *> it(m_selectedRasterMetrics);
+    while (it.hasNext())
+    {
+        CT_AbstractMetric_Raster* metric = (CT_AbstractMetric_Raster*) it.next();
+        metric->finalizeConfiguration();
+    }
+
+    return true;
+}
+
 
 // Creation and affiliation of OUT models
 void PB_StepComputeRasterMetrics::createOutResultModelListProtected()
@@ -129,7 +141,6 @@ void PB_StepComputeRasterMetrics::createOutResultModelListProtected()
         while (it.hasNext())
         {
             CT_AbstractMetric_Raster* metric = (CT_AbstractMetric_Raster*) it.next();
-            metric->postConfigure();
             metric->initAttributesModels(resCpy_res, _outMetrics_ModelName);
         }
     }

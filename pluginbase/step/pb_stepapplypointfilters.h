@@ -63,6 +63,8 @@ protected:
 
     bool postConfigure();
 
+    bool finalizePostConfiguration() override;
+
 
     /*! \brief Output results specification
      * 

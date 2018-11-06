@@ -116,6 +116,19 @@ bool PB_StepApplyPointFilters::postConfigure()
     return false;
 }
 
+bool PB_StepApplyPointFilters::finalizePostConfiguration()
+{
+    QListIterator<CT_AbstractConfigurableElement *> it(m_selectedXYZFilters);
+
+    while (it.hasNext())
+    {
+        CT_AbstractFilter_XYZ* filter = (CT_AbstractFilter_XYZ*) it.next();
+        filter->finalizeConfiguration();
+    }
+
+    return true;
+}
+
 // Creation and affiliation of OUT models
 void PB_StepApplyPointFilters::createOutResultModelListProtected()
 {       
@@ -126,7 +139,6 @@ void PB_StepApplyPointFilters::createOutResultModelListProtected()
         while (it.hasNext())
         {
             CT_AbstractFilter_XYZ* filter = (CT_AbstractFilter_XYZ*) it.next();
-            filter->postConfigure();
 
             CT_AutoRenameModels* modelName = new CT_AutoRenameModels();
             _modelNames.insert(filter, modelName);

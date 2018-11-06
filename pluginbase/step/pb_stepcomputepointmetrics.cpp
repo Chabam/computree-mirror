@@ -147,6 +147,18 @@ bool PB_StepComputePointMetrics::postConfigure()
     return false;
 }
 
+bool PB_StepComputePointMetrics::finalizePostConfiguration()
+{
+    QListIterator<CT_AbstractConfigurableElement *> it(m_selectedXYZMetrics);
+    while (it.hasNext())
+    {
+        CT_AbstractMetric_XYZ* metric = dynamic_cast<CT_AbstractMetric_XYZ*>(it.next());
+        metric->finalizeConfiguration();
+    }
+
+    return true;
+}
+
 
 // Creation and affiliation of OUT models
 void PB_StepComputePointMetrics::createOutResultModelListProtected()
@@ -160,7 +172,6 @@ void PB_StepComputePointMetrics::createOutResultModelListProtected()
         while (it.hasNext())
         {
             CT_AbstractMetric_XYZ* metric = dynamic_cast<CT_AbstractMetric_XYZ*>(it.next());
-            metric->postConfigure();
             metric->initAttributesModels(resCpy, _outMetrics_ModelName);
         }
     }

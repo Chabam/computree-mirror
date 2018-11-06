@@ -231,7 +231,7 @@ bool CT_VirtualAbstractStep::restorePreSettings(SettingsReaderInterface &reader)
     if(_preConfigDialog != NULL)
         _preConfigDialog->restoreSettings(reader);
 
-    return true;
+    return finalizePreConfiguration();
 }
 
 bool CT_VirtualAbstractStep::restoreInputSettings(SettingsReaderInterface &reader)
@@ -258,7 +258,7 @@ bool CT_VirtualAbstractStep::restorePostSettings(SettingsReaderInterface &reader
     if(_postConfigDialog != NULL)
         return _postConfigDialog->restoreSettings(reader);
 
-    return true;
+    return finalizePostConfiguration();
 }
 
 bool CT_VirtualAbstractStep::restoreOthersSettings(SettingsReaderInterface &reader)
@@ -696,7 +696,10 @@ bool CT_VirtualAbstractStep::showPreConfigurationDialog()
     //cree la fenetre de pre-configuration
     createPreConfigurationDialog();
 
-    return preConfigure();
+    if(preConfigure())
+        return finalizePreConfiguration();
+
+    return false;
 }
 
 bool CT_VirtualAbstractStep::showPostConfigurationDialog()
@@ -704,7 +707,10 @@ bool CT_VirtualAbstractStep::showPostConfigurationDialog()
     // cree la fenetre de post-configuration
     createPostConfigurationDialog();
 
-    return postConfigure();
+    if(postConfigure())
+        return finalizePostConfiguration();
+
+    return false;
 }
 
 void CT_VirtualAbstractStep::ackDebugMode(int jump_n_step)

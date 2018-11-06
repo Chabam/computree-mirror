@@ -530,6 +530,12 @@ protected:
     virtual bool preConfigure();
 
     /**
+     * @brief Called after the dialog of pre configuration has been displayed and accepted or after pre settings has been restored.
+     * @warning Don't display a dialog in this method !
+     */
+    virtual bool finalizePreConfiguration() { return true; }
+
+    /**
      * @brief Show the INPUT elements configuration dialog. This dialog allow the user to select elements that must be used in "compute" method
      *        for searched elements. The dialog is showed in read only mode if the step has childrens or if we can not configure something.
      * @param forceReadOnly : true to force to show the input configuration dialog in read only mode
@@ -563,6 +569,12 @@ protected:
      * @return true if the settings was modified.
      */
     virtual bool postConfigure();
+
+    /**
+     * @brief Called after the dialog of post configuration has been displayed and accepted or after post settings has been restored.
+     * @warning Don't display a dialog in this method !
+     */
+    virtual bool finalizePostConfiguration() { return true; }
 
     /**
      * @brief Call this method when settings of your step (typically after a configuration dialog is accepted) is modified.
