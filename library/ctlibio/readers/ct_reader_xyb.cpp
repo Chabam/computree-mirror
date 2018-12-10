@@ -1,40 +1,148 @@
 #include "ct_reader_xyb.h"
-#include <QFile>
-#include <QIODevice>
-#include <QTextStream>
 
 #include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
-#include "ct_global/ct_context.h"
 #include "ct_coordinates/tools/ct_coordinatesystemmanager.h"
 #include "ct_iterator/ct_mutablepointiterator.h"
+#include "ct_cloudindex/registered/ct_standardnotmodifiablecloudindexregisteredt.h"
+
+#include <QFile>
+#include <QTextStream>
 
 #include <limits>
 
-CT_Reader_XYB::CT_Reader_XYB() : CT_AbstractReader(), CT_ReaderPointsFilteringExtension()
+CT_Reader_XYB::CT_Reader_XYB() : SuperClass(), CT_ReaderPointsFilteringExtension()
 {
-    _filterRadius = 0;
-    _zminFilter = -std::numeric_limits<double>::max();
-    _zmaxFilter = std::numeric_limits<double>::max();
+    m_filterRadius = 0;
+    m_zMinFilter = -std::numeric_limits<double>::max();
+    m_zMaxFilter = std::numeric_limits<double>::max();
+
+    addNewReadableFormat(FileFormat("xyb", tr("Fichiers binaire de points .xyb")));
+    setToolTip(tr("Chargement de points depuis un fichier format binaire XYB (FARO)"));
 }
 
-QString CT_Reader_XYB::GetReaderName() const
+QString CT_Reader_XYB::displayableName() const
 {
     return tr("Points, Fichier XYB");
 }
 
-CT_StepsMenu::LevelPredefined CT_Reader_XYB::getReaderSubMenuName() const
+/*CT_StepsMenu::LevelPredefined CT_Reader_XYB::getReaderSubMenuName() const
 {
     return CT_StepsMenu::LP_Points;
+}*/
+
+bool CT_Reader_XYB::setFilePath(const QString& filepath)
+{
+    QString error;
+    CT_XYBHeader* header = static_cast<CT_XYBHeader*>(internalReadHeader(filepath, error));
+
+    if(!error.isEmpty()) {
+        delete header;
+        return false;
+    }
+
+    if(CT_AbstractReader::setFilePath(filepath)) {
+        m_current.m_center[0] = header->scanCenterX();
+        m_current.m_center[1] = header->scanCenterY();
+        m_current.m_center[2] = header->scanCenterZ();
+        m_current._rows = header->nRows();
+        m_current._cols = header->nCols();
+        m_current._offset = header->offset();
+
+        delete header;
+        return true;
+    }
+
+    delete header;
+    return false;
 }
 
-bool CT_Reader_XYB::setFilePath(const QString &filepath)
+CT_FileHeader* CT_Reader_XYB::createHeaderPrototype() const
 {
-    // Test File validity
+    return new CT_XYBHeader();
+}
+
+void CT_Reader_XYB::setFilterRadius(const double &radius)
+{
+    m_filterRadius = radius;
+}
+
+void CT_Reader_XYB::setFilterRadius(const double &radius, const double &zmin, const double &zmax)
+{
+    m_filterRadius = radius;
+    m_zMinFilter = zmin;
+    m_zMaxFilter = zmax;
+}
+
+double CT_Reader_XYB::filterRadius() const
+{
+    return m_filterRadius;
+}
+
+double CT_Reader_XYB::filterZMin() const
+{
+    return m_zMinFilter;
+}
+
+double CT_Reader_XYB::filterZMax() const
+{
+    return m_zMaxFilter;
+}
+
+void CT_Reader_XYB::saveSettings(SettingsWriterInterface &writer) const
+{
+    SuperClass::saveSettings(writer);
+
+    writer.addParameter(this, "FilterRadius", m_filterRadius);
+    writer.addParameter(this, "FilterZMin", m_zMinFilter);
+    writer.addParameter(this, "FilterZMax", m_zMaxFilter);
+}
+
+bool CT_Reader_XYB::restoreSettings(SettingsReaderInterface &reader)
+{
+    if(!SuperClass::restoreSettings(reader))
+        return false;
+
+    QVariant value;
+
+    if(reader.parameter(this, "FilterRadius", value))
+        m_filterRadius = value.toDouble();
+
+    if(reader.parameter(this, "FilterZMin", value))
+        m_zMinFilter = value.toDouble();
+
+    if(reader.parameter(this, "FilterZMax", value))
+        m_zMaxFilter = value.toDouble();
+
+    return true;
+}
+
+bool CT_Reader_XYB::isPointFiltered(const CT_Point& point) const
+{
+    if((m_filterRadius <= 0) || (m_zMinFilter > m_zMaxFilter))
+        return CT_ReaderPointsFilteringExtension::isPointFiltered(point);
+
+    const double dx = point.x() - m_current.m_center[0];
+    const double dy = point.y() - m_current.m_center[1];
+    const double distance2D = sqrt(dx*dx + dy*dy);
+
+    return (distance2D > m_filterRadius ||
+            point.z() < m_zMinFilter ||
+            point.z() > m_zMaxFilter ||
+            CT_ReaderPointsFilteringExtension::isPointFiltered(point));
+}
+
+CT_FileHeader* CT_Reader_XYB::internalReadHeader(const QString& filepath, QString& error) const
+{
+    error = tr("En-tête non valide");
+
+    CT_XYBHeader* header = static_cast<CT_XYBHeader*>(createHeaderPrototype());
+    header->setFilePath(filepath);
+
     if(QFile::exists(filepath))
     {
         QFile f(filepath);
 
-        if(f.open(QIODevice::ReadOnly))
+        if(f.open(QFile::ReadOnly))
         {
             int      offset = 0;
             double   xc = 0;
@@ -53,13 +161,9 @@ bool CT_Reader_XYB::setFilePath(const QString &filepath)
                     f.read(d_data, 1);
 
                     if(d_data[0] == 0)
-                    {
                         ++nb_0;
-                    }
                     else
-                    {
                         nb_0 = 0;
-                    }
 
                     ++offset;
                 }
@@ -77,16 +181,19 @@ bool CT_Reader_XYB::setFilePath(const QString &filepath)
             bool okr = true;
             bool okc = true;
 
-            if (f.open(QIODevice::ReadOnly | QIODevice::Text))
+            if (f.open(QFile::ReadOnly | QFile::Text))
             {
                 QTextStream stream(&f);
 
                 stream.readLine();
+
                 QString line = stream.readLine();
+
                 if (!line.isNull())
                 {
-                    QStringList values = line.split(" ");
-                    if (values.size() >= 4 && values.at(0)=="ScanPosition")
+                    const QStringList values = line.split(" ");
+
+                    if ((values.size() >= 4) && (values.at(0) == "ScanPosition"))
                     {
                         xc = values.at(1).toDouble(&okx);
                         yc = values.at(2).toDouble(&oky);
@@ -95,168 +202,67 @@ bool CT_Reader_XYB::setFilePath(const QString &filepath)
                 }
 
                 line = stream.readLine();
+
                 if (!line.isNull())
                 {
-                    QStringList values = line.split(" ");
-                    if (values.size() >= 2 && values.at(0)=="Rows")
-                    {
+                    const QStringList values = line.split(" ");
+
+                    if ((values.size() >= 2) && (values.at(0) == "Rows"))
                         rows = values.at(1).toDouble(&okr);
-                    }
                 }
 
                 line = stream.readLine();
+
                 if (!line.isNull())
                 {
-                    QStringList values = line.split(" ");
-                    if (values.size() >= 2 && values.at(0)=="Cols")
-                    {
+                    const QStringList values = line.split(" ");
+
+                    if ((values.size() >= 2) && (values.at(0) == "Cols"))
                         cols = values.at(1).toDouble(&okc);
-                    }
                 }
 
                 f.close();
             }
 
             if (okx && oky && okz && okr && okc && offset > 0) {
-                if(CT_AbstractReader::setFilePath(filepath)) {
-                    m_current.m_center[0] = xc;
-                    m_current.m_center[1] = yc;
-                    m_current.m_center[2] = zc;
-                    m_current._rows = rows;
-                    m_current._cols = cols;
-                    m_current._offset = offset;
-
-                    return true;
-                }
+                header->setScanCenter(xc, yc, zc);
+                header->setNRows(rows);
+                header->setNCols(cols);
+                header->setOffset(offset);
+                error.clear();
             }
         }
     }
 
-    return false;
+    return header;
 }
 
-bool CT_Reader_XYB::configure()
+void CT_Reader_XYB::internalDeclareOutputModelsIn(CT_ReaderOutModelStructureManager& manager)
 {
-    return true;
+    manager.addItem(m_hOutScene, tr("Scène"));
+    manager.addItem(m_hOutIntensity, tr("Intensité"));
+    manager.addItem(m_hOutScanner, tr("Scanner"));
 }
 
-void CT_Reader_XYB::setFilterRadius(const double &radius)
+bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
 {
-    _filterRadius = radius;
-}
-
-void CT_Reader_XYB::setFilterRadius(const double &radius, const double &zmin, const double &zmax)
-{
-    _filterRadius = radius;
-    _zminFilter = zmin;
-    _zmaxFilter = zmax;
-}
-
-double CT_Reader_XYB::filterRadius() const
-{
-    return _filterRadius;
-}
-
-void CT_Reader_XYB::saveSettings(SettingsWriterInterface &writer) const
-{
-    SuperClass::saveSettings(writer);
-
-    writer.addParameter(this, "FilterRadius", _filterRadius);
-    writer.addParameter(this, "FilterZMin", _zminFilter);
-    writer.addParameter(this, "FilterZMax", _zmaxFilter);
-}
-
-bool CT_Reader_XYB::restoreSettings(SettingsReaderInterface &reader)
-{
-    if(!SuperClass::restoreSettings(reader))
-        return false;
-
-    QVariant value;
-
-    if(reader.parameter(this, "FilterRadius", value))
-        _filterRadius = value.toDouble();
-
-    if(reader.parameter(this, "FilterZMin", value))
-        _zminFilter = value.toDouble();
-
-    if(reader.parameter(this, "FilterZMax", value))
-        _zmaxFilter = value.toDouble();
-
-    return true;
-}
-
-CT_AbstractReader* CT_Reader_XYB::copy() const
-{
-    return new CT_Reader_XYB();
-}
-
-void CT_Reader_XYB::protectedInit()
-{
-    addNewReadableFormat(FileFormat("xyb", tr("Fichiers binaire de points .xyb")));
-
-    setToolTip(tr("Chargement de points depuis un fichier format binaire XYB (FARO)"));
-}
-
-void CT_Reader_XYB::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    addOutItemDrawableModel(DEF_CT_Reader_XYB_sceneOut, new CT_Scene(), tr("Scène"));
-    addOutItemDrawableModel(DEF_CT_Reader_XYB_intensityOut, new CT_PointsAttributesScalarTemplated<quint16>(), tr("Intensité"));
-    addOutItemDrawableModel(DEF_CT_Reader_XYB_scannerOut, new CT_Scanner(), tr("Scanner"));
-}
-
-bool CT_Reader_XYB::isInsideRadius(const CT_Point &point)
-{
-    if((_filterRadius <= 0) || (_zminFilter > _zmaxFilter))
-        return true;
-
-    double dx = point.x() - m_current.m_center[0];
-    double dy = point.y() - m_current.m_center[1];
-    double distance2D = sqrt(dx*dx + dy*dy);
-    return (distance2D <= _filterRadius &&
-            point.z() >= _zminFilter &&
-            point.z() <= _zmaxFilter);
-}
-
-bool CT_Reader_XYB::protectedReadFile()
-{
-    bool filter = (_filterRadius > 0) || (getPointsFilter() != nullptr);
-
     if(QFile::exists(filepath()))
     {
         QFile f(filepath());
 
-        if(f.open(QIODevice::ReadOnly))
+        if(f.open(QFile::ReadOnly))
         {
             QDataStream stream(&f);
             stream.setByteOrder(QDataStream::LittleEndian);
             stream.skipRawData(m_current._offset);
 
-            qint64 filesize = f.size();
-            qint64 a = 0;
+            const qint64 filesize = f.size();
 
             // un tableau de n_points
-            qint64 n_points = (filesize - m_current._offset) / 26;
+            const qint64 nPoints = (filesize - m_current._offset) / 26;
 
-            CT_AbstractUndefinedSizePointCloud* mpcir;
             CT_NMPCIR pcir;
-            CT_Point pReaded;
-            CT_MutablePointIterator *it = NULL;
-
-            if (filter)
-                mpcir = PS_REPOSITORY->createNewUndefinedSizePointCloud();
-            else {
-                pcir = PS_REPOSITORY->createNewPointCloud(n_points);
-                it = new CT_MutablePointIterator(pcir);
-            }
-
-            CT_StandardCloudStdVectorT<quint16> *collection;
-
-            if(filter)
-                collection = new CT_StandardCloudStdVectorT<quint16>();
-            else
-                collection = new CT_StandardCloudStdVectorT<quint16>(n_points);
+            CT_StandardCloudStdVectorT<quint16>* collection = NULL;
 
             double xmin = std::numeric_limits<double>::max();
             double ymin = std::numeric_limits<double>::max();
@@ -268,78 +274,63 @@ bool CT_Reader_XYB::protectedReadFile()
             double zmax = -std::numeric_limits<double>::max();
             quint16 imax = 0;
 
-            double x, y, z;
-            quint16 reflectance;
+            const bool filter = (m_filterRadius > 0) || (pointsFilter() != nullptr);
 
-            while(!stream.atEnd()
-                  && !isStopped())
-            {
-                stream >> x;
-                stream >> y;
-                stream >> z;
-                stream >> reflectance;
-
-                pReaded(CT_Point::X) = x;
-                pReaded(CT_Point::Y) = y;
-                pReaded(CT_Point::Z) = z;
-
-                if (!filter || (!isPointFiltered(pReaded) && isInsideRadius(pReaded)))
-                {
-                    if (x<xmin) {xmin = x;}
-                    if (x>xmax) {xmax = x;}
-                    if (y<ymin) {ymin = y;}
-                    if (y>ymax) {ymax = y;}
-                    if (z<zmin) {zmin = z;}
-                    if (z>zmax) {zmax = z;}
-                    if (reflectance<imin) {imin = reflectance;}
-                    if (reflectance>imax) {imax = reflectance;}
-
-                    if(filter) {
-                        mpcir->addPoint(pReaded);
-                        collection->addT(reflectance);
-                    } else {
-                        it->next();
-                        it->replaceCurrentPoint(pReaded);
-
-                        (*collection)[a] = reflectance;
-                    }
-                }
-
-                ++a;
-                setProgress(a*100/n_points);
+            if(filter) {
+                pcir = internalReadFileWithFilter(stream,
+                                                  xmin,
+                                                  ymin,
+                                                  zmin,
+                                                  imin,
+                                                  xmax,
+                                                  ymax,
+                                                  zmax,
+                                                  imax,
+                                                  collection,
+                                                  nPoints);
+            } else {
+                pcir = internalReadFileWithoutFilter(stream,
+                                                     xmin,
+                                                     ymin,
+                                                     zmin,
+                                                     imin,
+                                                     xmax,
+                                                     ymax,
+                                                     zmax,
+                                                     imax,
+                                                     collection,
+                                                     nPoints);
             }
 
-            if (it != NULL) {delete it;}
-
-            CT_Scene *scene;
-
-            if(filter)
-                pcir = PS_REPOSITORY->registerUndefinedSizePointCloud(mpcir);
-
-            scene = new CT_Scene(NULL, NULL, pcir);
+            // create and add the scene
+            CT_Scene* scene = m_hOutScene.createInstance(pcir);
             scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
+            group->addSingularItemWithOutHandle(m_hOutScene, scene);
 
-            // add the scene
-            addOutItemDrawable(DEF_CT_Reader_XYB_sceneOut, scene);
+            // create and add intensity
+            Intensity* pas =m_hOutIntensity.createInstance(pcir,
+                                                           collection,
+                                                           imin,
+                                                           imax);
+            group->addSingularItemWithOutHandle(m_hOutIntensity, pas);
 
-            CT_PointsAttributesScalarTemplated<quint16> *pas = new CT_PointsAttributesScalarTemplated<quint16>(NULL,
-                                                                                                               NULL,
-                                                                                                               pcir,
-                                                                                                               collection,
-                                                                                                               imin,
-                                                                                                               imax);
-
-            // add attributes
-            addOutItemDrawable(DEF_CT_Reader_XYB_intensityOut, pas);
-
-            if (m_current._rows<=0 || m_current._cols<=0)
+            if ((m_current._rows <= 0) || (m_current._cols <= 0))
                 return true;
 
-            double hres = 150.0 / ((double)m_current._rows);
-            double vres = 360.0 / ((double)m_current._cols);
-
-            // add the scanner
-            addOutItemDrawable(DEF_CT_Reader_XYB_scannerOut, new CT_Scanner(NULL, NULL, 0, m_current.m_center, Eigen::Vector3d(0,1,0), 360, 150, hres, vres, 0, 0, true, false));
+            // create and add the scanner
+            const double hres = 150.0 / ((double)m_current._rows);
+            const double vres = 360.0 / ((double)m_current._cols);
+            group->addSingularItemWithOutHandle(m_hOutScanner, m_hOutScanner.createInstance(0,
+                                                                                            m_current.m_center,
+                                                                                            Eigen::Vector3d(0,1,0),
+                                                                                            360,
+                                                                                            150,
+                                                                                            hres,
+                                                                                            vres,
+                                                                                            0,
+                                                                                            0,
+                                                                                            true,
+                                                                                            false));
 
             return true;
         }
@@ -348,116 +339,111 @@ bool CT_Reader_XYB::protectedReadFile()
     return false;
 }
 
-CT_FileHeader* CT_Reader_XYB::createHeaderPrototype() const
-{
-    return new CT_XYBHeader(NULL, NULL);
-}
+CT_NMPCIR CT_Reader_XYB::internalReadFileWithFilter(QDataStream& stream,
+                                                    double& xmin,
+                                                    double& ymin,
+                                                    double& zmin,
+                                                    quint16& imin,
+                                                    double& xmax,
+                                                    double& ymax,
+                                                    double& zmax,
+                                                    quint16& imax,
+                                                    CT_StandardCloudStdVectorT<quint16>*& collection,
+                                                    const qint64& nPointToRead) {
 
+    CT_AbstractUndefinedSizePointCloud* mpcir = PS_REPOSITORY->createNewUndefinedSizePointCloud();
+    collection = new CT_StandardCloudStdVectorT<quint16>();
 
-CT_FileHeader *CT_Reader_XYB::protectedReadHeader(const QString &filepath, QString &error) const
-{
-    Q_UNUSED(error)
+    CT_Point pReaded;
+    double x, y, z;
+    quint16 reflectance;
+    qint64 nPointReaded = 0;
 
-    CT_XYBHeader *header = new CT_XYBHeader(NULL, NULL);
-    header->setFile(filepath);
-
-    if(QFile::exists(filepath))
+    while(!stream.atEnd()
+          && !isStopped())
     {
-        QFile f(filepath);
+        stream >> x;
+        stream >> y;
+        stream >> z;
+        stream >> reflectance;
 
-        if(f.open(QIODevice::ReadOnly))
+        pReaded(CT_Point::X) = x;
+        pReaded(CT_Point::Y) = y;
+        pReaded(CT_Point::Z) = z;
+
+        if (!isPointFiltered(pReaded))
         {
-            int      offset = 0;
-            double   xc = 0;
-            double   yc = 0;
-            double   zc = 0;
-            int      rows = 0;
-            int      cols = 0;
+            if (x<xmin) {xmin = x;}
+            if (x>xmax) {xmax = x;}
+            if (y<ymin) {ymin = y;}
+            if (y>ymax) {ymax = y;}
+            if (z<zmin) {zmin = z;}
+            if (z>zmax) {zmax = z;}
+            if (reflectance<imin) {imin = reflectance;}
+            if (reflectance>imax) {imax = reflectance;}
 
-            char d_data[8];
-            int nb_0 = 0;
-
-            while((offset<150) && (nb_0 != 4))
-            {
-                if (!f.atEnd())
-                {
-                    f.read(d_data, 1);
-
-                    if(d_data[0] == 0)
-                    {
-                        ++nb_0;
-                    }
-                    else
-                    {
-                        nb_0 = 0;
-                    }
-
-                    ++offset;
-                }
-            }
-
-            if(nb_0 != 4)
-                offset = -1;
-
-            f.close();
-
-            // Read scan position
-            bool okx = true;
-            bool oky = true;
-            bool okz = true;
-            bool okr = true;
-            bool okc = true;
-
-            if (f.open(QIODevice::ReadOnly | QIODevice::Text))
-            {
-                QTextStream stream(&f);
-
-                stream.readLine();
-                QString line = stream.readLine();
-                if (!line.isNull())
-                {
-                    QStringList values = line.split(" ");
-                    if (values.size() >= 4 && values.at(0)=="ScanPosition")
-                    {
-                        xc = values.at(1).toDouble(&okx);
-                        yc = values.at(2).toDouble(&oky);
-                        zc = values.at(3).toDouble(&okz);
-                    }
-                }
-
-                line = stream.readLine();
-                if (!line.isNull())
-                {
-                    QStringList values = line.split(" ");
-                    if (values.size() >= 2 && values.at(0)=="Rows")
-                    {
-                        rows = values.at(1).toDouble(&okr);
-                    }
-                }
-
-                line = stream.readLine();
-                if (!line.isNull())
-                {
-                    QStringList values = line.split(" ");
-                    if (values.size() >= 2 && values.at(0)=="Cols")
-                    {
-                        cols = values.at(1).toDouble(&okc);
-                    }
-                }
-
-                f.close();
-            }
-
-            if (okx && oky && okz && okr && okc && offset > 0) {
-                header->m_scanCenterX = xc;
-                header->m_scanCenterY = yc;
-                header->m_scanCenterZ = zc;
-                header->m_nrows = rows;
-                header->m_ncols = cols;
-            }
+            mpcir->addPoint(pReaded);
+            collection->addT(reflectance);
         }
+
+        ++nPointReaded;
+        setProgress(nPointReaded*100/nPointToRead);
     }
 
-    return header;
+    return PS_REPOSITORY->registerUndefinedSizePointCloud(mpcir);
+}
+
+CT_NMPCIR CT_Reader_XYB::internalReadFileWithoutFilter(QDataStream& stream,
+                                                       double& xmin,
+                                                       double& ymin,
+                                                       double& zmin,
+                                                       quint16& imin,
+                                                       double& xmax,
+                                                       double& ymax,
+                                                       double& zmax,
+                                                       quint16& imax,
+                                                       CT_StandardCloudStdVectorT<quint16>*& collection,
+                                                       const qint64& nPointToRead) {
+
+    CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPointToRead);
+    collection = new CT_StandardCloudStdVectorT<quint16>(nPointToRead);
+
+    CT_MutablePointIterator it(pcir);
+
+    CT_Point pReaded;
+    double x, y, z;
+    quint16 reflectance;
+    qint64 nPointReaded = 0;
+
+    while(!stream.atEnd()
+          && !isStopped())
+    {
+        stream >> x;
+        stream >> y;
+        stream >> z;
+        stream >> reflectance;
+
+        pReaded(CT_Point::X) = x;
+        pReaded(CT_Point::Y) = y;
+        pReaded(CT_Point::Z) = z;
+
+        if (x<xmin) {xmin = x;}
+        if (x>xmax) {xmax = x;}
+        if (y<ymin) {ymin = y;}
+        if (y>ymax) {ymax = y;}
+        if (z<zmin) {zmin = z;}
+        if (z>zmax) {zmax = z;}
+        if (reflectance<imin) {imin = reflectance;}
+        if (reflectance>imax) {imax = reflectance;}
+
+        it.next();
+        it.replaceCurrentPoint(pReaded);
+        (*collection)[nPointReaded] = reflectance;
+
+        ++nPointReaded;
+        setProgress(nPointReaded*100/nPointToRead);
+    }
+
+    return pcir;
 }
 

@@ -1,10 +1,10 @@
 #ifndef DM_ATTRIBUTESBUILDINGCOLLECTIONT_H
 #define DM_ATTRIBUTESBUILDINGCOLLECTIONT_H
 
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 #include "ct_result/ct_resultgroup.h"
-#include "ct_result/tools/iterator/ct_resultiterator.h"
+#include "ct_iterator/ct_singlemodeliteratorstdstyleforresultgroup.h"
 
 /**
  * @brief Recursively build a collection of attributes available from a step.
@@ -22,8 +22,7 @@ public:
 private:
     QList<Type*>   m_collection;
 
-    void recursiveBuildAttributesFromStep(CT_VirtualAbstractStep *step);
-    void recursiveBuildAttributesFromModels(QList<CT_AbstractModel *> models);
+    void recursiveBuildAttributesFromStep(const CT_VirtualAbstractStep* step);
 };
 
 #include "tools/attributes/dm_attributesbuildingcollectiont.hpp"

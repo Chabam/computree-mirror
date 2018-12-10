@@ -5,9 +5,9 @@
 #include <QTextStream>
 #include "cdm_pluginmanager.h"
 
-#include "ct_result/model/inModel/abstract/ct_inabstractresultmodel.h"
-#include "ct_result/model/outModel/abstract/ct_outabstractresultmodel.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
 #include "ct_exporter/abstract/ct_abstractexporter.h"
 
 class QTreeWidgetItem;

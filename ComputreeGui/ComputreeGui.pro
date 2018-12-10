@@ -1,7 +1,24 @@
-include(../shared.pri)
-include(../include_all.pri)
+contains ( QT_VERSION, "^5.*" ) {
+    QT *= widgets
+}
+
+CT_PREFIX = ..
+CT_PREFIX_INSTALL = ../..
+CT_LIB_PREFIX = ../library
+
+COMPUTREE = ctlibplugin
+
+include($${CT_PREFIX}/destdir.pri)
+include($${CT_PREFIX}/include_ct_library.pri)
+include($${CT_LIB_PREFIX}/library_include_eigen.pri)
 include(../amkgl_default_path.pri)
 include(../qglviewer_default_path.pri)
+
+INCLUDEPATH += .
+INCLUDEPATH += $$CT_LIB_PREFIX
+INCLUDEPATH += $${CT_PREFIX}/ComputreeCore
+INCLUDEPATH += $${CT_PREFIX}/ComputreeCore/src
+TR_EXCLUDE  += $${CT_PREFIX}/ComputreeCore/*
 
 CONFIG -= plugin
 
@@ -10,12 +27,11 @@ TEMPLATE = app
 QT += opengl
 QT += xml
 
-DESTDIR = $${PLUGINSHARED_DESTDIR}
+DESTDIR = $${EXECUTABLE_DESTDIR}
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
 
-HEADERS += $${PLUGIN_SHARED_DIR}/interfaces.h \
-    dm_graphicsviewsynchronizedgroup.h \
+HEADERS += dm_graphicsviewsynchronizedgroup.h \
     dm_graphicsviewsynchronizedgroupoptions.h \
     dm_itemdrawablemodelmanager.h \
     dm_multipleitemdrawablemodelmanager.h \
@@ -31,7 +47,11 @@ HEADERS += $${PLUGIN_SHARED_DIR}/interfaces.h \
     dm_progresslistenermanager.h \
     dm_stepsfrompluginsmodelconstructor.h \
     dm_domutils.h \
-    dm_itemdrawableconfigurationmanagerview.h
+    dm_itemdrawableconfigurationmanagerview.h \
+    ../library/documentinterface.h \
+    ../library/graphicsviewinterface.h \
+    ../library/indocumentviewinterface.h \
+    ../library/treeviewinterface.h
 
 # OTHER
 SOURCES += main.cpp \
@@ -85,17 +105,6 @@ include(tools/tools.pri)
 
 TR_EXCLUDE  += ./qtcolorpicker/*
 TR_EXCLUDE  += ./muParser/*
-
-INCLUDEPATH += $${PLUGIN_SHARED_DIR}
-INCLUDEPATH += $${EXPORTER_SHARED_DIR}
-
-INCLUDEPATH += $${COMPUTREE_CORE_DIR}
-INCLUDEPATH += $${COMPUTREE_CORE_DIR}/src
-
-TR_EXCLUDE  += $${PLUGIN_SHARED_DIR}/*
-TR_EXCLUDE  += $${EXPORTER_SHARED_DIR}/*
-TR_EXCLUDE  += $${COMPUTREE_CORE_DIR}/*
-TR_EXCLUDE  += $${COMPUTREE_CORE_DIR}/*
 
 RESOURCES += resource/icones.qrc
 
@@ -151,4 +160,8 @@ win32 {
 
 unix {
     LIBS += $$QGLVIEWER_DIR/libQGLViewer-qt5.a
+}
+
+!equals(PWD, $${OUT_PWD}) {
+    error("Shadow build seems to be activated, please desactivated it !")
 }

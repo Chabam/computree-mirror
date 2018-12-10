@@ -29,12 +29,10 @@
 #ifndef DM_GRAPHICSVIEWCAMERA_H
 #define DM_GRAPHICSVIEWCAMERA_H
 
-#include "interfaces.h"
+#include "graphicsviewinterface.h"
 
 class DM_GraphicsViewCamera : public CameraInterface
 {
-    Q_INTERFACES(CameraInterface)
-
 public:
     DM_GraphicsViewCamera();
 

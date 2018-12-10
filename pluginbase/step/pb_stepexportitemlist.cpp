@@ -73,18 +73,18 @@ void PB_StepExportItemList::createInResultModelListProtected()
 {
     CT_InResultModelGroup *resIn = createNewInResultModel(DEFin_res, tr("Résultat"));
     resIn->setZeroOrMoreRootGroup();
-    resIn->addGroupModel("", DEFin_grp, CT_AbstractItemGroup::staticGetType(), tr("Groupe"));
-    resIn->addItemModel(DEFin_grp, DEFin_item, CT_AbstractItemDrawable::staticGetType(), tr("Item à exporter"));
+    resIn->addStdGroupModel("", DEFin_grp, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
+    resIn->addStdItemModel(DEFin_grp, DEFin_item, CT_AbstractItemDrawable::staticGetType(), tr("Item à exporter"));
 
     CT_InResultModelGroup* resCounter = createNewInResultModel(DEFin_resCounter, tr("Résultat compteur"), "", true);
-    resCounter->setRootGroup(DEF_inGroupCounter);
-    resCounter->addItemModel(DEF_inGroupCounter, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
+    resCounter->setStdRootGroup(DEF_inGroupCounter);
+    resCounter->addStdItemModel(DEF_inGroupCounter, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
 
     CT_InResultModelGroup* baseNameRes = createNewInResultModel(DEF_inresName, tr("Nom de base (optionnel)"), "", true);
     baseNameRes->setZeroOrMoreRootGroup();
-    baseNameRes->addGroupModel("", DEF_inGroupName, CT_AbstractItemGroup::staticGetType(), tr("Groupe"));
-    baseNameRes->addItemModel(DEF_inGroupName, DEF_inName, CT_AbstractSingularItemDrawable::staticGetType(), tr("Base Name"));
-    baseNameRes->addItemAttributeModel(DEF_inName, DEF_inNameAtt, QList<QString>() << CT_AbstractCategory::DATA_FILE_NAME << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Name"));
+    baseNameRes->addStdGroupModel("", DEF_inGroupName, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
+    baseNameRes->addStdItemModel(DEF_inGroupName, DEF_inName, CT_AbstractSingularItemDrawable::staticGetType(), tr("Base Name"));
+    baseNameRes->addStdItemAttributeModel(DEF_inName, DEF_inNameAtt, QList<QString>() << CT_AbstractCategory::DATA_FILE_NAME << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Name"));
     baseNameRes->setMinimumNumberOfPossibilityThatMustBeSelectedForOneTurn(0);
 }
 
@@ -220,7 +220,7 @@ void PB_StepExportItemList::compute()
     CT_ResultGroupIterator itIn_grp(resIn_Item, this, DEFin_grp);
     while (itIn_grp.hasNext() && !isStopped())
     {
-        const CT_AbstractItemGroup* grpIn = (CT_AbstractItemGroup*) itIn_grp.next();
+        const CT_StandardItemGroup* grpIn = (CT_StandardItemGroup*) itIn_grp.next();
         CT_AbstractItemDrawable* item = (CT_AbstractItemDrawable*)grpIn->firstItemByINModelName(this, DEFin_item);
 
         if (item != NULL)

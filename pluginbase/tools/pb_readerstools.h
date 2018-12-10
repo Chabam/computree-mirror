@@ -19,7 +19,7 @@ public:
     static void initAvailableReaders(Collection& cToAdd,
                                      std::function<bool(const CT_AbstractReader*)> canBeAdded) {
         // get the plugin manager
-        const PluginManagerInterface* pm = PS_CONTEXT->pluginManager();
+        const PluginManagerInterface* pm = CT_Context::staticInstance()->pluginManager();
         const int nPlugins = pm->countPluginLoaded();
 
         // for each plugin
@@ -35,7 +35,7 @@ public:
                 for(const CT_AbstractReader* reader : readers) {
                     if((canBeAdded == nullptr) || canBeAdded(reader)) {
                         CT_AbstractReader *readerCpy = reader->copy();
-                        readerCpy->init(false);
+                        //readerCpy->init(false);
 
                         cToAdd.append(readerCpy);
                     }
@@ -114,12 +114,12 @@ public:
      * @return Returns the list with classname of all readers in the collection
      */
     template<class Collection>
-    static QStringList constructReadersClassNameList(const Collection& readers) {
+    static QStringList constructReadersUniqueNameList(const Collection& readers) {
 
         QStringList ret;
 
         for(const CT_AbstractReader* reader : readers) {
-            ret.append(reader->GetReaderClassName());
+            ret.append(reader->uniqueName());
         }
 
         if (ret.isEmpty())

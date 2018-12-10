@@ -4,47 +4,51 @@
 #include "ctlibio/ctlibio_global.h"
 #include "ct_itemdrawable/ct_fileheader.h"
 
-
 class CTLIBIO_EXPORT CT_XYBHeader : public CT_FileHeader
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_XYBHeader, CT_FileHeader, XYB Header)
 
+    using SuperClass = CT_FileHeader;
+
 public:
     CT_XYBHeader();
+    CT_XYBHeader(const CT_XYBHeader& other) = default;
 
-    CT_XYBHeader(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result);
+    void setScanCenter(const double& cx,
+                       const double& cy,
+                       const double& cz);
 
-    CT_XYBHeader(const QString &modelName,
-                     const CT_AbstractResult *result);
+    void setNRows(const int& n);
 
-    virtual bool hasBoundingBox() const {return false;}
+    void setNCols(const int& n);
 
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    void setOffset(const int& offset);
 
-    inline double get_scanCenterX() const {return m_scanCenterX;}
-    inline double get_scanCenterY() const {return m_scanCenterY;}
-    inline double get_scanCenterZ() const {return m_scanCenterZ;}
-    inline int get_nrows() const {return m_nrows;}
-    inline int get_cols() const {return m_ncols;}
+    double scanCenterX() const {return m_scanCenterX;}
+    double scanCenterY() const {return m_scanCenterY;}
+    double scanCenterZ() const {return m_scanCenterZ;}
+    int nRows() const {return m_nrows;}
+    int nCols() const {return m_ncols;}
+    int offset() const {return m_offset;}
 
-    double        m_scanCenterX;
-    double        m_scanCenterY;
-    double        m_scanCenterZ;
-    int        m_nrows;
-    int        m_ncols;
+    CT_ITEM_COPY_IMP(CT_XYBHeader)
 
 private:
+    double      m_scanCenterX;
+    double      m_scanCenterY;
+    double      m_scanCenterZ;
+    int         m_nrows;
+    int         m_ncols;
+    int         m_offset;
 
     CT_DEFAULT_IA_BEGIN(CT_XYBHeader)
-    CT_DEFAULT_IA_V3(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::get_scanCenterX, QObject::tr("Scan Center X"), "scX")
-    CT_DEFAULT_IA_V3(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::get_scanCenterY, QObject::tr("Scan Center Y"), "scY")
-    CT_DEFAULT_IA_V3(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::get_scanCenterZ, QObject::tr("Scan Center Z"), "scZ")
-    CT_DEFAULT_IA_V3(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::get_nrows, QObject::tr("Scan rows number"), "scR")
-    CT_DEFAULT_IA_V3(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::get_cols, QObject::tr("Scan columns number"), "scC")
+    CT_DEFAULT_IA_V2(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::scanCenterX, QObject::tr("Scan Center X"))
+    CT_DEFAULT_IA_V2(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::scanCenterY, QObject::tr("Scan Center Y"))
+    CT_DEFAULT_IA_V2(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::scanCenterZ, QObject::tr("Scan Center Z"))
+    CT_DEFAULT_IA_V2(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::nRows, QObject::tr("Scan rows number"))
+    CT_DEFAULT_IA_V2(CT_XYBHeader, CT_AbstractCategory::staticInitDataValue(), &CT_XYBHeader::nCols, QObject::tr("Scan columns number"))
     CT_DEFAULT_IA_END(CT_XYBHeader)
-
 };
 
 #endif // CT_XYBHeader_H

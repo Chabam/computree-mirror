@@ -1,10 +1,10 @@
 #ifndef GSTEPCHOOSERDIALOG_H
 #define GSTEPCHOOSERDIALOG_H
 
-#include "interfaces.h"
 #include "ct_step/tools/menu/ct_menulevel.h"
 
 #include <QDialog>
+#include <QMenu>
 
 namespace Ui {
 class GStepChooserDialog;

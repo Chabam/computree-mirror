@@ -121,7 +121,7 @@ void GStepManager2::addOpenFileStep(QString filePath)
             {
                 CT_AbstractStepLoadFile *stepLf = itLf.next();
 
-                cb->addItem(GStepViewDefault::staticGetStepNameFromConfiguration(stepLf, m_stepNameConfig, true) + " (" + pluginManager->getPluginName(stepLf->getPlugin()) + ")");
+                cb->addItem(GStepViewDefault::staticGetStepNameFromConfiguration(stepLf, m_stepNameConfig, true) + " (" + pluginManager->getPluginName(stepLf->pluginStaticCastT<>()) + ")");
             }
 
             if(dialog.exec() == 1)
@@ -134,7 +134,7 @@ void GStepManager2::addOpenFileStep(QString filePath)
         {
             stepLfList.removeOne(stepToCopy);
 
-            CT_VirtualAbstractStep *newStep = stepToCopy->getPlugin()->createNewInstanceOfStep(*stepToCopy, NULL);
+            CT_VirtualAbstractStep *newStep = stepToCopy->pluginStaticCastT<>()->createNewInstanceOfStep(*stepToCopy, NULL);
 
             CT_AbstractStepLoadFile *newStepLF = dynamic_cast<CT_AbstractStepLoadFile*>(newStep);
 
@@ -142,7 +142,7 @@ void GStepManager2::addOpenFileStep(QString filePath)
             {
                 if(newStepLF->setFilePath(filePath))
                 {
-                    if(newStepLF->showPreConfigurationDialog())
+                    if(newStepLF->showPreInputConfigurationDialog())
                     {
                         if(newStepLF->showInputResultConfigurationDialog())
                         {
@@ -233,7 +233,7 @@ void GStepManager2::addStepToCurrentStepOrToRootAndConfigure(CT_VirtualAbstractS
 {
     QMutexLocker locker(m_protectTreeMutex);
 
-    if((stepToCopy != NULL) && (stepToCopy->getPlugin() != NULL))
+    if((stepToCopy != NULL) && (stepToCopy->pluginStaticCastT<>() != NULL))
     {
         CT_VirtualAbstractStep* parentStep = extractStepFromItem(ui->treeWidget->currentItem());
 
@@ -248,9 +248,9 @@ void GStepManager2::addStepToCurrentStepOrToRootAndConfigure(CT_VirtualAbstractS
 
             GUI_LOG->addErrorMessage(LogInterface::gui, error);
         } else {
-            CT_VirtualAbstractStep *stepCopied = stepToCopy->getPlugin()->createNewInstanceOfStep(*stepToCopy, parentStep);
+            CT_VirtualAbstractStep *stepCopied = stepToCopy->pluginStaticCastT<>()->createNewInstanceOfStep(*stepToCopy, parentStep);
 
-            if(stepCopied->showPreConfigurationDialog())
+            if(stepCopied->showPreInputConfigurationDialog())
             {
                 if(stepCopied->showInputResultConfigurationDialog())
                 {
@@ -533,10 +533,10 @@ void GStepManager2::resultAdded(const CT_AbstractResult* result)
     // NOT GUI thread !
     QMutexLocker locker(m_protectTreeMutex);
 
-    QTreeWidgetItem* parentItem = m_steps.value(result->parentStep());
+    QTreeWidgetItem* parentItem = m_steps.value(result->parentStepStaticCastT<>());
     if(parentItem != NULL) {
         QTreeWidgetItem* child = createItemForResult(result);
-        m_resultsToAdd.insert((CT_AbstractResult*)result, qMakePair(result->parentStep(), child));
+        m_resultsToAdd.insert((CT_AbstractResult*)result, qMakePair(result->parentStepStaticCastT<>(), child));
     }
 }
 
@@ -597,7 +597,7 @@ bool GStepManager2::extractResultInformationFromTree(QTreeWidgetItem *child, QSt
     CT_AbstractResult* result = extractResultFromItem(child);
 
     if(result != NULL) {
-        name = result->getName();
+        name = result->displayableName();
         isClearedFromMemory = result->isClearedFromMemory();
         isBusy = result->isBusy();
     }
@@ -647,15 +647,15 @@ bool GStepManager2::extractStepInformationFromTree(QTreeWidgetItem* child,
         filepath = "";
         name = GStepViewDefault::staticGetStepNameFromConfiguration(step, m_stepNameConfig, true);
         debugModeOn = step->isDebugModeOn();
-        progress = step->getProgress();
+        progress = step->progressValue();
         isSettingsModified = step->isSettingsModified();
-        executeTime = step->getExecuteTime();
+        executeTime = step->executeTime();
         isManual = step->isManual();
 
         CT_AbstractStepLoadFile *stepLF = dynamic_cast<CT_AbstractStepLoadFile*>(step);
 
         if(stepLF != NULL)
-            filepath = stepLF->getFilePath();
+            filepath = stepLF->filePath();
     }
 
     return (step != NULL);

@@ -34,6 +34,8 @@
 #include "amkglapp.h"
 #include "tools/amkgl/dm_amkgleasyaccess.h"
 
+#include "ct_global/ct_context.h"
+
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     #include "qtextcodec.h"
 #endif

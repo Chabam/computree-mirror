@@ -56,11 +56,7 @@ void DM_ItemDrawableTreeViewModelBuilderT<Item>::staticRecursiveCreateItemForNex
                                                                                        const int &level,
                                                                                        const int &maxNLevel)
 {
-    CT_ChildIterator it(item);
-
-    while(it.hasNext())
-    {
-        CT_AbstractItemDrawable *child = dynamic_cast<CT_AbstractItemDrawable*>((CT_AbstractItem*)it.next());
+    item->visitChildrensOfTypeItem([&itemModelBuilder, &parent, &level, &maxNLevel](const CT_AbstractItemDrawable* child) -> bool {
 
         QList<Item*> items = itemModelBuilder->createItems(*child, level);
 
@@ -69,9 +65,11 @@ void DM_ItemDrawableTreeViewModelBuilderT<Item>::staticRecursiveCreateItemForNex
             static_cast<Item*>(parent)->appendRow(items);
 
             if((level+1) < maxNLevel)
-                staticRecursiveCreateItemForNextLevel(itemModelBuilder, child, items.first(), level+1, maxNLevel);
+                staticRecursiveCreateItemForNextLevel(itemModelBuilder, const_cast<CT_AbstractItemDrawable*>(child), items.first(), level+1, maxNLevel);
         }
-    }
+
+        return true;
+    });
 }
 
 template<class Item>

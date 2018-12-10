@@ -2,6 +2,6 @@
 #define INCLUDEGRAPHICSVIEW_H
 
 // specify the file of graphicsview here
-#include "interfaces.h"
+#include "graphicsviewinterface.h"
 
 #endif // INCLUDEGRAPHICSVIEW_H

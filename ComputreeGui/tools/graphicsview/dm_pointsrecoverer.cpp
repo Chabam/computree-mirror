@@ -1,6 +1,6 @@
 #include "dm_pointsrecoverer.h"
 
-#include "ct_itemdrawable/accessibility/ct_iaccesspointcloud.h"
+#include "ct_accessibility/ct_iaccesspointcloud.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
 
 DM_PointsRecoverer::DM_PointsRecoverer()
@@ -41,8 +41,8 @@ QList<CT_AbstractCloudIndex *> DM_PointsRecoverer::recoverGlobalPointsInItemDraw
     while(it.hasNext()) {
         CT_IAccessPointCloud *ap = dynamic_cast<CT_IAccessPointCloud*>(it.next());
 
-        if((ap != NULL) && (ap->getPointCloudIndex() != NULL))
-            l.append((CT_AbstractCloudIndex*)ap->getPointCloudIndex());
+        if((ap != NULL) && (ap->pointCloudIndex() != NULL))
+            l.append((CT_AbstractCloudIndex*)ap->pointCloudIndex());
     }
 
     return l;

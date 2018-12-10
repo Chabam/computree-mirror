@@ -286,17 +286,14 @@ contains( COMPUTREE, ctlibpcl ) {
 ##### EIGEN IF PCL ######
 
 !contains( DEFINES, USE_PCL ) {
-    isEmpty(PLUGIN_SHARED_DIR) {
+    isEmpty(CT_LIB_PREFIX) {
         INCLUDEPATH += ./3rdparty/eigen
-
         TR_EXCLUDE  += ./3rdparty/eigen/*
     } else {
-        INCLUDEPATH += $${PLUGIN_SHARED_DIR}/3rdparty/eigen
-
-        TR_EXCLUDE  += $${PLUGIN_SHARED_DIR}/3rdparty/eigen/*
+        INCLUDEPATH += $${CT_LIB_PREFIX}/3rdparty/eigen
+        TR_EXCLUDE  += $${CT_LIB_PREFIX}/3rdparty/eigen/*
     }
 }
-
 
 ### To avoid compilation error with GCC 7+
 unix {

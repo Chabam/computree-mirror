@@ -1,0 +1,8 @@
+TEMPLATE      = subdirs
+SUBDIRS       = ctlibmodels ctliblog ctlibwidget ctlibclouds ctlibstructure ctlibstep ctlibstructureaddon ctlibstepaddon ctlibfilters ctlibstructurewidget ctlibexporter ctlibreader ctlibaction ctlibplugin ctlibio
+CONFIG        += ordered
+
+win32-msvc2013 {
+    message( "msvc 2013 detected" )
+    QMAKE_CXXFLAGS += /FS
+}

@@ -32,7 +32,7 @@ void GFavoritesMenuDialog::init()
     ui->pushButtonAddSubLevel->setEnabled(false);
     ui->pushButtonRemoveLevel->setEnabled(false);
 
-    CT_MenuLevel *favorites = GUI_MANAGER->getPluginManager()->stepsMenu()->getOrCreateRootLevel(CT_StepsMenu::LO_Favorites);
+    CT_MenuLevel *favorites = GUI_MANAGER->getPluginManager()->stepsMenu()->createOrGetRootLevel(CT_StepsMenu::LO_Favorites);
 
     QList<CT_MenuLevel*> levels = favorites->levels();
     QListIterator<CT_MenuLevel*> it(levels);
@@ -76,7 +76,7 @@ void GFavoritesMenuDialog::recursiveAddOrRemoveLevelToFavorites(QTreeWidgetItem 
         if(item->isHidden())
             GUI_MANAGER->getPluginManager()->stepsMenu()->removeLevelFromFavorites(levelFromItem(item));
         else {
-            CT_MenuLevel *level = CT_MenuLevel::getOrCreateLevel(item->text(0), parentLevel);
+            CT_MenuLevel *level = CT_MenuLevel::staticCreateOrGetLevelInParentLevel(item->text(0), parentLevel);
             recursiveAddOrRemoveLevelToFavorites(item, level);
         }
     }
@@ -110,7 +110,7 @@ CT_MenuLevel *GFavoritesMenuDialog::levelFromItem(QTreeWidgetItem *item)
 
 void GFavoritesMenuDialog::accept()
 {
-    CT_MenuLevel *favorites = GUI_MANAGER->getPluginManager()->stepsMenu()->getOrCreateRootLevel(CT_StepsMenu::LO_Favorites);
+    CT_MenuLevel *favorites = GUI_MANAGER->getPluginManager()->stepsMenu()->createOrGetRootLevel(CT_StepsMenu::LO_Favorites);
 
     int n = ui->treeWidget->topLevelItemCount();
 
@@ -120,7 +120,7 @@ void GFavoritesMenuDialog::accept()
         if(item->isHidden())
             GUI_MANAGER->getPluginManager()->stepsMenu()->removeLevelFromFavorites(levelFromItem(item));
         else {
-            CT_MenuLevel *level = CT_MenuLevel::getOrCreateLevel(item->text(0), favorites);
+            CT_MenuLevel *level = CT_MenuLevel::staticCreateOrGetLevelInParentLevel(item->text(0), favorites);
 
             recursiveAddOrRemoveLevelToFavorites(item, level);
         }
@@ -133,7 +133,7 @@ void GFavoritesMenuDialog::accept()
             CT_MenuLevel *levelChoosed = levelFromItem(ci);
 
             if(levelChoosed != NULL)
-                levelChoosed->addStep(m_step->getPlugin()->createNewInstanceOfStep(*m_step, NULL));
+                levelChoosed->addStep(m_step->pluginStaticCastT<>()->createNewInstanceOfStep(*m_step, NULL));
         }
     }
 

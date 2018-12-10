@@ -1,9 +1,11 @@
 #ifndef DM_ITEMDRAWABLEVIEWCONFIGURATIONBUILDER_H
 #define DM_ITEMDRAWABLEVIEWCONFIGURATIONBUILDER_H
 
-#include "ct_itemdrawable/ct_itemdrawableconfiguration.h"
+#include "ct_itemdrawable/tools/ct_itemdrawableconfiguration.h"
 
 #include <QMutex>
+
+class CT_AbstractItemDrawable;
 
 class DM_ItemDrawableViewConfiguration
 {

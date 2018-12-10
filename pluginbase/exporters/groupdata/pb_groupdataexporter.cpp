@@ -12,7 +12,7 @@
 #include <QDebug>
 
 #include "ct_global/ct_context.h"
-#include "ct_itemdrawable/abstract/ct_abstractitemgroup.h"
+#include "ct_itemdrawable/abstract/CT_StandardItemGroup.h"
 #include "ct_itemdrawable/model/outModel/abstract/ct_outabstractsingularitemmodel.h"
 #include "ct_itemdrawable/model/outModel/abstract/ct_outabstractgroupmodel.h"
 #include "ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h"
@@ -63,7 +63,7 @@ bool PB_GroupDataExporter::setItemDrawableToExport(const QList<CT_AbstractItemDr
     {
         CT_AbstractItemDrawable *item = it.next();
 
-        if(dynamic_cast<CT_AbstractItemGroup*>(item) != NULL)
+        if(dynamic_cast<CT_StandardItemGroup*>(item) != NULL)
             myList.append(item);
     }
 
@@ -85,13 +85,13 @@ bool PB_GroupDataExporter::protectedExportToFile()
     // + une map listant les groupes par modèle
     // + une map pour les headers de fichiers (un par modèle de groupe)
     QMap<CT_OutAbstractGroupModel*, QMultiMap<CT_OutAbstractSingularItemModel*, CT_OutAbstractItemAttributeModel*>* > itemAttModelIndex;
-    QMultiMap<CT_OutAbstractGroupModel*, CT_AbstractItemGroup*> groupMap;
+    QMultiMap<CT_OutAbstractGroupModel*, CT_StandardItemGroup*> groupMap;
 
     // Parcours des groupes
     QListIterator<CT_AbstractItemDrawable*> it_itemsToExport(itemDrawableToExport());
     while(it_itemsToExport.hasNext())
     {
-        CT_AbstractItemGroup* group = dynamic_cast<CT_AbstractItemGroup*>(it_itemsToExport.next());
+        CT_StandardItemGroup* group = dynamic_cast<CT_StandardItemGroup*>(it_itemsToExport.next());
 
         CT_OutAbstractGroupModel *groupModel = (CT_OutAbstractGroupModel*)group->model();
         groupMap.insert(groupModel, group);
@@ -196,16 +196,16 @@ bool PB_GroupDataExporter::protectedExportToFile()
 
 
             // Liste des groupes correspondant au modèle de groupe en cours
-            QList<CT_AbstractItemGroup*> groupListForThisModel = groupMap.values(groupModel);
+            QList<CT_StandardItemGroup*> groupListForThisModel = groupMap.values(groupModel);
 
-            QListIterator<CT_AbstractItemGroup*> it_Groups(groupListForThisModel);
+            QListIterator<CT_StandardItemGroup*> it_Groups(groupListForThisModel);
             while(it_Groups.hasNext())
             {
-                const CT_AbstractItemGroup* group = it_Groups.next();
+                const CT_StandardItemGroup* group = it_Groups.next();
 
                 txtStream << group->id() << "\t";
 
-                const CT_AbstractItemGroup* parentGroup = group->parentGroup();
+                const CT_StandardItemGroup* parentGroup = group->parentGroup();
                 if (parentGroup != NULL)
                 {
                     txtStream << parentGroup->id() << "\t";

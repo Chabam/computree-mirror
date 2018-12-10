@@ -1,8 +1,10 @@
 #ifndef CDM_HRSCRIPTXMLWRITER_H
 #define CDM_HRSCRIPTXMLWRITER_H
 
-#include "interfaces.h"
 #include "computreeCore_global.h"
+
+#include "ct_step/abstract/ct_virtualabstractstep.h"
+#include "ct_abstractstepplugin.h"
 
 #include <QDomElement>
 #include <QStack>

@@ -1,6 +1,6 @@
 #include "dm_amkglglobaledgescloudmanager.h"
 
-#include "ct_tools/repository/ct_repositoryaccess.h"
+#include "ct_accessor/ct_repositoryaccess.h"
 #include "ct_cloud/tools/ct_globaledgecloudmanager.h"
 
 DM_AMKglGlobalEdgesCloudManager::DM_AMKglGlobalEdgesCloudManager()

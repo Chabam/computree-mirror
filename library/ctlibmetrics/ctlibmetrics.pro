@@ -15,6 +15,7 @@ DEFINES += CTLIBMETRICS_LIBRARY
 
 HEADERS += $${PLUGIN_SHARED_INTERFACE_DIR}/interfaces.h \ 
     ctlibmetrics_global.h \
+    ct_metric/abstract/ct_abstractmetric.h \
     ct_metric/abstract/ct_abstractmetric_raster.h \
     ct_metric/abstract/ct_abstractmetric_xyz.h \
     ct_metric/points/ct_cloudmetrics.h \
@@ -22,6 +23,7 @@ HEADERS += $${PLUGIN_SHARED_INTERFACE_DIR}/interfaces.h \
     ct_metric/abstract/ct_abstractmetricgeneric.h
 
 SOURCES += \
+    ct_metric/abstract/ct_abstractmetric.cpp \
     ct_metric/abstract/ct_abstractmetric_raster.cpp \
     ct_metric/abstract/ct_abstractmetric_xyz.cpp \
     ct_metric/points/ct_cloudmetrics.cpp \

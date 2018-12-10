@@ -1,7 +1,7 @@
 #ifndef DM_GLOBALPOINTSMODIFIER_H
 #define DM_GLOBALPOINTSMODIFIER_H
 
-#include "interfaces.h"
+#include "graphicsviewinterface.h"
 
 #include "scene/permanentitemscenebymodel.h"
 #include "defineglobalcloud.h"

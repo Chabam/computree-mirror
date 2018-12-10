@@ -17,6 +17,8 @@
 #include "tools/opengl/shapetovolume.h"
 #include "tools/drawmodeconverter.h"
 
+#include "painterinterface.h"
+
 GraphicsViewDebugMode::GraphicsViewDebugMode() : CT_AbstractActionForGraphicsView()
 {
     m_mustShowCoordinateSystem = false;

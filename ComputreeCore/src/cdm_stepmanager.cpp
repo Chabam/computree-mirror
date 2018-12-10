@@ -93,22 +93,6 @@ bool CDM_StepManager::addStep(CT_VirtualAbstractStep *step, CT_VirtualAbstractSt
     return false;
 }
 
-bool CDM_StepManager::insertStep(CT_VirtualAbstractStep *step, CT_VirtualAbstractStep &parent)
-{
-    if(parent.insertStep(-1, step))
-    {
-        //createThread(*step);
-
-        connectStep(step);
-
-        emit stepInserted(-1, step);
-
-        return true;
-    }
-
-    return false;
-}
-
 bool CDM_StepManager::removeStep(CT_VirtualAbstractStep *step)
 {
     if(isRunning())
@@ -281,18 +265,19 @@ bool CDM_StepManager::checkOneStepIsInDebugModeFromStep(CT_VirtualAbstractStep *
         if(step->isDebugModeOn())
             return true;
 
-        stepChildList = step->getStepChildList();
+        step->visitChildrens([&stepChildList](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+            stepChildList.append(const_cast<CT_VirtualAbstractStep*>(child));
+            return true;
+        });
     }
     else
     {
         stepChildList = getStepRootList();
     }
 
-    QListIterator<CT_VirtualAbstractStep*> it(stepChildList);
-
-    while(it.hasNext())
+    for(CT_VirtualAbstractStep* step : stepChildList)
     {
-        if(checkOneStepIsInDebugModeFromStep(it.next()))
+        if(checkOneStepIsInDebugModeFromStep(step))
             return true;
     }
 
@@ -451,8 +436,8 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
     // ou si elle en a un mais qu'il a ete supprime de la memoire
     if(forceAfterExecute
         || step.isSettingsModified()
-        || ((step.nResult() == 0) && (step.getProgress() < 100))
-        || ((step.nResult() > 0) && (step.getResult(0)->isClearedFromMemory())))
+        || ((step.nOutResult() == 0) && (step.progressValue() < 100))
+        || ((step.nOutResult() > 0) && (step.outResultAt(0)->isClearedFromMemory())))
     {
         // on lance l'etape seulement si elle a besoin d'un resultat
         // et qu'il y en a un
@@ -462,7 +447,7 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
         if((step.needInputResults()
             && (step.parentStep() != NULL)
             && !step.parentStep()->isStopped()
-            && (step.parentStep()->getErrorCode() == 0))
+            && (step.parentStep()->errorCode() == 0))
             || !step.needInputResults())
         {
             _mutex.lock();
@@ -494,7 +479,7 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
 
             forceAfterExecute = true;
 
-            if(step.getErrorCode() != 0)
+            if(step.errorCode() != 0)
                 continueLoop = false;
         }
         else
@@ -520,15 +505,10 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
     if(continueLoop)
     {
         // on continu avec les tapes filles
-        QList<CT_VirtualAbstractStep*> children = step.getStepChildList();
-        QListIterator<CT_VirtualAbstractStep*> it(children);
-
-        while(continueLoop
-              && !restart
-              && it.hasNext())
-        {
-            continueLoop = recursiveExecuteStep(*it.next(), restart, forceAfterExecute);
-        }
+        step.visitChildrens([this, &continueLoop, &restart, &forceAfterExecute](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+            continueLoop = this->recursiveExecuteStep(*const_cast<CT_VirtualAbstractStep*>(child), restart, forceAfterExecute);
+            return continueLoop && !restart;
+        });
 
         if(!restart)
         {
@@ -544,14 +524,11 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
 
 void CDM_StepManager::recursiveClearResult(CT_VirtualAbstractStep &step)
 {
-    QList<CT_VirtualAbstractStep *> stepChildList = step.getStepChildList();
-    QListIterator<CT_VirtualAbstractStep*> it(stepChildList);
+    step.visitChildrens([this](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+        this->recursiveClearResult(*const_cast<CT_VirtualAbstractStep*>(child));
+        return !_stop;
+    });
 
-    while((!_stop)
-            && it.hasNext())
-    {
-        recursiveClearResult(*(it.next()));
-    }
 
     if(!_stop)
     {
@@ -633,7 +610,7 @@ void CDM_StepManager::slotStepRequiredManualMode()
             emit stepInManualMode(true);
 
             // sinon si on n'a pas déjà donné le contexte à l'étape
-            if(step->getGuiContext() != m_guiContext)
+            if(step->guiContext() != m_guiContext)
                 step->setGuiContext(m_guiContext); // on lui donne
 
             // on informe l'étape qu'on a bien activé le mode manuel

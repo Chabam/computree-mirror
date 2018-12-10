@@ -1,7 +1,6 @@
 #ifndef CDM_HRSCRIPTXMLREADER_H
 #define CDM_HRSCRIPTXMLREADER_H
 
-#include "interfaces.h"
 #include "cdm_scriptmanagerabstract.h"
 
 #include <QDomElement>

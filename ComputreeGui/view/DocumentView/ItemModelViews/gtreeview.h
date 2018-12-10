@@ -18,7 +18,7 @@
 
 #include "dm_itemdrawablemanageroptions.h"
 
-#include "ct_attributes/abstract/ct_abstractitemattribute.h"
+#include "ct_itemattributes/abstract/ct_abstractitemattribute.h"
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 #include "tools/itemdrawable/dm_contextmenucolouristadder.h"
 
@@ -90,6 +90,10 @@ private:
     typedef QHash<CT_OutAbstractModel*, int>            DataReferenceCollection;
     typedef QHashIterator<CT_OutAbstractModel*, int>    DataReferenceCollectionIterator;
 
+    using ItemDrawableTypeModel = CT_OutAbstractModel;
+    using ItemDrawableType = CT_AbstractItemDrawable;
+    using ItemDrawableTypeResult = DM_ItemDrawableType<ItemDrawableTypeModel*, ItemDrawableType>;
+
     DM_ActionsHandlerForTreeView                                                    *m_actionsHandler;
 
     QMenu                                                                           *m_contextMenu;
@@ -100,7 +104,7 @@ private:
     CG_CustomTreeItemModel                                                          *m_model;
     DM_ItemDrawableTreeViewControllerT<CG_CustomTreeItemModel, CG_CustomTreeItem>   m_treeViewController;
 
-    DM_ItemDrawableBuilderT<CT_OutAbstractItemModel*, CT_AbstractItemDrawable>      m_typeBuilder;
+    DM_ItemDrawableBuilderT<ItemDrawableTypeModel*, ItemDrawableType>               m_typeBuilder;
 
     QList<CT_AbstractItemDrawable*>                                                 m_expandedItems;
 

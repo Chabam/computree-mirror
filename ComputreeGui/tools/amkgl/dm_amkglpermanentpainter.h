@@ -1,8 +1,8 @@
 #ifndef DM_AMKGLPERMANENTPAINTER_H
 #define DM_AMKGLPERMANENTPAINTER_H
 
-#include "interfaces.h"
-
+#include "painterinterface.h"
+#include "graphicsviewinterface.h"
 #include "scene/tools/permanentiteminformation.h"
 #include "renderer/generic/generictypedef.h"
 

@@ -181,9 +181,9 @@ void GItemDrawableConfigurationManagerView::on_widgetComboBox_currentItemChanged
 
             for(int i=0; i<size; ++i)
             {
-                QString name = config->getVariableName(i);
-                QVariant value = config->getVariableValue(i);
-                CT_ItemDrawableConfiguration::Type type = config->getVariableType(i);
+                QString name = config->variableName(i);
+                QVariant value = config->variableValue(i);
+                CT_ItemDrawableConfiguration::Type type = config->variableType(i);
 
                 QTableWidgetItem *item = new QTableWidgetItem();
                 item->setFlags(Qt::ItemIsEnabled);
@@ -252,8 +252,8 @@ void GItemDrawableConfigurationManagerView::on_tableWidgetConfiguration_itemChan
         {
             int i = item->row();
 
-            QVariant value = config->getVariableValue(i);
-            CT_ItemDrawableConfiguration::Type type = config->getVariableType(i);
+            QVariant value = config->variableValue(i);
+            CT_ItemDrawableConfiguration::Type type = config->variableType(i);
 
             if(type == CT_ItemDrawableConfiguration::Bool)
             {
@@ -327,8 +327,8 @@ void GItemDrawableConfigurationManagerView::tableWidgetComboBoxIndexChanged(QStr
         {
             int i = row;
 
-            QVariant varValue = config->getVariableValue(i);
-            CT_ItemDrawableConfiguration::Type type = config->getVariableType(i);
+            QVariant varValue = config->variableValue(i);
+            CT_ItemDrawableConfiguration::Type type = config->variableType(i);
 
             if(type == CT_ItemDrawableConfiguration::StringList)
             {

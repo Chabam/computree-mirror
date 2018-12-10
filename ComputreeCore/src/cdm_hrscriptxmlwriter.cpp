@@ -6,7 +6,6 @@
 #include <QTextStream>
 #include <QDebug>
 
-#include "ct_step/abstract/ct_virtualabstractstep.h"
 #include "ct_abstractstepplugin.h"
 
 #include "cdm_pluginmanager.h"
@@ -308,7 +307,7 @@ int CDM_HRScriptXMLWriter::genericAddParameter(const QObject *caller, const QStr
 
 void CDM_HRScriptXMLWriter::recursiveProcessStep(CT_VirtualAbstractStep* step, QDomElement &parentDom, int& stepID, QSet<CT_AbstractStepPlugin*>& pluginsUsed)
 {
-    pluginsUsed.insert(step->getPlugin());
+    pluginsUsed.insert(step->pluginStaticCastT<>());
 
     processStepPreSettings(step, stepID);
     processStepInputSettings(step, stepID);
@@ -320,11 +319,10 @@ void CDM_HRScriptXMLWriter::recursiveProcessStep(CT_VirtualAbstractStep* step, Q
 
     ++stepID;
 
-    const QList<CT_VirtualAbstractStep*> childrens = step->getStepChildList();
-
-    foreach (CT_VirtualAbstractStep* child, childrens) {
-        recursiveProcessStep(child, stepEL, stepID, pluginsUsed);
-    }
+    step->visitChildrens([this, &stepEL, &stepID, &pluginsUsed](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+        this->recursiveProcessStep(const_cast<CT_VirtualAbstractStep*>(child), stepEL, stepID, pluginsUsed);
+        return true;
+    });
 
     parentDom.appendChild(stepEL);
 }
@@ -443,8 +441,8 @@ QDomElement CDM_HRScriptXMLWriter::getOrCreateDomElementForCaller(const QObject 
 QDomElement CDM_HRScriptXMLWriter::createDomElementForStep(CT_VirtualAbstractStep *step, int stepID)
 {
     QDomElement stepEL = m_document.createElement("Step");
-    stepEL.setAttribute("plugin", CDM_XMLTools::encodeEntities(m_pluginManager->getPluginName(step->getPlugin())));
-    stepEL.setAttribute("type", CDM_XMLTools::encodeEntities(step->getPlugin()->getKeyForStep(*step)));
+    stepEL.setAttribute("plugin", CDM_XMLTools::encodeEntities(m_pluginManager->getPluginName(step->pluginStaticCastT<>())));
+    stepEL.setAttribute("type", CDM_XMLTools::encodeEntities(step->pluginStaticCastT<>()->getKeyForStep(*step)));
     stepEL.setAttribute("id", stepID);
 
     return stepEL;

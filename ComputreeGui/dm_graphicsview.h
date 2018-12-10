@@ -36,8 +36,6 @@
 
 class DM_GraphicsView : public GraphicsViewInterface
 {
-    Q_INTERFACES(GraphicsViewInterface)
-
 public:
 
     DM_GraphicsView();

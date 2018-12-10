@@ -71,11 +71,6 @@ public:
      */
     CT_OutAbstractResultModel* resultModelByUniqueName(const QString& uniqueName) const;
 
-    /*!
-     *  \brief Retourne le modèle de sortie à partir de son nom.
-     *
-     *  \return NULL si le modèle n'a pas été trouvé.
-     */
     /**
      * @brief Returns the output model that has the same unique name (the collection of all models created with method "createSearchModelCollection()" will be used to
      *        improve performance)

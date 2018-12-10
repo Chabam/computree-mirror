@@ -161,9 +161,9 @@ void PB_StepLoadFileByName::createInResultModelListProtected()
 {
     CT_InResultModelGroupToCopy *resultModel = createNewInResultModelForCopy(DEF_inResult, tr("Résultat"));
     resultModel->setZeroOrMoreRootGroup();
-    resultModel->addGroupModel("", DEF_inGroup, CT_AbstractItemGroup::staticGetType(), tr("Groupe"), "", CT_InAbstractGroupModel::CG_ChooseOneIfMultiple);
-    resultModel->addItemModel(DEF_inGroup, DEF_inItem, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"));
-    resultModel->addItemAttributeModel(DEF_inItem, DEF_inAttName, QList<QString>() << CT_AbstractCategory::DATA_FILE_NAME << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Nom"));
+    resultModel->addStdGroupModel("", DEF_inGroup, CT_StandardItemGroup::staticGetType(), tr("Groupe"), "", CT_InAbstractGroupModel::CG_ChooseOneIfMultiple);
+    resultModel->addStdItemModel(DEF_inGroup, DEF_inItem, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"));
+    resultModel->addStdItemAttributeModel(DEF_inItem, DEF_inAttName, QList<QString>() << CT_AbstractCategory::DATA_FILE_NAME << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Nom"));
 }
 
 // Creation and affiliation of OUT models

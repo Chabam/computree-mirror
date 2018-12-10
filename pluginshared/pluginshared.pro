@@ -100,14 +100,7 @@ SOURCES += \
     ct_stepcanbeaddedfirstseparator.cpp \
     ct_itemdrawable/abstract/ct_abstractitemgroup.cpp \
     ct_result/ct_resultgroup.cpp \
-    ct_itemdrawable/model/inModel/abstract/ct_inabstractgroupmodel.cpp \
-    ct_itemdrawable/model/outModel/abstract/ct_outabstractgroupmodel.cpp \
-    ct_result/model/inModel/ct_inresultmodelgroup.cpp \
     ct_itemdrawable/ct_standarditemgroup.cpp \
-    ct_result/model/outModel/ct_outresultmodelgroup.cpp \
-    ct_result/model/inModel/ct_inresultmodelnotneedinputresult.cpp \
-    ct_result/model/outModel/abstract/ct_outabstractresultmodel.cpp \
-    ct_result/model/inModel/tools/ct_inresultmodelmanager.cpp \
     ct_result/tools/ct_inmanager.cpp \
     ct_result/model/outModel/tools/ct_outresultmodelmanager.cpp \
     ct_result/tools/ct_outmanager.cpp \
@@ -119,13 +112,8 @@ SOURCES += \
     ct_view/inModel/ctg_inresultmodelconfiguration.cpp \
     ct_view/inModel/ctg_inmodelpossibilitieschoice.cpp \
     ct_result/model/inModel/tools/ct_inresultsbymodel.cpp \
-    ct_result/model/inModel/ct_inresultmodelgrouptocopy.cpp \
-    ct_result/model/outModel/ct_outresultmodelgroupcopy.cpp \
-    ct_result/model/outModel/tools/ct_outresultmodelgrouptocopypossibility.cpp \
     ct_result/model/outModel/tools/ct_iteratoritemsmodelforresultmodelgroup.cpp \
-    ct_tools/model/ct_autorenamemodels.cpp \
     ct_shapedata/ct_boxdata.cpp \
-    ct_itemdrawable/model/inModel/ct_inzeroormoregroupmodel.cpp \
     ct_itemdrawable/tools/ct_standardcontext.cpp \
     ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.cpp \
     ct_itemdrawable/ct_referencepoint.cpp \
@@ -145,12 +133,7 @@ SOURCES += \
     ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp \
-    ct_tools/model/abstract/ct_abstractoutmodelcopyaction.cpp \
     ct_tools/model/ct_generateoutresultmodelname.cpp \
-    ct_tools/model/ct_outmodelcopyactionaddmodelgroupingroup.cpp \
-    ct_tools/model/ct_outmodelcopyactionaddmodelitemingroup.cpp \
-    ct_tools/model/ct_outmodelcopyactionremovemodelgroupingroup.cpp \
-    ct_tools/model/ct_outmodelcopyactionremovemodelitemingroup.cpp \
     ct_result/model/outModel/tools/ct_iteratorgroupsmodelforresultmodelgroup.cpp \
     ct_view/ct_lineedit.cpp \
     ct_math/ct_math.cpp \
@@ -252,14 +235,12 @@ SOURCES += \
     ct_itemdrawable/ct_tnodegroup.cpp \
     ct_itemdrawable/abstract/ct_abstractstandarditemgroup.cpp \
     ct_global/ct_temporarylog.cpp \
-    ct_result/model/outModel/tools/ct_outresultmodelgrouptocopypossibilities.cpp \
     ct_itemdrawable/ct_topfnodegroup.cpp \
     ct_itemdrawable/tools/iterator/ct_groupiterator.cpp \
     ct_itemdrawable/tools/iterator/ct_itemiterator.cpp \
     ct_itemdrawable/tools/iterator/ct_mutablegroupiterator.cpp \
     ct_itemdrawable/tools/iterator/ct_mutableitemiterator.cpp \
     ct_itemdrawable/tools/iterator/ct_containeriterator.cpp \
-    ct_itemdrawable/model/outModel/ct_outopfnodegroupmodel.cpp \
     ct_result/tools/iterator/ct_resultgroupiterator.cpp \
     ct_result/tools/iterator/ct_resultitemiterator.cpp \
     ct_tools/ct_mimedata.cpp \
@@ -267,32 +248,12 @@ SOURCES += \
     ct_categories/ct_stdcategory.cpp \
     ct_categories/tools/ct_categorymanager.cpp \
     ct_attributes/abstract/ct_abstractitemattribute.cpp \
-    ct_attributes/model/inModel/abstract/ct_inabstractattributemodel.cpp \
     ct_attributes/tools/ct_itemattributecontainer.cpp \
-    ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.cpp \
-    ct_model/abstract/ct_abstractmodel.cpp \
-    ct_itemdrawable/model/inModel/abstract/ct_inabstractsingularitemmodel.cpp \
-    ct_itemdrawable/model/inModel/ct_instdsingularitemmodel.cpp \
-    ct_itemdrawable/model/inModel/ct_instdgroupmodel.cpp \
-    ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.cpp \
-    ct_itemdrawable/model/outModel/abstract/ct_outabstractsingularitemmodel.cpp \
-    ct_itemdrawable/model/outModel/ct_outstdgroupmodel.cpp \
-    ct_itemdrawable/model/outModel/ct_outstdsingularitemmodel.cpp \
-    ct_attributes/model/inModel/ct_instditemattributemodel.cpp \
-    ct_attributes/model/outModel/ct_outstditemattributemodel.cpp \
-    ct_model/inModel/abstract/ct_inabstractmodel.cpp \
-    ct_model/outModel/abstract/ct_outabstractmodel.cpp \
-    ct_model/inModel/tools/ct_instdmodelpossibility.cpp \
-    ct_model/inModel/tools/ct_instdmodelpossibilitygroup.cpp \
-    ct_result/model/inModel/abstract/ct_inabstractresultmodel.cpp \
     ct_attributes/tools/ct_defaultitemattributemanager.cpp \
-    ct_result/model/inModel/tools/ct_instdresultmodelpossibility.cpp \
     ct_itemdrawable/abstract/ct_abstractmeshmodel.cpp \
     ct_result/tools/iterator/ct_resultiterator.cpp \
     ct_item/abstract/ct_abstractitem.cpp \
     ct_colorcloud/abstract/ct_abstractmodifiableindexcloudcolormap.cpp \
-    ct_itemdrawable/model/inModel/abstract/ct_inabstractitemmodel.cpp \
-    ct_model/tools/ct_modelsearchhelper.cpp \
     ct_item/tools/iterator/ct_childiterator.cpp \
     ct_shapedata/ct_planarbsplinedata.cpp \
     ct_itemdrawable/ct_planarbspline.cpp \
@@ -332,7 +293,6 @@ SOURCES += \
     ct_shape2ddata/ct_point2ddata.cpp \
     ct_itemdrawable/ct_point2d.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.cpp \
-    ct_tools/model/ct_outmodelcopyactionaddmodelitemattributeinitem.cpp \
     ct_attributes/ct_stditemattributet.cpp \
     ct_itemdrawable/ct_fileheader.cpp \
     ct_itemdrawable/ct_transformationmatrix.cpp \
@@ -348,7 +308,6 @@ SOURCES += \
     ct_itemdrawable/abstract/ct_abstractimage2d.cpp \
     ct_iterator/ct_mutableindexiterator.cpp \
     ct_itemdrawable/tools/ct_itemsearchhelper.cpp \
-    ct_model/tools/ct_modelsaverestorehelper.cpp \
     ct_itemdrawable/ct_sphere.cpp \
     ct_shapedata/ct_spheredata.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.cpp \
@@ -379,11 +338,10 @@ SOURCES += \
     ct_view/elements/ctg_configurableelementsselector.cpp \
     ct_view/ct_multilineedit.cpp \
     ct_view/tools/ct_textfileconfigurationdialog.cpp \
-    ct_model/tools/ct_modelselectionhelper.cpp \
     ct_itemdrawable/ct_grid4d_dense.cpp \
     ct_itemdrawable/ct_grid4d_sparse.cpp \
     ct_itemdrawable/ct_grid3d_sparse.cpp \
-	ct_math/delaunay2d/ct_delaunaysidelist.cpp \
+    ct_math/delaunay2d/ct_delaunaysidelist.cpp \
     ct_math/delaunay2d/ct_delaunaytrianglesrecycler.cpp \
     ct_itemdrawable/ct_grid3d_points.cpp \
     ct_itemdrawable/tools/scanner/ct_thetaphishootingpattern.cpp \
@@ -399,7 +357,8 @@ SOURCES += \
     ct_reader/extensions/ct_readerpointsfilteringextension.cpp \
     ct_view/ct_groupbox.cpp \
     ct_itemdrawable/ct_scanpath.cpp \
-    ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp
+    ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp \
+    ct_tools/ct_uniqueindexgenerator.cpp
 
 HEADERS += interfaces.h \
     pluginShared_global.h \
@@ -455,13 +414,7 @@ HEADERS += interfaces.h \
     ct_stepcanbeaddedfirstseparator.h \
     ct_itemdrawable/abstract/ct_abstractitemgroup.h \
     ct_result/ct_resultgroup.h \
-    ct_itemdrawable/model/inModel/abstract/ct_inabstractgroupmodel.h \
-    ct_itemdrawable/model/outModel/abstract/ct_outabstractgroupmodel.h \
-    ct_result/model/inModel/ct_inresultmodelgroup.h \
     ct_itemdrawable/ct_standarditemgroup.h \
-    ct_result/model/outModel/ct_outresultmodelgroup.h \
-    ct_result/model/inModel/ct_inresultmodelnotneedinputresult.h \
-    ct_result/model/outModel/abstract/ct_outabstractresultmodel.h \
     ct_result/model/inModel/tools/ct_inresultmodelmanager.h \
     ct_result/tools/ct_inmanager.h \
     ct_result/model/outModel/tools/ct_outresultmodelmanager.h \
@@ -470,19 +423,12 @@ HEADERS += interfaces.h \
     ct_result/tools/ct_inresultmanager.h \
     ct_result/tools/ct_outresultmanager.h \
     ct_result/tools/iterator/private/ct_treestructureforiterator.h \
-    ct_itemdrawable/model/outModel/abstract/def_ct_abstractgroupmodelout.h \
     ct_view/inModel/ctg_inresultmodelpossibilities.h \
     ct_view/inModel/ctg_inresultmodelconfiguration.h \
     ct_view/inModel/ctg_inmodelpossibilitieschoice.h \
-    ct_itemdrawable/model/inModel/abstract/def_ct_abstractgroupmodelin.h \
     ct_result/model/inModel/tools/ct_inresultsbymodel.h \
-    ct_result/model/inModel/ct_inresultmodelgrouptocopy.h \
-    ct_result/model/outModel/ct_outresultmodelgroupcopy.h \
-    ct_result/model/outModel/tools/ct_outresultmodelgrouptocopypossibility.h \
     ct_result/model/outModel/tools/ct_iteratoritemsmodelforresultmodelgroup.h \
-    ct_tools/model/ct_autorenamemodels.h \
     ct_shapedata/ct_boxdata.h \
-    ct_itemdrawable/model/inModel/ct_inzeroormoregroupmodel.h \
     ct_itemdrawable/tools/ct_standardcontext.h \
     ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h \
     interfacessettings.h \
@@ -504,12 +450,7 @@ HEADERS += interfaces.h \
     ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.h \
-    ct_tools/model/abstract/ct_abstractoutmodelcopyaction.h \
     ct_tools/model/ct_generateoutresultmodelname.h \
-    ct_tools/model/ct_outmodelcopyactionaddmodelgroupingroup.h \
-    ct_tools/model/ct_outmodelcopyactionaddmodelitemingroup.h \
-    ct_tools/model/ct_outmodelcopyactionremovemodelgroupingroup.h \
-    ct_tools/model/ct_outmodelcopyactionremovemodelitemingroup.h \
     ct_result/model/outModel/tools/ct_iteratorgroupsmodelforresultmodelgroup.h \
     ct_view/ct_lineedit.h \
     ct_math/ct_math.h \
@@ -677,14 +618,12 @@ HEADERS += interfaces.h \
     ct_itemdrawable/ct_tnodegroup.h \
     ct_itemdrawable/abstract/ct_abstractstandarditemgroup.h \
     ct_global/ct_temporarylog.h \
-    ct_result/model/outModel/tools/ct_outresultmodelgrouptocopypossibilities.h \
     ct_itemdrawable/ct_topfnodegroup.h \
     ct_itemdrawable/tools/iterator/ct_groupiterator.h \
     ct_itemdrawable/tools/iterator/ct_itemiterator.h \
     ct_itemdrawable/tools/iterator/ct_mutablegroupiterator.h \
     ct_itemdrawable/tools/iterator/ct_mutableitemiterator.h \
     ct_itemdrawable/tools/iterator/ct_containeriterator.h \
-    ct_itemdrawable/model/outModel/ct_outopfnodegroupmodel.h \
     ct_result/tools/iterator/ct_resultgroupiterator.h \
     ct_result/tools/iterator/ct_resultitemiterator.h \
     ct_cloudindex/ct_cloudindexstdlistt.h \
@@ -702,49 +641,19 @@ HEADERS += interfaces.h \
     ct_attributes/ct_stditemattributet.hpp \
     ct_attributes/ct_stditemattributewrappert.h \
     ct_attributes/ct_stditemattributewrappert.hpp \
-    ct_itemdrawable/model/inModel/abstract/def_ct_abstractitemdrawablemodelin.h \
-    ct_itemdrawable/model/outModel/abstract/def_ct_abstractitemdrawablemodelout.h \
     ct_attributes/tools/ct_iacreator.h \
     ct_attributes/abstract/ct_abstractitemattributet.h \
     ct_attributes/abstract/ct_abstractitemattributet.hpp \
     ct_attributes/tools/ct_itemattributecontainer.h \
-    ct_itemdrawable/model/abstract/ct_abstractgroupmodelt.h \
-    ct_itemdrawable/model/abstract/ct_abstractgroupmodelt.hpp \
-    ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h \
-    ct_attributes/model/inModel/abstract/ct_inabstractitemattributemodel.h \
-    ct_model/abstract/ct_abstractmodel.h \
-    ct_itemdrawable/model/abstract/ct_abstractsingularitemmodelt.h \
-    ct_itemdrawable/model/abstract/ct_abstractsingularitemmodelt.hpp \
-    ct_itemdrawable/model/inModel/abstract/ct_inabstractsingularitemmodel.h \
-    ct_itemdrawable/model/inModel/ct_instdsingularitemmodel.h \
-    ct_itemdrawable/model/inModel/ct_instdgroupmodel.h \
-    ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h \
-    ct_itemdrawable/model/outModel/abstract/ct_outabstractsingularitemmodel.h \
-    ct_itemdrawable/model/outModel/ct_outstdgroupmodel.h \
-    ct_itemdrawable/model/outModel/ct_outstdsingularitemmodel.h \
-    ct_attributes/model/inModel/abstract/def_ct_inabstractitemattributemodel.h \
-    ct_attributes/model/outModel/abstract/def_ct_outabstractitemattributemodel.h \
-    ct_attributes/model/abstract/ct_abstractitemattributemodelt.h \
-    ct_attributes/model/abstract/ct_abstractitemattributemodelt.hpp \
-    ct_attributes/model/inModel/ct_instditemattributemodel.h \
-    ct_attributes/model/outModel/ct_outstditemattributemodel.h \
-    ct_model/inModel/abstract/ct_inabstractmodel.h \
-    ct_model/outModel/abstract/ct_outabstractmodel.h \
-    ct_model/inModel/tools/ct_instdmodelpossibility.h \
-    ct_model/inModel/tools/ct_instdmodelpossibilitygroup.h \
-    ct_result/model/inModel/abstract/ct_inabstractresultmodel.h \
     ct_attributes/tools/ct_defaultitemattributemanager.h \
     ct_itemdrawable/accessibility/ct_iaccessfacecloud.h \
     ct_itemdrawable/accessibility/ct_iaccessedgecloud.h \
     ct_cloudindex/abstract/ct_abstractmodifiablecloudindex.h \
-    ct_result/model/inModel/tools/ct_instdresultmodelpossibility.h \
     ct_cloudindex/registered/abstract/ct_abstractmodifiablecloudindexregistered.h \
     ct_itemdrawable/abstract/ct_abstractmeshmodel.h \
     ct_result/tools/iterator/ct_resultiterator.h \
     ct_item/abstract/ct_abstractitem.h \
     ct_colorcloud/abstract/ct_abstractmodifiableindexcloudcolormap.h \
-    ct_itemdrawable/model/inModel/abstract/ct_inabstractitemmodel.h \
-    ct_model/tools/ct_modelsearchhelper.h \
     ct_item/tools/iterator/ct_childiterator.h \
     ct_shapedata/ct_planarbsplinedata.h \
     ct_itemdrawable/ct_planarbspline.h \
@@ -792,7 +701,6 @@ HEADERS += interfaces.h \
     ct_shape2ddata/ct_point2ddata.h \
     ct_itemdrawable/ct_point2d.h \
     ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.h \
-    ct_tools/model/ct_outmodelcopyactionaddmodelitemattributeinitem.h \
     ct_itemdrawable/ct_fileheader.h \
     ct_itemdrawable/ct_transformationmatrix.h \
     ct_coordinates/tools/ct_coordinatesystemcloudindex.h \
@@ -832,7 +740,6 @@ HEADERS += interfaces.h \
     ct_itemdrawable/ct_image2d.h \
     ct_itemdrawable/ct_image2d.hpp \
     ct_itemdrawable/abstract/ct_abstractimage2d.h \
-    ct_model/tools/ct_modelsaverestorehelper.h \
     ct_tools/ct_typeinfo.h \
     ct_itemdrawable/ct_sphere.h \
     ct_shapedata/ct_spheredata.h \
@@ -869,7 +776,6 @@ HEADERS += interfaces.h \
     ct_tools/ct_stringtonumericconversiont.h \
     ct_view/elements/ctg_configurableelementsselector.h \
     ct_view/ct_multilineedit.h \
-    ct_model/tools/ct_modelselectionhelper.h \
     ct_itemdrawable/ct_grid4d_dense.h \
     ct_itemdrawable/ct_grid4d_dense.hpp \
     ct_itemdrawable/ct_grid4d_sparse.h \
@@ -899,7 +805,8 @@ HEADERS += interfaces.h \
     ct_view/ct_groupbox.h \
     ct_itemdrawable/tools/scanner/ct_thetaphishootingpattern.h \
     ct_itemdrawable/ct_scanpath.h \
-    ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.h
+    ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.h \
+    ct_tools/ct_uniqueindexgenerator.h
 
 DEPENDPATH *= ${INCLUDEPATH}
 

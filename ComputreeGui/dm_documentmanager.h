@@ -25,7 +25,7 @@
 
 *****************************************************************************/
 
-#include "interfaces.h"
+#include "documentinterface.h"
 
 #ifndef DM_DOCUMENTMANAGER_H
 #define DM_DOCUMENTMANAGER_H
@@ -34,8 +34,6 @@ class DM_Document;
 
 class DM_DocumentManager : public DocumentManagerInterface
 {
-    Q_INTERFACES(DocumentManagerInterface)
-
 public:
     virtual void redrawAllDocument() = 0;
     virtual bool containsDocument(DM_Document *document) const = 0;

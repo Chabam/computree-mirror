@@ -68,9 +68,17 @@ void DM_ItemModelViewSynchronizedGroup::slotItemDrawableToBeRemoved(CT_AbstractI
     if(_imv != NULL
             && item.isSelected())
     {
-        QList<DocumentInterface*> ll = item.document();
-        ll.removeOne(_imv);
-        ll.removeOne((DocumentInterface*)sender());
+        QList<DocumentInterface*> ll;
+
+        DocumentInterface* currentDoc = static_cast<DocumentInterface*>(sender());
+        DM_DocumentView*& imv = _imv;
+
+        item.visitDocumentsWhereThisItemIs([&ll, &imv, &currentDoc](const IDocumentForModel* doc) -> bool {
+            if((doc != imv) && (doc != currentDoc))
+                ll.append(static_cast<DocumentInterface*>(const_cast<IDocumentForModel*>(doc)));
+
+            return true;
+        });
 
         if(ll.isEmpty())
             _imv->removeItemDrawable(item);

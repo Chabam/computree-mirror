@@ -19,7 +19,7 @@ bool DM_AttributesColorT<CT_AbstractPointsAttributes>::process(GDocumentViewForG
             size_t size = index->size();
             size_t globalIndexOfPoint;
 
-            CT_AbstractColorCloud *toApplyColorCloud = m_ac->getColorCloud();
+            CT_AbstractColorCloud *toApplyColorCloud = m_ac->colorCloud();
 
             if(toApplyColorCloud != NULL) {
 
@@ -58,7 +58,7 @@ bool DM_AttributesColorT<CT_AbstractFaceAttributes>::process(GDocumentViewForGra
             size_t size = index->size();
             size_t globalIndexOfFace;
 
-            CT_AbstractColorCloud *toApplyColorCloud = m_ac->getColorCloud();
+            CT_AbstractColorCloud *toApplyColorCloud = m_ac->colorCloud();
 
             if(toApplyColorCloud != NULL) {
 
@@ -97,7 +97,7 @@ bool DM_AttributesColorT<CT_AbstractEdgeAttributes>::process(GDocumentViewForGra
             size_t size = index->size();
             size_t globalIndexOfEdge;
 
-            CT_AbstractColorCloud *toApplyColorCloud = m_ac->getColorCloud();
+            CT_AbstractColorCloud *toApplyColorCloud = m_ac->colorCloud();
 
             if(toApplyColorCloud != NULL) {
 

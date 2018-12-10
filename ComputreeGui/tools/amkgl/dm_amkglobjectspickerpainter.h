@@ -1,7 +1,7 @@
 #ifndef DM_AMKGLOBJECTSPICKERPAINTER_H
 #define DM_AMKGLOBJECTSPICKERPAINTER_H
 
-#include "interfaces.h"
+#include "painterinterface.h"
 
 class ObjectsProcessorForPicker;
 

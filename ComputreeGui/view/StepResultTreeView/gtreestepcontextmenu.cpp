@@ -63,7 +63,7 @@ void GTreeStepContextMenu::reload()
     action->setEnabled((selectedStep() != NULL)
                        && ((!selectedStep()->needInputResults())
                            || ((selectedStep()->parentStep() != NULL)
-                               && (selectedStep()->parentStep()->nResult() > 0))));
+                               && (selectedStep()->parentStep()->nOutResult() > 0))));
     connect(action, SIGNAL(triggered()), this, SLOT(executeStepRequired()));
     addAction(action);
 

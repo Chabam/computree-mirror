@@ -24,7 +24,7 @@ bool DM_AttributesNormalT<CT_AbstractPointsAttributes>::process(GDocumentViewFor
 
     if(normalArray != NULL)
     {
-        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->getNormalCloud();
+        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
 
         if(toApplyNormalCloud != NULL) {
 
@@ -65,7 +65,7 @@ bool DM_AttributesNormalT<CT_AbstractFaceAttributes>::process(GDocumentViewForGr
 
     if(normalArray != NULL)
     {
-        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->getNormalCloud();
+        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
 
         if(toApplyNormalCloud != NULL) {
 
@@ -106,7 +106,7 @@ bool DM_AttributesNormalT<CT_AbstractEdgeAttributes>::process(GDocumentViewForGr
 
     if(normalArray != NULL)
     {
-        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->getNormalCloud();
+        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
 
         if(toApplyNormalCloud != NULL) {
 

@@ -1,0 +1,2 @@
+COMPUTREE *= ctlibwidget
+COMPUTREE *= ctlibstructureaddon

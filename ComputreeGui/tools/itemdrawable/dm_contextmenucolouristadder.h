@@ -3,10 +3,11 @@
 
 #include <QMenu>
 #include <QList>
+#include <QGradient>
+
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 
 class CT_AbstractItemDrawable;
-class CT_AbstractModel;
-class CT_OutAbstractItemAttributeModel;
 
 class DocumentManagerInterface;
 
@@ -37,9 +38,9 @@ class DM_ContextMenuColouristAdder : public QObject
 public:
     struct ActionSetColorByAttribute {
         ActionSetColorByAttribute(): m_model(NULL), m_docIndex(-1) {}
-        ActionSetColorByAttribute(CT_OutAbstractItemAttributeModel *m, int docI) : m_model(m), m_docIndex(docI) {}
+        ActionSetColorByAttribute(const CT_OutAbstractItemAttributeModel* m, int docI) : m_model(const_cast<CT_OutAbstractItemAttributeModel*>(m)), m_docIndex(docI) {}
 
-        CT_OutAbstractItemAttributeModel    *m_model;
+        CT_OutAbstractItemAttributeModel*   m_model;
         int                                 m_docIndex;
     };
 

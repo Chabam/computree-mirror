@@ -150,9 +150,9 @@ QString GStepViewDefault::staticGetStepNameFromConfiguration(CT_VirtualAbstractS
         name = QString(" %1 -").arg(step->uniqueID());
     }
 
-    QString shortDescription = " " + step->getStepDescription() + " ";
-    QString key = " " + step->getPlugin()->getKeyForStep(*step) + " ";
-    QString displayableName = " " + step->getStepDisplayableName()+ " ";
+    QString shortDescription = " " + step->description() + " ";
+    QString key = " " + step->pluginStaticCastT<>()->getKeyForStep(*step) + " ";
+    QString displayableName = " " + step->displayableName()+ " ";
 
 
     if(config.testFlag(DNC_StepShortDescription) )
@@ -211,8 +211,8 @@ bool GStepViewDefault::searchStepByNameAndExpandParent(const QString &anyName,
 bool GStepViewDefault::searchOriginalStepAndExpandParent(CT_VirtualAbstractStep *step)
 {
     if(step != NULL)
-        return searchStepByNameAndExpandParent(step->getPlugin()->getKeyForStep(*step),
-                                               GUI_MANAGER->getPluginManager()->getPluginName(step->getPlugin()),
+        return searchStepByNameAndExpandParent(step->pluginStaticCastT<>()->getKeyForStep(*step),
+                                               GUI_MANAGER->getPluginManager()->getPluginName(step->pluginStaticCastT<>()),
                                                false);
 
     return false;
@@ -244,34 +244,34 @@ bool GStepViewDefault::recursiveSearchStepByNameAndExpandParent(const QModelInde
                         bool ok = true;
 
                         if(!pluginName.isEmpty()) {
-                            ok = (GUI_MANAGER->getPluginManager()->getPluginName(step->getPlugin()) == pluginName);
+                            ok = (GUI_MANAGER->getPluginManager()->getPluginName(step->pluginStaticCastT<>()) == pluginName);
                         }
 
-                        if(ok && ((step->getStepName() == anyName)
-                               || (step->getPlugin()->getKeyForStep(*step) == anyName)
-                               || (step->getStepCustomName() == anyName)
-                               || (step->getStepExtendedName() == anyName)
-                               || (step->getStepDisplayableName() == anyName)
-                               || (step->getStepDescription() == anyName))) {
+                        if(ok && ((step->name() == anyName)
+                               || (step->pluginStaticCastT<>()->getKeyForStep(*step) == anyName)
+                               || (step->displayableCustomName() == anyName)
+                               || (step->displayableExtendedName() == anyName)
+                               || (step->displayableName() == anyName)
+                               || (step->description() == anyName))) {
 
                             ui->treeView->expand(index.parent());
                             ui->treeView->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
                             ui->treeView->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
 
                             if(changeDisplayConfigIfNameFoundedIsNotDisplayed) {
-                                if(step->getStepDescription() == anyName) {
+                                if(step->description() == anyName) {
                                     if(!(m_nameConfig & DNC_StepShortDescription)) {
                                         m_nameConfig |= DNC_StepShortDescription;
                                         emit displayNameConfigurationChanged(m_nameConfig);
                                         m_proxy->invalidate();
                                     }
-                                } else if(step->getStepDisplayableName() == anyName) {
+                                } else if(step->displayableName() == anyName) {
                                     if(!(m_nameConfig & DNC_StepDisplayableName)) {
                                         m_nameConfig |= DNC_StepDisplayableName;
                                         emit displayNameConfigurationChanged(m_nameConfig);
                                         m_proxy->invalidate();
                                     }
-                                } else if(step->getPlugin()->getKeyForStep(*step) == anyName) {
+                                } else if(step->pluginStaticCastT<>()->getKeyForStep(*step) == anyName) {
                                     if(!(m_nameConfig & DNC_StepKey)) {
                                         m_nameConfig |= DNC_StepKey;
                                         emit displayNameConfigurationChanged(m_nameConfig);

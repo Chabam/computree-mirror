@@ -121,7 +121,7 @@ void CT_MutableItemIterator::remove()
 void CT_MutableItemIterator::initIterator(const CT_AbstractItemGroup *parent, const CT_InAbstractSingularItemModel *inModel)
 {
     m_items = parent->items();
-    QList<CT_InStdModelPossibility*> list = inModel->getPossibilitiesSavedSelected();
+    QList<CT_InStdModelPossibility*> list = inModel->getPossibilitiesSelected();
     QListIterator<CT_InStdModelPossibility*> it(list);
 
     while(it.hasNext())

@@ -1,7 +1,7 @@
 #include "glogwidget.h"
 #include "ui_glogwidget.h"
 
-#include "interfaces.h"
+#include "loginterface.h"
 
 #include <QElapsedTimer>
 

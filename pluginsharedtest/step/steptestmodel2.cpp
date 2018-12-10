@@ -26,8 +26,8 @@ void StepTestModel2::createInResultModelListProtected()
 {
     CT_InResultModelGroupToCopy * resultModel = createNewInResultModelForCopy(DEF_SearchInResult, tr("Sections / Clusters"));
     resultModel->setZeroOrMoreRootGroup();
-    resultModel->addGroupModel("", m_arInGroup, CT_StandardItemGroup::staticGetType(), "", "", CT_InAbstractGroupModel::CG_ChooseMultipleIfMultiple, CT_InAbstractGroupModel::FG_IsObligatory);
-    resultModel->addItemModel(m_arInGroup.completeName(), m_arInPointCluster, CT_PointCluster::staticGetType(), "", "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsObligatory);
+    resultModel->addStdGroupModel("", m_arInGroup, CT_StandardItemGroup::staticGetType(), "", "", CT_InAbstractGroupModel::CG_ChooseMultipleIfMultiple, CT_InAbstractGroupModel::FG_IsObligatory);
+    resultModel->addStdItemModel(m_arInGroup.completeName(), m_arInPointCluster, CT_PointCluster::staticGetType(), "", "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsObligatory);
 }
 
 void StepTestModel2::createOutResultModelListProtected()

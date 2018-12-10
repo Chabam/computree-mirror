@@ -30,7 +30,7 @@
 #define PB_STEPPLUGINMANAGER_H
 
 #include "ct_abstractstepplugin.h"
-#include "ct_log/ct_fileloglistener.h"
+//#include "ct_log/ct_fileloglistener.h"
 
 #ifdef USE_GDAL
 #include "gdal.h"
@@ -77,7 +77,7 @@ public:
      * @param readerClassName : the classname of the reader
      * @return Returns the reader with the specified classname if founded, NULL otherwise
      */
-    CT_AbstractReader* readerAvailableByClassName(const QString &readerClassName) const;
+    CT_AbstractReader* readerAvailableByUniqueName(const QString &readerClassName) const;
 
     /**
      * @brief Returns a collection that contains a copy of exporters available in all plugins. The key
@@ -103,12 +103,12 @@ protected:
     bool loadFilters();
     bool loadMetrics();
 
-    bool loadAfterAllPluginsLoaded();
-    void aboutToBeUnloaded();
+    bool loadAfterAllPluginsLoaded() final;
+    //void aboutToBeUnloaded();
 
 private:
-    CT_FileLogListener  m_fileLog;
-    CT_FileLogListener* _logListener;
+    //CT_FileLogListener  m_fileLog;
+    //CT_FileLogListener* _logListener;
 
     QList<CT_AbstractConfigurableElement *> m_rasterMetricsOfAllPlugins;
     QList<CT_AbstractConfigurableElement *> m_xyzMetricsOfAllPlugins;
@@ -124,17 +124,17 @@ private:
     /**
      * @brief Search in all plugins raster metrics available and add it to the collection
      */
-    void initRasterMetricsCollection();
+    //void initRasterMetricsCollection();
 
     /**
      * @brief Search in all plugins xyz metrics available and add it to the collection
      */
-    void initXyzMetricsCollection();
+    //void initXyzMetricsCollection();
 
     /**
      * @brief Search in all plugins xyz filters available and add it to the collection
      */
-    void initXyzFiltersCollection();
+    //void initXyzFiltersCollection();
 
     /**
      * @brief Search in all plugins readers available and add it to the collection
@@ -144,7 +144,7 @@ private:
     /**
      * @brief Search in all plugins exporters available and add it to the collection
      */
-    void initExportersCollection();
+    //void initExportersCollection();
 };
 
 #endif // PB_STEPPLUGINMANAGER_H

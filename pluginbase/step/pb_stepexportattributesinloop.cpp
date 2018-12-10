@@ -134,29 +134,29 @@ void PB_StepExportAttributesInLoop::createInResultModelListProtected()
 {
     CT_InResultModelGroup *resIn = createNewInResultModel(DEFin_res, tr("Résultat"));
     resIn->setZeroOrMoreRootGroup();
-    resIn->addGroupModel("", DEFin_grpMain, CT_AbstractItemGroup::staticGetType(), tr("Groupe"));
+    resIn->addStdGroupModel("", DEFin_grpMain, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
 
 #ifdef USE_OPENCV
     if (_rasterExport)
     {
-        resIn->addItemModel(DEFin_grpMain, DEFin_plotListInGrid, CT_PlotListInGrid::staticGetType(), tr("Grille de placettes"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsObligatory);
+        resIn->addStdItemModel(DEFin_grpMain, DEFin_plotListInGrid, CT_PlotListInGrid::staticGetType(), tr("Grille de placettes"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsObligatory);
     }
 #endif
 
-    resIn->addGroupModel(DEFin_grpMain, DEFin_grp, CT_AbstractItemGroup::staticGetType(), tr("Groupe"));
-    resIn->addItemModel(DEFin_grp, DEFin_itemWithXY, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item (avec XY)"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
-    resIn->addItemAttributeModel(DEFin_itemWithXY, DEFin_Xattribute, QList<QString>() << CT_AbstractCategory::DATA_X, CT_AbstractCategory::DOUBLE, tr("X"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
-    resIn->addItemAttributeModel(DEFin_itemWithXY, DEFin_Yattribute, QList<QString>() << CT_AbstractCategory::DATA_Y, CT_AbstractCategory::DOUBLE, tr("Y"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
-    resIn->addItemAttributeModel(DEFin_itemWithXY, DEFin_attributeInItemXY, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Attribut Item (avec XY)"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
+    resIn->addStdGroupModel(DEFin_grpMain, DEFin_grp, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
+    resIn->addStdItemModel(DEFin_grp, DEFin_itemWithXY, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item (avec XY)"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
+    resIn->addStdItemAttributeModel(DEFin_itemWithXY, DEFin_Xattribute, QList<QString>() << CT_AbstractCategory::DATA_X, CT_AbstractCategory::DOUBLE, tr("X"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
+    resIn->addStdItemAttributeModel(DEFin_itemWithXY, DEFin_Yattribute, QList<QString>() << CT_AbstractCategory::DATA_Y, CT_AbstractCategory::DOUBLE, tr("Y"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
+    resIn->addStdItemAttributeModel(DEFin_itemWithXY, DEFin_attributeInItemXY, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Attribut Item (avec XY)"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
 
-    resIn->addItemModel(DEFin_grp, DEFin_itemWithAttribute, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
-    resIn->addItemAttributeModel(DEFin_itemWithAttribute, DEFin_attribute, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Attribut Item"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
+    resIn->addStdItemModel(DEFin_grp, DEFin_itemWithAttribute, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
+    resIn->addStdItemAttributeModel(DEFin_itemWithAttribute, DEFin_attribute, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Attribut Item"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
 
     if (_exportInLoop)
     {
         CT_InResultModelGroup* res_counter = createNewInResultModel(DEF_inResultCounter, tr("Résultat compteur"), "", true);
-        res_counter->setRootGroup(DEF_inGroupCounter);
-        res_counter->addItemModel(DEF_inGroupCounter, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
+        res_counter->setStdRootGroup(DEF_inGroupCounter);
+        res_counter->addStdItemModel(DEF_inGroupCounter, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
         res_counter->setMinimumNumberOfPossibilityThatMustBeSelectedForOneTurn(0);
     }
 }
@@ -284,7 +284,7 @@ void PB_StepExportAttributesInLoop::compute()
     while (ith1.hasNext())
     {
         ith1.next();
-        hash.insert((CT_OutAbstractSingularItemModel*) (ith1.key()->originalModel()), ith1.value());
+        hash.insert((CT_OutAbstractSingularItemModel*) (ith1.key()->rootOriginalModel()), ith1.value());
     }
 
 
@@ -293,7 +293,7 @@ void PB_StepExportAttributesInLoop::compute()
     while (ith2.hasNext())
     {
         ith2.next();
-        hash.insert((CT_OutAbstractSingularItemModel*) (ith2.key()->originalModel()), ith2.value());
+        hash.insert((CT_OutAbstractSingularItemModel*) (ith2.key()->rootOriginalModel()), ith2.value());
     }
 
     CT_ModelSearchHelper::SplitHash hashX = PS_MODELS->splitSelectedAttributesModelBySelectedSingularItemModel(DEFin_Xattribute, DEFin_itemWithXY, resIn->model(), this);
@@ -301,11 +301,11 @@ void PB_StepExportAttributesInLoop::compute()
     while (ithX.hasNext())
     {
         ithX.next();
-        hash.insert((CT_OutAbstractSingularItemModel*) (ithX.key()->originalModel()), ithX.value());
+        hash.insert((CT_OutAbstractSingularItemModel*) (ithX.key()->rootOriginalModel()), ithX.value());
 
-        CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) (ithX.key()->originalModel());
+        CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) (ithX.key()->rootOriginalModel());
         CT_OutAbstractItemAttributeModel *attrModel = ithX.value();
-        if (attrModel->isADefaultItemAttributeModel() && attrModel->originalModel() != NULL) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->originalModel());}
+        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->rootOriginalModel());}
         xKey = QString("ITEM_%1_ATTR_%2").arg(itemModel->uniqueName()).arg(attrModel->uniqueName());
     }
 
@@ -314,11 +314,11 @@ void PB_StepExportAttributesInLoop::compute()
     while (ithY.hasNext())
     {
         ithY.next();
-        hash.insert((CT_OutAbstractSingularItemModel*) (ithY.key()->originalModel()), ithY.value());
+        hash.insert((CT_OutAbstractSingularItemModel*) (ithY.key()->rootOriginalModel()), ithY.value());
 
-        CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) (ithY.key()->originalModel());
+        CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) (ithY.key()->rootOriginalModel());
         CT_OutAbstractItemAttributeModel *attrModel = ithY.value();
-        if (attrModel->isADefaultItemAttributeModel() && attrModel->originalModel() != NULL) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->originalModel());}
+        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->rootOriginalModel());}
         yKey = QString("ITEM_%1_ATTR_%2").arg(itemModel->uniqueName()).arg(attrModel->uniqueName());
     }
 
@@ -338,7 +338,7 @@ void PB_StepExportAttributesInLoop::compute()
             QString attrDN = attrModel->displayableName();
             QString attrUN = attrModel->uniqueName();
 
-            if (attrModel->isADefaultItemAttributeModel() && attrModel->originalModel() != NULL) {attrUN = attrModel->originalModel()->uniqueName();}
+            if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
 
             QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
             _modelsKeys.append(key);
@@ -478,7 +478,7 @@ void PB_StepExportAttributesInLoop::compute()
     CT_ResultGroupIterator itIn_grpMain(resIn, this, DEFin_grpMain);
     while (itIn_grpMain.hasNext() && !isStopped())
     {
-        const CT_AbstractItemGroup* grpMain = (CT_AbstractItemGroup*) itIn_grpMain.next();
+        const CT_StandardItemGroup* grpMain = (CT_StandardItemGroup*) itIn_grpMain.next();
 
 #ifdef USE_OPENCV
         QMap<QString, CT_Image2D<double>*> rasters;
@@ -508,7 +508,7 @@ void PB_StepExportAttributesInLoop::compute()
         CT_GroupIterator itIn_grp(grpMain, this, DEFin_grp);
         while (itIn_grp.hasNext() && !isStopped())
         {
-            const CT_AbstractItemGroup* grp = (CT_AbstractItemGroup*) itIn_grp.next();
+            const CT_StandardItemGroup* grp = (CT_StandardItemGroup*) itIn_grp.next();
 
             QMap<QString, QPair<CT_AbstractSingularItemDrawable*, CT_AbstractItemAttribute*> > indexedAttributes;
 

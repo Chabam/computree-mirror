@@ -3,7 +3,7 @@
 
 #include "computreeCore_global.h"
 
-#include "interfaces.h"
+#include "interfacesforplugin.h"
 
 #include <QPluginLoader>
 
@@ -18,8 +18,6 @@
 class COMPUTREECORESHARED_EXPORT CDM_PluginManager : public QObject, public CoreInterface, public PluginManagerInterface
 {
     Q_OBJECT
-    Q_INTERFACES(CoreInterface)
-    Q_INTERFACES(PluginManagerInterface)
 
 public:
 

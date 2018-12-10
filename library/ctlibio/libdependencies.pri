@@ -1,0 +1,2 @@
+COMPUTREE *= ctlibreader
+COMPUTREE *= ctlibstructureaddon

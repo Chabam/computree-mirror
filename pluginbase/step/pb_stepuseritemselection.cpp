@@ -64,8 +64,8 @@ void PB_StepUserItemSelection::createInResultModelListProtected()
                                                                                  tr(""),
                                                                                  false);
     resultInModel_R->setZeroOrMoreRootGroup();
-    resultInModel_R->addGroupModel("", DEF_groupIn_G);
-    resultInModel_R->addItemModel(DEF_groupIn_G,
+    resultInModel_R->addStdGroupModel("", DEF_groupIn_G);
+    resultInModel_R->addStdItemModel(DEF_groupIn_G,
                                   DEF_itemIn_I,
                                   CT_AbstractSingularItemDrawable::staticGetType(),
                                   tr("Item"));
@@ -110,20 +110,20 @@ void PB_StepUserItemSelection::compute()
     // Gets OUT results and models
     m_itemDrawableToAdd.clear();
 
-    QList<CT_AbstractItemGroup*> groupsToRemove;
+    QList<CT_StandardItemGroup*> groupsToRemove;
 
     CT_ResultGroupIterator itG(resultOut_R, groupInModel_G);
 
     // create a list of itemdrawable to add in the document
     while(itG.hasNext() && !isStopped())
     {
-        const CT_AbstractItemGroup *groupOut_G = itG.next();
+        const CT_StandardItemGroup *groupOut_G = itG.next();
         CT_AbstractSingularItemDrawable *itemOut_I = groupOut_G->firstItemByINModelName(this, DEF_itemIn_I);
 
         if (itemOut_I != NULL)
-            m_itemDrawableToAdd.insert(itemOut_I, (CT_AbstractItemGroup*)groupOut_G);
+            m_itemDrawableToAdd.insert(itemOut_I, (CT_StandardItemGroup*)groupOut_G);
         else if(m_removeGroupsWithoutItemResearched || m_removeParents)
-            groupsToRemove.append((CT_AbstractItemGroup*)groupOut_G);
+            groupsToRemove.append((CT_StandardItemGroup*)groupOut_G);
     }
 
     // request the manual mode
@@ -140,11 +140,11 @@ void PB_StepUserItemSelection::compute()
 
     // we remove the parent group of all ItemDrawable that must be deleted from the out result
     // and all groups that don't contains a ItemDrawable researched
-    QListIterator<CT_AbstractItemGroup*> itE(groupsToRemove);
+    QListIterator<CT_StandardItemGroup*> itE(groupsToRemove);
 
     while(itE.hasNext())
     {
-        CT_AbstractItemGroup *group = itE.next();
+        CT_StandardItemGroup *group = itE.next();
 
         recursiveRemoveGroup(group->parentGroup(), group);
     }
@@ -153,7 +153,7 @@ void PB_StepUserItemSelection::compute()
     requestManualMode();
 }
 
-void PB_StepUserItemSelection::recursiveRemoveGroup(CT_AbstractItemGroup *parent, CT_AbstractItemGroup *group) const
+void PB_StepUserItemSelection::recursiveRemoveGroup(CT_StandardItemGroup *parent, CT_StandardItemGroup *group) const
 {
     if(parent != NULL)
     {
@@ -180,7 +180,7 @@ void PB_StepUserItemSelection::initManualMode()
     if (_mode == 0)
     {
         // TODO add async with GuiManagerInterface
-        QHashIterator<CT_AbstractItemDrawable*, CT_AbstractItemGroup*> it(m_itemDrawableToAdd);
+        QHashIterator<CT_AbstractItemDrawable*, CT_StandardItemGroup*> it(m_itemDrawableToAdd);
 
         while(it.hasNext())
             m_doc->addItemDrawable(*it.next().key());

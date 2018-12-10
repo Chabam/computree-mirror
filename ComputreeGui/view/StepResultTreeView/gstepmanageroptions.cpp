@@ -29,7 +29,7 @@
 #include "gstepmanageroptions.h"
 #include "ui_gstepmanageroptions.h"
 
-#include "ct_result/model/inModel/abstract/ct_inabstractresultmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
 
 #include <QFileDialog>
 #include <QMessageBox>

@@ -134,7 +134,7 @@ const CT_AbstractItemGroup* CT_GroupIterator::current() const
 
 void CT_GroupIterator::initIterator(const CT_AbstractItemGroup *parent, const CT_InAbstractGroupModel *inModel)
 {
-    QList<CT_InStdModelPossibility*> list = inModel->getPossibilitiesSavedSelected();
+    QList<CT_InStdModelPossibility*> list = inModel->getPossibilitiesSelected();
 
     QListIterator<CT_InStdModelPossibility*> it(list);
 

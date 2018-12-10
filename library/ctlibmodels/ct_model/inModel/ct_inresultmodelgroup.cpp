@@ -1,0 +1,233 @@
+#include "ct_inresultmodelgroup.h"
+
+#include "ct_model/inModel/tools/ct_instdmodelpossibilityselectiongroup.h"
+#include "ct_model/inModel/ct_inzeroormoregroupmodel.h"
+#include "ct_model/inModel/ct_instdgroupmodel.h"
+#include "ct_model/inModel/ct_instdsingularitemmodel.h"
+#include "ct_model/inModel/ct_instditemattributemodel.h"
+
+#include "ct_model/outModel/abstract/ct_outabstractresultmodelgroup.h"
+
+CT_InResultModelGroup::CT_InResultModelGroup(const QString& displayableName,
+                                             const QString& shortDescription,
+                                             bool recursive) : SuperClass(displayableName),
+    m_rootGroup(NULL)
+{
+    setShortDescription(shortDescription.isEmpty() ? displayableName : shortDescription);
+    setRecursive(recursive);
+    setMinimumNumberOfPossibilityToSelect(1);
+    setMaximumNumberOfPossibilityThatCanBeSelected(1);
+}
+
+CT_InResultModelGroup::CT_InResultModelGroup(const CT_InResultModelGroup& other,
+                                             const bool& withPossibilities) : SuperClass(other),
+    m_rootGroup((other.m_rootGroup != NULL) ? static_cast<DEF_CT_AbstractGroupModelIn*>(other.m_rootGroup->copy(withPossibilities)) : NULL)
+{
+    if(withPossibilities)
+        staticCopyPossibilitiesToModel(&other, this);
+}
+
+CT_InResultModelGroup::~CT_InResultModelGroup()
+{
+    delete m_rootGroup;
+}
+
+DEF_CT_AbstractGroupModelIn* CT_InResultModelGroup::rootGroup() const
+{
+    return m_rootGroup;
+}
+
+void CT_InResultModelGroup::setRootGroup(DEF_CT_AbstractGroupModelIn* rootGroup)
+{
+    delete m_rootGroup;
+
+    m_rootGroup = rootGroup;
+    m_rootGroup->setParentModel(this);
+}
+
+CT_InZeroOrMoreGroupModel* CT_InResultModelGroup::setZeroOrMoreRootGroup(const QString& groupType,
+                                                                         const QString& groupNameFromType)
+{
+    CT_InZeroOrMoreGroupModel* model = new CT_InZeroOrMoreGroupModel(groupType, groupNameFromType);
+    setRootGroup(model);
+
+    return model;
+}
+
+CT_InStdGroupModel* CT_InResultModelGroup::setStdRootGroup(const QString& groupType,
+                                                           const QString& groupNameFromType,
+                                                           const QString& displayableName,
+                                                           const QString& shortDescription,
+                                                           const QString& detailledDescription,
+                                                           const quint8& minPossibility,
+                                                           const int& maxPossibility)
+{
+    CT_InStdGroupModel* model = new CT_InStdGroupModel(groupType,
+                                                       groupNameFromType,
+                                                       displayableName,
+                                                       shortDescription,
+                                                       detailledDescription,
+                                                       minPossibility,
+                                                       maxPossibility);
+
+    setRootGroup(model);
+
+    return model;
+}
+
+CT_InStdGroupModel* CT_InResultModelGroup::addStdGroupModel(DEF_CT_AbstractGroupModelIn* parentGroup,
+                                                            const QString& groupType,
+                                                            const QString& groupNameFromType,
+                                                            const QString& displayableName,
+                                                            const QString& shortDescription,
+                                                            const QString& detailledDescription,
+                                                            const quint8& minPossibility,
+                                                            const int& maxPossibility)
+{
+    MODELS_ASSERT(parentGroup != NULL);
+    MODELS_ASSERT(!groupType.isEmpty());
+    MODELS_ASSERT(!displayableName.isEmpty());
+
+    CT_InStdGroupModel* newModel = new CT_InStdGroupModel(groupType,
+                                                          groupNameFromType,
+                                                          displayableName,
+                                                          shortDescription,
+                                                          detailledDescription,
+                                                          minPossibility,
+                                                          maxPossibility);
+
+    parentGroup->addGroup(newModel);
+
+    return newModel;
+}
+
+CT_InStdSingularItemModel* CT_InResultModelGroup::addStdItemModel(DEF_CT_AbstractGroupModelIn* parentGroup,
+                                                                  const QString& itemType,
+                                                                  const QString& itemNameFromType,
+                                                                  const QString& displayableName,
+                                                                  const QString& shortDescription,
+                                                                  const QString& detailledDescription,
+                                                                  const quint8& minPossibility,
+                                                                  const int& maxPossibility)
+{
+    MODELS_ASSERT(parentGroup != NULL);
+    MODELS_ASSERT(!itemType.isEmpty());
+    MODELS_ASSERT(!displayableName.isEmpty());
+
+    CT_InStdSingularItemModel* newModel = new CT_InStdSingularItemModel(itemType,
+                                                                        itemNameFromType,
+                                                                        displayableName,
+                                                                        shortDescription,
+                                                                        detailledDescription,
+                                                                        minPossibility,
+                                                                        maxPossibility);
+
+    parentGroup->addItem(newModel);
+
+    return newModel;
+}
+
+CT_InStdItemAttributeModel* CT_InResultModelGroup::addStdItemAttributeModel(DEF_CT_AbstractItemDrawableModelIn* parentItem,
+                                                                            const int valueType,
+                                                                            const QList<QString>& categoriesType,
+                                                                            const QString& displayableName,
+                                                                            const QString& shortDescription,
+                                                                            const QString& detailledDescription,
+                                                                            const quint8& minPossibility,
+                                                                            const int& maxPossibility)
+{
+    MODELS_ASSERT(parentItem != NULL);
+    MODELS_ASSERT(!categoriesType.isEmpty());
+    MODELS_ASSERT(!displayableName.isEmpty());
+
+    CT_InStdItemAttributeModel* newModel = new CT_InStdItemAttributeModel(valueType, categoriesType, displayableName, shortDescription, detailledDescription, minPossibility, maxPossibility);
+
+    parentItem->addItemAttribute(newModel);
+
+    return newModel;
+}
+
+bool CT_InResultModelGroup::visitChildrens(const CT_AbstractModel::ChildrenVisitor& visitor) const
+{
+    if(rootGroup() != NULL)
+        return visitor(rootGroup());
+
+    return true;
+}
+
+bool CT_InResultModelGroup::isEmpty() const
+{
+    return (rootGroup() == NULL);
+}
+
+void CT_InResultModelGroup::saveSettings(SettingsWriterInterface& writer) const
+{
+    SuperClass::saveSettings(writer);
+
+    writer.addParameter(this, "IsRecursive", isRecursive());
+}
+
+bool CT_InResultModelGroup::restoreSettings(SettingsReaderInterface& reader)
+{
+    if(!SuperClass::restoreSettings(reader))
+        return false;
+
+    QVariant value;
+
+    if(!reader.parameter(this, "IsRecursive", value))
+        return false;
+
+    const bool recursive = value.toBool();
+
+    if(isRecursive() != recursive)
+        return false;
+
+    // TODO : MK 08.11.18 check if this is necessary and why i have coded this ???
+    /*const bool recursive = value.toBool();
+
+    if(isRecursive() != recursive)
+    {
+        setRecursiveWithoutUseForceRecursivity(recursive);
+
+        CT_InAbstractResultModel *om = static_cast<CT_InAbstractResultModel*>(recursiveOriginalModel());
+
+        if(om != this)
+            staticSetRecursiveWithoutUseForceRecursivity(om, recursive);
+
+        recursiveClearPossibilitiesSaved();
+
+        IStepForModel* sp = step();
+        bool continueLoop = true;
+
+        while(continueLoop
+              && (sp != NULL))
+        {
+            sp = sp->parentStep();
+
+            if(sp != NULL)
+            {
+                // get all OUTPUT models of this step that represent results
+                QList<CT_OutAbstractResultModel*> outputResultModels = sp->getOutResultModels();
+
+                // for each models
+                for(const CT_OutAbstractResultModel* outputResultModel : outputResultModels)
+                    recursiveFindAllPossibilitiesInModel(*outputResultModel);
+
+                continueLoop = recursive;
+            }
+        }
+    }*/
+
+    return true;
+}
+
+CT_InAbstractModel* CT_InResultModelGroup::copy(bool withPossibilities) const
+{
+    return new CT_InResultModelGroup(*this, withPossibilities);
+}
+
+bool CT_InResultModelGroup::canBeComparedWith(const CT_OutAbstractModel& model) const
+{
+    // if the OUTPUT model represent a CT_ResultGroup it's ok !
+    return (dynamic_cast<const CT_OutAbstractResultModelGroup*>(&model) != NULL);
+}

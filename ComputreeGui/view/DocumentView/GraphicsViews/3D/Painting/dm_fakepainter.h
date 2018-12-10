@@ -2,6 +2,7 @@
 #define DM_FAKEPAINTER_H
 
 #include "ct_cloudindex/ct_cloudindexstdvectort.h"
+#include "painterinterface.h"
 
 /**
  * @brief A painter that can be used to :

@@ -1,6 +1,7 @@
 #include "batch.h"
 
 #include "cdm_configfile.h"
+#include "cdm_scriptmanagerxmlallversions.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -9,7 +10,7 @@
 Batch::Batch()
 {
     _pluginManager = new CDM_PluginManager();
-    _scriptManager = new CDM_ScriptManagerXML(*_pluginManager);
+    _scriptManager = new CDM_ScriptManagerXMLAllVersions(*_pluginManager);
     _actionManager = new CDM_ActionsManager();
     _stepManager = new CDM_StepManager(_scriptManager, _actionManager);
 
@@ -261,25 +262,17 @@ void Batch::removeAllStep()
     {
         CT_VirtualAbstractStep *step = rootList.takeFirst();
 
-        recursiveInformStepInGuiThreadThatWillBeDeleted(*step);
+        step->aboutToBeDeleted();
+
+        step->recursiveVisitChildrens([](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+            const_cast<CT_VirtualAbstractStep*>(child)->aboutToBeDeleted();
+            return true;
+        });
 
         ok = _stepManager->removeStep(step);
     }
 
     emit allStepRemoved();
-}
-
-void Batch::recursiveInformStepInGuiThreadThatWillBeDeleted(CT_VirtualAbstractStep &step)
-{
-    step.aboutToBeDeleted();
-
-    QList<CT_VirtualAbstractStep*> stepList = step.getStepChildList();
-    QListIterator<CT_VirtualAbstractStep*> it(stepList);
-
-    while(it.hasNext())
-    {
-        recursiveInformStepInGuiThreadThatWillBeDeleted(*(it.next()));
-    }
 }
 
 

@@ -30,10 +30,9 @@
 
 #include "view/MainView/gmainprogressdialog.h"
 
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
 #include "ct_exporter/abstract/ct_abstractexporter.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h"
 #include "ct_result/ct_resultgroup.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
@@ -677,17 +676,14 @@ void DM_GuiManager::addNewContext(DM_Context *context)
     }
 }
 
-void DM_GuiManager::recursiveDeleteStepConfigurationDialog(CT_VirtualAbstractStep &step)
+void DM_GuiManager::recursiveDeleteStepConfigurationDialog(CT_VirtualAbstractStep& step)
 {
     step.aboutToBeDeleted();
 
-    QList<CT_VirtualAbstractStep*> stepList = step.getStepChildList();
-    QListIterator<CT_VirtualAbstractStep*> it(stepList);
-
-    while(it.hasNext())
-    {
-        recursiveDeleteStepConfigurationDialog(*(it.next()));
-    }
+    step.recursiveVisitChildrens([](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+        const_cast<CT_VirtualAbstractStep*>(child)->aboutToBeDeleted();
+        return true;
+    });
 }
 
 void DM_GuiManager::staticRemoveResultFromOtherView(ActionItemDrawable info)
@@ -696,13 +692,8 @@ void DM_GuiManager::staticRemoveResultFromOtherView(ActionItemDrawable info)
     {
         if(info._res->isVisible())
         {
-            info._progress->setText(QObject::tr("Suppression du resultat %1 des autres vues.").arg(info._res->getName()));
-
-            if(info._res->isVisible())
-            {
-                info._view->removeAllItemDrawableOfResultFromDocuments(*info._res, *info._progress);
-            }
-
+            info._progress->setText(QObject::tr("Suppression du résultat %1 des autres vues.").arg(info._res->displayableName()));
+            info._view->removeAllItemDrawableOfResultFromDocuments(*info._res, *info._progress);
             info._progress->setText("");
         }
     }
@@ -804,58 +795,44 @@ void DM_GuiManager::staticClearResultMemoryAndRemoveStep(ActionStep info)
 
 int DM_GuiManager::staticRecursiveCountProgress(CT_VirtualAbstractStep *step)
 {
-    int count = 0;
+    int count = step->nOutResult();
 
-    QList<CT_VirtualAbstractStep *> list = step->getStepChildList();
-
-    QListIterator<CT_VirtualAbstractStep *> it(list);
-
-    while(it.hasNext())
-    {
-        count += staticRecursiveCountProgress(it.next());
-    }
-
-    count += step->nResult();
+    step->recursiveVisitChildrens([&count](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+        count += child->nOutResult();
+        return true;
+    });
 
     return count;
 }
 
 int DM_GuiManager::staticRecursiveClearResultMemoryAndRemoveStep(ActionStep info)
 {
-    QList<CT_VirtualAbstractStep *> list = info._step->getStepChildList();
+    info._step->visitChildrens([&info](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
 
-    QListIterator<CT_VirtualAbstractStep *> it(list);
-
-    while(it.hasNext())
-    {
         ActionStep infoRecur = info;
-        infoRecur._step = it.next();
-
+        infoRecur._step = const_cast<CT_VirtualAbstractStep*>(child);
         info._nProgress = staticRecursiveClearResultMemoryAndRemoveStep(infoRecur);
-    }
 
-    QList<CT_ResultGroup *> listRes = info._step->getOutResultList();
+        return true;
+    });
 
-    QListIterator<CT_ResultGroup *> itRes(listRes);
 
-    while(itRes.hasNext())
-    {
-        CT_ResultGroup *res = itRes.next();
+    info._step->visitOutResults([&info](const CT_AbstractResult* result) -> bool {
 
         staticRemoveResultFromOtherView(ActionItemDrawable(NULL,
-                                                           res,
+                                                           const_cast<CT_AbstractResult*>(result),
                                                            NULL,
                                                            "",
                                                            info._docManagerView,
                                                            info._secondProgress));
 
         info._nProgress++;
-
         info._progress->setProgress(((float)(info._nProgress*100))/((float)info._totalProgressSize));
-    }
+
+        return true;
+    });
 
     info._step->clearOutResult();
-
     info._stepManager->removeStep(info._step);
 
     return info._nProgress;

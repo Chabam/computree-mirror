@@ -1,7 +1,7 @@
 #ifndef DM_MESHOBJECTSMODIFIER_H
 #define DM_MESHOBJECTSMODIFIER_H
 
-#include "interfaces.h"
+#include "graphicsviewinterface.h"
 
 #include "scene/permanentitemscenebymodel.h"
 #include "defineglobalcloud.h"

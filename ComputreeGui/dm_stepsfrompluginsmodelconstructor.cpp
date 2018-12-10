@@ -2,9 +2,6 @@
 
 #include <QStandardItem>
 
-#include "ct_steploadfileseparator.h"
-#include "ct_stepcanbeaddedfirstseparator.h"
-#include "ct_stepseparator.h"
 #include "ct_step/abstract/ct_abstractsteploadfile.h"
 #include "ct_step/abstract/ct_abstractstepcanbeaddedfirst.h"
 
@@ -146,7 +143,7 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForLevelA
             item->appendRow(items);
     }
 
-    CT_MenuLevel *favoritesLevel = m_pluginManager.stepsMenu()->getOrCreateRootLevel(CT_StepsMenu::LO_Favorites);
+    CT_MenuLevel *favoritesLevel = m_pluginManager.stepsMenu()->createOrGetRootLevel(CT_StepsMenu::LO_Favorites);
 
     if((item->rowCount() == 0) && (level != favoritesLevel)) {
         qDeleteAll(l.begin(), l.end());
@@ -160,22 +157,22 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForStep(C
 {
     QList<QStandardItem*> l;
 
-    QStandardItem *item = new QStandardItem(step->getPlugin()->getKeyForStep(*step));
+    QStandardItem *item = new QStandardItem(step->pluginStaticCastT<>()->getKeyForStep(*step));
     item->setEditable(false);
-    item->setToolTip(QObject::tr("<html><p>%1</p><p>%2</p></html>").arg(step->getStepDescription()).arg(step->getStepDetailledDescription()));
+    item->setToolTip(QObject::tr("<html><p>%1</p><p>%2</p></html>").arg(step->description()).arg(step->detailledDescription()));
     item->setData(qVariantFromValue((void*)step), DR_Pointer);
     item->setData((int)stepType, DR_Type);
     item->setData((int)stepType, DR_SecondaryType);
     l << item;
 
-    QString pluginName = m_pluginManager.getPluginName(step->getPlugin());
+    QString pluginName = m_pluginManager.getPluginName(step->pluginStaticCastT<>());
 
     if (pluginName.startsWith("plug_"))
         pluginName.remove(0, 5);
 
     item = new QStandardItem(pluginName);
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)step->getPlugin()), DR_Pointer);
+    item->setData(qVariantFromValue((void*)step->pluginStaticCastT<>()), DR_Pointer);
     item->setData((int)IT_Plugin, DR_Type);
     item->setData((int)stepType, DR_SecondaryType);
     l << item;

@@ -2,7 +2,6 @@
 #define GFAVORITESMENUDIALOG_H
 
 #include <QDialog>
-#include "interfaces.h"
 #include "view/Steps/gstepviewdefault.h"
 
 namespace Ui {

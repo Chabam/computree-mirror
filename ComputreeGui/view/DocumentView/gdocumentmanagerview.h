@@ -30,6 +30,7 @@
 #define GDOCUMENTMANAGERVIEW_H
 
 #include "dm_documentmanagerview.h"
+#include "ct_step/abstract/ct_virtualabstractstep.h"
 
 #include <QMdiArea>
 #include <QMutex>

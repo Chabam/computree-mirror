@@ -4,6 +4,7 @@
 #include "ct_global/ct_repository.h"
 #include "ct_cloud/registered/ct_stdcloudregisteredt.h"
 #include "ct_cloud/ct_standardcloudstdvectort.h"
+#include "ct_cloudindex/abstract/ct_abstractcloudindex.h"
 
 /**
  * Class that manage selection or visibility, etc... of Points/Faces or Edges in 3d graphics view. This

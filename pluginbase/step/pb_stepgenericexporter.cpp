@@ -192,27 +192,27 @@ void PB_StepGenericExporter::createInResultModelListProtected()
     CT_InResultModelGroup *resultModel = createNewInResultModel(DEF_SearchInResultToExport, tr("Résultat"), "", true);
 
     resultModel->setZeroOrMoreRootGroup();
-    resultModel->addGroupModel("", DEF_SearchInGroup);
+    resultModel->addStdGroupModel("", DEF_SearchInGroup);
 
     if(!_exporter->exportOnlyGroup())
-        resultModel->addItemModel(DEF_SearchInGroup, DEF_SearchInItemDrawable, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"));
+        resultModel->addStdItemModel(DEF_SearchInGroup, DEF_SearchInItemDrawable, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"));
 
     if (_multipleExport)
     {
         if (_otherItem)
         {
-            resultModel->addItemModel(DEF_SearchInGroup, DEF_SearchInItemWithName, CT_AbstractSingularItemDrawable::staticGetType(), tr("ItemWithName"));
-            resultModel->addItemAttributeModel(DEF_SearchInItemWithName, DEF_SearchInItemDrawableAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::STRING, tr("Name"));
+            resultModel->addStdItemModel(DEF_SearchInGroup, DEF_SearchInItemWithName, CT_AbstractSingularItemDrawable::staticGetType(), tr("ItemWithName"));
+            resultModel->addStdItemAttributeModel(DEF_SearchInItemWithName, DEF_SearchInItemDrawableAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::STRING, tr("Name"));
         } else {
-            resultModel->addItemAttributeModel(DEF_SearchInItemDrawable, DEF_SearchInItemDrawableAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::STRING, tr("Name"));
+            resultModel->addStdItemAttributeModel(DEF_SearchInItemDrawable, DEF_SearchInItemDrawableAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::STRING, tr("Name"));
         }
     }
 
     if (_adaptative)
     {
         CT_InResultModelGroup* resCounter = createNewInResultModel(DEFin_resCounter, tr("Résultat compteur"), "", true);
-        resCounter->setRootGroup(DEF_inGroupCounter);
-        resCounter->addItemModel(DEF_inGroupCounter, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
+        resCounter->setStdRootGroup(DEF_inGroupCounter);
+        resCounter->addStdItemModel(DEF_inGroupCounter, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
     }
 }
 
@@ -437,7 +437,7 @@ void PB_StepGenericExporter::setItemsToExportFromModelsToExporter()
     CT_InResultModelGroup *resModel = (CT_InResultModelGroup*)getInResultModel(DEF_SearchInResultToExport);
 
     // on récupère les possibilités pour ce résultat (il n'y en a qu'une puisque un résultat d'entrée = un résultat de sortie)
-    QList<CT_InStdModelPossibility*> possibilities = resModel->getPossibilitiesSavedSelected();
+    QList<CT_InStdModelPossibility*> possibilities = resModel->getPossibilitiesSelected();
 
     QListIterator<CT_InStdModelPossibility*> it(possibilities);
 
@@ -454,7 +454,7 @@ void PB_StepGenericExporter::setItemsToExportFromModelsToExporter()
             inItemModelToExport = (CT_InAbstractItemModel*)PS_MODELS->searchModel(DEF_SearchInItemDrawable, (CT_OutAbstractResultModel*)it.next()->outModel(), this);
 
         // on récupère sa possibilité (il n'y en a qu'une puisqu'on a mis CT_InStandardItemDrawableModel::C_ChooseOneIfMultiple)
-        CT_InStdModelPossibility *possibility = inItemModelToExport->getPossibilitiesSavedSelected().first();
+        CT_InStdModelPossibility *possibility = inItemModelToExport->getPossibilitiesSelected().first();
 
         // on récupère l'ItemDrawable choisi
         eItems.append(((CT_OutAbstractItemModel*)possibility->outModel())->itemDrawable());

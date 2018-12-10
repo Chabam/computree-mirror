@@ -277,22 +277,22 @@ bool DM_StepTreeViewDefaultProxyModel::acceptStep(const QModelIndex &index, bool
 
         if(step != NULL) {
             if(m_filterConfig.testFlag(FC_StepKey)
-                    && filterRegExp().exactMatch(step->getPlugin()->getKeyForStep(*step)))
+                    && filterRegExp().exactMatch(step->pluginStaticCastT<>()->getKeyForStep(*step)))
                 accepted = true;
 
             if(!accepted
                     && m_filterConfig.testFlag(FC_StepDisplayableName)
-                    && filterRegExp().exactMatch(step->getStepDisplayableName()))
+                    && filterRegExp().exactMatch(step->displayableCustomName()))
                 accepted = true;
 
             if(!accepted
                     && m_filterConfig.testFlag(FC_StepShortDescription)
-                    && filterRegExp().exactMatch(step->getStepDescription()))
+                    && filterRegExp().exactMatch(step->description()))
                 accepted = true;
 
             if(!accepted
                     && m_filterConfig.testFlag(FC_StepFullDescription)
-                    && filterRegExp().exactMatch(step->getStepDetailledDescription()))
+                    && filterRegExp().exactMatch(step->detailledDescription()))
                 accepted = true;
         }
 
@@ -310,7 +310,7 @@ bool DM_StepTreeViewDefaultProxyModel::existStepInPluginCollection(const QModelI
     if(step == NULL)
         return false;
 
-    return m_plugins.contains(step->getPlugin());
+    return m_plugins.contains(step->pluginStaticCastT<>());
 }
 
 bool DM_StepTreeViewDefaultProxyModel::isStepCompatibleWithParent(const QModelIndex &index) const

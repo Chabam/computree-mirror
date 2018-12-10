@@ -2,6 +2,7 @@
 
 #include "cdm_configfile.h"
 #include "ct_abstractstepplugin.h"
+#include "pluginentryinterface.h"
 
 #include <QDir>
 #include <QDebug>

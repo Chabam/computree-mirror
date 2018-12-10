@@ -32,7 +32,7 @@ bool CT_IteratorGroupsModelForResultModelGroup::recursiveBeginIterateGroups(cons
     CT_TreeStructureConstructor constructor;
 
     // création de la structure à parcourir en fonction des possibilités sélectionnées du modèle d'entrée
-    QList<CT_InStdModelPossibility*> savedChecked = model->getPossibilitiesSavedSelected();
+    QList<CT_InStdModelPossibility*> savedChecked = model->getPossibilitiesSelected();
 
     QListIterator<CT_InStdModelPossibility*> itChecked(savedChecked);
 

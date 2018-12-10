@@ -2,7 +2,7 @@
 
 #include "ct_global/ct_context.h"
 
-#include "ct_tools/repository/ct_repositoryaccess.h"
+#include "ct_accessor/ct_repositoryaccess.h"
 #include "ct_cloud/tools/ct_globalpointcloudmanager.h"
 
 DM_AMKglGlobalPointsCloudManager::DM_AMKglGlobalPointsCloudManager()

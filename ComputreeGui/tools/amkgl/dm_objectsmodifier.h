@@ -1,8 +1,7 @@
 #ifndef DM_OBJECTSMODIFIER_H
 #define DM_OBJECTSMODIFIER_H
 
-#include "interfaces.h"
-
+#include "graphicsviewinterface.h"
 #include "renderer/ichunk.h"
 
 /**

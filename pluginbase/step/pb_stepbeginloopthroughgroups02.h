@@ -35,7 +35,7 @@ protected:
 private:
     QList<CT_AbstractSingularItemDrawable*>               _ids;
 
-    void recursiveRemoveGroupIfEmpty(CT_AbstractItemGroup *parent, CT_AbstractItemGroup *group) const;
+    void recursiveRemoveGroupIfEmpty(CT_StandardItemGroup *parent, CT_StandardItemGroup *group) const;
 };
 
 #endif // PB_STEPBEGINLOOPTHROOUGHGROUPS02_H

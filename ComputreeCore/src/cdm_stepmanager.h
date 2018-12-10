@@ -2,7 +2,7 @@
 #define CDM_STEPMANAGER_H
 
 #include "computreeCore_global.h"
-#include "interfaces.h"
+#include "ct_step/abstract/ct_virtualabstractstep.h"
 #include "cdm_stepmanageroptions.h"
 
 #include <QThread>
@@ -55,16 +55,6 @@ public:
      *  \return true si l'ajout est effectif, false sinon.
      */
     bool addStep(CT_VirtualAbstractStep *step, CT_VirtualAbstractStep *parent = NULL);
-
-    /*!
-     *  \brief Insertion d'une etape
-     *
-     *  \param step : L'etape  insrer.
-     *  \param parent : L'etape parente & laquelle ajouter cette etape
-     *
-     *  \return true si l'ajout est effectif, false sinon.
-     */
-    bool insertStep(CT_VirtualAbstractStep *step, CT_VirtualAbstractStep &parent);
 
     /*!
      *  \brief Suppression d'une etape

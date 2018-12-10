@@ -100,10 +100,10 @@ void PB_StepComputePointMetrics::createInResultModelListProtected()
 {
     CT_InResultModelGroupToCopy *resIn_res = createNewInResultModelForCopy(DEFin_res, tr("Points"));
     resIn_res->setZeroOrMoreRootGroup();
-    resIn_res->addGroupModel("", DEFin_grp, CT_AbstractItemGroup::staticGetType(), tr("Groupe"));
-    resIn_res->addItemModel(DEFin_grp, DEFin_points, CT_AbstractItemDrawableWithPointCloud::staticGetType(), tr("Scène"));
-    resIn_res->addItemModel(DEFin_grp, DEFin_areaShape, CT_AbstractAreaShape2D::staticGetType(), tr("Emprise de la placette"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsOptional);
-    resIn_res->addItemModel(DEFin_grp, DEFin_lasAtt, CT_StdLASPointsAttributesContainer::staticGetType(), tr("Attributs LAS"), "", CT_InAbstractItemModel::C_ChooseOneIfMultiple, CT_InAbstractItemModel::F_IsOptional);
+    resIn_res->addStdGroupModel("", DEFin_grp, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
+    resIn_res->addStdItemModel(DEFin_grp, DEFin_points, CT_AbstractItemDrawableWithPointCloud::staticGetType(), tr("Scène"));
+    resIn_res->addStdItemModel(DEFin_grp, DEFin_areaShape, CT_AbstractAreaShape2D::staticGetType(), tr("Emprise de la placette"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsOptional);
+    resIn_res->addStdItemModel(DEFin_grp, DEFin_lasAtt, CT_StdLASPointsAttributesContainer::staticGetType(), tr("Attributs LAS"), "", CT_InAbstractItemModel::C_ChooseOneIfMultiple, CT_InAbstractItemModel::F_IsOptional);
 }
 
 // Semi-automatic creation of step parameters DialogBox
@@ -115,9 +115,9 @@ void PB_StepComputePointMetrics::createPostConfigurationDialog()
     CT_OutAbstractResultModel* resultInModelOut = NULL;
     CT_InAbstractSingularItemModel* baseModel = NULL;
 
-    if(!resultInModel->getPossibilitiesSavedSelected().isEmpty())
+    if(!resultInModel->getPossibilitiesSelected().isEmpty())
     {
-        resultInModelOut = (CT_OutAbstractResultModel*)resultInModel->getPossibilitiesSavedSelected().first()->outModel();
+        resultInModelOut = (CT_OutAbstractResultModel*)resultInModel->getPossibilitiesSelected().first()->outModel();
     }
 
     if(resultInModelOut != NULL)
@@ -125,9 +125,9 @@ void PB_StepComputePointMetrics::createPostConfigurationDialog()
         baseModel = (CT_InAbstractSingularItemModel*)PS_MODELS->searchModel(DEFin_points, resultInModelOut, this);
     }
 
-    if(baseModel != NULL && !baseModel->getPossibilitiesSavedSelected().isEmpty())
+    if(baseModel != NULL && !baseModel->getPossibilitiesSelected().isEmpty())
     {
-        _inSceneDisplayableName =  baseModel->getPossibilitiesSavedSelected().first()->outModel()->displayableName();
+        _inSceneDisplayableName =  baseModel->getPossibilitiesSelected().first()->outModel()->displayableName();
     }
 }
 

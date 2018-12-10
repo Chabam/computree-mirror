@@ -194,7 +194,7 @@ protected:
     /**
      * @brief Recursive set color of childrens of this group
      */
-    void recursiveSetColor(CT_AbstractItemGroup *group,
+    void recursiveSetColor(CT_StandardItemGroup *group,
                               const QColor &color);
 
 public slots:

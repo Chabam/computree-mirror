@@ -24,7 +24,7 @@ bool CT_OutResultModelManager::addResultModel(CT_OutAbstractResultModel* model)
 void CT_OutResultModelManager::finalizeModels()
 {
     for(CT_OutAbstractResultModel* model : m_resultModels) {
-        model->recursiveSetComplete();
+        model->recursiveFinalize();
     }
 }
 

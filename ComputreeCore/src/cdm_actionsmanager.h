@@ -14,7 +14,6 @@
  */
 class COMPUTREECORESHARED_EXPORT CDM_ActionsManager : public QObject, public ActionsManagerInterface
 {
-    Q_INTERFACES(ActionsManagerInterface)
     Q_OBJECT
 
 public:

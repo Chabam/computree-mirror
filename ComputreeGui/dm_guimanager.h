@@ -63,7 +63,6 @@ class CT_AbstractExporter;
 class DM_GuiManager : public QObject, public GuiManagerInterface
 {
     Q_OBJECT
-    Q_INTERFACES(GuiManagerInterface)
 
 private:
 

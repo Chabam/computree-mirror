@@ -20,9 +20,9 @@ void StepTestModel1::createInResultModelListProtected()
 {
     CT_InResultModelGroupToCopy * resultModel = createNewInResultModelForCopy(DEF_SearchInResult, tr("Sections / Clusters"));
     resultModel->setZeroOrMoreRootGroup();
-    resultModel->addGroupModel("", DEF_SearchInSectionGroup);
-    resultModel->addGroupModel(DEF_SearchInSectionGroup, DEF_SearchInClusterGroup);
-    resultModel->addItemModel(DEF_SearchInClusterGroup, DEF_SearchInPointCluster, CT_PointCluster::staticGetType());
+    resultModel->addStdGroupModel("", DEF_SearchInSectionGroup);
+    resultModel->addStdGroupModel(DEF_SearchInSectionGroup, DEF_SearchInClusterGroup);
+    resultModel->addStdItemModel(DEF_SearchInClusterGroup, DEF_SearchInPointCluster, CT_PointCluster::staticGetType());
 }
 
 void StepTestModel1::createOutResultModelListProtected()

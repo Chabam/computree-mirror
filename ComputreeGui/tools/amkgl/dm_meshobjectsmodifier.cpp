@@ -6,8 +6,8 @@
 
 #include "ct_cloudindex/abstract/ct_abstractcloudindext.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
-#include "ct_itemdrawable/accessibility/ct_iaccessedgecloud.h"
-#include "ct_itemdrawable/accessibility/ct_iaccessfacecloud.h"
+#include "ct_accessibility/ct_iaccessedgecloud.h"
+#include "ct_accessibility/ct_iaccessfacecloud.h"
 
 DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* scene,
                                                const Scene::ObjectType& objectType,
@@ -40,7 +40,7 @@ DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* 
         Q_ASSERT((mesh == NULL) || (edgeAccess != NULL));
 
         if(edgeAccess != NULL) {
-            m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractEdgeCloudIndex*)edgeAccess->getEdgeCloudIndex());
+            m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractEdgeCloudIndex*)edgeAccess->edgeCloudIndex());
             Q_ASSERT(m_cloudIndex != NULL);
         }
 
@@ -62,7 +62,7 @@ DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* 
         Q_ASSERT((mesh == NULL) || (faceAccess != NULL));
 
         if(faceAccess != NULL) {
-            m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractEdgeCloudIndex*)faceAccess->getFaceCloudIndex());
+            m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractEdgeCloudIndex*)faceAccess->faceCloudIndex());
             Q_ASSERT(m_cloudIndex != NULL);
         }
     }

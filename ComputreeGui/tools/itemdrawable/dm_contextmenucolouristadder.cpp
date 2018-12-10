@@ -1,9 +1,8 @@
 #include "dm_contextmenucolouristadder.h"
 
-#include "interfaces.h"
 #include "ct_point.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractsingularitemmodel.h"
-#include "ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractsingularitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 
 #include "qtcolorpicker/qtcolorpicker.h"
@@ -93,9 +92,9 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
     {
         CT_OutAbstractSingularItemModel *model = dynamic_cast<CT_OutAbstractSingularItemModel*>(it.next());
 
-        if((model != NULL) && !model->itemAttributes().isEmpty())
+        if((model != NULL) && !model->isEmpty())
         {
-            if(!finalModels.contains((CT_OutAbstractSingularItemModel*)model->lastOriginalModelWithAStep()))
+            if(!finalModels.contains((CT_OutAbstractSingularItemModel*)model->recursiveOriginalModelWithAStep()))
                 finalModels.append(model);
         }
     }
@@ -110,12 +109,13 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
 
         for(int i=0; i<nDocs; ++i)
         {
-            QMenu *subMenu = menu->addMenu(tr("%1").arg(m_docManager->documentAt(i)->getNumber()));
+            QMenu* subMenu = menu->addMenu(tr("%1").arg(m_docManager->documentAt(i)->getNumber()));
 
-            foreach (CT_OutAbstractItemAttributeModel *attModel, model->itemAttributes()) {
+            model->visitAttributes([this, &subMenu, &i](const CT_OutAbstractItemAttributeModel* attModel) -> bool {
                 QAction *action = subMenu->addAction(attModel->displayableName(), this, SLOT(colorByAttributeAndGradient()));
                 action->setData(qVariantFromValue(DM_ContextMenuColouristAdder::ActionSetColorByAttribute(attModel, i)));
-            }
+                return true;
+            });
         }
     }
 
@@ -243,14 +243,14 @@ void DM_ContextMenuColouristAdder::colorByAttributeAndGradient()
         CT_AbstractSingularItemDrawable *item = dynamic_cast<CT_AbstractSingularItemDrawable*>(it.next());
 
         if(item != NULL) {
-            CT_AbstractItemAttribute *att = item->itemAttribute(info.m_model);
+            CT_AbstractItemAttribute *att = item->itemAttributeWithOutModel(info.m_model);
 
             if(att != NULL) {
                 ok = true;
 
                 double value = 0;
 
-                if(att->type() == CT_AbstractCategory::BOOLEAN)
+                if(att->valueType() == CT_AbstractCategory::BOOLEAN)
                     value = att->toBool(item, &ok);
                 else
                     value = att->toDouble(item, &ok);
@@ -280,7 +280,7 @@ void DM_ContextMenuColouristAdder::colorByAttributeAndGradient()
 
         while(itOk.hasNext()) {
             CT_AbstractSingularItemDrawable *item = (CT_AbstractSingularItemDrawable*)itOk.next();
-            CT_AbstractItemAttribute *att = item->itemAttribute(info.m_model);
+            CT_AbstractItemAttribute *att = item->itemAttributeWithOutModel(info.m_model);
             double vv = att->toDouble(item, &ok);
 
             // convert the value to be between 0 and 1

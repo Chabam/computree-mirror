@@ -1,6 +1,7 @@
 #include "cdm_scriptproblem.h"
 
 #include "cdm_pluginmanager.h"
+#include "ct_abstractstepplugin.h"
 
 CDM_ScriptProblem::CDM_ScriptProblem(CDM_PluginManager &pluginManager,
                                      TypeOfProblem type,
@@ -26,12 +27,12 @@ CDM_ScriptProblem::CDM_ScriptProblem(CDM_PluginManager &pluginManager,
 
     if(m_pluginName.isEmpty()) {
         if(m_configureStep != NULL)
-            m_pluginName = pluginManager.getPluginName(m_configureStep->getPlugin());
+            m_pluginName = pluginManager.getPluginName(static_cast<CT_AbstractStepPlugin*>(m_configureStep->plugin()));
     }
 
     if(m_stepName.isEmpty()) {
         if(m_configureStep != NULL)
-            m_stepName = m_configureStep->getStepName();
+            m_stepName = m_configureStep->name();
     }
 }
 
@@ -116,7 +117,7 @@ bool CDM_ScriptProblem::solutionConfigureStepPreParams()
 {
     if(m_configureStep != NULL)
     {
-        if(m_configureStep->showPreConfigurationDialog())
+        if(m_configureStep->showPreInputConfigurationDialog())
         {
             if(m_configureStep->showInputResultConfigurationDialog())
             {

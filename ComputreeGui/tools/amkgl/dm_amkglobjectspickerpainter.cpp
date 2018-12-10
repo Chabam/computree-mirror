@@ -407,6 +407,6 @@ void DM_AMKglObjectsPickerPainter::drawEdges(const CT_AbstractMeshModel *mesh)
 
 void DM_AMKglObjectsPickerPainter::drawPoints(const CT_AbstractMeshModel *mesh)
 {
-    drawPointCloud(mesh->getPointCloudIndex());
+    drawPointCloud(mesh->pointCloudIndex());
 }
 

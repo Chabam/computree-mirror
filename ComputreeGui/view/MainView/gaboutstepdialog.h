@@ -4,12 +4,14 @@
 #include <QDialog>
 #include <QTreeWidgetItem>
 
-#include "ct_result/model/outModel/abstract/ct_outabstractresultmodel.h"
-#include "ct_result/model/inModel/abstract/ct_inabstractresultmodel.h"
-#include "ct_itemdrawable/model/inModel/abstract/ct_inabstractitemmodel.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h"
-#include "ct_attributes/model/inModel/abstract/ct_inabstractitemattributemodel.h"
-#include "ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractitemattributemodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
+
+class CT_VirtualAbstractStep;
 
 namespace Ui {
 class GAboutStepDialog;

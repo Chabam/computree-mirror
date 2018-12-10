@@ -6,30 +6,21 @@ CDM_CitationInfo::CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManag
 {
     _stepManager = stepManager;
     _pluginManager = pluginManager;
-    QList<CT_VirtualAbstractStep*> rootList = stepManager->getStepRootList();
-    QListIterator<CT_VirtualAbstractStep*> it(rootList);
 
-    while(it.hasNext())
+    QList<CT_VirtualAbstractStep *>& thisStepList = _stepList;
+
+    const QList<CT_VirtualAbstractStep*> rootList = stepManager->getStepRootList();
+
+    for(CT_VirtualAbstractStep* currentStep : rootList)
     {
-        CT_VirtualAbstractStep* currentStep = it.next();
-        _stepList.append(currentStep);
-        recursiveGetStepList(currentStep, _stepList);
+        thisStepList.append(currentStep);
+
+        currentStep->recursiveVisitChildrens([&thisStepList](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+            thisStepList.append(const_cast<CT_VirtualAbstractStep*>(child));
+            return true;
+        });
     }
 }
-
-void CDM_CitationInfo::recursiveGetStepList(CT_VirtualAbstractStep *step, QList<CT_VirtualAbstractStep*> &stepList)
-{
-    QList<CT_VirtualAbstractStep *> stepChildList = step->getStepChildList();
-    QListIterator<CT_VirtualAbstractStep *> it(stepChildList);
-
-    while(it.hasNext())
-    {
-        CT_VirtualAbstractStep* currentStep = it.next();
-        stepList.append(currentStep);
-        recursiveGetStepList(currentStep, stepList);
-    }
-}
-
 
 QList<CDM_CitationInfo::StepCitationInfo> CDM_CitationInfo::getScriptTable()
 {
@@ -39,7 +30,7 @@ QList<CDM_CitationInfo::StepCitationInfo> CDM_CitationInfo::getScriptTable()
     {
         CT_VirtualAbstractStep* currentStep = _stepList.at(i);
 
-        CT_AbstractStepPlugin* plugin = currentStep->getPlugin();
+        CT_AbstractStepPlugin* plugin = currentStep->pluginStaticCastT<>();
         QString pluginOfficialName = plugin->getPluginOfficialName();
         QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
 
@@ -52,7 +43,7 @@ QList<CDM_CitationInfo::StepCitationInfo> CDM_CitationInfo::getScriptTable()
             pluginName = pluginOfficialName;
         }
 
-        list.append(CDM_CitationInfo::StepCitationInfo(currentStep->uniqueID(), currentStep->getStepName(), currentStep->getStepDescription(), pluginName));
+        list.append(CDM_CitationInfo::StepCitationInfo(currentStep->uniqueID(), currentStep->name(), currentStep->description(), pluginName));
     }
     return list;
 }
@@ -70,10 +61,10 @@ QString CDM_CitationInfo::getPluginAndStepCitations()
     {
         CT_VirtualAbstractStep* currentStep = _stepList.at(i);
 
-        CT_AbstractStepPlugin* plugin = currentStep->getPlugin();
+        CT_AbstractStepPlugin* plugin = currentStep->pluginStaticCastT<>();
         QString pluginOfficialName = plugin->getPluginOfficialName();
         QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
-        QString stepName = currentStep->getStepName();
+        QString stepName = currentStep->name();
 
         if (pluginName.left(5) == "plug_")
         {
@@ -130,7 +121,7 @@ QString CDM_CitationInfo::getPluginRIS()
     for (int i = 0 ; i < _stepList.size() ; i++)
     {
         CT_VirtualAbstractStep* currentStep = _stepList.at(i);
-        CT_AbstractStepPlugin* plugin = currentStep->getPlugin();
+        CT_AbstractStepPlugin* plugin = currentStep->pluginStaticCastT<>();
         QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
 
         plugins.insert(pluginName, plugin);

@@ -5,13 +5,12 @@
 #include <QStandardItemModel>
 #include <QItemSelection>
 
-#include "interfaces.h"
-
 class CDM_PluginManager;
 class DM_ActionsManager;
 class GDocumentManagerView;
 class DM_DocumentView;
 class DM_ActionsHandler;
+class CT_AbstractAction;
 
 namespace Ui {
 class GActionsManager;

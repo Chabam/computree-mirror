@@ -29,16 +29,13 @@
 #include "dm_document.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
 
-#include "ct_itemdrawable/abstract/ct_abstractitemgroup.h"
+#include "ct_itemdrawable/ct_standarditemgroup.h"
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 
 #include "ct_result/abstract/ct_abstractresult.h"
-#include "ct_result/model/outModel/abstract/ct_outabstractresultmodel.h"
-
-#include "ct_itemdrawable/tools/iterator/ct_groupiterator.h"
-#include "ct_itemdrawable/tools/iterator/ct_itemiterator.h"
+#include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
 
 int DM_Document::NUMBER = 1;
 
@@ -141,12 +138,13 @@ void DM_Document::removeItemDrawable(CT_AbstractItemDrawable &item)
 
 void DM_Document::removeAllItemDrawableOfResult(const CT_AbstractResult &res)
 {
-    CT_AbstractResult *oResult = (CT_AbstractResult*)&res;
+    // MK : 05.12.18 original code
+    /*CT_AbstractResult *oResult = (CT_AbstractResult*)&res;
     CT_AbstractResult *result = (CT_AbstractResult*)&res;
 
     if(res.model() != NULL)
     {
-        CT_OutAbstractResultModel *om = (CT_OutAbstractResultModel*)res.model()->originalModel();
+        CT_OutAbstractResultModel *om = (CT_OutAbstractResultModel*)res.model()->recursiveOriginalModel();
 
         if((om != NULL)
             && !om->childrens().isEmpty())
@@ -173,12 +171,39 @@ void DM_Document::removeAllItemDrawableOfResult(const CT_AbstractResult &res)
 
     endRemoveMultipleItemDrawable();
 
+    redrawGraphics();*/
+
+    // MK 05.12.18 new code (to test it!)
+    const CT_AbstractResult* currentResult = &res;
+    const CT_AbstractResult* originalResult = static_cast<CT_AbstractResult*>(currentResult->model()->recursiveOriginalModel()->result());
+
+    beginRemoveMultipleItemDrawable();
+
+    QMutableListIterator<CT_AbstractItemDrawable*> it(_listItemDrawable);
+
+    while(it.hasNext())
+    {
+        CT_AbstractItemDrawable* item = it.next();
+        const CT_AbstractResult* resultOfItem = item->result();
+
+        if((resultOfItem == currentResult)
+                || (resultOfItem == originalResult))
+        {
+            emit itemDrawableToBeRemoved(*item);
+
+            item->removeDocumentParent(this);
+            it.remove();
+        }
+    }
+
+    endRemoveMultipleItemDrawable();
+
     redrawGraphics();
 }
 
 void DM_Document::removeAllItemDrawableOfModel(const CT_OutAbstractModel &model)
 {
-    CT_OutAbstractModel *lom = model.lastOriginalModelWithAResult();
+    const CT_OutAbstractModel* lom = model.recursiveOriginalModelWithAResult();
 
     beginRemoveMultipleItemDrawable();
 
@@ -274,14 +299,23 @@ QList<CT_AbstractItemDrawable*> DM_Document::getSelectedItemDrawable() const
     return list;
 }
 
-bool DM_Document::containsItemDrawable(const CT_AbstractItemDrawable *item) const
+bool DM_Document::containsItemDrawable(const CT_AbstractItemDrawable* item) const
 {
-    return item->document().contains(const_cast<DM_Document*>(this));
+    return item->isInDocument(this);
 }
 
-bool DM_Document::containsItemDrawableOrAtLeastOneChildren(const CT_AbstractItemDrawable *item) const
+bool DM_Document::containsItemDrawableOrAtLeastOneChildren(const CT_AbstractItemDrawable* item) const
 {
-    return recursiveContainsItemDrawableModelOrAtLeastOneChildren(item->model());
+    CT_OutAbstractModel* model = item->model();
+
+    if(model->isVisibleInDocument(this))
+        return true;
+
+    const DM_Document* doc = this;
+
+    return !model->recursiveVisitOutChildrens([&doc](const CT_OutAbstractModel* child) -> bool {
+        return !child->isVisibleInDocument(doc);
+    });
 }
 
 bool DM_Document::useItemColor() const
@@ -353,7 +387,7 @@ void DM_Document::setSelectAllItemDrawable(bool select)
 
 void DM_Document::setSelectAllItemDrawableOfModel(bool select, const CT_OutAbstractModel &model)
 {
-    CT_OutAbstractModel *lom = model.lastOriginalModelWithAResult();
+    const CT_OutAbstractModel* lom = model.recursiveOriginalModelWithAResult();
 
     QListIterator<CT_AbstractItemDrawable*> it(_listItemDrawable);
 
@@ -368,7 +402,7 @@ void DM_Document::setSelectAllItemDrawableOfModel(bool select, const CT_OutAbstr
 
 QList<CT_AbstractItemDrawable*> DM_Document::findItemDrawable(const CT_OutAbstractModel &model) const
 {
-    CT_OutAbstractModel *lom = model.lastOriginalModelWithAResult();
+    const CT_OutAbstractModel* lom = model.recursiveOriginalModelWithAResult();
 
     QList<CT_AbstractItemDrawable*> list;
 
@@ -387,7 +421,7 @@ QList<CT_AbstractItemDrawable*> DM_Document::findItemDrawable(const CT_OutAbstra
 
 void DM_Document::findItemDrawable(const CT_OutAbstractModel &model, QList<CT_AbstractItemDrawable *> &outList) const
 {
-    CT_OutAbstractModel *lom = model.lastOriginalModelWithAResult();
+    const CT_OutAbstractModel* lom = model.recursiveOriginalModelWithAResult();
 
     outList.clear();
 
@@ -404,7 +438,7 @@ void DM_Document::findItemDrawable(const CT_OutAbstractModel &model, QList<CT_Ab
 
 CT_AbstractItemDrawable* DM_Document::findFirstItemDrawable(const CT_OutAbstractModel &model) const
 {
-    CT_OutAbstractModel *lom = model.lastOriginalModelWithAResult();
+    const CT_OutAbstractModel* lom = model.recursiveOriginalModelWithAResult();
 
     QListIterator<CT_AbstractItemDrawable*> it(_listItemDrawable);
 
@@ -439,69 +473,6 @@ DM_AbstractInfo* DM_Document::createNewItemInformation(const CT_AbstractItemDraw
     return NULL;
 }
 
-void DM_Document::recursiveAddChildrensToInformationsCollection(const CT_AbstractItemGroup *group,
-                                                                QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash,
-                                                                const bool &searchInHashIfItemExist)
-{
-    CT_GroupIterator it(group);
-
-    while(it.hasNext())
-    {
-        const CT_AbstractItemGroup *child = it.next();
-
-        DM_AbstractInfo *childInfo = NULL;
-
-        if(searchInHashIfItemExist)
-            childInfo = hash->value((CT_AbstractItemGroup*)child, NULL);
-
-        if(childInfo == NULL)
-        {
-            childInfo = createNewItemInformation(child);
-
-            if(childInfo != NULL)
-                hash->insert((CT_AbstractItemGroup*)child, childInfo);
-        }
-
-        recursiveAddChildrensToInformationsCollection(child, hash, searchInHashIfItemExist);
-    }
-
-    CT_ItemIterator itI(group);
-
-    while(itI.hasNext())
-    {
-        const CT_AbstractSingularItemDrawable *child = itI.next();
-
-        DM_AbstractInfo *childInfo = NULL;
-
-        if(searchInHashIfItemExist)
-            childInfo = hash->value((CT_AbstractSingularItemDrawable*)child, NULL);
-
-        if(childInfo == NULL)
-        {
-            childInfo = createNewItemInformation(child);
-
-            if(childInfo != NULL)
-                hash->insert((CT_AbstractSingularItemDrawable*)child, childInfo);
-        }
-    }
-}
-
-bool DM_Document::recursiveContainsItemDrawableModelOrAtLeastOneChildren(const CT_OutAbstractModel *model) const
-{
-    if(model->isVisibleInDocument(this))
-        return true;
-
-    QList<CT_OutAbstractModel*> models = model->childrensStaticCast<CT_OutAbstractModel>();
-    QListIterator<CT_OutAbstractModel*> it(models);
-
-    while(it.hasNext()) {
-        if(recursiveContainsItemDrawableModelOrAtLeastOneChildren(it.next()))
-            return true;
-    }
-
-    return false;
-}
-
 void DM_Document::slotItemDrawableAdded(CT_AbstractItemDrawable &item)
 {
     connect(&item, SIGNAL(selectChange(bool)), this, SLOT(slotItemDrawableSelectionChanged(bool)), Qt::QueuedConnection);
@@ -509,39 +480,39 @@ void DM_Document::slotItemDrawableAdded(CT_AbstractItemDrawable &item)
     if(item.result() == NULL)
         return;
 
-    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = m_itemsInformation.value(item.result(), NULL);
-    DM_AbstractInfo *info = NULL;
-
-    bool firstCreate = false;
+    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*>* hash = m_itemsInformation.value(item.result(), NULL);
 
     if(hash == NULL)
     {
-        firstCreate = true;
-
         hash = new QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*>();
         m_itemsInformation.insert(item.result(), hash);
 
         connect(item.result(), SIGNAL(destroyed(QObject*)), this, SLOT(slotResultDestroyed(QObject*)), Qt::DirectConnection);
-    }
-    else
-    {
-        info = hash->value(&item, NULL);
-    }
 
-    if(info == NULL)
-    {
-        info = createNewItemInformation(&item);
+        DM_AbstractInfo* info = createNewItemInformation(&item);
 
-        if(info != NULL)
-            hash->insert(&item, info);
-        else
+        if(info == NULL)
             return;
+
+        hash->insert(&item, info);
     }
 
-    CT_AbstractItemGroup *group = dynamic_cast<CT_AbstractItemGroup*>(&item);
+    CT_StandardItemGroup* group = dynamic_cast<CT_StandardItemGroup*>(&item);
 
-    if(group != NULL)
-        recursiveAddChildrensToInformationsCollection(group, hash, !firstCreate);
+    if(group != NULL) {
+        group->recursiveVisitChildrensOfTypeItem([this, &hash](const CT_AbstractItemDrawable* child) -> bool {
+
+            if(!hash->contains(const_cast<CT_AbstractItemDrawable*>(child)))
+            {
+                DM_AbstractInfo* childInfo = this->createNewItemInformation(child);
+
+                if(childInfo != NULL)
+                    hash->insert(const_cast<CT_AbstractItemDrawable*>(child), childInfo);
+            }
+
+            return true;
+        });
+    }
 }
 
 void DM_Document::slotItemToBeRemoved(CT_AbstractItemDrawable &item)

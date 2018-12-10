@@ -37,8 +37,6 @@
 
 class DM_MainWindow : public GuiContextInterface
 {
-    Q_INTERFACES(GuiContextInterface)
-
 public:
     DM_MainWindow();
     virtual ~DM_MainWindow();

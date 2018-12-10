@@ -150,7 +150,7 @@ void CT_ResultGroupIterator::initIterator(const CT_ResultGroup *result, const CT
         CT_TreeStructureConstructor constructor;
 
         // création de la structure à parcourir en fonction des possibilités sélectionnées du modèle d'entrée
-        QList<CT_InStdModelPossibility*> savedChecked = inModel->getPossibilitiesSavedSelected();
+        QList<CT_InStdModelPossibility*> savedChecked = inModel->getPossibilitiesSelected();
 
         QListIterator<CT_InStdModelPossibility*> itChecked(savedChecked);
 

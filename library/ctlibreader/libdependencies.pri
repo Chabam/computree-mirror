@@ -1,0 +1,3 @@
+COMPUTREE *= ctlibstructure
+COMPUTREE *= ctlibwidget
+

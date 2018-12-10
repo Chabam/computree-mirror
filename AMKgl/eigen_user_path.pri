@@ -1,4 +1,4 @@
-DEFAULT_EIGEN_INC_PATH = "../pluginshared/3rdparty/eigen"
+DEFAULT_EIGEN_INC_PATH = "../library/3rdparty/eigen"
 
 ##### PCL ####
 include(../pcl_default_path.pri)

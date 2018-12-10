@@ -104,19 +104,19 @@ CT_VirtualAbstractStep* PB_StepExportPointsByXYArea::createNewInstance(CT_StepIn
 void PB_StepExportPointsByXYArea::createInResultModelListProtected()
 {
     CT_InResultModelGroup* resCount = createNewInResultModel(DEFin_resCount, tr("Résultat compteur"), "", true);
-    resCount->setRootGroup(DEF_inGroupCount);
-    resCount->addItemModel(DEF_inGroupCount, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
+    resCount->setStdRootGroup(DEF_inGroupCount);
+    resCount->addStdItemModel(DEF_inGroupCount, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
 
     CT_InResultModelGroup *resScene = createNewInResultModel(DEFin_resScene, tr("Scène"));
     resScene->setZeroOrMoreRootGroup();
-    resScene->addGroupModel("", DEFin_grpScene, CT_AbstractItemGroup::staticGetType(), tr("Groupe"));
-    resScene->addItemModel(DEFin_grpScene, DEFin_itemScene, CT_AbstractItemDrawableWithPointCloud::staticGetType(), tr("Scène"));
+    resScene->addStdGroupModel("", DEFin_grpScene, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
+    resScene->addStdItemModel(DEFin_grpScene, DEFin_itemScene, CT_AbstractItemDrawableWithPointCloud::staticGetType(), tr("Scène"));
 
     CT_InResultModelGroup *resXYAreas = createNewInResultModel(DEFin_resAreas, tr("Emprise"), "", true);
     resXYAreas->setZeroOrMoreRootGroup();
-    resXYAreas->addGroupModel("", DEFin_grpAreas, CT_AbstractItemGroup::staticGetType(), tr("Groupe"));
-    resXYAreas->addItemModel(DEFin_grpAreas, DEFin_itemAreas, CT_AbstractAreaShape2D::staticGetType(), tr("Emprise"));
-    resXYAreas->addItemAttributeModel(DEFin_itemAreas, DEFin_itemAreasAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Nom"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsOptional);
+    resXYAreas->addStdGroupModel("", DEFin_grpAreas, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
+    resXYAreas->addStdItemModel(DEFin_grpAreas, DEFin_itemAreas, CT_AbstractAreaShape2D::staticGetType(), tr("Emprise"));
+    resXYAreas->addStdItemAttributeModel(DEFin_itemAreas, DEFin_itemAreasAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Nom"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsOptional);
 }
 
 // Creation and affiliation of OUT models
@@ -212,7 +212,7 @@ void PB_StepExportPointsByXYArea::compute()
                 CT_ResultGroupIterator itIn_grpAreas(resInAreas, this, DEFin_grpAreas);
                 while (itIn_grpAreas.hasNext() && !isStopped())
                 {
-                    const CT_AbstractItemGroup* group = (CT_AbstractItemGroup*) itIn_grpAreas.next();
+                    const CT_StandardItemGroup* group = (CT_StandardItemGroup*) itIn_grpAreas.next();
 
                     CT_AbstractAreaShape2D* area = (CT_AbstractAreaShape2D*)group->firstItemByINModelName(this, DEFin_itemAreas);
 
@@ -275,7 +275,7 @@ void PB_StepExportPointsByXYArea::compute()
     CT_ResultGroupIterator itIn_grpScene(resInScene, this, DEFin_grpScene);
     while (itIn_grpScene.hasNext() && !isStopped())
     {
-        const CT_AbstractItemGroup* group = (CT_AbstractItemGroup*) itIn_grpScene.next();
+        const CT_StandardItemGroup* group = (CT_StandardItemGroup*) itIn_grpScene.next();
         
         CT_AbstractItemDrawableWithPointCloud* scene = (CT_AbstractItemDrawableWithPointCloud*)group->firstItemByINModelName(this, DEFin_itemScene);
 

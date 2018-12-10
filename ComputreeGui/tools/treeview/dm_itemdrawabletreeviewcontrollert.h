@@ -3,8 +3,6 @@
 
 #include <QTimer>
 
-#include "interfaces.h"
-
 #include "tools/treeview/dm_abstractitemtreeviewcontroller.h"
 #include "tools/treeview/dm_iitemdrawablestandarditembuildert.h"
 #include "tools/treeview/dm_itreeviewmanagert.h"

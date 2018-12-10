@@ -1,7 +1,6 @@
 #ifndef DM_ACTIONSHANDLER_H
 #define DM_ACTIONSHANDLER_H
 
-#include "interfaces.h"
 #include "cdm_actionsmanager.h"
 
 class DM_ActionsHandler : public QObject

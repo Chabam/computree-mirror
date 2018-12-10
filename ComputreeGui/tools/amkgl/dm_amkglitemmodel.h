@@ -2,7 +2,7 @@
 #define DM_AMKGLITEMMODEL_H
 
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
 #include "ct_result/ct_resultgroup.h"
 
 class DM_AMKglItemModelIterator {

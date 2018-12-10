@@ -37,7 +37,7 @@
 #include "view/DocumentView/GraphicsViews/ggraphicsviewsynchronizedgroup.h"
 
 #include "ct_result/abstract/ct_abstractresult.h"
-#include "ct_result/tools/iterator/ct_resultiterator.h"
+#include "ct_iterator/ct_singlemodeliteratorstdstyleforresultgroup.h"
 
 #include <QMdiSubWindow>
 
@@ -130,9 +130,9 @@ bool GDocumentManagerView::addAllItemDrawableOfModelToDocument(CT_AbstractResult
 
         res.setBusy(true);
 
-        CT_ResultIterator it((CT_ResultGroup*)&res, &model);
+        auto iterator = CT_SingleModelIteratorStdStyleForResultGroup<CT_AbstractItemDrawable>::createCompleteIterator(&model);
 
-        int n = it.size();
+        const int n = iterator.count();
 
         if(n != 0)
         {
@@ -141,18 +141,20 @@ bool GDocumentManagerView::addAllItemDrawableOfModelToDocument(CT_AbstractResult
             if(n > 1)
                 doc->beginAddMultipleItemDrawable();
 
-            while(it.hasNext())
-            {
-                CT_AbstractItemDrawable *item = (CT_AbstractItemDrawable*)it.next();
-                doc->addItemDrawable(*item);
+            for(CT_AbstractItemDrawable* item : iterator) {
+
+                if(item != NULL)
+                    doc->addItemDrawable(*item);
 
                 ++i;
                 progress.setProgress(((float)(i*100))/n);
             }
 
+
             if(n > 1)
                 doc->endAddMultipleItemDrawable();
-                doc->redrawGraphics();
+
+            doc->redrawGraphics();
         }
 
         progress.setProgress(100);
@@ -174,9 +176,7 @@ bool GDocumentManagerView::addAllItemDrawableOfResultToDocument(CT_AbstractResul
 
         res.setBusy(true);
 
-        CT_ResultIterator it((CT_ResultGroup*)&res, false);
-
-        int n = it.size();
+        const int n = res.nChildrens();
 
         if(n != 0)
         {
@@ -185,14 +185,17 @@ bool GDocumentManagerView::addAllItemDrawableOfResultToDocument(CT_AbstractResul
             if(n > 1)
                 doc->beginAddMultipleItemDrawable();
 
-            while(it.hasNext())
-            {
-                CT_AbstractItemDrawable *item = (CT_AbstractItemDrawable*)it.next();
-                doc->addItemDrawable(*item);
+            res.visitChildrens([&doc, &i, &progress, &n](const CT_AbstractItem* child) -> bool {
+                CT_AbstractItemDrawable* item = dynamic_cast<CT_AbstractItemDrawable*>(const_cast<CT_AbstractItem*>(child));
+
+                if(item != NULL)
+                    doc->addItemDrawable(*item);
 
                 ++i;
                 progress.setProgress(((float)(i*100))/n);
-            }
+
+                return true;
+            });
 
             if(n > 1)
                 doc->endAddMultipleItemDrawable();
@@ -332,13 +335,17 @@ bool GDocumentManagerView::removeAllItemDrawableOfListFromDocuments(QList<CT_Abs
 
             if(item->isDisplayed())
             {
-                QList<DocumentInterface*> itemDocList = item->document();
+                QList<DocumentInterface*> itemDocList;
+
+                item->visitDocumentsWhereThisItemIs([&itemDocList](const IDocumentForModel* doc) -> bool {
+                    itemDocList.append(static_cast<DocumentInterface*>(const_cast<IDocumentForModel*>(doc)));
+                    return true;
+                });
+
                 QListIterator<DocumentInterface*> itDoc(itemDocList);
 
                 while(itDoc.hasNext())
-                {
                     itDoc.next()->removeItemDrawable(*item);
-                }
             }
 
             ++i;
@@ -366,7 +373,7 @@ bool GDocumentManagerView::removeAllItemDrawableOfListFromDocument(QList<CT_Abst
         {
             CT_AbstractItemDrawable *item = itItem.next();
 
-            if(item->isDisplayed() && item->document().contains(doc))
+            if(item->isDisplayed() && item->isInDocument(doc))
                 doc->removeItemDrawable(*item);
 
             ++i;

@@ -2,74 +2,40 @@
 #define PB_STEPUSEREADERTOLOADFILES_H
 
 #include "ct_step/abstract/ct_abstractstep.h"
-#include "ct_tools/model/ct_autorenamemodels.h"
-#include "ct_itemdrawable/model/outModel/ct_outstdsingularitemmodel.h"
-#include "ct_reader/tools/ct_readerresultaddingtools.h"
+#include "ct_itemdrawable/ct_readeritem.h"
 
+/**
+ * @brief Step that use a result that contains a collection of CT_ReaderItem (in a group) and use
+ *        it to load multiple files.
+ */
 class PB_StepUseReaderToLoadFiles: public CT_AbstractStep
 {
     Q_OBJECT
+    using SuperClass = CT_AbstractStep;
 
 public:
+    PB_StepUseReaderToLoadFiles();
 
-    /*! \brief Step constructor
-     * 
-     * Create a new instance of the step
-     * 
-     * \param dataInit Step parameters object
-     */
-    PB_StepUseReaderToLoadFiles(CT_StepInitializeData &dataInit);
+    QString description() const final;
 
-    ~PB_StepUseReaderToLoadFiles();
-
-    /*! \brief Step description
-     * 
-     * Return a description of the step function
-     */
-    QString getStepDescription() const;
-
-    /*! \brief Step detailled description
-     * 
-     * Return a detailled description of the step function
-     */
-    QString getStepDetailledDescription() const;
-
-    /*! \brief Step URL
-     * 
-     * Return a URL of a wiki for this step
-     */
-    QString getStepURL() const;
-
-    /*! \brief Step copy
-     * 
-     * Step copy, used when a step is added by step contextual menu
-     */
-    CT_VirtualAbstractStep* createNewInstance(CT_StepInitializeData &dataInit);
-
+    CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
+    void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
 
-    void createPreConfigurationDialog();
+    void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
-    /*! \brief Input results specification
-     * 
-     * Specification of input results models needed by the step (IN)
-     */
-    void createInResultModelListProtected();
+    void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
-    /*! \brief Output results specification
-     * 
-     * Specification of output results models created by the step (OUT)
-     */
-    void createOutResultModelListProtected();
-
-    /*! \brief Algorithm of the step
-     * 
-     * Step computation, using input results, and creating output results
-     */
-    void compute();
+    void compute() final;
 
 private:
+    CT_HandleInResultGroupCopy<>                                m_hInResultGroupCopy;
+    CT_HandleInStdZeroOrMoreGroup                               m_hInRootGroup;
+    CT_HandleInStdGroup<>                                       m_hInGroup;
+    CT_HandleInSingularItem<CT_ReaderItem>                      m_hInReaderItem;
+    CT_HandleInSingularItem<>                                   m_hInConditionnalItem;
+    CT_HandleInStdItemAttributeT<CT_AbstractCategory::BOOLEAN>  m_hInConditionnalAttribute;
 
     bool                                    _conditionnal;
     CT_ReaderResultAddingTools              m_readerAddingTools;

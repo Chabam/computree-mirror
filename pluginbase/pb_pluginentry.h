@@ -52,7 +52,7 @@
  */
 
 
-#include "interfaces.h"
+#include "pluginentryinterface.h"
 
 class PB_StepPluginManager;
 

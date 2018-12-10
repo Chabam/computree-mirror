@@ -151,10 +151,10 @@ bool CT_OutModelCopyActionAddReaderResultModelInGroup::execute(const CT_VirtualA
         CT_InAbstractSingularItemModel *inReaderModel = dynamic_cast< CT_InAbstractSingularItemModel* >(PS_MODELS->searchModel(_inReaderModelName, modelCopy->outModelForSearch(), step));
 
         Q_ASSERT(inReaderModel != NULL);
-        Q_ASSERT(!inReaderModel->getPossibilitiesSavedSelected().isEmpty());
+        Q_ASSERT(!inReaderModel->getPossibilitiesSelected().isEmpty());
 
         // on récupère sa première possibilité (on ne peut utiliser plusieurs possiblités ici !)
-        CT_OutAbstractSingularItemModel *outReaderModel = dynamic_cast< CT_OutAbstractSingularItemModel* >(inReaderModel->getPossibilitiesSavedSelected().first()->outModel());
+        CT_OutAbstractSingularItemModel *outReaderModel = dynamic_cast< CT_OutAbstractSingularItemModel* >(inReaderModel->getPossibilitiesSelected().first()->outModel());
 
         Q_ASSERT(outReaderModel != NULL);
 

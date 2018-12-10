@@ -49,8 +49,6 @@
 #include "gfavoritesmenudialog.h"
 #include "gaboutmemory.h"
 
-#include "ct_steploadfileseparator.h"
-#include "ct_stepcanbeaddedfirstseparator.h"
 #include "ct_abstractstepplugin.h"
 #include "ct_step/abstract/ct_abstractsteploadfile.h"
 #include "ct_step/abstract/ct_abstractstepcanbeaddedfirst.h"
@@ -1167,18 +1165,15 @@ QString GMainWindow::createFileExtensionAvailable() const
 
 void GMainWindow::getFileExtensionAvailableInStepsOfLevelRecursively(CT_MenuLevel *level, QHash<QString, QStringList> &hash) const
 {
-    QList<CT_VirtualAbstractStep*> steps = level->steps();
-    QListIterator<CT_VirtualAbstractStep*> itS(steps);
+    const QList<CT_VirtualAbstractStep*> steps = level->steps();
 
-    while(itS.hasNext()) {
-        CT_AbstractStepLoadFile *lfStep = dynamic_cast<CT_AbstractStepLoadFile*>(itS.next());
+    for(CT_VirtualAbstractStep* step : steps) {
+        CT_AbstractStepLoadFile *lfStep = dynamic_cast<CT_AbstractStepLoadFile*>(step);
 
         if(lfStep != NULL) {
-            QList<FileFormat> ffs = lfStep->getFileExtensionAccepted();
-            QListIterator<FileFormat> itFFs(ffs);
+            const QList<FileFormat> ffs = lfStep->fileExtensionAccepted();
 
-            while(itFFs.hasNext()) {
-                const FileFormat &ff = itFFs.next();
+            for(const FileFormat& ff : ffs) {
 
                 if(!ff.suffixes().isEmpty()) {
                     QStringList sl = hash.value(ff.description(), QStringList());
@@ -1197,11 +1192,10 @@ void GMainWindow::getFileExtensionAvailableInStepsOfLevelRecursively(CT_MenuLeve
         }
     }
 
-    QList<CT_MenuLevel*> levels = level->levels();
-    QListIterator<CT_MenuLevel*> it(levels);
+    const QList<CT_MenuLevel*> levels = level->levels();
 
-    while(it.hasNext()) {
-        getFileExtensionAvailableInStepsOfLevelRecursively(it.next(), hash);
+    for(CT_MenuLevel* level : levels) {
+        getFileExtensionAvailableInStepsOfLevelRecursively(level, hash);
     }
 }
 

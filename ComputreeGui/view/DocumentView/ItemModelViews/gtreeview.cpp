@@ -26,8 +26,8 @@
 #include "tools/graphicsview/dm_pointscolourist.h"
 
 #include "ct_global/ct_context.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractsingularitemmodel.h"
-#include "ct_itemdrawable/abstract/ct_abstractitemgroup.h"
+#include "ct_model/outModel/abstract/ct_outabstractsingularitemmodel.h"
+#include "ct_itemdrawable/ct_standarditemgroup.h"
 #include "ct_itemdrawable/ct_itemattributelist.h"
 
 int GTreeView::COLUMN_FIRST_DATA_VALUE = 1;
@@ -139,7 +139,7 @@ void GTreeView::init()
     connect(documentView(), SIGNAL(itemDrawableAdded(CT_AbstractItemDrawable&)), this, SLOT(slotAddItemDrawable(CT_AbstractItemDrawable&)), Qt::DirectConnection);
     connect(documentView(), SIGNAL(itemDrawableToBeRemoved(CT_AbstractItemDrawable&)), this, SLOT(slotRemoveItemDrawable(CT_AbstractItemDrawable&)), Qt::DirectConnection);
 
-    qRegisterMetaType<DM_ItemDrawableType<CT_OutAbstractItemModel*, CT_AbstractSingularItemDrawable> >("DM_ItemDrawableType<CT_OutAbstractItemModel*, CT_AbstractSingularItemDrawable> ");
+    qRegisterMetaType<ItemDrawableTypeResult>("ItemDrawableTypeResult");
     connect(&m_typeBuilder, SIGNAL(removed()), this, SLOT(slotItemTypeRemoved()), Qt::QueuedConnection);
     connect(&m_typeBuilder, SIGNAL(added()), this, SLOT(slotNewItemTypeDetected()), Qt::QueuedConnection);
 
@@ -570,7 +570,12 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
         if(!item.isSelected())
             return l;
 
-        QList<DocumentInterface*> docs = item.document();
+        QList<IDocumentForModel*> docs;
+        item.visitDocumentsWhereThisItemIs([&docs](const IDocumentForModel* doc) -> bool {
+            docs.append(const_cast<IDocumentForModel*>(doc));
+            return true;
+        });
+
         QListIterator<DM_DocumentView*> it(syncGroup()->documentViews());
 
         bool continueLoop = true;
@@ -611,7 +616,7 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
         while(itIA.hasNext())
         {
             CT_AbstractItemAttribute *att = itIA.next();
-            const int index = m_dataReferencesToUse.value(att->model()->originalModel(), -1);
+            const int index = m_dataReferencesToUse.value(att->model()->recursiveOriginalModel(), -1);
 
             if(index != -1)
             {
@@ -624,30 +629,28 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
     {
         itemDisplay->setText(item.model()->displayableName());
 
-        const CT_AbstractItemGroup *group = dynamic_cast<const CT_AbstractItemGroup*>(&item);
+        const CT_StandardItemGroup *group = dynamic_cast<const CT_StandardItemGroup*>(&item);
 
         if(group != NULL)
         {
-            QVector<CT_AbstractItem*> items = group->childrensForGui();
-            QVectorIterator<CT_AbstractItem*> it(items);
+            const DataReferenceCollection& ref = m_dataReferencesToUse;
 
-            while(it.hasNext())
-            {
-                CT_ItemAttributeList *sI = dynamic_cast<CT_ItemAttributeList*>(it.next());
+            group->visitChildrensForTreeView([&ref, &l](const CT_AbstractItem* child) -> bool {
+                const CT_ItemAttributeList* sI = dynamic_cast<const CT_ItemAttributeList*>(child);
 
                 if(sI != NULL)
                 {
-                    QList<CT_AbstractItemAttribute*> lIA = sI->itemAttributes();
+                    const QList<CT_AbstractItemAttribute*> lIA = sI->itemAttributes();
                     QListIterator<CT_AbstractItemAttribute*> itIA(lIA);
 
                     while(itIA.hasNext())
                     {
                         CT_AbstractItemAttribute *att = itIA.next();
-                        const int index = m_dataReferencesToUse.value(att->model()->originalModel(), -1);
+                        const int index = ref.value(att->model()->recursiveOriginalModel(), -1);
 
                         if(index != -1)
                         {
-                            CG_CustomTreeItem *ii = l.at(index + GTreeView::COLUMN_FIRST_DATA_VALUE);
+                            CG_CustomTreeItem* ii = l.at(index + GTreeView::COLUMN_FIRST_DATA_VALUE);
 
                             if(!ii->text().isEmpty())
                                 ii->setText(ii->text() + " / ");
@@ -656,7 +659,9 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
                         }
                     }
                 }
-            }
+
+                return true;
+            });
         }
     }
 
@@ -974,12 +979,12 @@ void GTreeView::reconstructReferencesToUse()
 {
     DataReferenceCollection uniqueReferences;
 
-    QList<DM_ItemDrawableType<CT_OutAbstractItemModel*, CT_AbstractItemDrawable> > types = m_typeBuilder.types();
-    QListIterator<DM_ItemDrawableType<CT_OutAbstractItemModel*, CT_AbstractItemDrawable> > it(types);
+    QList<ItemDrawableTypeResult> types = m_typeBuilder.types();
+    QListIterator<ItemDrawableTypeResult> it(types);
 
     while(it.hasNext())
     {
-        const DM_ItemDrawableType<CT_OutAbstractItemModel*, CT_AbstractItemDrawable>  &type = it.next();
+        const ItemDrawableTypeResult &type = it.next();
 
         if(!type.isEmpty())
             recursiveAddToReferencesToUseForModel(uniqueReferences, type.type());
@@ -988,28 +993,31 @@ void GTreeView::reconstructReferencesToUse()
     m_dataReferencesToUse = uniqueReferences;
 }
 
-void GTreeView::recursiveAddToReferencesToUseForModel(DataReferenceCollection &uniqueReferences,
-                                                      const CT_OutAbstractModel *model)
+void GTreeView::recursiveAddToReferencesToUseForModel(DataReferenceCollection& uniqueReferences,
+                                                      const CT_OutAbstractModel* model)
 {
-    if(dynamic_cast<const CT_OutAbstractSingularItemModel*>(model) != NULL)
-    {
-        const CT_OutAbstractSingularItemModel *sModel = (const CT_OutAbstractSingularItemModel*)model;
-        QListIterator<CT_OutAbstractItemAttributeModel*> itR(sModel->itemAttributes());
+    model->recursiveVisitOutChildrens([&uniqueReferences](const CT_OutAbstractModel* child) -> bool {
+        if(dynamic_cast<const CT_OutAbstractSingularItemModel*>(child) != NULL)
+        {
+            const CT_OutAbstractSingularItemModel* sModel = static_cast<const CT_OutAbstractSingularItemModel*>(child);
 
-        while(itR.hasNext()) {
-            CT_OutAbstractModel* newModel = itR.next()->originalModel();
+            sModel->visitAttributes([&uniqueReferences](const CT_OutAbstractItemAttributeModel* att) -> bool {
+                CT_OutAbstractModel* newModel = att->recursiveOriginalModel();
+
+                if(!uniqueReferences.contains(newModel))
+                    uniqueReferences.insert(newModel, uniqueReferences.size());
+
+                return true;
+            });
+        } else {
+            CT_OutAbstractModel* newModel = child->recursiveOriginalModel();
+
             if(!uniqueReferences.contains(newModel))
                 uniqueReferences.insert(newModel, uniqueReferences.size());
         }
-    }
-    else
-    {
-        QList<CT_AbstractModel*> child = model->childrens();
-        QListIterator<CT_AbstractModel*> it(child);
 
-        while(it.hasNext())
-            recursiveAddToReferencesToUseForModel(uniqueReferences, (CT_OutAbstractModel*)it.next());
-    }
+        return true;
+    });
 }
 
 void GTreeView::reconstructCompleter()

@@ -1,0 +1,303 @@
+#ifndef CT_ABSTRACTSINGULARITEMDRAWABLE_H
+#define CT_ABSTRACTSINGULARITEMDRAWABLE_H
+
+#include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
+#include "ct_itemattributes/tools/ct_defaultitemattributemanager.h"
+#include "ct_itemattributes/tools/ct_itemattributecontainer.h"
+
+#include <QColor>
+
+class CT_StandardItemGroup;
+
+/**
+ * @brief Represent an item that is a leaf of a group in the tree structure. Only singular item can have item attributes.
+ */
+class CTLIBSTRUCTURE_EXPORT CT_AbstractSingularItemDrawable : public CT_AbstractItemDrawable, public ISingularItemDrawableForModel
+{
+    Q_OBJECT
+    CT_TYPE_IMPL_MACRO(CT_AbstractSingularItemDrawable, CT_AbstractItemDrawable, Item)
+
+    using SuperClass = CT_AbstractItemDrawable;
+
+public:
+    CT_AbstractSingularItemDrawable();
+
+    /**
+     * @brief Copy constructor.
+     *
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - Unique ID
+     *          - Pointer of base and alternative draw manager
+     *          - Displayable name
+     *          - Center coordinates
+     *          - Default Color
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     */
+    CT_AbstractSingularItemDrawable(const CT_AbstractSingularItemDrawable& other);
+
+    /**
+     * @brief Set the x center coordinate of this item
+     */
+    void setCenterX(double x);
+
+    /**
+     * @brief Set the y center coordinate of this item
+     */
+    void setCenterY(double y);
+
+    /**
+     * @brief Set the z center coordinate of this item
+     */
+    void setCenterZ(double z);
+
+    /**
+     * @brief Returns the x center coordinate of this item
+     */
+    double centerX() const override;
+
+    /**
+     * @brief Returns the y center coordinate of this item
+     */
+    double centerY() const override;
+
+    /**
+     * @brief Returns the z center coordinate of this item
+     */
+    double centerZ() const override;
+
+    /**
+     * @brief Set coordinate of the center
+     */
+    inline virtual void setCenterCoordinate(const Eigen::Vector3d& center) {m_centerCoordinates = center;}
+
+    /**
+     * @brief Returns coordinate of the center
+     */
+    inline const Eigen::Vector3d& centerCoordinate() const {return m_centerCoordinates;}
+
+    /**
+     * @brief Visit childrens. Redefined to visit item attributes (default and new).
+     * @return Returns true if no childrens has been visited otherwise returns the result of the visitor.
+     */
+    bool visitChildrens(const ChildrensVisitor& visitor) const override;
+
+    /**
+     * @brief Returns the number of attributes
+     */
+    int nChildrens() const override;
+
+    /**
+     * @brief Visit childrens of type CT_AbstractItemDrawable. Redefined because this item doesn't contains child of type CT_AbstractItemDrawable.
+     * @return Returns true because no childrens can be visited.
+     */
+    bool visitChildrensOfTypeItem(const ItemVisitor&) const override { return true; }
+
+    /**
+     * @brief Add an item attribute to this item.
+     * @param outItemAttributeHandle : the handle of the item attribute
+     * @param itemAttribute : the item attribute to add (life in memory of this item attribute will be managed by this group)
+     * @warning There is no verification made to check that this item attribute can be added or not to this item. Be sure what you do.
+     */
+    template<typename OutHandleType>
+    void addItemAttributeWithOutHandle(const OutHandleType& outItemAttributeHandle, CT_AbstractItemAttribute* itemAttribute) {
+        Q_ASSERT(model() != NULL);
+
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this item
+        const CT_OutAbstractItemAttributeModel* outModelToUse = outItemAttributeHandle.findModelWithParent(model());
+
+        // now we can add the item with the right model
+        addItemAttributeWithOutModel(outModelToUse, itemAttribute);
+    }
+
+    /**
+     * @brief Add an item attribute to this item.
+     * @param model : the model to set to the item attribute and to use to add it in the collection of attributes
+     * @param itemAttribute : the item attribute to add (life in memory of this item attribute will be managed by this group)
+     * @warning There is no verification made to check that this item attribute can be added or not to this item. Be sure what you do.
+     */
+    void addItemAttributeWithOutModel(const CT_OutAbstractItemAttributeModel* outModel, CT_AbstractItemAttribute* itemAttribute);
+
+    /**
+     * @brief Returns the item attribute that use the specified output model
+     * @param outModel : the model of the item attribute to find. The model of the item attribute will be used to find it in the collection.
+     * @return NULL if no item attribute that use this model has been found
+     */
+    CT_AbstractItemAttribute* itemAttributeWithOutModel(const CT_OutAbstractItemAttributeModel* outModel) const;
+
+    /**
+     * @brief Visit all item attributes
+     * @param visitor : the visitor to use
+     * @return Returns true if no item attributes has been visited otherwise returns the result of the visitor.
+     */
+    bool visitItemAttributes(const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const;
+
+    /**
+     * @brief Visit all default item attributes
+     * @param visitor : the visitor to use
+     * @return Returns true if no item attributes has been visited otherwise returns the result of the visitor.
+     */
+    bool visitDefaultItemAttributes(const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const;
+
+    /**
+     * @brief Visit all not default item attributes
+     * @param visitor : the visitor to use
+     * @return Returns true if no item attributes has been visited otherwise returns the result of the visitor.
+     */
+    bool visitItemAttributesAdded(const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const;
+
+    /**
+     * @brief Visit all item attributes that will not be removed and that use output model of selected possibilities of the specified input model
+     * @param inModel : the input model to use to visit selected possibilities to get output models
+     * @param visitor : the visitor to use
+     * @return Returns true if no attributes has been visited otherwise returns the result of the visitor.
+     */
+    bool visitItemAttributesInSelectedPossibilitiesOfInModel(const CT_InAbstractItemAttributeModel* inModel, const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const;
+
+    /**
+     * @brief Return the number of default and added item attributes
+     */
+    int nItemAttributes() const;
+
+    /**
+     * @brief Return the number of default item attributes
+     */
+    int nDefaultItemAttributes() const;
+
+    /**
+     * @brief Return the number of added item attributes
+     */
+    int nItemAttributesAdded() const;
+
+    /**
+     * @brief Returns a list of item attributes corresponding to the possibility selected of the INPUT model passed in parameter
+     */
+    QList<CT_AbstractItemAttribute*> itemAttributes(const CT_InAbstractItemAttributeModel* inModel) const;
+
+    /**
+     * @brief Returns a list of item attributes corresponding to the list of out models passed in parameter
+     */
+    QList<CT_AbstractItemAttribute*> itemAttributes(const QList<CT_OutAbstractItemAttributeModel *>& outModelList) const;
+
+    /**
+     * @brief Return all item attributes of this item drawable
+     */
+    QList<CT_AbstractItemAttribute*> itemAttributes() const;
+
+    /**
+     * @brief Returns the first item attribute that match with a possibility of the IN model.
+     *
+     *        An IN model can have a number of possibilities > 1 if you set Choose_MultipleIfMultiple. A
+     *        group can contains items that match with one or two or etc... possibility of the model so he must
+     *        return a list of ItemDrawable. This method test the first possibility, if a ItemDrawable is found,
+     *        it will be returned otherwise the method continue to search with the next possibility, etc...
+     *
+     * @return NULL if no item will be found
+     */
+    CT_AbstractItemAttribute* firstItemAttribute(const CT_InAbstractItemAttributeModel *inModel) const;
+
+    /**
+     * @brief Return all default item attributes of this item drawable
+     */
+    QList<CT_AbstractItemAttribute*> defaultItemAttributes() const;
+
+    /**
+     * @brief Return all item attributes (added by user) of this item drawable
+     */
+    QList<CT_AbstractItemAttribute*> itemAttributesAdded() const;
+
+    /**
+     * @brief Set a default color to this item. When it will added for the first time in a view it will have this color
+     */
+    void setDefaultColor(const QColor &color);
+
+    /**
+     * @brief Returns the default color of this item
+     */
+    QColor defaultColor() const;
+
+    /**
+     * @brief Called from result or parent item to inform that this item will be deleted from the result passed in parameter
+     */
+    void willBeRemovedFromResult(const CT_AbstractResult* res) override;
+
+    /**
+     * @brief Set the parent group
+     * @warning Not intended for direct use by plugin developper
+     */
+    void setParentGroup(const CT_StandardItemGroup* pGroup);
+
+    /**
+     * @brief Returns the parentGroup of this group
+     * @return NULL if the group is a root group (the parent group is the result)
+     */
+    CT_StandardItemGroup* parentGroup() const;
+
+protected:
+    /**
+     * @brief Create and return a qt style iterator to iterate over childrens (groups or items or etc...) that use the specified out model
+     * @param outModel : the out model of childrens
+     * @return A new qt style iterator to iterate over childrens (groups or items or etc...) that use the specified out model
+     */
+    IChildrensIteratorQtStyleSharedPtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
+
+private:
+    class ItemAttributeIterator : public IChildrensIteratorQtStyle {
+    public:
+        ItemAttributeIterator(const CT_AbstractItemAttribute* item) : m_current(const_cast<CT_AbstractItemAttribute*>(item)) {}
+
+        bool hasNext() const override { return m_current != NULL; }
+
+        CT_AbstractItem* next() override {
+            CT_AbstractItem* c = m_current;
+            m_current = NULL;
+            return c;
+        }
+
+    private:
+        CT_AbstractItemAttribute* m_current;
+    };
+
+    /**
+     * @brief The container of attributes added to this item (not default)
+     */
+    CT_ItemAttributeContainer   m_itemAttributes;
+
+    /**
+     * @brief The default color to use when it was added to a document
+     */
+    QColor                      m_defaultColor;
+
+    /**
+     * @brief Coordinates of the center of this item
+     */
+    Eigen::Vector3d             m_centerCoordinates;
+
+
+    /**
+     * @brief Writted to create a default Item Attribute
+     */
+    quint64 pId() const {return id();}
+
+    /**
+     * @brief Writted to create a default Item Attribute
+     */
+    QString pDisplayableName() const { return displayableName(); }
+
+    // declare that we will add default item attributes in this class
+    //  => We must add CT_DEFAULT_IA_INIT(CT_AbstractSingularItemDrawable) in top of cpp file
+    CT_DEFAULT_IA_BEGIN(CT_AbstractSingularItemDrawable)
+    CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataId(), &CT_AbstractSingularItemDrawable::pId, QObject::tr("ID"))
+    CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataDisplayableName(), &CT_AbstractSingularItemDrawable::pDisplayableName, QObject::tr("Name"))
+    CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataCx(), &CT_AbstractSingularItemDrawable::centerX, QObject::tr("Center X"))
+    CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataCy(), &CT_AbstractSingularItemDrawable::centerY, QObject::tr("Center Y"))
+    CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataCz(), &CT_AbstractSingularItemDrawable::centerZ, QObject::tr("Center Z"))
+    CT_DEFAULT_IA_END(CT_AbstractSingularItemDrawable)
+};
+
+#endif // CT_ABSTRACTSINGULARITEMDRAWABLE_H

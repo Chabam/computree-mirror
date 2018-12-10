@@ -2,7 +2,6 @@
 #define CDM_CITATIONINFO_H
 
 #include "computreeCore_global.h"
-#include "interfaces.h"
 #include "cdm_stepmanager.h"
 #include "cdm_pluginmanager.h"
 
@@ -41,8 +40,6 @@ public:
     static QString getComputreeCoreRis();
 
 private:
-    void recursiveGetStepList(CT_VirtualAbstractStep *step, QList<CT_VirtualAbstractStep *> &stepList);
-
     QList<CT_VirtualAbstractStep *> _stepList;
     CDM_StepManager*                _stepManager;
     CDM_PluginManager*              _pluginManager;

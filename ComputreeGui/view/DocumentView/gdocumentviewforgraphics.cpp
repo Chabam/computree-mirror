@@ -13,14 +13,13 @@
 #include "ct_colorcloud/registered/ct_standardcolorcloudregistered.h"
 #include "ct_normalcloud/registered/ct_standardnormalcloudregistered.h"
 
-#include "ct_itemdrawable/tools/iterator/ct_groupiterator.h"
-#include "ct_itemdrawable/tools/iterator/ct_itemiterator.h"
+#include "ct_iterator/ct_singlemodeliteratorstdstyleforresultgroup.h"
 
-#include "ct_itemdrawable/abstract/ct_abstractitemgroup.h"
+#include "ct_itemdrawable/ct_standarditemgroup.h"
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
-#include "ct_itemdrawable/accessibility/ct_iaccesspointcloud.h"
-#include "ct_itemdrawable/accessibility/ct_iaccessedgecloud.h"
-#include "ct_itemdrawable/accessibility/ct_iaccessfacecloud.h"
+#include "ct_accessibility/ct_iaccesspointcloud.h"
+#include "ct_accessibility/ct_iaccessedgecloud.h"
+#include "ct_accessibility/ct_iaccessfacecloud.h"
 
 #include "dm_iteminfoforgraphics.h"
 
@@ -343,7 +342,7 @@ void GDocumentViewForGraphics::setColor(const CT_AbstractItemDrawable *item, con
     }
 
     info->setColor(color);
-    recursiveSetColor(dynamic_cast<CT_AbstractItemGroup*>((CT_AbstractItemDrawable*)item), color);
+    recursiveSetColor(dynamic_cast<CT_StandardItemGroup*>((CT_AbstractItemDrawable*)item), color);
 
     emit startUpdateColorsTimer();
 }
@@ -1128,7 +1127,7 @@ DM_AbstractInfo* GDocumentViewForGraphics::createNewItemInformation(const CT_Abs
     return info;
 }
 
-void GDocumentViewForGraphics::recursiveSetColor(CT_AbstractItemGroup *group,
+void GDocumentViewForGraphics::recursiveSetColor(CT_StandardItemGroup *group,
                                                  const QColor &color)
 {
     if(group == NULL)
@@ -1137,11 +1136,9 @@ void GDocumentViewForGraphics::recursiveSetColor(CT_AbstractItemGroup *group,
     CT_AbstractResult *lastResult = NULL;
     QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = NULL;
 
-    CT_GroupIterator itG(group);
-
-    while(itG.hasNext())
+    for(const CT_StandardItemGroup* cChild : group->groups())
     {
-        CT_AbstractItemGroup *child = (CT_AbstractItemGroup*)itG.next();
+        CT_StandardItemGroup* child = const_cast<CT_StandardItemGroup*>(cChild);
 
         if(lastResult != child->result())
         {
@@ -1169,11 +1166,9 @@ void GDocumentViewForGraphics::recursiveSetColor(CT_AbstractItemGroup *group,
 
     }
 
-    CT_ItemIterator itI(group);
-
-    while(itI.hasNext())
+    for(const CT_AbstractSingularItemDrawable* cChild : group->singularItems())
     {
-        CT_AbstractSingularItemDrawable *child = (CT_AbstractSingularItemDrawable*)itI.next();
+        CT_AbstractSingularItemDrawable* child = const_cast<CT_AbstractSingularItemDrawable*>(cChild);
 
         if(lastResult != child->result())
         {

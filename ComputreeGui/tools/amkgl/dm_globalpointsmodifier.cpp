@@ -5,7 +5,7 @@
 
 #include "ct_pointcloudindex/abstract/ct_abstractpointcloudindex.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
-#include "ct_itemdrawable/accessibility/ct_iaccesspointcloud.h"
+#include "ct_accessibility/ct_iaccesspointcloud.h"
 
 DM_GlobalPointsModifier::DM_GlobalPointsModifier(const PermanentItemSceneByModel *scene,
                                                  const CT_AbstractItemDrawable* itemWithPC, bool createAsModifier)
@@ -32,7 +32,7 @@ DM_GlobalPointsModifier::DM_GlobalPointsModifier(const PermanentItemSceneByModel
     Q_ASSERT((itemWithPC == NULL) || (pointAccess != NULL));
 
     if(pointAccess != NULL) {
-        m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractPointCloudIndex*)pointAccess->getPointCloudIndex());
+        m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractPointCloudIndex*)pointAccess->pointCloudIndex());
         Q_ASSERT(m_cloudIndex != NULL);
     }
 }

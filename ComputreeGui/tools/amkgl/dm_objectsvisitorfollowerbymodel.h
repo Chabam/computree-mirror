@@ -3,8 +3,7 @@
 
 #include "visitor/iobjectsvisitorbymodel.h"
 #include "scene/tools/permanentiteminformation.h"
-
-#include "interfaces.h"
+#include "graphicsviewinterface.h"
 
 /**
  * @brief Inherit from interfaces from pluginshared and from amkgl to enable a visit of objects in

@@ -1,7 +1,7 @@
 #ifndef CDM_LOG_H
 #define CDM_LOG_H
 
-#include "interfaces.h"
+#include "loginterface.h"
 
 #include <QMutex>
 #include <QSemaphore>
@@ -61,26 +61,24 @@ signals:
     void finished();
 };
 
-#define CDM_DECLARE_NORMAL_MESSAGE void addMessage(const int &severity, const int &type, const QString &s, const QString &filter = ""); \
+#define CDM_DECLARE_NORMAL_MESSAGE void addMessage(const int &severity, const int &type, const QString &s, const QString &filter = ""); /*\
 void addMessage(const int &severity, CT_VirtualAbstractStep *type, const QString &s, const QString &filter = ""); \
 void addMessage(const int &severity, CT_AbstractAction *type, const QString &s, const QString &filter = ""); \
 void addMessage(const int &severity, PluginEntryInterface *type, const QString &s, const QString &filter = ""); \
 void addMessage(const int &severity, CT_AbstractStepPlugin *type, const QString &s, const QString &filter = ""); \
 void addMessage(const int &severity, CT_AbstractResult *type, const QString &s, const QString &filter = ""); \
-void addMessage(const int &severity, CT_AbstractItemDrawable *type, const QString &s, const QString &filter = "");
+void addMessage(const int &severity, CT_AbstractItemDrawable *type, const QString &s, const QString &filter = "");*/
 
-#define CDM_DECLARE_SEVERITY_MESSAGE(_M_TYPE_) void _M_TYPE_(const int &type, const QString &s, const QString &filter = ""); \
+#define CDM_DECLARE_SEVERITY_MESSAGE(_M_TYPE_) void _M_TYPE_(const int &type, const QString &s, const QString &filter = ""); /*\
 void _M_TYPE_(CT_VirtualAbstractStep *type, const QString &s, const QString &filter = ""); \
 void _M_TYPE_(CT_AbstractAction *type, const QString &s, const QString &filter = ""); \
 void _M_TYPE_(PluginEntryInterface *type, const QString &s, const QString &filter = ""); \
 void _M_TYPE_(CT_AbstractStepPlugin *type, const QString &s, const QString &filter = ""); \
 void _M_TYPE_(CT_AbstractResult *type, const QString &s, const QString &filter = ""); \
-void _M_TYPE_(CT_AbstractItemDrawable *type, const QString &s, const QString &filter = "");
+void _M_TYPE_(CT_AbstractItemDrawable *type, const QString &s, const QString &filter = "");*/
 
 class CDM_Log : public LogInterface
 {
-    Q_INTERFACES(LogInterface)
-
 public:
     CDM_Log();
     ~CDM_Log();

@@ -4,7 +4,7 @@
 #include "ct_step/abstract/ct_abstractstep.h"
 
 class CT_AbstractSingularItemDrawable;
-class CT_AbstractItemGroup;
+class CT_StandardItemGroup;
 
 /*!
  * \class PB_StepUserItemSelection
@@ -89,7 +89,7 @@ protected:
 private:
 
     // Step parameters
-    QHash<CT_AbstractItemDrawable*, CT_AbstractItemGroup*>      m_itemDrawableToAdd;
+    QHash<CT_AbstractItemDrawable*, CT_StandardItemGroup*>      m_itemDrawableToAdd;
     QList<CT_AbstractItemDrawable*>                             m_itemDrawableSelected;
     DocumentInterface                                           *m_doc;
     int                                                         m_status;
@@ -98,7 +98,7 @@ private:
 
     int                                                         _mode;
 
-    void recursiveRemoveGroup(CT_AbstractItemGroup *parent, CT_AbstractItemGroup *group) const;
+    void recursiveRemoveGroup(CT_StandardItemGroup *parent, CT_StandardItemGroup *group) const;
 };
 
 #endif // PB_STEPUSERITEMSELECTION_H

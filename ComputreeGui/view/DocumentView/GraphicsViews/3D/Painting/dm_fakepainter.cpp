@@ -76,7 +76,7 @@ void DM_FakePainter::drawPoint(const size_t &globalIndex)
 
 void DM_FakePainter::drawPoints(const CT_AbstractMeshModel *mesh)
 {
-    drawPointCloud(mesh->getPointCloudIndex());
+    drawPointCloud(mesh->pointCloudIndex());
 }
 
 void DM_FakePainter::drawPointCloud(const CT_AbstractCloudIndex *pci)
@@ -96,7 +96,7 @@ void DM_FakePainter::drawEdges(const CT_AbstractMeshModel *mesh)
     if(mesh == NULL)
         return;
 
-    const CT_AbstractCloudIndex *eci = mesh->getEdgeCloudIndex();
+    const CT_AbstractCloudIndex *eci = mesh->edgeCloudIndex();
 
     if(eci == NULL)
         return;
@@ -105,8 +105,8 @@ void DM_FakePainter::drawEdges(const CT_AbstractMeshModel *mesh)
         m_nEdges += eci->size();
     else if(m_mode.testFlag(BackupEdgeCloudIndex))
         addEdgeIndexes(eci);
-    else if(m_mode.testFlag(BackupPointCloudIndexIfEdge) && (mesh->getPointCloudIndex() != NULL))
-        addPointIndexes(mesh->getPointCloudIndex());
+    else if(m_mode.testFlag(BackupPointCloudIndexIfEdge) && (mesh->pointCloudIndex() != NULL))
+        addPointIndexes(mesh->pointCloudIndex());
 }
 
 void DM_FakePainter::drawMesh(const CT_AbstractMeshModel *mesh)
@@ -121,7 +121,7 @@ void DM_FakePainter::drawFaces(const CT_AbstractMeshModel *mesh)
     if(mesh == NULL)
         return;
 
-    const CT_AbstractCloudIndex *fci = mesh->getFaceCloudIndex();
+    const CT_AbstractCloudIndex *fci = mesh->faceCloudIndex();
 
     if(fci == NULL)
         return;
@@ -130,8 +130,8 @@ void DM_FakePainter::drawFaces(const CT_AbstractMeshModel *mesh)
         m_nFaces += fci->size();
     else if(m_mode.testFlag(BackupEdgeCloudIndex))
         addFaceIndexes(fci);
-    else if(m_mode.testFlag(BackupPointCloudIndexIfFace) && (mesh->getPointCloudIndex() != NULL))
-        addPointIndexes(mesh->getPointCloudIndex());
+    else if(m_mode.testFlag(BackupPointCloudIndexIfFace) && (mesh->pointCloudIndex() != NULL))
+        addPointIndexes(mesh->pointCloudIndex());
 }
 
 void DM_FakePainter::addPointIndexes(const CT_AbstractCloudIndex *pci)

@@ -352,7 +352,7 @@ bool PB_CSVExporter::configureExportWithLastConfigurationAndNewItemToExport()
                 const QPair<CT_OutAbstractSingularItemModel *, CT_OutAbstractItemAttributeModel *> &column = itC.next();
 
                 // if same original model
-                if(column.first->originalModel() == model->originalModel())
+                if(column.first->rootOriginalModel() == model->rootOriginalModel())
                 {
                     itA.toFront();
 
@@ -363,7 +363,7 @@ bool PB_CSVExporter::configureExportWithLastConfigurationAndNewItemToExport()
                         CT_OutAbstractItemAttributeModel *attModel = itA.next();
 
                         // if same original model
-                        if(column.second->originalModel() == attModel->originalModel())
+                        if(column.second->rootOriginalModel() == attModel->rootOriginalModel())
                         {
                             // we can replace this pair by this model
                             replaced.replace(index, true);

@@ -140,7 +140,7 @@ bool PB_GDALExporter::setItemDrawableToExport(const QList<CT_AbstractItemDrawabl
                 QString attrDN = attrModel->displayableName();
                 QString attrUN = attrModel->uniqueName();
 
-                if (attrModel->isADefaultItemAttributeModel() && attrModel->originalModel() != NULL) {attrUN = attrModel->originalModel()->uniqueName();}
+                if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
 
                 QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
 
@@ -374,7 +374,7 @@ bool PB_GDALExporter::exportItemDrawable(CT_AbstractItemDrawable *item, GDALData
             QString itemUN = itemModel->uniqueName();
             QString attrUN = attrModel->uniqueName();
 
-            if (attrModel->isADefaultItemAttributeModel() && attrModel->originalModel() != NULL) {attrUN = attrModel->originalModel()->uniqueName();}
+            if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
 
             QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
 

@@ -1,10 +1,10 @@
 #ifndef DM_OBJECTSVISITORFOLLOWERFORACTION_H
 #define DM_OBJECTSVISITORFOLLOWERFORACTION_H
 
+#include "graphicsviewinterface.h"
+
 #include "visitor/iobjectsvisitor.h"
 #include "scene/tools/permanentiteminformation.h"
-
-#include "interfaces.h"
 
 /**
  * @brief Inherit from interfaces from pluginshared and from amkgl to enable a visit of objects in

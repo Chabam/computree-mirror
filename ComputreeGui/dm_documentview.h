@@ -30,6 +30,7 @@
 #define DM_DOCUMENTVIEW_H
 
 #include "dm_document.h"
+#include "ct_actions/actionoptionsinterface.h"
 
 class DM_DocumentManagerView;
 

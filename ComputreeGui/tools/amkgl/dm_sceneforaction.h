@@ -3,6 +3,7 @@
 
 #include "scene/permanentscene.h"
 #include "scene/tools/permanentiteminformation.h"
+#include "graphicsviewinterface.h"
 
 class CT_AbstractActionForGraphicsView;
 class DM_AMKglPermanentPainter;

@@ -2,88 +2,60 @@
 #define PB_STEPCREATEREADERLIST_H
 
 #include "ct_step/abstract/ct_abstractstepcanbeaddedfirst.h"
-#include "ct_reader/abstract/ct_abstractreader.h"
+#include "ct_itemdrawable/ct_readeritem.h"
+#include "ct_itemdrawable/ct_fileheader.h"
 
-
+/**
+ * @brief Step that can use any type of reader to load multiple files (of same type).
+ */
 class PB_StepCreateReaderList: public CT_AbstractStepCanBeAddedFirst
 {
     Q_OBJECT
-    typedef CT_AbstractStepCanBeAddedFirst SuperClass;
+    using SuperClass = CT_AbstractStepCanBeAddedFirst;
 
 public:
 
-    /*! \brief Step constructor
-     * 
-     * Create a new instance of the step
-     * 
-     * \param dataInit Step parameters object
-     */
-    PB_StepCreateReaderList(CT_StepInitializeData &dataInit);
+    PB_StepCreateReaderList();
 
-    /*! \brief Step description
-     * 
-     * Return a description of the step function
-     */
-    QString getStepDescription() const;
+    QString description() const final;
 
-    /*! \brief Step detailled description
-     * 
-     * Return a detailled description of the step function
-     */
-    QString getStepDetailledDescription() const;
+    QString detailledDescription() const final;
 
-    /*! \brief Step URL
-     * 
-     * Return a URL of a wiki for this step
-     */
-    QString getStepURL() const;
+    void savePreSettings(SettingsWriterInterface& writer) const final;
+    bool restorePreSettings(SettingsReaderInterface &reader) final;
 
-    /*! \brief Step copy
-     * 
-     * Step copy, used when a step is added by step contextual menu
-     */
-    CT_VirtualAbstractStep* createNewInstance(CT_StepInitializeData &dataInit);
+    void savePostSettings(SettingsWriterInterface& writer) const final;
+    bool restorePostSettings(SettingsReaderInterface &reader) final;
+
+    CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
+    void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
 
-    /*! \brief Input results specification
-     * 
-     * Specification of input results models needed by the step (IN)
-     */
-    void createInResultModelListProtected();
+    void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
-    void createPreConfigurationDialog();
+    bool postInputConfigure() final;
 
-    bool postConfigure();
+    void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
-    /*! \brief Output results specification
-     * 
-     * Specification of output results models created by the step (OUT)
-     */
-    void createOutResultModelListProtected();
-
-    /*! \brief Algorithm of the step
-     * 
-     * Step computation, using input results, and creating output results
-     */
-    void compute();
-
-    void savePreSettings(SettingsWriterInterface& writer) const override;
-    bool restorePreSettings(SettingsReaderInterface &reader) override;
-    void savePostSettings(SettingsWriterInterface& writer) const override;
-    bool restorePostSettings(SettingsReaderInterface &reader) override;
+    void compute() final;
 
 private:
+    CT_HandleOutResultGroup                 m_hOutResult;
+    CT_HandleOutStdGroup                    m_hOutRootGroup;
+    CT_HandleOutStdGroup                    m_hOutFileGroup;
+    CT_HandleOutSingularItem<CT_ReaderItem> m_hOutReaderItem;
+    CT_HandleOutSingularItem<CT_FileHeader> m_hOutFileHeader;
 
     /**
      * @brief Contains the classname of the selected reader
      */
-    QString                                         m_readerSelectedClassName;
+    QString         m_readerSelectedUniqueName;
 
     /**
      * @brief Contains the list of filepath of all files selected
      */
-    QStringList                                     m_filepathCollection;
+    QStringList     m_filepathCollection;
 };
 
 #endif // PB_STEPCREATEREADERLIST_H

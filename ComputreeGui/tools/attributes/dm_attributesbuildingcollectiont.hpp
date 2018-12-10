@@ -30,46 +30,36 @@ const QList<Type*>& DM_AttributesBuildingCollectionT<Type>::attributesCollection
 }
 
 template<typename Type>
-void DM_AttributesBuildingCollectionT<Type>::recursiveBuildAttributesFromStep(CT_VirtualAbstractStep *step)
+void DM_AttributesBuildingCollectionT<Type>::recursiveBuildAttributesFromStep(const CT_VirtualAbstractStep* step)
 {
-    QList<CT_ResultGroup*> results = step->getOutResultList();
-    QListIterator<CT_ResultGroup*> it(results);
+    QList<Type*>& collection = m_collection;
 
-    while(it.hasNext())
-        recursiveBuildAttributesFromModels(it.next()->model()->childrens());
+    // build attributes from models
+    step->visitOutResultModels([&collection](const CT_OutAbstractResultModel* resModel) -> bool {
 
-    QList<CT_VirtualAbstractStep*> steps = step->getStepChildList();
+        resModel->recursiveVisitOutChildrens([&collection](const CT_OutAbstractModel* child) -> bool {
 
-    while(!steps.isEmpty())
-        recursiveBuildAttributesFromStep(steps.takeFirst());
-}
+            Type* proto = dynamic_cast<Type*>(child->prototype());
 
-template<typename Type>
-void DM_AttributesBuildingCollectionT<Type>::recursiveBuildAttributesFromModels(QList<CT_AbstractModel*> models)
-{
-    QListIterator<CT_AbstractModel*> itM(models);
+            if(proto != NULL) {
+                auto iterator = CT_SingleModelIteratorStdStyleForResultGroup<Type>::createCompleteIterator(child);
 
-    while(itM.hasNext())
-    {
-        CT_AbstractModel *model = itM.next();
-
-        if((dynamic_cast<Type*>(((CT_OutAbstractModel*)model)->item()) != NULL)
-                && (((CT_OutAbstractModel*)model)->result() != NULL))
-        {
-            CT_ResultIterator it((CT_ResultGroup*)((CT_OutAbstractModel*)model)->result(), model);
-
-            while(it.hasNext())
-            {
-                Type *tt = (Type*)it.next();
-
-                if(!m_collection.contains(tt))
-                    m_collection.append(tt);
+                for(Type* tt : iterator) {
+                    if(!collection.contains(tt))
+                        collection.append(tt);
+                }
             }
-        }
 
-        recursiveBuildAttributesFromModels(model->childrens());
-    }
+            return true;
+        });
+
+        return true;
+    });
+
+    step->visitChildrens([this](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+        this->recursiveBuildAttributesFromStep(child);
+        return true;
+    });
 }
-
 
 #endif // DM_ATTRIBUTESBUILDINGCOLLECTIONT_HPP

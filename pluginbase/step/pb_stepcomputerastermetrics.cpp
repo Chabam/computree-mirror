@@ -95,9 +95,9 @@ void PB_StepComputeRasterMetrics::createInResultModelListProtected()
 {
     CT_InResultModelGroupToCopy *resIn_res = createNewInResultModelForCopy(DEFin_res, tr("Points"));
     resIn_res->setZeroOrMoreRootGroup();
-    resIn_res->addGroupModel("", DEFin_grp, CT_AbstractItemGroup::staticGetType(), tr("Groupe"));
-    resIn_res->addItemModel(DEFin_grp, DEFin_raster, CT_AbstractImage2D::staticGetType(), tr("Raster"));
-    resIn_res->addItemModel(DEFin_grp, DEFin_areaShape, CT_AbstractAreaShape2D::staticGetType(), tr("Emprise de la placette"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsOptional);
+    resIn_res->addStdGroupModel("", DEFin_grp, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
+    resIn_res->addStdItemModel(DEFin_grp, DEFin_raster, CT_AbstractImage2D::staticGetType(), tr("Raster"));
+    resIn_res->addStdItemModel(DEFin_grp, DEFin_areaShape, CT_AbstractAreaShape2D::staticGetType(), tr("Emprise de la placette"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsOptional);
 }
 
 bool PB_StepComputeRasterMetrics::postConfigure()

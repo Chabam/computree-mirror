@@ -1,17 +1,9 @@
 #include "pb_stepgenericloadfile.h"
 
-#include "ct_itemdrawable/model/outModel/ct_outstdgroupmodel.h"
-#include "ct_itemdrawable/model/outModel/ct_outstdsingularitemmodel.h"
-#include "ct_result/model/inModel/ct_inresultmodelnotneedinputresult.h"
-#include "ct_result/model/outModel/ct_outresultmodelgroup.h"
 #include "ct_result/ct_resultgroup.h"
 #include "ct_itemdrawable/ct_standarditemgroup.h"
-#include "ct_model/tools/ct_modelsearchhelper.h"
 
-#define DEF_SearchResult                "PB_SGLF_result"
-#define DEF_SearchGroup                 "PB_SGLF_group"
-
-PB_StepGenericLoadFile::PB_StepGenericLoadFile(CT_StepInitializeData &dataInit, CT_AbstractReader *reader) : CT_AbstractStepLoadFile(dataInit)
+PB_StepGenericLoadFile::PB_StepGenericLoadFile(CT_AbstractReader* reader) : SuperClass()
 {
     m_reader = reader;
 
@@ -27,50 +19,37 @@ PB_StepGenericLoadFile::~PB_StepGenericLoadFile()
 
 void PB_StepGenericLoadFile::init()
 {
-    m_reader->init(false);
+    //m_reader->init(false);
 
     CT_AbstractStepLoadFile::init();
 }
 
-QString PB_StepGenericLoadFile::getStepName() const
+QString PB_StepGenericLoadFile::name() const
 {
-    return m_reader->GetReaderClassName();
+    return m_reader->metaObject()->className();
 }
 
-QString PB_StepGenericLoadFile::getStepDisplayableName() const
+QString PB_StepGenericLoadFile::displayableName() const
 {
-    return m_reader->GetReaderName();
+    return m_reader->displayableName();
 }
 
-QString PB_StepGenericLoadFile::getStepDescription() const
+QString PB_StepGenericLoadFile::description() const
 {
-//    const QList<FileFormat>& formats = m_reader->readableFormats();
-
-//    if (formats.size() > 0)
-//    {
-//        return formats.first().description();
-//    }
-
-    return m_reader->GetReaderName();
-
+    return tr("Charge un fichier du type") + createAcceptedExtensionString(" ");
 }
 
-QString PB_StepGenericLoadFile::getStepDetailledDescription() const
+QString PB_StepGenericLoadFile::detailledDescription() const
 {
-    if(m_reader != NULL)
-    {
-        QString t = m_reader->toolTip();
+    const QString t = m_reader->toolTip();
 
-        if(!t.isEmpty())
-            return t;
-    }
+    if(!t.isEmpty())
+        return t;
 
-    QString ext = createAcceptedExtensionString(" ");
-
-    return tr("Charge un fichier du type") + ext;
+    return tr("Charge un fichier du type") + createAcceptedExtensionString(" ");
 }
 
-QList<FileFormat> PB_StepGenericLoadFile::getFileExtensionAccepted() const
+QList<FileFormat> PB_StepGenericLoadFile::fileExtensionAccepted() const
 {
     return m_reader->readableFormats();
 }
@@ -79,7 +58,7 @@ void PB_StepGenericLoadFile::savePreSettings(SettingsWriterInterface &writer) co
 {
     SuperClass::savePreSettings(writer);
 
-    writer.addParameter(this, "ReaderClassName", m_reader->GetReaderClassName());
+    writer.addParameter(this, "ReaderUniqueName", m_reader->uniqueName());
 }
 
 bool PB_StepGenericLoadFile::restorePreSettings(SettingsReaderInterface &reader)
@@ -88,10 +67,10 @@ bool PB_StepGenericLoadFile::restorePreSettings(SettingsReaderInterface &reader)
         return false;
 
     QVariant value;
-    if(!reader.parameter(this, "ReaderClassName", value))
+    if(!reader.parameter(this, "ReaderUniqueName", value))
         return false;
 
-    if(value.toString() != m_reader->GetReaderClassName())
+    if(value.toString() != m_reader->uniqueName())
         return false;
 
     return true;
@@ -117,34 +96,31 @@ bool PB_StepGenericLoadFile::restorePostSettings(SettingsReaderInterface &reader
     return true;
 }
 
-bool PB_StepGenericLoadFile::setFilePath(QString filePath)
+bool PB_StepGenericLoadFile::setFilePath(const QString& newFilePath)
 {
-    QString fp = getFilePath();
+    const QString fp = filePath();
 
-    if(CT_AbstractStepLoadFile::setFilePath(filePath))
+    if(CT_AbstractStepLoadFile::setFilePath(newFilePath))
     {
-        if(!m_reader->setFilePath(getFilePath()))
-        {
-            setFilePath(fp);
-            setSettingsModified(false);
+        if(m_reader->setFilePath(filePath()))
+            return true;
 
-            return false;
-        }
-
-        return true;
+        // undo
+        setFilePath(fp);
+        setSettingsModified(false);
     }
 
     return false;
 }
 
-CT_VirtualAbstractStep* PB_StepGenericLoadFile::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepGenericLoadFile::createNewInstance() const
 {
-    return new PB_StepGenericLoadFile(dataInit, m_reader->copy());
+    return new PB_StepGenericLoadFile(m_reader->copy());
 }
 
-bool PB_StepGenericLoadFile::preConfigure()
+bool PB_StepGenericLoadFile::preInputConfigure()
 {
-    if(CT_AbstractStepLoadFile::preConfigure())
+    if(CT_AbstractStepLoadFile::preInputConfigure())
     {
         if(m_reader->filepath().isEmpty() || m_reader->configure()) {
             setSettingsModified(true);
@@ -155,9 +131,14 @@ bool PB_StepGenericLoadFile::preConfigure()
     return false;
 }
 
-bool PB_StepGenericLoadFile::postConfigure()
+void PB_StepGenericLoadFile::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    if(CT_AbstractStepLoadFile::postConfigure())
+    manager.setNotNeedInputResult();
+}
+
+bool PB_StepGenericLoadFile::postInputConfigure()
+{
+    if(CT_AbstractStepLoadFile::postInputConfigure())
     {
         if(m_reader->configure()) {
             setSettingsModified(true);
@@ -168,92 +149,35 @@ bool PB_StepGenericLoadFile::postConfigure()
     return false;
 }
 
-void PB_StepGenericLoadFile::createInResultModelListProtected()
+void PB_StepGenericLoadFile::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
-    // No in result is needed
-    setNotNeedInputResult();
-}
+    manager.addResult(m_hOutResult);
+    manager.setRootGroup(m_hOutResult, m_hOutRootGroup);
+    m_reader->declareOutputModelsInGroup(manager, m_hOutRootGroup);
 
-// Creation and affiliation of OUT models
-void PB_StepGenericLoadFile::createOutResultModelListProtected()
-{
-    if(!isAPrototype())
-        m_reader->createOutItemDrawableModelList();
-
-    CT_OutStdGroupModel *root = new CT_OutStdGroupModel(DEF_SearchGroup);
-
-    QListIterator<CT_OutStdSingularItemModel*> it(m_reader->outItemDrawableModels());
-
-    while(it.hasNext())
-    {
-        CT_OutStdSingularItemModel *model = it.next();
-        root->addItem((CT_OutStdSingularItemModel*)model->copy());
-    }
-
-    QListIterator<CT_OutStdGroupModel*> itG(m_reader->outGroupsModel());
-
-    while(itG.hasNext())
-    {
-        CT_OutStdGroupModel *model = itG.next();
-        root->addGroup((CT_OutStdGroupModel*)model->copy());
-    }
-
-    CT_FileHeader *header = m_reader->createHeaderPrototype();
+    CT_FileHeader* header = m_reader->createHeaderPrototype();
 
     if(header != NULL)
-        root->addItem(new CT_OutStdSingularItemModel("", header, tr("Entête de fichier")), m_autoRenameFileHeader);
-
-    addOutResultModel(new CT_OutResultModelGroup(DEF_SearchResult, root, "Result"));
+        manager.addItem(m_hOutRootGroup, m_hOutFileHeader, tr("Entête de fichier"), "", "", header);
 }
 
 void PB_StepGenericLoadFile::compute()
 {
-    CT_FileHeader *header = NULL;
+    for(CT_ResultGroup* outRes : m_hOutResult.iterate()) {
 
-    if(((header = m_reader->readHeader()) != NULL) && m_reader->readFile())
-    {
-        CT_ResultGroup *out_res = getOutResultList().first();
-        CT_StandardItemGroup *group = new CT_StandardItemGroup(DEF_SearchGroup, out_res);
+        CT_StandardItemGroup* rootGroup = m_hOutRootGroup.createInstance();
+        outRes->addRootGroupWithOutHandle(m_hOutRootGroup, rootGroup);
 
-        QListIterator<CT_OutStdSingularItemModel*> it(m_reader->outItemDrawableModels());
+        m_reader->readFile(rootGroup);
 
-        while(it.hasNext())
-        {
-            CT_OutStdSingularItemModel *model = it.next();
-            CT_OutAbstractItemModel *modelCreation = (CT_OutAbstractItemModel*)PS_MODELS->searchModelForCreation(model->uniqueName(), out_res);
+        if(m_hOutFileHeader.isValid()) {
+            CT_FileHeader* header = m_reader->readHeader();
 
-            QList<CT_AbstractSingularItemDrawable*> items = m_reader->takeItemDrawableOfModel(model->uniqueName(), out_res, modelCreation);
-            QListIterator<CT_AbstractSingularItemDrawable*> itI(items);
+            Q_ASSERT(header != NULL);
 
-            while(itI.hasNext())
-                group->addItemDrawable(itI.next());
+            rootGroup->addSingularItemWithOutHandle(m_hOutFileHeader, header);
         }
-
-        QListIterator<CT_OutStdGroupModel*> itG(m_reader->outGroupsModel());
-
-        while(itG.hasNext())
-        {
-            CT_OutStdGroupModel *model = itG.next();
-            CT_OutAbstractItemModel *modelCreation = (CT_OutAbstractItemModel*)PS_MODELS->searchModelForCreation(model->uniqueName(), out_res);
-
-            QList<CT_AbstractItemGroup*> groups = m_reader->takeGroupOfModel(model->uniqueName(), out_res, modelCreation);
-            QListIterator<CT_AbstractItemGroup*> itI(groups);
-
-            while(itI.hasNext())
-                group->addGroup(itI.next());
-        }
-
-        header->changeResult(out_res);
-        header->setModel(m_autoRenameFileHeader.completeName());
-
-        group->addItemDrawable(header);
-
-        out_res->addGroup(group);
-
-        return;
     }
-
-    delete header;
 }
 
 void PB_StepGenericLoadFile::readerProgressChanged(int progress)

@@ -6,7 +6,7 @@
 #include "signalhandler.h"
 
 #include "cdm_pluginmanager.h"
-#include "cdm_scriptmanagerxml.h"
+#include "cdm_scriptmanagerabstract.h"
 #include "cdm_stepmanager.h"
 #include "cdm_actionsmanager.h"
 
@@ -54,14 +54,13 @@ private:
     QCommandLineOption      m_startstepsOption = QCommandLineOption("a");
     QCommandLineOption      m_noLogsOption = QCommandLineOption("a");
     CDM_PluginManager       *_pluginManager;
-    CDM_ScriptManagerXML    *_scriptManager;
+    CDM_ScriptManagerAbstract    *_scriptManager;
     CDM_StepManager         *_stepManager;
     CDM_ActionsManager      *_actionManager;
 
     QString                 _script;
 
     void initParser();
-    void recursiveInformStepInGuiThreadThatWillBeDeleted(CT_VirtualAbstractStep &step);
 
 signals:
 

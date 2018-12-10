@@ -1,7 +1,9 @@
 #ifndef DM_ITREEVIEWMANAGERT_H
 #define DM_ITREEVIEWMANAGERT_H
 
-#include "interfaces.h"
+#include <QList>
+
+class CT_AbstractItemDrawable;
 
 /**
  * @brief You must inherit this class if you want to use the DM_ItemDrawableTreeViewControllerT

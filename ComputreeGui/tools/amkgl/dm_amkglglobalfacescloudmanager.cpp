@@ -1,6 +1,6 @@
 #include "dm_amkglglobalfacescloudmanager.h"
 
-#include "ct_tools/repository/ct_repositoryaccess.h"
+#include "ct_accessor/ct_repositoryaccess.h"
 #include "ct_cloud/tools/ct_globalfacecloudmanager.h"
 
 DM_AMKglGlobalFacesCloudManager::DM_AMKglGlobalFacesCloudManager()

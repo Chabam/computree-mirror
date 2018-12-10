@@ -251,7 +251,7 @@ void GGraphicsViewImp::getBoundingBoxOfAllItemDrawablePresentInView(Eigen::Vecto
 
             Eigen::Vector3d tmpMin, tmpMax;
 
-            item->getBoundingBox(tmpMin, tmpMax);
+            item->boundingBox(tmpMin, tmpMax);
 
             if(tmpMin[0] <= tmpMax[0]) {
                 minArray = minArray.min(tmpMin.array());
@@ -292,7 +292,7 @@ void GGraphicsViewImp::getBoundingBoxOfAllItemDrawableSelectedInView(Eigen::Vect
         if(item->isSelected() && item->doesBoundingBoxAppearToBeValid()) {
             Eigen::Vector3d tmpMin, tmpMax;
 
-            item->getBoundingBox(tmpMin, tmpMax);
+            item->boundingBox(tmpMin, tmpMax);
 
             if(tmpMin[0] <= tmpMax[0]) {
                 minArray = minArray.min(tmpMin.array());
@@ -309,8 +309,8 @@ void GGraphicsViewImp::getBoundingBoxOfAllItemDrawableSelectedInView(Eigen::Vect
 
 void GGraphicsViewImp::getBoundingBoxOfAllPointsSelectedInView(Eigen::Vector3d &min, Eigen::Vector3d &max) const
 {
-    min.array() = std::numeric_limits<double>::max();
-    max.array() = -min.array();
+    min.setConstant(std::numeric_limits<double>::max());
+    max = -min;
 
     PermanentItemScene* scene = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL);
 
@@ -1172,8 +1172,8 @@ void GGraphicsViewImp::computeAndSetTextPosition()
 
 void GGraphicsViewImp::getBoundingBoxOfSelectedElementsOfMeshesInView(Scene::ObjectType globalType, Eigen::Vector3d &min, Eigen::Vector3d &max) const
 {
-    min.array() = std::numeric_limits<double>::max();
-    max.array() = -min.array();
+    min.setConstant(std::numeric_limits<double>::max());
+    max = -min;
 
     MeshObjectsVisitor visitor(globalType);
 

@@ -11,11 +11,11 @@
 #include "qtcolorpicker.h"
 
 #include "ct_point.h"
-#include "ct_result/tools/iterator/ct_resultiterator.h"
+#include "ct_iterator/ct_singlemodeliteratorstdstyleforresultgroup.h"
 #include "ct_result/abstract/ct_abstractresult.h"
-#include "ct_result/model/outModel/abstract/ct_outabstractresultmodel.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractitemmodel.h"
-#include "ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 
@@ -186,23 +186,21 @@ void GItemDrawableModelManager::reConstructContextMenu()
 
 QList<QStandardItem*> GItemDrawableModelManager::recursiveCreateItemsForModel(const CT_OutAbstractModel *model)
 {
-    QList<QStandardItem*> retList = createItemsForModel(model);
+    const QList<QStandardItem*> retList = createItemsForModel(model);
 
     if(retList.isEmpty())
         return retList;
 
-    QStandardItem *rootItem = retList.first();
+    QStandardItem* rootItem = retList.first();
 
-    QList<CT_AbstractModel*> items = model->childrens();
-    QListIterator<CT_AbstractModel*> it(items);
-
-    while(it.hasNext())
-    {
-        QList<QStandardItem *> lNew = recursiveCreateItemsForModel((CT_OutAbstractModel*)it.next());
+    model->visitOutChildrens([&rootItem, this](const CT_OutAbstractModel* child) -> bool {
+        const QList<QStandardItem *> lNew = this->recursiveCreateItemsForModel(child);
 
         if(!lNew.isEmpty())
             rootItem->appendRow(lNew);
-    }
+
+        return true;
+    });
 
     return retList;
 }
@@ -259,12 +257,12 @@ QList<QStandardItem *> GItemDrawableModelManager::createItemsForItemModel(const 
         }
     }
 
-    QStandardItem *item2 = new QStandardItem(model->itemDrawable()->name());
+    QStandardItem *item2 = new QStandardItem(model->itemDrawableStaticCastT<>()->name());
     item2->setEditable(false);
     retList.append(item2);
 
 
-    connect(model, SIGNAL(visibilityInDocumentChanged(const DocumentInterface*,bool)), this, SLOT(modelVisibilityInDocumentChanged(const DocumentInterface*,bool)), Qt::QueuedConnection);
+    connect(model, SIGNAL(visibilityInDocumentChanged(const IDocumentForModel*,bool)), this, SLOT(modelVisibilityInDocumentChanged(const IDocumentForModel*,bool)), Qt::QueuedConnection);
 
     return retList;
 }
@@ -290,7 +288,7 @@ QStandardItem* GItemDrawableModelManager::recursiveGetStandardItemForModel(QStan
     return NULL;
 }
 
-QStandardItem *GItemDrawableModelManager::recursiveGetStandardItemForModel(QStandardItem *pItem, CT_OutAbstractModel *model, const DocumentInterface *doc) const
+QStandardItem *GItemDrawableModelManager::recursiveGetStandardItemForModel(QStandardItem *pItem, CT_OutAbstractModel *model, const IDocumentForModel *doc) const
 {
     int count = pItem->rowCount();
     int cCount = pItem->columnCount();
@@ -355,10 +353,11 @@ QList<CT_AbstractItemDrawable *> GItemDrawableModelManager::getItemDrawableToCol
 
             if(iModel != NULL)
             {
-                CT_ResultIterator it((CT_ResultGroup*)res, iModel);
+                auto iterator = CT_SingleModelIteratorStdStyleForResultGroup<CT_AbstractItemDrawable>::createCompleteIterator(iModel);
 
-                while(it.hasNext())
-                    items.append((CT_AbstractItemDrawable*)it.next());
+                for(CT_AbstractItemDrawable* item : iterator) {
+                    items.append(item);
+                }
             }
         }
     }
@@ -411,7 +410,7 @@ void GItemDrawableModelManager::modelVisibilityChanged(bool visible)
     }
 }
 
-void GItemDrawableModelManager::modelVisibilityInDocumentChanged(const DocumentInterface *doc, bool visible)
+void GItemDrawableModelManager::modelVisibilityInDocumentChanged(const IDocumentForModel *doc, bool visible)
 {
     if(m_docManagerView != NULL)
     {

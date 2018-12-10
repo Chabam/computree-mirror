@@ -136,7 +136,7 @@ void CT_MutableGroupIterator::remove()
 
 void CT_MutableGroupIterator::initIterator(const CT_AbstractItemGroup *parent, const CT_InAbstractGroupModel *inModel)
 {
-    QList<CT_InStdModelPossibility*> list = inModel->getPossibilitiesSavedSelected();
+    QList<CT_InStdModelPossibility*> list = inModel->getPossibilitiesSelected();
 
     QListIterator<CT_InStdModelPossibility*> it(list);
 

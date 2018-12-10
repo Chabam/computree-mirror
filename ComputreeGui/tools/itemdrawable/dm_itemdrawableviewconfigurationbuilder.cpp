@@ -37,7 +37,7 @@ void DM_ItemDrawableViewConfigurationBuilder::addItemDrawable(CT_AbstractItemDra
 
     QList<DM_ItemDrawableViewConfiguration> addL;
 
-    CT_ItemDrawableConfiguration *t = pItem->getViewConfiguration();
+    CT_ItemDrawableConfiguration *t = pItem->drawConfiguration();
 
     int value = 0;
 
@@ -51,7 +51,7 @@ void DM_ItemDrawableViewConfigurationBuilder::addItemDrawable(CT_AbstractItemDra
 
     if(m_searchInChildren)
     {
-        QList<CT_ItemDrawableConfiguration*> dependantViewConfigurations = pItem->getDependantViewConfigurations();
+        QList<CT_ItemDrawableConfiguration*> dependantViewConfigurations = pItem->dependantDrawConfigurations();
 
         int size = dependantViewConfigurations.size();
 
@@ -90,7 +90,7 @@ void DM_ItemDrawableViewConfigurationBuilder::removeItemDrawable(CT_AbstractItem
 
     QList<DM_ItemDrawableViewConfiguration> rL;
 
-    CT_ItemDrawableConfiguration *t = pItem->getViewConfiguration();
+    CT_ItemDrawableConfiguration *t = pItem->drawConfiguration();
 
     int value = 0;
 
@@ -104,7 +104,7 @@ void DM_ItemDrawableViewConfigurationBuilder::removeItemDrawable(CT_AbstractItem
 
     if(m_searchInChildren)
     {
-        QList<CT_ItemDrawableConfiguration*> dependantViewConfigurations = pItem->getDependantViewConfigurations();
+        QList<CT_ItemDrawableConfiguration*> dependantViewConfigurations = pItem->dependantDrawConfigurations();
 
         int size = dependantViewConfigurations.size();
 

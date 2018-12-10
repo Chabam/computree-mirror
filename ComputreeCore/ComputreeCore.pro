@@ -1,5 +1,12 @@
-include(../shared.pri)
-include(../include_all.pri)
+CT_PREFIX = ..
+CT_PREFIX_INSTALL = ../..
+CT_LIB_PREFIX = ../library
+
+COMPUTREE = ctlibplugin
+
+include($${CT_PREFIX}/destdir.pri)
+include($${CT_PREFIX}/include_ct_library.pri)
+include($${CT_LIB_PREFIX}/library_include_eigen.pri)
 
 CONFIG -= plugin
 TARGET = CompuTreeCore
@@ -9,13 +16,14 @@ QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-DESTDIR = $${PLUGINSHARED_DESTDIR}
+DESTDIR = $${EXECUTABLE_DESTDIR}
 DEFINES += COMPUTREECORE_LIBRARY
 
 INCLUDEPATH += ./src
+INCLUDEPATH += $$CT_LIB_PREFIX
 
-HEADERS += $${PLUGIN_SHARED_INTERFACE_DIR}/interfaces.h \
-    src/cdm_configfile.h \
+#$${PLUGIN_SHARED_INTERFACE_DIR}/interfaces.h \
+HEADERS += src/cdm_configfile.h \
     computreeCore_global.h \
     src/cdm_stepmanageroptions.h \
     src/cdm_stepmanager.h \
@@ -68,3 +76,7 @@ SOURCES += \
     src/cdm_hrscriptxmlreader.cpp \
     src/cdm_xmltools.cpp \
     src/cdm_scriptmanagerxmlallversions.cpp
+
+!equals(PWD, $${OUT_PWD}) {
+    error("Shadow build seems to be activated, please desactivated it !")
+}

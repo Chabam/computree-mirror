@@ -591,5 +591,5 @@ void DM_AMKglPermanentPainter::drawEdges(const CT_AbstractMeshModel *mesh)
 
 void DM_AMKglPermanentPainter::drawPoints(const CT_AbstractMeshModel *mesh)
 {
-    drawPointCloud(mesh->getPointCloudIndex());
+    drawPointCloud(mesh->pointCloudIndex());
 }

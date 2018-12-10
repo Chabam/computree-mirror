@@ -12,10 +12,10 @@ CONFIG(debug, debug|release) {
     CT_DESTDIR_NAME = ComputreeInstallRelease
 }
 
-PLUGINSHARED_DESTDIR = $${CT_PREFIX_INSTALL}/$${CT_DESTDIR_NAME}
-PLUGINSHARED_PLUGIN_DESTDIR = $${PLUGINSHARED_DESTDIR}/plugins
+EXECUTABLE_DESTDIR = $${CT_PREFIX_INSTALL}/$${CT_DESTDIR_NAME}
+PLUGIN_DESTDIR = $${EXECUTABLE_DESTDIR}/plugins
 
-message(Element(s) will be installed to $${PLUGINSHARED_DESTDIR})
+message(Element(s) will be installed to $${EXECUTABLE_DESTDIR})
 
 contains(QMAKE_TARGET.arch, x86_64) {
     DEFINES += ENVIRONMENT64

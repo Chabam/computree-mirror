@@ -2,7 +2,7 @@
 #include "ui_gaboutmemory.h"
 
 #include "ct_global/ct_context.h"
-#include "ct_tools/repository/ct_repositoryaccess.h"
+#include "ct_accessor/ct_repositoryaccess.h"
 #include "ct_cloud/tools/ct_globalpointcloudmanager.h"
 #include "ct_cloud/tools/ct_globaledgecloudmanager.h"
 #include "ct_cloud/tools/ct_globalfacecloudmanager.h"

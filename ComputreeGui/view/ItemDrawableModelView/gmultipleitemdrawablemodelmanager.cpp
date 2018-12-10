@@ -50,7 +50,7 @@ void GMultipleItemDrawableModelManager::addResult(const CT_AbstractResult *res)
         connect((CT_AbstractResult*)res, SIGNAL(destroyed(QObject*)), this, SLOT(resultDestroyedQueued(QObject*)), Qt::QueuedConnection);
 
         _results.append((CT_AbstractResult*)res);
-        ui->comboBoxResult->addItem(res->getName() + QString(" (%1)").arg((*res->parentStep()).uniqueID()), qVariantFromValue((void*)res));
+        ui->comboBoxResult->addItem(res->displayableName() + QString(" (%1)").arg(static_cast<CT_VirtualAbstractStep*>(res->parentStep())->uniqueID()), qVariantFromValue((void*)res));
         ui->comboBoxResult->setCurrentIndex(ui->comboBoxResult->count()-1);
     }
     else

@@ -44,9 +44,9 @@ void PB_StepBeginLoopThroughGroups02::createInResultModelListProtected()
 {
     CT_InResultModelGroupToCopy *resultModel = createNewInResultModelForCopy(DEF_inResult_g, tr("Résultat"));
     resultModel->setZeroOrMoreRootGroup();
-    resultModel->addGroupModel("", DEF_inGroup, CT_AbstractItemGroup::staticGetType(), tr("Groupe"), "", CT_InAbstractGroupModel::CG_ChooseOneIfMultiple);
-    resultModel->addItemModel(DEF_inGroup, DEF_inItem, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"));
-    resultModel->addItemAttributeModel(DEF_inItem, DEF_inAttName, QList<QString>() << CT_AbstractCategory::DATA_FILE_NAME << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Nom"));
+    resultModel->addStdGroupModel("", DEF_inGroup, CT_StandardItemGroup::staticGetType(), tr("Groupe"), "", CT_InAbstractGroupModel::CG_ChooseOneIfMultiple);
+    resultModel->addStdItemModel(DEF_inGroup, DEF_inItem, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"));
+    resultModel->addStdItemAttributeModel(DEF_inItem, DEF_inAttName, QList<QString>() << CT_AbstractCategory::DATA_FILE_NAME << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Nom"));
 }
 
 // Redefine in children steps to complete ConfigurationDialog
@@ -78,7 +78,7 @@ void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_Standar
         CT_ResultGroupIterator it(outResult, this, DEF_inGroup);
         while (it.hasNext())
         {
-            CT_AbstractItemGroup *group = (CT_AbstractItemGroup*) it.next();
+            CT_StandardItemGroup *group = (CT_StandardItemGroup*) it.next();
 
             if (group != NULL)
             {
@@ -92,11 +92,11 @@ void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_Standar
         _counter->setNTurns(_ids.size());
     }
 
-    QList<CT_AbstractItemGroup*> groupsToBeRemoved;
+    QList<CT_StandardItemGroup*> groupsToBeRemoved;
     CT_ResultGroupIterator it2(outResult, this, DEF_inGroup);
     while (it2.hasNext() && (!isStopped()))
     {
-        CT_AbstractItemGroup *group = (CT_AbstractItemGroup*) it2.next();
+        CT_StandardItemGroup *group = (CT_StandardItemGroup*) it2.next();
 
         CT_AbstractSingularItemDrawable* item = (CT_AbstractSingularItemDrawable*) group->firstItemByINModelName(this, DEF_inItem);
         if (item != NULL)
@@ -123,14 +123,14 @@ void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_Standar
 
     while (!groupsToBeRemoved.isEmpty())
     {
-        CT_AbstractItemGroup *group = groupsToBeRemoved.takeLast();
+        CT_StandardItemGroup *group = groupsToBeRemoved.takeLast();
         recursiveRemoveGroupIfEmpty(group->parentGroup(), group);
     }
 
     setProgress( 100 );
 }
 
-void PB_StepBeginLoopThroughGroups02::recursiveRemoveGroupIfEmpty(CT_AbstractItemGroup *parent, CT_AbstractItemGroup *group) const
+void PB_StepBeginLoopThroughGroups02::recursiveRemoveGroupIfEmpty(CT_StandardItemGroup *parent, CT_StandardItemGroup *group) const
 {
     if(parent != NULL)
     {

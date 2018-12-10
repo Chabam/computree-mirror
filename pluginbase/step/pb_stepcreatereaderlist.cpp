@@ -1,82 +1,50 @@
 #include "pb_stepcreatereaderlist.h"
 
 #include "pb_steppluginmanager.h"
+#include "ct_reader/abstract/ct_abstractreader.h"
+#include "ct_view/tools/ct_configurablewidgettodialog.h"
+#include "tools/pb_readerstools.h"
 
 #include <QMessageBox>
 
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/outModel/ct_outresultmodelgroup.h"
-#include "ct_view/ct_genericconfigurablewidget.h"
-#include "ct_abstractstepplugin.h"
-#include "ct_reader/ct_standardreaderseparator.h"
-
-#include "ct_view/ct_combobox.h"
-#include "ct_global/ct_context.h"
-#include "ct_model/tools/ct_modelsearchhelper.h"
-#include "ct_itemdrawable/ct_readeritem.h"
-#include "ct_view/ct_stepconfigurabledialog.h"
-#include "ct_view/tools/ct_configurablewidgettodialog.h"
-
-#include "tools/pb_readerstools.h"
-
-// Alias for indexing models
-#define DEFout_res "res"
-#define DEFout_grp "grp"
-#define DEFout_grpHeader "grpHeader"
-#define DEFout_header "header"
-#define DEFout_reader "reader"
-
 // Constructor : initialization of parameters
-PB_StepCreateReaderList::PB_StepCreateReaderList(CT_StepInitializeData &dataInit) : CT_AbstractStepCanBeAddedFirst(dataInit)
+PB_StepCreateReaderList::PB_StepCreateReaderList() : SuperClass()
 {
 }
 
 // Step description (tooltip of contextual menu)
-QString PB_StepCreateReaderList::getStepDescription() const
+QString PB_StepCreateReaderList::description() const
 {
     return tr("1- Créer une liste de readers");
 }
 
 // Step detailled description
-QString PB_StepCreateReaderList::getStepDetailledDescription() const
+QString PB_StepCreateReaderList::detailledDescription() const
 {
     return tr("Cette étape créer une liste de reader (lecteur de fichier). Ces readers pourront par la suite être utilisés par d'autres étapes pour charger les fichiers.");
 }
 
-// Step URL
-QString PB_StepCreateReaderList::getStepURL() const
-{
-    //return tr("STEP URL HERE");
-    return CT_AbstractStepCanBeAddedFirst::getStepURL(); //by default URL of the plugin
-}
-
 // Step copy method
-CT_VirtualAbstractStep* PB_StepCreateReaderList::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepCreateReaderList::createNewInstance() const
 {
-    return new PB_StepCreateReaderList(dataInit);
+    return new PB_StepCreateReaderList();
 }
 
-//////////////////// PROTECTED METHODS //////////////////
-
-// Creation and affiliation of IN models
-void PB_StepCreateReaderList::createInResultModelListProtected()
+void PB_StepCreateReaderList::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    // No in result is needed
-    setNotNeedInputResult();
+    const QStringList list_readersList = PB_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
+
+    preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedUniqueName);
 }
 
-void PB_StepCreateReaderList::createPreConfigurationDialog()
+void PB_StepCreateReaderList::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    CT_StepConfigurableDialog *configDialog = newStandardPreConfigurationDialog();
-
-    const QStringList list_readersList = PB_ReadersTools::constructReadersClassNameList(getPluginAs<PB_StepPluginManager>()->readersAvailable());
-
-    configDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedClassName);
+    manager.setNotNeedInputResult();
 }
 
-bool PB_StepCreateReaderList::postConfigure()
+bool PB_StepCreateReaderList::postInputConfigure()
 {
-    CT_AbstractReader* reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
+    CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
     const QString fileFilter = PB_ReadersTools::constructStringForFileDialog(reader);
 
     if(fileFilter.isEmpty()) {
@@ -96,100 +64,84 @@ bool PB_StepCreateReaderList::postConfigure()
 
         if(reader->setFilePath(fileList.first())) {
             reader->setFilePathCanBeModified(false);
-            bool ok = reader->configure();
+            const bool ok = reader->configure();
             reader->setFilePathCanBeModified(true);
 
-            if(ok) {
-                m_filepathCollection = fileList;
-                setSettingsModified(true);
-            }
+            if(!ok)
+                return false;
 
-            return ok;
+            m_filepathCollection = fileList;
+            setSettingsModified(true);
+
+            return true;
         }
     }
 
     return false;
 }
 
-// Creation and affiliation of OUT models
-void PB_StepCreateReaderList::createOutResultModelListProtected()
+void PB_StepCreateReaderList::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
-    // create a new result
-    CT_OutResultModelGroup *outRes = createNewOutResultModel(DEFout_res, tr("Liste de readers"));
+    manager.addResult(m_hOutResult, tr("Liste de readers"));
+    manager.setRootGroup(m_hOutResult, m_hOutRootGroup);
 
-    // add a root group
-    outRes->setRootGroup(DEFout_grp, new CT_StandardItemGroup(), tr("Groupe"));
-
-    // get the reader selected
-    CT_AbstractReader *reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
+    CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
 
     // if one reader was selected and at least one file is defined
-    if(reader != NULL && m_filepathCollection.size() > 0)
+    if((reader != NULL)
+            && (m_filepathCollection.size() > 0))
     {
+        manager.addGroup(m_hOutRootGroup, m_hOutFileGroup, tr("Fichier"));
+        manager.addItem(m_hOutRootGroup, m_hOutReaderItem, tr("Reader"), "", "", new CT_ReaderItem(reader, false));
+
         // get the header
-        CT_FileHeader *rHeader = reader->createHeaderPrototype();
+        CT_FileHeader* rHeader = reader->createHeaderPrototype();
 
-        if(rHeader != NULL) {
-            // copy the reader (copyFull = with configuration and models)
-            CT_AbstractReader* readerCpy = reader->copyFull();
-
-            outRes->addGroupModel(DEFout_grp, DEFout_grpHeader, new CT_StandardItemGroup(), tr("Fichier"));
-            outRes->addItemModel(DEFout_grpHeader, DEFout_reader, new CT_ReaderItem(NULL, NULL, readerCpy), tr("Reader"));
-            outRes->addItemModel(DEFout_grpHeader, DEFout_header, rHeader, tr("Entête"));
-        }
+        if(rHeader != NULL)
+            manager.addItem(m_hOutRootGroup, m_hOutFileHeader, tr("Entête"), "", "", rHeader);
     }
 }
 
 void PB_StepCreateReaderList::compute()
 {
-    QList<CT_ResultGroup*> outResultList = getOutResultList();
+    for(CT_ResultGroup* result : m_hOutResult.iterate()) {
 
-    // get the out result
-    CT_ResultGroup* resultOut = outResultList.at(0);
+        CT_StandardItemGroup* rootGroup = m_hOutRootGroup.createInstance();
+        result->addRootGroupWithOutHandle(m_hOutRootGroup, rootGroup);
 
-    // search the model for headers
-    CT_OutAbstractItemModel* headerModel = (CT_OutAbstractItemModel*)PS_MODELS->searchModelForCreation(DEFout_header, resultOut);
+        CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
 
-    // create the root group and add it to result
-    CT_StandardItemGroup* grp = new CT_StandardItemGroup(DEFout_grp, resultOut);
-    resultOut->addGroup(grp);
+        if(reader != NULL) {
 
-    CT_AbstractReader *reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
-
-    if(reader != NULL) {
-        // for each file in the list
-        for (int i = 0 ; i < m_filepathCollection.size() ; i++)
-        {
-            // copy the reader (copyFull = with configuration and models)
-            CT_AbstractReader* readerCpy = reader->copyFull();
-
-            // set the new filepath and check if it is valid
-            if (readerCpy->setFilePath(m_filepathCollection.at(i)))
+            // for each file in the list
+            for(const QString& filePath : m_filepathCollection)
             {
-                // create models of this reader
-                if(readerCpy->outItemDrawableModels().isEmpty() && reader->outGroupsModel().isEmpty())
-                    readerCpy->createOutItemDrawableModelList();
+                // copy the reader (copyFull = with configuration and models)
+                CT_AbstractReader* readerCpy = reader->copyFull();
 
-                // create the group that will contains header and reader (represent a File)
-                CT_StandardItemGroup* grpHeader = new CT_StandardItemGroup(DEFout_grpHeader, resultOut);
+                // set the new filepath and check if it is valid
+                if (readerCpy->setFilePath(filePath))
+                {
+                    // create the group that will contains header and reader (represent a File)
+                    CT_StandardItemGroup* grpHeader = m_hOutFileGroup.createInstance();
+                    rootGroup->addGroupWithOutHandle(m_hOutFileGroup, grpHeader);
 
-                CT_FileHeader *header = readerCpy->readHeader();
-                header->changeResult(resultOut);
-                header->setModel(headerModel);
+                    // add the header
+                    if(m_hOutFileHeader.isValid()) {
+                        CT_FileHeader* header = readerCpy->readHeader();
+                        Q_ASSERT(header != NULL);
+                        grpHeader->addSingularItemWithOutHandle(m_hOutFileHeader, header);
+                    }
 
-                // add the header
-                grpHeader->addItemDrawable(header);
-
-                // add the reader
-                grpHeader->addItemDrawable(new CT_ReaderItem(DEFout_reader, resultOut, readerCpy));
-
-                // add the group to the root
-                grp->addGroup(grpHeader);
-            }
-            else
-            {
-                PS_LOG->addMessage(LogInterface::warning, LogInterface::step, tr("Fichier %1 inexistant ou non valide").arg(m_filepathCollection.at(i)));
-                delete readerCpy;
+                    // add the reader item
+                    CT_ReaderItem* rItem = new CT_ReaderItem(readerCpy, true);
+                    grpHeader->addSingularItemWithOutHandle(m_hOutReaderItem, rItem);
+                }
+                else
+                {
+                    STEP_LOG->addWarningMessage(tr("Fichier %1 inexistant ou non valide").arg(filePath));
+                    delete readerCpy;
+                }
             }
         }
     }
@@ -199,12 +151,7 @@ void PB_StepCreateReaderList::savePreSettings(SettingsWriterInterface &writer) c
 {
     SuperClass::savePreSettings(writer);
 
-    writer.addParameter(this, "ReaderClassName", m_readerSelectedClassName);
-
-    CT_AbstractReader *reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
-
-    if(reader != NULL)
-        reader->saveSettings(writer);
+    writer.addParameter(this, "ReaderClassName", m_readerSelectedUniqueName);
 }
 
 bool PB_StepCreateReaderList::restorePreSettings(SettingsReaderInterface &reader)
@@ -216,24 +163,17 @@ bool PB_StepCreateReaderList::restorePreSettings(SettingsReaderInterface &reader
     if(!reader.parameter(this, "ReaderClassName", value))
         return false;
 
-    m_readerSelectedClassName = value.toString();
+    m_readerSelectedUniqueName = value.toString();
 
-    CT_AbstractReader *fReader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
-
-    if(fReader == NULL)
-        return false;
-
-    fReader->restoreSettings(reader);
-
-    return true;
+    return (pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName) != NULL);
 }
 
 void PB_StepCreateReaderList::savePostSettings(SettingsWriterInterface &writer) const
 {
     SuperClass::savePostSettings(writer);
 
-    for(int i=0 ; i<m_filepathCollection.size(); ++i) {
-        writer.addParameterPath(this, "File", m_filepathCollection.at(i));
+    for(const QString& filePath : m_filepathCollection) {
+        writer.addParameterPath(this, "File", filePath);
     }
 }
 
@@ -242,21 +182,22 @@ bool PB_StepCreateReaderList::restorePostSettings(SettingsReaderInterface &reade
     if(!SuperClass::restorePostSettings(reader))
         return false;
 
-    QString path;
+    CT_AbstractReader* fReader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
+
+    QString filePath;
     m_filepathCollection.clear();
 
     const int n = reader.parameterPathCount(this, "File");
+    m_filepathCollection.reserve(n);
 
     for(int i=0 ; i<n; ++i) {
-        if(reader.parameterPath(this, "File", path))
-            m_filepathCollection.append(path);
-    }
+        if(reader.parameterPath(this, "File", filePath)) {
 
-    CT_AbstractReader *fReader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
+            if(!fReader->setFilePath(filePath))
+                return false;
 
-    for(int i=0 ; i<m_filepathCollection.size(); ++i) {
-        if(!fReader->setFilePath(m_filepathCollection.at(i)))
-            return false;
+            m_filepathCollection.append(filePath);
+        }
     }
 
     return true;

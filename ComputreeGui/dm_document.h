@@ -33,8 +33,7 @@
 #include <QList>
 #include <QString>
 
-#include "interfaces.h"
-
+#include "documentinterface.h"
 #include "dm_abstractinfo.h"
 
 class CT_AbstractItemDrawable;
@@ -43,7 +42,7 @@ class DM_DocumentManager;
 class DM_ActionsHandler;
 class DM_Document;
 
-class CT_AbstractItemGroup;
+class CT_StandardItemGroup;
 class CT_AbstractSingularItemDrawable;
 
 /**
@@ -82,7 +81,6 @@ public:
 class DM_Document : public DocumentInterface
 {
     Q_OBJECT
-    Q_INTERFACES(DocumentInterface)
 
 public:
     DM_Document(DM_DocumentManager &manager, QString title);
@@ -342,18 +340,6 @@ protected:
      * @brief Overload this method if you want to create your own item information. By default return NULL;
      */
     virtual DM_AbstractInfo* createNewItemInformation(const CT_AbstractItemDrawable *item) const;
-
-    /**
-     * @brief Add this group and this information to the collection, recursively add childrens item
-     */
-    void recursiveAddChildrensToInformationsCollection(const CT_AbstractItemGroup *group,
-                                                       QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash,
-                                                       const bool &searchInHashIfItemExist = true);
-
-    /**
-     * @brief returns true if this model or one children is contained in this document
-     */
-    bool recursiveContainsItemDrawableModelOrAtLeastOneChildren(const CT_OutAbstractModel *model) const;
 
 private:
     DM_IDocumentCloseFilter         *m_closeFilter;

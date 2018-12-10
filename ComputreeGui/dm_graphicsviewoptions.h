@@ -29,7 +29,7 @@
 #ifndef DM_GRAPHICSVIEWOPTIONS_H
 #define DM_GRAPHICSVIEWOPTIONS_H
 
-#include "interfaces.h"
+#include "graphicsviewinterface.h"
 #include "renderer/drawmodeaccessor.h"
 
 #include <QtGlobal>
@@ -40,7 +40,6 @@
 class DM_GraphicsViewOptions : public QObject, public GraphicsViewOptionsInterface, public DrawModeAccessor
 {
     Q_OBJECT
-    Q_INTERFACES(GraphicsViewOptionsInterface)
 
 public:
 

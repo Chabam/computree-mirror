@@ -1,5 +1,28 @@
-include(../shared.pri)
-include($${PLUGIN_SHARED_DIR}/include.pri)
+#include(../shared.pri)
+#include($${PLUGIN_SHARED_DIR}/include.pri)
+
+contains ( QT_VERSION, "^5.*" ) {
+    QT *= widgets
+}
+
+CT_PREFIX = ..
+CT_PREFIX_INSTALL = ../..
+CT_LIB_PREFIX = ../library
+
+COMPUTREE = ctlibplugin
+
+include($${CT_PREFIX}/destdir.pri)
+include($${CT_PREFIX}/include_ct_library.pri)
+
+##### TODO : remove it to use eigen from pcl or from 3rdparty ######
+
+INCLUDEPATH += $$CT_LIB_PREFIX/3rdparty/eigen
+TR_EXCLUDE  += $$CT_LIB_PREFIX/3rdparty/eigen/*
+
+INCLUDEPATH += .
+INCLUDEPATH += $$CT_LIB_PREFIX
+INCLUDEPATH += $${CT_PREFIX}/ComputreeCore
+INCLUDEPATH += $${CT_PREFIX}/ComputreeCore/src
 
 CONFIG -= plugin
 
@@ -26,7 +49,6 @@ HEADERS += \
     interfacesbatch.h \
     batch.h \
     batchpluginmanager.h \
-    $$PLUGIN_SHARED_DIR/interfaces.h \
     signalhandler.h \
     StepResultTreeView/gstepmanager2.h
 
@@ -36,13 +58,6 @@ FORMS += \
 
 RESOURCES += \
     systray.qrc
-
-INCLUDEPATH += .
-INCLUDEPATH += $${PLUGIN_SHARED_DIR}
-INCLUDEPATH += $${EXPORTER_SHARED_DIR}
-
-INCLUDEPATH += $${COMPUTREE_CORE_DIR}
-INCLUDEPATH += $${COMPUTREE_CORE_DIR}/src
 
 macx {
     LIBS += $${DESTDIR}/libCompuTreeCore*.dylib

@@ -3,13 +3,12 @@
 
 #include "dm_itemmodelviewsynchronizedgroup.h"
 #include "view/DocumentView/gdocumentview.h"
+#include "treeviewinterface.h"
 
 class CT_AbstractActionForTreeView;
 
 class GItemModelView : public TreeViewInterface
 {
-    Q_INTERFACES(TreeViewInterface)
-
 public:
     GItemModelView();
     ~GItemModelView();

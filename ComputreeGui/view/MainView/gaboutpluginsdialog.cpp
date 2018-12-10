@@ -6,9 +6,6 @@
 #include "cdm_tools.h"
 #include "dm_guimanager.h"
 
-#include "ct_stepseparator.h"
-#include "ct_steploadfileseparator.h"
-#include "ct_stepcanbeaddedfirstseparator.h"
 #include "ct_actions/ct_actionsseparator.h"
 #include "ct_actions/abstract/ct_abstractaction.h"
 #include "ct_exporter/ct_standardexporterseparator.h"
@@ -150,7 +147,7 @@ void GAboutPluginsDialog::createItemsForLevelRecursively(QTreeWidgetItem *parent
     while(itS.hasNext()) {
         CT_VirtualAbstractStep *step = itS.next();
 
-        if(step->getPlugin() == plugin)
+        if(step->pluginStaticCastT<>() == plugin)
             createItemsForStep(item, step);
     }
 
@@ -160,7 +157,7 @@ void GAboutPluginsDialog::createItemsForLevelRecursively(QTreeWidgetItem *parent
 
 void GAboutPluginsDialog::createItemsForStep(QTreeWidgetItem *parent, CT_VirtualAbstractStep *step)
 {
-    QString stepName = step->getPlugin()->getKeyForStep(*step);
+    QString stepName = step->pluginStaticCastT<>()->getKeyForStep(*step);
     QString keyName = parent->text(0)+ "_" + stepName;
 
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
@@ -171,20 +168,18 @@ void GAboutPluginsDialog::createItemsForStep(QTreeWidgetItem *parent, CT_Virtual
     QTreeWidgetItem *itemIN = new QTreeWidgetItem(item);
     itemIN->setText(0, "IN");
 
-    QList<CT_InAbstractResultModel*> list = step->getInResultsModel();
-    QListIterator<CT_InAbstractResultModel*> it(list);
-
-    while(it.hasNext())
-        recursiveCreateItemsForResultModel(itemIN, it.next());
+    step->visitInResultModels([this, &itemIN](const CT_InAbstractResultModel* model) -> bool {
+        this->recursiveCreateItemsForResultModel(itemIN, model);
+        return true;
+    });
 
     QTreeWidgetItem *itemOUT = new QTreeWidgetItem(item);
     itemOUT->setText(0, "OUT");
 
-    QList<CT_OutAbstractResultModel*> listO = step->getOutResultsModel();
-    QListIterator<CT_OutAbstractResultModel*> itO(listO);
-
-    while(itO.hasNext())
-        recursiveCreateItemsForResultModel(itemOUT, itO.next());
+    step->visitOutResultModels([this, &itemOUT](const CT_OutAbstractResultModel* model) -> bool {
+        this->recursiveCreateItemsForResultModel(itemOUT, model);
+        return true;
+    });
 }
 
 void GAboutPluginsDialog::createItemsForAction(QTreeWidgetItem *parent, CT_AbstractAction *act)
@@ -208,11 +203,10 @@ void GAboutPluginsDialog::recursiveCreateItemsForResultModel(QTreeWidgetItem *pa
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     item->setText(0, "Result : " + rModel->resultName());
 
-    QList<CT_AbstractModel*> list = rModel->childrens();
-    QListIterator<CT_AbstractModel*> it(list);
-
-    while(it.hasNext())
-        recursiveCreateItemsForModel(item, it.next());
+    rModel->visitOutChildrens([this, &item](const CT_OutAbstractModel* child) -> bool {
+        this->recursiveCreateItemsForModel(item, child);
+        return true;
+    });
 }
 
 void GAboutPluginsDialog::recursiveCreateItemsForResultModel(QTreeWidgetItem *parent, const CT_InAbstractResultModel *rModel) const
@@ -220,11 +214,10 @@ void GAboutPluginsDialog::recursiveCreateItemsForResultModel(QTreeWidgetItem *pa
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     item->setText(0, "Result : " + rModel->displayableName());
 
-    QList<CT_AbstractModel*> list = rModel->childrens();
-    QListIterator<CT_AbstractModel*> it(list);
-
-    while(it.hasNext())
-        recursiveCreateItemsForModel(item, it.next());
+    rModel->visitInChildrens([this, &item](const CT_InAbstractModel* child) -> bool {
+        this->recursiveCreateItemsForModel(item, child);
+        return true;
+    });
 }
 
 void GAboutPluginsDialog::recursiveCreateItemsForModel(QTreeWidgetItem *parent, const CT_AbstractModel *rModel) const
@@ -232,11 +225,10 @@ void GAboutPluginsDialog::recursiveCreateItemsForModel(QTreeWidgetItem *parent, 
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     item->setText(0,rModel->displayableName());
 
-    QList<CT_AbstractModel*> list = rModel->childrens();
-    QListIterator<CT_AbstractModel*> it(list);
-
-    while(it.hasNext())
-        recursiveCreateItemsForModel(item, it.next());
+    rModel->visitChildrens([this, &item](const CT_AbstractModel* child) -> bool {
+        this->recursiveCreateItemsForModel(item, child);
+        return true;
+    });
 }
 
 void GAboutPluginsDialog::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
@@ -345,12 +337,12 @@ void GAboutPluginsDialog::exportStepsForLevel(QTextStream &stream, const CT_Menu
             type = "Generic";
         }
 
-        stream << step->getStepName() << "\t";
-        stream << step->getPlugin()->getKeyForStep(*step) << "\t";
-        stream << step->getStepDescription() << "\t";
+        stream << step->name() << "\t";
+        stream << step->pluginStaticCastT<>()->getKeyForStep(*step) << "\t";
+        stream << step->description() << "\t";
         stream << levelName << "\t";
         stream << type << "\t";
-        stream << _pManager->getPluginName(_pManager->getPluginIndex(step->getPlugin())) << "\n";
+        stream << _pManager->getPluginName(_pManager->getPluginIndex(step->pluginStaticCastT<>())) << "\n";
     }
 }
 

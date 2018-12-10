@@ -118,15 +118,15 @@ void CDM_StepsMenuManager::writeStepInformationToFavoritesFileRecursively(const 
 {
     xmlWriter.writeStartElement(XML_STEP_START_KEY);
 
-    xmlWriter.writeTextElement(XML_STEP_PLUGIN_NAME_KEY, m_pluginManager->getPluginName(step->getPlugin()));
-    xmlWriter.writeTextElement(XML_STEP_KEY_KEY, step->getPlugin()->getKeyForStep(*step));
+    xmlWriter.writeTextElement(XML_STEP_PLUGIN_NAME_KEY, m_pluginManager->getPluginName(step->pluginStaticCastT<>()));
+    xmlWriter.writeTextElement(XML_STEP_KEY_KEY, step->pluginStaticCastT<>()->getKeyForStep(*step));
 
     xmlWriter.writeEndElement();
 }
 
 void CDM_StepsMenuManager::loadFavoritesFrom(const QString &filepath)
 {
-    CT_MenuLevel *favorites = m_menuOfSteps->getOrCreateRootLevel(CT_StepsMenu::LO_Favorites);
+    CT_MenuLevel *favorites = m_menuOfSteps->createOrGetRootLevel(CT_StepsMenu::LO_Favorites);
 
     QFile xmlDoc(filepath);
 
@@ -160,7 +160,7 @@ void CDM_StepsMenuManager::readLevelAndAddItToFavoritesRecursively(CT_MenuLevel 
                 if(xmlReader.name() == XML_LEVEL_START_KEY) {
                     readLevelAndAddItToFavoritesRecursively(thisLevel, xmlReader);
                 } else if(xmlReader.name() == XML_LEVEL_NAME_KEY) {
-                    thisLevel = CT_MenuLevel::getOrCreateLevel(xmlReader.readElementText(), parentLevel);
+                    thisLevel = CT_MenuLevel::staticCreateOrGetLevelInParentLevel(xmlReader.readElementText(), parentLevel);
                 } else if(xmlReader.name() == XML_STEP_START_KEY) {
                     readStepAndAddItToLevel(thisLevel, xmlReader);
                 }

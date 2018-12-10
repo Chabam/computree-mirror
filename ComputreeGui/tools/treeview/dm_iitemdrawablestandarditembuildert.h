@@ -3,7 +3,7 @@
 
 #include <QStandardItem>
 
-#include "interfaces.h"
+class CT_AbstractItemDrawable;
 
 /**
  * @brief You must inherit this class if you want to use the DM_ItemDrawableTreeViewController.

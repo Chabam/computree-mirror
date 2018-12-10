@@ -1,7 +1,8 @@
 #ifndef DM_MULTIPLEOBJECTSMODIFIER_H
 #define DM_MULTIPLEOBJECTSMODIFIER_H
 
-#include "interfaces.h"
+#include "graphicsviewinterface.h"
+
 #include "scene/permanentsceneelementtype.h"
 
 class IChunk;

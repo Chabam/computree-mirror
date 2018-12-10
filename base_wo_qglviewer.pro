@@ -1,7 +1,7 @@
 include(all_check_dependencies.pri) # Just verify if there is problems with dependencies, do nothing else
 
 TEMPLATE      = subdirs
-SUBDIRS       = pluginshared AMKgl library/ctlibio library/ctlibmetrics library/ctlibfilters library/ctliblas library/ctlibstdactions pluginbase ComputreeCore ComputreeGui
+SUBDIRS       = library AMKgl pluginbase ComputreeCore ComputreeGui
 CONFIG       += console ordered
 
 win32-msvc2013 {

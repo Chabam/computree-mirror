@@ -17,7 +17,6 @@ class CT_OutAbstractItemAttributeModel;
 class CT_OutAbstractResultModel;
 class DM_DocumentView;
 class GDocumentManagerView;
-class DocumentInterface;
 
 namespace Ui {
 class GItemDrawableModelManager;
@@ -76,7 +75,7 @@ private:
     QList<QStandardItem*> createItemsForItemModel(const CT_OutAbstractItemModel *model);
 
     QStandardItem* recursiveGetStandardItemForModel(QStandardItem *pItem, CT_OutAbstractModel *model, int column) const;
-    QStandardItem* recursiveGetStandardItemForModel(QStandardItem *pItem, CT_OutAbstractModel *model, const DocumentInterface *doc) const;
+    QStandardItem* recursiveGetStandardItemForModel(QStandardItem *pItem, CT_OutAbstractModel *model, const IDocumentForModel* doc) const;
 
     void recursiveSetCheckBoxEnable(QStandardItem *parent, bool enable);
 
@@ -91,7 +90,7 @@ private slots:
     void refreshCheckbox();
 
     void modelVisibilityChanged(bool visible);
-    void modelVisibilityInDocumentChanged(const DocumentInterface *doc, bool visible);
+    void modelVisibilityInDocumentChanged(const IDocumentForModel* doc, bool visible);
     void itemChanged(QStandardItem *item);
 
     void resultDestroyedDirect();
