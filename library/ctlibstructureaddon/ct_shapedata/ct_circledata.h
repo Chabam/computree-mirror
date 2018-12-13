@@ -31,19 +31,23 @@
 #include "ct_shapedata.h"
 #include "ct_defines.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_CircleDataPreProcessingAction
+class CTLIBSTRUCTUREADDON_EXPORT CT_CircleDataPreProcessingAction
 {
 public:
+    virtual ~CT_CircleDataPreProcessingAction() {}
 
-    virtual void preProcessing(const CT_Point &point, CT_Point &newPoint) = 0;
+    virtual void preProcessing(const CT_Point& point, CT_Point& newPoint) = 0;
 };
 
-class PLUGINSHAREDSHARED_EXPORT CT_CircleData : public CT_ShapeData
+class CTLIBSTRUCTUREADDON_EXPORT CT_CircleData : public CT_ShapeData
 {
+    using SuperClass = CT_ShapeData;
+
 public:
     CT_CircleData();
-    CT_CircleData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, double radius);
-    CT_CircleData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, double radius, double error);
+    CT_CircleData(const Eigen::Vector3d& center, const Eigen::Vector3d& direction, double radius);
+    CT_CircleData(const Eigen::Vector3d& center, const Eigen::Vector3d& direction, double radius, double error);
+    CT_CircleData(const CT_CircleData& other) = default;
 
     void setRadius(double radius);
     void setError(double error);
@@ -51,7 +55,7 @@ public:
     double getRadius() const;
     double getError() const;
 
-    CT_CircleData* clone() const;
+    CT_SHAPEDATA_CLONE_IMP(CT_CircleData)
 
     CT_CircleData& operator= (const CT_CircleData& o);
 
@@ -60,7 +64,7 @@ public:
       *
       * \return NULL si le nombre de points est infrieur  3.
       */
-    static CT_CircleData* staticCreateZAxisAlignedCircleDataFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex,
+    static CT_CircleData* staticCreateZAxisAlignedCircleDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                            double z = 0);
 
     /**
@@ -70,11 +74,10 @@ public:
       *
       * \return NULL si le nombre de points est infrieur  3.
       */
-    static CT_CircleData* staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(const CT_AbstractPointCloudIndex &pointCloudIndex,
-                                                                                            CT_CircleDataPreProcessingAction *preProcessingAction,
+    static CT_CircleData* staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(const CT_AbstractPointCloudIndex& pointCloudIndex,
+                                                                                            CT_CircleDataPreProcessingAction* preProcessingAction,
                                                                                             double z = 0);
 private:
-
     double _radius;
     double _error;
 };

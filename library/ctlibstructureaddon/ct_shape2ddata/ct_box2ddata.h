@@ -30,28 +30,29 @@
 
 #include "ct_areashape2ddata.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_Box2DData : public CT_AreaShape2DData
+class CTLIBSTRUCTUREADDON_EXPORT CT_Box2DData : public CT_AreaShape2DData
 {
+    using SuperClass = CT_AreaShape2DData;
+
 public:
     CT_Box2DData();
-    CT_Box2DData(const Eigen::Vector2d &center, double height, double width);
-    CT_Box2DData(const Eigen::Vector2d &min, const Eigen::Vector2d &max);
+    CT_Box2DData(const Eigen::Vector2d& center, double height, double width);
+    CT_Box2DData(const Eigen::Vector2d& min, const Eigen::Vector2d& max);
+    CT_Box2DData(const CT_Box2DData& other) = default;
 
     double getHeight() const;
     double getWidth() const;
 
-    void getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
+    void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
 
-    bool contains(double x, double y) const;
-    virtual double getArea() const;
+    bool contains(double x, double y) const override;
+    double getArea() const override;
 
-    CT_Box2DData* clone() const;
-    CT_Shape2DData* copy() const {return this->clone();}
+    CT_SHAPEDATA2D_CLONE_IMP(CT_Box2DData)
 
-    CT_Box2DData& operator= (const CT_Box2DData& o);
+    CT_Box2DData& operator= (const CT_Box2DData& o) = default;
 
 private:
-
     double       _width;  // selon l'axe de x
     double       _height; // selon l'axe de y
 };

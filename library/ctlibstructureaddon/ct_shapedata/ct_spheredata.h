@@ -30,16 +30,19 @@
 
 #include "ct_shapedata.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_SphereData : public CT_ShapeData
+class CTLIBSTRUCTUREADDON_EXPORT CT_SphereData : public CT_ShapeData
 {
+    using SuperClass = CT_ShapeData;
+
 public:
     CT_SphereData();
-    CT_SphereData(const Eigen::Vector3d &center,
+    CT_SphereData(const Eigen::Vector3d& center,
                   double radius);
+    CT_SphereData(const CT_SphereData& other) = default;
 
     double getRadius() const;
 
-    CT_SphereData* clone() const;
+    CT_SHAPEDATA_CLONE_IMP(CT_SphereData)
 
 private:
     double            m_radius;

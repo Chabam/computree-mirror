@@ -28,18 +28,20 @@
 #ifndef CT_CYLINDERDATA_H
 #define CT_CYLINDERDATA_H
 
-#include "ct_circledata.h"
-
 #include "ct_defines.h"
 #include "ct_linedata.h"
+#include "ct_circledata.h"
 #include "ct_point.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_CylinderData : public CT_ShapeData
+class CTLIBSTRUCTUREADDON_EXPORT CT_CylinderData : public CT_ShapeData
 {
+    using SuperClass = CT_ShapeData;
+
 public:
     CT_CylinderData();
-    CT_CylinderData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, double radius, double h);
-    CT_CylinderData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, double radius, double h, double lineError, double circleError);
+    CT_CylinderData(const Eigen::Vector3d& center, const Eigen::Vector3d& direction, double radius, double h);
+    CT_CylinderData(const Eigen::Vector3d& center, const Eigen::Vector3d& direction, double radius, double h, double lineError, double circleError);
+    CT_CylinderData(const CT_CylinderData& other) = default;
 
     double getRadius() const;
     double getHeight() const;
@@ -49,20 +51,20 @@ public:
     void setLineError(double error);
     void setCircleError(double error);
 
-    CT_CylinderData* clone() const;
+    CT_SHAPEDATA_CLONE_IMP(CT_CylinderData)
 
     /**
       * \brief Retourne les donnes d'un cylindre 3D  partir du nuage de points pass en paramtre.
       *
       * \return NULL si le nombre de points est infrieur  3.
       */
-    static CT_CylinderData* staticCreate3DCylinderDataFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex,
-                                                                     const Eigen::Vector3d &pointCloudBarycenter);
+    static CT_CylinderData* staticCreate3DCylinderDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
+                                                                     const Eigen::Vector3d& pointCloudBarycenter);
 
-    static CT_CylinderData* staticCreate3DCylinderDataFromPointCloudAndDirection(const CT_AbstractPointCloudIndex &pointCloudIndex,
-                                                                                 const Eigen::Vector3d &pointCloudBarycenter,
-                                                                                 const CT_LineData &direction,
-                                                                                 CT_CircleData *outCircleData = NULL);
+    static CT_CylinderData* staticCreate3DCylinderDataFromPointCloudAndDirection(const CT_AbstractPointCloudIndex& pointCloudIndex,
+                                                                                 const Eigen::Vector3d& pointCloudBarycenter,
+                                                                                 const CT_LineData& direction,
+                                                                                 CT_CircleData* outCircleData = NULL);
 
 private:
 
@@ -80,7 +82,7 @@ private:
     {
     public:
 
-        CircleDataPreProcessingAction(const Eigen::Vector3d &translation,
+        CircleDataPreProcessingAction(const Eigen::Vector3d& translation,
                                       double cosRotationZ,
                                       double sinRotationZ,
                                       double cosRotationY,
@@ -95,7 +97,7 @@ private:
             _zMax = -999999999;
         }
 
-        void preProcessing(const CT_Point &point, CT_Point &newPoint)
+        void preProcessing(const CT_Point& point, CT_Point& newPoint)
         {
             double x = point(0) + _translation(0);
             double y = point(1) + _translation(1);

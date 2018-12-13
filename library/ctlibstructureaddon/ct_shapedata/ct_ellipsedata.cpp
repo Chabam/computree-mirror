@@ -37,22 +37,28 @@
 const double CT_EllipseData::EL_INFINITY = 1.0e10;
 const double CT_EllipseData::EL_ZERO = 1.0e-10;
 
-CT_EllipseData::CT_EllipseData() : CT_ShapeData()
+CT_EllipseData::CT_EllipseData() : SuperClass(),
+    _error(0)
 {
-    _error = 0;
 }
 
-CT_EllipseData::CT_EllipseData(const Eigen::Vector3d &center, const CT_LineData &axisA, const CT_LineData &axisB) : CT_ShapeData(center, ((axisA.getP1() - axisA.getP2()).normalized().cross((axisB.getP1() - axisB.getP2()).normalized()).normalized()))
+CT_EllipseData::CT_EllipseData(const Eigen::Vector3d &center,
+                               const CT_LineData& axisA,
+                               const CT_LineData& axisB) : SuperClass(center,
+                                                                      ((axisA.getP1() - axisA.getP2()).normalized().cross((axisB.getP1() - axisB.getP2()).normalized()).normalized())),
+    _axisA(axisA),
+    _axisB(axisB),
+    _error(0)
 {
-    _axisA = axisA;
-    _axisB = axisB;
-    _error = 0;
 }
 
-CT_EllipseData::CT_EllipseData(const Eigen::Vector3d &center, const CT_LineData &axisA, const CT_LineData &axisB, double error) : CT_ShapeData(center,((axisA.getP1() - axisA.getP2()).normalized().cross((axisB.getP1() - axisB.getP2()).normalized()).normalized()))
+CT_EllipseData::CT_EllipseData(const Eigen::Vector3d &center,
+                               const CT_LineData& axisA,
+                               const CT_LineData& axisB,
+                               double error) : CT_EllipseData(center,
+                                                              axisA,
+                                                              axisB)
 {
-    _axisA = axisA;
-    _axisB = axisB;
     _error = error;
 }
 

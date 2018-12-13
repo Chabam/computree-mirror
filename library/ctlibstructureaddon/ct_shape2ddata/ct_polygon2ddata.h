@@ -33,25 +33,21 @@
 
 #include "ct_triangulation/ct_delaunayt.h"
 
-
 #include <QVector>
 #include <QStack>
 
-class PLUGINSHAREDSHARED_EXPORT CT_Polygon2DData : public CT_AreaShape2DData
+class CTLIBSTRUCTUREADDON_EXPORT CT_Polygon2DData : public CT_AreaShape2DData
 {
+    using SuperClass = CT_AreaShape2DData;
+
 public:
-
     CT_Polygon2DData();
+    CT_Polygon2DData(const QVector<Eigen::Vector2d*>& vertices);
+    CT_Polygon2DData(const QVector<Eigen::Vector3d*>& vertices);
+    CT_Polygon2DData(const CT_Polygon2DData& other);
+    ~CT_Polygon2DData() override;
 
-    CT_Polygon2DData(const QVector<Eigen::Vector2d *> &vertices, bool copy = true);
-    CT_Polygon2DData(const QVector<Eigen::Vector3d *> &vertices);
-
-    ~CT_Polygon2DData();
-
-    CT_Polygon2DData* clone() const;
-    CT_Shape2DData* copy() const {return this->clone();}
-
-    void getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
+    void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
 
     void computeCentroid();
 
@@ -66,20 +62,22 @@ public:
 
     bool contains(double x, double y) const;
 
-    void draw(PainterInterface &painter, bool drawPoints, bool drawLines, double zPlane) const;
+    void draw(PainterInterface& painter, bool drawPoints, bool drawLines, double zPlane) const;
 
     static CT_Polygon2DData* createConvexHull(const CT_PointCloudIndexVector *indices);
-    static CT_Polygon2DData* createConvexHull(const CT_DelaunayT &triangulation);
+    static CT_Polygon2DData* createConvexHull(const CT_DelaunayT& triangulation);
 
-    static void orderPointsByXY(QList<Eigen::Vector2d *> &pointList);
-    static void orderPointsByXY(QList<Eigen::Vector3d *> &pointList);
+    static void orderPointsByXY(QList<Eigen::Vector2d *>& pointList);
+    static void orderPointsByXY(QList<Eigen::Vector3d *>& pointList);
 
 
     // Use Andrew's monotone chain convex hull algorithm
-    static CT_Polygon2DData* createConvexHull(QList<Eigen::Vector2d *> &orderedCandidates);
-    static CT_Polygon2DData *createConvexHull(QList<Eigen::Vector3d *> &orderedCandidates);
+    static CT_Polygon2DData* createConvexHull(QList<Eigen::Vector2d *>& orderedCandidates);
+    static CT_Polygon2DData* createConvexHull(QList<Eigen::Vector3d *>& orderedCandidates);
 
-    static CT_Polygon2DData* chainHull_2D(QList<Eigen::Vector2d*> &orderedCandidates);
+    static CT_Polygon2DData* chainHull_2D(QList<Eigen::Vector2d*>& orderedCandidates);
+
+    CT_SHAPEDATA2D_CLONE_IMP(CT_Polygon2DData)
 
 private:
     QVector<Eigen::Vector2d*> _vertices;
@@ -94,7 +92,6 @@ private:
 
     static bool compareV2d(const Eigen::Vector2d* p1, const Eigen::Vector2d* p2);
     static bool compareV3d(const Eigen::Vector3d *p1, const Eigen::Vector3d *p2);
-
 };
 
 #endif // CT_POLYGON2DDATA_H

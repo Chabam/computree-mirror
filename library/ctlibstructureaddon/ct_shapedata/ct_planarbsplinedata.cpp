@@ -29,17 +29,16 @@
 
 #include <math.h>
 
-CT_PlanarBSplineData::CT_PlanarBSplineData() : CT_ShapeData()
+CT_PlanarBSplineData::CT_PlanarBSplineData() : SuperClass(),
+    _degree(1),
+    _nCP(0)
 {
-    _nCP = 0;
-    _degree = 1;
 }
 
-CT_PlanarBSplineData::CT_PlanarBSplineData(int nCP, int degree) : CT_ShapeData()
+CT_PlanarBSplineData::CT_PlanarBSplineData(int nCP, int degree) : SuperClass(),
+    _degree(degree),
+    _nCP(nCP)
 {
-    _nCP = nCP;
-    _degree = degree;
-
     _controlPoints.resize(_nCP);
     _nodalSequence.resize(_nCP);
 }
@@ -62,7 +61,7 @@ void CT_PlanarBSplineData::setCP(int index, double x, double y, double z)
     _controlPoints[index](2) = z;
 }
 
-void CT_PlanarBSplineData::setCP(int index, const Eigen::Vector3d &value)
+void CT_PlanarBSplineData::setCP(int index, const Eigen::Vector3d& value)
 {
     setCP(index, value(0), value(1), value(2));
 }
@@ -74,7 +73,7 @@ void CT_PlanarBSplineData::setNodalValue(int index, double value)
     _nodalSequence[index] = value;
 }
 
-const Eigen::Vector3d &CT_PlanarBSplineData::getCPAt(int index) const
+const Eigen::Vector3d& CT_PlanarBSplineData::getCPAt(int index) const
 {
     Q_ASSERT_X(index > 0 && index <= _nCP, "CT_PlanarBSplineData", "When getting control point, you must choose a valid index");
 
@@ -86,21 +85,6 @@ double CT_PlanarBSplineData::getNodalValueAt(int index) const
     Q_ASSERT_X(index > 0 && index <= _nCP, "CT_PlanarBSplineData", "When getting control point, you must choose a valid index");
 
     return _nodalSequence.at(index);
-}
-
-CT_PlanarBSplineData *CT_PlanarBSplineData::clone() const
-{
-    CT_PlanarBSplineData* data = new CT_PlanarBSplineData(nCP(), degree());
-    data->setCenter(getCenter());
-    data->setDirection(getDirection());
-
-    for (int i = 0 ; i < nCP() ; i++)
-    {
-        data->setCP(i, _controlPoints.at(i));
-        data->setNodalValue(i, _nodalSequence.at(i));
-    }
-
-    return data;
 }
 
 

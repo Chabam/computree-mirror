@@ -32,37 +32,36 @@
 #include "ct_pointcloud/abstract/ct_abstractpointcloud.h"
 #include "ct_pointcloudindex/abstract/ct_abstractpointcloudindex.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_Circle2DDataPreProcessingAction
+class CTLIBSTRUCTUREADDON_EXPORT CT_Circle2DDataPreProcessingAction
 {
 public:
-
-    virtual void preProcessing(const CT_Point &point, CT_Point &newPoint) = 0;
+    virtual ~CT_Circle2DDataPreProcessingAction() {}
+    virtual void preProcessing(const CT_Point& point, CT_Point& newPoint) = 0;
 };
 
-class PLUGINSHAREDSHARED_EXPORT CT_Circle2DData : public CT_AreaShape2DData
+class CTLIBSTRUCTUREADDON_EXPORT CT_Circle2DData : public CT_AreaShape2DData
 {
+    using SuperClass = CT_AreaShape2DData;
+
 public:
     CT_Circle2DData();
-    CT_Circle2DData(const Eigen::Vector2d &center, double radius);
+    CT_Circle2DData(const Eigen::Vector2d& center, double radius);
+    CT_Circle2DData(const CT_Circle2DData& other) = default;
 
     void setRadius(double radius);
     double getRadius() const;
 
-    void getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
+    void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
 
-    bool contains(double x, double y) const;
-    virtual double getArea() const;
+    bool contains(double x, double y) const override;
+    double getArea() const override;
 
-    CT_Circle2DData* clone() const;
-    CT_Shape2DData* copy() const {return this->clone();}
+    CT_SHAPEDATA2D_CLONE_IMP(CT_Circle2DData)
 
-    CT_Circle2DData& operator= (const CT_Circle2DData& o);
-
+    CT_Circle2DData& operator= (const CT_Circle2DData& o) = default;
 
 private:
-
     double _radius;
-
 };
 
 #endif // CT_CIRCLE2DDATA_H

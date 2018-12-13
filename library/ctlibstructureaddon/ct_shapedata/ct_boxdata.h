@@ -30,21 +30,28 @@
 
 #include "ct_shapedata.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_BoxData : public CT_ShapeData
+class CTLIBSTRUCTUREADDON_EXPORT CT_BoxData : public CT_ShapeData
 {
+    using SuperClass = CT_ShapeData;
+
 public:
     CT_BoxData();
-    CT_BoxData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, const Eigen::Vector3d &widthDirection, double height, double width, double depth);
+    CT_BoxData(const Eigen::Vector3d& center,
+               const Eigen::Vector3d& direction,
+               const Eigen::Vector3d& widthDirection,
+               double height,
+               double width,
+               double depth);
+    CT_BoxData(const CT_BoxData& other) = default;
 
     const Eigen::Vector3d& getWidthDirection() const;
     float getHeight() const;
     float getWidth() const;
     float getDepth() const;
 
-    CT_BoxData* clone() const;
+    CT_SHAPEDATA_CLONE_IMP(CT_BoxData)
 
 private:
-
     Eigen::Vector3d   _widthDirection;
     double            _width;  // selon l'axe de _widthDirection
     double            _height; // selon l'axe de _direction

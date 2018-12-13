@@ -27,7 +27,7 @@
 
 #include "ct_linedata.h"
 #include "ct_iterator/ct_pointiterator.h"
-#include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
+#include "ct_itemdrawable/abstract/ct_abstractgeometricalitem.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -37,34 +37,32 @@
 #define ONE_DIV_ONE_POINT_FIVE  0.66666666666666666666
 #define M_PI_MULT_2             6.28318530717958647692
 
-CT_LineData::CT_LineData() : CT_ShapeData()
+CT_LineData::CT_LineData() : SuperClass(),
+    _error(0),
+    _n_points(0)
 {
-    _error = 0;
-    _n_points = 0;
 }
 
-CT_LineData::CT_LineData(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2) : CT_ShapeData((p1 + p2) / 2.0, p2 - p1)
+CT_LineData::CT_LineData(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2) : SuperClass((p1 + p2) / 2.0, p2 - p1),
+    _p1(p1),
+    _p2(p2),
+    _error(0),
+    _n_points(0)
 {
-    _p1 = p1;
-    _p2 = p2;
-    _error = 0;
-    _n_points = 0;
 }
 
-CT_LineData::CT_LineData(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2, double error, int n) : CT_ShapeData((p1 + p2) / 2.0, p2 - p1)
+CT_LineData::CT_LineData(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2, double error, int n) : CT_LineData(p1, p2)
 {
-    _p1 = p1;
-    _p2 = p2;
     _error = error;
     _n_points = n;
 }
 
-const Eigen::Vector3d &CT_LineData::getP1() const
+const Eigen::Vector3d& CT_LineData::getP1() const
 {
     return _p1;
 }
 
-const Eigen::Vector3d &CT_LineData::getP2() const
+const Eigen::Vector3d& CT_LineData::getP2() const
 {
     return _p2;
 }
@@ -109,7 +107,7 @@ double CT_LineData::length() const
     return CT_MathPoint::distance3D(_p1, _p2);
 }
 
-bool CT_LineData::intersectionWithRect3D  (double plan_x, double plan_y, double plan_z, Eigen::Vector3d &vect_plan, double *xi, double *yi, double *zi)
+bool CT_LineData::intersectionWithRect3D  (double plan_x, double plan_y, double plan_z, Eigen::Vector3d& vect_plan, double* xi, double* yi, double* zi)
 {
     // intersection segment plan : http://www.softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm#intersect3D_SegPlane()
     Eigen::Vector3d u(_p2(0) - _p1(0), _p2(1) - _p1(1), _p2(2) - _p1(2));
@@ -132,12 +130,7 @@ bool CT_LineData::intersectionWithRect3D  (double plan_x, double plan_y, double 
     return false;
 }
 
-CT_LineData* CT_LineData::clone() const
-{
-    return new CT_LineData(getP1(), getP2(), getError(), n());
-}
-
-CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex)
+CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex)
 {
     CT_PointIterator it(&pointCloudIndex);
 
@@ -148,7 +141,7 @@ CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const CT_AbstractPo
     while(it.hasNext())
     {
         it.next();
-        const CT_Point &p = it.currentPoint();
+        const CT_Point& p = it.currentPoint();
         liste.append(Eigen::Vector3d(p(0), p(1), p(2)));
     }
 
@@ -156,22 +149,22 @@ CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const CT_AbstractPo
     return result;
 }
 
-CT_LineData *CT_LineData::staticCreateLineDataFromItemCenters(const QList<CT_AbstractSingularItemDrawable *> &items)
+CT_LineData *CT_LineData::staticCreateLineDataFromItemCenters(const QList<CT_AbstractGeometricalItem*>& items)
 {
     QList<Eigen::Vector3d> liste;
 
-    QListIterator<CT_AbstractSingularItemDrawable *> it(items);
+    QListIterator<CT_AbstractGeometricalItem* > it(items);
     while (it.hasNext())
     {
-        CT_AbstractSingularItemDrawable *item = it.next();
-        const Eigen::Vector3d &coord = item->getCenterCoordinate();
+        CT_AbstractGeometricalItem* item = it.next();
+        const Eigen::Vector3d& coord = item->centerCoordinate();
         liste.append(coord);
     }
 
     return CT_LineData::staticCreateLineDataFromPointCloud(liste);
 }
 
-CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const QList<Eigen::Vector3d> &l_gp)
+CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const QList<Eigen::Vector3d>& l_gp)
 {
     double x;
     double y;
@@ -216,7 +209,7 @@ CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const QList<Eigen::
     double R;
 
     int n_a;
-    double *a_tab;
+    double* a_tab;
 
     double a;
     double a_carre;

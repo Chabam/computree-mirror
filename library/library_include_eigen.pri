@@ -32,4 +32,4 @@ isEmpty(USE_PCL_ERROR_MSG) {
 INCLUDEPATH *= $$EIGEN_INC_PATH
 TR_EXCLUDE  *= $$EIGEN_INC_PATH/*
 
-warning(Eigen path is ==> $$EIGEN_INC_PATH)
+#warning(Eigen path is ==> $$EIGEN_INC_PATH)

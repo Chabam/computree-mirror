@@ -32,14 +32,14 @@
 #include <math.h>
 
 
-CT_Line2DData::CT_Line2DData() : CT_Shape2DData()
+CT_Line2DData::CT_Line2DData() : SuperClass()
 {
 }
 
-CT_Line2DData::CT_Line2DData(const Eigen::Vector2d &p1, const Eigen::Vector2d &p2) : CT_Shape2DData((p1 + p2) / 2.0)
+CT_Line2DData::CT_Line2DData(const Eigen::Vector2d& p1, const Eigen::Vector2d& p2) : SuperClass((p1 + p2) / 2.0),
+    _p1(p1),
+    _p2(p2)
 {
-    _p1 = p1;
-    _p2 = p2;
 }
 
 const Eigen::Vector2d& CT_Line2DData::getP1() const
@@ -47,11 +47,10 @@ const Eigen::Vector2d& CT_Line2DData::getP1() const
     return _p1;
 }
 
-const Eigen::Vector2d &CT_Line2DData::getP2() const
+const Eigen::Vector2d& CT_Line2DData::getP2() const
 {
     return _p2;
 }
-
 
 double CT_Line2DData::x1() const
 {
@@ -78,7 +77,7 @@ double CT_Line2DData::length() const
     return CT_Math2DLines::distance2D(_p1, _p2);
 }
 
-void CT_Line2DData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+void CT_Line2DData::getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const
 {
     min(0) = std::min(_p1(0), _p2(0));
     min(1) = std::min(_p1(1), _p2(1));
@@ -86,9 +85,4 @@ void CT_Line2DData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) c
     max(0) = std::max(_p1(0), _p2(0));
     max(1) = std::max(_p1(1), _p2(1));
     max(2) = 0;
-}
-
-CT_Line2DData* CT_Line2DData::clone() const
-{
-    return new CT_Line2DData(getP1(), getP2());
 }

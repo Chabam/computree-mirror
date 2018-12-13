@@ -37,24 +37,22 @@
 #include <QVector>
 #include <QStack>
 
-class PLUGINSHAREDSHARED_EXPORT CT_Polyline2DData : public CT_Shape2DData
+class CTLIBSTRUCTUREADDON_EXPORT CT_Polyline2DData : public CT_Shape2DData
 {
+    using SuperClass = CT_Shape2DData;
+
 public:
-
     CT_Polyline2DData();
+    CT_Polyline2DData(const QVector<Eigen::Vector2d*>& vertices);
+    CT_Polyline2DData(const CT_Polyline2DData& other);
+    ~CT_Polyline2DData() override;
 
-    CT_Polyline2DData(const QVector<Eigen::Vector2d *> &vertices, bool copy = true);
-
-    ~CT_Polyline2DData();
-
-    CT_Polyline2DData* clone() const;
-    CT_Shape2DData* copy() const {return this->clone();}
-
-    void getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
+    void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const;
 
     inline const QVector<Eigen::Vector2d*>& getVertices() const {return _vertices;}
     inline int getVerticesNumber() {return _vertices.size();}
 
+    CT_SHAPEDATA2D_CLONE_IMP(CT_Polyline2DData)
 
 private:
     QVector<Eigen::Vector2d*> _vertices;
@@ -65,7 +63,6 @@ private:
     double               _maxY;
 
     friend class CT_Polyline2D;
-
 };
 
 #endif // CT_POLYLINE2DDATA_H

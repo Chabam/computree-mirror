@@ -28,32 +28,30 @@
 #ifndef CT_SHAPEDATA_H
 #define CT_SHAPEDATA_H
 
-#include "pluginShared_global.h"
-
+#include "ctlibstructureaddon_global.h"
 #include <Eigen/Core>
+
+#define CT_SHAPEDATA_CLONE_IMP(argClass) argClass* clone() const { return new argClass(*this); }
+
 /**
-  * Reprsente les donnes d'une forme gomtrique
+  * Represent data of geometrical item
   */
-class PLUGINSHAREDSHARED_EXPORT CT_ShapeData
+class CTLIBSTRUCTUREADDON_EXPORT CT_ShapeData
 {
 public:
-
-    CT_ShapeData();
-    CT_ShapeData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction);
-    virtual ~CT_ShapeData();
+    CT_ShapeData() = default;
+    CT_ShapeData(const Eigen::Vector3d& center, const Eigen::Vector3d& direction);
+    CT_ShapeData(const CT_ShapeData& other) = default;
 
     const Eigen::Vector3d& getCenter() const;
-    const Eigen::Vector3d &getDirection() const;
+    const Eigen::Vector3d& getDirection() const;
 
-    void setCenter(const Eigen::Vector3d &center);
-    void setDirection(const Eigen::Vector3d &direction);
+    void setCenter(const Eigen::Vector3d& center);
+    void setDirection(const Eigen::Vector3d& direction);
 
 private:
-
     Eigen::Vector3d   _center;
     Eigen::Vector3d   _direction;
-
-    friend class CT_AbstractShape;
 };
 
 #endif // CT_SHAPEDATA_H

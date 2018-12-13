@@ -32,22 +32,27 @@
 
 #include <math.h>
 
-CT_CircleData::CT_CircleData() : CT_ShapeData()
+CT_CircleData::CT_CircleData() : SuperClass(),
+    _radius(0),
+    _error(0)
 {
-    _radius = 0;
-    _error = 0;
 }
 
-CT_CircleData::CT_CircleData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, double radius) : CT_ShapeData(center, direction)
+CT_CircleData::CT_CircleData(const Eigen::Vector3d& center,
+                             const Eigen::Vector3d& direction,
+                             double radius) : SuperClass(center, direction),
+    _radius(radius),
+    _error(0)
 {
-    _radius = radius;
-    _error = 0;
 }
 
-CT_CircleData::CT_CircleData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, double radius, double error) : CT_ShapeData(center, direction)
+CT_CircleData::CT_CircleData(const Eigen::Vector3d& center,
+                             const Eigen::Vector3d& direction,
+                             double radius,
+                             double error) : SuperClass(center, direction),
+    _radius(radius),
+    _error(error)
 {
-    _radius = radius;
-    _error = error;
 }
 
 void CT_CircleData::setRadius(double radius)
@@ -70,11 +75,6 @@ double CT_CircleData::getError() const
     return _error;
 }
 
-CT_CircleData* CT_CircleData::clone() const
-{
-    return new CT_CircleData(getCenter(), getDirection(), getRadius(), getError());
-}
-
 CT_CircleData& CT_CircleData::operator= (const CT_CircleData& o)
 {
     setRadius(o.getRadius());
@@ -85,7 +85,7 @@ CT_CircleData& CT_CircleData::operator= (const CT_CircleData& o)
     return *this;
 }
 
-CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex,
+CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                                double z)
 {
     return staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(pointCloudIndex,
@@ -93,8 +93,8 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloud(c
                                                                              z);
 }
 
-CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(const CT_AbstractPointCloudIndex &pointCloudIndex,
-                                                                                                CT_CircleDataPreProcessingAction *preProcessingAction,
+CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(const CT_AbstractPointCloudIndex& pointCloudIndex,
+                                                                                                CT_CircleDataPreProcessingAction* preProcessingAction,
                                                                                                 double z)
 {
 
@@ -103,7 +103,7 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWi
     if(size < 3)
         return NULL;
 
-    std::vector<CT_Point> *newPointCloud = NULL;
+    std::vector<CT_Point>* newPointCloud = NULL;
 
     if(preProcessingAction != NULL)
         newPointCloud = new std::vector<CT_Point>(size);
@@ -136,7 +136,7 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWi
 
         if(preProcessingAction != NULL)
         {
-            CT_Point &newP = (*newPointCloud)[i];
+            CT_Point& newP = (*newPointCloud)[i];
 
             preProcessingAction->preProcessing(p, newP);
 
@@ -195,7 +195,7 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWi
     {
         for(i=0; i<size; ++i)
         {
-            const CT_Point &p = (*newPointCloud)[i];
+            const CT_Point& p = (*newPointCloud)[i];
             x = p(0);
             y = p(1);
 
@@ -215,7 +215,7 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWi
         {
             it.next();
 
-            const CT_Point &p = it.currentPoint();
+            const CT_Point& p = it.currentPoint();
 
             // Added 01/06/2018 : offset management to avoid error with double precision coordinates
             x = p(0) - offsetX;

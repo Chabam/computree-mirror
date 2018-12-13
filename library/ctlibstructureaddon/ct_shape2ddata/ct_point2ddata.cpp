@@ -27,15 +27,15 @@
 
 #include "ct_point2ddata.h"
 
-CT_Point2DData::CT_Point2DData() : CT_Shape2DData()
+CT_Point2DData::CT_Point2DData() : SuperClass()
 {
 }
 
-CT_Point2DData::CT_Point2DData(const Eigen::Vector2d &point) : CT_Shape2DData(point)
+CT_Point2DData::CT_Point2DData(const Eigen::Vector2d& point) : SuperClass(point)
 {
 }
 
-CT_Point2DData::CT_Point2DData(const double &x, const double &y) : CT_Shape2DData(x, y)
+CT_Point2DData::CT_Point2DData(const double& x, const double& y) : SuperClass(x, y)
 {
 }
 
@@ -49,7 +49,7 @@ double CT_Point2DData::y() const
     return getCenter()(1);
 }
 
-void CT_Point2DData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+void CT_Point2DData::getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const
 {
     min(0) = getCenter()(0);
     min(1) = getCenter()(1);

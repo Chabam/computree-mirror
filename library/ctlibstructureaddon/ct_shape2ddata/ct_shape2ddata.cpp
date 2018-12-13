@@ -27,14 +27,12 @@
 
 #include "ct_shape2ddata.h"
 
-CT_Shape2DData::CT_Shape2DData() {}
-
-CT_Shape2DData::CT_Shape2DData(const Eigen::Vector2d &center)
+CT_Shape2DData::CT_Shape2DData(const Eigen::Vector2d& center)
 {
     _center = center;
 }
 
-CT_Shape2DData::CT_Shape2DData(const double &x, const double &y)
+CT_Shape2DData::CT_Shape2DData(const double& x, const double& y)
 {
     _center(0) = x;
     _center(1) = y;
@@ -42,12 +40,12 @@ CT_Shape2DData::CT_Shape2DData(const double &x, const double &y)
 
 CT_Shape2DData::~CT_Shape2DData() {}
 
-const Eigen::Vector2d &CT_Shape2DData::getCenter() const
+const Eigen::Vector2d& CT_Shape2DData::getCenter() const
 {
     return _center;
 }
 
-void CT_Shape2DData::setCenter(const Eigen::Vector2d &center)
+void CT_Shape2DData::setCenter(const Eigen::Vector2d& center)
 {
     _center(0) = center(0);
     _center(1) = center(1);

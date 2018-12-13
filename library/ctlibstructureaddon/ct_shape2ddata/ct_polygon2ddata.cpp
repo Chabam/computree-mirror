@@ -36,67 +36,75 @@
 #include <limits>
 #include <algorithm>
 
-CT_Polygon2DData::CT_Polygon2DData() : CT_AreaShape2DData()
+CT_Polygon2DData::CT_Polygon2DData() : SuperClass(),
+    _area(0.0),
+    _areaComputed(false)
 {
-    _area = 0.0;
-    _areaComputed = false;
 }
 
-CT_Polygon2DData::CT_Polygon2DData(const QVector<Eigen::Vector2d *> &vertices, bool copy) : CT_AreaShape2DData()
+CT_Polygon2DData::CT_Polygon2DData(const QVector<Eigen::Vector2d*>& vertices) : SuperClass(),
+    _area(0.0),
+    _areaComputed(false)
 {
-    _area = 0.0;
-    _areaComputed = false;
-
     _min(0) = std::numeric_limits<double>::max();
     _min(1) = std::numeric_limits<double>::max();
     _max(0) = -std::numeric_limits<double>::max();
     _max(1) = -std::numeric_limits<double>::max();
 
-
-    int size = vertices.size();
+    int i = 0;
+    const int size = vertices.size();
     _vertices.resize(size);
-    for (int i = 0 ; i < size ; i++)
-    {
-        Eigen::Vector2d* source = vertices.at(i);
-        if (copy)
-        {
-            _vertices[i] = new Eigen::Vector2d(*source);
-        } else {
-            _vertices[i] = vertices.at(i);
-        }
+
+    for(Eigen::Vector2d* v : vertices) {
+        _vertices[i++] = new Eigen::Vector2d(*v);
     }
 
     // Compute Centroid and affect to center
     computeCentroid();
 }
 
-CT_Polygon2DData::CT_Polygon2DData(const QVector<Eigen::Vector3d *> &vertices)
+CT_Polygon2DData::CT_Polygon2DData(const QVector<Eigen::Vector3d*>& vertices) : SuperClass(),
+    _area(0.0),
+    _areaComputed(false)
 {
-    _area = 0.0;
-    _areaComputed = false;
-
     _min(0) = std::numeric_limits<double>::max();
     _min(1) = std::numeric_limits<double>::max();
     _max(0) = -std::numeric_limits<double>::max();
     _max(1) = -std::numeric_limits<double>::max();
 
-
-    int size = vertices.size();
+    const int size = vertices.size();
     _vertices.resize(size);
+
     for (int i = 0 ; i < size ; i++)
     {
-        Eigen::Vector3d* source = vertices.at(i);
-        _vertices[i] = new Eigen::Vector2d((*source)(0), (*source)(1));
+        const Eigen::Vector3d& source = *vertices.at(i);
+        Eigen::Vector2d*& dest = _vertices[i];
+        dest = new Eigen::Vector2d(source(0), source(1));
     }
 
     // Compute Centroid and affect to center
     computeCentroid();
+}
 
+CT_Polygon2DData::CT_Polygon2DData(const CT_Polygon2DData &other) : SuperClass(other)
+{
+    _area = other._area;
+    _areaComputed = other._areaComputed;
+
+    _min = other._min;
+    _max = other._max;
+
+    int i = 0;
+    const int size = other._vertices.size();
+    _vertices.resize(size);
+
+    for(Eigen::Vector2d* v : other._vertices) {
+        _vertices[i++] = new Eigen::Vector2d(*v);
+    }
 }
 
 void CT_Polygon2DData::computeCentroid()
 {
-
     double signedArea = 0.0;
     double a = 0.0;
 
@@ -104,26 +112,26 @@ void CT_Polygon2DData::computeCentroid()
     ptC(0) = 0;
     ptC(1) = 0;
 
+    const int size = _vertices.size();
+
     _min(0) = std::numeric_limits<double>::max();
     _min(1) = std::numeric_limits<double>::max();
     _max(0) = -std::numeric_limits<double>::max();
     _max(1) = -std::numeric_limits<double>::max();
 
-    for (int i = 0 ; i < _vertices.size() ; i++)
+    for (int i = 0 ; i < size ; i++)
     {
-        Eigen::Vector2d *pt = _vertices.at(i);
+        Eigen::Vector2d& pt = *_vertices.at(i);
 
-        if ((*pt)(0) < _min(0)) {_min(0) = (*pt)(0);}
-        if ((*pt)(0) > _max(0)) {_max(0) = (*pt)(0);}
-        if ((*pt)(1) < _min(1)) {_min(1) = (*pt)(1);}
-        if ((*pt)(1) > _max(1)) {_max(1) = (*pt)(1);}
+        if (pt(0) < _min(0)) {_min(0) = pt(0);}
+        if (pt(0) > _max(0)) {_max(0) = pt(0);}
+        if (pt(1) < _min(1)) {_min(1) = pt(1);}
+        if (pt(1) > _max(1)) {_max(1) = pt(1);}
     }
 
+    Eigen::Vector2d* pt1 = NULL;
+    Eigen::Vector2d* pt2 = NULL;
 
-    Eigen::Vector2d *pt1 = NULL;
-    Eigen::Vector2d *pt2 = NULL;
-
-    int size = _vertices.size();
     pt1 = _vertices.at(size - 1);
 
     for (int i = 0 ; i < size ; i++)
@@ -144,7 +152,6 @@ void CT_Polygon2DData::computeCentroid()
         pt1 = pt2;
     }
 
-
     signedArea = signedArea*0.5;
     ptC(0) = ptC(0) / ((double)6.0*signedArea) + _min(0);
     ptC(1) = ptC(1) / ((double)6.0*signedArea) + _min(1);
@@ -159,13 +166,7 @@ CT_Polygon2DData::~CT_Polygon2DData()
     qDeleteAll(_vertices);
 }
 
-
-CT_Polygon2DData* CT_Polygon2DData::clone() const
-{
-    return new CT_Polygon2DData(_vertices);
-}
-
-void CT_Polygon2DData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+void CT_Polygon2DData::getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const
 {
     min(0) = _min(0);
     min(1) = _min(1);
@@ -182,17 +183,19 @@ double CT_Polygon2DData::getAreaIfNotSelfIntersecting()
         _area = fabs(getSignedArea());
         _areaComputed = true;
     }
+
     return _area;
 }
 
 double CT_Polygon2DData::getSignedArea()
 {
     double area = 0;
-    Eigen::Vector2d *pt1 = NULL;
-    Eigen::Vector2d *pt2 = NULL;
+    Eigen::Vector2d* pt1 = NULL;
+    Eigen::Vector2d* pt2 = NULL;
 
-    int size = getVerticesNumber();
+    const int size = getVerticesNumber();
     pt1 = _vertices.at(size - 1);
+
     for (int i = 0 ; i < size ; i++)
     {
         pt2 = _vertices.at(i);
@@ -212,11 +215,12 @@ double CT_Polygon2DData::getSignedArea()
 double CT_Polygon2DData::getPerimeter() const
 {
     double perimeter = 0;
-    Eigen::Vector2d *pt1 = NULL;
-    Eigen::Vector2d *pt2 = NULL;
+    Eigen::Vector2d* pt1 = NULL;
+    Eigen::Vector2d* pt2 = NULL;
 
-    int size = getVerticesNumber();
+    const int size = getVerticesNumber();
     pt1 = _vertices.at(size - 1);
+
     for (int i = 0 ; i < size ; i++)
     {
         pt2 = _vertices.at(i);
@@ -229,7 +233,7 @@ double CT_Polygon2DData::getPerimeter() const
 
 double CT_Polygon2DData::getArea() const
 {
-    return ((CT_Polygon2DData*) this)->getAreaIfNotSelfIntersecting();
+    return const_cast<CT_Polygon2DData*>(this)->getAreaIfNotSelfIntersecting();
 }
 
 bool CT_Polygon2DData::contains(double x, double y) const
@@ -239,16 +243,16 @@ bool CT_Polygon2DData::contains(double x, double y) const
     if (y < _min(1)) {return false;}
     if (y > _max(1)) {return false;}
 
-    Eigen::Vector2d *pt1 = NULL;
-    Eigen::Vector2d *pt2 = NULL;
+    Eigen::Vector2d* pt1 = NULL;
+    Eigen::Vector2d* pt2 = NULL;
     bool result = false;
 
-    int size = getVerticesNumber();
+    const int size = getVerticesNumber();
     pt1 = _vertices.at(size - 1);
+
     for (int i = 0 ; i < size ; i++)
     {
         pt2 = _vertices.at(i);
-
 
         if (((((*pt2)(1) <= y) && (y < (*pt1)(1))) || (((*pt1)(1) <= y) && (y < (*pt2)(1)))) &&
                 (x < (((*pt1)(0) - (*pt2)(0))*(y - (*pt2)(1))/((*pt1)(1) - (*pt2)(1)) + (*pt2)(0))))
@@ -261,25 +265,25 @@ bool CT_Polygon2DData::contains(double x, double y) const
     return result;
 }
 
-void CT_Polygon2DData::draw(PainterInterface &painter, bool drawPoints, bool drawLines, double zPlane) const
+void CT_Polygon2DData::draw(PainterInterface& painter, bool drawPoints, bool drawLines, double zPlane) const
 {
     if(drawPoints || drawLines)
     {
-        const QVector<Eigen::Vector2d*>&vertices = getVertices();
-        int size = vertices.size();
+        const QVector<Eigen::Vector2d*>& vertices = getVertices();
+        const int size = vertices.size();
 
-        Eigen::Vector2d *pt1 = vertices.last();
+        Eigen::Vector2d* pt1 = vertices.last();
+
         for (int i = 0 ; i < size ; i++)
         {
-            Eigen::Vector2d *pt2 = vertices.at(i);
+            Eigen::Vector2d* pt2 = vertices.at(i);
+
             if(drawPoints)
-            {
                 painter.drawPoint((*pt2)(0), (*pt2)(1), zPlane);
-            }
+
             if(drawLines)
-            {
                 painter.drawLine((*pt1)(0), (*pt1)(1), zPlane, (*pt2)(0), (*pt2)(1), zPlane);
-            }
+
             pt1 = pt2;
         }
     }
@@ -293,7 +297,7 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_PointCloudIndexVec
     CT_PointIterator it(indices);
     while(it.hasNext())
     {
-        const CT_Point &point = it.next().currentPoint();
+        const CT_Point& point = it.next().currentPoint();
         Eigen::Vector3d* pt = new Eigen::Vector3d(point);
 
         delaunay.insertNode(CT_NodeT::create(pt, NULL, true));
@@ -303,7 +307,7 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_PointCloudIndexVec
     return poly;
 }
 
-CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_DelaunayT &triangulation)
+CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_DelaunayT& triangulation)
 {
     QVector<Eigen::Vector2d*> convexHull;
 
@@ -319,23 +323,21 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_DelaunayT &triangu
         QSharedPointer<CT_NodeT> node = nodes.at(i);
         Eigen::Vector3d* point = node.data()->getPoint();
 
-        Eigen::Vector2d *vertice = new Eigen::Vector2d((*point)(0), (*point)(1));
+        Eigen::Vector2d* vertice = new Eigen::Vector2d((*point)(0), (*point)(1));
         convexHull.append(vertice);
     }
 
     return new CT_Polygon2DData(convexHull);
 }
 
-
-
-void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector2d*> &pointList)
+void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector2d*>& pointList)
 {
     std::sort(pointList.begin(), pointList.end(), compareV2d);
 }
 
 bool CT_Polygon2DData::compareV2d(const Eigen::Vector2d* p1, const Eigen::Vector2d* p2)
 {
-     return ((*p1)(0) < (*p2)(0) || ((*p1)(0) == (*p2)(0) && (*p1)(1) < (*p2)(1)));
+     return ((*p1)(0) < (*p2)(0) || ((*p1)(0) == (*p2)(0)& & (*p1)(1) < (*p2)(1)));
 }
 
 // 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
@@ -348,7 +350,7 @@ double CT_Polygon2DData::cross(const Eigen::Vector2d* O, const Eigen::Vector2d* 
 
 // Returns a list of points on the convex hull in counter-clockwise order.
 // Note: the last point in the returned list is the same as the first one.
-CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector2d*> &orderedCandidates)
+CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector2d*>& orderedCandidates)
 {
     // Adapted from http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
     // And also: http://www.codecodex.com/wiki/Andrew's_Monotone_Chain_Algorithm
@@ -378,7 +380,7 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector2d*> &or
     return new CT_Polygon2DData(H);
 }
 
-void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector3d*> &pointList)
+void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector3d*>& pointList)
 {
     std::sort(pointList.begin(), pointList.end(), compareV3d);
 }
@@ -398,7 +400,7 @@ double CT_Polygon2DData::cross(const Eigen::Vector3d* O, const Eigen::Vector3d* 
 
 // Returns a list of points on the convex hull in counter-clockwise order.
 // Note: the last point in the returned list is the same as the first one.
-CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector3d*> &orderedCandidates)
+CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector3d*>& orderedCandidates)
 {
     // Adapted from http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
     // And also: http://www.codecodex.com/wiki/Andrew's_Monotone_Chain_Algorithm

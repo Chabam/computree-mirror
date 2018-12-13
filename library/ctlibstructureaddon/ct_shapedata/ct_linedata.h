@@ -32,14 +32,17 @@
 
 #include "ct_defines.h"
 
-class CT_AbstractSingularItemDrawable;
+class CT_AbstractGeometricalItem;
 
-class PLUGINSHAREDSHARED_EXPORT CT_LineData : public CT_ShapeData
+class CTLIBSTRUCTUREADDON_EXPORT CT_LineData : public CT_ShapeData
 {
+    using SuperClass = CT_ShapeData;
+
 public:
     CT_LineData();
-    CT_LineData(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2);
-    CT_LineData(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2, double error, int n);
+    CT_LineData(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2);
+    CT_LineData(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2, double error, int n);
+    CT_LineData(const CT_LineData& other) = default;
 
     const Eigen::Vector3d& getP1() const;
     const Eigen::Vector3d& getP2() const;
@@ -63,28 +66,26 @@ public:
         return sqrt(getMSE());
     }
 
-    bool intersectionWithRect3D  (double plan_x, double plan_y, double plan_z, Eigen::Vector3d &vect_plan, double *xi, double *yi, double *zi);
+    bool intersectionWithRect3D  (double plan_x, double plan_y, double plan_z, Eigen::Vector3d& vect_plan, double* xi, double* yi, double* zi);
 
-    CT_LineData* clone() const;
+    CT_SHAPEDATA_CLONE_IMP(CT_LineData)
 
     /**
       * \brief Retourne les donnes d'une ligne 3D (rgression linaire)  partir du nuage de points passé en paramtre.
       *
       * \return NULL si le nombre de points est infrieur  2.
       */
-    static CT_LineData* staticCreateLineDataFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex);
+    static CT_LineData* staticCreateLineDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex);
 
+    static CT_LineData* staticCreateLineDataFromPointCloud(const QList<Eigen::Vector3d>& l_gp);
 
-    static CT_LineData* staticCreateLineDataFromPointCloud(const QList<Eigen::Vector3d> &l_gp);
-
-    static CT_LineData* staticCreateLineDataFromItemCenters(const QList<CT_AbstractSingularItemDrawable *> &items);
+    static CT_LineData* staticCreateLineDataFromItemCenters(const QList<CT_AbstractGeometricalItem*> &items);
 
 private:
-
-    Eigen::Vector3d   _p1;
-    Eigen::Vector3d   _p2;
-    int         _n_points;
-    double       _error;
+    Eigen::Vector3d     _p1;
+    Eigen::Vector3d     _p2;
+    double              _error;
+    int                 _n_points;
 };
 
 #endif // CT_LINEDATA_H

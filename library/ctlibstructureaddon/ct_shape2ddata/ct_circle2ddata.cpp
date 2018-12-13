@@ -34,15 +34,14 @@
 #include <math.h>
 #include "ct_math/ct_mathpoint.h"
 
-CT_Circle2DData::CT_Circle2DData() : CT_AreaShape2DData()
+CT_Circle2DData::CT_Circle2DData() : SuperClass(),
+    _radius(0)
 {
-    _radius = 0;
 }
 
-CT_Circle2DData::CT_Circle2DData(const Eigen::Vector2d &center, double radius) : CT_AreaShape2DData(center)
+CT_Circle2DData::CT_Circle2DData(const Eigen::Vector2d& center, double radius) : SuperClass(center),
+    _radius(radius)
 {
-    _radius = radius;
-
     _min(0) = center(0) - radius;
     _min(1) = center(1) - radius;
     _max(0) = center(0) + radius;
@@ -64,7 +63,7 @@ double CT_Circle2DData::getRadius() const
     return _radius;
 }
 
-void CT_Circle2DData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+void CT_Circle2DData::getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const
 {
     min(0) = _min(0);
     min(1) = _min(1);
@@ -88,17 +87,4 @@ bool CT_Circle2DData::contains(double x, double y) const
 double CT_Circle2DData::getArea() const
 {
     return M_PI*_radius*_radius;
-}
-
-CT_Circle2DData* CT_Circle2DData::clone() const
-{
-    return new CT_Circle2DData(getCenter(), getRadius());
-}
-
-CT_Circle2DData& CT_Circle2DData::operator= (const CT_Circle2DData& o)
-{
-    setCenter(o.getCenter());
-    setRadius(o.getRadius());
-
-    return *this;
 }

@@ -32,29 +32,31 @@
 
 #include <QVector>
 
-class PLUGINSHAREDSHARED_EXPORT CT_PlanarBSplineData : public CT_ShapeData
+class CTLIBSTRUCTUREADDON_EXPORT CT_PlanarBSplineData : public CT_ShapeData
 {
+    using SuperClass = CT_ShapeData;
+
 public:
     CT_PlanarBSplineData();
     CT_PlanarBSplineData(int nCP, int degree);
+    CT_PlanarBSplineData(const CT_PlanarBSplineData& other) = default;
 
     void reset(int nCP, int degree);
 
     void setCP(int index, double x, double y, double z);
-    void setCP(int index, const Eigen::Vector3d &value);
+    void setCP(int index, const Eigen::Vector3d& value);
     void setNodalValue(int index, double value);
 
-    const Eigen::Vector3d &getCPAt(int index) const;
+    const Eigen::Vector3d& getCPAt(int index) const;
     double getNodalValueAt(int index) const;
-
 
     inline int nCP() const {return _nCP;}
     inline int degree() const {return _degree;}
 
-    inline const QVector<Eigen::Vector3d> &getControlPoints() const {return _controlPoints;}
-    inline const QVector<double> &getNodalValues() const {return _nodalSequence;}
+    inline const QVector<Eigen::Vector3d> & getControlPoints() const {return _controlPoints;}
+    inline const QVector<double> & getNodalValues() const {return _nodalSequence;}
 
-    CT_PlanarBSplineData *clone() const;
+    CT_SHAPEDATA_CLONE_IMP(CT_PlanarBSplineData)
 
 private:
     int                         _degree;

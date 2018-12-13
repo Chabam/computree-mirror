@@ -28,29 +28,27 @@
 #ifndef CT_AREASHAPE2DDATA_H
 #define CT_AREASHAPE2DDATA_H
 
-#include "pluginShared_global.h"
 #include "ct_shape2ddata.h"
-
 
 /**
   * Reprsente les donnes d'une forme géomtrique 2D
   */
-class PLUGINSHAREDSHARED_EXPORT CT_AreaShape2DData : public CT_Shape2DData
+class CTLIBSTRUCTUREADDON_EXPORT CT_AreaShape2DData : public CT_Shape2DData
 {
+    using SuperClass = CT_Shape2DData;
+
 public:
-
-    CT_AreaShape2DData();
-    CT_AreaShape2DData(const Eigen::Vector2d &center);
-
-    virtual ~CT_AreaShape2DData();
+    CT_AreaShape2DData() = default;
+    CT_AreaShape2DData(const Eigen::Vector2d& center);
+    CT_AreaShape2DData(const CT_AreaShape2DData& other) = default;
 
     virtual bool contains(double x, double y) const = 0;
+
     virtual double getArea() const = 0;
 
 protected:
     Eigen::Vector2d _min;
     Eigen::Vector2d _max;
-
 };
 
 #endif // CT_AREASHAPE2DDATA_H

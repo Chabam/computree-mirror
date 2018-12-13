@@ -29,9 +29,6 @@
 
 #include "ct_pointcloudindex/abstract/ct_abstractpointcloudindex.h"
 
-#include <QDebug>
-
-
 #ifdef _MSC_VER
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -39,28 +36,36 @@
 
 const double CT_CylinderData::M_PI_X2 = M_PI*2.0;
 
-CT_CylinderData::CT_CylinderData() : CT_ShapeData()
+CT_CylinderData::CT_CylinderData() : SuperClass(),
+    _radius(0),
+    _h(0),
+    _lineError(0),
+    _circleError(0)
 {
-    _radius = 0;
-    _h = 0;
-    _lineError = 0;
-    _circleError = 0;
 }
 
-CT_CylinderData::CT_CylinderData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, double radius, double h) : CT_ShapeData(center, direction)
+CT_CylinderData::CT_CylinderData(const Eigen::Vector3d& center,
+                                 const Eigen::Vector3d& direction,
+                                 double radius,
+                                 double h) : SuperClass(center, direction),
+    _radius(radius),
+    _h(h),
+    _lineError(0),
+    _circleError(0)
 {
-    _radius = radius;
-    _h = h;
-    _lineError = 0;
-    _circleError = 0;
 }
 
-CT_CylinderData::CT_CylinderData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, double radius, double h, double lineError, double circleError) : CT_ShapeData(center, direction)
+CT_CylinderData::CT_CylinderData(const Eigen::Vector3d& center,
+                                 const Eigen::Vector3d& direction,
+                                 double radius,
+                                 double h,
+                                 double lineError,
+                                 double circleError) : SuperClass(center, direction),
+    _radius(radius),
+    _h(h),
+    _lineError(lineError),
+    _circleError(circleError)
 {
-    _radius = radius;
-    _h = h;
-    _lineError = lineError;
-    _circleError = circleError;
 }
 
 double CT_CylinderData::getRadius() const
@@ -93,30 +98,25 @@ void CT_CylinderData::setCircleError(double error)
     _circleError  = error;
 }
 
-CT_CylinderData* CT_CylinderData::clone() const
-{
-    return new CT_CylinderData(getCenter(), getDirection(), getRadius(), getHeight(), getLineError(), getCircleError());
-}
-
-CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex,
-                                                                           const Eigen::Vector3d &pointCloudBarycenter)
+CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
+                                                                           const Eigen::Vector3d& pointCloudBarycenter)
 {
     if(pointCloudIndex.size() < 3)
         return NULL;
 
     // fitting des points avec une ligne 3D
-    CT_LineData *lineData = CT_LineData::staticCreateLineDataFromPointCloud(pointCloudIndex);
+    CT_LineData* lineData = CT_LineData::staticCreateLineDataFromPointCloud(pointCloudIndex);
 
-    CT_CylinderData *data = CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDirection(pointCloudIndex, pointCloudBarycenter, *lineData);
+    CT_CylinderData* data = CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDirection(pointCloudIndex, pointCloudBarycenter, *lineData);
     delete lineData;
 
     return data;
 }
 
-CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDirection(const CT_AbstractPointCloudIndex &pointCloudIndex,
-                                                                                       const Eigen::Vector3d &pointCloudBarycenter,
-                                                                                       const CT_LineData &direction,
-                                                                                       CT_CircleData *outCircleData)
+CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDirection(const CT_AbstractPointCloudIndex& pointCloudIndex,
+                                                                                       const Eigen::Vector3d& pointCloudBarycenter,
+                                                                                       const CT_LineData& direction,
+                                                                                       CT_CircleData* outCircleData)
 {
     if(pointCloudIndex.size() < 3)
         return NULL;
@@ -177,7 +177,7 @@ CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDir
     // on deplace et tourne les points puis on fit un cercle
     CircleDataPreProcessingAction preProcessingAction(Eigen::Vector3d(tx, ty, tz), cos(rz), sin(rz), cos(ry), sin(ry));
 
-    CT_CircleData *circleData = CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(pointCloudIndex,
+    CT_CircleData* circleData = CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(pointCloudIndex,
                                                                                                                  &preProcessingAction);
     if(circleData == NULL)
         return NULL;
@@ -207,7 +207,7 @@ CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDir
     if(outCircleData != NULL)
         *outCircleData = *circleData;
 
-    CT_CylinderData *cylinderData = new CT_CylinderData(circleData->getCenter(),
+    CT_CylinderData* cylinderData = new CT_CylinderData(circleData->getCenter(),
                                                         vect_line,
                                                         circleData->getRadius(),
                                                         preProcessingAction.getZMax()-preProcessingAction.getZMin(),

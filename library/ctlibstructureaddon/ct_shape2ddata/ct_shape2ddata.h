@@ -28,34 +28,34 @@
 #ifndef CT_SHAPE2DDATA_H
 #define CT_SHAPE2DDATA_H
 
-#include "pluginShared_global.h"
+#include "ctlibstructureaddon_global.h"
 #include <Eigen/Core>
 
+#define CT_SHAPEDATA2D_CLONE_IMP(argClass) CT_Shape2DData* copy() const override { return clone(); } \
+                                           argClass* clone() const { return new argClass(*this); }
+
 /**
-  * Reprsente les donnes d'une forme géomtrique 2D
+  * Represent data of 2D geometrical item
   */
-class PLUGINSHAREDSHARED_EXPORT CT_Shape2DData
+class CTLIBSTRUCTUREADDON_EXPORT CT_Shape2DData
 {
 public:
-
-    CT_Shape2DData();
-    CT_Shape2DData(const Eigen::Vector2d &center);
-    CT_Shape2DData(const double &x, const double &y);
+    CT_Shape2DData() = default;
+    CT_Shape2DData(const Eigen::Vector2d& center);
+    CT_Shape2DData(const double& x, const double& y);
+    CT_Shape2DData(const CT_Shape2DData& other) = default;
     virtual ~CT_Shape2DData();
 
     const Eigen::Vector2d& getCenter() const;
-    void setCenter(const Eigen::Vector2d &center);
 
-    virtual void getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const = 0;
+    void setCenter(const Eigen::Vector2d& center);
+
+    virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const = 0;
 
     virtual CT_Shape2DData* copy() const = 0;
 
 protected:
-
     Eigen::Vector2d   _center;
-
-    friend class CT_AbstractShape2D;
-
 };
 
 #endif // CT_SHAPE2DDATA_H

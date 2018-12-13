@@ -27,19 +27,27 @@
 
 #include "ct_boxdata.h"
 
-CT_BoxData::CT_BoxData() : CT_ShapeData()
+CT_BoxData::CT_BoxData() : SuperClass(),
+    _height(0),
+    _width(0),
+    _depth(0)
 {
 }
 
-CT_BoxData::CT_BoxData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction, const Eigen::Vector3d &widthDirection, double height, double width, double depth) : CT_ShapeData(center, direction)
+CT_BoxData::CT_BoxData(const Eigen::Vector3d& center,
+                       const Eigen::Vector3d& direction,
+                       const Eigen::Vector3d& widthDirection,
+                       double height,
+                       double width,
+                       double depth) : SuperClass(center, direction),
+    _widthDirection(widthDirection),
+    _height(height),
+    _width(width),
+    _depth(depth)
 {
-    _widthDirection = widthDirection;
-    _height = height;
-    _width = width;
-    _depth = depth;
 }
 
-const Eigen::Vector3d &CT_BoxData::getWidthDirection() const
+const Eigen::Vector3d& CT_BoxData::getWidthDirection() const
 {
     return _widthDirection;
 }

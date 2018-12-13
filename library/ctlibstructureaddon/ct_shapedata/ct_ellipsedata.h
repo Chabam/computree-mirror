@@ -32,18 +32,21 @@
 #include "ct_linedata.h"
 #include "ct_defines.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_EllipseData : public CT_ShapeData
+class CTLIBSTRUCTUREADDON_EXPORT CT_EllipseData : public CT_ShapeData
 {
+    using SuperClass = CT_ShapeData;
+
 public:
     CT_EllipseData();
-    CT_EllipseData(const Eigen::Vector3d &center, const CT_LineData &axisA, const CT_LineData &axisB);
-    CT_EllipseData(const Eigen::Vector3d &center, const CT_LineData &axisA, const CT_LineData &axisB, double error);
+    CT_EllipseData(const Eigen::Vector3d &center, const CT_LineData& axisA, const CT_LineData& axisB);
+    CT_EllipseData(const Eigen::Vector3d &center, const CT_LineData& axisA, const CT_LineData& axisB, double error);
+    CT_EllipseData(const CT_EllipseData& other) = default;
 
     const CT_LineData& getAxisA() const;
     const CT_LineData& getAxisB() const;
     double getError() const;
 
-    CT_EllipseData* clone() const;
+    CT_SHAPEDATA_CLONE_IMP(CT_EllipseData)
 
     /**
       * \brief Retourne les donnes d'une ellipse 2D  partir du nuage de points pass en paramtre.

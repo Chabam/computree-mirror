@@ -27,18 +27,14 @@
 
 #include "ct_shapedata.h"
 
-CT_ShapeData::CT_ShapeData() {}
-
-CT_ShapeData::CT_ShapeData(const Eigen::Vector3d &center, const Eigen::Vector3d &direction)
+CT_ShapeData::CT_ShapeData(const Eigen::Vector3d& center, const Eigen::Vector3d& direction)
 {
     _center = center;
     _direction = direction;
     _direction.normalize();
 }
 
-CT_ShapeData::~CT_ShapeData() {}
-
-const Eigen::Vector3d &CT_ShapeData::getCenter() const
+const Eigen::Vector3d& CT_ShapeData::getCenter() const
 {
     return _center;
 }
@@ -48,12 +44,12 @@ const Eigen::Vector3d& CT_ShapeData::getDirection() const
     return _direction;
 }
 
-void CT_ShapeData::setCenter(const Eigen::Vector3d &center)
+void CT_ShapeData::setCenter(const Eigen::Vector3d& center)
 {
     _center = center;
 }
 
-void CT_ShapeData::setDirection(const Eigen::Vector3d &direction)
+void CT_ShapeData::setDirection(const Eigen::Vector3d& direction)
 {
     _direction = direction;
     _direction.normalize();

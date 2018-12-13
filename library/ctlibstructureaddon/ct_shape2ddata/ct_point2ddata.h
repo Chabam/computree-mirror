@@ -30,21 +30,22 @@
 
 #include "ct_shape2ddata.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_Point2DData : public CT_Shape2DData
+class CTLIBSTRUCTUREADDON_EXPORT CT_Point2DData : public CT_Shape2DData
 {
+    using SuperClass = CT_Shape2DData;
+
 public:
     CT_Point2DData();
-    CT_Point2DData(const Eigen::Vector2d &point);
-    CT_Point2DData(const double &x, const double &y);
+    CT_Point2DData(const Eigen::Vector2d& point);
+    CT_Point2DData(const double& x, const double& y);
+    CT_Point2DData(const CT_Point2DData& other) = default;
 
     double x() const;
     double y() const;
 
-    void getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
+    void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
 
-    CT_Point2DData* clone() const;
-    CT_Shape2DData* copy() const {return this->clone();}
-
+    CT_SHAPEDATA2D_CLONE_IMP(CT_Point2DData)
 };
 
 #endif // CT_POINT2DDATA_H
