@@ -1,4 +1,6 @@
-DEFAULT_EIGEN_INC_PATH = "./3rdparty/eigen"
+isEmpty(DEFAULT_EIGEN_INC_PATH) {
+    DEFAULT_EIGEN_INC_PATH = "./3rdparty/eigen"
+}
 
 ##### PCL ####
 include(../pcl_default_path.pri)

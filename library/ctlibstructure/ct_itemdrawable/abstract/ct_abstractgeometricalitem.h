@@ -36,7 +36,47 @@ public:
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */
-    CT_AbstractGeometricalItem(const CT_AbstractGeometricalItem& other);
+    CT_AbstractGeometricalItem(const CT_AbstractGeometricalItem& other) = default;
+
+    /**
+     * @brief Set the x center coordinate of this item
+     */
+    void setCenterX(double x);
+
+    /**
+     * @brief Set the y center coordinate of this item
+     */
+    void setCenterY(double y);
+
+    /**
+     * @brief Set the z center coordinate of this item
+     */
+    void setCenterZ(double z);
+
+    /**
+     * @brief Returns the x center coordinate of this item
+     */
+    double centerX() const override;
+
+    /**
+     * @brief Returns the y center coordinate of this item
+     */
+    double centerY() const override;
+
+    /**
+     * @brief Returns the z center coordinate of this item
+     */
+    double centerZ() const override;
+
+    /**
+     * @brief Set coordinate of the center
+     */
+    inline virtual void setCenterCoordinate(const Eigen::Vector3d& center) {m_centerCoordinates = center;}
+
+    /**
+     * @brief Returns coordinate of the center
+     */
+    inline const Eigen::Vector3d& centerCoordinate() const {return m_centerCoordinates;}
 
     /**
      * @brief Returns true if this item has a bounding box. All geometrical item has a bounding box so returns true by default.
@@ -128,14 +168,22 @@ private:
     /**
      * @brief Minimum corner of the bounding box
      */
-    Eigen::Vector3d   m_minCoordinates;
+    Eigen::Vector3d     m_minCoordinates;
 
     /**
      * @brief Maximum corner of the bounding box
      */
-    Eigen::Vector3d   m_maxCoordinates;
+    Eigen::Vector3d     m_maxCoordinates;
+
+    /**
+     * @brief Coordinates of the center of this item
+     */
+    Eigen::Vector3d     m_centerCoordinates;
 
     CT_DEFAULT_IA_BEGIN(CT_AbstractGeometricalItem)
+    CT_DEFAULT_IA_V2(CT_AbstractGeometricalItem, CT_AbstractCategory::staticInitDataCx(), &CT_AbstractGeometricalItem::centerX, QObject::tr("Center X"))
+    CT_DEFAULT_IA_V2(CT_AbstractGeometricalItem, CT_AbstractCategory::staticInitDataCy(), &CT_AbstractGeometricalItem::centerY, QObject::tr("Center Y"))
+    CT_DEFAULT_IA_V2(CT_AbstractGeometricalItem, CT_AbstractCategory::staticInitDataCz(), &CT_AbstractGeometricalItem::centerZ, QObject::tr("Center Z"))
     CT_DEFAULT_IA_V2(CT_AbstractGeometricalItem, CT_AbstractCategory::staticInitDataX(), &CT_AbstractGeometricalItem::minX, QObject::tr("Min X"))
     CT_DEFAULT_IA_V2(CT_AbstractGeometricalItem, CT_AbstractCategory::staticInitDataX(), &CT_AbstractGeometricalItem::maxX, QObject::tr("Max X"))
     CT_DEFAULT_IA_V2(CT_AbstractGeometricalItem, CT_AbstractCategory::staticInitDataY(), &CT_AbstractGeometricalItem::minY, QObject::tr("Min Y"))

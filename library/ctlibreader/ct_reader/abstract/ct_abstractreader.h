@@ -168,8 +168,8 @@ public:
      * @brief Return the list of out ItemDrawable created in the method "readFile" that have the type passed in parameter and remove
      *        them from this reader. Set the model and change the result of the ItemDrawable returned if result != NULL or model != NULL.
      *
-     * @example QList<CT_AbstractSingularItemDrawable*> scenes = takeItemDrawableOfType(CT_Scene::staticGetType()); // if you want to change the model and the result yourself
-     * @example QList<CT_AbstractSingularItemDrawable*> scenes = takeItemDrawableOfType(CT_Scene::staticGetType(), outResult, outSceneModel); // if you want to change the model and the result in this method
+     * @example QList<CT_AbstractSingularItemDrawable*> scenes = takeItemDrawableOfType(CT_Scene::staticType()); // if you want to change the model and the result yourself
+     * @example QList<CT_AbstractSingularItemDrawable*> scenes = takeItemDrawableOfType(CT_Scene::staticType(), outResult, outSceneModel); // if you want to change the model and the result in this method
      *
      * @warning this method remove ItemDrawable from the reader !
      */
@@ -200,8 +200,8 @@ public:
      * @brief Return the first ItemDrawable in the list that was created in the method "readFile" that have the type passed in parameter and remove
      *        them from this reader. Set the model and change the result of the ItemDrawable returned if result != NULL or model != NULL.
      *
-     * @example CT_AbstractSingularItemDrawable *scene = takeFirstItemDrawableOfType(CT_Scene::staticGetType()); // if you want to change the model and the result yourself
-     * @example CT_AbstractSingularItemDrawable *scene = takeFirstItemDrawableOfType(CT_Scene::staticGetType(), outResult, outSceneModel); // if you want to change the model and the result in this method
+     * @example CT_AbstractSingularItemDrawable *scene = takeFirstItemDrawableOfType(CT_Scene::staticType()); // if you want to change the model and the result yourself
+     * @example CT_AbstractSingularItemDrawable *scene = takeFirstItemDrawableOfType(CT_Scene::staticType(), outResult, outSceneModel); // if you want to change the model and the result in this method
      *
      * @warning this method remove ItemDrawable from the reader !
      */
@@ -231,7 +231,7 @@ public:
     /**
      * @brief Return the list of ItemDrawable created in the method "readFile" that have the type passed in parameter.
      *
-     *        example : itemDrawableOfType( CT_Scene::staticGetType() )
+     *        example : itemDrawableOfType( CT_Scene::staticType() )
      *
      * @warning this method DON'T remove ItemDrawable from the reader, it will be deleted by the reader in the destructor !
      */

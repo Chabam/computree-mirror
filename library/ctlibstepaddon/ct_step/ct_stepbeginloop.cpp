@@ -59,13 +59,13 @@ void CT_StepBeginLoop::declareOutputModels(CT_StepOutModelStructureManager& mana
 
 void CT_StepBeginLoop::compute()
 {
-    for(CT_ResultGroup* result : m_hOutResult.iterate()) {
-        CT_StandardItemGroup* rootGroup = m_hOutRootGroup.createInstance();
-        result->addRootGroupWithOutHandle(m_hOutRootGroup, rootGroup);
+    for(CT_ResultGroup* result : m_hOutResult.iterateOutputs()) {
+        CT_StandardItemGroup* rootGroup = new CT_StandardItemGroup();
+        result->addRootGroup(m_hOutRootGroup, rootGroup);
 
         _counter->setTurnName(QString("Turn%1").arg(_counter->currentTurn()));
 
-        rootGroup->addSingularItemWithOutHandle(m_hOutLoopCounter, m_hOutLoopCounter.createInstance(_counter, this));
+        rootGroup->addSingularItem(m_hOutLoopCounter, m_hOutLoopCounter.createInstance(_counter, this));
     }
 }
 

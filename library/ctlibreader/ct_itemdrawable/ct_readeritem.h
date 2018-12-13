@@ -66,7 +66,7 @@ public:
      *          - Auto delete reader is set to true
      */
     CT_ReaderItem(const CT_ReaderItem& other);
-    ~CT_ReaderItem();
+    ~CT_ReaderItem() override;
 
     /**
      * @brief Returns the reader

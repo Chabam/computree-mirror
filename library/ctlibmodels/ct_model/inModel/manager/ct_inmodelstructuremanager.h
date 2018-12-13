@@ -35,7 +35,7 @@ public:
     template<class HandleInResult>
     void addResult(HandleInResult& handleResult,
                    const QString& displayableName = QString{"In Result"},
-                   const QString& shortDescription = QString{""},
+                   const QString& shortDescription = QString(),
                    bool recursive = false) {
 
         checkNotNeedInputResultIsNotPresent();
@@ -92,16 +92,16 @@ public:
     template<class HandleInResult, class HandleInGroup>
     void setRootGroup(const HandleInResult& handleResult,
                       HandleInGroup& rootGroupHandle,
-                      const QString& displayableName = QString{"In Root Group"},
-                      const QString& shortDescription = QString{""},
-                      const QString& detailledDescription = QString{""}) {
+                      const QString& displayableName = QString(),
+                      const QString& shortDescription = QString(),
+                      const QString& detailledDescription = QString()) {
 
         checkNotNeedInputResultIsNotPresent();
 
         internalSetRootGroup(handleResult,
                              rootGroupHandle,
                              std::integral_constant<bool, IsAnInputModel<HandleInResult::ModelType>::Is && IsAnInputModel<HandleInGroup::ModelType>::Is>(),
-                             displayableName,
+                             displayableName.isEmpty() ? HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()) : displayableName,
                              shortDescription,
                              detailledDescription);
     }
@@ -117,16 +117,16 @@ public:
     template<class HandleInGroupParent, class HandleInGroup>
     void addGroup(const HandleInGroupParent& parentGroup,
                   HandleInGroup& groupHandle,
-                  const QString& displayableName = QString{"In Group"},
-                  const QString& shortDescription = QString{""},
-                  const QString& detailledDescription = QString{""}) {
+                  const QString& displayableName = QString(),
+                  const QString& shortDescription = QString(),
+                  const QString& detailledDescription = QString()) {
 
         checkNotNeedInputResultIsNotPresent();
 
         internalAddGroup(parentGroup,
                          groupHandle,
                          std::integral_constant<bool, IsAnInputModel<HandleInGroupParent::ModelType>::Is && IsAnInputModel<HandleInGroup::ModelType>::Is>(),
-                         displayableName,
+                         displayableName.isEmpty() ? HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()) : displayableName,
                          shortDescription,
                          detailledDescription);
     }
@@ -142,16 +142,16 @@ public:
     template<class HandleInGroupParent, class HandleInItem>
     void addItem(const HandleInGroupParent& parentGroup,
                  HandleInItem& itemHandle,
-                 const QString& displayableName = QString{"In Item"},
-                 const QString& shortDescription = QString{""},
-                 const QString& detailledDescription = QString{""}) {
+                 const QString& displayableName = QString(),
+                 const QString& shortDescription = QString(),
+                 const QString& detailledDescription = QString()) {
 
         checkNotNeedInputResultIsNotPresent();
 
         internalAddItem(parentGroup,
                         itemHandle,
                         std::integral_constant<bool, IsAnInputModel<HandleInGroupParent::ModelType>::Is && IsAnInputModel<HandleInItem::ModelType>::Is>(),
-                        displayableName,
+                        displayableName.isEmpty() ? HandleInItem::ItemType::nameFromType(HandleInItem::ItemType::staticType()) : displayableName,
                         shortDescription,
                         detailledDescription);
     }
@@ -170,8 +170,8 @@ public:
                           HandleInItemAttribute& itemAttributeHandle,
                           const Categories& categories,
                           const QString& displayableName = QString{"In Item Attribute"},
-                          const QString& shortDescription = QString{""},
-                          const QString& detailledDescription = QString{""}) {
+                          const QString& shortDescription = QString(),
+                          const QString& detailledDescription = QString()) {
 
         checkNotNeedInputResultIsNotPresent();
 

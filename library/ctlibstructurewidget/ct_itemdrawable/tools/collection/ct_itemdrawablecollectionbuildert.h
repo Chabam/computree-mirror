@@ -34,7 +34,7 @@ public:
     CT_ItemDrawableCollectionBuilderT(const CT_ItemDrawableCollectionBuilderT<Type...>& other) = default;
 
     /**
-     * @brief Build the collection of ItemDrawable that type (staticGetType) match with template (ItemDrawable1, ItemDrawable2, ...).
+     * @brief Build the collection of ItemDrawable that type (staticType) match with template (ItemDrawable1, ItemDrawable2, ...).
      * @param step : the step where begin the search (algorithme go up in the hierarchy of step to find in results items searched)
      * @param forceSearchModels : True to search only models if step was not already launched. In this case the attribute
      *                         "modelsCollection" and "modelResult" of CT_ItemDrawableCollectionHierarchyResult will be filled.

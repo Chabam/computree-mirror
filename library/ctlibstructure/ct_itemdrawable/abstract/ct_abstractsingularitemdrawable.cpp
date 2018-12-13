@@ -9,48 +9,28 @@ CT_DEFAULT_IA_INIT(CT_AbstractSingularItemDrawable)
 
 CT_AbstractSingularItemDrawable::CT_AbstractSingularItemDrawable() : SuperClass()
 {
-    m_centerCoordinates(0) = 0;
-    m_centerCoordinates(1) = 0;
-    m_centerCoordinates(2) = 0;
-
     m_defaultColor = Qt::white;
 }
 
 CT_AbstractSingularItemDrawable::CT_AbstractSingularItemDrawable(const CT_AbstractSingularItemDrawable& other) : SuperClass(other),
-    m_centerCoordinates(other.m_centerCoordinates),
     m_defaultColor(other.m_defaultColor)
 {
     // TODO : MK 20.11.18 copy item attributes
 }
 
-void CT_AbstractSingularItemDrawable::setCenterX(double x)
-{
-    m_centerCoordinates(0) = x;
-}
-
-void CT_AbstractSingularItemDrawable::setCenterY(double y)
-{
-    m_centerCoordinates(1) = y;
-}
-
-void CT_AbstractSingularItemDrawable::setCenterZ(double z)
-{
-    m_centerCoordinates(2) = z;
-}
-
 double CT_AbstractSingularItemDrawable::centerX() const
 {
-    return m_centerCoordinates(0);
+    return 0;
 }
 
 double CT_AbstractSingularItemDrawable::centerY() const
 {
-    return m_centerCoordinates(1);
+    return 0;
 }
 
 double CT_AbstractSingularItemDrawable::centerZ() const
 {
-    return m_centerCoordinates(2);
+    return 0;
 }
 
 bool CT_AbstractSingularItemDrawable::visitChildrens(const CT_AbstractItem::ChildrensVisitor& visitor) const

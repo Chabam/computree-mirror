@@ -218,7 +218,7 @@ public:
      * @warning There is no verification made to check that this item can be added or not to this group. Be sure what you do.
      */
     template<typename OutHandleType>
-    void addSingularItemWithOutHandle(const OutHandleType& outItemHandle, CT_AbstractSingularItemDrawable* item) {
+    void addSingularItem(const OutHandleType& outItemHandle, CT_AbstractSingularItemDrawable* item) {
         Q_ASSERT(model() != NULL);
 
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
@@ -380,7 +380,7 @@ public:
      * @warning There is no verification made to check that this group can be added or not to this group. Be sure what you do.
      */
     template<typename OutHandleType>
-    void addGroupWithOutHandle(const OutHandleType& outGroupHandle, CT_StandardItemGroup* group) {
+    void addGroup(const OutHandleType& outGroupHandle, CT_StandardItemGroup* group) {
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
         Q_ASSERT(model() != NULL);

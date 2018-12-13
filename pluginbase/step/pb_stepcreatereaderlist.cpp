@@ -104,10 +104,10 @@ void PB_StepCreateReaderList::declareOutputModels(CT_StepOutModelStructureManage
 
 void PB_StepCreateReaderList::compute()
 {
-    for(CT_ResultGroup* result : m_hOutResult.iterate()) {
+    for(CT_ResultGroup* result : m_hOutResult.iterateOutputs()) {
 
         CT_StandardItemGroup* rootGroup = m_hOutRootGroup.createInstance();
-        result->addRootGroupWithOutHandle(m_hOutRootGroup, rootGroup);
+        result->addRootGroup(m_hOutRootGroup, rootGroup);
 
         CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
 
@@ -123,19 +123,19 @@ void PB_StepCreateReaderList::compute()
                 if (readerCpy->setFilePath(filePath))
                 {
                     // create the group that will contains header and reader (represent a File)
-                    CT_StandardItemGroup* grpHeader = m_hOutFileGroup.createInstance();
-                    rootGroup->addGroupWithOutHandle(m_hOutFileGroup, grpHeader);
+                    CT_StandardItemGroup* grpHeader = new CT_StandardItemGroup();
+                    rootGroup->addGroup(m_hOutFileGroup, grpHeader);
 
                     // add the header
                     if(m_hOutFileHeader.isValid()) {
                         CT_FileHeader* header = readerCpy->readHeader();
                         Q_ASSERT(header != NULL);
-                        grpHeader->addSingularItemWithOutHandle(m_hOutFileHeader, header);
+                        grpHeader->addSingularItem(m_hOutFileHeader, header);
                     }
 
                     // add the reader item
                     CT_ReaderItem* rItem = new CT_ReaderItem(readerCpy, true);
-                    grpHeader->addSingularItemWithOutHandle(m_hOutReaderItem, rItem);
+                    grpHeader->addSingularItem(m_hOutReaderItem, rItem);
                 }
                 else
                 {

@@ -72,10 +72,23 @@ public:
      * @warning There is no verification made to check that this group can be added or not to this result. Be sure what you do.
      */
     template<typename OutHandleType>
-    void addRootGroupWithOutHandle(const OutHandleType& outRootGroupHandle, CT_StandardItemGroup* rootGroup) {
+    void addRootGroup(const OutHandleType& outRootGroupHandle, CT_StandardItemGroup* rootGroup) {
         Q_ASSERT(outRootGroupHandle.nModels() == 1);
 
         addRootGroupWithOutModel(outRootGroupHandle.firstModel(), rootGroup);
+    }
+
+    /**
+     * @brief Add a group to the result.
+     * @param outRootGroupHandle : the handle of the root group
+     * @param rootGroups : a collection of root group to add (life in memory of groups will be managed by this result)
+     * @warning There is no verification made to check that this group can be added or not to this result. Be sure what you do.
+     */
+    template<typename OutHandleType>
+    void addRootGroups(const OutHandleType& outRootGroupHandle, const QList<CT_StandardItemGroup*>& rootGroups) {
+        Q_ASSERT(outRootGroupHandle.nModels() == 1);
+
+        addRootGroupsWithOutModel(outRootGroupHandle.firstModel(), rootGroups);
     }
 
     /**

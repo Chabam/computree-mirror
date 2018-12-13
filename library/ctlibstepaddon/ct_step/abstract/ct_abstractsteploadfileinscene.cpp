@@ -157,14 +157,14 @@ void CT_AbstractStepLoadFileInScene::readDataFile(QFile &f, int offset, bool lit
 
 void CT_AbstractStepLoadFileInScene::createOutResult(CT_PCIR pcir, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax)
 {
-    for(CT_ResultGroup* res : m_hOutResult.iterate()) {
+    for(CT_ResultGroup* res : m_hOutResult.iterateOutputs()) {
         CT_StandardItemGroup* group = m_hOutRootGroup.createInstance();
 
         CT_Scene* scene = m_hOutScene.createInstance(pcir);
         scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
 
-        res->addRootGroupWithOutHandle(m_hOutRootGroup, group);
-        group->addSingularItemWithOutHandle(m_hOutScene, scene);
+        res->addRootGroup(m_hOutRootGroup, group);
+        group->addSingularItem(m_hOutScene, scene);
 
         return;
     }

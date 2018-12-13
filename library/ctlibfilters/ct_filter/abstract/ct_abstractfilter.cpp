@@ -9,10 +9,6 @@ CT_AbstractFilter::CT_AbstractFilter(const CT_AbstractFilter &other) : CT_Abstra
     Q_UNUSED(other);
 }
 
-CT_AbstractFilter::~CT_AbstractFilter()
-{
-}
-
 void CT_AbstractFilter::saveSettings(SettingsWriterInterface& writer) const
 {
     Q_UNUSED(writer)

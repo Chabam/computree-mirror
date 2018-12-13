@@ -20,7 +20,7 @@ public:
     /**
      * @brief Iterate over output results
      */
-    final_iterator iterate() const {
+    final_iterator iterateOutputs() const {
 
         QVector<CT_OutAbstractResultModel*> outModels(1);
         outModels[0] = model();

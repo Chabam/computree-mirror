@@ -36,30 +36,30 @@ void StepTestInputOutput::compute()
     m_inputItemsDisplayableName.clear();
     m_outputItemsDisplayableName.clear();
 
-    for(const CT_StandardItemGroup* group : m_hInGroup.iterateOverInputs(m_hInResult)) {
+    for(const CT_StandardItemGroup* group : m_hInGroup.iterateInputs(m_hInResult)) {
         m_inputGroupsDisplayableName.append(group->displayableName());
     }
 
-    for(const CT_AbstractSingularItemDrawable* item : m_hInItem.iterateOverInputs(m_hInResult)) {
+    for(const CT_AbstractSingularItemDrawable* item : m_hInItem.iterateInputs(m_hInResult)) {
         m_inputItemsDisplayableName.append(item->displayableName());
     }
 
-    for(CT_ResultGroup* result : m_hOutResult.iterate()) {
+    for(CT_ResultGroup* result : m_hOutResult.iterateOutputs()) {
         for(int i=0; i<8; ++i) {
-            CT_StandardItemGroup* rg = m_hOutRootGroup.createInstance();
+            CT_StandardItemGroup* rg = new CT_StandardItemGroup();
             //m_outputRootGroupsDisplayableName.append(QString("root group %1").arg(i));
             //rg->setDisplayableName(m_outputRootGroupsDisplayableName.last());
-            result->addRootGroupWithOutHandle(m_hOutRootGroup, rg);
+            result->addRootGroup(m_hOutRootGroup, rg);
 
-            CT_StandardItemGroup* g = m_hOutGroup1.createInstance();
+            CT_StandardItemGroup* g = new CT_StandardItemGroup();
             m_outputGroupsDisplayableName.append(QString("group %1").arg(i));
             g->setDisplayableName(m_outputGroupsDisplayableName.last());
-            rg->addGroupWithOutHandle(m_hOutGroup1, g);
+            rg->addGroup(m_hOutGroup1, g);
 
-            ItemForStepTest* item = m_hOutItem1.createInstance();
+            ItemForStepTest* item = new ItemForStepTest();
             m_outputItemsDisplayableName.append(QString("out item %1").arg(i));
             item->setDisplayableName(m_outputItemsDisplayableName.last());
-            g->addSingularItemWithOutHandle(m_hOutItem1, item);
+            g->addSingularItem(m_hOutItem1, item);
         }
     }
 }

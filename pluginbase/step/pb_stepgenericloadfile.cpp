@@ -163,10 +163,10 @@ void PB_StepGenericLoadFile::declareOutputModels(CT_StepOutModelStructureManager
 
 void PB_StepGenericLoadFile::compute()
 {
-    for(CT_ResultGroup* outRes : m_hOutResult.iterate()) {
+    for(CT_ResultGroup* outRes : m_hOutResult.iterateOutputs()) {
 
-        CT_StandardItemGroup* rootGroup = m_hOutRootGroup.createInstance();
-        outRes->addRootGroupWithOutHandle(m_hOutRootGroup, rootGroup);
+        CT_StandardItemGroup* rootGroup = new CT_StandardItemGroup();
+        outRes->addRootGroup(m_hOutRootGroup, rootGroup);
 
         m_reader->readFile(rootGroup);
 
@@ -175,7 +175,7 @@ void PB_StepGenericLoadFile::compute()
 
             Q_ASSERT(header != NULL);
 
-            rootGroup->addSingularItemWithOutHandle(m_hOutFileHeader, header);
+            rootGroup->addSingularItem(m_hOutFileHeader, header);
         }
     }
 }

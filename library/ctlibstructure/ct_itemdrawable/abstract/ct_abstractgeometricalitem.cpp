@@ -5,6 +5,10 @@ CT_DEFAULT_IA_INIT(CT_AbstractGeometricalItem)
 
 CT_AbstractGeometricalItem::CT_AbstractGeometricalItem() : SuperClass()
 {
+    m_centerCoordinates(0) = 0;
+    m_centerCoordinates(1) = 0;
+    m_centerCoordinates(2) = 0;
+
     m_minCoordinates(0) = std::numeric_limits<double>::max();
     m_minCoordinates(1) = std::numeric_limits<double>::max();
     m_minCoordinates(2) = std::numeric_limits<double>::max();
@@ -14,10 +18,34 @@ CT_AbstractGeometricalItem::CT_AbstractGeometricalItem() : SuperClass()
     m_maxCoordinates(2) = -std::numeric_limits<double>::max();
 }
 
-CT_AbstractGeometricalItem::CT_AbstractGeometricalItem(const CT_AbstractGeometricalItem& other) : SuperClass(other),
-    m_minCoordinates(other.m_minCoordinates),
-    m_maxCoordinates(other.m_maxCoordinates)
+void CT_AbstractGeometricalItem::setCenterX(double x)
 {
+    m_centerCoordinates(0) = x;
+}
+
+void CT_AbstractGeometricalItem::setCenterY(double y)
+{
+    m_centerCoordinates(1) = y;
+}
+
+void CT_AbstractGeometricalItem::setCenterZ(double z)
+{
+    m_centerCoordinates(2) = z;
+}
+
+double CT_AbstractGeometricalItem::centerX() const
+{
+    return m_centerCoordinates(0);
+}
+
+double CT_AbstractGeometricalItem::centerY() const
+{
+    return m_centerCoordinates(1);
+}
+
+double CT_AbstractGeometricalItem::centerZ() const
+{
+    return m_centerCoordinates(2);
 }
 
 void CT_AbstractGeometricalItem::boundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const

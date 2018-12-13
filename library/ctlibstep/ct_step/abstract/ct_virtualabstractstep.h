@@ -634,13 +634,6 @@ protected:
     virtual void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) { Q_UNUSED(preInputConfigDialog)}
 
     /**
-     * @brief Create a new standard pre configuration dialog. Call this method only once ! If you call this method multiple times the last
-     *        standard pre configuration dialog will be deleted from memory.
-     * @return The standard pre configuration dialog.
-     */
-    CT_StepConfigurableDialog* createOrGetStandardPreInputConfigurationDialog();
-
-    /**
      * @brief Show the pre configuration dialog.
      *
      * If you want to show your own configuration dialog your must overload this method and show your dialog when this method is called. Don't forget
@@ -971,6 +964,13 @@ private:
     GuiContextInterface*            m_currentGuiContext;                      /*!< gui context in manual or debug mode */
 
     bool                            m_isAPrototype;
+
+    /**
+     * @brief Create a new standard pre configuration dialog. Call this method only once ! If you call this method multiple times the last
+     *        standard pre configuration dialog will be deleted from memory.
+     * @return The standard pre configuration dialog.
+     */
+    CT_StepConfigurableDialog* createOrGetStandardPreInputConfigurationDialog();
 
     /**
      * @brief Call to create and fill the pre input configuration dialog

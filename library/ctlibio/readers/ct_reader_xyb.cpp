@@ -303,16 +303,16 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
             }
 
             // create and add the scene
-            CT_Scene* scene = m_hOutScene.createInstance(pcir);
+            CT_Scene* scene = new CT_Scene(pcir);
             scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
-            group->addSingularItemWithOutHandle(m_hOutScene, scene);
+            group->addSingularItem(m_hOutScene, scene);
 
             // create and add intensity
-            Intensity* pas =m_hOutIntensity.createInstance(pcir,
-                                                           collection,
-                                                           imin,
-                                                           imax);
-            group->addSingularItemWithOutHandle(m_hOutIntensity, pas);
+            Intensity* pas = new Intensity(pcir,
+                                           collection,
+                                           imin,
+                                           imax);
+            group->addSingularItem(m_hOutIntensity, pas);
 
             if ((m_current._rows <= 0) || (m_current._cols <= 0))
                 return true;
@@ -320,17 +320,17 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
             // create and add the scanner
             const double hres = 150.0 / ((double)m_current._rows);
             const double vres = 360.0 / ((double)m_current._cols);
-            group->addSingularItemWithOutHandle(m_hOutScanner, m_hOutScanner.createInstance(0,
-                                                                                            m_current.m_center,
-                                                                                            Eigen::Vector3d(0,1,0),
-                                                                                            360,
-                                                                                            150,
-                                                                                            hres,
-                                                                                            vres,
-                                                                                            0,
-                                                                                            0,
-                                                                                            true,
-                                                                                            false));
+            group->addSingularItem(m_hOutScanner, new CT_Scanner(0,
+                                                                 m_current.m_center,
+                                                                 Eigen::Vector3d(0,1,0),
+                                                                 360,
+                                                                 150,
+                                                                 hres,
+                                                                 vres,
+                                                                 0,
+                                                                 0,
+                                                                 true,
+                                                                 false));
 
             return true;
         }

@@ -26,18 +26,18 @@ void STepTestEasy::compute()
     m_outputGroupsDisplayableName.clear();
     m_outputItemsDisplayableName.clear();
 
-    for(CT_ResultGroup* result : m_hOutResult.iterate()) {
+    for(CT_ResultGroup* result : m_hOutResult.iterateOutputs()) {
 
         for(int i=0; i<3; ++i) {
-            CT_StandardItemGroup* rg = m_hOutRootGroup.createInstance();
+            CT_StandardItemGroup* rg = new CT_StandardItemGroup();
             m_outputGroupsDisplayableName.append(QString("group %1").arg(i));
             rg->setDisplayableName(m_outputGroupsDisplayableName.last());
-            result->addRootGroupWithOutHandle(m_hOutRootGroup, rg);
+            result->addRootGroup(m_hOutRootGroup, rg);
 
-            ItemForStepTest* item = m_hOutItem.createInstance();
+            ItemForStepTest* item = new ItemForStepTest();
             m_outputItemsDisplayableName.append(QString("item %1").arg(i));
             item->setDisplayableName(m_outputItemsDisplayableName.last());
-            rg->addSingularItemWithOutHandle(m_hOutItem, item);
+            rg->addSingularItem(m_hOutItem, item);
         }
     }
 }

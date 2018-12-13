@@ -1,6 +1,7 @@
 CT_PREFIX = ..
 CT_PREFIX_INSTALL = ../..
 CT_LIB_PREFIX = ../library
+DEFAULT_EIGEN_INC_PATH = "$$CT_LIB_PREFIX/3rdparty/eigen"
 
 COMPUTREE = ctlibplugin
 

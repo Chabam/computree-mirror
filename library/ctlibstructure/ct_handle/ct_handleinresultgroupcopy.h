@@ -25,7 +25,7 @@ public:
     /**
      * @brief Iterate over input results
      */
-    final_const_iterator iterateOverInputs() const {
+    final_const_iterator iterateInputs() const {
         QVector<CT_OutAbstractResultModel*> outModels;
         int currentIndex = 0;
 
@@ -46,7 +46,7 @@ public:
     /**
      * @brief Iterate over copies (output results)
      */
-    final_iterator iterate() const {
+    final_iterator iterateOutputs() const {
         using InResultToolType = ModelType::ToolToModifyResultModelCopiesType;
         using OutResultModelType = InResultToolType::ModelType;
 

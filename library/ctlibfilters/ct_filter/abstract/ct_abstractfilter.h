@@ -13,12 +13,11 @@ class CTLIBFILTERS_EXPORT CT_AbstractFilter : public CT_AbstractConfigurableElem
 public:
     CT_AbstractFilter();
     CT_AbstractFilter(const CT_AbstractFilter &other);
-    ~CT_AbstractFilter();
 
     /**
      * @brief Do nothing by default. You can inherit it if you want to do some change after configuration
      */
-    void postConfigure() override {}
+    virtual void postConfigure() {}
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;

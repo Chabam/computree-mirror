@@ -41,21 +41,6 @@ public:
     CT_AbstractSingularItemDrawable(const CT_AbstractSingularItemDrawable& other);
 
     /**
-     * @brief Set the x center coordinate of this item
-     */
-    void setCenterX(double x);
-
-    /**
-     * @brief Set the y center coordinate of this item
-     */
-    void setCenterY(double y);
-
-    /**
-     * @brief Set the z center coordinate of this item
-     */
-    void setCenterZ(double z);
-
-    /**
      * @brief Returns the x center coordinate of this item
      */
     double centerX() const override;
@@ -69,16 +54,6 @@ public:
      * @brief Returns the z center coordinate of this item
      */
     double centerZ() const override;
-
-    /**
-     * @brief Set coordinate of the center
-     */
-    inline virtual void setCenterCoordinate(const Eigen::Vector3d& center) {m_centerCoordinates = center;}
-
-    /**
-     * @brief Returns coordinate of the center
-     */
-    inline const Eigen::Vector3d& centerCoordinate() const {return m_centerCoordinates;}
 
     /**
      * @brief Visit childrens. Redefined to visit item attributes (default and new).
@@ -104,7 +79,7 @@ public:
      * @warning There is no verification made to check that this item attribute can be added or not to this item. Be sure what you do.
      */
     template<typename OutHandleType>
-    void addItemAttributeWithOutHandle(const OutHandleType& outItemAttributeHandle, CT_AbstractItemAttribute* itemAttribute) {
+    void addItemAttribute(const OutHandleType& outItemAttributeHandle, CT_AbstractItemAttribute* itemAttribute) {
         Q_ASSERT(model() != NULL);
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
@@ -274,12 +249,6 @@ private:
     QColor                      m_defaultColor;
 
     /**
-     * @brief Coordinates of the center of this item
-     */
-    Eigen::Vector3d             m_centerCoordinates;
-
-
-    /**
      * @brief Writted to create a default Item Attribute
      */
     quint64 pId() const {return id();}
@@ -294,9 +263,6 @@ private:
     CT_DEFAULT_IA_BEGIN(CT_AbstractSingularItemDrawable)
     CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataId(), &CT_AbstractSingularItemDrawable::pId, QObject::tr("ID"))
     CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataDisplayableName(), &CT_AbstractSingularItemDrawable::pDisplayableName, QObject::tr("Name"))
-    CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataCx(), &CT_AbstractSingularItemDrawable::centerX, QObject::tr("Center X"))
-    CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataCy(), &CT_AbstractSingularItemDrawable::centerY, QObject::tr("Center Y"))
-    CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataCz(), &CT_AbstractSingularItemDrawable::centerZ, QObject::tr("Center Z"))
     CT_DEFAULT_IA_END(CT_AbstractSingularItemDrawable)
 };
 

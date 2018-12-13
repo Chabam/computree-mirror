@@ -21,7 +21,7 @@ public:
     /**
      * @brief Iterate over input results
      */
-    final_const_iterator iterateOverInputs() const {
+    final_const_iterator iterateInputs() const {
         QVector<CT_OutAbstractResultModel*> outModels;
         int currentIndex = 0;
 

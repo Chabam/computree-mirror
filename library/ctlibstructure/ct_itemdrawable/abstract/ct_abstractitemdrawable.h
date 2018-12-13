@@ -38,7 +38,7 @@
 #include <QMutex>
 
 #include <set>
-#include <Eigen/Core>
+#include "Eigen/Core"
 
 /**
   * @brief Use this define in your class to add type information

@@ -381,7 +381,7 @@ void TestStructure::testCompleteStructureCreation()
 
     CT_StandardItemGroup* rootGroup = hRootGroup.createInstance();
     QVERIFY(rootGroup != NULL);
-    result->addRootGroupWithOutHandle(hRootGroup, rootGroup);
+    result->addRootGroup(hRootGroup, rootGroup);
 
     QVERIFY(rootGroup->result() == result);
     QVERIFY(rootGroup->model() == hRootGroup.firstModel());
@@ -389,7 +389,7 @@ void TestStructure::testCompleteStructureCreation()
 
     CT_StandardItemGroup* childGroup = hChildGroup.createInstance();
     QVERIFY(childGroup != NULL);
-    rootGroup->addGroupWithOutHandle(hChildGroup, childGroup);
+    rootGroup->addGroup(hChildGroup, childGroup);
 
     QVERIFY(childGroup->result() == result);
     QVERIFY(childGroup->model() == hChildGroup.firstModel());
@@ -397,7 +397,7 @@ void TestStructure::testCompleteStructureCreation()
 
     MySingularItem* childItem = hChildItem.createInstance();
     QVERIFY(childItem != NULL);
-    childGroup->addSingularItemWithOutHandle(hChildItem, childItem);
+    childGroup->addSingularItem(hChildItem, childItem);
 
     QVERIFY(childItem->result() == result);
     QVERIFY(childItem->model() == hChildItem.firstModel());
@@ -407,7 +407,7 @@ void TestStructure::testCompleteStructureCreation()
     QVERIFY(attribute != NULL);
     QVERIFY(attribute->category() == cat);
     QVERIFY(attribute->data(NULL) == 5.0);
-    childItem->addItemAttributeWithOutHandle(hItemAttribute, attribute);
+    childItem->addItemAttribute(hItemAttribute, attribute);
 
     QVERIFY(attribute->result() == result);
     QVERIFY(attribute->model() == hItemAttribute.firstModel());
@@ -489,9 +489,9 @@ void TestStructure::testCompleteStructureCreationInDifferentOrder()
 
     // Must this be allowed ??
 
-    //childGroup->addSingularItemWithOutHandle(hChildItem, childItem);
-    //rootGroup->addGroupWithOutHandle(hChildGroup, childGroup);
-    //result->addRootGroupWithOutHandle(hRootGroup, rootGroup);
+    //childGroup->addSingularItem(hChildItem, childItem);
+    //rootGroup->addGroup(hChildGroup, childGroup);
+    //result->addRootGroup(hRootGroup, rootGroup);
 
     bool addInDifferentOrderIsAllowed = false;
 
@@ -646,10 +646,10 @@ void TestStructure::testCompleteStructureCreationAndOneCopy()
     MySingularItem* childItem = hOutChildItem.createInstance();
     auto itemAttribute = hOutItemAttribute.createInstance(cat, false);
 
-    outResult1->addRootGroupWithOutHandle(hOutRootGroup, rootGroup);
-    rootGroup->addGroupWithOutHandle(hOutChildGroup, childGroup);
-    childGroup->addSingularItemWithOutHandle(hOutChildItem, childItem);
-    childItem->addItemAttributeWithOutHandle(hOutItemAttribute, itemAttribute);
+    outResult1->addRootGroup(hOutRootGroup, rootGroup);
+    rootGroup->addGroup(hOutChildGroup, childGroup);
+    childGroup->addSingularItem(hOutChildItem, childItem);
+    childItem->addItemAttribute(hOutItemAttribute, itemAttribute);
 
     outResult1->setComplete();
     step1.addResult(outResult1);
@@ -694,25 +694,25 @@ void TestStructure::testCompleteStructureCreationAndOneCopy()
     myDebug() << "--------- iterator ---------";
 
     // iterate over copies
-    for(CT_ResultGroup* result : hInResultCopy.iterate()) {
+    for(CT_ResultGroup* result : hInResultCopy.iterateOutputs()) {
         Q_UNUSED(result)
     }
 
     // iterate over inputs
-    for(const CT_ResultGroup* result : hInResultCopy.iterateOverInputs()) {
+    for(const CT_ResultGroup* result : hInResultCopy.iterateInputs()) {
         Q_UNUSED(result)
     }
 
     // iterate over copies
     // and add item to found groups in real output 2
-    for(CT_StandardItemGroup* group : hInChildGroup.iterate(hInResultCopy)) {
+    for(CT_StandardItemGroup* group : hInChildGroup.iterateOutputs(hInResultCopy)) {
         myDebug() << group->model() << " <- " << hOutChildItem2.firstModel();
-        group->addSingularItemWithOutHandle(hOutChildItem2, hOutChildItem2.createInstance());
+        group->addSingularItem(hOutChildItem2, hOutChildItem2.createInstance());
     }
 
     // iterate over inputs
     // and add item to found groups in real output 2
-    for(const CT_StandardItemGroup* group : hInChildGroup.iterateOverInputs(hInResultCopy)) {
+    for(const CT_StandardItemGroup* group : hInChildGroup.iterateInputs(hInResultCopy)) {
         Q_UNUSED(group)
     }
 
@@ -780,10 +780,10 @@ void TestStructure::testCompleteStructureCreationAndDoubleCopy()
     MySingularItem* childItem = hOutChildItem.createInstance();
     auto itemAttribute = hOutItemAttribute.createInstance(cat, false);
 
-    outResult1->addRootGroupWithOutHandle(hOutRootGroup, rootGroup);
-    rootGroup->addGroupWithOutHandle(hOutChildGroup, childGroup);
-    childGroup->addSingularItemWithOutHandle(hOutChildItem, childItem);
-    childItem->addItemAttributeWithOutHandle(hOutItemAttribute, itemAttribute);
+    outResult1->addRootGroup(hOutRootGroup, rootGroup);
+    rootGroup->addGroup(hOutChildGroup, childGroup);
+    childGroup->addSingularItem(hOutChildItem, childItem);
+    childItem->addItemAttribute(hOutItemAttribute, itemAttribute);
 
     outResult1->setComplete();
     step1.addResult(outResult1);
@@ -832,8 +832,8 @@ void TestStructure::testCompleteStructureCreationAndDoubleCopy()
     });
 
     // add item attribute to found items in real output 1
-    for(CT_AbstractSingularItemDrawable* item : hInChildItem.iterate(hInResultCopy)) {
-        item->addItemAttributeWithOutHandle(hOutItemAttribute2, hOutItemAttribute2.createInstance(cat, 2.4));
+    for(CT_AbstractSingularItemDrawable* item : hInChildItem.iterateOutputs(hInResultCopy)) {
+        item->addItemAttribute(hOutItemAttribute2, hOutItemAttribute2.createInstance(cat, 2.4));
     }
 
     outResult1Copied->setComplete();
@@ -881,8 +881,8 @@ void TestStructure::testCompleteStructureCreationAndDoubleCopy()
     });
 
     // add item attribute to found items in real output 2
-    for(CT_AbstractSingularItemDrawable* item : hInChildItem2.iterate(hInResultCopy2)) {
-        item->addItemAttributeWithOutHandle(hOutItemAttribute3, hOutItemAttribute3.createInstance(cat, "coucou"));
+    for(CT_AbstractSingularItemDrawable* item : hInChildItem2.iterateOutputs(hInResultCopy2)) {
+        item->addItemAttribute(hOutItemAttribute3, hOutItemAttribute3.createInstance(cat, "coucou"));
     }
 
     outResult2Copied->setComplete();

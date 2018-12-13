@@ -3,6 +3,7 @@
 CT_LIB_PREFIX = ..
 CT_PREFIX = ..
 CT_PREFIX_INSTALL = ../../..
+DEFAULT_EIGEN_INC_PATH = "../3rdparty/eigen"
 
 exists($$TARGET/libdependencies.pri) {
     include($$TARGET/libdependencies.pri)

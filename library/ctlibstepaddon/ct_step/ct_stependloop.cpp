@@ -47,7 +47,7 @@ void CT_StepEndLoop::compute()
 {    
     m_mustRecheckTree = false;
 
-    for(CT_LoopCounter* counter : m_hInLoopCounter.iterate(m_hInResultCopy)) {
+    for(CT_LoopCounter* counter : m_hInLoopCounter.iterateOutputs(m_hInResultCopy)) {
 
         STEP_LOG->addInfoMessage(tr("Fin de boucle, tour %1 sur %2").arg(counter->currentTurn()).arg(counter->nTurns()));
 
