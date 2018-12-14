@@ -3,9 +3,17 @@
 # to make qmake more faster :
 CONFIG -= depend_includepath
 
-CT_PREFIX = ..
-CT_PREFIX_INSTALL = ../..
-CT_LIB_PREFIX = ../library
+isEmpty(CT_PREFIX) {
+    CT_PREFIX = ..
+}
+
+isEmpty(CT_PREFIX_INSTALL) {
+    CT_PREFIX_INSTALL = $$CT_PREFIX
+}
+
+isEmpty(CT_LIB_PREFIX) {
+    CT_LIB_PREFIX = $$CT_PREFIX/library
+}
 
 # all plugins needs this library
 COMPUTREE += ctlibplugin
