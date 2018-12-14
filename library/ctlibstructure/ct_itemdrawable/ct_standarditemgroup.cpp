@@ -253,17 +253,7 @@ bool CT_StandardItemGroup::removeSingularItemWithOutModel(const DEF_CT_AbstractI
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
-    const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
-
-    ItemContainerType* ct = m_newItemsAdded.value(key, NULL);
-
-    if(ct != NULL)
-    {
-        ct->setWillBeRemovedLater();
-        return true;
-    }
-
-    ct = m_itemsCopied.value(key, NULL);
+    ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
     if(ct != NULL)
     {
@@ -308,17 +298,10 @@ bool CT_StandardItemGroup::containsSingularItemWithOutModel(const DEF_CT_Abstrac
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
-    const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
-
-    ItemContainerType* ct = m_newItemsAdded.value(key, NULL);
+    ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
     if(ct == NULL)
-    {
-        ct = m_itemsCopied.value(key, NULL);
-
-        if(ct == NULL)
-            return false;
-    }
+        return false;
 
     return !ct->willBeRemovedLater();
 }
@@ -503,19 +486,9 @@ CT_AbstractSingularItemDrawable* CT_StandardItemGroup::singularItemWithOutModel(
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
-    const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
+    const ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
-    ItemContainerType* ct = m_newItemsAdded.value(key, NULL);
-
-    if(ct == NULL)
-    {
-        ct = m_itemsCopied.value(key, NULL);
-
-        if(ct == NULL)
-            return NULL;
-    }
-
-    return ct->willBeRemovedLater() ? NULL : ct->item();
+    return ((ct == NULL) || ct->willBeRemovedLater()) ? NULL : ct->item();
 }
 
 bool CT_StandardItemGroup::visitSingularItemsInSelectedPossibilitiesOfInModel(const DEF_CT_AbstractItemDrawableModelIn* inModel,
@@ -581,12 +554,7 @@ bool CT_StandardItemGroup::removeGroupsWithOutModel(const DEF_CT_AbstractGroupMo
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-    const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
-
-    GroupContainerType* container = m_newGroupsAdded.value(key, NULL);
-
-    if(container == NULL)
-        container = m_groupsCopied.value(key, NULL);
+    GroupContainerType* container = groupContainerWithOutModel(outModel);
 
     if(container == NULL)
         return false;
@@ -800,12 +768,7 @@ bool CT_StandardItemGroup::containsGroupWithOutModel(const DEF_CT_AbstractGroupM
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
 
-    const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
-
-    GroupContainerType* container = m_newGroupsAdded.value(key, NULL);
-
-    if(container == NULL)
-        container = m_groupsCopied.value(key, NULL);
+    GroupContainerType* container = groupContainerWithOutModel(outModel);
 
     if(container == NULL)
         return false;
@@ -1072,18 +1035,11 @@ void CT_StandardItemGroup::staticCopyItemsFromXToBackupIfChildrenItemsAreStillPr
 
 CT_StandardItemGroup::IChildrensIteratorQtStyleSharedPtr CT_StandardItemGroup::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
 {
-    const OutModelKeyType key = outModelKey(outModel);
-
     // is a group ?
     if(dynamic_cast<const CT_OutAbstractGroupModel*>(outModel) != NULL) {
         QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
 
-        GroupContainerType* groupContainer = m_newGroupsAdded.value(key, NULL);
-
-        if(groupContainer != NULL)
-            return IChildrensIteratorQtStyleSharedPtr(new GroupQtIterator(groupContainer->begin(), groupContainer->end()));
-
-        groupContainer = m_groupsCopied.value(key, NULL);
+        GroupContainerType* groupContainer = groupContainerWithOutModel(outModel);
 
         if(groupContainer != NULL)
             return IChildrensIteratorQtStyleSharedPtr(new GroupQtIterator(groupContainer->begin(), groupContainer->end()));
@@ -1093,21 +1049,47 @@ CT_StandardItemGroup::IChildrensIteratorQtStyleSharedPtr CT_StandardItemGroup::c
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
-    ItemContainerType* ct = m_newItemsAdded.value(key, NULL);
+    ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
     if(ct != NULL)
     {
         if(!ct->willBeRemovedLater())
             return IChildrensIteratorQtStyleSharedPtr(new ItemQtIterator(ct->item()));
-    } else {
-        ct = m_itemsCopied.value(key, NULL);
-
-        if(ct != NULL)
-        {
-            if(!ct->willBeRemovedLater())
-                return IChildrensIteratorQtStyleSharedPtr(new ItemQtIterator(ct->item()));
-        }
     }
 
     return IChildrensIteratorQtStyleSharedPtr(NULL);
 }
+
+CT_StandardItemGroup::ItemContainerType* CT_StandardItemGroup::itemContainerWithOutModel(const CT_OutAbstractModel* outModel) const
+{
+    Q_ASSERT(outModel != NULL);
+
+    const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
+
+    ItemContainerType* ct = m_newItemsAdded.value(key, NULL);
+
+    if(ct == NULL)
+        ct = m_itemsCopied.value(key, NULL);
+
+    return ct;
+}
+
+CT_StandardItemGroup::GroupContainerType* CT_StandardItemGroup::groupContainerWithOutModel(const CT_OutAbstractModel* outModel) const
+{
+    Q_ASSERT(outModel != NULL);
+
+    const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
+
+    GroupContainerType* groupContainer = m_newGroupsAdded.value(key, NULL);
+
+    if(groupContainer == NULL)
+        groupContainer = m_groupsCopied.value(key, NULL);
+
+    return groupContainer;
+}
+
+template<>
+CT_StandardItemGroup::GroupContainerType* CT_StandardItemGroup::containerWithOutModel(const CT_OutAbstractModel* outModel) const { return groupContainerWithOutModel(outModel); }
+
+template<>
+CT_StandardItemGroup::ItemContainerType* CT_StandardItemGroup::containerWithOutModel(const CT_OutAbstractModel* outModel) const { return itemContainerWithOutModel(outModel); }

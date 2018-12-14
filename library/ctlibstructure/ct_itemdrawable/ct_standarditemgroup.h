@@ -10,6 +10,8 @@
 #include "ct_model/outModel/abstract/def_ct_abstractitemdrawablemodelout.h"
 #include "ct_model/inModel/abstract/def_ct_abstractgroupmodelin.h"
 #include "ct_model/inModel/abstract/def_ct_abstractitemdrawablemodelin.h"
+#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
+#include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
 
 #include "ct_iterator/ct_multicollectioniteratorstdstyle.h"
 #include "ct_tools/ct_handleiteratort.h"
@@ -334,7 +336,10 @@ public:
      * @param itemHandle : the handle of the item (input or output)
      */
     template<typename HandleType>
-    SingularItemIterator singularItems(const HandleType& itemHandle) {
+    SingularItemIterator singularItems(const HandleType& itemHandle) const {
+        Q_ASSERT(model() != NULL);
+        QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
+
         return internalSingularItems(itemHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
     }
 
@@ -474,6 +479,18 @@ public:
      * @return An object that you can use to iterate over groups
      */
     GroupIterator groups() const;
+
+    /**
+     * @brief Returns an object to iterate over items that use the specified handle.
+     * @param itemHandle : the handle of the item (input or output)
+     */
+    template<typename HandleType>
+    GroupIterator groups(const HandleType& groupHandle) const {
+        Q_ASSERT(model() != NULL);
+        QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
+
+        return internalGroups(groupHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+    }
 
     /**
      * @brief Visit only new groups that will not be removed
@@ -738,30 +755,69 @@ private:
     void*               m_context;
 
     /**
+     * @brief Returns the item container that use the specified model or NULL if no container was found
+     */
+    ItemContainerType* itemContainerWithOutModel(const CT_OutAbstractModel* outModel) const;
+
+    /**
+     * @brief Returns the group container that use the specified model or NULL if no container was found
+     */
+    GroupContainerType* groupContainerWithOutModel(const CT_OutAbstractModel* outModel) const;
+
+    template<typename ContainerType>
+    ContainerType* containerWithOutModel(const CT_OutAbstractModel*) const { static_assert(false, "You can not call this method with this type of container !"); }
+
+    /**
      * @brief Returns an object to iterate over items that use the specified handle.
-     * @param itemHandle : the handle of the item (input or output)
+     * @param outItemHandle : the handle of the item (output)
      */
     template<typename OutHandleType>
     SingularItemIterator internalSingularItems(const OutHandleType& outItemHandle,
-                                               std::true_type) {
-        Q_ASSERT(model() != NULL);
+                                               std::true_type) const {
+        return internalXXXWithOutputHandle<SingularItemIterator, MultiItemCollectionIterator, ItemContainerType, OutHandleType>(outItemHandle);
+    }
 
-        QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
+    /**
+     * @brief Returns an object to iterate over items that use the specified handle.
+     * @param inItemHandle : the handle of the item (input)
+     */
+    template<typename InHandleType>
+    SingularItemIterator internalSingularItems(const InHandleType& inItemHandle,
+                                               std::false_type) const {
+        return internalXXXWithInputHandle<SingularItemIterator, MultiItemCollectionIterator, ItemContainerType, InHandleType>(inItemHandle);
+    }
 
+    /**
+     * @brief Returns an object to iterate over groups that use the specified handle.
+     * @param outGroupHandle : the handle of the group (output)
+     */
+    template<typename OutHandleType>
+    GroupIterator internalGroups(const OutHandleType& outGroupHandle,
+                                 std::true_type) const {
+        return internalXXXWithOutputHandle<GroupIterator, MultiGroupCollectionIterator, GroupContainerType, OutHandleType>(outGroupHandle);
+    }
+
+    /**
+     * @brief Returns an object to iterate over groups that use the specified handle.
+     * @param inGroupHandle : the handle of the group (input)
+     */
+    template<typename InHandleType>
+    GroupIterator internalGroups(const InHandleType& inGroupHandle,
+                                 std::false_type) const {
+        return internalXXXWithInputHandle<GroupIterator, MultiGroupCollectionIterator, GroupContainerType, InHandleType>(inGroupHandle);
+    }
+
+    template<typename Iterator, typename MultiCollectionIterator, typename ContainerType, typename OutHandleType>
+    Iterator internalXXXWithOutputHandle(const OutHandleType& outGroupHandle) const {
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findModelWithParent(model());
+        const CT_OutAbstractModel* outModelToUse = outGroupHandle.findModelWithParent(model());
 
         Q_ASSERT(outModelToUse != NULL);
 
-        const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModelToUse);
+        const ContainerType* ct = groupContainerWithOutModel(outModelToUse);
 
-        ItemContainerType* ct = m_newItemsAdded.value(key, NULL);
-
-        if(ct == NULL)
-            ct = m_itemsCopied.value(key, NULL);
-
-        using iterator = ItemContainerType::const_iterator;
+        using iterator = ContainerType::const_iterator;
         using info = QPair<iterator, iterator>;
 
         std::vector<info> infos;
@@ -771,19 +827,52 @@ private:
             infos[0] = qMakePair(ct->constBegin(), ct->constEnd());
         }
 
-        return SingularItemIterator(MultiItemCollectionIterator::create(infos), MultiItemCollectionIterator());
+        return Iterator(MultiCollectionIterator::create(infos), MultiCollectionIterator());
     }
 
-    /**
-     * @brief Returns an object to iterate over items that use the specified handle.
-     * @param itemHandle : the handle of the item (input or output)
-     */
-    template<typename InHandleType>
-    SingularItemIterator internalSingularItems(const InHandleType& inItemHandle,
-                                               std::false_type) {
-        static_assert(false, "TODO !!!");
+    template<typename Iterator, typename MultiCollectionIterator, typename ContainerType, typename InHandleType>
+    Iterator internalXXXWithInputHandle(const InHandleType& inHandle) const {
+        const CT_InAbstractModel* inOriginalModel = inHandle.model();
+        const CT_InAbstractResultModel* inOriginalResultModel = dynamic_cast<CT_InAbstractResultModel*>(inOriginalModel->rootModel());
+
+        Q_ASSERT(inOriginalResultModel != NULL);
+
+        using iterator = ContainerType::const_iterator;
+        using info = QPair<iterator, iterator>;
+
+        std::vector<info> infos;
+
+        const int nResultPossibility = inOriginalResultModel->nPossibilitySaved();
+
+        for(int i=0; i<nResultPossibility; ++i) {
+            if(inOriginalResultModel->possibilitySavedAt(i)->isSelected()) {
+                CT_InAbstractModel* inModelWithPossibilities = static_cast<CT_InStdResultModelPossibility*>(inOriginalResultModel->possibilitySavedAt(i))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(inOriginalModel);
+
+                const CT_InStdModelPossibilitySelectionGroup* selectionGroup = inModelWithPossibilities->possibilitiesGroup();
+
+                for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
+                    const CT_OutAbstractModel* outModel = possibility->outModel();
+
+                    if(outModel->parentModel() == model()) {
+                        const ContainerType* ct = containerWithOutModel<ContainerType>(possibility->outModel());
+
+                        if(ct != NULL)
+                            infos.push_back(qMakePair(ct->constBegin(), ct->constEnd()));
+                    }
+                }
+            }
+        }
+
+        return Iterator(MultiCollectionIterator::create(infos), MultiCollectionIterator());
     }
 };
+
+template<>
+CTLIBSTRUCTURE_EXPORT CT_StandardItemGroup::GroupContainerType* CT_StandardItemGroup::containerWithOutModel(const CT_OutAbstractModel* outModel) const;
+
+template<>
+CTLIBSTRUCTURE_EXPORT CT_StandardItemGroup::ItemContainerType* CT_StandardItemGroup::containerWithOutModel(const CT_OutAbstractModel* outModel) const;
+
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CT_StandardItemGroup::RemoveLaterBits)
 

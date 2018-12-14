@@ -710,11 +710,18 @@ void TestStructure::testCompleteStructureCreationAndOneCopy()
         group->addSingularItem(hOutChildItem2, hOutChildItem2.createInstance());
     }
 
+    int countChildItem = 0;
+
     // iterate over inputs
     // and add item to found groups in real output 2
     for(const CT_StandardItemGroup* group : hInChildGroup.iterateInputs(hInResultCopy)) {
-        Q_UNUSED(group)
+        for(const CT_AbstractSingularItemDrawable* item : group->singularItems(hInChildItem)) {
+            Q_UNUSED(item)
+            ++countChildItem;
+        }
     }
+
+    QCOMPARE(countChildItem, 1);
 
     // verify the final structure
     myDebug() << "--------- outResult 2 (final) ---------";

@@ -22,7 +22,7 @@ public:
 
     template<class HandleInResult>
     final_const_iterator iterateInputs(const HandleInResult& inResult) const {
-        QVector<DEF_CT_AbstractGroupModelOut*> outModels;
+        QVector<CT_OutAbstractModel*> outModels;
         int currentIndex = 0;
 
         const CT_InAbstractModel* inResultModel = inResult.model();
@@ -38,7 +38,7 @@ public:
                 outModels.resize(outModels.size() + selectionGroup->nPossibilitySelected());
 
                 for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
-                    outModels[currentIndex++] = static_cast<DEF_CT_AbstractGroupModelOut*>(possibility->outModel());
+                    outModels[currentIndex++] = possibility->outModel();
                 }
             }
         }
