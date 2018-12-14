@@ -27,19 +27,15 @@
 #ifndef CT_DELAUNAYTRIANGLE_H
 #define CT_DELAUNAYTRIANGLE_H
 
-#include "pluginShared_global.h"
 #include "ct_shape2ddata/ct_polygon2ddata.h"
 #include "ct_delaunayvertex.h"
-
-#include <QDebug>
-
 
 /**
  * DelaunayTriangle - Triangle of the Delaunay triangulation.
  *
  * @author A. Piboule - february 2004
  */
-class PLUGINSHAREDSHARED_EXPORT CT_DelaunayTriangle
+class CTLIBSTRUCTUREADDON_EXPORT CT_DelaunayTriangle
 {
 
 public:

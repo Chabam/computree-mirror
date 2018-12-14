@@ -3,15 +3,15 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.h"
 
-#ifdef USE_OPENCV
 template< typename DataT>
 class CT_StandardImage2DDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardImage2DDrawManager(QString drawConfigurationName = "", bool mapMode = true, bool scale = false);
-    virtual ~CT_StandardImage2DDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
 protected:
 
@@ -39,7 +39,7 @@ protected:
     static QString staticInitConfigMapModeShowGrid();
     static QString staticInitConfigMapModeClusterMode();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 
 private:
     bool    _defaultMapMode;
@@ -47,6 +47,5 @@ private:
 };
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp"
-#endif
 
 #endif // CT_STANDARDIMAGE2DDRAWMANAGER_H

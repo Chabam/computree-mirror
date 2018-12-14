@@ -153,16 +153,22 @@ bool CT_DelaunayOutline::contains(double x, double y)
     else                                        {return true;}
 }
 
-CT_Polygon2DData *CT_DelaunayOutline::getShape()
+CT_Polygon2DData* CT_DelaunayOutline::getShape()
 {
-    QVector<Eigen::Vector2d *> vertices;
+    const int size = _vertices.size();
 
-    for (int i = 0 ; i < _vertices.size() ; i++)
+    QVector<Eigen::Vector2d> vertices;
+    vertices.resize(size);
+
+    for(int i=0; i<size; ++i)
     {
-        CT_DelaunayVertex* vt = _vertices.at(i);
-        vertices.append(new Eigen::Vector2d(vt->x(), vt->y()));
+        const CT_DelaunayVertex* vt = _vertices.at(i);
+
+        Eigen::Vector2d& v = vertices[i];
+        v(0) = vt->x();
+        v(1) = vt->y();
     }
 
-    return new CT_Polygon2DData(vertices, false);
+    return new CT_Polygon2DData(vertices);
 }
 

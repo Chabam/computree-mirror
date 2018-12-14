@@ -3,13 +3,14 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardReferencePointDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardReferencePointDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardReferencePointDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardReferencePointDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
 protected:
 
@@ -21,7 +22,7 @@ protected:
     static QString staticInitConfigFactor();
     static QString staticInitConfigPointSize();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 };
 
 #endif // CT_STANDARDREFERENCEPOINTDRAWMANAGER_H

@@ -29,7 +29,10 @@
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_itemdrawable/abstract/ct_abstractgeometricalitem.h"
 
+#ifdef _MSC_VER
 #define _USE_MATH_DEFINES
+#endif
+
 #include <math.h>
 #include "ct_math/ct_mathpoint.h"
 

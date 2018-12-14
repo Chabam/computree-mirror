@@ -44,6 +44,21 @@ const Eigen::Vector3d& CT_ShapeData::getDirection() const
     return _direction;
 }
 
+void CT_ShapeData::setCenterX(const double& x)
+{
+    _center(0) = x;
+}
+
+void CT_ShapeData::setCenterY(const double& y)
+{
+    _center(1) = y;
+}
+
+void CT_ShapeData::setCenterZ(const double& z)
+{
+    _center(2) = z;
+}
+
 void CT_ShapeData::setCenter(const Eigen::Vector3d& center)
 {
     _center = center;

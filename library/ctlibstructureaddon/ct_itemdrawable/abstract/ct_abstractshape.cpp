@@ -28,23 +28,19 @@
 #include "ct_abstractshape.h"
 
 
-CT_AbstractShape::CT_AbstractShape() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_AbstractShape::CT_AbstractShape() : SuperClass(),
+    _data(NULL)
 {
-    _data = NULL;
 }
 
-CT_AbstractShape::CT_AbstractShape(const CT_OutAbstractSingularItemModel *model,
-                                   const CT_AbstractResult *result,
-                                   CT_ShapeData *data) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+CT_AbstractShape::CT_AbstractShape(CT_ShapeData* data) : SuperClass(),
+    _data(data)
 {
-    _data = data;
 }
 
-CT_AbstractShape::CT_AbstractShape(const QString &modelName,
-                                   const CT_AbstractResult *result,
-                                   CT_ShapeData *data) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
+CT_AbstractShape::CT_AbstractShape(const CT_AbstractShape& other) : SuperClass(other),
+    _data((other._data != NULL) ? other._data->copy() : NULL)
 {
-    _data = data;
 }
 
 CT_AbstractShape::~CT_AbstractShape()
@@ -54,42 +50,26 @@ CT_AbstractShape::~CT_AbstractShape()
 
 void CT_AbstractShape::setCenterX(double x)
 {
-    getDataNotConst()->_center(0) = x;
+    _data->setCenterX(x);
+    SuperClass::setCenterX(x);
 }
 
 void CT_AbstractShape::setCenterY(double y)
 {
-    getDataNotConst()->_center(1) = y;
+    _data->setCenterY(y);
+    SuperClass::setCenterY(y);
 }
 
 void CT_AbstractShape::setCenterZ(double z)
 {
-    getDataNotConst()->_center(2) = z;
+    _data->setCenterZ(z);
+    SuperClass::setCenterZ(z);
 }
 
-void CT_AbstractShape::setCenterCoordinate(const Eigen::Vector3d &center)
+void CT_AbstractShape::setCenterCoordinate(const Eigen::Vector3d& center)
 {
-    getDataNotConst()->_center = center;
-}
-
-double CT_AbstractShape::getCenterX() const
-{
-    return getDataNotConst()->getCenter().x();
-}
-
-double CT_AbstractShape::getCenterY() const
-{
-    return getDataNotConst()->getCenter().y();
-}
-
-double CT_AbstractShape::getCenterZ() const
-{
-    return getDataNotConst()->getCenter().z();
-}
-
-const Eigen::Vector3d &CT_AbstractShape::getCenterCoordinate() const
-{
-    return getDataNotConst()->getCenter();
+    _data->setCenter(center);
+    SuperClass::setCenterCoordinate(center);
 }
 
 const CT_ShapeData* CT_AbstractShape::getPointerData() const
@@ -126,7 +106,6 @@ double CT_AbstractShape::getDirectionZ() const
 {
     return _data->getDirection().z();
 }
-
 
 CT_ShapeData* CT_AbstractShape::getDataNotConst() const
 {

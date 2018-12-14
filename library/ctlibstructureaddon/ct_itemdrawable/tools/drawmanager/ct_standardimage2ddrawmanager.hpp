@@ -2,17 +2,15 @@
 #define CT_STANDARDIMAGE2DDRAWMANAGER_HPP
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h"
+#include "painterinterface.h"
 
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef USE_OPENCV
 #include "ct_itemdrawable/ct_image2d.h"
 #include "ct_tools/ct_typeinfo.h"
 
 #include <ctime>
-
-#include <QObject>
 
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_3D_MODE_ENABLED = CT_StandardImage2DDrawManager<DataT>::staticInitConfig3DModeEnabled();
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_3D_MODE_LINK_POINTS_ENABLED = CT_StandardImage2DDrawManager<DataT>::staticInitConfig3DModeLinkPointsEnabled();
@@ -28,35 +26,30 @@ template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::I
 
 template< typename DataT >
 CT_StandardImage2DDrawManager<DataT>::CT_StandardImage2DDrawManager(QString drawConfigurationName, bool mapMode, bool scale)
-    : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(drawConfigurationName.isEmpty() ? CT_Image2D<DataT>::staticName() : drawConfigurationName)
+    : SuperClass(drawConfigurationName.isEmpty() ? CT_Image2D<DataT>::staticName() : drawConfigurationName)
 {
     _defaultMapMode = mapMode;
     _defaultScaleState = scale;
 }
 
 template< typename DataT >
-CT_StandardImage2DDrawManager<DataT>::~CT_StandardImage2DDrawManager()
-{
-}
-
-template< typename DataT >
 void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
 {
-    CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::draw(view, painter, itemDrawable);
+    SuperClass::draw(view, painter, itemDrawable);
 
-    const CT_Image2D<DataT> &item = dynamic_cast< const CT_Image2D<DataT>& >(itemDrawable);
+    const CT_Image2D<DataT> &item = static_cast< const CT_Image2D<DataT>& >(itemDrawable);
 
-    bool mode3D = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_3D_MODE_ENABLED).toBool();
-    bool relier = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_3D_MODE_LINK_POINTS_ENABLED).toBool();
-    bool relief = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_3D_MODE_HEIGHT_MAP_ENABLED).toBool();
-    bool echelle = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_3D_MODE_SCALING_ENABLED).toBool();
-    double zmin = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_3D_MODE_ZMIN_SCALE_VALUE).toDouble();
-    double zmax = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_3D_MODE_ZMAX_SCALE_VALUE).toDouble();
-    bool modeMap = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAP_MODE_ENABLED).toBool();
-    bool fixerZ = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_ENABLED).toBool();
-    double z = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_VALUE).toDouble();
-    bool show_grid = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAP_MODE_SHOW_GRID).toBool();
-    bool clusterMode = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAP_MODE_CLUSTER_MODE).toBool();
+    bool mode3D = drawConfiguration()->variableValue(INDEX_CONFIG_3D_MODE_ENABLED).toBool();
+    bool relier = drawConfiguration()->variableValue(INDEX_CONFIG_3D_MODE_LINK_POINTS_ENABLED).toBool();
+    bool relief = drawConfiguration()->variableValue(INDEX_CONFIG_3D_MODE_HEIGHT_MAP_ENABLED).toBool();
+    bool echelle = drawConfiguration()->variableValue(INDEX_CONFIG_3D_MODE_SCALING_ENABLED).toBool();
+    double zmin = drawConfiguration()->variableValue(INDEX_CONFIG_3D_MODE_ZMIN_SCALE_VALUE).toDouble();
+    double zmax = drawConfiguration()->variableValue(INDEX_CONFIG_3D_MODE_ZMAX_SCALE_VALUE).toDouble();
+    bool modeMap = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ENABLED).toBool();
+    bool fixerZ = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_ENABLED).toBool();
+    double z = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_VALUE).toDouble();
+    bool show_grid = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_SHOW_GRID).toBool();
+    bool clusterMode = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_CLUSTER_MODE).toBool();
 
     double amplitude = item.dataMax() - item.dataMin();
     double scaling = (zmax - zmin) / amplitude;
@@ -302,7 +295,7 @@ CT_ItemDrawableConfiguration CT_StandardImage2DDrawManager<DataT>::createDrawCon
 {
     CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
 
-    item.addAllConfigurationOf(CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::createDrawConfiguration(drawConfigurationName));
+    item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
 
     // Adding lines to this config dialog box
     item.addNewConfiguration(staticInitConfigMapModeEnabled(), QObject::tr("Mode Raster"), CT_ItemDrawableConfiguration::Bool, _defaultMapMode);
@@ -388,5 +381,5 @@ QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeClusterMode
 {
     return "IM2D_COLMD";
 }
-#endif
+
 #endif // CT_STANDARDIMAGE2DDRAWMANAGER_HPP

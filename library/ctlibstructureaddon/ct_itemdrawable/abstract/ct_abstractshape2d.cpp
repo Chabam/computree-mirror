@@ -26,57 +26,42 @@
 *****************************************************************************/
 
 #include "ct_abstractshape2d.h"
-#include "ct_global/ct_context.h"
 
 // initialize default item attributes of this class for each unique number declared
 CT_DEFAULT_IA_INIT(CT_AbstractShape2D)
 
+double CT_AbstractShape2D::Z_PLANE_FOR_2D_SHAPES = 0;
 
-CT_AbstractShape2D::CT_AbstractShape2D() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_AbstractShape2D::CT_AbstractShape2D() : SuperClass(),
+    _data(NULL),
+    _zValue(0),
+    _zValueDefined(false)
 {
-    _data = NULL;
-    _zValue = 0;
-    _zValueDefined = false;
 }
 
-CT_AbstractShape2D::CT_AbstractShape2D(const CT_OutAbstractSingularItemModel *model,
-                                   const CT_AbstractResult *result,
-                                   CT_Shape2DData *data) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+CT_AbstractShape2D::CT_AbstractShape2D(CT_Shape2DData* data) : SuperClass(),
+    _data(data),
+    _zValue(0),
+    _zValueDefined(false)
 {
-    _data = data;
-    _zValue = 0;
-    _zValueDefined = false;
+    Q_ASSERT(_data != NULL);
 
-    if (_data != NULL)
-    {
-        data->getBoundingBox(_minCoordinates, _maxCoordinates);
+    Eigen::Vector3d min, max;
+    _data->getBoundingBox(min, max);
+    min(2) = 0;
+    max(2) = 0;
+    setBoundingBox(min, max);
 
-        const Eigen::Vector2d &center2D = data->getCenter();
-        Eigen::Vector3d center(center2D(0), center2D(1), 0);
-        CT_AbstractItemDrawableWithoutPointCloud::setCenterCoordinate(center);
-    }
+    const Eigen::Vector2d& center2D = data->getCenter();
+    SuperClass::setCenterCoordinate(Eigen::Vector3d(center2D(0), center2D(1), 0));
 
 }
 
-CT_AbstractShape2D::CT_AbstractShape2D(const QString &modelName,
-                                   const CT_AbstractResult *result,
-                                   CT_Shape2DData *data) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
+CT_AbstractShape2D::CT_AbstractShape2D(const CT_AbstractShape2D& other) : SuperClass(other),
+    _data((other._data != NULL) ? other._data->copy() : NULL),
+    _zValue(other._zValue),
+    _zValueDefined(other._zValueDefined)
 {
-    _data = data;
-    _zValue = 0;
-    _zValueDefined = false;
-
-    if (_data != NULL)
-    {
-        data->getBoundingBox(_minCoordinates, _maxCoordinates);
-
-        _minCoordinates(2) = 0;
-        _maxCoordinates(2) = 0;
-
-        const Eigen::Vector2d &center2D = data->getCenter();
-        Eigen::Vector3d center(center2D(0), center2D(1), 0);
-        CT_AbstractItemDrawableWithoutPointCloud::setCenterCoordinate(center);
-    }
 }
 
 CT_AbstractShape2D::~CT_AbstractShape2D()
@@ -86,31 +71,38 @@ CT_AbstractShape2D::~CT_AbstractShape2D()
 
 void CT_AbstractShape2D::setCenterX(double x)
 {
-    getDataNotConst()->_center(0) = x;
+    _data->setCenterX(x);
+    SuperClass::setCenterX(x);
 }
 
 void CT_AbstractShape2D::setCenterY(double y)
 {
-    getDataNotConst()->_center(1) = y;
+    _data->setCenterY(y);
+    SuperClass::setCenterY(y);
 }
 
-void CT_AbstractShape2D::setCenterCoordinate(const Eigen::Vector3d &center)
+void CT_AbstractShape2D::setCenterZ(double z)
 {
-    getDataNotConst()->_center(0) = center(0);
-    getDataNotConst()->_center(1) = center(1);
+    setZValue(z);
+}
 
-    Eigen::Vector3d center3D(center(0), center(1), 0);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterCoordinate(center3D);
+void CT_AbstractShape2D::setCenterCoordinate(const Eigen::Vector3d& center)
+{
+    const Eigen::Vector3d center3D(center(0), center(1), _zValueDefined ? _zValue : Z_PLANE_FOR_2D_SHAPES);
+    _data->setCenter(center3D);
+
+    SuperClass::setCenterCoordinate(center3D);
 }
 
 void CT_AbstractShape2D::setZValue(double z)
 {
     _zValue = z;
     _zValueDefined = true;
-    setCenterZ(z);
+
+    SuperClass::setCenterZ(z);
 }
 
-double CT_AbstractShape2D::getZValue() const
+double CT_AbstractShape2D::zValue() const
 {
     return _zValue;
 }
@@ -118,16 +110,6 @@ double CT_AbstractShape2D::getZValue() const
 bool CT_AbstractShape2D::isZValueDefined() const
 {
     return _zValueDefined;
-}
-
-double CT_AbstractShape2D::getCenterX() const
-{
-    return getDataNotConst()->getCenter()(0);
-}
-
-double CT_AbstractShape2D::getCenterY() const
-{
-    return getDataNotConst()->getCenter()(1);
 }
 
 const CT_Shape2DData* CT_AbstractShape2D::getPointerData() const
@@ -140,18 +122,20 @@ const CT_Shape2DData& CT_AbstractShape2D::getData() const
     return *_data;
 }
 
-const Eigen::Vector2d &CT_AbstractShape2D::getCenter() const
+const Eigen::Vector2d& CT_AbstractShape2D::getCenter() const
 {
     return _data->getCenter();
 }
 
-void CT_AbstractShape2D::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+void CT_AbstractShape2D::setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max)
 {
-    CT_AbstractItemDrawableWithoutPointCloud::getBoundingBox(min, max);
-    double zplane = CT_Context::staticInstance()->getZPlaneFor2DShapes();
+    Eigen::Vector3d cmin = min;
+    Eigen::Vector3d cmax = max;
 
-    min(2) = zplane;
-    max(2) = zplane;
+    cmin(2) = _zValueDefined ? _zValue : Z_PLANE_FOR_2D_SHAPES;
+    cmax(2) = cmin(2);
+
+    SuperClass::setBoundingBox(cmin, cmax);
 }
 
 CT_Shape2DData* CT_AbstractShape2D::getDataNotConst() const

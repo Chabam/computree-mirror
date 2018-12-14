@@ -107,13 +107,14 @@ void CT_DelaunayVertex::getVerticesWithin(double dist, QList<CT_DelaunayVertex *
 
 CT_Polygon2DData *CT_DelaunayVertex::getVoroShape()
 {
-    QVector<Eigen::Vector2d *> vertices;
+    const int size = _voroVertices.size();
+    QVector<Eigen::Vector2d> vertices(size);
 
-    for (int i = 0 ; i < _voroVertices.size() ; i++)
+    for (int i = 0 ; i <size ; i++)
     {
-        CT_DelaunayVoroVertex* vt = _voroVertices.at(i);
-        vertices.append(new Eigen::Vector2d(vt->x(), vt->y()));
+        const CT_DelaunayVoroVertex* vt = _voroVertices[i];
+        vertices[i] = Eigen::Vector2d(vt->x(), vt->y());
     }
 
-    return new CT_Polygon2DData(vertices, false);
+    return new CT_Polygon2DData(vertices);
 }

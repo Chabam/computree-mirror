@@ -6,15 +6,12 @@
 
 #include <QList>
 
-#include "pluginShared_global.h"
+#include "ctlibmath_global.h"
 
-
-class PLUGINSHAREDSHARED_EXPORT CT_MathStatistics
+class CTLIBMATH_EXPORT CT_MathStatistics
 {
 public:
-
     static double computeQuantile(QList<double> &values, double quantile, bool sort = false);
-
 };
 
 #endif // CT_MATHSTATISTICS_H

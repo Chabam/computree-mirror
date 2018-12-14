@@ -3,9 +3,9 @@
 
 #include <Eigen/Core>
 
-#include "pluginShared_global.h"
+#include "ctlibmath_global.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_Math2DLines
+class CTLIBMATH_EXPORT CT_Math2DLines
 {
 public:
 

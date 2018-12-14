@@ -58,8 +58,3 @@ void CT_Point2DData::getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) 
     max(1) = getCenter()(1);
     max(2) = 0;
 }
-
-CT_Point2DData* CT_Point2DData::clone() const
-{
-    return new CT_Point2DData(getCenter());
-}

@@ -28,7 +28,6 @@
 #ifndef CT_IMAGE2D_H
 #define CT_IMAGE2D_H
 
-#ifdef USE_OPENCV
 #include "ct_itemdrawable/abstract/ct_abstractimage2d.h"
 #include "ct_itemdrawable/tools/ct_itemplateddata2darray.h"
 #include "ct_math/ct_math.h"
@@ -48,6 +47,9 @@ template< typename DataT > class CT_StandardImage2DDrawManager;
 template< typename DataT>
 class CT_Image2D : public CT_AbstractImage2D, public CT_ITemplatedData2DArray<DataT>
 {
+    CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Image2D, DataT, CT_AbstractImage2D, Raster)
+    using SuperClass = CT_AbstractImage2D;
+
 public:
 
     /*!
@@ -66,11 +68,6 @@ public:
       */
     CT_Image2D();
 
-    CT_Image2D(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result);
-
-    CT_Image2D(const QString &modelName, const CT_AbstractResult *result);
-
-
     /*!
      * \brief Contructor with integer column and row coordinates
      *
@@ -85,9 +82,7 @@ public:
      * \param na Value used to code NA
      * \param initValue Initialisation value for raster cells
      */
-    CT_Image2D(const CT_OutAbstractSingularItemModel *model,
-                const CT_AbstractResult *result,
-                double xmin,
+    CT_Image2D(double xmin,
                 double ymin,
                 size_t dimx,
                 size_t dimy,
@@ -96,22 +91,30 @@ public:
                 DataT na,
                 DataT initValue);
 
-    CT_Image2D(const QString &modelName,
-                const CT_AbstractResult *result,
-                double xmin,
-                double ymin,
-                size_t dimx,
-                size_t dimy,
-                double resolution,
-                double zlevel,
-                DataT na,
-                DataT initValue);
+    /**
+     * @brief Copy constructor.
+     *
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - Unique ID
+     *          - Pointer of base and alternative draw manager
+     *          - Displayable name
+     *          - Center coordinates
+     *          - Default Color
+     *          - Min and Max coordinates (bounding box)
+     *          - OpenCv mat
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     */
+    CT_AbstractImage2D(const CT_AbstractImage2D& other) = default;
 
     /*!
      * \brief Destructor
      */
-    virtual ~CT_Image2D();
-
+    ~CT_Image2D() override;
 
     /*!
       * \brief CT_Image2D factory with min and max (X,Y) coordinates
@@ -128,20 +131,7 @@ public:
       * \param initValue Initialisation value for raster cells
       * \param coodConstructor Not used, only to ensure constructor different signatures
       */
-    static CT_Image2D<DataT>* createImage2DFromXYCoords(const CT_OutAbstractSingularItemModel *model,
-                                                          const CT_AbstractResult *result,
-                                                          double xmin,
-                                                          double ymin,
-                                                          double xmax,
-                                                          double ymax,
-                                                          double resolution,
-                                                          double zlevel,
-                                                          DataT na,
-                                                          DataT initValue);
-
-    static CT_Image2D<DataT>* createImage2DFromXYCoords(const QString &modelName,
-                                                          const CT_AbstractResult *result,
-                                                          double xmin,
+    static CT_Image2D<DataT>* createImage2DFromXYCoords(double xmin,
                                                           double ymin,
                                                           double xmax,
                                                           double ymax,
@@ -159,23 +149,6 @@ public:
      * \param val
      */
     void initGridWithValue(const DataT val);
-
-    virtual QString getType() const;
-    static QString staticGetType();
-
-    virtual QString name() const;
-    static QString staticName();
-
-    /*!
-     * \brief Copy method
-     *
-     * \param model Item model for the copy
-     * \param result Result containing the copy
-     * \param copyModeList Copy mode
-     * \return Item copy
-     */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-    virtual CT_AbstractItemDrawable* copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
 
     const CT_ITemplatedData2DArray<DataT>* iTemplatedData2DArray() const { return this; }
 
@@ -378,6 +351,7 @@ public:
 
     const static CT_StandardImage2DDrawManager<DataT> IMAGE2D_DRAW_MANAGER;
 
+    CT_ITEM_COPY_IMP(CT_Image2D<DataT>)
 
     DataT               _NAdata;    /*!< Valeur codant NA */
 
@@ -386,12 +360,12 @@ public:
     cv::Mat_<DataT>     _data;      /*!< Tableau contenant les données pour chaque case de la grille*/
 
     CT_DEFAULT_IA_BEGIN(CT_Image2D<DataT>)
-    CT_DEFAULT_IA_V3(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Image2D<DataT>::colDim, QObject::tr("X dimension"), "xd")
-    CT_DEFAULT_IA_V3(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Image2D<DataT>::linDim, QObject::tr("Y dimension"), "yd")
-    CT_DEFAULT_IA_V3(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Image2D<DataT>::resolution, QObject::tr("Resolution"), "res")
-    CT_DEFAULT_IA_V3(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Image2D<DataT>::NA, QObject::tr("NA"), "na")
-    CT_DEFAULT_IA_V3(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Image2D<DataT>::dataMin, QObject::tr("Min Value"), "min")
-    CT_DEFAULT_IA_V3(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Image2D<DataT>::dataMax, QObject::tr("Max Value"), "max")
+    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Image2D<DataT>::colDim, QObject::tr("X dimension"))
+    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Image2D<DataT>::linDim, QObject::tr("Y dimension"))
+    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Image2D<DataT>::resolution, QObject::tr("Resolution"))
+    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Image2D<DataT>::NA, QObject::tr("NA"))
+    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Image2D<DataT>::dataMin, QObject::tr("Min Value"))
+    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Image2D<DataT>::dataMax, QObject::tr("Max Value"))
     CT_DEFAULT_IA_END(CT_Image2D<DataT>)
 };
 
@@ -401,39 +375,38 @@ template<>
 inline bool CT_Image2D<bool>::NA() const {return false;}
 
 template<>
-PLUGINSHAREDSHARED_EXPORT void CT_Image2D<bool>::computeMinMax();
+CTLIBSTRUCTUREADDON_EXPORT void CT_Image2D<bool>::computeMinMax();
 
 template<>
-PLUGINSHAREDSHARED_EXPORT double CT_Image2D<bool>::ratioValueAtIndex(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT double CT_Image2D<bool>::ratioValueAtIndex(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT double CT_Image2D<bool>::valueAtIndexAsDouble(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT double CT_Image2D<bool>::valueAtIndexAsDouble(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Image2D<bool>::valueAtIndexAsString(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Image2D<bool>::valueAtIndexAsString(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Image2D<bool>::setMaxValueAtIndex(const size_t index, const bool value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Image2D<bool>::setMaxValueAtIndex(const size_t index, const bool value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Image2D<bool>::setMinValueAtIndex(const size_t index, const bool value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Image2D<bool>::setMinValueAtIndex(const size_t index, const bool value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Image2D<bool>::addValueAtIndex(const size_t index, const bool value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Image2D<bool>::addValueAtIndex(const size_t index, const bool value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QList<bool> CT_Image2D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t distance, const bool keepNAs, const CenterMode centermode) const;
+CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Image2D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t distance, const bool keepNAs, const CenterMode centermode) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Image2D<unsigned long>::valueAtIndexAsString(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Image2D<unsigned long>::valueAtIndexAsString(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Image2D<unsigned long>::NAAsString() const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Image2D<unsigned long>::NAAsString() const;
 
 // fin des spécialisations
 
 // Includes the template implementations
 #include "ct_itemdrawable/ct_image2d.hpp"
-#endif
 
 #endif // CT_IMAGE2D_H

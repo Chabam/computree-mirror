@@ -1,47 +1,39 @@
 #include "ct_standardreferencepointdrawmanager.h"
 
 #include "ct_itemdrawable/ct_referencepoint.h"
-
-#include <QObject>
-
+#include "painterinterface.h"
 
 const QString CT_StandardReferencePointDrawManager::INDEX_CONFIG_BUFFER_VISIBLE = CT_StandardReferencePointDrawManager::staticInitConfigBufferVisible();
 const QString CT_StandardReferencePointDrawManager::INDEX_CONFIG_FACTOR = CT_StandardReferencePointDrawManager::staticInitConfigFactor();
 const QString CT_StandardReferencePointDrawManager::INDEX_CONFIG_POINT_SIZE = CT_StandardReferencePointDrawManager::staticInitConfigPointSize();
 
-CT_StandardReferencePointDrawManager::CT_StandardReferencePointDrawManager(QString drawConfigurationName) : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(drawConfigurationName.isEmpty() ? CT_ReferencePoint::staticName() : drawConfigurationName)
-{
-    
-}
-
-CT_StandardReferencePointDrawManager::~CT_StandardReferencePointDrawManager()
+CT_StandardReferencePointDrawManager::CT_StandardReferencePointDrawManager(QString drawConfigurationName) : SuperClass(drawConfigurationName.isEmpty() ? CT_ReferencePoint::staticName() : drawConfigurationName)
 {
 }
 
 void CT_StandardReferencePointDrawManager::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
 {
-    CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::draw(view, painter, itemDrawable);
+    SuperClass::draw(view, painter, itemDrawable);
 
-    const CT_ReferencePoint &item = dynamic_cast<const CT_ReferencePoint&>(itemDrawable);
+    const CT_ReferencePoint &item = static_cast<const CT_ReferencePoint&>(itemDrawable);
 
-    double sizeCube = (double) (getDrawConfiguration()->getVariableValue(INDEX_CONFIG_POINT_SIZE).toInt()) / 100.0;
+    const double sizeCube = (double) (drawConfiguration()->variableValue(INDEX_CONFIG_POINT_SIZE).toInt()) / 100.0;
 
-    painter.setPointSize(getDrawConfiguration()->getVariableValue(INDEX_CONFIG_POINT_SIZE).toInt());
-    //painter.drawPoint(item.getCenterX(), item.getCenterY(), item.getCenterZ());
-    painter.drawCube(item.getCenterX() - sizeCube, item.getCenterY() - sizeCube, item.getCenterZ() - sizeCube,item.getCenterX() + sizeCube, item.getCenterY() + sizeCube, item.getCenterZ() + sizeCube, GL_FRONT_AND_BACK, GL_FILL);
+    painter.setPointSize(drawConfiguration()->variableValue(INDEX_CONFIG_POINT_SIZE).toInt());
+    //painter.drawPoint(item.centerX(), item.centerY(), item.centerZ());
+    painter.drawCube(item.centerX() - sizeCube, item.centerY() - sizeCube, item.centerZ() - sizeCube,item.centerX() + sizeCube, item.centerY() + sizeCube, item.centerZ() + sizeCube, GL_FRONT_AND_BACK, GL_FILL);
 
-    if(getDrawConfiguration()->getVariableValue(INDEX_CONFIG_BUFFER_VISIBLE).toBool())
-    {
-        painter.drawCircle(item.x(), item.y(), item.z(), item.xyBuffer()*getDrawConfiguration()->getVariableValue(INDEX_CONFIG_FACTOR).toDouble());
-    }
+    if(drawConfiguration()->variableValue(INDEX_CONFIG_BUFFER_VISIBLE).toBool())
+        painter.drawCircle(item.x(), item.y(), item.z(), item.xyBuffer()*drawConfiguration()->variableValue(INDEX_CONFIG_FACTOR).toDouble());
+
     painter.restoreDefaultPointSize();
 }
 
 CT_ItemDrawableConfiguration CT_StandardReferencePointDrawManager::createDrawConfiguration(QString drawConfigurationName) const
 {
-    CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
+    CT_ItemDrawableConfiguration item(drawConfigurationName);
 
-    //item.addAllConfigurationOf(CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::createDrawConfiguration(drawConfigurationName));
+    //item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
     item.addNewConfiguration(CT_StandardReferencePointDrawManager::staticInitConfigBufferVisible(), QObject::tr("Buffer"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(CT_StandardReferencePointDrawManager::staticInitConfigFactor(), QObject::tr("Facteur multiplicatif"), CT_ItemDrawableConfiguration::Double, 1.0);
     item.addNewConfiguration(CT_StandardReferencePointDrawManager::staticInitConfigPointSize(), QObject::tr("Taille de point"), CT_ItemDrawableConfiguration::Int, 10);

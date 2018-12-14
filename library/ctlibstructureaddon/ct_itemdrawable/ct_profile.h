@@ -30,8 +30,6 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractprofile.h"
 #include "ct_itemdrawable/tools/ct_itemplateddata3darray.h"
-
-#include "ct_math/ct_math.h"
 #include <QMutex>
 
 template< typename DataT > class CT_StandardProfileDrawManager;
@@ -47,6 +45,10 @@ template< typename DataT > class CT_StandardProfileDrawManager;
 template< typename DataT>
 class CT_Profile : public CT_AbstractProfile
 {
+    CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Profile, DataT, CT_AbstractProfile, Profile)
+
+    using SuperClass = CT_AbstractProfile;
+
 public:
 
     /*!
@@ -60,9 +62,6 @@ public:
         CM_DropCenter = 3       /*!< Gives neighbours only */
     };
 
-    /**
-      * \brief Empty Contructor vide
-      */
     CT_Profile();
 
     /*!
@@ -81,9 +80,7 @@ public:
      * \param na Value used to code NA
      * \param initValue Initialisation value for grid cells
      */
-    CT_Profile(const CT_OutAbstractSingularItemModel *model,
-               const CT_AbstractResult *result,
-               double xmin,
+    CT_Profile(double xmin,
                double ymin,
                double zmin,
                double xdir,
@@ -94,18 +91,28 @@ public:
                DataT na,
                DataT initValue);
 
-    CT_Profile(const QString &modelName,
-               const CT_AbstractResult *result,
-               double xmin,
-               double ymin,
-               double zmin,
-               double xdir,
-               double ydir,
-               double zdir,
-               size_t dim,
-               double resolution,
-               DataT na,
-               DataT initValue);
+    /**
+     * @brief Copy constructor.
+     *
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - Unique ID
+     *          - Pointer of base and alternative draw manager
+     *          - Displayable name
+     *          - Center coordinates
+     *          - Default Color
+     *          - Min and Max coordinates (bounding box)
+     *          - NAdata
+     *          - dataMax
+     *          - dataMin
+     *          - data
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     */
+    CT_Profile(const CT_Profile& other) = default;
 
     /*!
      * \brief Factory with origin and end of segment
@@ -123,21 +130,7 @@ public:
      * \param na Value used to code NA
      * \param initValue Initialisation value for grid cells
      */
-    static CT_Profile<DataT>* createProfileFromSegment(const CT_OutAbstractSingularItemModel *model,
-                                                       const CT_AbstractResult *result,
-                                                       double xmin,
-                                                       double ymin,
-                                                       double zmin,
-                                                       double xmax,
-                                                       double ymax,
-                                                       double zmax,
-                                                       double resolution,
-                                                       DataT na,
-                                                       DataT initValue);
-
-    static CT_Profile<DataT>* createProfileFromSegment(const QString &modelName,
-                                                       const CT_AbstractResult *result,
-                                                       double xmin,
+    static CT_Profile<DataT>* createProfileFromSegment(double xmin,
                                                        double ymin,
                                                        double zmin,
                                                        double xmax,
@@ -150,7 +143,7 @@ public:
     /*!
      * \brief Destructor
      */
-    virtual ~CT_Profile();
+    ~CT_Profile() override;
 
     /*!
      * \brief Initialize all grid cells values with val
@@ -160,23 +153,6 @@ public:
      * \param val
      */
     void initGridWithValue(const DataT &val);
-
-    virtual QString getType() const;
-    static QString staticGetType();
-
-    virtual QString name() const;
-    static QString staticName();
-
-    /*!
-     * \brief Copy method
-     *
-     * \param model Item model for the copy
-     * \param result Result containing the copy
-     * \param copyModeList Copy mode
-     * \return Item copy
-     */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-    virtual CT_AbstractItemDrawable* copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
 
     /*!
      * \brief Generic setter taking a double as input value
@@ -392,6 +368,7 @@ public:
       */
     double getOtsuThreshold(CT_Profile<DataT> *outProfileLow, CT_Profile<DataT> *outProfileHigh);
 
+    CT_ITEM_COPY_IMP(CT_Profile<DataT>)
 
 protected:
     DataT       _NAdata;            /*!< Valeur codant NA */
@@ -403,13 +380,19 @@ protected:
     const static CT_StandardProfileDrawManager<DataT> ABSPROFILE_DRAW_MANAGER;
 
 private:
+    size_t pNCells() const {return this->nCells();}
+    double pMinX() const {return this->minX();}
+    double pMinY() const {return this->minY();}
+    double pMinZ() const {return this->minZ();}
+    double pResolution() const {return this->resolution();}
+
     CT_DEFAULT_IA_BEGIN(CT_Profile<DataT>)
-    CT_DEFAULT_IA_V3(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataSize(), &CT_Profile<DataT>::nCells, QObject::tr("Dimension"), "dim")
-    CT_DEFAULT_IA_V3(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataX(), &CT_Profile<DataT>::minX, QObject::tr("X origin"), "xo")
-    CT_DEFAULT_IA_V3(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataY(), &CT_Profile<DataT>::minY, QObject::tr("Y origin"), "yo")
-    CT_DEFAULT_IA_V3(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataZ(), &CT_Profile<DataT>::minZ, QObject::tr("Z origin"), "zo")
-    CT_DEFAULT_IA_V3(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Profile<DataT>::resolution, QObject::tr("Resolution"), "res")
-    CT_DEFAULT_IA_V3(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Profile<DataT>::NA, QObject::tr("NA"), "na")
+    CT_DEFAULT_IA_V2(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataSize(), &CT_Profile<DataT>::pNCells, QObject::tr("Dimension"))
+    CT_DEFAULT_IA_V2(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataX(), &CT_Profile<DataT>::pMinX, QObject::tr("X origin"))
+    CT_DEFAULT_IA_V2(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataY(), &CT_Profile<DataT>::pMinY, QObject::tr("Y origin"))
+    CT_DEFAULT_IA_V2(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataZ(), &CT_Profile<DataT>::pMinZ, QObject::tr("Z origin"))
+    CT_DEFAULT_IA_V2(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Profile<DataT>::pResolution, QObject::tr("Resolution"))
+    CT_DEFAULT_IA_V2(CT_Profile<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Profile<DataT>::NA, QObject::tr("NA"))
     CT_DEFAULT_IA_END(CT_Profile<DataT>)
 };
 
@@ -419,28 +402,28 @@ template<>
 inline bool CT_Profile<bool>::NA() const {return false;}
 
 template<>
-PLUGINSHAREDSHARED_EXPORT void CT_Profile<bool>::computeMinMax();
+CTLIBSTRUCTUREADDON_EXPORT void CT_Profile<bool>::computeMinMax();
 
 template<>
-PLUGINSHAREDSHARED_EXPORT double CT_Profile<bool>::ratioValueAtIndex(const size_t &index) const;
+CTLIBSTRUCTUREADDON_EXPORT double CT_Profile<bool>::ratioValueAtIndex(const size_t &index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT double CT_Profile<bool>::valueAtIndexAsDouble(const size_t &index) const;
+CTLIBSTRUCTUREADDON_EXPORT double CT_Profile<bool>::valueAtIndexAsDouble(const size_t &index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Profile<bool>::valueAtIndexAsString(const size_t &index) const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Profile<bool>::valueAtIndexAsString(const size_t &index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Profile<bool>::setMaxValueAtIndex(const size_t &index, const bool &value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Profile<bool>::setMaxValueAtIndex(const size_t &index, const bool &value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Profile<bool>::setMinValueAtIndex(const size_t &index, const bool &value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Profile<bool>::setMinValueAtIndex(const size_t &index, const bool &value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Profile<bool>::addValueAtIndex(const size_t &index, const bool &value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Profile<bool>::addValueAtIndex(const size_t &index, const bool &value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QList<bool> CT_Profile<bool>::neighboursValues(const size_t &index, const size_t &distance, const bool keepNAs, const CenterMode centermode) const;
+CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Profile<bool>::neighboursValues(const size_t &index, const size_t &distance, const bool keepNAs, const CenterMode centermode) const;
 
 
 // fin des spécialisations

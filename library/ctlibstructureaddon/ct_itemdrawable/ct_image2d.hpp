@@ -35,13 +35,11 @@
 #include <typeinfo>
 #include <limits>
 
-#include "qdebug.h"
-
 template< typename DataT>
 const CT_StandardImage2DDrawManager<DataT> CT_Image2D<DataT>::IMAGE2D_DRAW_MANAGER;
 
 template< typename DataT>
-CT_Image2D<DataT>::CT_Image2D() : CT_AbstractImage2D()
+CT_Image2D<DataT>::CT_Image2D() : SuperClass()
 {
     _minCoordinates(0) = 0;
     _minCoordinates(1) = 0;
@@ -62,68 +60,24 @@ CT_Image2D<DataT>::CT_Image2D() : CT_AbstractImage2D()
 }
 
 template< typename DataT>
-CT_Image2D<DataT>::CT_Image2D(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result) : CT_AbstractImage2D(model, result)
-{
-    _minCoordinates(0) = 0;
-    _minCoordinates(1) = 0;
-    _minCoordinates(2) = 0;
-    _res = 1;
-    _dimCol = 0;
-    _dimLin = 0;
-    _maxCoordinates(0) = 0;
-    _maxCoordinates(1) = 0;
-    _maxCoordinates(2) = 0;
-
-    _minColCoord = 0;
-    _minLinCoord = 0;
-
-    _level = 0;
-
-    setBaseDrawManager(&IMAGE2D_DRAW_MANAGER);
-}
-
-template< typename DataT>
-CT_Image2D<DataT>::CT_Image2D(const QString &modelName, const CT_AbstractResult *result) : CT_AbstractImage2D(modelName, result)
-{
-    _minCoordinates(0) = 0;
-    _minCoordinates(1) = 0;
-    _minCoordinates(2) = 0;
-    _res = 1;
-    _dimCol = 0;
-    _dimLin = 0;
-    _maxCoordinates(0) = 0;
-    _maxCoordinates(1) = 0;
-    _maxCoordinates(2) = 0;
-
-    _minColCoord = 0;
-    _minLinCoord = 0;
-
-    _level = 0;
-
-    setBaseDrawManager(&IMAGE2D_DRAW_MANAGER);
-}
-
-template< typename DataT>
-CT_Image2D<DataT>::CT_Image2D(const CT_OutAbstractSingularItemModel *model,
-                                const CT_AbstractResult *result,
-                                double xmin,
+CT_Image2D<DataT>::CT_Image2D(double xmin,
                                 double ymin,
                                 size_t dimx,
                                 size_t dimy,
                                 double resolution,
                                 double zlevel,
                                 DataT na,
-                                DataT initValue) : CT_AbstractImage2D(model, result)
+                                DataT initValue) : SuperClass(),
+    _res(resolution),
+    _dimCol(dimx),
+    _dimLin(dimy)
 {
-    this->_minCoordinates(0) = xmin;
-    this->_minCoordinates(1) = ymin;
-    this->_minCoordinates(2) = zlevel;
-    this->_res = resolution;
-    this->_dimCol = dimx;
-    this->_dimLin = dimy;
-    this->_maxCoordinates(0) = this->minX() + this->_res * this->_dimCol;
-    this->_maxCoordinates(1) = this->minY() + this->_res * this->_dimLin;
-    this->_maxCoordinates(2) = zlevel;
+    this->setBoundingBox(xmin,
+                         ymin,
+                         zlevel,
+                         xmin + this->_res * this->_dimCol,
+                         ymin + this->_res * this->_dimLin,
+                         zlevel);
 
     this->_minColCoord = xmin;
     this->_minLinCoord = ymin;
@@ -131,50 +85,8 @@ CT_Image2D<DataT>::CT_Image2D(const CT_OutAbstractSingularItemModel *model,
     this->_level = zlevel;
     this->_NAdata = na;
 
-    this->setCenterX (this->minX() + (this->maxX() - this->minX())/2.0);
-    this->setCenterY (this->minY() + (this->maxY() - this->minY())/2.0);
-    this->setCenterZ (this->_level);
-
     this->_data = cv::Mat_<DataT>(int(this->_dimLin), int(this->_dimCol));
-    initGridWithValue(initValue);
-    this->setBaseDrawManager(&IMAGE2D_DRAW_MANAGER);
-}
 
-
-
-template< typename DataT>
-CT_Image2D<DataT>::CT_Image2D(const QString &modelName,
-                                const CT_AbstractResult *result,
-                                double xmin,
-                                double ymin,
-                                size_t dimx,
-                                size_t dimy,
-                                double resolution,
-                                double zlevel,
-                                DataT na,
-                                DataT initValue) : CT_AbstractImage2D(modelName, result)
-{
-    this->_minCoordinates(0) = xmin;
-    this->_minCoordinates(1) = ymin;
-    this->_minCoordinates(2) = zlevel;
-    this->_res = resolution;
-    this->_dimCol = dimx;
-    this->_dimLin = dimy;
-    this->_maxCoordinates(0) = this->minX() + this->_res * this->_dimCol;
-    this->_maxCoordinates(1) = this->minY() + this->_res * this->_dimLin;
-    this->_maxCoordinates(2) = zlevel;
-
-    this->_minColCoord = xmin;
-    this->_minLinCoord = ymin;
-
-    this->_level = zlevel;
-    this->_NAdata = na;
-
-    this->setCenterX (this->minX() + (this->maxX() - this->minX())/2.0);
-    this->setCenterY (this->minY() + (this->maxY() - this->minY())/2.0);
-    this->setCenterZ (this->_level);
-
-    this->_data = cv::Mat_<DataT>(int(this->_dimLin), int(this->_dimCol));
     initGridWithValue(initValue);
 
     this->setBaseDrawManager(&IMAGE2D_DRAW_MANAGER);
@@ -187,9 +99,7 @@ CT_Image2D<DataT>::~CT_Image2D()
 }
 
 template< typename DataT>
-CT_Image2D<DataT>* CT_Image2D<DataT>::createImage2DFromXYCoords(const CT_OutAbstractSingularItemModel *model,
-                                                                   const CT_AbstractResult *result,
-                                                                   double xmin,
+CT_Image2D<DataT>* CT_Image2D<DataT>::createImage2DFromXYCoords(double xmin,
                                                                    double ymin,
                                                                    double xmax,
                                                                    double ymax,
@@ -198,7 +108,7 @@ CT_Image2D<DataT>* CT_Image2D<DataT>::createImage2DFromXYCoords(const CT_OutAbst
                                                                    DataT na,
                                                                    DataT initValue)
 {
-    size_t dimx = ceil((xmax - xmin)/resolution);;
+    size_t dimx = ceil((xmax - xmin)/resolution);
     size_t dimy = ceil((ymax - ymin)/resolution);
 
     // to ensure a point exactly on a maximum limit of the grid will be included in the grid
@@ -212,38 +122,7 @@ CT_Image2D<DataT>* CT_Image2D<DataT>::createImage2DFromXYCoords(const CT_OutAbst
         dimy++;
     }
 
-    CT_Image2D<DataT>* grid = new CT_Image2D<DataT>(model, result, xmin, ymin, dimx, dimy, resolution, zlevel, na, initValue);
-
-    return grid;
-}
-
-template< typename DataT>
-CT_Image2D<DataT>* CT_Image2D<DataT>::createImage2DFromXYCoords(const QString &modelName,
-                                                                   const CT_AbstractResult *result,
-                                                                   double xmin,
-                                                                   double ymin,
-                                                                   double xmax,
-                                                                   double ymax,
-                                                                   double resolution,
-                                                                   double zlevel,
-                                                                   DataT na,
-                                                                   DataT initValue)
-{
-    size_t dimx = ceil((xmax - xmin)/resolution);;
-    size_t dimy = ceil((ymax - ymin)/resolution);
-
-    // to ensure a point exactly on a maximum limit of the grid will be included in the grid
-    while (xmax >= (xmin + dimx * resolution))
-    {
-        dimx++;
-    }
-
-    while (ymax >= (ymin + dimy * resolution))
-    {
-        dimy++;
-    }
-
-    CT_Image2D<DataT>* grid = new CT_Image2D<DataT>(modelName, result, xmin, ymin, dimx, dimy, resolution, zlevel, na, initValue);
+    CT_Image2D<DataT>* grid = new CT_Image2D<DataT>(xmin, ymin, dimx, dimy, resolution, zlevel, na, initValue);
 
     return grid;
 }
@@ -281,75 +160,6 @@ void CT_Image2D<DataT>::setMinMax(DataT min, DataT max)
     _dataMin = min;
     _dataMax = max;
 }
-
-template< typename DataT>
-QString CT_Image2D<DataT>::getType() const
-{
-    return staticGetType();
-}
-
-template< typename DataT>
-QString CT_Image2D<DataT>::staticGetType()
-{
-    QString type = CT_AbstractImage2D::staticGetType() + "/CT_Image2D<" + CT_TypeInfo::name<DataT>() + ">";
-    CT_AbstractItemDrawable::addNameTypeCorresp(type, staticName());
-    return type;
-}
-
-template< typename DataT>
-QString CT_Image2D<DataT>::name() const
-{
-    return staticName();
-}
-
-template< typename DataT>
-QString CT_Image2D<DataT>::staticName()
-{
-    return tr("Raster<%1>").arg(CT_TypeInfo::name<DataT>());
-}
-
-template< typename DataT>
-CT_AbstractItemDrawable* CT_Image2D<DataT>::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    CT_Image2D<DataT>* cpy = new CT_Image2D<DataT>((const CT_OutAbstractSingularItemModel *)model, result, this->minX(), this->minY(), this->_dimCol, this->_dimLin, this->_res, this->_level, this->_NAdata, this->_NAdata);
-    cpy->setId(this->id());
-    for (int r = 0 ; r < int(_dimLin) ; r++)
-    {
-        for (int c = 0 ; c < int(_dimCol) ; c++)
-        {
-            cpy->_data(r, c) = this->_data(r,c);
-        }
-    }
-    if (this->nCells() >0)
-    {
-        cpy->computeMinMax();
-    }
-    cpy->setAlternativeDrawManager(this->getAlternativeDrawManager());
-
-    return cpy;
-}
-
-template< typename DataT>
-CT_AbstractItemDrawable* CT_Image2D<DataT>::copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    CT_Image2D<DataT>* cpy = new CT_Image2D<DataT>(modelName, result, this->minX(), this->minY(), this->_dimCol, this->_dimLin, this->_res, this->_level, this->_NAdata, this->_NAdata);
-    cpy->setId(this->id());
-    for (int r = 0 ; r < int(_dimLin) ; r++)
-    {
-        for (int c = 0 ; c < int(_dimCol) ; c++)
-        {
-            cpy->_data(r, c) = this->_data(r,c);
-        }
-    }
-    if (this->nCells() >0)
-    {
-        cpy->computeMinMax();
-    }
-    cpy->setAlternativeDrawManager(this->getAlternativeDrawManager());
-
-    return cpy;
-}
-
 
 template< typename DataT>
 bool CT_Image2D<DataT>::setValueAtIndex(const size_t index, const DataT value)

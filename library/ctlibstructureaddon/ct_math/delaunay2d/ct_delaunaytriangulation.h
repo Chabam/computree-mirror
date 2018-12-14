@@ -27,8 +27,6 @@
 #ifndef CT_DELAUNAYTRIANGULATION_H
 #define CT_DELAUNAYTRIANGULATION_H
 
-#include "pluginShared_global.h"
-
 #include "ct_delaunayvertex.h"
 #include "ct_delaunaytriangle.h"
 #include "ct_delaunayoutline.h"
@@ -45,7 +43,7 @@
  *
  * @author A. Piboule - february 2004
  */
-class PLUGINSHAREDSHARED_EXPORT CT_DelaunayTriangulation
+class CTLIBSTRUCTUREADDON_EXPORT CT_DelaunayTriangulation
 {
 
 public:

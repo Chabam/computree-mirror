@@ -28,9 +28,7 @@
 #ifndef CT_MATHPOINT_H
 #define CT_MATHPOINT_H
 
-#include "pluginShared_global.h"
-
-#include "ct_point.h"
+#include "ctlibmath_global.h"
 
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
@@ -38,9 +36,9 @@
 #include <math.h>
 #include <QMatrix4x4>
 
-#include <Eigen/Core>
+#include <Eigen/Dense>
 
-class PLUGINSHAREDSHARED_EXPORT CT_MathPoint
+class CTLIBMATH_EXPORT CT_MathPoint
 {
 public:
 

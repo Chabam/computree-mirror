@@ -29,18 +29,18 @@
 #ifndef CT_MATHFITTEDLINE2D_H
 #define CT_MATHFITTEDLINE2D_H
 
-#include "pluginShared_global.h"
+#include "ctlibmath_global.h"
 #include "qmap.h"
 #include "ct_mathpoint.h"
 
 #include "Eigen/Core"
 
-class CT_MathFittedLine2D
+class CTLIBMATH_EXPORT CT_MathFittedLine2D
 {
 public:
-    CT_MathFittedLine2D(QList<Eigen::Vector2d*> &l_p)
+    CT_MathFittedLine2D(const QList<Eigen::Vector2d*>& l_p)
     {
-        int nb_points = l_p.size();
+        const int nb_points = l_p.size();
 
         if (nb_points > 1)
         {
@@ -111,7 +111,6 @@ public:
     {
         _predictedValues.clear();
     }
-
 
     /*!
      * \brief renvoie le nombre de points de la regression linéaire

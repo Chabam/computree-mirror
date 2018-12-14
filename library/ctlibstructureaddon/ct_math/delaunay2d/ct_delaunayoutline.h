@@ -24,44 +24,48 @@
 
 *****************************************************************************/
 
-#ifndef CT_DELAUNAYVOROVERTEX_H
-#define CT_DELAUNAYVOROVERTEX_H
+#ifndef CT_DELAUNAYOUTLINE_H
+#define CT_DELAUNAYOUTLINE_H
 
-#include "pluginShared_global.h"
+#include "ct_shape2ddata/ct_polygon2ddata.h"
 #include "ct_delaunayvertex.h"
-#include "ct_delaunaytriangle.h"
+
+#include <QList>
+
+#include <stdlib.h>     /* srand, rand */
 
 
 /**
- * DelaunayVoroVertex - side of a Voronoi Polygon.
+ * DelaunayOutline - Outline of a Delaunay triangulation.
  *
  * @author A. Piboule - february 2004
  */
-class PLUGINSHAREDSHARED_EXPORT CT_DelaunayVoroVertex
+class CTLIBSTRUCTUREADDON_EXPORT CT_DelaunayOutline
 {
 
 public:
-    CT_DelaunayVoroVertex (const CT_DelaunayTriangle *trit, CT_DelaunayVertex *v1t, CT_DelaunayVertex *v2t);
+    CT_DelaunayOutline ();
 
-    ~CT_DelaunayVoroVertex();
+    ~CT_DelaunayOutline ();
 
-    // give the other vertex of the side
-    CT_DelaunayVertex *next(const CT_DelaunayVertex *vt);
 
-    inline double x() {return _x;}
-    inline double y() {return _y;}
+    void addVertex (CT_DelaunayVertex* vt);
+
+    inline int getN () {return _vertices.size ();}
+
+    const QList<CT_DelaunayVertex*> &getVertices () {return _vertices;}
+
+    double area ();
+
+    bool contains (double x, double y);
+
+    // returns a drawable shape (a general path) of the outline Polygon
+    CT_Polygon2DData* getShape ();
 
 private:
-    friend class CT_DelaunayVertex;
-    friend class CT_DelaunayTriangulation;
-
-    CT_DelaunayVertex* _v1;
-    CT_DelaunayVertex* _v2;
-
-    double _x;
-    double _y;
+    QList<CT_DelaunayVertex*> _vertices;
 
 };
 
 
-#endif // CT_DELAUNAYVOROVERTEX_H
+#endif // CT_DELAUNAYOUTLINE_H

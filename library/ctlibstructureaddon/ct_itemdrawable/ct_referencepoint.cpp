@@ -26,103 +26,25 @@
 *****************************************************************************/
 
 #include "ct_referencepoint.h"
-#include "qdebug.h"
+#include "ct_log/ct_logmanager.h"
 
 const CT_StandardReferencePointDrawManager CT_ReferencePoint::REFERENCEPOINT_DRAW_MANAGER;
 int CT_ReferencePoint::_currentRefId = 0;
 
-CT_ReferencePoint::CT_ReferencePoint() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_ReferencePoint::CT_ReferencePoint() : SuperClass(),
+    _refId(-1) // referencePoint non valide
 {
-    _refId = -1; // referencePoint non valide
-
     setBaseDrawManager(&REFERENCEPOINT_DRAW_MANAGER);
 }
 
-CT_ReferencePoint::CT_ReferencePoint(const CT_OutAbstractSingularItemModel *model,
-                                     const CT_AbstractResult *result,
-                                     double x, double y, double z, double buffer) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+CT_ReferencePoint::CT_ReferencePoint(double x, double y, double z, double buffer) : SuperClass(),
+    _refId(_currentRefId++)
 {
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterX(x);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterY(y);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterZ(z);
-
-    _minCoordinates(0) = x;
-    _minCoordinates(1) = y;
-    _minCoordinates(2) = z;
-
-    _maxCoordinates(0) = x;
-    _maxCoordinates(1) = y;
-    _maxCoordinates(2) = z;
-
+    SuperClass::setCenterX(x);
+    SuperClass::setCenterY(y);
+    SuperClass::setCenterZ(z);
+    SuperClass::setBoundingBox(x, y, z, x, y, z);
     setXYBuffer(buffer);
-    _refId = _currentRefId++;
-
-    setBaseDrawManager(&REFERENCEPOINT_DRAW_MANAGER);
-}
-
-// Contructeur privé pour la copie
-CT_ReferencePoint::CT_ReferencePoint(const CT_OutAbstractSingularItemModel *model,
-                                     const CT_AbstractResult *result,
-                                     double x, double y, double z, double buffer, int refId) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
-{
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterX(x);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterY(y);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterZ(z);
-
-    _minCoordinates(0) = x;
-    _minCoordinates(1) = y;
-    _minCoordinates(2) = z;
-
-    _maxCoordinates(0) = x;
-    _maxCoordinates(1) = y;
-    _maxCoordinates(2) = z;
-
-    setXYBuffer(buffer);
-    _refId = refId;
-
-    setBaseDrawManager(&REFERENCEPOINT_DRAW_MANAGER);
-}
-
-CT_ReferencePoint::CT_ReferencePoint(const QString &modelName,
-                                     const CT_AbstractResult *result,
-                                     double x, double y, double z, double buffer, int refId) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
-{
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterX(x);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterY(y);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterZ(z);
-
-    _minCoordinates(0) = x;
-    _minCoordinates(1) = y;
-    _minCoordinates(2) = z;
-
-    _maxCoordinates(0) = x;
-    _maxCoordinates(1) = y;
-    _maxCoordinates(2) = z;
-
-    setXYBuffer(buffer);
-    _refId = refId;
-
-    setBaseDrawManager(&REFERENCEPOINT_DRAW_MANAGER);
-}
-
-CT_ReferencePoint::CT_ReferencePoint(const QString &modelName,
-                                     const CT_AbstractResult *result,
-                                     double x, double y, double z, double buffer) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
-{
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterX(x);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterY(y);
-    CT_AbstractItemDrawableWithoutPointCloud::setCenterZ(z);
-
-    _minCoordinates(0) = x;
-    _minCoordinates(1) = y;
-    _minCoordinates(2) = z;
-
-    _maxCoordinates(0) = x;
-    _maxCoordinates(1) = y;
-    _maxCoordinates(2) = z;
-
-    setXYBuffer(buffer);
-    _refId = _currentRefId++;
 
     setBaseDrawManager(&REFERENCEPOINT_DRAW_MANAGER);
 }
@@ -132,50 +54,27 @@ void CT_ReferencePoint::setXYBuffer(double buffer)
     _xyBuffer = buffer;
 }
 
-void CT_ReferencePoint::setCenterX(double x)
+void CT_ReferencePoint::setCenterX(double)
 {
-    Q_UNUSED(x)
-
-    qDebug() << "setCenterX n'a aucun aucun effet dans le cas d'un CT_ReferencePoint";
+    PS_LOG->addDebugMessage(LogInterface::itemdrawable, tr("setCenterX n'a aucun aucun effet dans le cas d'un CT_ReferencePoint"));
 }
 
-void CT_ReferencePoint::setCenterY(double y)
+void CT_ReferencePoint::setCenterY(double)
 {
-    Q_UNUSED(y)
-
-    qDebug() << "setCenterY n'a aucun aucun effet dans le cas d'un CT_ReferencePoint";
+    PS_LOG->addDebugMessage(LogInterface::itemdrawable, tr("setCenterY n'a aucun aucun effet dans le cas d'un CT_ReferencePoint"));
 }
 
-void CT_ReferencePoint::setCenterZ(double z)
+void CT_ReferencePoint::setCenterZ(double)
 {
-    Q_UNUSED(z)
-
-    qDebug() << "setCenterZ n'a aucun aucun effet dans le cas d'un CT_ReferencePoint";
+    PS_LOG->addDebugMessage(LogInterface::itemdrawable, tr("setCenterZ n'a aucun aucun effet dans le cas d'un CT_ReferencePoint"));
 }
 
-void CT_ReferencePoint::setCenterCoordinate(const Eigen::Vector3d &center)
+void CT_ReferencePoint::setCenterCoordinate(const Eigen::Vector3d&)
 {
-    Q_UNUSED(center)
-
-    qDebug() << "setCenterCoordinate n'a aucun aucun effet dans le cas d'un CT_ReferencePoint";
+    PS_LOG->addDebugMessage(LogInterface::itemdrawable, tr("setCenterCoordinate n'a aucun aucun effet dans le cas d'un CT_ReferencePoint"));
 }
 
-CT_AbstractItemDrawable* CT_ReferencePoint::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
+void CT_ReferencePoint::setBoundingBox(const Eigen::Vector3d&, const Eigen::Vector3d&)
 {
-    CT_ReferencePoint *ref = new CT_ReferencePoint((const CT_OutAbstractSingularItemModel *)model, result, x(), y(), z(), xyBuffer(), _refId);
-    ref->setId(id());
-
-    ref->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return ref;
-}
-
-CT_AbstractItemDrawable *CT_ReferencePoint::copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    CT_ReferencePoint *ref = new CT_ReferencePoint(modelName, result, x(), y(), z(), xyBuffer(), _refId);
-    ref->setId(id());
-
-    ref->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return ref;
+    PS_LOG->addDebugMessage(LogInterface::itemdrawable, tr("setBoundingBox n'a aucun aucun effet dans le cas d'un CT_ReferencePoint"));
 }

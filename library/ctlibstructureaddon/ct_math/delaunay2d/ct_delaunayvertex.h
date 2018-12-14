@@ -27,7 +27,7 @@
 #ifndef CT_DELAUNAYVERTEX_H
 #define CT_DELAUNAYVERTEX_H
 
-#include "pluginShared_global.h"
+#include "ctlibmath_global.h"
 #include "ct_shape2ddata/ct_polygon2ddata.h"
 
 #include "Eigen/Core"
@@ -41,7 +41,7 @@ class CT_DelaunayVoroVertex;
  *
  * @author A. Piboule - february 2004
  */
-class PLUGINSHAREDSHARED_EXPORT CT_DelaunayVertex
+class CTLIBSTRUCTUREADDON_EXPORT CT_DelaunayVertex
 {
 public:
     CT_DelaunayVertex (Eigen::Vector3d* data, bool deleteData);

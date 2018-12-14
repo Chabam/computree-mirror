@@ -1,9 +1,9 @@
 #ifndef CT_ITEMPLATEDDATA3DARRAY_H
 #define CT_ITEMPLATEDDATA3DARRAY_H
 
-#include "pluginShared_global.h"
+#include <QtGlobal>
 
-template< typename DataT>
+template<typename DataT>
 class CT_ITemplatedData3DArray
 {
 public:

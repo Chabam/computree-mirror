@@ -28,7 +28,7 @@
 #ifndef CT_DELAUNAYT_H
 #define CT_DELAUNAYT_H
 
-#include "pluginShared_global.h"
+#include "ctlibmath_global.h"
 
 #include <QSharedPointer>
 
@@ -36,7 +36,7 @@ class CT_NodeT;
 class CT_EdgeT;
 class CT_TriangleT;
 
-class PLUGINSHAREDSHARED_EXPORT CT_DelaunayT
+class CTLIBMATH_EXPORT CT_DelaunayT
 {
 public:
     CT_DelaunayT();

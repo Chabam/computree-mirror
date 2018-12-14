@@ -1,5 +1,5 @@
 TEMPLATE      = subdirs
-SUBDIRS       = ctlibmodels ctliblog ctlibwidget ctlibclouds ctlibstructure ctlibstep ctlibstructureaddon ctlibstepaddon ctlibfilters ctlibstructurewidget ctlibexporter ctlibreader ctlibaction ctlibplugin ctlibio
+SUBDIRS       = ctlibmodels ctliblog ctlibwidget ctlibclouds ctlibstructure ctlibstep ctlibmath ctlibstructureaddon ctlibstepaddon ctlibfilters ctlibstructurewidget ctlibexporter ctlibreader ctlibaction ctlibplugin ctlibio
 CONFIG        += ordered
 
 win32-msvc2013 {

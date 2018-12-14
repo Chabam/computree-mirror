@@ -31,7 +31,8 @@
 #include "ctlibstructureaddon_global.h"
 #include <Eigen/Core>
 
-#define CT_SHAPEDATA_CLONE_IMP(argClass) argClass* clone() const { return new argClass(*this); }
+#define CT_SHAPEDATA_CLONE_IMP(argClass) CT_ShapeData* copy() const override { return clone(); } \
+                                         argClass* clone() const { return new argClass(*this); }
 
 /**
   * Represent data of geometrical item
@@ -46,8 +47,13 @@ public:
     const Eigen::Vector3d& getCenter() const;
     const Eigen::Vector3d& getDirection() const;
 
+    void setCenterX(const double& x);
+    void setCenterY(const double& y);
+    void setCenterZ(const double& z);
     void setCenter(const Eigen::Vector3d& center);
     void setDirection(const Eigen::Vector3d& direction);
+
+    virtual CT_ShapeData* copy() const = 0;
 
 private:
     Eigen::Vector3d   _center;

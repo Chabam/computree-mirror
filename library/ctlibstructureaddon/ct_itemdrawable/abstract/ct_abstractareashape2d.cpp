@@ -28,23 +28,11 @@
 #include "ct_abstractareashape2d.h"
 
 
-CT_AbstractAreaShape2D::CT_AbstractAreaShape2D() : CT_AbstractShape2D()
+CT_AbstractAreaShape2D::CT_AbstractAreaShape2D() : SuperClass()
 {
 }
 
-CT_AbstractAreaShape2D::CT_AbstractAreaShape2D(const CT_OutAbstractSingularItemModel *model,
-                                   const CT_AbstractResult *result,
-                                   CT_AreaShape2DData *data) : CT_AbstractShape2D(model, result, data)
-{
-}
-
-CT_AbstractAreaShape2D::CT_AbstractAreaShape2D(const QString &modelName,
-                                   const CT_AbstractResult *result,
-                                   CT_AreaShape2DData *data) : CT_AbstractShape2D(modelName, result, data)
-{
-}
-
-CT_AbstractAreaShape2D::~CT_AbstractAreaShape2D()
+CT_AbstractAreaShape2D::CT_AbstractAreaShape2D(CT_AreaShape2DData* data) : SuperClass(data)
 {
 }
 
@@ -60,15 +48,15 @@ double CT_AbstractAreaShape2D::getArea() const
 
 const CT_AreaShape2DData* CT_AbstractAreaShape2D::getPointerAreaData() const
 {
-    return (CT_AreaShape2DData*) CT_AbstractShape2D::getPointerData();
+    return (CT_AreaShape2DData*) SuperClass::getPointerData();
 }
 
 const CT_AreaShape2DData& CT_AbstractAreaShape2D::getAreaData() const
 {
-    return (CT_AreaShape2DData&) CT_AbstractShape2D::getData();
+    return (CT_AreaShape2DData&) SuperClass::getData();
 }
 
 CT_AreaShape2DData* CT_AbstractAreaShape2D::getAreaDataNotConst() const
 {
-    return (CT_AreaShape2DData*) CT_AbstractShape2D::getDataNotConst();
+    return (CT_AreaShape2DData*) SuperClass::getDataNotConst();
 }

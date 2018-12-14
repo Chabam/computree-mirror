@@ -106,7 +106,7 @@ void CT_DelaunayTriangle::calculateCircle()
     // (if two point never have same position: verified by DelaunayTriangulation.doInsertion ())
     if ((dx12*dy23 - dy12*dx23) == 0)
     {
-        qDebug() << "Vertices " << _v1 << ", " << _v2 << ", " << _v3 << " aligned";
+        //qDebug() << "Vertices " << _v1 << ", " << _v2 << ", " << _v3 << " aligned";
         _ccX = NAN;
         _ccY = NAN;
         _r = NAN;
@@ -346,11 +346,11 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
 
 CT_Polygon2DData *CT_DelaunayTriangle::getShape()
 {
-    QVector<Eigen::Vector2d *> vertices;
+    QVector<Eigen::Vector2d> vertices(3);
 
-    vertices.append(new Eigen::Vector2d(_v1->x(), _v1->y()));
-    vertices.append(new Eigen::Vector2d(_v2->x(), _v2->y()));
-    vertices.append(new Eigen::Vector2d(_v3->x(), _v3->y()));
+    vertices[0] = Eigen::Vector2d(_v1->x(), _v1->y());
+    vertices[1] = Eigen::Vector2d(_v2->x(), _v2->y());
+    vertices[2] = Eigen::Vector2d(_v3->x(), _v3->y());
 
-    return new CT_Polygon2DData(vertices, false);
+    return new CT_Polygon2DData(vertices);
 }

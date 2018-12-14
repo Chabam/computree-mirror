@@ -28,13 +28,15 @@
 #ifndef CT_SPHERICALLINE3D_H
 #define CT_SPHERICALLINE3D_H
 
-#include "pluginShared_global.h"
-#include "ct_mathpoint.h"
 #include "ct_shapedata/ct_linedata.h"
 
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
+#include <math.h>
 #include <Eigen/Core>
 
-class CT_SphericalLine3D
+class CTLIBSTRUCTUREADDON_EXPORT CT_SphericalLine3D
 {
 public:
 

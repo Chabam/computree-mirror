@@ -31,7 +31,7 @@
 #include "ct_shape2ddata.h"
 
 /**
-  * Reprsente les donnes d'une forme géomtrique 2D
+  * Represent data of 2D geometrical item
   */
 class CTLIBSTRUCTUREADDON_EXPORT CT_AreaShape2DData : public CT_Shape2DData
 {

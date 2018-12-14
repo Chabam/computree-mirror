@@ -31,7 +31,7 @@
 #include <QSharedPointer>
 #include "ct_edget.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_TriangleT
+class CTLIBMATH_EXPORT CT_TriangleT
 {
 public:
 

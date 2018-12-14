@@ -7,11 +7,12 @@
 template< typename DataT>
 class CT_StandardProfileDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardProfileDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardProfileDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
 protected:
 
@@ -39,9 +40,7 @@ protected:
     static QString staticInitConfigScale();
     static QString staticInitConfigScaleCoeff();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
-
-
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 };
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp"

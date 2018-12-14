@@ -62,11 +62,11 @@
 
 
 /**
-  * @brief Use this define in your class (if ti was templated) to add type information
+  * @brief Use this define in your class (if it was templated) to add type information
   * @example class MyItemDrawable : public CT_AbstractSingularItemDrawable
   *          {
   *             Q_OBJECT
-  *             CT_TYPE_IMPL_MACRO(CT_AbstractSingularItemDrawable, CT_AbstractItemDrawable, Singular Item)
+  *             CT_TYPE_TEMPLATED_IMPL_MACRO(MyClass, T, CT_AbstractItemDrawable, Item)
   *
   *          public:
   *             MyItemDrawable();
@@ -75,7 +75,7 @@
   */
 #define CT_TYPE_TEMPLATED_IMPL_MACRO(ThisClassName, TemplateType, SuperClassName, Name) public: \
     virtual QString name() const {return staticName();} \
-    static QString staticName() { return QString("%1").arg(#Name).arg(CT_TypeInfo::name<SCALAR>()); } \
+    static QString staticName() { return QString("%1<%2>").arg(#Name).arg(CT_TypeInfo::name<TemplateType>()); } \
     QString type() const { return staticType(); } \
     static QString staticType() { return SuperClassName::staticType() + "/" + #ThisClassName + "<" + CT_TypeInfo::name<TemplateType>() + ">"; } \
     static void staticInitNameTypeCorresp() { ThisClassName::addNameTypeCorresp(staticType(), staticName()); } \

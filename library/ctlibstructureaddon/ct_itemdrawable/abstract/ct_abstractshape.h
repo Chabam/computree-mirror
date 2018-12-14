@@ -31,44 +31,49 @@
 #include "ct_abstractitemdrawablewithoutpointcloud.h"
 #include "ct_shapedata/ct_shapedata.h"
 
-
 /**
   * Reprsente une forme gomtrique 2D ou 3D
   */
-class PLUGINSHAREDSHARED_EXPORT CT_AbstractShape : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractShape : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractShape, CT_AbstractItemDrawableWithoutPointCloud, 3D shape)
 
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
+
 public:
-    /**
-      * \brief Contructeur vide.
-      */
     CT_AbstractShape();
+
     /**
-      * \brief Contructeur avec une instance des donnes (CT_ShapeData*), ne peut être NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_AbstractShape(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result,
-                     CT_ShapeData *data);
+     * @brief Construct with a data. Cannot be NULL !
+     */
+    CT_AbstractShape(CT_ShapeData* data);
 
-    CT_AbstractShape(const QString &modelName,
-                     const CT_AbstractResult *result,
-                     CT_ShapeData *data);
-
-    virtual ~CT_AbstractShape();
+    /**
+     * @brief Copy constructor.
+     *
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - Unique ID
+     *          - Pointer of base and alternative draw manager
+     *          - Displayable name
+     *          - Center coordinates
+     *          - Default Color
+     *          - Min and Max coordinates (bounding box)
+     *          - Data
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     */
+    CT_AbstractShape(const CT_AbstractShape& other);
+    ~CT_AbstractShape() override;
 
     void setCenterX(double x);
     void setCenterY(double y);
     void setCenterZ(double z);
     void setCenterCoordinate(const Eigen::Vector3d& center);
-
-
-    double getCenterX() const;
-    double getCenterY() const;
-    double getCenterZ() const;
-    const Eigen::Vector3d& getCenterCoordinate() const;
-
 
     const CT_ShapeData* getPointerData() const;
     const CT_ShapeData& getData() const;
@@ -79,7 +84,6 @@ public:
     double getDirectionZ() const;
 
 private:
-
     CT_ShapeData   *_data;
 
 protected:

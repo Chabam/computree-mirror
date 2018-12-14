@@ -27,8 +27,6 @@
 
 #include "ct_image2d.h"
 
-#ifdef USE_OPENCV
-
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<bool>)
 template<>
@@ -157,6 +155,3 @@ QString CT_Image2D<unsigned long>::NAAsString() const
 {
     return QString::number(NA(), 'g', 50);
 }
-
-
-#endif

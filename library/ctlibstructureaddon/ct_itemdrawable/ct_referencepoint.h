@@ -41,32 +41,41 @@
  * If the item is copied, the copy will have the same refId than the original.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_ReferencePoint : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_ReferencePoint : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_ReferencePoint, CT_AbstractItemDrawableWithoutPointCloud, Reference point)
 
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
+
 public:
     CT_ReferencePoint();
+    CT_ReferencePoint(double x, double y, double z, double buffer);
 
     /**
-      * \brief Contructeur
-      */
-    CT_ReferencePoint(const CT_OutAbstractSingularItemModel *model,
-                            const CT_AbstractResult *result,
-                            double x, double y, double z, double buffer);
+     * @brief Copy constructor.
+     *
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - Unique ID
+     *          - Pointer of base and alternative draw manager
+     *          - Displayable name
+     *          - Center coordinates
+     *          - Default Color
+     *          - Min and Max coordinates (bounding box)
+     *          - refID
+     *          - xyBuffer
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     */
+    CT_ReferencePoint(const CT_ReferencePoint& other) = default;
 
-    CT_ReferencePoint(const QString &modelName,
-                            const CT_AbstractResult *result,
-                            double x, double y, double z, double buffer);
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-
-    virtual CT_AbstractItemDrawable* copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-
-    inline double x() const { return getCenterX(); }
-    inline double y() const { return getCenterY(); }
-    inline double z() const { return getCenterZ(); }
+    inline double x() const { return centerX(); }
+    inline double y() const { return centerY(); }
+    inline double z() const { return centerZ(); }
     inline double refId() const { return _refId; }
 
     inline double xyBuffer() const { return _xyBuffer;}
@@ -75,10 +84,13 @@ public:
 
     // neutralisation des méthodes permettant de modifier les (x,y,z)
     // Une fois créés (constructeurs) : ne sont plus modifiables
-    void setCenterX(double x);
-    void setCenterY(double y);
-    void setCenterZ(double z);
-    void setCenterCoordinate(const Eigen::Vector3d& center);
+    void setCenterX(double x) override;
+    void setCenterY(double y) override;
+    void setCenterZ(double z) override;
+    void setCenterCoordinate(const Eigen::Vector3d& center) override;
+    void setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max);
+
+    CT_ITEM_COPY_IMP(CT_ReferencePoint)
 
 private:
 
@@ -88,17 +100,6 @@ private:
 
     double           _xyBuffer;
     int             _refId;         /*!< Identifiant automatique unique à la construction, identique à la copie */
-
-
-    // Contructeur privé pour la copie (permettant de conserver le refId de l'instance copiée
-    CT_ReferencePoint(const CT_OutAbstractSingularItemModel *model,
-                      const CT_AbstractResult *result,
-                      double x, double y, double z, double buffer, int refId);
-
-    CT_ReferencePoint(const QString &modelName,
-                      const CT_AbstractResult  *result,
-                      double x, double y, double z, double buffer, int refId);
-
 };
 
 #endif // CT_REFERENCEPOINT_H

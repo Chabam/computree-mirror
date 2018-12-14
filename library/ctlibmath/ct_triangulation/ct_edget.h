@@ -28,14 +28,14 @@
 #ifndef CT_EDGET_H
 #define CT_EDGET_H
 
-#include "pluginShared_global.h"
+#include "ctlibmath_global.h"
 
 #include <QSharedPointer>
 
 class CT_NodeT;
 class CT_TriangleT;
 
-class PLUGINSHAREDSHARED_EXPORT CT_EdgeT
+class CTLIBMATH_EXPORT CT_EdgeT
 {
 public:
 

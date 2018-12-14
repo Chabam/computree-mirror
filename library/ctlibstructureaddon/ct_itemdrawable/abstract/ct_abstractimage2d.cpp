@@ -26,21 +26,3 @@
 *****************************************************************************/
 
 #include "ct_abstractimage2d.h"
-
-
-CT_AbstractImage2D::CT_AbstractImage2D() : CT_AbstractItemDrawableWithoutPointCloud()
-{
-}
-
-CT_AbstractImage2D::CT_AbstractImage2D(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
-{
-}
-
-CT_AbstractImage2D::CT_AbstractImage2D(const QString &modelName, const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
-{
-}
-
-CT_AbstractImage2D::~CT_AbstractImage2D()
-{
-
-}

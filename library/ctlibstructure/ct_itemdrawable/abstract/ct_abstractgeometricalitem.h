@@ -41,17 +41,17 @@ public:
     /**
      * @brief Set the x center coordinate of this item
      */
-    void setCenterX(double x);
+    virtual void setCenterX(double x);
 
     /**
      * @brief Set the y center coordinate of this item
      */
-    void setCenterY(double y);
+    virtual void setCenterY(double y);
 
     /**
      * @brief Set the z center coordinate of this item
      */
-    void setCenterZ(double z);
+    virtual void setCenterZ(double z);
 
     /**
      * @brief Returns the x center coordinate of this item
@@ -112,7 +112,7 @@ public:
     /**
      * @brief Change the bounding box
      */
-    void setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max);
+    virtual void setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max);
 
     /**
      * @brief Change the center of the item from coordinates of the bounding box
@@ -163,6 +163,16 @@ public:
      * @brief Get the size in Z
      */
     inline double sizeZ() const {return m_maxCoordinates(2) - m_minCoordinates(2);}
+
+    /**
+     * @brief Returns min coordinate of bounding box
+     */
+    Eigen::Vector3d minCoordinates() const;
+
+    /**
+     * @brief Returns max coordinate of bounding box
+     */
+    Eigen::Vector3d maxCoordinates() const;
 
 private:
     /**

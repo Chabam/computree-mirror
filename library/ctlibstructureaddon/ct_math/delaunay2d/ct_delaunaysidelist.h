@@ -27,8 +27,6 @@
 #ifndef CT_DELAUNAYSIDELIST_H
 #define CT_DELAUNAYSIDELIST_H
 
-
-#include "pluginShared_global.h"
 #include "ct_delaunayvertex.h"
 #include "ct_delaunaytriangle.h"
 
@@ -38,7 +36,7 @@
  *
  * @author A. Piboule - february 2004 / modified october 2016
  */
-class PLUGINSHAREDSHARED_EXPORT CT_DelaunaySideList
+class CTLIBSTRUCTUREADDON_EXPORT CT_DelaunaySideList
 {
 
 public:

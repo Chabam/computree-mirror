@@ -66,10 +66,3 @@ float CT_BoxData::getDepth() const
 {
     return _depth;
 }
-
-
-
-CT_BoxData* CT_BoxData::clone() const
-{
-    return new CT_BoxData(getCenter(), getDirection(), getWidthDirection(), _height, _width, _depth);
-}

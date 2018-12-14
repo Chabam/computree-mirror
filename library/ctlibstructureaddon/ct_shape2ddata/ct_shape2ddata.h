@@ -44,11 +44,14 @@ public:
     CT_Shape2DData(const Eigen::Vector2d& center);
     CT_Shape2DData(const double& x, const double& y);
     CT_Shape2DData(const CT_Shape2DData& other) = default;
-    virtual ~CT_Shape2DData();
+    virtual ~CT_Shape2DData() {}
 
     const Eigen::Vector2d& getCenter() const;
 
+    void setCenterX(const double& x);
+    void setCenterY(const double& y);
     void setCenter(const Eigen::Vector2d& center);
+    void setCenter(const Eigen::Vector3d& center);
 
     virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const = 0;
 

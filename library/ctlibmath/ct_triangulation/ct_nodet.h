@@ -35,7 +35,7 @@
 
 class CT_VoronoiNodeT;
 
-class PLUGINSHAREDSHARED_EXPORT CT_NodeT
+class CTLIBMATH_EXPORT CT_NodeT
 {
 public:
     static QSharedPointer<CT_NodeT> create(Eigen::Vector3d *point, QObject *associate_object = NULL, bool toBeDeleted = false)

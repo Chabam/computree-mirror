@@ -25,21 +25,34 @@
 
 *****************************************************************************/
 
-#ifndef CT_MATHBOUNDINGSHAPE_H
-#define CT_MATHBOUNDINGSHAPE_H
+#ifndef CT_VORONOINODET_H
+#define CT_VORONOINODET_H
 
 #include "ctlibmath_global.h"
-#include <Eigen/Core>
 
-class CTLIBMATH_EXPORT CT_MathBoundingShape
+#include <QSharedPointer>
+
+class CTLIBMATH_EXPORT CT_VoronoiNodeT
 {
 public:
 
-    static bool aabbIntersects(const Eigen::Vector3d &min1, const Eigen::Vector3d &max1, const Eigen::Vector3d &min2, const Eigen::Vector3d &max2);
-    static bool aabbIntersects2D(const Eigen::Vector3d &min1, const Eigen::Vector3d &max1, const Eigen::Vector3d &min2, const Eigen::Vector3d &max2);
-    static bool containsPoint(const Eigen::Vector3d &min, const Eigen::Vector3d &max, const Eigen::Vector3d &point);
-    static bool containsPointIn2D(const Eigen::Vector3d &min, const Eigen::Vector3d &max, const Eigen::Vector3d &point);
+    static QSharedPointer<CT_VoronoiNodeT> create(double x, double y, double z)
+    {
+        QSharedPointer<CT_VoronoiNodeT> ptr(new CT_VoronoiNodeT(x, y, z));
 
+        return ptr;
+    }
+
+    // retourne les coordonnees du point
+    double getX() const;
+    double getY() const;
+    double getZ() const;
+
+private:
+
+    CT_VoronoiNodeT(double x, double y, double z);
+
+    double _x, _y, _z;
 };
 
-#endif // CT_MATHBOUNDINGSHAPE_H
+#endif // CT_VORONOINODET_H

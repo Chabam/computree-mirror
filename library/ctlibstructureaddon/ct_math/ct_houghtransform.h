@@ -8,24 +8,16 @@
 #include <QMap>
 #include <QVector>
 
-#include "pluginShared_global.h"
-
-
-class PLUGINSHAREDSHARED_EXPORT CT_HoughTransform
+class CTLIBSTRUCTUREADDON_EXPORT CT_HoughTransform
 {
 public:
 
     struct HoughObject
     {
-        HoughObject(const QVector<double> &coords, void* object)
+        HoughObject(const QVector<double>& coords, void* object) :
+            _houghCoords(coords),
+            _object(object)
         {
-            _houghCoords.resize(coords.size());
-
-            for (int i = 0 ; i < coords.size() ; i++)
-            {
-                _houghCoords[i] = coords.at(i);
-            }
-            _object = object;
         }
 
         double operator()(int idx) const
@@ -34,7 +26,7 @@ public:
             return _houghCoords[idx];
         }
 
-        double &operator[](int idx)
+        double& operator[](int idx)
         {
             return _houghCoords[idx];
         }

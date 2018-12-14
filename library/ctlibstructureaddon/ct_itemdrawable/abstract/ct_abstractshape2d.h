@@ -34,61 +34,74 @@
 /**
   * Représente une forme géomtrique 2D
   */
-class PLUGINSHAREDSHARED_EXPORT CT_AbstractShape2D : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractShape2D : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractShape2D, CT_AbstractItemDrawableWithoutPointCloud, 2D shape)
 
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
+
 public:
-    /**
-      * \brief Contructeur vide.
-      */
     CT_AbstractShape2D();
+
     /**
-      * \brief Contructeur avec une instance des donnes (CT_Shape2DData*), ne peut être NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_AbstractShape2D(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result,
-                     CT_Shape2DData *data);
+     * @brief Construct with a data. Cannot be NULL !
+     */
+    CT_AbstractShape2D(CT_Shape2DData* data);
 
-    CT_AbstractShape2D(const QString &modelName,
-                     const CT_AbstractResult *result,
-                     CT_Shape2DData *data);
+    /**
+     * @brief Copy constructor.
+     *
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - Unique ID
+     *          - Pointer of base and alternative draw manager
+     *          - Displayable name
+     *          - Center coordinates
+     *          - Default Color
+     *          - Min and Max coordinates (bounding box)
+     *          - Data 2D
+     *          - Z Value and if z value is defined
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     */
+    CT_AbstractShape2D(const CT_AbstractShape2D& other);
 
-    virtual ~CT_AbstractShape2D();
+    ~CT_AbstractShape2D() override;
 
-    void setCenterX(double x);
-    void setCenterY(double y);
-    void setCenterCoordinate(const Eigen::Vector3d &center);
+    void setCenterX(double x) override;
+    void setCenterY(double y) override;
+    void setCenterZ(double z) override;
+    void setCenterCoordinate(const Eigen::Vector3d &center) override;
 
     void setZValue(double z);
-    double getZValue() const;
-    bool isZValueDefined() const;
 
-    double getCenterX() const;
-    double getCenterY() const;
+    double zValue() const;
+
+    bool isZValueDefined() const;
 
     const CT_Shape2DData* getPointerData() const;
     const CT_Shape2DData& getData() const;
     const Eigen::Vector2d& getCenter() const;
 
-    void getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
+    void setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max) override;
 
+    static double Z_PLANE_FOR_2D_SHAPES;
 
 private:
-
-    CT_Shape2DData   *_data;
-    double            _zValue;
-    bool              _zValueDefined;
+    CT_Shape2DData*     _data;
+    double              _zValue;
+    bool                _zValueDefined;
 
 protected:
-
     CT_Shape2DData* getDataNotConst() const;
 
     CT_DEFAULT_IA_BEGIN(CT_AbstractShape2D)
-    CT_DEFAULT_IA_V3(CT_AbstractShape2D, CT_AbstractCategory::staticInitDataZ(), &CT_AbstractShape2D::getZValue, QObject::tr("Z"), "z")
+    CT_DEFAULT_IA_V2(CT_AbstractShape2D, CT_AbstractCategory::staticInitDataZ(), &CT_AbstractShape2D::zValue, QObject::tr("Z"))
     CT_DEFAULT_IA_END(CT_AbstractShape2D)
-
 };
 
 #endif // CT_ABSTRACTSHAPE2D_H

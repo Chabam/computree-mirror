@@ -41,51 +41,28 @@ CT_Polyline2DData::CT_Polyline2DData() : SuperClass(),
 {
 }
 
-CT_Polyline2DData::CT_Polyline2DData(const QVector<Eigen::Vector2d*>& vertices) : SuperClass()
+CT_Polyline2DData::CT_Polyline2DData(const QVector<Eigen::Vector2d>& vertices) : SuperClass(),
+    _vertices(vertices)
 {
-    const int size = vertices.size();
-    _vertices.resize(size);
-
     _minX = std::numeric_limits<double>::max();
     _minY = std::numeric_limits<double>::max();
     _maxX = -std::numeric_limits<double>::max();
     _maxY = -std::numeric_limits<double>::max();
 
+    const int size = _vertices.size();
+
     for (int i = 0 ; i < size ; i++)
     {
-        Eigen::Vector2d* source = vertices.at(i);
-        Eigen::Vector2d*& dest = _vertices[i];
-        dest = new Eigen::Vector2d(*source);
+        const Eigen::Vector2d& dest = _vertices[i];
 
-        if ((*dest)(0) < _minX) {_minX = (*dest)(0);}
-        if ((*dest)(0) > _maxX) {_maxX = (*dest)(0);}
-        if ((*dest)(1) < _minY) {_minY = (*dest)(1);}
-        if ((*dest)(1) > _maxY) {_maxY = (*dest)(1);}
+        if (dest(0) < _minX) {_minX = dest(0);}
+        if (dest(0) > _maxX) {_maxX = dest(0);}
+        if (dest(1) < _minY) {_minY = dest(1);}
+        if (dest(1) > _maxY) {_maxY = dest(1);}
     }
 
     _center(0) = (_maxX + _minX) / 2.0;
     _center(1) = (_maxY + _minY) / 2.0;
-}
-
-CT_Polyline2DData::CT_Polyline2DData(const CT_Polyline2DData& other) : SuperClass(other)
-{
-    _minX = other._minX;
-    _minY = other._minY;
-    _maxX = other._maxX;
-    _maxY = other._maxY;
-
-    int i = 0;
-    const int size = other._vertices.size();
-    _vertices.resize(size);
-
-    for(Eigen::Vector2d* v : other._vertices) {
-        _vertices[i++] = new Eigen::Vector2d(*v);
-    }
-}
-
-CT_Polyline2DData::~CT_Polyline2DData()
-{
-    qDeleteAll(_vertices);
 }
 
 void CT_Polyline2DData::getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const

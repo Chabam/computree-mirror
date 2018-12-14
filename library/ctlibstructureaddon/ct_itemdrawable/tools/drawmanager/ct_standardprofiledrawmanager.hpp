@@ -3,6 +3,7 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.h"
 #include "ct_itemdrawable/ct_profile.h"
+#include "painterinterface.h"
 #include <typeinfo>
 #include <QObject>
 
@@ -10,8 +11,6 @@
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
-
-#include "qdebug.h"
 
 template< typename DataT > const QString CT_StandardProfileDrawManager<DataT>::INDEX_CONFIG_COLUMN_MODE_ENABLED = CT_StandardProfileDrawManager<DataT>::staticInitConfigColumnModeEnabled();
 template< typename DataT > const QString CT_StandardProfileDrawManager<DataT>::INDEX_CONFIG_COLUMN_RADIUS = CT_StandardProfileDrawManager<DataT>::staticInitConfigColumnRadius();
@@ -27,35 +26,30 @@ template< typename DataT > const QString CT_StandardProfileDrawManager<DataT>::I
 
 template< typename DataT >
 CT_StandardProfileDrawManager<DataT>::CT_StandardProfileDrawManager(QString drawConfigurationName)
-    : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(drawConfigurationName.isEmpty() ? CT_Profile<DataT>::staticName() : drawConfigurationName)
+    : SuperClass(drawConfigurationName.isEmpty() ? CT_Profile<DataT>::staticName() : drawConfigurationName)
 {
     
 }
 
 template< typename DataT >
-CT_StandardProfileDrawManager<DataT>::~CT_StandardProfileDrawManager()
-{
-}
-
-template< typename DataT >
 void CT_StandardProfileDrawManager<DataT>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
 {
-    CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::draw(view, painter, itemDrawable);
+    SuperClass::draw(view, painter, itemDrawable);
 
-    const CT_Profile<DataT> &item = dynamic_cast<const CT_Profile<DataT>&>(itemDrawable);
+    const CT_Profile<DataT> &item = static_cast<const CT_Profile<DataT>&>(itemDrawable);
 
     // Getting the configuration values
-    bool    columnMode = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_COLUMN_MODE_ENABLED).toBool();
-    double  radius = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_COLUMN_RADIUS).toDouble();
-    bool    graphMode = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_GRAPH_MODE_ENABLED).toBool();
-    bool    drawAxis = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_AXIS).toBool();
-    bool    drawBars = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_BARS).toBool();
-    bool    drawPoints = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_POINTS).toBool();
-    int     pointsSize = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_POINTS_SIZE).toInt();
-    bool    drawCurve = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_CURVE).toBool();
-    int     orientation = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_GRAPH_ORIENTATION).toInt();
-    bool    scale = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_SCALE).toBool();
-    double  scaleCoeff = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_SCALE8COEFFICIENT).toDouble();
+    bool    columnMode = drawConfiguration()->variableValue(INDEX_CONFIG_COLUMN_MODE_ENABLED).toBool();
+    double  radius = drawConfiguration()->variableValue(INDEX_CONFIG_COLUMN_RADIUS).toDouble();
+    bool    graphMode = drawConfiguration()->variableValue(INDEX_CONFIG_GRAPH_MODE_ENABLED).toBool();
+    bool    drawAxis = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_AXIS).toBool();
+    bool    drawBars = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_BARS).toBool();
+    bool    drawPoints = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_POINTS).toBool();
+    int     pointsSize = drawConfiguration()->variableValue(INDEX_CONFIG_POINTS_SIZE).toInt();
+    bool    drawCurve = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_CURVE).toBool();
+    int     orientation = drawConfiguration()->variableValue(INDEX_CONFIG_GRAPH_ORIENTATION).toInt();
+    bool    scale = drawConfiguration()->variableValue(INDEX_CONFIG_SCALE).toBool();
+    double  scaleCoeff = drawConfiguration()->variableValue(INDEX_CONFIG_SCALE8COEFFICIENT).toDouble();
 
     if (radius <= 0) {radius = 0.50;}
     if (orientation < 0) {orientation = 0;}
@@ -81,7 +75,7 @@ void CT_StandardProfileDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
 
         if (item.getCellCenterXYZ(index, center))
         {
-            QColor color = painter.getColor();
+            const QColor color = painter.getColor();
             if (columnMode)
             {
                 if (isNa)
@@ -183,7 +177,7 @@ void CT_StandardProfileDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
 template< typename DataT >
 CT_ItemDrawableConfiguration CT_StandardProfileDrawManager<DataT>::createDrawConfiguration(QString drawConfigurationName) const
 {
-    CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
+    CT_ItemDrawableConfiguration item(drawConfigurationName);
 
     item.addNewConfiguration(staticInitConfigColumnModeEnabled(), QObject::tr("Mode colonne"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(staticInitConfigColumnRadius(), QObject::tr("Rayon de colonne"), CT_ItemDrawableConfiguration::Double, 0.50);

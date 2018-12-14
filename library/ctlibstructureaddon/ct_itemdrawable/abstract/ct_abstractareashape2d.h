@@ -35,29 +35,41 @@
 /**
   * Représente une forme géomtrique 2D surfacique
   */
-class PLUGINSHAREDSHARED_EXPORT CT_AbstractAreaShape2D : public CT_AbstractShape2D
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractAreaShape2D : public CT_AbstractShape2D
 {
-    // IMPORTANT pour avoir le nom de l'ItemDrawable
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractAreaShape2D, CT_AbstractShape2D, 2D area shape)
 
+    using SuperClass = CT_AbstractShape2D;
+
 public:
-    /**
-      * \brief Contructeur vide.
-      */
     CT_AbstractAreaShape2D();
+
     /**
-      * \brief Contructeur avec une instance des donnes (CT_AreaShape2DData*), ne peut être NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_AbstractAreaShape2D(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result,
-                     CT_AreaShape2DData *data);
+     * @brief Construct with a data. Cannot be NULL !
+     */
+    CT_AbstractAreaShape2D(CT_AreaShape2DData* data);
 
-    CT_AbstractAreaShape2D(const QString &modelName,
-                     const CT_AbstractResult *result,
-                     CT_AreaShape2DData *data);
-
-    virtual ~CT_AbstractAreaShape2D();
+    /**
+     * @brief Copy constructor.
+     *
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - Unique ID
+     *          - Pointer of base and alternative draw manager
+     *          - Displayable name
+     *          - Center coordinates
+     *          - Default Color
+     *          - Min and Max coordinates (bounding box)
+     *          - Data 2D
+     *          - Z Value and if z value is defined
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     */
+    CT_AbstractAreaShape2D(const CT_AbstractAreaShape2D& other) = default;
 
     virtual bool contains(double x, double y) const;
     virtual double getArea() const;
@@ -66,9 +78,7 @@ public:
     const CT_AreaShape2DData& getAreaData() const;
 
 protected:
-
     CT_AreaShape2DData* getAreaDataNotConst() const;
-
 };
 
 #endif // CT_ABSTRACTAREASHAPE2D_H

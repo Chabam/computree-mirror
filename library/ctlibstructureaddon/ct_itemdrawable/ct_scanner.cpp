@@ -30,8 +30,8 @@
 
 #ifdef _MSC_VER
 #define _USE_MATH_DEFINES
-#include <math.h>
 #endif
+#include <math.h>
 
 #include "ct_itemdrawable/tools/scanner/ct_thetaphishootingpattern.h"
 

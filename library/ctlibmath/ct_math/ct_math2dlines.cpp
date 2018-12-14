@@ -18,13 +18,11 @@ bool CT_Math2DLines::intersectSegments(Eigen::Vector2d &a, Eigen::Vector2d &b, E
 void CT_Math2DLines::computePerpendicularSegment(Eigen::Vector2d &a, Eigen::Vector2d &b, Eigen::Vector2d &c, Eigen::Vector2d &d, double length, bool clockwise)
 {
     double k = 1;
-    if (length > 0)
-    {
-        k = length/CT_Math2DLines::distance2D(a, b);
-    }
 
-    if (clockwise)
-    {
+    if (length > 0)
+        k = length/CT_Math2DLines::distance2D(a, b);
+
+    if (clockwise) {
         d(0) = c(0) + k*(a(1) - b(1));
         d(1) = c(1) + k*(b(0) - a(0));
     } else {

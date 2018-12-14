@@ -27,8 +27,6 @@
 #ifndef CT_DELAUNAYTRIANGLESRECYCLER_H
 #define CT_DELAUNAYTRIANGLESRECYCLER_H
 
-
-#include "pluginShared_global.h"
 #include "ct_delaunaytriangle.h"
 #include "ct_delaunayvertex.h"
 
@@ -38,7 +36,7 @@
  *
  * @author A. Piboule - february 2004 / modified october 2016
  */
-class PLUGINSHAREDSHARED_EXPORT CT_DelaunayTriangleRecycler
+class CTLIBSTRUCTUREADDON_EXPORT CT_DelaunayTriangleRecycler
 {
 
 public:

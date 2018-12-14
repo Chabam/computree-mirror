@@ -77,11 +77,6 @@ double CT_EllipseData::getError() const
     return _error;
 }
 
-CT_EllipseData* CT_EllipseData::clone() const
-{
-    return new CT_EllipseData(getCenter(), getAxisA(), getAxisB(), getError());
-}
-
 CT_EllipseData* CT_EllipseData::staticCreateZAxisAlignedEllipseDataFromPointCloud(const CT_AbstractPointCloudIndex *pointCloudIndex)
 {
     if(pointCloudIndex == NULL)

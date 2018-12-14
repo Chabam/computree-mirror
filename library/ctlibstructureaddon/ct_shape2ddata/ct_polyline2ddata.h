@@ -43,24 +43,23 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_Polyline2DData : public CT_Shape2DData
 
 public:
     CT_Polyline2DData();
-    CT_Polyline2DData(const QVector<Eigen::Vector2d*>& vertices);
-    CT_Polyline2DData(const CT_Polyline2DData& other);
-    ~CT_Polyline2DData() override;
+    CT_Polyline2DData(const QVector<Eigen::Vector2d>& vertices);
+    CT_Polyline2DData(const CT_Polyline2DData& other) = default;
 
     void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const;
 
-    inline const QVector<Eigen::Vector2d*>& getVertices() const {return _vertices;}
+    inline const QVector<Eigen::Vector2d>& getVertices() const {return _vertices;}
     inline int getVerticesNumber() {return _vertices.size();}
 
     CT_SHAPEDATA2D_CLONE_IMP(CT_Polyline2DData)
 
 private:
-    QVector<Eigen::Vector2d*> _vertices;
+    QVector<Eigen::Vector2d> _vertices;
 
-    double               _minX;
-    double               _maxX;
-    double               _minY;
-    double               _maxY;
+    double                  _minX;
+    double                  _maxX;
+    double                  _minY;
+    double                  _maxY;
 
     friend class CT_Polyline2D;
 };

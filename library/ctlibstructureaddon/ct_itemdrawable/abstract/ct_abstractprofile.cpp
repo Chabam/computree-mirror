@@ -26,21 +26,3 @@
 *****************************************************************************/
 
 #include "ct_abstractprofile.h"
-
-
-CT_AbstractProfile::CT_AbstractProfile() : CT_AbstractItemDrawableWithoutPointCloud()
-{
-}
-
-CT_AbstractProfile::CT_AbstractProfile(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
-{
-}
-
-CT_AbstractProfile::CT_AbstractProfile(const QString &modelName, const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
-{
-}
-
-CT_AbstractProfile::~CT_AbstractProfile()
-{
-}
-

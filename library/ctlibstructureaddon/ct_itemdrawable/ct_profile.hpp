@@ -35,23 +35,14 @@
 #include <typeinfo>
 #include <limits>
 
-#include "ct_math/ct_math.h"
-#include "qdebug.h"
-
 template< typename DataT>
 const CT_StandardProfileDrawManager<DataT> CT_Profile<DataT>::ABSPROFILE_DRAW_MANAGER;
 
 template< typename DataT>
-CT_Profile<DataT>::CT_Profile() : CT_AbstractProfile()
+CT_Profile<DataT>::CT_Profile() : SuperClass()
 {
-    _minCoordinates(0) = 0;
-    _minCoordinates(1) = 0;
-    _minCoordinates(2) = 0;
     _res = 1;
     _dim = 0;
-    _maxCoordinates(0) = 0;
-    _maxCoordinates(1) = 0;
-    _maxCoordinates(2) = 0;
     _NAdata = -1;
     _dataMax = -1;
     _dataMin = -1;
@@ -62,9 +53,7 @@ CT_Profile<DataT>::CT_Profile() : CT_AbstractProfile()
 
 
 template< typename DataT>
-CT_Profile<DataT>::CT_Profile(const CT_OutAbstractSingularItemModel *model,
-                              const CT_AbstractResult *result,
-                              double xmin,
+CT_Profile<DataT>::CT_Profile(double xmin,
                               double ymin,
                               double zmin,
                               double xdir,
@@ -73,12 +62,8 @@ CT_Profile<DataT>::CT_Profile(const CT_OutAbstractSingularItemModel *model,
                               size_t dim,
                               double resolution,
                               DataT na,
-                              DataT initValue) : CT_AbstractProfile(model, result)
+                              DataT initValue) : SuperClass()
 {
-    _minCoordinates(0) = xmin;
-    _minCoordinates(1) = ymin;
-    _minCoordinates(2) = zmin;
-
     _direction(0) = xdir;
     _direction(1) = ydir;
     _direction(2) = zdir;
@@ -89,15 +74,14 @@ CT_Profile<DataT>::CT_Profile(const CT_OutAbstractSingularItemModel *model,
     _dim = dim;
     _maxLength = _dim * _res;
 
-    _maxCoordinates(0) = xmin + _res * _dim * _direction.x();
-    _maxCoordinates(1) = ymin + _res * _dim * _direction.y();
-    _maxCoordinates(2) = zmin + _res * _dim * _direction.z();
-
     _NAdata = na;
 
-    setCenterX (minX() + (maxX() - minX())/2.0);
-    setCenterY (minY() + (maxY() - minY())/2.0);
-    setCenterZ (minZ() + (maxZ() - minZ())/2.0);
+    setBoundingBox(xmin,
+                   ymin,
+                   zmin,
+                   xmin + _res * _dim * _direction.x(),
+                   ymin + _res * _dim * _direction.y(),
+                   zmin + _res * _dim * _direction.z());
 
     _data.resize(nCells());
 
@@ -107,54 +91,7 @@ CT_Profile<DataT>::CT_Profile(const CT_OutAbstractSingularItemModel *model,
 }
 
 template< typename DataT>
-CT_Profile<DataT>::CT_Profile(const QString &modelName,
-                              const CT_AbstractResult *result,
-                              double xmin,
-                              double ymin,
-                              double zmin,
-                              double xdir,
-                              double ydir,
-                              double zdir,
-                              size_t dim,
-                              double resolution,
-                              DataT na,
-                              DataT initValue) : CT_AbstractProfile(modelName, result)
-{
-    _minCoordinates(0) = xmin;
-    _minCoordinates(1) = ymin;
-    _minCoordinates(2) = zmin;
-
-    _direction(0) = xdir;
-    _direction(1) = ydir;
-    _direction(2) = zdir;
-
-    _direction.normalize();
-
-    _res = resolution;
-    _dim = dim;
-    _maxLength = _dim * _res;
-
-    _maxCoordinates(0) = xmin + _res * _dim * _direction.x();
-    _maxCoordinates(1) = ymin + _res * _dim * _direction.y();
-    _maxCoordinates(2) = zmin + _res * _dim * _direction.z();
-
-    _NAdata = na;
-
-    setCenterX (minX() + (maxX() - minX())/2.0);
-    setCenterY (minY() + (maxY() - minY())/2.0);
-    setCenterZ (minZ() + (maxZ() - minZ())/2.0);
-
-    _data.resize(nCells());
-
-    initGridWithValue(initValue);
-
-    setBaseDrawManager(&ABSPROFILE_DRAW_MANAGER);
-}
-
-template< typename DataT>
-CT_Profile<DataT>* CT_Profile<DataT>::createProfileFromSegment(const CT_OutAbstractSingularItemModel *model,
-                                                               const CT_AbstractResult *result,
-                                                               double xmin,
+CT_Profile<DataT>* CT_Profile<DataT>::createProfileFromSegment(double xmin,
                                                                double ymin,
                                                                double zmin,
                                                                double xmax,
@@ -178,43 +115,10 @@ CT_Profile<DataT>* CT_Profile<DataT>::createProfileFromSegment(const CT_OutAbstr
         dim++;
     }
 
-    CT_Profile<DataT>* grid = new CT_Profile(model, result, xmin, ymin, zmin, xdir, ydir, zdir, dim, resolution, na, initValue);
+    CT_Profile<DataT>* grid = new CT_Profile(xmin, ymin, zmin, xdir, ydir, zdir, dim, resolution, na, initValue);
 
     return grid;
 }
-
-template< typename DataT>
-CT_Profile<DataT>* CT_Profile<DataT>::createProfileFromSegment(const QString &modelName,
-                                                               const CT_AbstractResult *result,
-                                                               double xmin,
-                                                               double ymin,
-                                                               double zmin,
-                                                               double xmax,
-                                                               double ymax,
-                                                               double zmax,
-                                                               double resolution,
-                                                               DataT na,
-                                                               DataT initValue)
-{
-    double xdir = xmax - xmin;
-    double ydir = ymax - ymin;
-    double zdir = zmax - zmin;
-
-    double length = sqrt(xdir*xdir + ydir*ydir + zdir*zdir);
-
-    int dim = ceil(length/resolution);
-
-    // to ensure a point exactly on a maximum limit of the grid will be included in the grid
-    while (length >= dim*resolution)
-    {
-        dim++;
-    }
-
-    CT_Profile<DataT>* grid = new CT_Profile(modelName, result, xmin, ymin, zmin, xdir, ydir, zdir, dim, resolution, na, initValue);
-
-    return grid;
-}
-
 
 template< typename DataT>
 CT_Profile<DataT>::~CT_Profile()
@@ -240,7 +144,6 @@ void CT_Profile<DataT>::setValueAtIndexFromDouble(const size_t &index, const dou
     setValueAtIndex(index, (DataT) value);
 }
 
-
 template< typename DataT>
 void CT_Profile<DataT>::computeMinMax()
 {
@@ -258,34 +161,6 @@ void CT_Profile<DataT>::computeMinMax()
             }
         }
     }
-}
-
-
-
-template< typename DataT>
-QString CT_Profile<DataT>::getType() const
-{
-    return staticGetType();
-}
-
-template< typename DataT>
-QString CT_Profile<DataT>::staticGetType()
-{
-    QString type = CT_AbstractProfile::staticGetType() + "/CT_Profile<" + CT_TypeInfo::name<DataT>() + ">";
-    CT_AbstractItemDrawable::addNameTypeCorresp(type, staticName());
-    return type;
-}
-
-template< typename DataT>
-QString CT_Profile<DataT>::name() const
-{
-    return staticName();
-}
-
-template< typename DataT>
-QString CT_Profile<DataT>::staticName()
-{
-    return tr("Profile<%1>").arg(CT_TypeInfo::name<DataT>());
 }
 
 template< typename DataT>
@@ -608,51 +483,6 @@ void CT_Profile<DataT>::standardize()
         DataT val = valueAtIndex(i);
         if (val != NA()) {setValueAtIndex(i, (DataT) ((double)val / (double)sum));}
     }
-}
-
-
-template< typename DataT>
-CT_AbstractItemDrawable* CT_Profile<DataT>::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_Profile<DataT>* cpy = new CT_Profile<DataT>((const CT_OutAbstractSingularItemModel *)model, result, minX(), minY(), minZ(), _direction.x(), _direction.y(), _direction.z(), _dim, _res, _NAdata, _NAdata);
-    cpy->setId(id());
-
-    for (size_t i = 0 ; i < nCells() ; i++)
-    {
-        cpy->setValueAtIndex(i, valueAtIndex(i));
-    }
-
-    if (nCells() >0)
-    {
-        cpy->computeMinMax();
-    }
-    cpy->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return cpy;
-}
-
-template< typename DataT>
-CT_AbstractItemDrawable* CT_Profile<DataT>::copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_Profile<DataT>* cpy = new CT_Profile<DataT>(modelName, result, minX(), minY(), minZ(), _direction.x(), _direction.y(), _direction.z(), _dim, _res, _NAdata, _NAdata);
-    cpy->setId(id());
-
-    for (size_t i = 0 ; i < nCells() ; i++)
-    {
-        cpy->setValueAtIndex(i, valueAtIndex(i));
-    }
-
-    if (nCells() >0)
-    {
-        cpy->computeMinMax();
-    }
-    cpy->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return cpy;
 }
 
 #endif // CT_PROFILE_HPP

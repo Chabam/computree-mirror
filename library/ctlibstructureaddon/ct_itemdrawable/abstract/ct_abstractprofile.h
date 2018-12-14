@@ -29,7 +29,6 @@
 #define CT_ABSTRACTPROFILE_H
 
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
-#include "ct_math/ct_math.h"
 
 #include <Eigen/Core>
 
@@ -41,22 +40,32 @@
  * It's usefull to manage generically a profile, without knowing its template type
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_AbstractProfile : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractProfile : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractProfile, CT_AbstractItemDrawableWithoutPointCloud, Profile)
 
 public:
+    CT_AbstractProfile() = default;
 
     /**
-      * \brief Empty Contructor
-      */
-    CT_AbstractProfile();
-
-    CT_AbstractProfile(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result);
-    CT_AbstractProfile(const QString &modelName, const CT_AbstractResult *result);
-
-    virtual ~CT_AbstractProfile();
+     * @brief Copy constructor.
+     *
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - Unique ID
+     *          - Pointer of base and alternative draw manager
+     *          - Displayable name
+     *          - Center coordinates
+     *          - Default Color
+     *          - Min and Max coordinates (bounding box)
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     */
+    CT_AbstractProfile(const CT_AbstractProfile& other) = default;
 
     /*!
      * \brief Return a [0;1] value for any type (or -1 for NA)
@@ -218,9 +227,9 @@ public:
     {
         if (index >= _dim) {return false;}
 
-        double length = lengthForIndex(index) ;
+        const double length = lengthForIndex(index) ;
 
-        center = _minCoordinates + length*_direction;
+        center = minCoordinates() + length*_direction;
 
         return true;
     }
@@ -240,8 +249,8 @@ public:
         double lengthBottom = length - (_res/2.0);
         double lengthTop = length + (_res/2.0);
 
-        bottom = _minCoordinates + lengthBottom*_direction;
-        top    = _minCoordinates + lengthTop*_direction;
+        bottom = minCoordinates() + lengthBottom*_direction;
+        top    = minCoordinates() + lengthTop*_direction;
 
         return true;
     }
