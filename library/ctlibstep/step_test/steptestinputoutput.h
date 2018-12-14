@@ -25,7 +25,7 @@ protected:
 
     void declareOutputModels(CT_StepOutModelStructureManager& manager) override;
 
-    void compute();
+    void compute() override;
 
 private:
     CT_HandleInResultGroup<>                    m_hInResult;
