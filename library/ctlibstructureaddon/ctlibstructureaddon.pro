@@ -4,7 +4,10 @@ contains ( QT_VERSION, "^5.*" ) {
     QT *= widgets
 }
 
+MUST_USE_OPENCV = 1
+
 include(../library_shared.pri)
+include(../../include_all.pri)
 
 TARGET = ctlibstructureaddon
 
@@ -45,11 +48,11 @@ HEADERS += \
     ct_itemdrawable/tools/scanner/ct_shot.h \
     ct_itemdrawable/tools/scanner/ct_shootingpattern.h \
     ct_itemdrawable/tools/scanner/ct_thetaphishootingpattern.h \
-#    ct_itemdrawable/ct_affiliationid.h \
-#    ct_itemdrawable/ct_box2d.h \
-#    ct_itemdrawable/ct_circle.h \
-#    ct_itemdrawable/ct_circle2d.h \
-#    ct_itemdrawable/ct_colorcomposite.h \
+    ct_itemdrawable/ct_affiliationid.h \
+    ct_itemdrawable/ct_box2d.h \
+    ct_itemdrawable/ct_circle.h \
+    ct_itemdrawable/ct_circle2d.h \
+    ct_itemdrawable/ct_colorcomposite.h \
 #    ct_itemdrawable/ct_cylinder.h \
 #    ct_itemdrawable/ct_edgeattributescolor.h \
 #    ct_itemdrawable/ct_edgeattributesnormal.h \
@@ -94,7 +97,6 @@ HEADERS += \
     ct_itemdrawable/ct_profile.hpp \
     ct_itemdrawable/ct_referencepoint.h \
 #    ct_itemdrawable/ct_scanpath.h \
-#    ct_itemdrawable/ct_scene.h \
 #    ct_itemdrawable/ct_shootingpatternd.h \
 #    ct_itemdrawable/ct_sphere.h \
 #    ct_itemdrawable/ct_stdpointsattributescontainer.h \
@@ -103,12 +105,12 @@ HEADERS += \
 #    ct_itemdrawable/ct_transformationmatrix.h \
 #    ct_itemdrawable/ct_triangulation2d.h \
 #    ct_itemdrawable/ct_ttreegroup.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.h \
+     ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.h \
+     ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.h \
+     ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.h \
+     ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.h \
+     ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.h \
+     ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h \
@@ -164,7 +166,11 @@ HEADERS += \
     ct_itemdrawable/abstract/ct_abstractshape.h \
     ct_itemdrawable/abstract/ct_abstractshape2d.h \
     ct_itemdrawable/abstract/ct_abstractimage2d.h \
-    ct_itemdrawable/abstract/ct_abstractprofile.h
+    ct_itemdrawable/abstract/ct_abstractprofile.h \
+    ct_itemdrawable/tools/ct_itemplateddata1darray.h \
+    ct_itemdrawable/tools/ct_itemplateddata2darray.h \
+    ct_itemdrawable/tools/ct_itemplateddata3darray.h \
+    ct_itemdrawable/tools/ct_itemplateddata4darray.h
 
 SOURCES += \ 
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.cpp \
@@ -195,11 +201,11 @@ SOURCES += \
     ct_itemdrawable/tools/drawmanager/ct_standardbeamdrawmanager.cpp \
     ct_itemdrawable/tools/scanner/ct_shot.cpp \
     ct_itemdrawable/tools/scanner/ct_thetaphishootingpattern.cpp \
-#    ct_itemdrawable/ct_affiliationid.cpp \
-#    ct_itemdrawable/ct_box2d.cpp \
-#    ct_itemdrawable/ct_circle.cpp \
-#    ct_itemdrawable/ct_circle2d.cpp \
-#    ct_itemdrawable/ct_colorcomposite.cpp \
+    ct_itemdrawable/ct_affiliationid.cpp \
+    ct_itemdrawable/ct_box2d.cpp \
+    ct_itemdrawable/ct_circle.cpp \
+    ct_itemdrawable/ct_circle2d.cpp \
+    ct_itemdrawable/ct_colorcomposite.cpp \
 #    ct_itemdrawable/ct_cylinder.cpp \
 #    ct_itemdrawable/ct_edgeattributescolor.cpp \
 #    ct_itemdrawable/ct_edgeattributesnormal.cpp \
@@ -230,7 +236,6 @@ SOURCES += \
     ct_itemdrawable/ct_profile.cpp \
     ct_itemdrawable/ct_referencepoint.cpp \
 #    ct_itemdrawable/ct_scanpath.cpp \
-#    ct_itemdrawable/ct_scene.cpp \
 #    ct_itemdrawable/ct_shootingpatternd.cpp \
 #    ct_itemdrawable/ct_sphere.cpp \
 #    ct_itemdrawable/ct_stdpointsattributescontainer.cpp \
@@ -239,12 +244,12 @@ SOURCES += \
 #    ct_itemdrawable/ct_transformationmatrix.cpp \
 #    ct_itemdrawable/ct_triangulation2d.cpp \
 #    ct_itemdrawable/ct_ttreegroup.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp \
+     ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.cpp \
+     ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.cpp \
+     ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.cpp \
+     ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.cpp \
+     ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.cpp \
+     ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.cpp \

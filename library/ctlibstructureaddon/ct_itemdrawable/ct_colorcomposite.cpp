@@ -27,98 +27,78 @@
 
 #include "ct_colorcomposite.h"
 
-#ifdef USE_OPENCV
-
-#include <limits>
-
 const CT_StandardColorCompositeDrawManager CT_ColorComposite::COLOR_COMPOSITE_DRAW_MANAGER;
 
-CT_ColorComposite::CT_ColorComposite() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_ColorComposite::CT_ColorComposite() : SuperClass(),
+    _red(NULL),
+    _green(NULL),
+    _blue(NULL),
+    _zValue(NULL),
+    _redSource(NULL),
+    _greenSource(NULL),
+    _blueSource(NULL)
 {
-    _red = NULL;
-    _green = NULL;
-    _blue = NULL;
-    _zValue = NULL;
-
-    _redSource = NULL;
-    _greenSource = NULL;
-    _blueSource = NULL;
-
-    // Setting the center attribute from the CT_AbstractItemDrawableWithoutPointCloud class
-    setCenterX( 0 );
-    setCenterY( 0 );
-    setCenterZ( 0 );
-
     setBaseDrawManager(&COLOR_COMPOSITE_DRAW_MANAGER);
 }
 
-CT_ColorComposite::CT_ColorComposite(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result,
-                                     CT_AbstractImage2D* red, CT_AbstractImage2D* green, CT_AbstractImage2D* blue, CT_Image2D<float>* zvalue) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+CT_ColorComposite::CT_ColorComposite(CT_AbstractImage2D* red,
+                                     CT_AbstractImage2D* green,
+                                     CT_AbstractImage2D* blue,
+                                     CT_Image2D<float>* zvalue) : SuperClass(),
+    _red(NULL),
+    _green(NULL),
+    _blue(NULL),
+    _zValue(NULL),
+    _redSource(red),
+    _greenSource(green),
+    _blueSource(blue)
 {
-    _red = NULL;
-    _green = NULL;
-    _blue = NULL;
-    _zValue = NULL;
-    _redSource = red;
-    _greenSource = green;
-    _blueSource = blue;
-
-    if (computeBands(red, green, blue, zvalue))
+    if(computeBands(red, green, blue, zvalue))
     {
-        setCenterX((red->maxX() + red->minX() / 2.0));
-        setCenterY((red->maxY() + red->minY() / 2.0));
-        setCenterZ(0);
-
-        _minCoordinates(0) = red->minX();
-        _minCoordinates(1) = red->minY();
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = red->maxX();
-        _maxCoordinates(1) = red->maxY();
-        _maxCoordinates(2) = 0;
-
-    } else {
-        setCenterX( 0 );
-        setCenterY( 0 );
-        setCenterZ( 0 );
+        setBoundingBox(red->minX(), red->minY(), 0,
+                       red->maxX(), red->maxY(), 0);
     }
 
     setBaseDrawManager(&COLOR_COMPOSITE_DRAW_MANAGER);
 }
 
-
-CT_ColorComposite::CT_ColorComposite(const QString &modelName, const CT_AbstractResult *result,
-                                     CT_AbstractImage2D* red, CT_AbstractImage2D* green, CT_AbstractImage2D* blue, CT_Image2D<float>* zvalue) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
+CT_ColorComposite::CT_ColorComposite(const CT_ColorComposite& other) : SuperClass(other)
 {
-    _red = NULL;
-    _green = NULL;
-    _blue = NULL;
-    _zValue = NULL;
-    _redSource = red;
-    _greenSource = green;
-    _blueSource = blue;
+    _red = static_cast<CT_Image2D<quint8>*>((other._red == NULL) ? NULL : other._red->copy(other._red->modelStaticT<CT_OutAbstractItemModel>(), other._red->result()));
+    _green = static_cast<CT_Image2D<quint8>*>((other._green == NULL) ? NULL : other._green->copy(other._green->modelStaticT<CT_OutAbstractItemModel>(), other._green->result()));
+    _blue = static_cast<CT_Image2D<quint8>*>((other._blue == NULL) ? NULL : other._blue->copy(other._blue->modelStaticT<CT_OutAbstractItemModel>(), other._blue->result()));
 
-    if (computeBands(red, green, blue, zvalue))
-    {
-        setCenterX((red->maxX() + red->minX() / 2.0));
-        setCenterY((red->maxY() + red->minY() / 2.0));
-        setCenterZ(0);
+    _zValue = other._zValue;
+    _redSource = other._redSource;
+    _greenSource = other._greenSource;
+    _blueSource = other._blueSource;
+}
 
-        _minCoordinates(0) = red->minX();
-        _minCoordinates(1) = red->minY();
-        _minCoordinates(2) = 0;
+CT_ColorComposite::~CT_ColorComposite()
+{
+    delete _red;
+    delete _green;
+    delete _blue;
+}
 
-        _maxCoordinates(0) = red->maxX();
-        _maxCoordinates(1) = red->maxY();
-        _maxCoordinates(2) = 0;
+const CT_Image2D<quint8>*CT_ColorComposite::getRedBand() const
+{
+    return _red;
+}
 
-    } else {
-        setCenterX( 0 );
-        setCenterY( 0 );
-        setCenterZ( 0 );
-    }
+const CT_Image2D<quint8>*CT_ColorComposite::getGreenBand() const
+{
+    return _green;
+}
 
-    setBaseDrawManager(&COLOR_COMPOSITE_DRAW_MANAGER);
+const CT_Image2D<quint8>*CT_ColorComposite::getBlueBand() const
+{
+    return _blue;
+}
+
+const CT_Image2D<float>*CT_ColorComposite::getZValueRaster() const
+{
+    return _zValue;
 }
 
 bool CT_ColorComposite::computeBands(CT_AbstractImage2D* red, CT_AbstractImage2D* green, CT_AbstractImage2D* blue, CT_Image2D<float>* zvalue)
@@ -132,27 +112,35 @@ bool CT_ColorComposite::computeBands(CT_AbstractImage2D* red, CT_AbstractImage2D
     {
         _zValue = zvalue;
 
-        _red = new CT_Image2D<quint8>(NULL, NULL, red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
-        _green = new CT_Image2D<quint8>(NULL, NULL, red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
-        _blue = new CT_Image2D<quint8>(NULL, NULL, red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
+        delete _red;
+        delete _green;
+        delete _blue;
 
-        double minRed = red->minValueAsDouble();
-        double minGreen = green->minValueAsDouble();
-        double minBlue = blue->minValueAsDouble();
-        double amplitudeRed = red->maxValueAsDouble() - minRed;
-        double amplitudeGreen = green->maxValueAsDouble() - minGreen;
-        double amplitudeBlue = blue->maxValueAsDouble() - minBlue;
+        _red = new CT_Image2D<quint8>(red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
+        _green = new CT_Image2D<quint8>(red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
+        _blue = new CT_Image2D<quint8>(red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
 
-        for (size_t xx = 0 ; xx < red->colDim() ; xx++)
+        const double minRed = red->minValueAsDouble();
+        const double minGreen = green->minValueAsDouble();
+        const double minBlue = blue->minValueAsDouble();
+        const double amplitudeRed = red->maxValueAsDouble() - minRed;
+        const double amplitudeGreen = green->maxValueAsDouble() - minGreen;
+        const double amplitudeBlue = blue->maxValueAsDouble() - minBlue;
+
+        const size_t nCol = red->colDim();
+        const size_t nLin = red->linDim();
+
+        size_t index;
+
+        for (size_t xx = 0 ; xx < nCol ; xx++)
         {
-            for (size_t yy = 0 ; yy < red->linDim() ; yy++)
+            for (size_t yy = 0 ; yy < nLin ; yy++)
             {
-                size_t index;
                 if (red->index(xx, yy, index))
                 {
-                    double redV = red->valueAtIndexAsDouble(index);
-                    double greenV = green->valueAtIndexAsDouble(index);
-                    double blueV = blue->valueAtIndexAsDouble(index);
+                    const double redV = red->valueAtIndexAsDouble(index);
+                    const double greenV = green->valueAtIndexAsDouble(index);
+                    const double blueV = blue->valueAtIndexAsDouble(index);
 
                     _red->setValue(xx, yy, 255*(redV / amplitudeRed));
                     _green->setValue(xx, yy, 255*(greenV / amplitudeGreen));
@@ -160,36 +148,13 @@ bool CT_ColorComposite::computeBands(CT_AbstractImage2D* red, CT_AbstractImage2D
                 }
             }
         }
+
         _red->setMinMax(0, 255);
         _green->setMinMax(0, 255);
         _blue->setMinMax(0, 255);
 
         return true;
     }
+
     return false;
 }
-
-CT_ColorComposite::~CT_ColorComposite()
-{
-    if (_red != NULL) {delete _red;}
-    if (_green != NULL) {delete _green;}
-    if (_blue != NULL) {delete _blue;}
-    _zValue = NULL;
-    _redSource = NULL;
-    _greenSource = NULL;
-    _blueSource = NULL;
-}
-
-CT_AbstractItemDrawable* CT_ColorComposite::copy(const CT_OutAbstractItemModel *model,
-                                                 const CT_AbstractResult *result,
-                                                 CT_ResultCopyModeList copyModeList)
-{
-    CT_ColorComposite *item = new CT_ColorComposite((const CT_OutAbstractSingularItemModel *)model, result, _redSource, _greenSource, _blueSource, _zValue);
-    item->setId(id());
-
-    item->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return item;
-}
-
-#endif

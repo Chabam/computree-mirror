@@ -6,9 +6,9 @@
 #include "ct_iterator/ct_singlemodeliteratorstdstyleforresultgroup.h"
 #include "ct_handleiteratort.h"
 
-template<typename SuperClass, typename ItemT>
+template<typename SuperClass, typename ItemT, typename ParentT = CT_AbstractItem>
 class CT_HandleIterationDecorator : public SuperClass {
-    using SingleModelIterator = CT_SingleModelIteratorStdStyleForResultGroup<ItemT>;
+    using SingleModelIterator = CT_SingleModelIteratorStdStyleForResultGroup<ItemT, ParentT>;
     using MultiModelIterator = CT_MultiModelIteratorStdStyle<SingleModelIterator, ItemT>;
     using ConstMultiModelIterator = CT_MultiModelIteratorStdStyle<SingleModelIterator, const ItemT>;
 

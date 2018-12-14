@@ -7,7 +7,7 @@ const QString CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::INDEX
 const QString CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::INDEX_CONFIG_BOUNDING_SHAPE_POINT_SIZE = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::staticInitConfigBoundingShapePointSize();
 const QString CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::INDEX_CONFIG_BOUNDING_SHAPE_CENTER_POINT_VISIBLE = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::staticInitConfigBoundingShapeCenterPointVisible();
 
-CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(const QString& drawConfigurationName) : CT_AbstractItemDrawableDrawManager(drawConfigurationName.isEmpty() ? CT_AbstractItemDrawableWithoutPointCloud::staticName() : drawConfigurationName)
+CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(const QString& drawConfigurationName) : SuperClass(drawConfigurationName.isEmpty() ? CT_AbstractItemDrawableWithoutPointCloud::staticName() : drawConfigurationName)
 {
 }
 
@@ -67,7 +67,7 @@ CT_ItemDrawableConfiguration CT_StandardAbstractItemDrawableWithoutPointCloudDra
 {
     CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
 
-    item.addAllConfigurationOf(CT_AbstractItemDrawableDrawManager::createDrawConfiguration(drawConfigurationName));
+    item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
     item.addNewConfiguration(CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::staticInitConfigBoundingShapeVisible(),QObject::tr("Bounding Shape"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::staticInitConfigBoundingShapeCenterPointVisible(), QObject::tr("Centre de la Bounding Shape"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::staticInitConfigBoundingShapePointSize(), QObject::tr("Taille des points (Bounding Shape)"), CT_ItemDrawableConfiguration::Double, 10.0);

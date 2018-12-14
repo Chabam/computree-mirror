@@ -3,23 +3,26 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardBox2DDrawManager : public CT_StandardAbstractShape2DDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardBox2DDrawManager : public CT_StandardAbstractShape2DDrawManager
 {
+    using SuperClass = CT_StandardAbstractShape2DDrawManager;
+
 public:
     CT_StandardBox2DDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardBox2DDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface& view,
+              PainterInterface& painter,
+              const CT_AbstractItemDrawable& itemDrawable) const override;
 
 protected:
 
-    const static QString INDEX_CONFIG_DRAW_BOX;
-    const static QString INDEX_CONFIG_FILL_BOX;
+    static const QString INDEX_CONFIG_DRAW_BOX;
+    static const QString INDEX_CONFIG_FILL_BOX;
 
     static QString staticInitConfigDrawBox();
     static QString staticInitConfigFillBox();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 };
 
 #endif // CT_STANDARDBOX2DDRAWMANAGER_H

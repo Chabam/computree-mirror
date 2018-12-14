@@ -7,19 +7,20 @@
 
 #include <iterator>
 
-template<class ValueT>
+template<class ValueT, typename ParentT = CT_AbstractItem>
 class CT_SingleModelIteratorStdStyleForResultGroup : public std::iterator<std::input_iterator_tag, ValueT*> {
 public:
     using OutModelType = CT_OutAbstractModel;
-    using self_type = CT_SingleModelIteratorStdStyleForResultGroup<ValueT>;
+    using self_type = CT_SingleModelIteratorStdStyleForResultGroup<ValueT, ParentT>;
+    using ParentType = ParentT;
 
     static CT_HandleIteratorT<self_type> createCompleteIterator(const OutModelType* outModel) {
         return CT_HandleIteratorT<self_type>(self_type(outModel), self_type());
     }
 
-    CT_SingleModelIteratorStdStyleForResultGroup() : m_result(NULL), m_currentValue(NULL), m_currentIndexInHierarchy(-1) {}
+    CT_SingleModelIteratorStdStyleForResultGroup() : m_result(NULL), m_currentValue(NULL), m_currentParent(NULL), m_currentIndexInHierarchy(-1) {}
 
-    CT_SingleModelIteratorStdStyleForResultGroup(const OutModelType* outModel) : m_result(NULL), m_currentValue(NULL), m_currentIndexInHierarchy(-1) {
+    CT_SingleModelIteratorStdStyleForResultGroup(const OutModelType* outModel) : m_result(NULL), m_currentValue(NULL), m_currentParent(NULL), m_currentIndexInHierarchy(-1) {
         Q_ASSERT(outModel != NULL);
 
         m_result = static_cast<CT_ResultGroup*>(outModel->result());
@@ -59,8 +60,12 @@ public:
                 haveFoundWhatWeSearch = !isTheEndOfTheCollection;
             }
 
-            if(haveFoundWhatWeSearch)
+            if(haveFoundWhatWeSearch) {
+                if(m_currentIndexInHierarchy > 0)
+                    m_currentParent = static_cast<ParentType*>(*m_iteratorHierarchy[m_currentIndexInHierarchy-1].first);
+
                 m_currentValue = static_cast<ValueT*>(*m_iteratorHierarchy[m_currentIndexInHierarchy].first);
+            }
         } else {
             m_currentValue = dynamic_cast<ValueT*>(m_result);
         }
@@ -86,8 +91,12 @@ public:
             --m_currentIndexInHierarchy;
 
             // and search the next (return true if found, false if we there is no more element that we search in the all hierarchy)
-            if(goToNextInHierarchy())
+            if(goToNextInHierarchy()) {
+                if(m_currentIndexInHierarchy > 0)
+                    m_currentParent = static_cast<ParentType*>(*m_iteratorHierarchy[m_currentIndexInHierarchy-1].first);
+
                 m_currentValue = static_cast<ValueT*>(*m_iteratorHierarchy[m_currentIndexInHierarchy].first); // got it !
+            }
             else
                 m_currentValue = NULL;
         } else {
@@ -102,12 +111,15 @@ public:
     bool operator==(const self_type& rhs) { return m_currentValue == rhs.m_currentValue; }
     bool operator!=(const self_type& rhs) { return m_currentValue != rhs.m_currentValue; }
 
+    ParentType* currentParent() { return m_currentParent; }
+
 private:
     // begin, end
     using childrens_iterator = CT_AbstractItem::ChildrensCollection::const_iterator;
     using IteratorInfo = QPair<childrens_iterator, childrens_iterator>;
 
     CT_ResultGroup*             m_result;
+    ParentType*                 m_currentParent;
     ValueT*                     m_currentValue;
     QVector<OutModelType*>      m_modelsHierarchy;
     QVector<IteratorInfo>       m_iteratorHierarchy;

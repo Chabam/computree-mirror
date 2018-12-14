@@ -3,11 +3,12 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardAbstractShapeDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardAbstractShapeDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardAbstractShapeDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardAbstractShapeDrawManager();
 };
 
 #endif // CT_STANDARDABSTRACTSHAPEDRAWMANAGER_H

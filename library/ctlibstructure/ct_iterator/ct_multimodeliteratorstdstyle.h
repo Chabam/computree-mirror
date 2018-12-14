@@ -77,6 +77,8 @@ public:
     bool operator==(const self_type& rhs) { return m_currentValue == rhs.m_currentValue; }
     bool operator!=(const self_type& rhs) { return m_currentValue != rhs.m_currentValue; }
 
+    typename SingleModelIteratorStdStyleT::ParentType* currentParent() { return m_currentSingleModelIt.currentParent(); }
+
 private:
     ValueT*                 m_currentValue;
     SingleModelIt           m_currentSingleModelIt;

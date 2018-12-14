@@ -33,67 +33,22 @@ const CT_StandardBox2DDrawManager CT_Box2D::BOX2D_DRAW_MANAGER;
 
 CT_DEFAULT_IA_INIT(CT_Box2D)
 
-CT_Box2D::CT_Box2D() : CT_AbstractAreaShape2D()
+CT_Box2D::CT_Box2D() : SuperClass()
 {
     setBaseDrawManager(&BOX2D_DRAW_MANAGER);
 }
 
-CT_Box2D::CT_Box2D(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result, CT_Box2DData *data) : CT_AbstractAreaShape2D(model, result, data)
+CT_Box2D::CT_Box2D(CT_Box2DData* data) : SuperClass(data)
 {
     setBaseDrawManager(&BOX2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        const Eigen::Vector2d& center = data->getCenter();
-
-        _minCoordinates(0) = center(0) - getWidth() / 2.0;
-        _minCoordinates(1) = center(1) - getHeight() / 2.0;
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = center(0) + getWidth() / 2.0;
-        _maxCoordinates(1) = center(1) + getHeight() / 2.0;
-        _maxCoordinates(2) = 0;
-    }
 }
-
-CT_Box2D::CT_Box2D(const QString &modelName,
-                     const CT_AbstractResult *result, CT_Box2DData *data) : CT_AbstractAreaShape2D(modelName, result, data)
-{
-    setBaseDrawManager(&BOX2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        const Eigen::Vector2d& center = data->getCenter();
-
-        _minCoordinates(0) = center(0) - getWidth() / 2.0;
-        _minCoordinates(1) = center(1) - getHeight() / 2.0;
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = center(0) + getWidth() / 2.0;
-        _maxCoordinates(1) = center(1) + getHeight() / 2.0;
-        _maxCoordinates(2) = 0;
-    }
-}
-
 
 double CT_Box2D::getWidth() const
 {
-    return ((const CT_Box2DData&)getData()).getWidth();
+    return dataConstCastAs<CT_Box2DData>()->getWidth();
 }
 
 double CT_Box2D::getHeight() const
 {
-    return ((const CT_Box2DData&)getData()).getHeight();
+    return dataConstCastAs<CT_Box2DData>()->getHeight();
 }
-
-CT_AbstractItemDrawable* CT_Box2D::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Box2D *box = new CT_Box2D((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_Box2DData&)getData()).clone() : NULL);
-    box->setId(id());
-    box->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return box;
-}
-

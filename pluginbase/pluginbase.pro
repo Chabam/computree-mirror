@@ -1,12 +1,10 @@
 COMPUTREE += ctlibplugin ctlibio #ctlibmetrics ctlibfilters ctliblas ctlibstdactions
 
 CHECK_CAN_USE_GDAL = 1
-CHECK_CAN_USE_OPENCV = 1
+MUST_USE_OPENCV = 1
 DONT_CHECK_CT_LIBRARY = 1
 
 include(../plugin_shared.pri)
-
-DEFINES += _CRT_SECURE_NO_WARNINGS
 
 TARGET = plug_base
 

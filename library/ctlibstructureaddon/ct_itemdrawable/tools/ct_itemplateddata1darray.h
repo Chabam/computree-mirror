@@ -1,7 +1,7 @@
 #ifndef CT_ITEMPLATEDDATA1DARRAY_H
 #define CT_ITEMPLATEDDATA1DARRAY_H
 
-#include "pluginShared_global.h"
+#include <QtGlobal>
 
 template< typename DataT>
 class CT_ITemplatedData1DArray

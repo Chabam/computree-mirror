@@ -110,7 +110,7 @@ public:
     void setBoundingBox(double minx, double miny, double minz, double maxx, double maxy, double maxz);
 
     /**
-     * @brief Change the bounding box
+     * @brief Change the bounding box. Center coordinates will be modified according to this bounding box !
      */
     virtual void setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max);
 

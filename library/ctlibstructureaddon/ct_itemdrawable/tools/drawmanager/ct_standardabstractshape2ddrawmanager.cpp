@@ -1,26 +1,18 @@
 #include "ct_standardabstractshape2ddrawmanager.h"
 #include "ct_itemdrawable/abstract/ct_abstractshape2d.h"
 
-#include <QObject>
-
 const QString CT_StandardAbstractShape2DDrawManager::INDEX_CONFIG_USE_ALTERNATIVE_ZVALUE = CT_StandardAbstractShape2DDrawManager::staticInitConfigUseAlternativeZValue();
 const QString CT_StandardAbstractShape2DDrawManager::INDEX_CONFIG_Z_VALUE = CT_StandardAbstractShape2DDrawManager::staticInitConfigZValue();
 
-
-CT_StandardAbstractShape2DDrawManager::CT_StandardAbstractShape2DDrawManager(QString drawConfigurationName) : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(drawConfigurationName.isEmpty() ? CT_AbstractShape2D::staticName() : drawConfigurationName)
+CT_StandardAbstractShape2DDrawManager::CT_StandardAbstractShape2DDrawManager(QString drawConfigurationName) : SuperClass(drawConfigurationName.isEmpty() ? CT_AbstractShape2D::staticName() : drawConfigurationName)
 {
 }
-
-CT_StandardAbstractShape2DDrawManager::~CT_StandardAbstractShape2DDrawManager()
-{
-}
-
 
 CT_ItemDrawableConfiguration CT_StandardAbstractShape2DDrawManager::createDrawConfiguration(QString drawConfigurationName) const
 {
-    CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
+    CT_ItemDrawableConfiguration item(drawConfigurationName);
 
-    item.addAllConfigurationOf(CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::createDrawConfiguration(drawConfigurationName));
+    item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
     item.addNewConfiguration(CT_StandardAbstractShape2DDrawManager::staticInitConfigUseAlternativeZValue(), QObject::tr("Utiliser une valeur Z différente"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(CT_StandardAbstractShape2DDrawManager::staticInitConfigZValue(), QObject::tr("Valeur Z"), CT_ItemDrawableConfiguration::Double, 0);
 
@@ -29,8 +21,8 @@ CT_ItemDrawableConfiguration CT_StandardAbstractShape2DDrawManager::createDrawCo
 
 void CT_StandardAbstractShape2DDrawManager::setZValue(double val)
 {
-    getDrawConfiguration()->setVariableValue(CT_StandardAbstractShape2DDrawManager::staticInitConfigUseAlternativeZValue(), true);
-    getDrawConfiguration()->setVariableValue(CT_StandardAbstractShape2DDrawManager::staticInitConfigZValue(), val);
+    drawConfiguration()->setVariableValue(CT_StandardAbstractShape2DDrawManager::staticInitConfigUseAlternativeZValue(), true);
+    drawConfiguration()->setVariableValue(CT_StandardAbstractShape2DDrawManager::staticInitConfigZValue(), val);
 }
 
 // PROTECTED //

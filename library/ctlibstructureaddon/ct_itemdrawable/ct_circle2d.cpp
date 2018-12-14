@@ -27,67 +27,21 @@
 
 #include "ct_circle2d.h"
 
-#include "math.h"
-
 const CT_StandardCircle2DDrawManager CT_Circle2D::CIRCLE2D_DRAW_MANAGER;
 
 CT_DEFAULT_IA_INIT(CT_Circle2D)
 
-CT_Circle2D::CT_Circle2D() : CT_AbstractAreaShape2D()
+CT_Circle2D::CT_Circle2D() : SuperClass()
 {
     setBaseDrawManager(&CIRCLE2D_DRAW_MANAGER);
 }
 
-CT_Circle2D::CT_Circle2D(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result, CT_Circle2DData *data) : CT_AbstractAreaShape2D(model, result, data)
+CT_Circle2D::CT_Circle2D(CT_Circle2DData* data) : SuperClass(data)
 {
     setBaseDrawManager(&CIRCLE2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        const Eigen::Vector2d& center = data->getCenter();
-
-        _minCoordinates(0) = center(0) - getRadius();
-        _minCoordinates(1) = center(1) - getRadius();
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = center(0) + getRadius();
-        _maxCoordinates(1) = center(1) + getRadius();
-        _maxCoordinates(2) = 0;
-    }
-}
-
-CT_Circle2D::CT_Circle2D(const QString &modelName,
-                     const CT_AbstractResult *result, CT_Circle2DData *data) : CT_AbstractAreaShape2D(modelName, result, data)
-{
-    setBaseDrawManager(&CIRCLE2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        const Eigen::Vector2d& center = data->getCenter();
-
-        _minCoordinates(0) = center(0) - getRadius();
-        _minCoordinates(1) = center(1) - getRadius();
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = center(0) + getRadius();
-        _maxCoordinates(1) = center(1) + getRadius();
-        _maxCoordinates(2) = 0;
-    }
 }
 
 double CT_Circle2D::getRadius() const
 {
-    return ((const CT_Circle2DData&)getData()).getRadius();
+    return dataConstCastAs<CT_Circle2DData>()->getRadius();
 }
-
-CT_AbstractItemDrawable* CT_Circle2D::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Circle2D *circle = new CT_Circle2D((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_Circle2DData&)getData()).clone() : NULL);
-    circle->setId(id());
-    circle->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return circle;
-}
-

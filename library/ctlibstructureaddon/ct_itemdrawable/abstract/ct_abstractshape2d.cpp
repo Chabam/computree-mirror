@@ -48,13 +48,7 @@ CT_AbstractShape2D::CT_AbstractShape2D(CT_Shape2DData* data) : SuperClass(),
 
     Eigen::Vector3d min, max;
     _data->getBoundingBox(min, max);
-    min(2) = 0;
-    max(2) = 0;
     setBoundingBox(min, max);
-
-    const Eigen::Vector2d& center2D = data->getCenter();
-    SuperClass::setCenterCoordinate(Eigen::Vector3d(center2D(0), center2D(1), 0));
-
 }
 
 CT_AbstractShape2D::CT_AbstractShape2D(const CT_AbstractShape2D& other) : SuperClass(other),

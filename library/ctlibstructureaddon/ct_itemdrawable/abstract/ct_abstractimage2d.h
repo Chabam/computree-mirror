@@ -50,7 +50,7 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractImage2D : public CT_AbstractItemDraw
     using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
 
 public:
-    CT_AbstractImage2D() = default;
+    CT_AbstractImage2D();
 
     /**
      * @brief Copy constructor.

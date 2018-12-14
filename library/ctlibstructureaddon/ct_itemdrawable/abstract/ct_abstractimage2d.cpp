@@ -26,3 +26,13 @@
 *****************************************************************************/
 
 #include "ct_abstractimage2d.h"
+
+CT_AbstractImage2D::CT_AbstractImage2D() :
+    _dimCol(0),
+    _dimLin(0),
+    _minColCoord(0),
+    _minLinCoord(0),
+    _res(1),
+    _level(0)
+{
+}

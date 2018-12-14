@@ -31,53 +31,32 @@ CT_DEFAULT_IA_INIT(CT_AffiliationID)
 
 size_t CT_AffiliationID::LASTID = 0;
 
-CT_AffiliationID::CT_AffiliationID() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_AffiliationID::CT_AffiliationID() : SuperClass()
 {
-    _value = 0;
+    _value = LASTID++;
 }
 
-CT_AffiliationID::CT_AffiliationID(const CT_OutAbstractSingularItemModel *model,
-                                   CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+CT_AffiliationID::CT_AffiliationID(size_t value) : SuperClass(),
+    _value(value)
 {
-    _value = ++LASTID;
 }
 
-CT_AffiliationID::CT_AffiliationID(const CT_OutAbstractSingularItemModel *model,
-                                   const CT_AbstractResult *result,
-                                   size_t value) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+void CT_AffiliationID::setValue(size_t value)
 {
     _value = value;
 }
 
-CT_AffiliationID::CT_AffiliationID(const QString &modelName,
-                                   CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
+size_t CT_AffiliationID::getValue() const
 {
-    _value = ++LASTID;
+    return _value;
 }
 
-CT_AffiliationID::CT_AffiliationID(const QString &modelName,
-                                   const CT_AbstractResult *result,
-                                   const size_t &value) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
+QString CT_AffiliationID::getValueAsString() const
 {
-    _value = value;
+    return QString().number(_value);
 }
 
-CT_AffiliationID::~CT_AffiliationID()
+double CT_AffiliationID::getDoubleValue()
 {
-
+    return _value;
 }
-
-
-CT_AbstractItemDrawable* CT_AffiliationID::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_AffiliationID* cpy = new CT_AffiliationID((const CT_OutAbstractSingularItemModel *)model, result, _value);
-    cpy->setId(this->id());
-    cpy->setValue(_value);
-
-    cpy->setAlternativeDrawManager(this->getAlternativeDrawManager());
-
-    return cpy;
-}
-

@@ -28,40 +28,36 @@
 #ifndef CT_COLORCOMPOSITE_H
 #define CT_COLORCOMPOSITE_H
 
-#ifdef USE_OPENCV
-
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
 #include "ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.h"
 #include "ct_itemdrawable/ct_image2d.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_ColorComposite : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_ColorComposite : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_ColorComposite, CT_AbstractItemDrawableWithoutPointCloud, Color Composite)
 
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
+
 public:
 
     CT_ColorComposite();
+    CT_ColorComposite(CT_AbstractImage2D* red,
+                      CT_AbstractImage2D* green,
+                      CT_AbstractImage2D* blue,
+                      CT_Image2D<float>* zvalue);
+    CT_ColorComposite(const CT_ColorComposite& other);
+    ~CT_ColorComposite() override;
 
+    const CT_Image2D<quint8>* getRedBand() const;
+    const CT_Image2D<quint8>* getGreenBand() const;
+    const CT_Image2D<quint8>* getBlueBand() const;
+    const CT_Image2D<float>* getZValueRaster() const;
 
-    CT_ColorComposite(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result,
-                      CT_AbstractImage2D* red,CT_AbstractImage2D* green, CT_AbstractImage2D* blue, CT_Image2D<float>* zvalue);
+    CT_ITEM_COPY_IMP(CT_ColorComposite)
 
-    CT_ColorComposite(const QString &modelName, const CT_AbstractResult *result,
-                      CT_AbstractImage2D* red,CT_AbstractImage2D* green, CT_AbstractImage2D* blue, CT_Image2D<float>* zvalue);
-
-    ~CT_ColorComposite();
-
-    inline const CT_Image2D<quint8>* getRedBand() const {return _red;}
-    inline const CT_Image2D<quint8>* getGreenBand() const {return _green;}
-    inline const CT_Image2D<quint8>* getBlueBand() const {return _blue;}
-    inline const CT_Image2D<float>* getZValueRaster() const {return _zValue;}
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model,
-                         const CT_AbstractResult *result,
-                         CT_ResultCopyModeList copyModeList);
-
-private :
+private:
+    static const CT_StandardColorCompositeDrawManager COLOR_COMPOSITE_DRAW_MANAGER;
 
     CT_Image2D<quint8>*  _red;
     CT_Image2D<quint8>*  _green;
@@ -72,12 +68,10 @@ private :
     CT_AbstractImage2D* _greenSource;
     CT_AbstractImage2D* _blueSource;
 
-    bool computeBands(CT_AbstractImage2D *red, CT_AbstractImage2D *green, CT_AbstractImage2D *blue, CT_Image2D<float> *zvalue);
-
-
-    const static CT_StandardColorCompositeDrawManager COLOR_COMPOSITE_DRAW_MANAGER;
+    bool computeBands(CT_AbstractImage2D* red,
+                      CT_AbstractImage2D* green,
+                      CT_AbstractImage2D* blue,
+                      CT_Image2D<float>* zvalue);
 };
-
-#endif
 
 #endif // CT_COLORCOMPOSITE_H

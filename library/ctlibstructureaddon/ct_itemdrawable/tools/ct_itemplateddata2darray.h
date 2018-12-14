@@ -1,7 +1,7 @@
 #ifndef ITEMPLATEDDATA2DARRAY_H
 #define ITEMPLATEDDATA2DARRAY_H
 
-#include "pluginShared_global.h"
+#include <QtGlobal>
 
 template< typename DataT>
 class CT_ITemplatedData2DArray

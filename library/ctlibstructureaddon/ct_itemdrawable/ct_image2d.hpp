@@ -29,7 +29,6 @@
 #define CT_IMAGE2D_HPP
 
 #include "ct_itemdrawable/ct_image2d.h"
-#include "ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h"
 
 #include <math.h>
 #include <typeinfo>
@@ -41,37 +40,23 @@ const CT_StandardImage2DDrawManager<DataT> CT_Image2D<DataT>::IMAGE2D_DRAW_MANAG
 template< typename DataT>
 CT_Image2D<DataT>::CT_Image2D() : SuperClass()
 {
-    _minCoordinates(0) = 0;
-    _minCoordinates(1) = 0;
-    _minCoordinates(2) = 0;
-    _res = 1;
-    _dimCol = 0;
-    _dimLin = 0;
-    _maxCoordinates(0) = 0;
-    _maxCoordinates(1) = 0;
-    _maxCoordinates(2) = 0;
-
-    _minColCoord = 0;
-    _minLinCoord = 0;
-
-    _level = 0;
-
     this->setBaseDrawManager(&IMAGE2D_DRAW_MANAGER);
 }
 
 template< typename DataT>
 CT_Image2D<DataT>::CT_Image2D(double xmin,
-                                double ymin,
-                                size_t dimx,
-                                size_t dimy,
-                                double resolution,
-                                double zlevel,
-                                DataT na,
-                                DataT initValue) : SuperClass(),
-    _res(resolution),
-    _dimCol(dimx),
-    _dimLin(dimy)
+                              double ymin,
+                              size_t dimx,
+                              size_t dimy,
+                              double resolution,
+                              double zlevel,
+                              DataT na,
+                              DataT initValue) : SuperClass()
 {
+    _res = resolution;
+    _dimCol = dimx;
+    _dimLin = dimy;
+
     this->setBoundingBox(xmin,
                          ymin,
                          zlevel,
@@ -90,6 +75,15 @@ CT_Image2D<DataT>::CT_Image2D(double xmin,
     initGridWithValue(initValue);
 
     this->setBaseDrawManager(&IMAGE2D_DRAW_MANAGER);
+}
+
+template<typename DataT>
+CT_Image2D<DataT>::CT_Image2D(const CT_Image2D<DataT>& other) : SuperClass(other)
+{
+    _NAdata = other._NAdata;
+    _dataMax = other._dataMax;
+    _dataMin = other._dataMin;
+    _data = other._data.clone();
 }
 
 template< typename DataT>

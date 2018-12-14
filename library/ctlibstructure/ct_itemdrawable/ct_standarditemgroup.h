@@ -13,6 +13,7 @@
 
 #include "ct_iterator/ct_multicollectioniteratorstdstyle.h"
 #include "ct_tools/ct_handleiteratort.h"
+#include "tools/sfinae.h"
 
 /**
  * @brief Represent a group that can contains other groups or other singular item (leaf). Its a node in a tree structure of items.
@@ -327,6 +328,15 @@ public:
      * @return An object that you can use to iterate over items
      */
     SingularItemIterator singularItems() const;
+
+    /**
+     * @brief Returns an object to iterate over items that use the specified handle.
+     * @param itemHandle : the handle of the item (input or output)
+     */
+    template<typename HandleType>
+    SingularItemIterator singularItems(const HandleType& itemHandle) {
+        return internalSingularItems(itemHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+    }
 
     /**
      * @brief Visit ony new singular items that will not be removed
@@ -726,6 +736,53 @@ private:
      * @brief A context for multithread processing if necessary
      */
     void*               m_context;
+
+    /**
+     * @brief Returns an object to iterate over items that use the specified handle.
+     * @param itemHandle : the handle of the item (input or output)
+     */
+    template<typename OutHandleType>
+    SingularItemIterator internalSingularItems(const OutHandleType& outItemHandle,
+                                               std::true_type) {
+        Q_ASSERT(model() != NULL);
+
+        QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
+
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findModelWithParent(model());
+
+        Q_ASSERT(outModelToUse != NULL);
+
+        const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModelToUse);
+
+        ItemContainerType* ct = m_newItemsAdded.value(key, NULL);
+
+        if(ct == NULL)
+            ct = m_itemsCopied.value(key, NULL);
+
+        using iterator = ItemContainerType::const_iterator;
+        using info = QPair<iterator, iterator>;
+
+        std::vector<info> infos;
+
+        if(ct != NULL) {
+            infos.resize(1);
+            infos[0] = qMakePair(ct->constBegin(), ct->constEnd());
+        }
+
+        return SingularItemIterator(MultiItemCollectionIterator::create(infos), MultiItemCollectionIterator());
+    }
+
+    /**
+     * @brief Returns an object to iterate over items that use the specified handle.
+     * @param itemHandle : the handle of the item (input or output)
+     */
+    template<typename InHandleType>
+    SingularItemIterator internalSingularItems(const InHandleType& inItemHandle,
+                                               std::false_type) {
+        static_assert(false, "TODO !!!");
+    }
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CT_StandardItemGroup::RemoveLaterBits)

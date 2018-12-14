@@ -8,7 +8,7 @@ isEmpty(CT_PREFIX) {
 }
 
 isEmpty(CT_PREFIX_INSTALL) {
-    CT_PREFIX_INSTALL = $$CT_PREFIX
+    CT_PREFIX_INSTALL = $$CT_PREFIX/..
 }
 
 isEmpty(CT_LIB_PREFIX) {

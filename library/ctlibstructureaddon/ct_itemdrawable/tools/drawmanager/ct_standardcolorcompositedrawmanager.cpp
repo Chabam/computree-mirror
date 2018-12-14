@@ -1,15 +1,7 @@
 #include "ct_standardcolorcompositedrawmanager.h"
 
-#include <stdlib.h>
-#include <time.h>
-
-#ifdef USE_OPENCV
 #include "ct_itemdrawable/ct_colorcomposite.h"
 #include "ct_tools/ct_typeinfo.h"
-
-#include <ctime>
-
-#include <QObject>
 
 const QString CT_StandardColorCompositeDrawManager::INDEX_CONFIG_MIN_RED= CT_StandardColorCompositeDrawManager::staticInitConfigMinRed();
 const QString CT_StandardColorCompositeDrawManager::INDEX_CONFIG_MAX_RED = CT_StandardColorCompositeDrawManager::staticInitConfigMaxRed();
@@ -19,21 +11,19 @@ const QString CT_StandardColorCompositeDrawManager::INDEX_CONFIG_MAP_MODE_ZLEVEL
 const QString CT_StandardColorCompositeDrawManager::INDEX_CONFIG_MAP_MODE_ZLEVEL_VALUE = CT_StandardColorCompositeDrawManager::staticInitConfigMapModeZLevelValue();
 
 CT_StandardColorCompositeDrawManager::CT_StandardColorCompositeDrawManager(QString drawConfigurationName, bool mapMode, bool scale)
-    : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(drawConfigurationName.isEmpty() ? CT_ColorComposite::staticName() : drawConfigurationName)
+    : SuperClass(drawConfigurationName.isEmpty() ? CT_ColorComposite::staticName() : drawConfigurationName)
 {
     _defaultMapMode = mapMode;
     _defaultScaleState = scale;
 }
 
-CT_StandardColorCompositeDrawManager::~CT_StandardColorCompositeDrawManager()
+void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface& view,
+                                                PainterInterface& painter,
+                                                const CT_AbstractItemDrawable& itemDrawable) const
 {
-}
+    SuperClass::draw(view, painter, itemDrawable);
 
-void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
-{
-    CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::draw(view, painter, itemDrawable);
-
-    const CT_ColorComposite &item = dynamic_cast< const CT_ColorComposite& >(itemDrawable);
+    const CT_ColorComposite& item = static_cast<const CT_ColorComposite&>(itemDrawable);
 
     const CT_Image2D<quint8>* red = item.getRedBand();
     const CT_Image2D<quint8>* green = item.getGreenBand();
@@ -42,18 +32,17 @@ void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface &view, Pai
 
     if (red != NULL && green != NULL && blue != NULL)
     {
-
-        bool mode3D = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_3D_MODE_ENABLED).toBool();
-        bool modeMap = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAP_MODE_ENABLED).toBool();
-        bool fixerZ = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_ENABLED).toBool();
-        double z = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_VALUE).toDouble();
-        float minRed = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MIN_RED).toInt();
-        float maxRed = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_MAX_RED).toInt();
+        const bool mode3D = drawConfiguration()->variableValue(INDEX_CONFIG_3D_MODE_ENABLED).toBool();
+        const bool modeMap = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ENABLED).toBool();
+        const bool fixerZ = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_ENABLED).toBool();
+        const double z = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_VALUE).toDouble();
+        const float minRed = drawConfiguration()->variableValue(INDEX_CONFIG_MIN_RED).toInt();
+        const float maxRed = drawConfiguration()->variableValue(INDEX_CONFIG_MAX_RED).toInt();
 
         float ampliRed = maxRed - minRed;
         if (ampliRed < 0) {ampliRed = -ampliRed;}
 
-        double demiRes = red->resolution()/2.0;
+        const double demiRes = red->resolution()/2.0;
 
         if (mode3D && zvalue != NULL)
         {
@@ -137,9 +126,9 @@ void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface &view, Pai
 
 CT_ItemDrawableConfiguration CT_StandardColorCompositeDrawManager::createDrawConfiguration(QString drawConfigurationName) const
 {
-    CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
+    CT_ItemDrawableConfiguration item(drawConfigurationName);
 
-    item.addAllConfigurationOf(CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::createDrawConfiguration(drawConfigurationName));
+    item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
 
     // Adding lines to this config dialog box
     item.addNewConfiguration(staticInitConfigMinRed(), QObject::tr("Min Red"), CT_ItemDrawableConfiguration::Int, 0);
@@ -187,6 +176,3 @@ QString CT_StandardColorCompositeDrawManager::staticInitConfigMapModeZLevelValue
 {
     return "CCOMP_MMZLV";
 }
-
-
-#endif

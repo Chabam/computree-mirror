@@ -28,7 +28,6 @@
 #ifndef CT_AFFILIATIONID_H
 #define CT_AFFILIATIONID_H
 
-#include "ct_math/ct_math.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
 
 /*!
@@ -37,80 +36,31 @@
  * \brief <b>ItemDrawable managing affiliation ID</b>
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_AffiliationID : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_AffiliationID : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AffiliationID, CT_AbstractItemDrawableWithoutPointCloud, Affiliation ID)
 
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
+
 public:
-    /**
-      * \brief Empty Contructor vide
-      */
     CT_AffiliationID();
+    CT_AffiliationID(size_t value);
+    CT_AffiliationID(const CT_AffiliationID& other) = default;
 
+    void setValue(size_t value);
+    size_t getValue() const;
+    QString getValueAsString() const;
+    double getDoubleValue();
 
-    /*!
-      * \brief Contructor with integer column and row coordinates
-      *
-      * \param model Item model for creation
-      * \param result Result containing the item
-      */
-     CT_AffiliationID(const CT_OutAbstractSingularItemModel *model, CT_AbstractResult *result);
-
-    /*!
-      * \brief Contructor with integer column and row coordinates
-      *
-      * \param model Item model for creation
-      * \param result Result containing the item
-      * \param value Value
-      */
-     CT_AffiliationID(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result, size_t value);
-
-     /**
-      * @brief Create a ItemDrawable with a name of model defined in your step (typically a DEF_...)
-      *        and the result that will contains your ItemDrawable
-      *
-      * @warning The modelName can not be empty and the result can not be NULL to use this constructor
-      */
-     CT_AffiliationID(const QString &modelName,
-                      CT_AbstractResult *result);
-
-     /**
-      * @brief Create a ItemDrawable with a name of model defined in your step (typically a DEF_...)
-      *        and the result that will contains your ItemDrawable
-      *
-      * @warning The modelName can not be empty and the result can not be NULL to use this constructor
-      */
-     CT_AffiliationID(const QString &modelName,
-                      const CT_AbstractResult *result,
-                      const size_t &value);
-
-    virtual ~CT_AffiliationID();
-
-    inline void setValue(size_t value) {_value = value;}
-    inline size_t getValue() const {return _value;}
-    inline QString getValueAsString() const {return QString("%1").arg(_value);}
-
-    inline virtual double getDoubleValue() {return (double) _value;}
-
-    /*!
-     * \brief Copy method
-     *
-     * \param model Item model for the copy
-     * \param result Result containing the copy
-     * \param copyModeList Copy mode
-     * \return Item copy
-     */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-
-protected:
-    size_t       _value;
+    CT_ITEM_COPY_IMP(CT_AffiliationID)
 
 private:
-    static size_t                               LASTID;
+    static size_t   LASTID;
+    size_t          _value;
 
     CT_DEFAULT_IA_BEGIN(CT_AffiliationID)
-    CT_DEFAULT_IA_V3(CT_AffiliationID, CT_AbstractCategory::staticInitDataId(), &CT_AffiliationID::getValue, QObject::tr("Affiliation_ID"), "aid")
+    CT_DEFAULT_IA_V2(CT_AffiliationID, CT_AbstractCategory::staticInitDataId(), &CT_AffiliationID::getValue, QObject::tr("Affiliation_ID"))
     CT_DEFAULT_IA_END(CT_AffiliationID)
 };
 

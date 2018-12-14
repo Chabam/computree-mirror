@@ -84,10 +84,15 @@ public:
     double getDirectionZ() const;
 
 private:
-    CT_ShapeData   *_data;
+    CT_ShapeData*   _data;
 
 protected:
     CT_ShapeData* getDataNotConst() const;
+
+    template<typename DataT>
+    DataT* dataConstCastAs() const {
+        return static_cast<DataT*>(getDataNotConst());
+    }
 };
 
 #endif // CT_ABSTRACTSHAPE_H

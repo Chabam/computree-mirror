@@ -99,6 +99,11 @@ private:
 protected:
     CT_Shape2DData* getDataNotConst() const;
 
+    template<typename DataT>
+    DataT* dataConstCastAs() const {
+        return static_cast<DataT*>(getDataNotConst());
+    }
+
     CT_DEFAULT_IA_BEGIN(CT_AbstractShape2D)
     CT_DEFAULT_IA_V2(CT_AbstractShape2D, CT_AbstractCategory::staticInitDataZ(), &CT_AbstractShape2D::zValue, QObject::tr("Z"))
     CT_DEFAULT_IA_END(CT_AbstractShape2D)

@@ -41,52 +41,39 @@
  * It represents a circle in 3D, defined by a center, a direction and a radius.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Circle : public CT_AbstractShape
+class CTLIBSTRUCTUREADDON_EXPORT CT_Circle : public CT_AbstractShape
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Circle, CT_AbstractShape, 3D circle)
 
+    using SuperClass = CT_AbstractShape;
+
 public:
 
     CT_Circle();
-
-    /**
-      * \brief Contructeur avec une instance des donnes (CT_CircleData*), ne peut tre NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_Circle(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              CT_CircleData *data);
-
-    CT_Circle(const QString &modelName,
-              const CT_AbstractResult *result,
-              CT_CircleData *data);
-
+    CT_Circle(CT_CircleData* data);
+    CT_Circle(const CT_Circle& other) = default;
 
     double getRadius() const;
     double getError() const;
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-    virtual CT_AbstractItemDrawable *copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
 
     /**
       * \brief Retourne un cercle 2D  partir du nuage de points pass en paramtre.
       *
       * \return NULL si le nombre de points est infrieur  3.
       */
-    static CT_Circle* staticCreateZAxisAlignedCircleFromPointCloud(const CT_OutAbstractSingularItemModel *model,
-                                                                   quint64 id,
-                                                                   const CT_AbstractResult *result,
-                                                                   const CT_AbstractPointCloudIndex &pointCloudIndex,
+    static CT_Circle* staticCreateZAxisAlignedCircleFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                    double z = 0);
 
+    CT_ITEM_COPY_IMP(CT_Circle)
+
 private:
+    static const CT_StandardCircleDrawManager   CIRCLE_DRAW_MANAGER;
 
     CT_DEFAULT_IA_BEGIN(CT_Circle)
-    CT_DEFAULT_IA_V3(CT_Circle, CT_AbstractCategory::staticInitDataRadius(), &CT_Circle::getRadius, QObject::tr("Rayon du cercle"), "rdc")
-    CT_DEFAULT_IA_V3(CT_Circle, CT_AbstractCategory::staticInitDataR2(), &CT_Circle::getError, QObject::tr("Erreur d'ajustement du cercle"), "eadc")
+    CT_DEFAULT_IA_V2(CT_Circle, CT_AbstractCategory::staticInitDataRadius(), &CT_Circle::getRadius, QObject::tr("Rayon du cercle"))
+    CT_DEFAULT_IA_V2(CT_Circle, CT_AbstractCategory::staticInitDataR2(), &CT_Circle::getError, QObject::tr("Erreur d'ajustement du cercle"))
     CT_DEFAULT_IA_END(CT_Circle)
-
-    const static CT_StandardCircleDrawManager   CIRCLE_DRAW_MANAGER;
 };
 
 #endif // CT_CIRCLE_H

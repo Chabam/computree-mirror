@@ -41,38 +41,26 @@
  * It represents a circle in 2D, defined by a center and a radius.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Circle2D : public CT_AbstractAreaShape2D
+class CTLIBSTRUCTUREADDON_EXPORT CT_Circle2D : public CT_AbstractAreaShape2D
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Circle2D, CT_AbstractAreaShape2D, 2D circle)
 
+    using SuperClass = CT_AbstractAreaShape2D;
+
 public:
-
     CT_Circle2D();
-
-    /**
-      * \brief Contructeur avec une instance des donnes (CT_Circle2DData*), ne peut etre NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_Circle2D(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              CT_Circle2DData *data);
-
-    CT_Circle2D(const QString &modelName,
-              const CT_AbstractResult *result,
-              CT_Circle2DData *data);
+    CT_Circle2D(CT_Circle2DData* data);
+    CT_Circle2D(const CT_Circle2D& other) = default;
 
     double getRadius() const;
 
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-
 private:
+    static const CT_StandardCircle2DDrawManager   CIRCLE2D_DRAW_MANAGER;
 
     CT_DEFAULT_IA_BEGIN(CT_Circle2D)
-    CT_DEFAULT_IA_V3(CT_Circle2D, CT_AbstractCategory::staticInitDataRadius(), &CT_Circle2D::getRadius, QObject::tr("Rayon du cercle"), "rdc")
+    CT_DEFAULT_IA_V2(CT_Circle2D, CT_AbstractCategory::staticInitDataRadius(), &CT_Circle2D::getRadius, QObject::tr("Rayon du cercle"))
     CT_DEFAULT_IA_END(CT_Circle2D)
-
-    const static CT_StandardCircle2DDrawManager   CIRCLE2D_DRAW_MANAGER;
-
 };
 
 #endif // CT_CIRCLE2D_H

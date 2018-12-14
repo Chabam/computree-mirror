@@ -30,11 +30,8 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractimage2d.h"
 #include "ct_itemdrawable/tools/ct_itemplateddata2darray.h"
-#include "ct_math/ct_math.h"
-
+#include "ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h"
 #include "opencv2/core/core.hpp"
-
-template< typename DataT > class CT_StandardImage2DDrawManager;
 
 /*!
  * \class CT_Image2D
@@ -83,13 +80,13 @@ public:
      * \param initValue Initialisation value for raster cells
      */
     CT_Image2D(double xmin,
-                double ymin,
-                size_t dimx,
-                size_t dimy,
-                double resolution,
-                double zlevel,
-                DataT na,
-                DataT initValue);
+               double ymin,
+               size_t dimx,
+               size_t dimy,
+               double resolution,
+               double zlevel,
+               DataT na,
+               DataT initValue);
 
     /**
      * @brief Copy constructor.
@@ -109,7 +106,7 @@ public:
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */
-    CT_AbstractImage2D(const CT_AbstractImage2D& other) = default;
+    CT_Image2D(const CT_Image2D<DataT>& other);
 
     /*!
      * \brief Destructor

@@ -3,21 +3,20 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardAbstractShape2DDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardAbstractShape2DDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardAbstractShape2DDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardAbstractShape2DDrawManager();
 
     void setZValue(double val);
 
 protected:
+    static const QString INDEX_CONFIG_USE_ALTERNATIVE_ZVALUE;
+    static const QString INDEX_CONFIG_Z_VALUE;
 
-    const static QString INDEX_CONFIG_USE_ALTERNATIVE_ZVALUE;
-    const static QString INDEX_CONFIG_Z_VALUE;
-
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
-
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 
     static QString staticInitConfigUseAlternativeZValue();
     static QString staticInitConfigZValue();

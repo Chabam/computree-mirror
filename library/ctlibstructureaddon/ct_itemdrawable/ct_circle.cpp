@@ -33,93 +33,33 @@ const CT_StandardCircleDrawManager CT_Circle::CIRCLE_DRAW_MANAGER;
 
 CT_DEFAULT_IA_INIT(CT_Circle)
 
-CT_Circle::CT_Circle() : CT_AbstractShape()
+CT_Circle::CT_Circle() : SuperClass()
 {
     setBaseDrawManager(&CIRCLE_DRAW_MANAGER);
 }
 
-CT_Circle::CT_Circle(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result, CT_CircleData *data) : CT_AbstractShape(model, result, data)
+CT_Circle::CT_Circle(CT_CircleData* data) : SuperClass(data)
 {
     setBaseDrawManager(&CIRCLE_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        const Eigen::Vector3d& center = data->getCenter();
-
-        _minCoordinates(0) = center(0) - getRadius();
-        _minCoordinates(1) = center(1) - getRadius();
-        _minCoordinates(2) = center(2) - getRadius();
-
-        _maxCoordinates(0) = center(0) + getRadius();
-        _maxCoordinates(1) = center(1) + getRadius();
-        _maxCoordinates(2) = center(2) + getRadius();
-    }
-}
-
-CT_Circle::CT_Circle(const QString &modelName,
-                     const CT_AbstractResult *result, CT_CircleData *data) : CT_AbstractShape(modelName, result, data)
-{
-    setBaseDrawManager(&CIRCLE_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        const Eigen::Vector3d& center = data->getCenter();
-
-        _minCoordinates(0) = center(0) - getRadius();
-        _minCoordinates(1) = center(1) - getRadius();
-        _minCoordinates(2) = center(2) - getRadius();
-
-        _maxCoordinates(0) = center(0) + getRadius();
-        _maxCoordinates(1) = center(1) + getRadius();
-        _maxCoordinates(2) = center(2) + getRadius();
-    }
 }
 
 double CT_Circle::getRadius() const
 {
-    return ((const CT_CircleData&)getData()).getRadius();
+    return dataConstCastAs<CT_CircleData>()->getRadius();
 }
 
 double CT_Circle::getError() const
 {
-    return ((const CT_CircleData&)getData()).getError();
+    return dataConstCastAs<CT_CircleData>()->getError();
 }
 
-CT_AbstractItemDrawable* CT_Circle::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Circle *circle = new CT_Circle((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_CircleData&)getData()).clone() : NULL);
-    circle->setId(id());
-    circle->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return circle;
-}
-
-CT_AbstractItemDrawable* CT_Circle::copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Circle *circle = new CT_Circle(modelName, result, (getPointerData() != NULL) ? ((const CT_CircleData&)getData()).clone() : NULL);
-    circle->setId(id());
-    circle->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return circle;
-}
-
-CT_Circle* CT_Circle::staticCreateZAxisAlignedCircleFromPointCloud(const CT_OutAbstractSingularItemModel *model,
-                                                                   quint64 id,
-                                                                   const CT_AbstractResult *result,
-                                                                   const CT_AbstractPointCloudIndex &pointCloudIndex,
+CT_Circle* CT_Circle::staticCreateZAxisAlignedCircleFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                    double z)
 {
-    Q_UNUSED(id)
-
-    CT_CircleData *data = CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloud(pointCloudIndex, z);
+    CT_CircleData* data = CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloud(pointCloudIndex, z);
 
     if(data == NULL)
-    {
         return NULL;
-    }
 
-    return new CT_Circle((const CT_OutAbstractSingularItemModel *)model, result, data);
+    return new CT_Circle(data);
 }

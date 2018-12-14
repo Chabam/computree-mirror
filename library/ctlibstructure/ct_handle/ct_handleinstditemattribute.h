@@ -7,6 +7,6 @@
 #include "ct_tools/ct_handleiterationdecorator.h"
 
 template<CT_AbstractCategory::ValueType valueType, int min = 1, int max = 1>
-using CT_HandleInStdItemAttribute = CT_HandleIterationDecorator<CT_HandleInItemAttribute<CT_AbstractItemAttribute, valueType, min, max>, CT_AbstractItemAttribute>;
+using CT_HandleInStdItemAttribute = CT_HandleIterationDecorator<CT_HandleInItemAttribute<CT_AbstractItemAttribute, valueType, min, max>, CT_AbstractItemAttribute, CT_AbstractSingularItemDrawable>;
 
 #endif // CT_HANDLEINSTDITEMATTRIBUTE_H
