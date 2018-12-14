@@ -170,7 +170,8 @@ HEADERS += \
     ct_itemdrawable/tools/ct_itemplateddata1darray.h \
     ct_itemdrawable/tools/ct_itemplateddata2darray.h \
     ct_itemdrawable/tools/ct_itemplateddata3darray.h \
-    ct_itemdrawable/tools/ct_itemplateddata4darray.h
+    ct_itemdrawable/tools/ct_itemplateddata4darray.h \
+    ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.h
 
 SOURCES += \ 
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.cpp \
@@ -300,4 +301,5 @@ SOURCES += \
     ct_itemdrawable/abstract/ct_abstractshape.cpp \
     ct_itemdrawable/abstract/ct_abstractshape2d.cpp \
     ct_itemdrawable/abstract/ct_abstractimage2d.cpp \
-    ct_itemdrawable/abstract/ct_abstractprofile.cpp
+    ct_itemdrawable/abstract/ct_abstractprofile.cpp \
+    ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.cpp

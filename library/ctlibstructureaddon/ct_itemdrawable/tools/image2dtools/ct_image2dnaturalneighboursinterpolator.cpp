@@ -1,16 +1,15 @@
 #include "ct_image2dnaturalneighboursinterpolator.h"
 
-#ifdef USE_OPENCV
 #include "ct_math/delaunay2d/ct_delaunaytriangulation.h"
 
-
-CT_Image2DNaturalNeighboursInterpolator::CT_Image2DNaturalNeighboursInterpolator(CT_Image2D<float>* raster, CT_Image2D<float>* rasterI, int ncells)
+CT_Image2DNaturalNeighboursInterpolator::CT_Image2DNaturalNeighboursInterpolator(CT_Image2D<float>* raster,
+                                                                                 CT_Image2D<float>* rasterI,
+                                                                                 int ncells)
 {
     _raster = raster;
     _rasterInterpol = rasterI;
     _nCells = ncells;
 }
-
 
 void CT_Image2DNaturalNeighboursInterpolator::interpolateForOneCell(const size_t &index)
 {
@@ -85,6 +84,4 @@ void CT_Image2DNaturalNeighboursInterpolator::interpolateForOneCell(const size_t
         delete delaunay;
     }
 }
-
-#endif
 
