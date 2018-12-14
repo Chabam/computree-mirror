@@ -135,6 +135,11 @@ public:
     using MultiItemCollectionIterator = CT_MultiCollectionIteratorStdStyle<typename ItemContainerType::const_iterator, const CT_AbstractSingularItemDrawable>;
     using SingularItemIterator = CT_HandleIteratorT<MultiItemCollectionIterator>;
 
+    template<typename T>
+    using MultiItemCollectionIteratorT = CT_MultiCollectionIteratorStdStyle<typename ItemContainerType::const_iterator, const T>;
+    template<typename T>
+    using SingularItemIteratorT = CT_HandleIteratorT<MultiItemCollectionIteratorT<T>>;
+
     CT_StandardItemGroup();
 
     /**
@@ -336,7 +341,7 @@ public:
      * @param itemHandle : the handle of the item (input or output)
      */
     template<typename HandleType>
-    SingularItemIterator singularItems(const HandleType& itemHandle) const {
+    SingularItemIteratorT<typename HandleType::ItemType> singularItems(const HandleType& itemHandle) const {
         Q_ASSERT(model() != NULL);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
@@ -772,9 +777,9 @@ private:
      * @param outItemHandle : the handle of the item (output)
      */
     template<typename OutHandleType>
-    SingularItemIterator internalSingularItems(const OutHandleType& outItemHandle,
+    SingularItemIteratorT<typename OutHandleType::ItemType> internalSingularItems(const OutHandleType& outItemHandle,
                                                std::true_type) const {
-        return internalXXXWithOutputHandle<SingularItemIterator, MultiItemCollectionIterator, ItemContainerType, OutHandleType>(outItemHandle);
+        return internalXXXWithOutputHandle<SingularItemIteratorT<typename OutHandleType::ItemType>, MultiItemCollectionIteratorT<typename OutHandleType::ItemType>, ItemContainerType, OutHandleType>(outItemHandle);
     }
 
     /**
@@ -782,9 +787,9 @@ private:
      * @param inItemHandle : the handle of the item (input)
      */
     template<typename InHandleType>
-    SingularItemIterator internalSingularItems(const InHandleType& inItemHandle,
+    SingularItemIteratorT<typename InHandleType::ItemType> internalSingularItems(const InHandleType& inItemHandle,
                                                std::false_type) const {
-        return internalXXXWithInputHandle<SingularItemIterator, MultiItemCollectionIterator, ItemContainerType, InHandleType>(inItemHandle);
+        return internalXXXWithInputHandle<SingularItemIteratorT<typename InHandleType::ItemType>, MultiItemCollectionIteratorT<typename InHandleType::ItemType>, ItemContainerType, InHandleType>(inItemHandle);
     }
 
     /**
