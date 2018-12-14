@@ -26,78 +26,35 @@
 *****************************************************************************/
 
 #include "ct_line.h"
-#include "math.h"
 
 const CT_StandardLineDrawManager CT_Line::LINE_DRAW_MANAGER;
 
 CT_DEFAULT_IA_INIT(CT_Line)
 
-CT_Line::CT_Line() : CT_AbstractShape()
+CT_Line::CT_Line() : SuperClass()
 {
     setBaseDrawManager(&LINE_DRAW_MANAGER);
 }
 
-CT_Line::CT_Line(const CT_OutAbstractSingularItemModel *model,
-                 const CT_AbstractResult *result,
-                 CT_LineData *data) : CT_AbstractShape(model, result, data)
+CT_Line::CT_Line(CT_LineData* data) : SuperClass(data)
 {
     setBaseDrawManager(&LINE_DRAW_MANAGER);
 
-    if (data != NULL)
-    {
-        _minCoordinates(0) = std::min(data->x1(), data->x2());
-        _minCoordinates(1) = std::min(data->y1(), data->y2());
-        _minCoordinates(2) = std::min(data->z1(), data->z2());
-
-        _maxCoordinates(0) = std::max(data->x1(), data->x2());
-        _maxCoordinates(1) = std::max(data->y1(), data->y2());
-        _maxCoordinates(2) = std::max(data->z1(), data->z2());
-    }
+    setBoundingBox(qMin(data->x1(), data->x2()),
+                   qMin(data->y1(), data->y2()),
+                   qMin(data->z1(), data->z2()),
+                   qMax(data->x1(), data->x2()),
+                   qMax(data->y1(), data->y2()),
+                   qMax(data->z1(), data->z2()));
 }
 
-CT_Line::CT_Line(const QString &modelName,
-                 const CT_AbstractResult *result,
-                 CT_LineData *data) : CT_AbstractShape(modelName, result, data)
+CT_Line* CT_Line::staticCreateLineFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex)
 {
-    setBaseDrawManager(&LINE_DRAW_MANAGER);
 
-    if (data != NULL)
-    {
-        _minCoordinates(0) = std::min(data->x1(), data->x2());
-        _minCoordinates(1) = std::min(data->y1(), data->y2());
-        _minCoordinates(2) = std::min(data->z1(), data->z2());
-
-        _maxCoordinates(0) = std::max(data->x1(), data->x2());
-        _maxCoordinates(1) = std::max(data->y1(), data->y2());
-        _maxCoordinates(2) = std::max(data->z1(), data->z2());
-    }
-}
-
-
-CT_AbstractItemDrawable* CT_Line::copy(const CT_OutAbstractItemModel *model,
-                                       const CT_AbstractResult *result,
-                                       CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Line *line = new CT_Line((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_LineData&)getData()).clone() : NULL);
-    line->setId(id());
-
-    line->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return line;
-}
-
-CT_Line* CT_Line::staticCreateLineFromPointCloud(const CT_OutAbstractSingularItemModel *model,
-                                                 quint64 id,
-                                                 const CT_AbstractResult *result,
-                                                 const CT_AbstractPointCloudIndex &pointCloudIndex)
-{
-    Q_UNUSED(id)
-
-    CT_LineData *data = CT_LineData::staticCreateLineDataFromPointCloud(pointCloudIndex);
+    CT_LineData* data = CT_LineData::staticCreateLineDataFromPointCloud(pointCloudIndex);
 
     if(data == NULL)
         return NULL;
 
-    return new CT_Line((const CT_OutAbstractSingularItemModel *)model, result, data);
+    return new CT_Line(data);
 }

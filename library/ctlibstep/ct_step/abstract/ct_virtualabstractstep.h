@@ -189,6 +189,12 @@ public:
     T* pluginStaticCastT() const { return static_cast<T*>(plugin()); }
 
     /**
+     * @brief Set the parent step of this step
+     * @param parent : the parent step
+     */
+    void setParentStep(const CT_VirtualAbstractStep* parent);
+
+    /**
      * @brief Call it to set this step was a prototype (a prototype is a class instancied only to create new instance of the same type)
      */
     void setIsAPrototype();
@@ -1011,12 +1017,6 @@ private:
      * @brief Called in "showInputResultConfigurationDialog()" or in "restoreInputSettings()" to initialize inputs models
      */
     bool internalDeclareInputModels();
-
-    /**
-     * @brief Set the parent step of this step
-     * @param parent : the parent step
-     */
-    void setParentStep(const CT_VirtualAbstractStep* parent);
 
     /**
      * @brief Set when the process has begun

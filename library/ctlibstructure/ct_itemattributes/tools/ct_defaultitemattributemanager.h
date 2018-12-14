@@ -15,6 +15,7 @@
 
 #include "ct_tools/ct_staticmethodinvoker.h"
 
+#include <typeinfo>
 #include <QHash>
 
 /**
@@ -125,10 +126,10 @@ public:
                           const VType& data,
                           const QString& displayableName = "")
     {
-        static_assert(std::is_integral<VType>::value, "You must pass an integral (constant value) ! If you pass "
-                                                      "a member function of your class be careful that it was not a "
-                                                      "function of a base class. If so, you must create a member function "
-                                                      "in your class that call the function of the base class.");
+        static_assert(std::is_scalar<VType>::value, "You must pass an integral (constant value) ! If you pass "
+                                                    "a member function of your class be careful that it was not a "
+                                                    "function of a base class. If so, you must create a member function "
+                                                    "in your class that call the function of the base class.");
 
         const CT_AbstractCategory* cat = staticInternalGetCategoryFromUniqueName(categoryUniqueName);
 

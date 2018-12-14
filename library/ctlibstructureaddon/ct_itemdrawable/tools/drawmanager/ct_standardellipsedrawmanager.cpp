@@ -1,20 +1,19 @@
 #include "ct_standardellipsedrawmanager.h"
 
 #include "ct_itemdrawable/ct_ellipse.h"
+#include "painterinterface.h"
 
-CT_StandardEllipseDrawManager::CT_StandardEllipseDrawManager(QString drawConfigurationName) : CT_StandardAbstractShapeDrawManager(drawConfigurationName.isEmpty() ? CT_Ellipse::staticName() : drawConfigurationName)
+CT_StandardEllipseDrawManager::CT_StandardEllipseDrawManager(QString drawConfigurationName) : SuperClass(drawConfigurationName.isEmpty() ? CT_Ellipse::staticName() : drawConfigurationName)
 {
 }
 
-CT_StandardEllipseDrawManager::~CT_StandardEllipseDrawManager()
+void CT_StandardEllipseDrawManager::draw(GraphicsViewInterface& view,
+                                         PainterInterface& painter,
+                                         const CT_AbstractItemDrawable& itemDrawable) const
 {
-}
+    SuperClass::draw(view, painter, itemDrawable);
 
-void CT_StandardEllipseDrawManager::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
-{
-    CT_StandardAbstractShapeDrawManager::draw(view, painter, itemDrawable);
+    const CT_Ellipse& item = static_cast<const CT_Ellipse&>(itemDrawable);
 
-    const CT_Ellipse &item = dynamic_cast<const CT_Ellipse&>(itemDrawable);
-
-    painter.drawEllipse(item.getCenterX(), item.getCenterY(), item.getCenterZ(), item.getAxisA().length()/2.0, item.getAxisB().length()/2.0);
+    painter.drawEllipse(item.centerX(), item.centerY(), item.centerZ(), item.getAxisA().length()/2.0, item.getAxisB().length()/2.0);
 }

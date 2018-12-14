@@ -1,52 +1,18 @@
 #include "ct_faceattributesnormal.h"
 #include "ct_normalcloud/ct_normalcloudstdvector.h"
 
-CT_FaceAttributesNormal::CT_FaceAttributesNormal() : CT_AbstractFaceAttributes(), CT_AttributesNormal()
+CT_FaceAttributesNormal::CT_FaceAttributesNormal() : SuperClass(),
+    CT_AttributesNormal()
 {
 }
 
-CT_FaceAttributesNormal::CT_FaceAttributesNormal(const CT_OutAbstractSingularItemModel *model,
-                                                 const CT_AbstractResult *result,
-                                                 CT_FCIR pcir) : CT_AbstractFaceAttributes(model,
-                                                                                                                                                      result,
-                                                                                                                                                      pcir),
+CT_FaceAttributesNormal::CT_FaceAttributesNormal(CT_FCIR pcir) : SuperClass(pcir),
     CT_AttributesNormal(new CT_NormalCloudStdVector(pcir->size()))
 {
 }
 
-CT_FaceAttributesNormal::CT_FaceAttributesNormal(const CT_OutAbstractSingularItemModel *model,
-                                                 const CT_AbstractResult *result,
-                                                 CT_FCIR pcir,
-                                                 CT_AbstractNormalCloud *nc) : CT_AbstractFaceAttributes(model,
-                                                                                                         result,
-                                                                                                         pcir), CT_AttributesNormal(nc)
+CT_FaceAttributesNormal::CT_FaceAttributesNormal(CT_FCIR pcir,
+                                                 CT_AbstractNormalCloud *nc) : SuperClass(pcir),
+    CT_AttributesNormal(nc)
 {
-}
-
-CT_FaceAttributesNormal::CT_FaceAttributesNormal(const QString &modelName,
-                                                 const CT_AbstractResult *result,
-                                                 CT_FCIR pcir) : CT_AbstractFaceAttributes(modelName,
-                                                                                                                                                      result,
-                                                                                                                                                      pcir),
-    CT_AttributesNormal(new CT_NormalCloudStdVector(pcir->size()))
-{
-}
-
-CT_FaceAttributesNormal::CT_FaceAttributesNormal(const QString &modelName,
-                                                 const CT_AbstractResult *result,
-                                                 CT_FCIR pcir,
-                                                 CT_AbstractNormalCloud *nc) : CT_AbstractFaceAttributes(modelName,
-                                                                                                         result,
-                                                                                                         pcir), CT_AttributesNormal(nc)
-{
-}
-
-CT_AbstractItemDrawable* CT_FaceAttributesNormal::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    CT_AbstractNormalCloud* normalCloud = getNormalCloud();
-
-    if (normalCloud == NULL)
-        return new CT_FaceAttributesNormal((const CT_OutAbstractSingularItemModel *)model, result, getFaceCloudIndexRegistered(), (CT_AbstractNormalCloud*) NULL);
-    else
-        return new CT_FaceAttributesNormal((const CT_OutAbstractSingularItemModel *)model, result, getFaceCloudIndexRegistered(), dynamic_cast<CT_AbstractNormalCloud*>(normalCloud->copy()));
 }

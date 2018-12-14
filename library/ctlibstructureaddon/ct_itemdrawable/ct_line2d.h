@@ -41,25 +41,16 @@
  * It represents a line in 2D, defined by two points.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Line2D : public CT_AbstractShape2D
+class CTLIBSTRUCTUREADDON_EXPORT CT_Line2D : public CT_AbstractShape2D
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Line2D, CT_AbstractShape2D, 2D line)
+    using SuperClass = CT_AbstractShape2D;
 
 public:
-
     CT_Line2D();
-
-    /**
-      * \brief Contructeur avec une instance des donnes (CT_Line2DData*), ne peut etre NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_Line2D(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              CT_Line2DData *data);
-
-    CT_Line2D(const QString &modelName,
-              const CT_AbstractResult *result,
-              CT_Line2DData *data);
+    CT_Line2D(CT_Line2DData *data);
+    CT_Line2D(const CT_Line2D& other) = default;
 
     const Eigen::Vector2d &getP1() const;
     const Eigen::Vector2d &getP2() const;
@@ -72,21 +63,19 @@ public:
 
     double length() const;
 
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_Line2D)
 
 private:
 
     CT_DEFAULT_IA_BEGIN(CT_Line2D)
-    CT_DEFAULT_IA_V3(CT_Line2D, CT_AbstractCategory::staticInitDataLength(), &CT_Line2D::length, QObject::tr("Longueur de la ligne"), "ldl")
-    CT_DEFAULT_IA_V3(CT_Line2D, CT_AbstractCategory::staticInitDataX(), &CT_Line2D::x1, QObject::tr("X1"), "x1")
-    CT_DEFAULT_IA_V3(CT_Line2D, CT_AbstractCategory::staticInitDataY(), &CT_Line2D::y1, QObject::tr("Y1"), "y1")
-    CT_DEFAULT_IA_V3(CT_Line2D, CT_AbstractCategory::staticInitDataX(), &CT_Line2D::x2, QObject::tr("X2"), "x2")
-    CT_DEFAULT_IA_V3(CT_Line2D, CT_AbstractCategory::staticInitDataY(), &CT_Line2D::y2, QObject::tr("Y2"), "y2")
+    CT_DEFAULT_IA_V2(CT_Line2D, CT_AbstractCategory::staticInitDataLength(), &CT_Line2D::length, QObject::tr("Longueur de la ligne"))
+    CT_DEFAULT_IA_V2(CT_Line2D, CT_AbstractCategory::staticInitDataX(), &CT_Line2D::x1, QObject::tr("X1"))
+    CT_DEFAULT_IA_V2(CT_Line2D, CT_AbstractCategory::staticInitDataY(), &CT_Line2D::y1, QObject::tr("Y1"))
+    CT_DEFAULT_IA_V2(CT_Line2D, CT_AbstractCategory::staticInitDataX(), &CT_Line2D::x2, QObject::tr("X2"))
+    CT_DEFAULT_IA_V2(CT_Line2D, CT_AbstractCategory::staticInitDataY(), &CT_Line2D::y2, QObject::tr("Y2"))
     CT_DEFAULT_IA_END(CT_Line2D)
 
     const static CT_StandardLine2DDrawManager  LINE2D_DRAW_MANAGER;
-
 };
 
 #endif // CT_LINE2D_H

@@ -7,59 +7,27 @@
 template<typename SCALAR>
 class CT_EdgeAttributesScalarT : public CT_AbstractEdgeAttributesScalar, public CT_AttributesScalarT<SCALAR>
 {
+    CT_TYPE_TEMPLATED_IMPL_MACRO(CT_EdgeAttributesScalarT, SCALAR, CT_AbstractEdgeAttributesScalar, Edge %1 attributes)
+    using SuperClass = CT_AbstractEdgeAttributesScalar;
+
 public:
     CT_EdgeAttributesScalarT();
-
-    CT_EdgeAttributesScalarT(const CT_OutAbstractSingularItemModel *model,
-                             CT_AbstractResult *result,
-                             CT_ECIR pcir);
-
-    CT_EdgeAttributesScalarT(const CT_OutAbstractSingularItemModel *model,
-                             CT_AbstractResult *result,
-                             CT_ECIR pcir,
-                             CT_StandardCloudStdVectorT<SCALAR> *collection);
-
-    CT_EdgeAttributesScalarT(const CT_OutAbstractSingularItemModel *model,
-                             CT_AbstractResult *result,
-                             CT_ECIR pcir,
+    CT_EdgeAttributesScalarT(CT_ECIR pcir);
+    CT_EdgeAttributesScalarT(CT_ECIR pcir, CT_StandardCloudStdVectorT<SCALAR> *collection);
+    CT_EdgeAttributesScalarT(CT_ECIR pcir,
                              CT_StandardCloudStdVectorT<SCALAR> *collection,
                              const SCALAR &min,
                              const SCALAR &max);
+    CT_EdgeAttributesScalarT(const CT_EdgeAttributesScalarT<SCALAR>& other) = default;
 
-    CT_EdgeAttributesScalarT(const QString &modelName,
-                             CT_AbstractResult *result,
-                             CT_ECIR pcir);
+    double dMin() const override { return CT_AttributesScalarT<SCALAR>::dMin(); }
+    double dMax() const override { return CT_AttributesScalarT<SCALAR>::dMax(); }
 
-    CT_EdgeAttributesScalarT(const QString &modelName,
-                             CT_AbstractResult *result,
-                             CT_ECIR pcir,
-                             CT_StandardCloudStdVectorT<SCALAR> *collection);
+    double dValueAt(const size_t& index) const override { return CT_AttributesScalarT<SCALAR>::dValueAt(index); }
 
-    CT_EdgeAttributesScalarT(const QString &modelName,
-                             CT_AbstractResult *result,
-                             CT_ECIR pcir,
-                             CT_StandardCloudStdVectorT<SCALAR> *collection,
-                             const SCALAR &min,
-                             const SCALAR &max);
+    size_t attributesSize() const override { return CT_AttributesScalarT<SCALAR>::attributesSize(); }
 
-    /**
-      * ATTENTION : ne pas oublier de redéfinir ces deux méthodes si vous hérité de cette classe.
-      */
-    QString getType() const;
-    static QString staticGetType();
-
-    virtual QString name() const;
-    static QString staticName();
-
-
-    double dMin() const { return CT_AttributesScalarT<SCALAR>::dMin(); }
-    double dMax() const { return CT_AttributesScalarT<SCALAR>::dMax(); }
-
-    double dValueAt(const size_t &index) const { return CT_AttributesScalarT<SCALAR>::dValueAt(index); }
-
-    size_t attributesSize() const { return CT_AttributesScalarT<SCALAR>::attributesSize(); }
-
-    CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_EdgeAttributesScalarT<SCALAR>)
 };
 
 #include "ct_itemdrawable/ct_edgeattributesscalart.hpp"

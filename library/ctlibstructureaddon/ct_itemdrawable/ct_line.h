@@ -41,64 +41,52 @@
  *
  * It represents a line in 3D, defined by two points.
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Line : public CT_AbstractShape
+class CTLIBSTRUCTUREADDON_EXPORT CT_Line : public CT_AbstractShape
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Line, CT_AbstractShape, 3D line)
+    using SuperClass = CT_AbstractShape;
 
 public:
-
     CT_Line();
-    /**
-      * \brief Contructeur avec une instance des donnes (CT_LineData*), ne peut tre NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_Line(const CT_OutAbstractSingularItemModel *model,
-            const CT_AbstractResult *result,
-            CT_LineData *data);
+    CT_Line(CT_LineData* data);
+    CT_Line(const CT_Line& other) = default;
 
-    CT_Line(const QString &modelName,
-            const CT_AbstractResult *result,
-            CT_LineData *data);
+    inline const Eigen::Vector3d& getP1() const {return dataConstCastAs<CT_LineData>()->getP1();}
+    inline const Eigen::Vector3d& getP2() const {return dataConstCastAs<CT_LineData>()->getP2();}
 
-
-    inline const Eigen::Vector3d& getP1() const {return ((const CT_LineData&)getData()).getP1();}
-    inline const Eigen::Vector3d& getP2() const {return ((const CT_LineData&)getData()).getP2();}
-
-    inline double getP1_X() const {return ((const CT_LineData&)getData()).x1();}
-    inline double getP1_Y() const {return ((const CT_LineData&)getData()).y1();}
-    inline double getP1_Z() const {return ((const CT_LineData&)getData()).z1();}
-    inline double getP2_X() const {return ((const CT_LineData&)getData()).x2();}
-    inline double getP2_Y() const {return ((const CT_LineData&)getData()).y2();}
-    inline double getP2_Z() const {return ((const CT_LineData&)getData()).z2();}
-    inline double getLength() const {return ((const CT_LineData&)getData()).length();}
-    inline double getError() const {return ((const CT_LineData&)getData()).getError();}
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    inline double getP1_X() const {return dataConstCastAs<CT_LineData>()->x1();}
+    inline double getP1_Y() const {return dataConstCastAs<CT_LineData>()->y1();}
+    inline double getP1_Z() const {return dataConstCastAs<CT_LineData>()->z1();}
+    inline double getP2_X() const {return dataConstCastAs<CT_LineData>()->x2();}
+    inline double getP2_Y() const {return dataConstCastAs<CT_LineData>()->y2();}
+    inline double getP2_Z() const {return dataConstCastAs<CT_LineData>()->z2();}
+    inline double getLength() const {return dataConstCastAs<CT_LineData>()->length();}
+    inline double getError() const {return dataConstCastAs<CT_LineData>()->getError();}
 
     /**
       * \brief Retourne une ligne 3D (rgression linaire)  partir du nuage de points pass en paramtre.
       *
       * \return NULL si le nombre de points est infrieur  2.
       */
-    static CT_Line* staticCreateLineFromPointCloud(const CT_OutAbstractSingularItemModel *model,
-                                                   quint64 id,
-                                                   const CT_AbstractResult *result,
-                                                   const CT_AbstractPointCloudIndex &pointCloudIndex);
+    static CT_Line* staticCreateLineFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex);
+
+    CT_ITEM_COPY_IMP(CT_Line)
 
 private:
     const static CT_StandardLineDrawManager   LINE_DRAW_MANAGER;
 
     CT_DEFAULT_IA_BEGIN(CT_Line)
-    CT_DEFAULT_IA_V3(CT_Line, CT_AbstractCategory::staticInitDataX(), &CT_Line::getP1_X, QObject::tr("X1"), "x1")
-    CT_DEFAULT_IA_V3(CT_Line, CT_AbstractCategory::staticInitDataY(), &CT_Line::getP1_Y, QObject::tr("Y1"), "y1")
-    CT_DEFAULT_IA_V3(CT_Line, CT_AbstractCategory::staticInitDataZ(), &CT_Line::getP1_Z, QObject::tr("Z1"), "z1")
+    CT_DEFAULT_IA_V2(CT_Line, CT_AbstractCategory::staticInitDataX(), &CT_Line::getP1_X, QObject::tr("X1"))
+    CT_DEFAULT_IA_V2(CT_Line, CT_AbstractCategory::staticInitDataY(), &CT_Line::getP1_Y, QObject::tr("Y1"))
+    CT_DEFAULT_IA_V2(CT_Line, CT_AbstractCategory::staticInitDataZ(), &CT_Line::getP1_Z, QObject::tr("Z1"))
 
-    CT_DEFAULT_IA_V3(CT_Line, CT_AbstractCategory::staticInitDataX(), &CT_Line::getP2_X, QObject::tr("X2"), "x2")
-    CT_DEFAULT_IA_V3(CT_Line, CT_AbstractCategory::staticInitDataY(), &CT_Line::getP2_Y, QObject::tr("Y2"), "y2")
-    CT_DEFAULT_IA_V3(CT_Line, CT_AbstractCategory::staticInitDataZ(), &CT_Line::getP2_Z, QObject::tr("Z2"), "z2")
+    CT_DEFAULT_IA_V2(CT_Line, CT_AbstractCategory::staticInitDataX(), &CT_Line::getP2_X, QObject::tr("X2"))
+    CT_DEFAULT_IA_V2(CT_Line, CT_AbstractCategory::staticInitDataY(), &CT_Line::getP2_Y, QObject::tr("Y2"))
+    CT_DEFAULT_IA_V2(CT_Line, CT_AbstractCategory::staticInitDataZ(), &CT_Line::getP2_Z, QObject::tr("Z2"))
 
-    CT_DEFAULT_IA_V3(CT_Line, CT_AbstractCategory::staticInitDataLength(), &CT_Line::getLength, QObject::tr("Longueur"), "ln")
-    CT_DEFAULT_IA_V3(CT_Line, CT_AbstractCategory::staticInitDataR2(), &CT_Line::getError, QObject::tr("Erreur d'ajustement de la ligne"), "eadl")
+    CT_DEFAULT_IA_V2(CT_Line, CT_AbstractCategory::staticInitDataLength(), &CT_Line::getLength, QObject::tr("Longueur"))
+    CT_DEFAULT_IA_V2(CT_Line, CT_AbstractCategory::staticInitDataR2(), &CT_Line::getError, QObject::tr("Erreur d'ajustement de la ligne"))
     CT_DEFAULT_IA_END(CT_Line)
 };
 

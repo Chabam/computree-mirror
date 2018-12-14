@@ -4,35 +4,22 @@
 #include "ct_itemdrawable/abstract/ct_abstractfaceattributes.h"
 #include "ct_attributes/ct_attributesnormal.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_FaceAttributesNormal : public CT_AbstractFaceAttributes, public CT_AttributesNormal
+class CTLIBSTRUCTUREADDON_EXPORT CT_FaceAttributesNormal : public CT_AbstractFaceAttributes, public CT_AttributesNormal
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_FaceAttributesNormal, CT_AbstractFaceAttributes, Face normal attributes)
+    using SuperClass = CT_AbstractFaceAttributes;
 
 public:
     CT_FaceAttributesNormal();
+    CT_FaceAttributesNormal(CT_FCIR pcir);
+    CT_FaceAttributesNormal(CT_FCIR pcir,
+                            CT_AbstractNormalCloud *nc);
+    CT_FaceAttributesNormal(const CT_FaceAttributesNormal& other) = default;
 
-    CT_FaceAttributesNormal(const CT_OutAbstractSingularItemModel *model,
-                              const CT_AbstractResult *result,
-                              CT_FCIR pcir);
+    size_t attributesSize() const override { return CT_AttributesNormal::attributesSize(); }
 
-    CT_FaceAttributesNormal(const CT_OutAbstractSingularItemModel *model,
-                              const CT_AbstractResult *result,
-                              CT_FCIR pcir,
-                              CT_AbstractNormalCloud *nc);
-
-    CT_FaceAttributesNormal(const QString &modelName,
-                              const CT_AbstractResult *result,
-                              CT_FCIR pcir);
-
-    CT_FaceAttributesNormal(const QString &modelName,
-                              const CT_AbstractResult *result,
-                              CT_FCIR pcir,
-                              CT_AbstractNormalCloud *nc);
-
-    size_t attributesSize() const { return CT_AttributesNormal::attributesSize(); }
-
-    CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_FaceAttributesNormal)
 };
 
 #endif // CT_FACEATTRIBUTESNORMAL_H

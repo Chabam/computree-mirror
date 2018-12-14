@@ -26,122 +26,59 @@
 *****************************************************************************/
 
 #include "ct_cylinder.h"
-#include "ct_line.h"
 
 CT_DEFAULT_IA_INIT(CT_Cylinder)
 
 const CT_StandardCylinderDrawManager CT_Cylinder::CYLINDER_DRAW_MANAGER;
 
-CT_Cylinder::CT_Cylinder() : CT_AbstractShape()
+CT_Cylinder::CT_Cylinder() : SuperClass()
 {
     setBaseDrawManager(&CYLINDER_DRAW_MANAGER);
 }
 
-CT_Cylinder::CT_Cylinder(const CT_OutAbstractSingularItemModel *model,
-                         const CT_AbstractResult *result,
-                         CT_CylinderData *data) : CT_AbstractShape(model, result, data)
+CT_Cylinder::CT_Cylinder(CT_CylinderData* data) : SuperClass(data)
 {
     setBaseDrawManager(&CYLINDER_DRAW_MANAGER);
 
-    if (data != NULL)
-    {
-        const Eigen::Vector3d& center = data->getCenter();
-        double length = std::max(getRadius(), getHeight());
+    const Eigen::Vector3d& center = data->getCenter();
+    const double length = std::max(getRadius(), getHeight());
 
-        _minCoordinates(0) = center(0) - length;
-        _minCoordinates(1) = center(1) - length;
-        _minCoordinates(2) = center(2) - length;
-
-        _maxCoordinates(0) = center(0) + length;
-        _maxCoordinates(1) = center(1) + length;
-        _maxCoordinates(2) = center(2) + length;
-    }
-}
-
-CT_Cylinder::CT_Cylinder(const QString &modelName,
-                         const CT_AbstractResult *result,
-                         CT_CylinderData *data) : CT_AbstractShape(modelName, result, data)
-{
-    setBaseDrawManager(&CYLINDER_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        const Eigen::Vector3d& center = data->getCenter();
-        double length = std::max(getRadius(), getHeight());
-
-        _minCoordinates(0) = center(0) - length;
-        _minCoordinates(1) = center(1) - length;
-        _minCoordinates(2) = center(2) - length;
-
-        _maxCoordinates(0) = center(0) + length;
-        _maxCoordinates(1) = center(1) + length;
-        _maxCoordinates(2) = center(2) + length;
-    }
+    setBoundingBox(center(0) - length,
+                   center(1) - length,
+                   center(2) - length,
+                   center(0) + length,
+                   center(1) + length,
+                   center(2) + length);
 }
 
 double CT_Cylinder::getRadius() const
 {
-    return ((const CT_CylinderData&)getData()).getRadius();
+    return dataConstCastAs<CT_CylinderData>()->getRadius();
 }
 
 double CT_Cylinder::getHeight() const
 {
-    return ((const CT_CylinderData&)getData()).getHeight();
+    return dataConstCastAs<CT_CylinderData>()->getHeight();
 }
 
 double CT_Cylinder::getLineError() const
 {
-    return ((const CT_CylinderData&)getData()).getLineError();
+    return dataConstCastAs<CT_CylinderData>()->getLineError();
 }
 
 double CT_Cylinder::getCircleError() const
 {
-    return ((const CT_CylinderData&)getData()).getCircleError();
+    return dataConstCastAs<CT_CylinderData>()->getCircleError();
 }
 
-CT_AbstractItemDrawable* CT_Cylinder::copy(const CT_OutAbstractItemModel *model,
-                                           const CT_AbstractResult *result,
-                                           CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Cylinder *cylinder = new CT_Cylinder((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_CylinderData&)getData()).clone() : NULL);
-    cylinder->setId(id());
-
-    cylinder->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return cylinder;
-}
-
-CT_Cylinder* CT_Cylinder::staticCreate3DCylinderFromPointCloud(const CT_OutAbstractSingularItemModel *model,
-                                                               quint64 id,
-                                                               const CT_AbstractResult *result,
-                                                               const CT_AbstractPointCloudIndex &pointCloudIndex,
+CT_Cylinder* CT_Cylinder::staticCreate3DCylinderFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex,
                                                                const Eigen::Vector3d &pointCloudBarycenter)
 {
-    Q_UNUSED(id)
-
     CT_CylinderData *data = CT_CylinderData::staticCreate3DCylinderDataFromPointCloud(pointCloudIndex,
                                                                                       pointCloudBarycenter);
 
     if(data == NULL)
         return NULL;
 
-    return new CT_Cylinder((const CT_OutAbstractSingularItemModel *)model, result, data);
-}
-
-CT_Cylinder* CT_Cylinder::staticCreate3DCylinderFromPointCloud(const QString &modelName,
-                                                               quint64 id,
-                                                               const CT_AbstractResult *result,
-                                                               const CT_AbstractPointCloudIndex &pointCloudIndex,
-                                                               const Eigen::Vector3d &pointCloudBarycenter)
-{
-    Q_UNUSED(id)
-
-    CT_CylinderData *data = CT_CylinderData::staticCreate3DCylinderDataFromPointCloud(pointCloudIndex,
-                                                                                      pointCloudBarycenter);
-
-    if(data == NULL)
-        return NULL;
-
-    return new CT_Cylinder(modelName, result, data);
+    return new CT_Cylinder(data);
 }

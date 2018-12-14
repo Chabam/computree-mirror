@@ -53,16 +53,16 @@ HEADERS += \
     ct_itemdrawable/ct_circle.h \
     ct_itemdrawable/ct_circle2d.h \
     ct_itemdrawable/ct_colorcomposite.h \
-#    ct_itemdrawable/ct_cylinder.h \
-#    ct_itemdrawable/ct_edgeattributescolor.h \
-#    ct_itemdrawable/ct_edgeattributesnormal.h \
-#    ct_itemdrawable/ct_edgeattributesscalart.h \
-#    ct_itemdrawable/ct_edgeattributesscalart.hpp \
-#    ct_itemdrawable/ct_ellipse.h \
-#    ct_itemdrawable/ct_faceattributescolor.h \
-#    ct_itemdrawable/ct_faceattributesnormal.h \
-#    ct_itemdrawable/ct_faceattributesscalart.h \
-#    ct_itemdrawable/ct_faceattributesscalart.hpp \
+    ct_itemdrawable/ct_cylinder.h \
+    ct_itemdrawable/ct_edgeattributescolor.h \
+    ct_itemdrawable/ct_edgeattributesnormal.h \
+    ct_itemdrawable/ct_edgeattributesscalart.h \
+    ct_itemdrawable/ct_edgeattributesscalart.hpp \
+    ct_itemdrawable/ct_ellipse.h \
+    ct_itemdrawable/ct_faceattributescolor.h \
+    ct_itemdrawable/ct_faceattributesnormal.h \
+    ct_itemdrawable/ct_faceattributesscalart.h \
+    ct_itemdrawable/ct_faceattributesscalart.hpp \
 #    ct_itemdrawable/ct_grid3d.h \
 #    ct_itemdrawable/ct_grid3d.hpp \
 #    ct_itemdrawable/ct_grid3d_points.h \
@@ -76,8 +76,8 @@ HEADERS += \
 #    ct_itemdrawable/ct_grid4d_sparse.hpp \
     ct_itemdrawable/ct_image2d.h \
     ct_itemdrawable/ct_image2d.hpp \
-#    ct_itemdrawable/ct_line.h \
-#    ct_itemdrawable/ct_line2d.h \
+    ct_itemdrawable/ct_line.h \
+    ct_itemdrawable/ct_line2d.h \
 #    ct_itemdrawable/ct_meshmodel.h \
 #    ct_itemdrawable/ct_opfmeshmodel.h \
 #    ct_itemdrawable/ct_planarbspline.h \
@@ -111,8 +111,8 @@ HEADERS += \
      ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.h \
      ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.h \
      ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.h \
+     ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.h \
@@ -121,8 +121,8 @@ HEADERS += \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.h \
@@ -207,13 +207,12 @@ SOURCES += \
     ct_itemdrawable/ct_circle.cpp \
     ct_itemdrawable/ct_circle2d.cpp \
     ct_itemdrawable/ct_colorcomposite.cpp \
-#    ct_itemdrawable/ct_cylinder.cpp \
-#    ct_itemdrawable/ct_edgeattributescolor.cpp \
-#    ct_itemdrawable/ct_edgeattributesnormal.cpp \
-#    ct_itemdrawable/ct_edgeattributesscalart.cpp \
-#    ct_itemdrawable/ct_ellipse.cpp \
-#    ct_itemdrawable/ct_faceattributescolor.cpp \
-#    ct_itemdrawable/ct_faceattributesnormal.cpp \
+    ct_itemdrawable/ct_cylinder.cpp \
+    ct_itemdrawable/ct_edgeattributescolor.cpp \
+    ct_itemdrawable/ct_edgeattributesnormal.cpp \
+    ct_itemdrawable/ct_ellipse.cpp \
+    ct_itemdrawable/ct_faceattributescolor.cpp \
+    ct_itemdrawable/ct_faceattributesnormal.cpp \
 #    ct_itemdrawable/ct_grid3d.cpp \
 #    ct_itemdrawable/ct_grid3d_points.cpp \
 #    ct_itemdrawable/ct_grid3d_sparse.cpp \
@@ -221,8 +220,8 @@ SOURCES += \
 #    ct_itemdrawable/ct_grid4d_dense.cpp \
 #    ct_itemdrawable/ct_grid4d_sparse.cpp \
 #    ct_itemdrawable/ct_image2d.cpp \
-#    ct_itemdrawable/ct_line.cpp \
-#    ct_itemdrawable/ct_line2d.cpp \
+    ct_itemdrawable/ct_line.cpp \
+    ct_itemdrawable/ct_line2d.cpp \
 #    ct_itemdrawable/ct_meshmodel.cpp \
 #    ct_itemdrawable/ct_opfmeshmodel.cpp \
 #    ct_itemdrawable/ct_planarbspline.cpp \
@@ -245,20 +244,20 @@ SOURCES += \
 #    ct_itemdrawable/ct_transformationmatrix.cpp \
 #    ct_itemdrawable/ct_triangulation2d.cpp \
 #    ct_itemdrawable/ct_ttreegroup.cpp \
-     ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.cpp \
-     ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.cpp \
-     ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.cpp \
-     ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.cpp \
-     ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.cpp \
-     ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.cpp \

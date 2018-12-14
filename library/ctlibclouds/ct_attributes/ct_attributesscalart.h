@@ -41,10 +41,10 @@ public:
 
     ~CT_AttributesScalarT();
 
-    double dMin() const;
-    double dMax() const;
+    double dMin() const override;
+    double dMax() const override;
 
-    double dValueAt(const size_t &index) const;
+    double dValueAt(const size_t &index) const override;
 
     SCALAR min() const;
     SCALAR max() const;
@@ -55,7 +55,7 @@ public:
     const SCALAR& valueAt(const size_t &index) const;
     void setValueAt(const size_t &index, const SCALAR& value);
 
-    size_t attributesSize() const;
+    size_t attributesSize() const override;
 
 private:
     SCALAR                              m_min;

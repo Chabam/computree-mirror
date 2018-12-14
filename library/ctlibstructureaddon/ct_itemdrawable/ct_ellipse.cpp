@@ -30,69 +30,39 @@
 CT_DEFAULT_IA_INIT(CT_Ellipse)
 const CT_StandardEllipseDrawManager CT_Ellipse::ELLIPSE_DRAW_MANAGER;
 
-CT_Ellipse::CT_Ellipse(): CT_AbstractShape()
+CT_Ellipse::CT_Ellipse(): SuperClass()
 {
     setBaseDrawManager(&ELLIPSE_DRAW_MANAGER);
 }
 
-CT_Ellipse::CT_Ellipse(const CT_OutAbstractSingularItemModel *model,
-                       const CT_AbstractResult *result,
-                       CT_EllipseData *data) : CT_AbstractShape(model, result, data)
+CT_Ellipse::CT_Ellipse(CT_EllipseData* data) : SuperClass(data)
 {
     setBaseDrawManager(&ELLIPSE_DRAW_MANAGER);
 
+    const Eigen::Vector3d& center = data->getCenter();
+    const double length = std::max(getAxisA().length(), getAxisB().length());
 
-    if (data != NULL)
-    {
-        const Eigen::Vector3d& center = data->getCenter();
-        double length = std::max(getAxisA().length(), getAxisB().length());
-
-        _minCoordinates(0) = center(0) - length;
-        _minCoordinates(1) = center(1) - length;
-        _minCoordinates(2) = center(2) - length;
-
-        _maxCoordinates(0) = center(0) + length;
-        _maxCoordinates(1) = center(1) + length;
-        _maxCoordinates(2) = center(2) + length;
-    }
+    setBoundingBox(center(0) - length,
+                   center(1) - length,
+                   center(2) - length,
+                   center(0) + length,
+                   center(1) + length,
+                   center(2) + length);
 }
-
-CT_Ellipse::CT_Ellipse(const QString &modelName,
-                       const CT_AbstractResult *result,
-                       CT_EllipseData *data) : CT_AbstractShape(modelName, result, data)
-{
-    setBaseDrawManager(&ELLIPSE_DRAW_MANAGER);
-
-
-    if (data != NULL)
-    {
-        const Eigen::Vector3d& center = data->getCenter();
-        double length = std::max(getAxisA().length(), getAxisB().length());
-
-        _minCoordinates(0) = center(0) - length;
-        _minCoordinates(1) = center(1) - length;
-        _minCoordinates(2) = center(2) - length;
-
-        _maxCoordinates(0) = center(0) + length;
-        _maxCoordinates(1) = center(1) + length;
-        _maxCoordinates(2) = center(2) + length;
-    }
-}
-
 
 const CT_LineData& CT_Ellipse::getAxisA() const
 {
-    return ((const CT_EllipseData&)getData()).getAxisA();
+    return dataConstCastAs<CT_EllipseData>()->getAxisA();
 }
 
 const CT_LineData& CT_Ellipse::getAxisB() const
 {
-    return ((const CT_EllipseData&)getData()).getAxisB();
+    return dataConstCastAs<CT_EllipseData>()->getAxisB();
 }
 
 double CT_Ellipse::getError() const
 {
-    return ((const CT_EllipseData&)getData()).getError();
+    return dataConstCastAs<CT_EllipseData>()->getError();
 }
 
 double CT_Ellipse::getAxisRatio() const
@@ -170,29 +140,12 @@ double CT_Ellipse::getAxisBLength() const
     return getAxisB().length();
 }
 
-CT_AbstractItemDrawable* CT_Ellipse::copy(const CT_OutAbstractItemModel *model,
-                                          const CT_AbstractResult *result,
-                                          CT_ResultCopyModeList copyModeList)
+CT_Ellipse* CT_Ellipse::staticCreateZAxisAlignedEllipseFromPointCloud(const CT_AbstractPointCloudIndex* pointCloudIndex)
 {
-    Q_UNUSED(copyModeList);
-    CT_Ellipse *el = new CT_Ellipse((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_EllipseData&)getData()).clone() : NULL);
-    el->setId(id());
-    el->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return el;
-}
-
-CT_Ellipse* CT_Ellipse::staticCreateZAxisAlignedEllipseFromPointCloud(const CT_OutAbstractSingularItemModel *model,
-                                                                      quint64 id,
-                                                                      const CT_AbstractResult *result,
-                                                                      const CT_AbstractPointCloudIndex *pointCloudIndex)
-{
-    Q_UNUSED(id)
-
-    CT_EllipseData *data = CT_EllipseData::staticCreateZAxisAlignedEllipseDataFromPointCloud(pointCloudIndex);
+    CT_EllipseData* data = CT_EllipseData::staticCreateZAxisAlignedEllipseDataFromPointCloud(pointCloudIndex);
 
     if(data == NULL)
         return NULL;
 
-    return new CT_Ellipse((const CT_OutAbstractSingularItemModel *)model, result, data);
+    return new CT_Ellipse(data);
 }

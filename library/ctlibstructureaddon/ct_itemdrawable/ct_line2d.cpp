@@ -27,93 +27,58 @@
 
 #include "ct_line2d.h"
 
-#include "math.h"
-
 const CT_StandardLine2DDrawManager CT_Line2D::LINE2D_DRAW_MANAGER;
 
 CT_DEFAULT_IA_INIT(CT_Line2D)
 
-CT_Line2D::CT_Line2D() : CT_AbstractShape2D()
+CT_Line2D::CT_Line2D() : SuperClass()
 {
     setBaseDrawManager(&LINE2D_DRAW_MANAGER);
 }
 
-CT_Line2D::CT_Line2D(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result, CT_Line2DData *data) : CT_AbstractShape2D(model, result, data)
+CT_Line2D::CT_Line2D(CT_Line2DData* data) : SuperClass(data)
 {
     setBaseDrawManager(&LINE2D_DRAW_MANAGER);
 
-    if (data != NULL)
-    {
-        _minCoordinates(0) = std::min(data->x1(), data->x2());
-        _minCoordinates(1) = std::min(data->y1(), data->y2());
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = std::max(data->x1(), data->x2());
-        _maxCoordinates(1) = std::max(data->y1(), data->y2());
-        _maxCoordinates(2) = 0;
-    }
-}
-
-CT_Line2D::CT_Line2D(const QString &modelName,
-                     const CT_AbstractResult *result, CT_Line2DData *data) : CT_AbstractShape2D(modelName, result, data)
-{
-    setBaseDrawManager(&LINE2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        _minCoordinates(0) = std::min(data->x1(), data->x2());
-        _minCoordinates(1) = std::min(data->y1(), data->y2());
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = std::max(data->x1(), data->x2());
-        _maxCoordinates(1) = std::max(data->y1(), data->y2());
-        _maxCoordinates(2) = 0;
-    }
+    setBoundingBox(Eigen::Vector3d(qMin(data->x1(), data->x2()),
+                   qMin(data->y1(), data->y2()),
+                   0),
+                   Eigen::Vector3d(qMax(data->x1(), data->x2()),
+                   qMax(data->y1(), data->y2()),
+                   0));
 }
 
 const Eigen::Vector2d &CT_Line2D::getP1() const
 {
-    return ((const CT_Line2DData&)getData()).getP1();
+    return dataConstCastAs<CT_Line2DData>()->getP1();
 }
 
 const Eigen::Vector2d &CT_Line2D::getP2() const
 {
-    return ((const CT_Line2DData&)getData()).getP2();
+    return dataConstCastAs<CT_Line2DData>()->getP2();
 }
 
 double CT_Line2D::x1() const
 {
-    return ((const CT_Line2DData&)getData()).x1();
+    return dataConstCastAs<CT_Line2DData>()->x1();
 }
 
 double CT_Line2D::y1() const
 {
-    return ((const CT_Line2DData&)getData()).y1();
+    return dataConstCastAs<CT_Line2DData>()->y1();
 }
 
 double CT_Line2D::x2() const
 {
-     return ((const CT_Line2DData&)getData()).x2();
+     return dataConstCastAs<CT_Line2DData>()->x2();
 }
 
 double CT_Line2D::y2() const
 {
-     return ((const CT_Line2DData&)getData()).y2();
+     return dataConstCastAs<CT_Line2DData>()->y2();
 }
 
 double CT_Line2D::length() const
 {
-     return ((const CT_Line2DData&)getData()).length();
+     return dataConstCastAs<CT_Line2DData>()->length();
 }
-
-CT_AbstractItemDrawable* CT_Line2D::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Line2D *line = new CT_Line2D((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_Line2DData&)getData()).clone() : NULL);
-    line->setId(id());
-    line->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return line;
-}
-

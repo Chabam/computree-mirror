@@ -75,7 +75,7 @@
   */
 #define CT_TYPE_TEMPLATED_IMPL_MACRO(ThisClassName, TemplateType, SuperClassName, Name) public: \
     virtual QString name() const {return staticName();} \
-    static QString staticName() { return QString("%1<%2>").arg(#Name).arg(CT_TypeInfo::name<TemplateType>()); } \
+    static QString staticName() { return QString(#Name).contains("%1") ? QString(#Name).arg(CT_TypeInfo::name<TemplateType>()) : QString("%1<%2>").arg(#Name).arg(CT_TypeInfo::name<TemplateType>()); } \
     QString type() const { return staticType(); } \
     static QString staticType() { return SuperClassName::staticType() + "/" + #ThisClassName + "<" + CT_TypeInfo::name<TemplateType>() + ">"; } \
     static void staticInitNameTypeCorresp() { ThisClassName::addNameTypeCorresp(staticType(), staticName()); } \

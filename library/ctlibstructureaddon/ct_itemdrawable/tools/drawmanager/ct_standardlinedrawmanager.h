@@ -3,13 +3,16 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardLineDrawManager : public CT_StandardAbstractShapeDrawManager
+#include <QPen>
+
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardLineDrawManager : public CT_StandardAbstractShapeDrawManager
 {
+    using SuperClass = CT_StandardAbstractShapeDrawManager;
+
 public:
     CT_StandardLineDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardLineDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
     void configure(const QPen &pen);
 
@@ -21,7 +24,7 @@ protected:
     static QString staticInitConfigLineSize();
     static QString staticInitConfigLineStyle();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 
 private:
     QPen            _pen;

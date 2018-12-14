@@ -156,7 +156,7 @@ CT_VirtualAbstractStep* CT_AbstractStepPlugin::createNewInstanceOfStep(const CT_
 {
     CT_VirtualAbstractStep* myStep = &const_cast<CT_VirtualAbstractStep&>(step);
     CT_VirtualAbstractStep* newStep = myStep->createNewInstance();
-    newStep->setParent(parent);
+    newStep->setParentStep(parent);
     newStep->setPlugin(this);
     newStep->init();
 
