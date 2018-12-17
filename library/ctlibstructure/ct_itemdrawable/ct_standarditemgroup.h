@@ -61,6 +61,7 @@ protected:
         };
 
         using const_iterator = InternalIterator;
+        using ElementType = CT_AbstractSingularItemDrawable;
 
         SingularItemContainer(CT_AbstractSingularItemDrawable* item) : m_item(item), m_willBeRemovedLater(false), m_autoDelete(true) {}
         ~SingularItemContainer() { if(m_autoDelete) { delete m_item; } }
@@ -68,6 +69,11 @@ protected:
         inline void setWillBeRemovedLater() { m_willBeRemovedLater = true; }
         inline void undoWillBeRemovedLater() { m_willBeRemovedLater = false; }
         inline bool willBeRemovedLater() const { return m_willBeRemovedLater; }
+
+        /**
+         * @brief Returns the number of elements that must not be removed later
+         */
+        int nToKeep() const { return m_willBeRemovedLater ? 0 : 1; }
 
         inline CT_AbstractSingularItemDrawable* item() const { return m_item; }
 
@@ -83,9 +89,9 @@ protected:
         }
 
     private:
-        CT_AbstractSingularItemDrawable *m_item;
-        bool                            m_willBeRemovedLater;
-        bool                            m_autoDelete;
+        CT_AbstractSingularItemDrawable* m_item;
+        bool                             m_willBeRemovedLater;
+        bool                             m_autoDelete;
     };
 
     using ItemContainerType = SingularItemContainer;
@@ -377,6 +383,18 @@ public:
     SingularItemIterator backupSingularItems() const;
 
     /**
+     * @brief Returns the first item that use the model in the specified handle.
+     * @param itemHandle : the handle of the item (input or output)
+     */
+    template<typename HandleType>
+    const typename HandleType::ItemType* singularItem(const HandleType& itemHandle) const {
+        Q_ASSERT(model() != NULL);
+        QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
+
+        return internalSingularItem(itemHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+    }
+
+    /**
      * @brief Returns the singular item that use the specified output model
      * @param outModel : the model of the item to find. The model of the item will be used to find it in the collection.
      * @return NULL if no item that use this model has been found or if it must be removed later
@@ -541,6 +559,33 @@ public:
     int nGroupInTotal() const;
 
     /**
+     * @brief Returns the first group that use the model in the specified handle.
+     * @param itemHandle : the handle of the item (input or output)
+     */
+    template<typename HandleType>
+    const typename HandleType::GroupType* group(const HandleType& groupHandle) const {
+        Q_ASSERT(model() != NULL);
+        QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
+
+        return internalGroup(groupHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+    }
+
+    /**
+     * @brief Returns the group that use the specified output model
+     * @param outModel : the model of the group to find. The model of the item will be used to find it in the collection.
+     * @return NULL if no item that use this model has been found or if it must be removed later
+     */
+    CT_StandardItemGroup* groupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel) const;
+
+    /**
+     * @brief Visit all groups that will not be removed and that use output model of selected possibilities of the specified input model
+     * @param inModel : the input model to use to visit selected possibilities to get output models
+     * @param visitor : the visitor to use
+     * @return Returns true if no groups has been visited otherwise returns the result of the visitor.
+     */
+    bool visitGroupsInSelectedPossibilitiesOfInModel(const DEF_CT_AbstractGroupModelIn* inModel, const GroupVisitor& visitor) const;
+
+    /**
      * @brief Returns true if the group contains a group that use the specified output model
      */
     bool containsGroupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel) const;
@@ -624,7 +669,7 @@ public:
     CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* model, const CT_AbstractResult* result) const override;
 
 protected:
-    using OutModelKeyType = CT_OutAbstractModel*;
+    using OutModelKeyType = /*CT_OutAbstractModel**/CT_OutAbstractModel::UniqueIndexType;
 
     using GroupsCollection = QHash<OutModelKeyType, GroupContainerType*>;
     using ItemsCollection = QHash<OutModelKeyType, ItemContainerType*>;
@@ -637,7 +682,8 @@ protected:
      */
     template<class OutModel>
     static inline OutModelKeyType outModelKey(const OutModel* model) {
-        return const_cast<OutModel*>(model);
+        //return const_cast<OutModel*>(model);
+        return model->uniqueIndex();
     }
 
     /**
@@ -645,7 +691,8 @@ protected:
      */
     template<class OutModel>
     static inline OutModelKeyType outModelCopyKey(const OutModel* modelCopy) {
-        return static_cast<OutModel*>(modelCopy->originalModel());
+        //return static_cast<OutModel*>(modelCopy->originalModel());
+        return modelCopy->uniqueIndex();
     }
 
     /**
@@ -835,17 +882,12 @@ private:
         return Iterator(MultiCollectionIterator::create(infos), MultiCollectionIterator());
     }
 
-    template<typename Iterator, typename MultiCollectionIterator, typename ContainerType, typename InHandleType>
-    Iterator internalXXXWithInputHandle(const InHandleType& inHandle) const {
+    template<typename InHandleType, typename Visitor>
+    bool visitInModelWithPossibilitiesFromInHandle(const InHandleType& inHandle, const Visitor& visitor) const {
         const CT_InAbstractModel* inOriginalModel = inHandle.model();
         const CT_InAbstractResultModel* inOriginalResultModel = dynamic_cast<CT_InAbstractResultModel*>(inOriginalModel->rootModel());
 
         Q_ASSERT(inOriginalResultModel != NULL);
-
-        using iterator = ContainerType::const_iterator;
-        using info = QPair<iterator, iterator>;
-
-        std::vector<info> infos;
 
         const int nResultPossibility = inOriginalResultModel->nPossibilitySaved();
 
@@ -853,22 +895,127 @@ private:
             if(inOriginalResultModel->possibilitySavedAt(i)->isSelected()) {
                 CT_InAbstractModel* inModelWithPossibilities = static_cast<CT_InStdResultModelPossibility*>(inOriginalResultModel->possibilitySavedAt(i))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(inOriginalModel);
 
-                const CT_InStdModelPossibilitySelectionGroup* selectionGroup = inModelWithPossibilities->possibilitiesGroup();
-
-                for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
-                    const CT_OutAbstractModel* outModel = possibility->outModel();
-
-                    if(outModel->parentModel() == model()) {
-                        const ContainerType* ct = containerWithOutModel<ContainerType>(possibility->outModel());
-
-                        if(ct != NULL)
-                            infos.push_back(qMakePair(ct->constBegin(), ct->constEnd()));
-                    }
-                }
+                if(!visitor(inModelWithPossibilities))
+                    return false;
             }
         }
 
+        return true;
+    }
+
+    template<typename Iterator, typename MultiCollectionIterator, typename ContainerType, typename InHandleType>
+    Iterator internalXXXWithInputHandle(const InHandleType& inHandle) const {
+
+        using iterator = ContainerType::const_iterator;
+        using info = QPair<iterator, iterator>;
+
+        std::vector<info> infos;
+
+        const CT_OutAbstractModel::UniqueIndexType myModelUI = model()->uniqueIndex();
+
+        visitInModelWithPossibilitiesFromInHandle(inHandle, [&infos, &myModelUI, this](CT_InAbstractModel* inModelWithPossibilities) -> bool {
+
+            const CT_InStdModelPossibilitySelectionGroup* selectionGroup = inModelWithPossibilities->possibilitiesGroup();
+
+            for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
+                const CT_OutAbstractModel* outModel = possibility->outModel();
+
+                if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == myModelUI) {
+                    const ContainerType* ct = this->containerWithOutModel<ContainerType>(outModel);
+
+                    if((ct != NULL) && (ct->nToKeep() > 0))
+                        infos.push_back(qMakePair(ct->constBegin(), ct->constEnd()));
+                }
+            }
+
+            return true;
+        });
+
         return Iterator(MultiCollectionIterator::create(infos), MultiCollectionIterator());
+    }
+
+    template<typename ContainerType, typename InHandleType>
+    const typename ContainerType::ElementType* internalFirstXXXWithInputHandle(const InHandleType& inHandle) const {
+
+        const typename ContainerType::ElementType* found = NULL;
+
+        const CT_OutAbstractModel::UniqueIndexType myModelUI = model()->uniqueIndex();
+
+        visitInModelWithPossibilitiesFromInHandle(inHandle, [&found, &myModelUI, this](CT_InAbstractModel* inModelWithPossibilities) -> bool {
+
+            const CT_InStdModelPossibilitySelectionGroup* selectionGroup = inModelWithPossibilities->possibilitiesGroup();
+
+            for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
+                const CT_OutAbstractModel* outModel = possibility->outModel();
+
+                if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == myModelUI) {
+                    const ContainerType* ct = this->containerWithOutModel<ContainerType>(outModel);
+
+                    if((ct != NULL) && (ct->nToKeep() > 0)) {
+                        found = *ct->constBegin();
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        });
+
+        return found;
+    }
+
+    /**
+     * @brief Returns the first item that use the model in the specified handle.
+     * @param outItemHandle : the handle of the item (output)
+     */
+    template<typename OutHandleType>
+    const typename OutHandleType::ItemType* internalSingularItem(const OutHandleType& outItemHandle,
+                                                                 std::true_type) const {
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const CT_OutAbstractModel* outModelToUse = outItemHandle.findModelWithParent(model());
+
+        Q_ASSERT(outModelToUse != NULL);
+
+        return singularItemWithOutModel(outModelToUse);
+    }
+
+    /**
+     * @brief Returns the first item that use the model in the specified handle.
+     * @param inItemHandle : the handle of the item (input)
+     */
+    template<typename InHandleType>
+    const typename InHandleType::ItemType* internalSingularItem(const InHandleType& inItemHandle,
+                                                                std::false_type) const {
+        return static_cast<const typename InHandleType::ItemType*>(internalFirstXXXWithInputHandle<ItemContainerType>(inItemHandle));
+    }
+
+
+
+    /**
+     * @brief Returns the first group that use the model in the specified handle.
+     * @param outItemHandle : the handle of the group (output)
+     */
+    template<typename OutHandleType>
+    const typename OutHandleType::GroupType* internalGroup(const OutHandleType& outGroupHandle,
+                                                                 std::true_type) const {
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const CT_OutAbstractModel* outModelToUse = outGroupHandle.findModelWithParent(model());
+
+        Q_ASSERT(outModelToUse != NULL);
+
+        return groupWithOutModel(outModelToUse);
+    }
+
+    /**
+     * @brief Returns the first group that use the model in the specified handle.
+     * @param inItemHandle : the handle of the group (input)
+     */
+    template<typename InHandleType>
+    const typename InHandleType::GroupType* internalGroup(const InHandleType& inGroupHandle,
+                                                                std::false_type) const {
+        return static_cast<const typename InHandleType::GroupType*>(internalFirstXXXWithInputHandle<GroupContainerType>(inGroupHandle));
     }
 };
 

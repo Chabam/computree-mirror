@@ -56,6 +56,7 @@ class CTLIBMODELS_EXPORT CT_OutAbstractModel : public CT_AbstractModel
 
 public:
     typedef std::function<bool(const CT_OutAbstractModel*)> OutChildrenVisitor;
+    using UniqueIndexType = int;
 
     /**
      * @brief Construct an output model that has a unique index (by default at -1 so it was invalid) and a displayable name
@@ -76,12 +77,12 @@ public:
      * @param uniqueIndex : the new unique index
      * @warning Not intended for direct use by plugin developper
      */
-    void setUniqueIndex(const int& uniqueIndex);
+    void setUniqueIndex(const UniqueIndexType& uniqueIndex);
 
     /**
      * @brief Returns the unique index of this model or -1 if it was not valid
      */
-    int uniqueIndex() const;
+    UniqueIndexType uniqueIndex() const;
 
     /**
      * @brief Returns the original model (recursively) if this model is a copy otherwise return 'this'
@@ -205,7 +206,7 @@ private:
      * @brief Unique index that must be really unique for each output model in hierarchy of steps. Except when it was copied : it must
      *        be the same than the original model
      */
-    int                                 m_uniqueIndex;
+    UniqueIndexType                     m_uniqueIndex;
 
     /**
      * @brief The original model is NULL if this model was not a copied model otherwise it was the model that was used to produce the copy.

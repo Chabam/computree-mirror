@@ -14,9 +14,10 @@ template<typename T, typename Locker>
 class CT_ContainerT
 {
 public:
-    using ElementVisitor = std::function<bool(const T*)>;
-    using iterator = typename QList<T*>::iterator;
-    using const_iterator = typename QList<T*>::const_iterator;
+    using ElementType = T;
+    using ElementVisitor = std::function<bool(const ElementType*)>;
+    using iterator = typename QList<ElementType*>::iterator;
+    using const_iterator = typename QList<ElementType*>::const_iterator;
 
     CT_ContainerT(Locker& accessLocker);
     ~CT_ContainerT();

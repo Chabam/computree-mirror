@@ -85,7 +85,7 @@
   * @brief Use this define in your class to add the copy method without write your own.
   * @warning You must define the copy contructor in your class !
   */
-#define CT_ITEM_COPY_IMP(argClass) CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* newModelToUse, const CT_AbstractResult* newResult) const override \
+#define CT_ITEM_COPY_IMP(argClass) CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* newModelToUse = NULL, const CT_AbstractResult* newResult = NULL) const override \
                                      { \
                                         argClass* cpy = new argClass(*this); \
                                         cpy->setModel(newModelToUse); \
@@ -353,7 +353,12 @@ public:
      * @param newResult : new result to use if it can be changed
      * @return The copy of this item (see the copy constructor to now what is copied and what is initialized differently)
      */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* newModelToUse, const CT_AbstractResult* newResult) const = 0;
+    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* newModelToUse = NULL, const CT_AbstractResult* newResult = NULL) const = 0;
+
+    template<class T>
+    T* copyAs(const CT_OutAbstractItemModel* newModelToUse = NULL, const CT_AbstractResult* newResult = NULL) const {
+        return static_cast<T*>(this->copy(newModelToUse, newResult));
+    }
 
     // TODO : MK 21.11.18 refactor this and check with Alexandre Piboule what it means
     static void addNameTypeCorresp(QString type, QString name);

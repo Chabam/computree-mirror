@@ -242,12 +242,16 @@ public:
     void finalize(UniqueIndexGenerator& uniqueIndexGenerator) {
         const auto visitor = [&uniqueIndexGenerator](const CT_OutAbstractModel* model) -> bool {
 
-            const_cast<CT_OutAbstractModel*>(model)->setUniqueIndex(uniqueIndexGenerator());
+            if((model->uniqueIndex() <= 0) || (model->originalModel() == model))
+                const_cast<CT_OutAbstractModel*>(model)->setUniqueIndex(uniqueIndexGenerator());
+
             return true;
         };
 
         for(OutModelInfo* resultModelInfo : m_results) {
-            resultModelInfo->model->setUniqueIndex(uniqueIndexGenerator());
+            if((resultModelInfo->model->uniqueIndex() <= 0) || (resultModelInfo->model->originalModel() == resultModelInfo->model))
+                resultModelInfo->model->setUniqueIndex(uniqueIndexGenerator());
+
             resultModelInfo->model->recursiveFinalize();
             resultModelInfo->model->recursiveVisitOutChildrens(visitor);
         }

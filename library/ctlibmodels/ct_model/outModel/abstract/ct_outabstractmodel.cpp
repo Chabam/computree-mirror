@@ -23,12 +23,12 @@ CT_OutAbstractModel::~CT_OutAbstractModel()
     deleteAndClearItem();
 }
 
-void CT_OutAbstractModel::setUniqueIndex(const int& uniqueIndex)
+void CT_OutAbstractModel::setUniqueIndex(const UniqueIndexType& uniqueIndex)
 {
     m_uniqueIndex = uniqueIndex;
 }
 
-int CT_OutAbstractModel::uniqueIndex() const
+CT_OutAbstractModel::UniqueIndexType CT_OutAbstractModel::uniqueIndex() const
 {
     return m_uniqueIndex;
 }

@@ -249,7 +249,7 @@ void CT_StandardItemGroup::addSingularItemWithOutModel(const DEF_CT_AbstractItem
 bool CT_StandardItemGroup::removeSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel)
 {
     Q_ASSERT(outModel != NULL);
-    Q_ASSERT(outModel->parentModel() == model());
+    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
@@ -294,7 +294,7 @@ bool CT_StandardItemGroup::containsSingularItemInSelectedPossibilitiesOfInModel(
 bool CT_StandardItemGroup::containsSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel) const
 {
     Q_ASSERT(outModel != NULL);
-    Q_ASSERT(outModel->parentModel() == model());
+    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
@@ -482,7 +482,7 @@ CT_StandardItemGroup::SingularItemIterator CT_StandardItemGroup::backupSingularI
 CT_AbstractSingularItemDrawable* CT_StandardItemGroup::singularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel) const
 {
     Q_ASSERT(outModel != NULL);
-    Q_ASSERT(outModel->parentModel() == model());
+    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
@@ -550,7 +550,7 @@ void CT_StandardItemGroup::addGroupWithOutModel(const DEF_CT_AbstractGroupModelO
 bool CT_StandardItemGroup::removeGroupsWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel)
 {
     Q_ASSERT(outModel != NULL);
-    Q_ASSERT(outModel->parentModel() == model());
+    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
@@ -761,10 +761,52 @@ int CT_StandardItemGroup::nGroupInTotal() const
     return n;
 }
 
+CT_StandardItemGroup* CT_StandardItemGroup::groupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel) const
+{
+    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
+
+    QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
+
+    GroupContainerType* container = groupContainerWithOutModel(outModel);
+
+    if(container == NULL)
+        return false;
+
+    CT_StandardItemGroup* group = NULL;
+    container->visitElementsToKeep([&group](const CT_StandardItemGroup* gr) -> bool {
+        group = const_cast<CT_StandardItemGroup*>(gr);
+        return false;
+    });
+
+    return group;
+}
+
+bool CT_StandardItemGroup::visitGroupsInSelectedPossibilitiesOfInModel(const DEF_CT_AbstractGroupModelIn* inModel, const CT_StandardItemGroup::GroupVisitor& visitor) const
+{
+    Q_ASSERT(inModel != NULL);
+
+    QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
+
+    const auto visitorAdapter = [this, &visitor](const CT_InStdModelPossibility* possibility) -> bool {
+
+        const CT_StandardItemGroup* group = this->groupWithOutModel(static_cast<DEF_CT_AbstractGroupModelOut*>(possibility->outModel()));
+
+        if(group != NULL) {
+            if(!visitor(group))
+                return false;
+        }
+
+        return true;
+    };
+
+    return !inModel->possibilitiesGroup()->visitSelectedPossibilities(visitorAdapter);
+}
+
 bool CT_StandardItemGroup::containsGroupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel) const
 {
     Q_ASSERT(outModel != NULL);
-    Q_ASSERT(outModel->parentModel() == model());
+    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
 

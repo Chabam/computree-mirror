@@ -43,6 +43,7 @@ void TestStep::testCaseInputOutput()
     QVERIFY(step.finalizeConfiguration() == true);
 
     StepTestInputOutput* step2 = new StepTestInputOutput();
+    step2->setParentStep(&step);
     QVERIFY(step.appendStep(step2) == true);
 
     step2->init();
@@ -54,6 +55,7 @@ void TestStep::testCaseInputOutput()
     //step2->showInputResultConfigurationDialog();
 
     StepTestInputOutput* step3 = new StepTestInputOutput();
+    step3->setParentStep(step2);
     QVERIFY(step2->appendStep(step3) == true);
 
     step3->init();
