@@ -780,13 +780,13 @@ void CT_VirtualAbstractStep::createPreInputConfigurationDialog()
     if(m_preInputConfigDialog == NULL) {
         m_preInputConfigDialog = new CT_StepConfigurableDialog();
         m_preInputConfigDialog->setWindowTitle(m_preInputConfigDialog->windowTitle() + QString(" (%1)").arg(displayableCustomName()));
-    }
 
-    fillPreInputConfigurationDialog(m_preInputConfigDialog);
+        fillPreInputConfigurationDialog(m_preInputConfigDialog);
 
-    if(m_preInputConfigDialog->isEmpty()) {
-        delete m_preInputConfigDialog;
-        m_preInputConfigDialog = NULL;
+        if(m_preInputConfigDialog->isEmpty()) {
+            delete m_preInputConfigDialog;
+            m_preInputConfigDialog = NULL;
+        }
     }
 }
 
@@ -795,13 +795,13 @@ void CT_VirtualAbstractStep::createPostInputConfigurationDialog()
     if(m_postInputConfigDialog == NULL) {
         m_postInputConfigDialog = new CT_StepConfigurableDialog();
         m_postInputConfigDialog->setWindowTitle(m_postInputConfigDialog->windowTitle() + QString(" (%1)").arg(displayableCustomName()));
-    }
 
-    fillPostInputConfigurationDialog(m_postInputConfigDialog);
+        fillPostInputConfigurationDialog(m_postInputConfigDialog);
 
-    if(m_postInputConfigDialog->isEmpty()) {
-        delete m_postInputConfigDialog;
-        m_postInputConfigDialog = NULL;
+        if(m_postInputConfigDialog->isEmpty()) {
+            delete m_postInputConfigDialog;
+            m_postInputConfigDialog = NULL;
+        }
     }
 }
 

@@ -2,6 +2,7 @@
 #define CT_OUTMODELSTRUCTUREMANAGER_H
 
 #include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
 #include "tools/sfinae.h"
 
 #include <type_traits>
@@ -305,7 +306,8 @@ private:
     /**
      * @brief Collection of output result model
      */
-    QList<OutModelInfo*>            m_results;
+    QList<OutModelInfo*>                m_results;
+    QSet<CT_InAbstractResultModel*>     m_inResultsCopy;
 
     GENERATE_ADD_XXX_TO(internalAddGroupTo, addGroupWithInputTool, addGroup)
     GENERATE_ADD_XXX_TO(internalAddItemTo, addItemWithInputTool, addItem)
@@ -356,11 +358,13 @@ private:
 
         MODELS_ASSERT(handleInResultCopy.isValid());
 
-        auto outModel = handleInResultCopy.model();
+        auto inModel = handleInResultCopy.model();
 
-        MODELS_ASSERT(outModel->toolToModifyResultModelCopies() == NULL);
+        MODELS_ASSERT(!m_inResultsCopy.contains(inModel) || (inModel->toolToModifyResultModelCopies() == NULL));
 
-        const auto tool = outModel->createOutResultModelCopiesAccordingToNumberOfPossibility();
+        m_inResultsCopy.insert(inModel);
+
+        const auto tool = inModel->createOutResultModelCopiesAccordingToNumberOfPossibility();
 
         const auto visitor = [this](const CT_OutAbstractResultModel* outResultModel) -> bool {
             m_results.append(new OutModelInfo(const_cast<CT_OutAbstractResultModel*>(outResultModel), false));

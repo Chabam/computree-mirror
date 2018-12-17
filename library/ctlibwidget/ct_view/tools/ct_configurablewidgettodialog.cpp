@@ -30,6 +30,7 @@ int CT_ConfigurableWidgetToDialog::exec(CT_AbstractConfigurableWidget *widget)
 
     int ret;
     bool ok = false;
+    widget->setVisible(true);
 
     while(!ok && ((ret = dialog.exec()) == QDialog::Accepted)) {
         QString err;

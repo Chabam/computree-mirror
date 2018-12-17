@@ -16,4 +16,5 @@ void CT_OutModelStructureManager::clearResults(bool deleteFromMemory)
         qDeleteAll(m_results);
 
     m_results.clear();
+    m_inResultsCopy.clear();
 }
