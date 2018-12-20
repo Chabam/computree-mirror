@@ -29,14 +29,14 @@ CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT(Struc
     m_mask(mask),
     m_shiftRight(shiftRight)
 {
-    auto res = std::minmax(m_collection->begin(),
-                           m_collection->end(),
-                           [&mask](const StructType& a, const StructType& b) {
+    auto res = std::minmax_element(m_collection->begin(),
+                                   m_collection->end(),
+                                   [&mask](const StructType& a, const StructType& b) {
         return (a.entire & mask) < (b.entire & mask);
     });
 
-    m_min = ((res.first.entire & m_mask) >> m_shiftRight);
-    m_max = ((res.second.entire & m_mask) >> m_shiftRight);
+    m_min = (((*res.first).entire & m_mask) >> m_shiftRight);
+    m_max = (((*res.second).entire & m_mask) >> m_shiftRight);
 }
 
 template<typename StructType>

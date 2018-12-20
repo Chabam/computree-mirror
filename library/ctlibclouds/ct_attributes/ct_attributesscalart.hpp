@@ -17,10 +17,10 @@ CT_AttributesScalarT<SCALAR>::CT_AttributesScalarT(CT_StandardCloudStdVectorT<SC
 {
     m_collection = collection;
 
-    auto res = std::minmax(m_collection->begin(), m_collection->end(), CT_AttributesScalarT<SCALAR>::staticCompareScalar);
+    auto res = std::minmax_element(m_collection->begin(), m_collection->end(), CT_AttributesScalarT<SCALAR>::staticCompareScalar);
 
-    m_min = res.first;
-    m_max = res.second;
+    m_min = *res.first;
+    m_max = *res.second;
 }
 
 template<typename SCALAR>
