@@ -31,60 +31,40 @@
 
 const CT_StandardScanPathDrawManager CT_ScanPath::SCANPATH_DRAW_MANAGER;
 
-CT_ScanPath::CT_ScanPath() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_ScanPath::CT_ScanPath() : SuperClass(),
+    _minGPSTime(std::numeric_limits<double>::max()),
+    _maxGPSTime(-std::numeric_limits<double>::max()),
+    _sorted(false)
 {
-    double max = std::numeric_limits<double>::max();
-    _minCoordinates = Eigen::Vector3d(max,max,max);
-    _maxCoordinates = Eigen::Vector3d(-max,-max,-max);
-    _minGPSTime = max;
-    _maxGPSTime = -max;
-    _sorted = false;
+    setBoundingBox(_minGPSTime,
+                   _minGPSTime,
+                   _minGPSTime,
+                   _maxGPSTime,
+                   _maxGPSTime,
+                   _maxGPSTime);
 
     setBaseDrawManager(&SCANPATH_DRAW_MANAGER);
 }
-
-CT_ScanPath::CT_ScanPath(const CT_OutAbstractSingularItemModel *model,
-                                     const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
-{
-    double max = std::numeric_limits<double>::max();
-    _minCoordinates = Eigen::Vector3d(max,max,max);
-    _maxCoordinates = Eigen::Vector3d(-max,-max,-max);
-    _minGPSTime = max;
-    _maxGPSTime = -max;
-    _sorted = false;
-
-    setBaseDrawManager(&SCANPATH_DRAW_MANAGER);
-}
-
-CT_ScanPath::CT_ScanPath(const QString &modelName,
-                        const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
-{
-    double max = std::numeric_limits<double>::max();
-    _minCoordinates = Eigen::Vector3d(max,max,max);
-    _maxCoordinates = Eigen::Vector3d(-max,-max,-max);
-    _minGPSTime = max;
-    _maxGPSTime = -max;
-    _sorted = false;
-
-    setBaseDrawManager(&SCANPATH_DRAW_MANAGER);
-}
-
-
 
 void CT_ScanPath::addPathPoint(double gpsTime, double x, double y, double z)
 {
     _pathPoints.append(PathPoint(gpsTime, Eigen::Vector3d(x,y,z)));
     _sorted = false;
 
-    if (x < _minCoordinates(0)) {_minCoordinates(0) = x;}
-    if (y < _minCoordinates(1)) {_minCoordinates(1) = y;}
-    if (z < _minCoordinates(2)) {_minCoordinates(2) = z;}
+    Eigen::Vector3d min, max;
+    boundingBox(min, max);
+
+    if (x < min(0)) {min(0) = x;}
+    if (y < min(1)) {min(1) = y;}
+    if (z < min(2)) {min(2) = z;}
     if (gpsTime < _minGPSTime) {_minGPSTime = gpsTime;}
 
-    if (x > _maxCoordinates(0)) {_maxCoordinates(0) = x;}
-    if (y > _maxCoordinates(1)) {_maxCoordinates(1) = y;}
-    if (z > _maxCoordinates(2)) {_maxCoordinates(2) = z;}
+    if (x > max(0)) {max(0) = x;}
+    if (y > max(1)) {max(1) = y;}
+    if (z > max(2)) {max(2) = z;}
     if (gpsTime > _maxGPSTime) {_maxGPSTime = gpsTime;}
+
+    setBoundingBox(min, max);
 }
 
 void CT_ScanPath::addPathPoint(double gpsTime, const Eigen::Vector3d &point)
@@ -183,24 +163,4 @@ Eigen::Vector3d CT_ScanPath::getPathPointForGPSTime(double gpsTime)
         Eigen::Vector3d vec = lastPoint + direction*ratio;
         return vec;
     }
-}
-
-CT_AbstractItemDrawable* CT_ScanPath::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    CT_ScanPath *ref = new CT_ScanPath((const CT_OutAbstractSingularItemModel *)model, result);
-    ref->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    ref->_pathPoints = this->_pathPoints;
-
-    return ref;
-}
-
-CT_AbstractItemDrawable *CT_ScanPath::copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    CT_ScanPath *ref = new CT_ScanPath(modelName, result);
-    ref->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    ref->_pathPoints = this->_pathPoints;
-
-    return ref;
 }

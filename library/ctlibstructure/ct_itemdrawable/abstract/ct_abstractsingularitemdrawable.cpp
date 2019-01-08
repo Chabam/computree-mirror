@@ -210,7 +210,7 @@ CT_StandardItemGroup* CT_AbstractSingularItemDrawable::parentGroup() const
     return static_cast<CT_StandardItemGroup*>(parentItem());
 }
 
-CT_AbstractItem::IChildrensIteratorQtStyleSharedPtr CT_AbstractSingularItemDrawable::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
+CT_AbstractItem::IChildrensIteratorQtStylePtr CT_AbstractSingularItemDrawable::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
 {
     const CT_OutAbstractItemAttributeModel* iaModel = dynamic_cast<const CT_OutAbstractItemAttributeModel*>(outModel);
 
@@ -218,8 +218,8 @@ CT_AbstractItem::IChildrensIteratorQtStyleSharedPtr CT_AbstractSingularItemDrawa
         const CT_AbstractItemAttribute* attribute = iaModel->isADefaultItemAttributeModel() ? PS_DIAM->itemAttributeFromOutModel(iaModel, type()) : m_itemAttributes.itemAttributeFromOutModel(iaModel);
 
         if(attribute != NULL)
-            return IChildrensIteratorQtStyleSharedPtr(new ItemAttributeIterator(attribute));
+            return IChildrensIteratorQtStylePtr(new ItemAttributeIterator(attribute));
     }
 
-    return IChildrensIteratorQtStyleSharedPtr(NULL);
+    return IChildrensIteratorQtStylePtr(NULL);
 }

@@ -9,27 +9,17 @@
 /**
  * @brief A singular item that can manage a CT_Mesh
  */
-class PLUGINSHAREDSHARED_EXPORT CT_MeshModel : public CT_AbstractMeshModel
+class CTLIBSTRUCTUREADDON_EXPORT CT_MeshModel : public CT_AbstractMeshModel
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_MeshModel, CT_AbstractMeshModel, Mesh model)
+    using SuperClass = CT_AbstractMeshModel;
 
 public:
     CT_MeshModel();
-    CT_MeshModel(const CT_OutAbstractSingularItemModel *model,
-                 const CT_AbstractResult *result);
-    CT_MeshModel(const CT_OutAbstractSingularItemModel *model,
-                 const CT_AbstractResult *result,
-                 CT_Mesh *mesh);
-
-    CT_MeshModel(const QString &modelName,
-                 const CT_AbstractResult *result);
-    CT_MeshModel(const QString &modelName,
-                 const CT_AbstractResult *result,
-                 CT_Mesh *mesh);
-
+    CT_MeshModel(CT_Mesh* mesh);
+    CT_MeshModel(const CT_MeshModel& other);
     ~CT_MeshModel();
-
 
     /**
      * @brief Define if the mesh must be automatically deleted from memory. (true by default)
@@ -60,11 +50,6 @@ public:
      * @brief Clear mesh (delete from memory if method "autoDeleteMesh" returns true)
      */
     void clearMesh();
-
-    /**
-     * @brief Returns a copy of this item
-     */
-    CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
 
     /**
      * @brief Draw only faces
@@ -135,6 +120,8 @@ public:
      * @brief Returns the edge cloud index registered
      */
     CT_ECIR getEdgeCloudIndexRegistered() const;
+
+    CT_ITEM_COPY_IMP(CT_MeshModel)
 
 protected:
 

@@ -78,26 +78,26 @@ HEADERS += \
     ct_itemdrawable/ct_image2d.hpp \
     ct_itemdrawable/ct_line.h \
     ct_itemdrawable/ct_line2d.h \
-#    ct_itemdrawable/ct_meshmodel.h \
-#    ct_itemdrawable/ct_opfmeshmodel.h \
-#    ct_itemdrawable/ct_planarbspline.h \
-#    ct_itemdrawable/ct_plotgridmanager.h \
-#    ct_itemdrawable/ct_plotlistingrid.h \
-#    ct_itemdrawable/ct_point2d.h \
-#    ct_itemdrawable/ct_pointcluster.h \
+    ct_itemdrawable/ct_meshmodel.h \
+    ct_itemdrawable/ct_opfmeshmodel.h \
+    ct_itemdrawable/ct_planarbspline.h \
+    ct_itemdrawable/ct_plotgridmanager.h \
+    ct_itemdrawable/ct_plotlistingrid.h \
+    ct_itemdrawable/ct_point2d.h \
+    ct_itemdrawable/ct_pointcluster.h \
 #    ct_itemdrawable/ct_pointsattributescolor.h \
 #    ct_itemdrawable/ct_pointsattributesnormal.h \
 #    ct_itemdrawable/ct_pointsattributesscalarmaskt.h \
 #    ct_itemdrawable/ct_pointsattributesscalarmaskt.hpp \
 #    ct_itemdrawable/ct_pointsattributesscalartemplated.h \
 #    ct_itemdrawable/ct_pointsattributesscalartemplated.hpp \
-#    ct_itemdrawable/ct_polygon2d.h \
-#    ct_itemdrawable/ct_polyline2d.h \
+    ct_itemdrawable/ct_polygon2d.h \
+    ct_itemdrawable/ct_polyline2d.h \
     ct_itemdrawable/ct_profile.h \
     ct_itemdrawable/ct_profile.hpp \
     ct_itemdrawable/ct_referencepoint.h \
-#    ct_itemdrawable/ct_scanpath.h \
-#    ct_itemdrawable/ct_shootingpatternd.h \
+    ct_itemdrawable/ct_scanpath.h \
+    ct_itemdrawable/ct_shootingpatternd.h \
 #    ct_itemdrawable/ct_sphere.h \
 #    ct_itemdrawable/ct_stdpointsattributescontainer.h \
 #    ct_itemdrawable/ct_tnodegroup.h \
@@ -124,17 +124,17 @@ HEADERS += \
     ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpolyline2ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardpolyline2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.h \
     ct_shapedata/ct_boxdata.h \
@@ -222,21 +222,21 @@ SOURCES += \
 #    ct_itemdrawable/ct_image2d.cpp \
     ct_itemdrawable/ct_line.cpp \
     ct_itemdrawable/ct_line2d.cpp \
-#    ct_itemdrawable/ct_meshmodel.cpp \
-#    ct_itemdrawable/ct_opfmeshmodel.cpp \
-#    ct_itemdrawable/ct_planarbspline.cpp \
-#    ct_itemdrawable/ct_plotgridmanager.cpp \
-#    ct_itemdrawable/ct_plotlistingrid.cpp \
-#    ct_itemdrawable/ct_point2d.cpp \
-#    ct_itemdrawable/ct_pointcluster.cpp \
+    ct_itemdrawable/ct_meshmodel.cpp \
+    ct_itemdrawable/ct_opfmeshmodel.cpp \
+    ct_itemdrawable/ct_planarbspline.cpp \
+    ct_itemdrawable/ct_plotgridmanager.cpp \
+    ct_itemdrawable/ct_plotlistingrid.cpp \
+    ct_itemdrawable/ct_point2d.cpp \
+    ct_itemdrawable/ct_pointcluster.cpp \
 #    ct_itemdrawable/ct_pointsattributescolor.cpp \
 #    ct_itemdrawable/ct_pointsattributesnormal.cpp \
-#    ct_itemdrawable/ct_polygon2d.cpp \
-#    ct_itemdrawable/ct_polyline2d.cpp \
+    ct_itemdrawable/ct_polygon2d.cpp \
+    ct_itemdrawable/ct_polyline2d.cpp \
     ct_itemdrawable/ct_profile.cpp \
     ct_itemdrawable/ct_referencepoint.cpp \
-#    ct_itemdrawable/ct_scanpath.cpp \
-#    ct_itemdrawable/ct_shootingpatternd.cpp \
+    ct_itemdrawable/ct_scanpath.cpp \
+    ct_itemdrawable/ct_shootingpatternd.cpp \
 #    ct_itemdrawable/ct_sphere.cpp \
 #    ct_itemdrawable/ct_stdpointsattributescontainer.cpp \
 #    ct_itemdrawable/ct_tnodegroup.cpp \
@@ -258,17 +258,17 @@ SOURCES += \
 #    ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpolyline2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardpolyline2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp \
     ct_shapedata/ct_boxdata.cpp \

@@ -1,31 +1,18 @@
 #include "ct_shootingpatternd.h"
 
-CT_ShootingPatternD::CT_ShootingPatternD() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_ShootingPatternD::CT_ShootingPatternD() : SuperClass(),
+    m_pattern(NULL)
 {
-    m_pattern = NULL;
 }
 
-CT_ShootingPatternD::CT_ShootingPatternD(const CT_OutAbstractSingularItemModel *model,
-                                         const CT_AbstractResult *result,
-                                         CT_ShootingPattern *pattern) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+CT_ShootingPatternD::CT_ShootingPatternD(CT_ShootingPattern* pattern) : SuperClass(),
+    m_pattern(pattern)
 {
-    m_pattern = pattern;
-
     if(m_pattern != NULL)
-        setCenterCoordinate(m_pattern->getCenterCoordinate());
+        setCenterCoordinate(m_pattern->centerCoordinate());
 }
 
-CT_ShootingPatternD::CT_ShootingPatternD(const QString &modelName,
-                                         const CT_AbstractResult *result,
-                                         CT_ShootingPattern *pattern) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
-{
-    m_pattern = pattern;
-
-    if(m_pattern != NULL)
-        setCenterCoordinate(m_pattern->getCenterCoordinate());
-}
-
-CT_ShootingPatternD::CT_ShootingPatternD(const CT_ShootingPatternD& other) : CT_AbstractItemDrawableWithoutPointCloud((const CT_OutAbstractSingularItemModel*)other.model(), other.result())
+CT_ShootingPatternD::CT_ShootingPatternD(const CT_ShootingPatternD& other) : SuperClass(other)
 {
     m_pattern = ((other.m_pattern == NULL) ? NULL : other.m_pattern->clone());
 }
@@ -42,16 +29,11 @@ CT_ShootingPattern* CT_ShootingPatternD::getShootingPattern() const
 
 size_t CT_ShootingPatternD::getNumberOfShots() const
 {
-    return m_pattern->getNumberOfShots();
+    return m_pattern->numberOfShots();
 }
 
 CT_Shot CT_ShootingPatternD::getShotAt(const size_t &index) const
 {
-    return m_pattern->getShotAt(index);
-}
-
-CT_ShootingPatternD* CT_ShootingPatternD::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    return new CT_ShootingPatternD((const CT_OutAbstractSingularItemModel*)model, result, (m_pattern == NULL) ? NULL : m_pattern->clone());
+    return m_pattern->shotAt(index);
 }
 

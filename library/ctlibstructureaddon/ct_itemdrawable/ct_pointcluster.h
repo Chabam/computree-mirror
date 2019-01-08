@@ -36,7 +36,7 @@
 
 template<typename T> class CT_CloudIndexStdVectorT;
 
-class PLUGINSHAREDSHARED_EXPORT CT_PointClusterBarycenter
+class CTLIBSTRUCTUREADDON_EXPORT CT_PointClusterBarycenter
 {
 public:
 
@@ -117,23 +117,15 @@ private:
  * It contains an automatically updated barycenter.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_PointCluster : public CT_AbstractItemDrawableWithPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_PointCluster : public CT_AbstractItemDrawableWithPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_PointCluster, CT_AbstractItemDrawableWithPointCloud, Point cluster)
+    using SuperClass = CT_AbstractItemDrawableWithPointCloud;
 
 public:
-
-    CT_PointCluster();
-
-    CT_PointCluster(const CT_OutAbstractSingularItemModel *model,
-                    const CT_AbstractResult *result);
-
-    CT_PointCluster(const QString &modelName,
-                    const CT_AbstractResult *result);
-
-    virtual ~CT_PointCluster();
-
+    CT_PointCluster(bool prototype = true);
+    CT_PointCluster(const CT_PointCluster& other) = default;
 
     /**
       * \brief Ajoute un point au groupe  partir de son index dans le nuage de point (PointCloud)
@@ -160,22 +152,18 @@ public:
       *
       * ATTENTION les deux groupes doivent avoir le mme nuage de points en rfrence ! sinon la mthode renvoie NULL.
       */
-    static CT_PointCluster* merge(CT_PointCluster &pCLuster1, CT_PointCluster &pCLuster2, const CT_OutAbstractSingularItemModel *model, quint64 id, CT_AbstractResult &result, bool verifyDuplicated = false);
+    static CT_PointCluster* merge(CT_PointCluster& pCLuster1, CT_PointCluster& pCLuster2, bool verifyDuplicated = false);
 
-    static CT_PointCluster* merge(CT_PointCluster &pCLuster1, CT_PointCluster &pCLuster2, const QString &modelName, quint64 id, CT_AbstractResult &result, bool verifyDuplicated = false);
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model,
-                                          const CT_AbstractResult *result,
-                                          CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_PointCluster)
 
 private:
 
+    static const CT_StandardPointClusterDrawManager     POINTCLUSTER_DRAW_MANAGER;
+
     CT_PointClusterBarycenter                           _barycenter;
-    const static CT_StandardPointClusterDrawManager     POINTCLUSTER_DRAW_MANAGER;
-    CT_PointCloudIndexVector                            *m_pIndex;
+    CT_PointCloudIndexVector*                           m_pIndex;
 
 protected:
-
     void initBarycenter();
 };
 

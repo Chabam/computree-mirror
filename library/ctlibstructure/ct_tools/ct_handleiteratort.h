@@ -16,7 +16,12 @@ public:
      *        first to determine the result) and return it. If you want just know if there is
      *        or not element to iterate over, prefer call the method "isEmpty()".
      */
-    int count() const { return std::distance(m_begin, m_end); }
+    int count() const {
+        IteratorT it = m_begin;
+        IteratorT end = m_end;
+
+        return std::distance(it, end);
+    }
 
     /**
      * @brief Returns true if there is no element to iterate over

@@ -219,7 +219,7 @@ protected:
      * @param outModel : the out model of childrens
      * @return A new qt style iterator to iterate over childrens (groups or items or etc...) that use the specified out model
      */
-    IChildrensIteratorQtStyleSharedPtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
+    IChildrensIteratorQtStylePtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
 
 private:
     class ItemAttributeIterator : public IChildrensIteratorQtStyle {
@@ -233,6 +233,8 @@ private:
             m_current = NULL;
             return c;
         }
+
+        IChildrensIteratorQtStyle* copy() const override { return new ItemAttributeIterator(m_current); }
 
     private:
         CT_AbstractItemAttribute* m_current;

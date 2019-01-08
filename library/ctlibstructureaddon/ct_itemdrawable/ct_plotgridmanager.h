@@ -30,33 +30,19 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_PlotGridManager : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_PlotGridManager : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_PlotGridManager, CT_AbstractItemDrawableWithoutPointCloud, Plot grid manager)
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
 
 public:
-    /**
-      * \brief Contructeur vide
-      */
     CT_PlotGridManager();
-    /**
-      * \brief Contructeur
-      */
-    CT_PlotGridManager(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result);
+    CT_PlotGridManager(const CT_PlotGridManager& other) = default;
 
-    CT_PlotGridManager(const QString &modelName,
-                     const CT_AbstractResult *result);
+    bool hasBoundingBox() const override { return false; }
 
-    virtual ~CT_PlotGridManager();
-
-    virtual bool hasBoundingBox() const {return false;}
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-
-
-protected:
+    CT_ITEM_COPY_IMP(CT_PlotGridManager)
 
 private:
     CT_DEFAULT_IA_BEGIN(CT_PlotGridManager)

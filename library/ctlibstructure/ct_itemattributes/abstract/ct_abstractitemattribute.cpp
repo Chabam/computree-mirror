@@ -76,7 +76,7 @@ IItemAttributeToolForModel* CT_AbstractItemAttribute::itemAttributeToolForModel(
     return &const_cast<ItemAttributeToolForModel&>(m_iaTool);
 }
 
-CT_AbstractItemAttribute::IChildrensIteratorQtStyleSharedPtr CT_AbstractItemAttribute::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel*) const
+CT_AbstractItemAttribute::IChildrensIteratorQtStylePtr CT_AbstractItemAttribute::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel*) const
 {
-    return IChildrensIteratorQtStyleSharedPtr(NULL); // no childrens
+    return NULL; // no childrens
 }

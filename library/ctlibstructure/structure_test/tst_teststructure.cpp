@@ -320,8 +320,8 @@ void TestStructure::testStdItemAttributeWrapperTCreation()
         int nChildrens() const override { return 0; }
 
     protected:
-        IChildrensIteratorQtStyleSharedPtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel*) const {
-            return IChildrensIteratorQtStyleSharedPtr(NULL);
+        IChildrensIteratorQtStylePtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel*) const {
+            return IChildrensIteratorQtStylePtr(NULL);
         }
     };
 

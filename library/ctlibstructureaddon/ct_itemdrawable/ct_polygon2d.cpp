@@ -33,38 +33,19 @@ CT_DEFAULT_IA_INIT(CT_Polygon2D)
 
 const CT_StandardPolygon2DDrawManager CT_Polygon2D::POLYGON2D_DRAW_MANAGER;
 
-CT_Polygon2D::CT_Polygon2D() : CT_AbstractAreaShape2D()
+CT_Polygon2D::CT_Polygon2D() : SuperClass()
 {
     setBaseDrawManager(&POLYGON2D_DRAW_MANAGER);
 }
 
-CT_Polygon2D::CT_Polygon2D(const CT_OutAbstractSingularItemModel *model,
-                         const CT_AbstractResult *result,
-                         CT_Polygon2DData *data) : CT_AbstractAreaShape2D(model, result, data)
+CT_Polygon2D::CT_Polygon2D(CT_Polygon2DData* data) : SuperClass(data)
 {
     setBaseDrawManager(&POLYGON2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        _minCoordinates(0) = data->_min(0);
-        _minCoordinates(1) = data->_min(1);
-
-        _maxCoordinates(0) = data->_max(0);
-        _maxCoordinates(1) = data->_max(1);
-    } else {
-        _minCoordinates(0) = 0;
-        _minCoordinates(1) = 0;
-
-        _maxCoordinates(0) = 0;
-        _maxCoordinates(1) = 0;
-    }
-    _minCoordinates(2) = 0;
-    _maxCoordinates(2) = 0;
 }
 
 CT_Polygon2D::CT_Polygon2D(const QString &modelName,
                          const CT_AbstractResult *result,
-                         CT_Polygon2DData *data) : CT_AbstractAreaShape2D(modelName, result, data)
+                         CT_Polygon2DData *data) : SuperClass(modelName, result, data)
 {
     setBaseDrawManager(&POLYGON2D_DRAW_MANAGER);
 

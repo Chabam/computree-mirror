@@ -31,10 +31,11 @@
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
 #include "ct_shape2ddata/ct_areashape2ddata.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_PlotListInGrid : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_PlotListInGrid : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_PlotListInGrid, CT_AbstractItemDrawableWithoutPointCloud, Plot grid list)
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
 
 public:
 
@@ -43,32 +44,16 @@ public:
         T_Square
     };
 
-    /**
-      * \brief Contructeur vide
-      */
+
     CT_PlotListInGrid();
-    /**
-      * \brief Contructeur
-      */
-    CT_PlotListInGrid(const CT_OutAbstractSingularItemModel *model,
-                      const CT_AbstractResult *result,
-                      const CT_AreaShape2DData* areaShape2D,
+    CT_PlotListInGrid(const CT_AreaShape2DData* areaShape2D,
                       const Eigen::Vector2d& refCoords,
                       double spacing,
                       double size);
+    CT_PlotListInGrid(const CT_PlotListInGrid& other);
+    ~CT_PlotListInGrid();
 
-    CT_PlotListInGrid(const QString &modelName,
-                      const CT_AbstractResult *result,
-                      const CT_AreaShape2DData* areaShape2D,
-                      const Eigen::Vector2d& refCoords,
-                      double spacing,
-                      double size);
-
-    virtual ~CT_PlotListInGrid();
-
-    virtual bool hasBoundingBox() const {return true;}
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    bool hasBoundingBox() const override {return true;}
 
     void getBoundingBox2D(Eigen::Vector2d &min, Eigen::Vector2d &max) const;
 
@@ -79,7 +64,6 @@ public:
 
     QMap<CT_AreaShape2DData *, size_t> createPlots(CT_PlotListInGrid::Type type);
 
-
     static bool orderTopLeftToBottomRight(CT_PlotListInGrid *s1, CT_PlotListInGrid *s2)
     {
         if (s1->_min(1) >= s2->_max(1)) {return true;}
@@ -87,6 +71,7 @@ public:
         return false;
     }
 
+    CT_ITEM_COPY_IMP(CT_PlotListInGrid)
 
 protected:
 
@@ -105,17 +90,6 @@ private:
     CT_DEFAULT_IA_END(CT_PlotListInGrid)
 
     void computeMinMax(const Eigen::Vector2d &refCoords);
-
-    CT_PlotListInGrid(const CT_OutAbstractSingularItemModel *model,
-                      const CT_AbstractResult *result,
-                      const CT_AreaShape2DData* areaShape2D,
-                      const Eigen::Vector2d& min,
-                      const Eigen::Vector2d& max,
-                      double spacing,
-                      double size,
-                      size_t firstIndex,
-                      size_t indexJumpAtEOL);
-
 };
 
 #endif // CT_PLOTLISTINGRID_H

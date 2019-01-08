@@ -32,19 +32,12 @@ const CT_StandardPlanarBSplineDrawManager CT_PlanarBSpline::PLANARBSPLINE_DRAW_M
 
 CT_DEFAULT_IA_INIT(CT_PlanarBSpline)
 
-CT_PlanarBSpline::CT_PlanarBSpline() : CT_AbstractShape()
+CT_PlanarBSpline::CT_PlanarBSpline() : SuperClass()
 {
     setBaseDrawManager(&PLANARBSPLINE_DRAW_MANAGER);
 }
 
-CT_PlanarBSpline::CT_PlanarBSpline(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result, CT_PlanarBSplineData *data) : CT_AbstractShape(model, result, data)
-{
-    setBaseDrawManager(&PLANARBSPLINE_DRAW_MANAGER);
-}
-
-CT_PlanarBSpline::CT_PlanarBSpline(const QString &modelName,
-                     const CT_AbstractResult *result, CT_PlanarBSplineData *data) : CT_AbstractShape(modelName, result, data)
+CT_PlanarBSpline::CT_PlanarBSpline(CT_PlanarBSplineData *data) : SuperClass(data)
 {
     setBaseDrawManager(&PLANARBSPLINE_DRAW_MANAGER);
 }
@@ -67,16 +60,5 @@ void CT_PlanarBSpline::setPolyline(const QList<Eigen::Vector3d> &list)
 const QList<Eigen::Vector3d> &CT_PlanarBSpline::getPolyline() const
 {
     return _polyline;
-}
-
-
-CT_AbstractItemDrawable* CT_PlanarBSpline::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_PlanarBSpline *bspline = new CT_PlanarBSpline((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_PlanarBSplineData&)getData()).clone() : NULL);
-    bspline->setId(id());
-    bspline->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return bspline;
 }
 

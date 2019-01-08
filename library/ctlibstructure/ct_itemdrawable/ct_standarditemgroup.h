@@ -223,6 +223,27 @@ public:
      */
     IItemDrawableToolForModel* itemToolForModel() const override;
 
+    /**
+     * @brief Assign the model to the item that you want to add later to this group
+     * @param outItemHandle : the handle of the item to add later
+     * @param item : the item that will
+     * @warning There is no verification made to check that this item can be added or not to this group. Be sure what you do.
+     */
+    template<typename OutHandleType>
+    void assignModelToItemToAdd(const OutHandleType& outItemHandle, CT_AbstractItemDrawable* item) {
+        if(model() == NULL)
+            qFatal("CT_StandardItemGroup::assignModelToItemToAdd(...) --> model() == NULL");
+
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const CT_OutAbstractModel* outModel = outItemHandle.findModelWithParent(model());
+
+        if(outModel == NULL)
+            qFatal("CT_StandardItemGroup::assignModelToItemToAdd(...) --> outModel == NULL");
+
+        item->setModel(outModel);
+    }
+
     /****** SINGULAR ITEM METHODS ********/
 
     /**
@@ -730,7 +751,7 @@ protected:
      * @param outModel : the out model of childrens
      * @return A new qt style iterator to iterate over childrens (groups or items or etc...) that use the specified out model
      */
-    IChildrensIteratorQtStyleSharedPtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
+    IChildrensIteratorQtStylePtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
 
 private:
 
@@ -745,6 +766,8 @@ private:
             m_begin++;
             return c;
         }
+
+        IChildrensIteratorQtStyle* copy() const override { return new GroupQtIterator(m_begin, m_end); }
 
     private:
         GroupContainerType::iterator m_begin;
@@ -762,6 +785,8 @@ private:
             m_current = NULL;
             return c;
         }
+
+        IChildrensIteratorQtStyle* copy() const override { return new ItemQtIterator(m_current); }
 
     private:
         CT_AbstractItemDrawable* m_current;

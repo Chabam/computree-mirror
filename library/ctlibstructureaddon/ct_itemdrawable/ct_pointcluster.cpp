@@ -28,51 +28,26 @@
 #include "ct_pointcluster.h"
 
 #include "ct_pointcloudindex/ct_pointcloudindexvector.h"
-#include "ct_global/ct_context.h"
+#include "ct_cloudindex/registered/ct_standardmodifiablecloudindexregisteredt.h"
 #include "ct_accessor/ct_pointaccessor.h"
 #include "ct_iterator/ct_pointiterator.h"
 
-#include <limits>
-
 const CT_StandardPointClusterDrawManager CT_PointCluster::POINTCLUSTER_DRAW_MANAGER;
 
-CT_PointCluster::CT_PointCluster() : CT_AbstractItemDrawableWithPointCloud()
+CT_PointCluster::CT_PointCluster(bool prototype) : SuperClass()
 {
     m_pIndex = NULL;
+    _barycenter.reset();
+
+    if(!prototype) {
+        CT_PointCloudIndexVector* cloudIndex = new CT_PointCloudIndexVector();
+        m_pIndex = cloudIndex;
+
+        cloudIndex->setSortType(CT_AbstractPointCloudIndex::NotSorted); // Important to be able to store Polylines
+        setPointCloudIndexRegistered(PS_REPOSITORY->registerPointCloudIndex(cloudIndex));
+    }
 
     setBaseDrawManager(&POINTCLUSTER_DRAW_MANAGER);
-
-    _barycenter.reset();
-}
-
-CT_PointCluster::CT_PointCluster(const CT_OutAbstractSingularItemModel *model,
-                                 const CT_AbstractResult *result) : CT_AbstractItemDrawableWithPointCloud(model, result)
-{
-    CT_PointCloudIndexVector *cloudIndex = new CT_PointCloudIndexVector();
-    m_pIndex = cloudIndex;
-
-    cloudIndex->setSortType(CT_AbstractPointCloudIndex::NotSorted); // Important to be able to store Polylines
-    setPointCloudIndexRegisteredProtected(PS_REPOSITORY->registerPointCloudIndex(cloudIndex));
-    setBaseDrawManager(&POINTCLUSTER_DRAW_MANAGER);
-
-    _barycenter.reset();
-}
-
-CT_PointCluster::CT_PointCluster(const QString &modelName,
-                                 const CT_AbstractResult *result) : CT_AbstractItemDrawableWithPointCloud(modelName, result)
-{
-    CT_PointCloudIndexVector *cloudIndex = new CT_PointCloudIndexVector();
-    m_pIndex = cloudIndex;
-
-    cloudIndex->setSortType(CT_AbstractPointCloudIndex::NotSorted); // Important to be able to store Polylines
-    setPointCloudIndexRegisteredProtected(PS_REPOSITORY->registerPointCloudIndex(cloudIndex));
-    setBaseDrawManager(&POINTCLUSTER_DRAW_MANAGER);
-
-    _barycenter.reset();
-}
-
-CT_PointCluster::~CT_PointCluster()
-{
 }
 
 bool CT_PointCluster::addPoint(size_t index, bool verifyIfExist, bool firstPosition)
@@ -90,15 +65,18 @@ bool CT_PointCluster::addPoint(size_t index, bool verifyIfExist, bool firstPosit
 
     _barycenter.addPoint(point);
 
-    if (point(0) < _minCoordinates(0)) {_minCoordinates(0) = point(0);}
-    if (point(1) < _minCoordinates(1)) {_minCoordinates(1) = point(1);}
-    if (point(2) < _minCoordinates(2)) {_minCoordinates(2) = point(2);}
+    Eigen::Vector3d min, max;
+    boundingBox(min, max);
 
-    if (point(0) > _maxCoordinates(0)) {_maxCoordinates(0) = point(0);}
-    if (point(1) > _maxCoordinates(1)) {_maxCoordinates(1) = point(1);}
-    if (point(2) > _maxCoordinates(2)) {_maxCoordinates(2) = point(2);}
+    min(0) = qMin(point(0), min(0));
+    min(1) = qMin(point(1), min(1));
+    min(2) = qMin(point(2), min(2));
 
-    updateCenterFromBoundingBox();
+    max(0) = qMax(point(0), max(0));
+    max(1) = qMax(point(1), max(1));
+    max(2) = qMax(point(2), max(2));
+
+    setBoundingBox(min, max);
 
     return true;
 }
@@ -108,14 +86,12 @@ const CT_PointClusterBarycenter& CT_PointCluster::getBarycenter() const
     return _barycenter;
 }
 
-CT_PointCluster* CT_PointCluster::merge(CT_PointCluster &pCLuster1, CT_PointCluster &pCLuster2, const CT_OutAbstractSingularItemModel *model, quint64 id, CT_AbstractResult &result, bool verifyDuplicated)
+CT_PointCluster* CT_PointCluster::merge(CT_PointCluster& pCLuster1, CT_PointCluster& pCLuster2, bool verifyDuplicated)
 {
-    Q_UNUSED(id)
+    CT_PointCluster* pMerged = new CT_PointCluster(false);
 
-    CT_PointCluster *pMerged = new CT_PointCluster((const CT_OutAbstractSingularItemModel *)model, &result);
-
-    const CT_AbstractPointCloudIndex *pIndex1 = pCLuster1.getPointCloudIndex();
-    const CT_AbstractPointCloudIndex *pIndex2 = pCLuster2.getPointCloudIndex();
+    const CT_AbstractPointCloudIndex* pIndex1 = pCLuster1.pointCloudIndex();
+    const CT_AbstractPointCloudIndex* pIndex2 = pCLuster2.pointCloudIndex();
 
     size_t size = pIndex1->size();
     size_t index;
@@ -136,84 +112,12 @@ CT_PointCluster* CT_PointCluster::merge(CT_PointCluster &pCLuster1, CT_PointClus
 
     return pMerged;
 }
-
-CT_PointCluster* CT_PointCluster::merge(CT_PointCluster &pCLuster1, CT_PointCluster &pCLuster2, const QString &modelName, quint64 id, CT_AbstractResult &result, bool verifyDuplicated)
-{
-    Q_UNUSED(id)
-
-    CT_PointCluster *pMerged = new CT_PointCluster(modelName, &result);
-
-    const CT_AbstractPointCloudIndex *pIndex1 = pCLuster1.getPointCloudIndex();
-    const CT_AbstractPointCloudIndex *pIndex2 = pCLuster2.getPointCloudIndex();
-
-    size_t size = pIndex1->size();
-    size_t index;
-
-    for(size_t i=0; i<size; ++i)
-    {
-        pIndex1->indexAt(i, index);
-        pMerged->addPoint(index);
-    }
-
-    size = pIndex2->size();
-
-    for(size_t i=0; i<size; ++i)
-    {
-        pIndex2->indexAt(i, index);
-        pMerged->addPoint(index, verifyDuplicated);
-    }
-
-    return pMerged;
-}
-
-CT_AbstractItemDrawable* CT_PointCluster::copy(const CT_OutAbstractItemModel *model,
-                                               const CT_AbstractResult *result,
-                                               CT_ResultCopyModeList copyModeList)
-{
-    CT_ResultCopyModeList::CopyMode copyMode = CT_ResultCopyModeList::CopyItemDrawableReference;
-
-    if(!copyModeList.isEmpty())
-    {
-        copyMode = copyModeList.takeFirst();
-    }
-
-    if(copyMode == CT_ResultCopyModeList::DontCopyItemDrawable)
-    {
-        copyMode = CT_ResultCopyModeList::CopyItemDrawableReference;
-    }
-
-    CT_PointCluster *pCluster;
-
-    if(copyMode == CT_ResultCopyModeList::CopyItemDrawableReference)
-    {
-        pCluster = new CT_PointCluster((const CT_OutAbstractSingularItemModel *)model, result);
-        pCluster->setPointCloudIndexRegisteredProtected(getPointCloudIndexRegistered());
-        pCluster->updateBoundingBox();
-        pCluster->initBarycenter();
-    }
-    else if(copyMode == CT_ResultCopyModeList::CopyItemDrawableCompletely)
-    {
-        pCluster = new CT_PointCluster((const CT_OutAbstractSingularItemModel *)model, result);
-
-        if(getPointCloudIndexRegistered() != NULL)
-        {
-            pCluster->setPointCloudIndexRegisteredProtected(PS_REPOSITORY->copyPointCloud(getPointCloudIndexRegistered()));
-        }
-
-        pCluster->updateBoundingBox();
-        pCluster->initBarycenter();
-    }
-
-    return pCluster;
-}
-
-///////// PROTECTED ///////////
 
 void CT_PointCluster::initBarycenter()
 {
     _barycenter.reset();
 
-    CT_PointIterator it(getPointCloudIndex());
+    CT_PointIterator it(pointCloudIndex());
 
     while(it.hasNext())
     {

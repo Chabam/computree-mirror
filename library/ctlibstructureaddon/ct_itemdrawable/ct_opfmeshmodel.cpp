@@ -1,34 +1,15 @@
 #include "ct_opfmeshmodel.h"
 
-CT_OPFMeshModel::CT_OPFMeshModel()
+CT_OPFMeshModel::CT_OPFMeshModel() : SuperClass(),
+    m_dUp(1.0),
+    m_dDown(1.0)
 {
-    defaultOpfMeshModelConstructorInitialization();
 }
 
-CT_OPFMeshModel::CT_OPFMeshModel(const CT_OutAbstractSingularItemModel *model,
-                                 const CT_AbstractResult *result) : CT_MeshModel(model, result)
+CT_OPFMeshModel::CT_OPFMeshModel(CT_Mesh* mesh) : SuperClass(mesh),
+    m_dUp(1.0),
+    m_dDown(1.0)
 {
-    defaultOpfMeshModelConstructorInitialization();
-}
-
-CT_OPFMeshModel::CT_OPFMeshModel(const CT_OutAbstractSingularItemModel *model,
-                                 const CT_AbstractResult *result,
-                                 CT_Mesh *mesh) : CT_MeshModel(model, result, mesh)
-{
-    defaultOpfMeshModelConstructorInitialization();
-}
-
-CT_OPFMeshModel::CT_OPFMeshModel(const QString &modelName,
-                                 const CT_AbstractResult *result) : CT_MeshModel(modelName, result)
-{
-    defaultOpfMeshModelConstructorInitialization();
-}
-
-CT_OPFMeshModel::CT_OPFMeshModel(const QString &modelName,
-                                 const CT_AbstractResult *result,
-                                 CT_Mesh *mesh) : CT_MeshModel(modelName, result, mesh)
-{
-    defaultOpfMeshModelConstructorInitialization();
 }
 
 void CT_OPFMeshModel::setDUp(double dUp)
@@ -49,10 +30,4 @@ double CT_OPFMeshModel::dUp() const
 double CT_OPFMeshModel::dDown() const
 {
     return m_dDown;
-}
-
-void CT_OPFMeshModel::defaultOpfMeshModelConstructorInitialization()
-{
-    m_dUp = 1.0;
-    m_dDown = 1.0;
 }

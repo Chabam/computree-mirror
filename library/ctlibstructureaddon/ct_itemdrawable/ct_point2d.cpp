@@ -31,43 +31,14 @@
 
 const CT_StandardPoint2DDrawManager CT_Point2D::POINT2D_DRAW_MANAGER;
 
-CT_Point2D::CT_Point2D() : CT_AbstractShape2D()
+CT_Point2D::CT_Point2D() : SuperClass()
 {
     setBaseDrawManager(&POINT2D_DRAW_MANAGER);
 }
 
-CT_Point2D::CT_Point2D(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result, CT_Point2DData *data) : CT_AbstractShape2D(model, result, data)
+CT_Point2D::CT_Point2D(CT_Point2DData *data) : SuperClass(data)
 {
     setBaseDrawManager(&POINT2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        _minCoordinates(0) = data->x();
-        _minCoordinates(1) = data->y();
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = data->x();
-        _maxCoordinates(1) = data->y();
-        _maxCoordinates(2) = 0;
-    }
-}
-
-CT_Point2D::CT_Point2D(const QString &modelName,
-                     const CT_AbstractResult *result, CT_Point2DData *data) : CT_AbstractShape2D(modelName, result, data)
-{
-    setBaseDrawManager(&POINT2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        _minCoordinates(0) = data->x();
-        _minCoordinates(1) = data->y();
-        _minCoordinates(2) = 0;
-
-        _maxCoordinates(0) = data->x();
-        _maxCoordinates(1) = data->y();
-        _maxCoordinates(2) = 0;
-    }
 }
 
 double CT_Point2D::x() const

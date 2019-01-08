@@ -178,7 +178,7 @@ protected:
      * @param outModel : the out model of childrens
      * @return A new qt style iterator to iterate over childrens (groups or items or etc...) that use the specified out model
      */
-    IChildrensIteratorQtStyleSharedPtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
+    IChildrensIteratorQtStylePtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
 
 private:
     using GroupContainerType = CT_StandardItemGroup::GroupContainerType;
@@ -196,6 +196,8 @@ private:
             m_begin++;
             return c;
         }
+
+        IChildrensIteratorQtStyle* copy() const override { return new GroupIterator(m_begin, m_end); }
 
     private:
         GroupContainerType::iterator m_begin;

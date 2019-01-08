@@ -77,9 +77,14 @@ public:
          *        the container leads to undefined results.
          */
         virtual CT_AbstractItem* next() = 0;
+
+        /**
+         * @brief Returns a copy of this object
+         */
+        virtual IChildrensIteratorQtStyle* copy() const = 0;
     };
 
-    using IChildrensIteratorQtStyleSharedPtr = QSharedPointer<CT_AbstractItem::IChildrensIteratorQtStyle>;
+    using IChildrensIteratorQtStylePtr = CT_AbstractItem::IChildrensIteratorQtStyle*;
 
     class ChildrensCollection;
 
@@ -89,9 +94,18 @@ public:
     template<typename ItemT>
     class ChildrensIteratorStdStyleT : public std::iterator<std::input_iterator_tag, ItemT*> {
     public:
-        using self_type = ChildrensIteratorStdStyleT;
+        using self_type = ChildrensIteratorStdStyleT<ItemT>;
 
         ChildrensIteratorStdStyleT() : m_iterator(NULL), m_currentValue(NULL) {}
+        ChildrensIteratorStdStyleT(const self_type& other) :
+            m_iterator(other.m_iterator != NULL ? other.m_iterator->copy() : NULL),
+            m_currentValue(other.m_currentValue)
+        {
+        }
+
+        ~ChildrensIteratorStdStyleT() {
+            delete m_iterator;
+        }
 
         self_type& operator++() {
             if(m_currentValue == NULL)
@@ -109,17 +123,23 @@ public:
         pointer operator->() { return &m_currentValue; }
         bool operator==(const self_type& rhs) { return m_currentValue == rhs.m_currentValue; }
         bool operator!=(const self_type& rhs) { return m_currentValue != rhs.m_currentValue; }
+        self_type& operator=(const self_type& other) {
+            delete this->m_iterator;
+            this->m_iterator = other.m_iterator != NULL ? other.m_iterator->copy() : NULL;
+            this->m_currentValue = other.m_currentValue;
+            return *this;
+        }
 
     private:
         ItemT*                              m_currentValue;
-        IChildrensIteratorQtStyleSharedPtr  m_iterator;
+        IChildrensIteratorQtStylePtr        m_iterator;
 
 
         template<typename ItemT>
         friend class ChildrensCollectionT;
 
-        ChildrensIteratorStdStyleT(IChildrensIteratorQtStyleSharedPtr it) : m_iterator(it), m_currentValue(NULL) {
-            if(!m_iterator.isNull() && m_iterator->hasNext())
+        ChildrensIteratorStdStyleT(IChildrensIteratorQtStylePtr it) : m_iterator(it), m_currentValue(NULL) {
+            if((m_iterator != NULL) && m_iterator->hasNext())
                 m_currentValue = m_iterator->next();
         }
     };
@@ -131,22 +151,37 @@ public:
     class ChildrensCollectionT {
     public:
         using const_iterator = ChildrensIteratorStdStyleT<ItemT>;
+        using self_type = ChildrensCollectionT<ItemT>;
 
         ChildrensCollectionT() : m_iterator(NULL) {}
-        ChildrensCollectionT(IChildrensIteratorQtStyleSharedPtr it) : m_iterator(it){}
+        ChildrensCollectionT(IChildrensIteratorQtStylePtr it) : m_iterator(it){}
+        ChildrensCollectionT(const self_type& other) :
+            m_iterator(other.m_iterator != NULL ? other.m_iterator->copy() : NULL)
+        {
+        }
+
+        ~ChildrensCollectionT() {
+            delete m_iterator;
+        }
 
         /**
          * @brief Returns a const STL-style iterator pointing to the first child in the collection of childrens that must be keeped.
          */
-        const_iterator begin() const { return const_iterator(m_iterator); }
+        const_iterator begin() const { return const_iterator(m_iterator != NULL ? m_iterator->copy() : NULL); }
 
         /**
          * @brief Returns a const STL-style iterator pointing to the imaginary child after the element item in the collection of childrens that must be keeped.
          */
         const_iterator end() const { return const_iterator(); }
 
+        self_type& operator=(const self_type& other) {
+            delete this->m_iterator;
+            this->m_iterator = other.m_iterator != NULL ? other.m_iterator->copy() : NULL;
+            return *this;
+        }
+
     private:
-        IChildrensIteratorQtStyleSharedPtr m_iterator;
+        IChildrensIteratorQtStylePtr m_iterator;
     };
 
     /**
@@ -156,7 +191,12 @@ public:
         using SuperClass = ChildrensCollectionT<CT_AbstractItem>;
     public:
         ChildrensCollection() : SuperClass() {}
-        ChildrensCollection(IChildrensIteratorQtStyleSharedPtr it) : SuperClass(it) {}
+        ChildrensCollection(IChildrensIteratorQtStylePtr it) : SuperClass(it) {}
+        ChildrensCollection(const ChildrensCollection& other) : SuperClass(other) {}
+        ChildrensCollection& operator=(const ChildrensCollection& other) {
+            SuperClass::operator =(other);
+            return *this;
+        }
     };
 
 public:
@@ -277,7 +317,7 @@ protected:
      * @param outModel : the out model of childrens
      * @return A new qt style iterator to iterate over childrens (groups or items or etc...) that use the specified out model
      */
-    virtual IChildrensIteratorQtStyleSharedPtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const = 0;
+    virtual IChildrensIteratorQtStylePtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const = 0;
 
 private:
     /**

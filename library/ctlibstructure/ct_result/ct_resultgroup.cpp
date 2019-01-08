@@ -114,7 +114,7 @@ CT_AbstractItem::ChildrensCollection CT_ResultGroup::childrensThatUseOutModel(co
     Q_ASSERT(outModel != NULL);
     Q_ASSERT(outModel == static_cast<CT_OutAbstractResultModelGroup*>(model())->rootGroup());
 
-    return CT_AbstractItem::ChildrensCollection(CT_AbstractItem::IChildrensIteratorQtStyleSharedPtr(new GroupIterator(m_rootGroups->begin(), m_rootGroups->end())));
+    return CT_AbstractItem::ChildrensCollection(CT_AbstractItem::IChildrensIteratorQtStylePtr(new GroupIterator(m_rootGroups->begin(), m_rootGroups->end())));
 }
 
 CT_AbstractResult* CT_ResultGroup::copy(const CT_OutAbstractResultModel* newModelToUse) const
@@ -170,9 +170,9 @@ void CT_ResultGroup::internalClearFromMemory()
     clearRootGroups();
 }
 
-CT_AbstractItem::IChildrensIteratorQtStyleSharedPtr CT_ResultGroup::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel*) const
+CT_AbstractItem::IChildrensIteratorQtStylePtr CT_ResultGroup::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel*) const
 {
-    return IChildrensIteratorQtStyleSharedPtr(new GroupIterator(m_rootGroups->begin(), m_rootGroups->end()));
+    return IChildrensIteratorQtStylePtr(new GroupIterator(m_rootGroups->begin(), m_rootGroups->end()));
 }
 
 void CT_ResultGroup::clearRootGroups()

@@ -41,35 +41,25 @@
  * It represents a line in 2D, defined by two points.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Point2D : public CT_AbstractShape2D
+class CTLIBSTRUCTUREADDON_EXPORT CT_Point2D : public CT_AbstractShape2D
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Point2D, CT_AbstractShape2D, 2D point)
+    using SuperClass = CT_AbstractShape2D;
 
 public:
 
     CT_Point2D();
-
-    /**
-      * \brief Contructeur avec une instance des donnes (CT_Point2DData*), ne peut etre NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_Point2D(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              CT_Point2DData *data);
-
-    CT_Point2D(const QString &modelName,
-              const CT_AbstractResult *result,
-              CT_Point2DData *data);
+    CT_Point2D(CT_Point2DData *data);
+    CT_Point2D(const CT_Point2D& other) = default;
 
     double x() const;
     double y() const;
 
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_Point2D)
 
 private:
-
     const static CT_StandardPoint2DDrawManager  POINT2D_DRAW_MANAGER;
-
 };
 
 #endif // CT_POINT2D_H

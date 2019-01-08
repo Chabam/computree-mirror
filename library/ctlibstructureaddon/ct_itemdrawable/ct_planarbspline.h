@@ -40,46 +40,36 @@
  * It represents a planar B-Spline in 3D.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_PlanarBSpline : public CT_AbstractShape
+class CTLIBSTRUCTUREADDON_EXPORT CT_PlanarBSpline : public CT_AbstractShape
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_PlanarBSpline, CT_AbstractShape, Planar B-spline)
+    using SuperClass = CT_AbstractShape;
 
 public:
 
     CT_PlanarBSpline();
-
-    /**
-      * \brief Contructeur avec une instance des donnes (CT_PlanarBSplineData*), ne peut tre NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_PlanarBSpline(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              CT_PlanarBSplineData *data);
-
-    CT_PlanarBSpline(const QString &modelName,
-              const CT_AbstractResult *result,
-              CT_PlanarBSplineData *data);
-
+    CT_PlanarBSpline(CT_PlanarBSplineData* data);
+    CT_PlanarBSpline(const CT_PlanarBSpline& other) = default;
 
     int getDegree() const;
     int getNCP() const;
 
-    void setPolyline(const QList<Eigen::Vector3d> &list);
-    const QList<Eigen::Vector3d> &getPolyline() const;
+    void setPolyline(const QList<Eigen::Vector3d>& list);
+    const QList<Eigen::Vector3d>& getPolyline() const;
 
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_PlanarBSpline)
 
 private:
 
     QList<Eigen::Vector3d>    _polyline;
 
     CT_DEFAULT_IA_BEGIN(CT_PlanarBSpline)
-    CT_DEFAULT_IA_V3(CT_PlanarBSpline, CT_AbstractCategory::staticInitDataNumber(), &CT_PlanarBSpline::getDegree, QObject::tr("Degré de polynome"), "dp")
-    CT_DEFAULT_IA_V3(CT_PlanarBSpline, CT_AbstractCategory::staticInitDataNumber(), &CT_PlanarBSpline::getNCP, QObject::tr("Nombre de points de contrôle"), "npc")
+    CT_DEFAULT_IA_V2(CT_PlanarBSpline, CT_AbstractCategory::staticInitDataNumber(), &CT_PlanarBSpline::getDegree, QObject::tr("Degré de polynome"))
+    CT_DEFAULT_IA_V2(CT_PlanarBSpline, CT_AbstractCategory::staticInitDataNumber(), &CT_PlanarBSpline::getNCP, QObject::tr("Nombre de points de contrôle"))
     CT_DEFAULT_IA_END(CT_PlanarBSpline)
 
     const static CT_StandardPlanarBSplineDrawManager   PLANARBSPLINE_DRAW_MANAGER;
-
 };
 
 #endif // CT_PLANARBSPLINE_H

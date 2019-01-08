@@ -31,10 +31,11 @@
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
 #include "ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_ScanPath : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_ScanPath : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_ScanPath, CT_AbstractItemDrawableWithoutPointCloud, Scan Path)
+    using SuperClass = SuperClass;
 
 public:
 
@@ -53,18 +54,8 @@ public:
         return (a._gpsTime < b._gpsTime);
     }
 
-
-
     CT_ScanPath();
-
-    /**
-      * \brief Contructeur
-      */
-    CT_ScanPath(const CT_OutAbstractSingularItemModel *model,
-                const CT_AbstractResult *result);
-
-    CT_ScanPath(const QString &modelName,
-                const CT_AbstractResult *result);
+    CT_ScanPath(const CT_ScanPath& other) = default;
 
     void addPathPoint(double gpsTime, double x, double y, double z);
     void addPathPoint(double gpsTime, const Eigen::Vector3d &point);
@@ -75,9 +66,7 @@ public:
 
     const QList<CT_ScanPath::PathPoint>& getPath() const {return _pathPoints;}
 
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-
-    virtual CT_AbstractItemDrawable* copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_ScanPath)
 
 private:
     bool                            _sorted;
@@ -86,8 +75,6 @@ private:
     double                          _maxGPSTime;
 
     const static CT_StandardScanPathDrawManager  SCANPATH_DRAW_MANAGER;
-
-
 };
 
 #endif // CT_SCANPATH_H

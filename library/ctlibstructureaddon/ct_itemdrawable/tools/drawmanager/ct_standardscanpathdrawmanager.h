@@ -3,13 +3,14 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardScanPathDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardScanPathDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardScanPathDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardScanPathDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
 protected:
 
@@ -21,7 +22,7 @@ protected:
     static QString staticInitConfigDrawLines();
     static QString staticInitConfigPointSize();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 };
 
 #endif // CT_STANDARDSCANPATHMANAGER_H

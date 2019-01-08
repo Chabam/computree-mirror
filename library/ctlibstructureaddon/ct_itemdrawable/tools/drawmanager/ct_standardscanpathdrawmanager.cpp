@@ -1,30 +1,23 @@
 #include "ct_standardscanpathdrawmanager.h"
 #include "ct_itemdrawable/ct_scanpath.h"
-
-#include <QObject>
-
+#include "painterinterface.h"
 
 const QString CT_StandardScanPathDrawManager::INDEX_CONFIG_DRAW_POINTS = CT_StandardScanPathDrawManager::staticInitConfigDrawPoints();
 const QString CT_StandardScanPathDrawManager::INDEX_CONFIG_DRAW_LINES = CT_StandardScanPathDrawManager::staticInitConfigDrawLines();
 const QString CT_StandardScanPathDrawManager::INDEX_CONFIG_POINT_SIZE = CT_StandardScanPathDrawManager::staticInitConfigPointSize();
 
-CT_StandardScanPathDrawManager::CT_StandardScanPathDrawManager(QString drawConfigurationName) : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(drawConfigurationName.isEmpty() ? CT_ScanPath::staticName() : drawConfigurationName)
-{
-    
-}
-
-CT_StandardScanPathDrawManager::~CT_StandardScanPathDrawManager()
+CT_StandardScanPathDrawManager::CT_StandardScanPathDrawManager(QString drawConfigurationName) : SuperClass(drawConfigurationName.isEmpty() ? CT_ScanPath::staticName() : drawConfigurationName)
 {
 }
 
 void CT_StandardScanPathDrawManager::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
 {
-    CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::draw(view, painter, itemDrawable);
+    SuperClass::draw(view, painter, itemDrawable);
 
     const CT_ScanPath &scanPath = dynamic_cast<const CT_ScanPath&>(itemDrawable);
-    //double sizeCube = (double) (getDrawConfiguration()->getVariableValue(INDEX_CONFIG_POINT_SIZE).toInt()) / 100.0;
-    bool drawPoints = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_POINTS).toBool();
-    bool drawLines = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_LINES).toBool();
+    //double sizeCube = (double) (drawConfiguration()->variableValue(INDEX_CONFIG_POINT_SIZE).toInt()) / 100.0;
+    const bool drawPoints = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_POINTS).toBool();
+    const bool drawLines = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_LINES).toBool();
 
     const QList<CT_ScanPath::PathPoint>& path = scanPath.getPath();
 
@@ -40,7 +33,7 @@ void CT_StandardScanPathDrawManager::draw(GraphicsViewInterface &view, PainterIn
 
         if(drawPoints)
         {
-            painter.setPointSize(getDrawConfiguration()->getVariableValue(INDEX_CONFIG_POINT_SIZE).toInt());
+            painter.setPointSize(drawConfiguration()->variableValue(INDEX_CONFIG_POINT_SIZE).toInt());
             painter.drawPoint(point(0), point(1), point(2));
         }
 
@@ -55,9 +48,9 @@ void CT_StandardScanPathDrawManager::draw(GraphicsViewInterface &view, PainterIn
 
 CT_ItemDrawableConfiguration CT_StandardScanPathDrawManager::createDrawConfiguration(QString drawConfigurationName) const
 {
-    CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
+    CT_ItemDrawableConfiguration item(drawConfigurationName);
 
-    //item.addAllConfigurationOf(CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::createDrawConfiguration(drawConfigurationName));
+    //item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
     item.addNewConfiguration(CT_StandardScanPathDrawManager::staticInitConfigDrawPoints(), QObject::tr("Draw points"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(CT_StandardScanPathDrawManager::staticInitConfigDrawLines(), QObject::tr("Draw lines"), CT_ItemDrawableConfiguration::Bool, true);
     item.addNewConfiguration(CT_StandardScanPathDrawManager::staticInitConfigPointSize(), QObject::tr("Points size"), CT_ItemDrawableConfiguration::Int, 5);

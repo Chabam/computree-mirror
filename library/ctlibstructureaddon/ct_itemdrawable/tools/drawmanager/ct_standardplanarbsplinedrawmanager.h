@@ -3,13 +3,14 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardPlanarBSplineDrawManager : public CT_StandardAbstractShapeDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardPlanarBSplineDrawManager : public CT_StandardAbstractShapeDrawManager
 {
+    using SuperClass = CT_StandardAbstractShapeDrawManager;
+
 public:
     CT_StandardPlanarBSplineDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardPlanarBSplineDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
 protected:
     const static QString INDEX_CONFIG_DRAW_CONTROL_POINTS;
@@ -21,7 +22,7 @@ protected:
     static QString staticInitConfigDrawPolyline();
 
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 
 };
 

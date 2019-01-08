@@ -12,6 +12,8 @@ class CT_Mesh;
 
 class CTLIBSTRUCTUREADDON_EXPORT CT_StandardMeshModelDrawManager : public CT_AbstractItemDrawableDrawManager
 {
+    using SuperClass = CT_AbstractItemDrawableDrawManager;
+
 public:
     CT_StandardMeshModelDrawManager(const QString& drawConfigurationName = "");
 

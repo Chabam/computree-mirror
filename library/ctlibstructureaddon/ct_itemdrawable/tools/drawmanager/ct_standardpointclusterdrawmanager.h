@@ -3,22 +3,23 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardPointClusterDrawManager : public CT_StandardAbstractItemDrawableWithPointCloudDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardPointClusterDrawManager : public CT_StandardAbstractItemDrawableWithPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithPointCloudDrawManager;
+
 public:
     CT_StandardPointClusterDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardPointClusterDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface& view, PainterInterface& painter, const CT_AbstractItemDrawable& itemDrawable) const override;
 
 protected:
-    const static QString INDEX_CONFIG_BARYCENTER_VISIBLE;
-    const static QString INDEX_CONFIG_LINES_VISIBLE;
+    static const QString INDEX_CONFIG_BARYCENTER_VISIBLE;
+    static const QString INDEX_CONFIG_LINES_VISIBLE;
 
     static QString staticInitConfigBarycenterVisible();
     static QString staticInitConfigLinesVisible();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 };
 
 #endif // CT_STANDARDPOINTCLUSTERDRAWMANAGER_H

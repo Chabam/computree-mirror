@@ -13,7 +13,7 @@ const QString CT_StandardMeshModelDrawManager::INDEX_CONFIG_BOUNDING_SHAPE_VISIB
 const QString CT_StandardMeshModelDrawManager::INDEX_CONFIG_BOUNDING_SHAPE_POINT_SIZE = CT_StandardMeshModelDrawManager::staticInitConfigBoundingShapePointSize();
 const QString CT_StandardMeshModelDrawManager::INDEX_CONFIG_BOUNDING_SHAPE_CENTER_POINT_VISIBLE = CT_StandardMeshModelDrawManager::staticInitConfigBoundingShapeCenterPointVisible();
 
-CT_StandardMeshModelDrawManager::CT_StandardMeshModelDrawManager(const QString& drawConfigurationName ) : CT_AbstractItemDrawableDrawManager(drawConfigurationName.isEmpty() ? CT_AbstractMeshModel::staticName() : drawConfigurationName)
+CT_StandardMeshModelDrawManager::CT_StandardMeshModelDrawManager(const QString& drawConfigurationName ) : SuperClass(drawConfigurationName.isEmpty() ? CT_AbstractMeshModel::staticName() : drawConfigurationName)
 {
 }
 
@@ -174,7 +174,7 @@ CT_ItemDrawableConfiguration CT_StandardMeshModelDrawManager::createDrawConfigur
 {
     CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
 
-    item.addAllConfigurationOf(CT_AbstractItemDrawableDrawManager::createDrawConfiguration(drawConfigurationName));
+    item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
     item.addNewConfiguration(CT_StandardMeshModelDrawManager::staticInitConfigShowFaces(), QObject::tr("Faces"), CT_ItemDrawableConfiguration::Bool, true);
     item.addNewConfiguration(CT_StandardMeshModelDrawManager::staticInitConfigShowEdges(), QObject::tr("Edges"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(CT_StandardMeshModelDrawManager::staticInitConfigShowPoints(), QObject::tr("Points"), CT_ItemDrawableConfiguration::Bool, false);

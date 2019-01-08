@@ -12,32 +12,16 @@
 /**
  * @brief A shooting pattern that can be drawn and access with a model.
  */
-class PLUGINSHAREDSHARED_EXPORT CT_ShootingPatternD : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_ShootingPatternD : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_ShootingPatternD, CT_AbstractItemDrawableWithoutPointCloud, Shooting pattern)
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
 
 public:
     CT_ShootingPatternD();
-
-    /**
-     * @brief Construct it with a model, a result and a pattern
-     */
-    CT_ShootingPatternD(const CT_OutAbstractSingularItemModel *model,
-                        const CT_AbstractResult *result,
-                        CT_ShootingPattern* pattern);
-
-    /**
-     * @brief Construct it with a model name, a result and a pattern
-     */
-    CT_ShootingPatternD(const QString &modelName,
-                        const CT_AbstractResult *result,
-                        CT_ShootingPattern* pattern);
-    /**
-     * @brief Construct it from existing object (copy it)
-     */
+    CT_ShootingPatternD(CT_ShootingPattern* pattern);
     CT_ShootingPatternD(const CT_ShootingPatternD& other);
-
     ~CT_ShootingPatternD();
 
 
@@ -70,19 +54,13 @@ public:
     //      Virtual/redefined methods from CT_AbstractItemDrawableWithoutPointCloud      //
     //***********************************************************************************//
 
-    /*!
-    *  \brief Method inherited from CT_AbstractItemDrawableWithoutPointCloud that needs to be redefined (pure virtual)
-    *  \return Returns a copy of the itemDrawable with a different id and a different result
-    */
-    virtual CT_ShootingPatternD* copy(const CT_OutAbstractItemModel *model,
-                                      const CT_AbstractResult *result,
-                                      CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_ShootingPatternD)
 
 private:
     CT_ShootingPattern* m_pattern;
 
     CT_DEFAULT_IA_BEGIN(CT_ShootingPatternD)
-    CT_DEFAULT_IA_V3(CT_ShootingPatternD, CT_AbstractCategory::staticInitDataSize(), &CT_ShootingPatternD::getNumberOfShots, QObject::tr("Number of shots"), "nos")
+    CT_DEFAULT_IA_V2(CT_ShootingPatternD, CT_AbstractCategory::staticInitDataSize(), &CT_ShootingPatternD::getNumberOfShots, QObject::tr("Number of shots"))
     CT_DEFAULT_IA_END(CT_ShootingPatternD)
 };
 

@@ -2,44 +2,24 @@
 
 const CT_StandardMeshModelDrawManager CT_MeshModel::CT_MESHMODEL_DRAW_MANAGER;
 
-CT_MeshModel::CT_MeshModel() : CT_AbstractMeshModel()
+CT_MeshModel::CT_MeshModel() : SuperClass(),
+    m_mesh(NULL),
+    m_autoDeleteMesh(true)
 {
-    m_mesh = NULL;
-    m_autoDeleteMesh = true;
-
     setBaseDrawManager(&CT_MESHMODEL_DRAW_MANAGER);
 }
 
-CT_MeshModel::CT_MeshModel(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result) : CT_AbstractMeshModel(model, result)
+CT_MeshModel::CT_MeshModel(CT_Mesh* mesh) : SuperClass(),
+    m_mesh(mesh),
+    m_autoDeleteMesh(true)
 {
-    m_mesh = NULL;
-    m_autoDeleteMesh = true;
-
     setBaseDrawManager(&CT_MESHMODEL_DRAW_MANAGER);
 }
 
-CT_MeshModel::CT_MeshModel(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result, CT_Mesh *mesh) : CT_AbstractMeshModel(model, result)
+CT_MeshModel::CT_MeshModel(const CT_MeshModel& other) : SuperClass(other)
 {
-    m_mesh = mesh;
-    m_autoDeleteMesh = true;
-
-    setBaseDrawManager(&CT_MESHMODEL_DRAW_MANAGER);
-}
-
-CT_MeshModel::CT_MeshModel(const QString &modelName, const CT_AbstractResult *result) : CT_AbstractMeshModel(modelName, result)
-{
-    m_mesh = NULL;
-    m_autoDeleteMesh = true;
-
-    setBaseDrawManager(&CT_MESHMODEL_DRAW_MANAGER);
-}
-
-CT_MeshModel::CT_MeshModel(const QString &modelName, const CT_AbstractResult *result, CT_Mesh *mesh) : CT_AbstractMeshModel(modelName, result)
-{
-    m_mesh = mesh;
-    m_autoDeleteMesh = true;
-
-    setBaseDrawManager(&CT_MESHMODEL_DRAW_MANAGER);
+    m_mesh = other.m_mesh;
+    m_autoDeleteMesh = false;
 }
 
 CT_MeshModel::~CT_MeshModel()
@@ -81,78 +61,68 @@ void CT_MeshModel::clearMesh()
     m_mesh = NULL;
 }
 
-CT_AbstractItemDrawable* CT_MeshModel::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    CT_MeshModel* meshm = new CT_MeshModel((const CT_OutAbstractSingularItemModel *)model, result, m_mesh);
-    meshm->setAutoDeleteMesh(false);
-
-    meshm->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return meshm;
-}
-
 void CT_MeshModel::drawFaces(GraphicsViewInterface &view, PainterInterface &painter)
 {
-    if(getAlternativeDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getAlternativeDrawManager())->drawFaces(view, painter, this->mesh());
-    else if(getBaseDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getBaseDrawManager())->drawFaces(view, painter, this->mesh());
+    if(alternativeDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)alternativeDrawManager())->drawFaces(view, painter, this->mesh());
+    else if(baseDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)baseDrawManager())->drawFaces(view, painter, this->mesh());
 }
 
 void CT_MeshModel::beginDrawMultipleFace(GraphicsViewInterface &view, PainterInterface &painter)
 {
-    if(getAlternativeDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getAlternativeDrawManager())->beginDrawMultipleFace(view, painter, this->mesh());
-    else if(getBaseDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getBaseDrawManager())->beginDrawMultipleFace(view, painter, this->mesh());
+    if(alternativeDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)alternativeDrawManager())->beginDrawMultipleFace(view, painter, this->mesh());
+    else if(baseDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)baseDrawManager())->beginDrawMultipleFace(view, painter, this->mesh());
 }
 
 void CT_MeshModel::drawFaceAt(const size_t &index, GraphicsViewInterface &view, PainterInterface &painter)
 {
-    if(getAlternativeDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getAlternativeDrawManager())->drawFaceAt(index, view, painter, this->mesh());
-    else if(getBaseDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getBaseDrawManager())->drawFaceAt(index, view, painter, this->mesh());
+    if(alternativeDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)alternativeDrawManager())->drawFaceAt(index, view, painter, this->mesh());
+    else if(baseDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)baseDrawManager())->drawFaceAt(index, view, painter, this->mesh());
 }
 
 void CT_MeshModel::endDrawMultipleFace(GraphicsViewInterface &view, PainterInterface &painter)
 {
-    if(getAlternativeDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getAlternativeDrawManager())->endDrawMultipleFace(view, painter, this->mesh());
-    else if(getBaseDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getBaseDrawManager())->endDrawMultipleFace(view, painter, this->mesh());
+    if(alternativeDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)alternativeDrawManager())->endDrawMultipleFace(view, painter, this->mesh());
+    else if(baseDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)baseDrawManager())->endDrawMultipleFace(view, painter, this->mesh());
 }
 
 void CT_MeshModel::drawEdges(GraphicsViewInterface &view, PainterInterface &painter)
 {
-    if(getAlternativeDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getAlternativeDrawManager())->drawEdges(view, painter, this->mesh());
-    else if(getBaseDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getBaseDrawManager())->drawEdges(view, painter, this->mesh());
+    if(alternativeDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)alternativeDrawManager())->drawEdges(view, painter, this->mesh());
+    else if(baseDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)baseDrawManager())->drawEdges(view, painter, this->mesh());
 }
 
 void CT_MeshModel::beginDrawMultipleEdge(GraphicsViewInterface &view, PainterInterface &painter)
 {
-    if(getAlternativeDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getAlternativeDrawManager())->beginDrawMultipleEdge(view, painter, this->mesh());
-    else if(getBaseDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getBaseDrawManager())->beginDrawMultipleEdge(view, painter, this->mesh());
+    if(alternativeDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)alternativeDrawManager())->beginDrawMultipleEdge(view, painter, this->mesh());
+    else if(baseDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)baseDrawManager())->beginDrawMultipleEdge(view, painter, this->mesh());
 }
 
 void CT_MeshModel::drawEdgeAt(const size_t &index, GraphicsViewInterface &view, PainterInterface &painter)
 {
-    if(getAlternativeDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getAlternativeDrawManager())->drawEdgeAt(index, view, painter, this->mesh());
-    else if(getBaseDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getBaseDrawManager())->drawEdgeAt(index, view, painter, this->mesh());
+    if(alternativeDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)alternativeDrawManager())->drawEdgeAt(index, view, painter, this->mesh());
+    else if(baseDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)baseDrawManager())->drawEdgeAt(index, view, painter, this->mesh());
 }
 
 void CT_MeshModel::endDrawMultipleEdge(GraphicsViewInterface &view, PainterInterface &painter)
 {
-    if(getAlternativeDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getAlternativeDrawManager())->endDrawMultipleEdge(view, painter, this->mesh());
-    else if(getBaseDrawManager() != NULL)
-        ((CT_StandardMeshModelDrawManager*)getBaseDrawManager())->endDrawMultipleEdge(view, painter, this->mesh());
+    if(alternativeDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)alternativeDrawManager())->endDrawMultipleEdge(view, painter, this->mesh());
+    else if(baseDrawManager() != NULL)
+        ((CT_StandardMeshModelDrawManager*)baseDrawManager())->endDrawMultipleEdge(view, painter, this->mesh());
 }
 
 const CT_AbstractPointCloudIndex* CT_MeshModel::getPointCloudIndex() const

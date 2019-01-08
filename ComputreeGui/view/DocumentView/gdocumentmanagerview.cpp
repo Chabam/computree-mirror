@@ -132,6 +132,7 @@ bool GDocumentManagerView::addAllItemDrawableOfModelToDocument(CT_AbstractResult
 
         auto iterator = CT_SingleModelIteratorStdStyleForResultGroup<CT_AbstractItemDrawable>::createCompleteIterator(&model);
 
+        //const int n = 299;
         const int n = iterator.count();
 
         if(n != 0)

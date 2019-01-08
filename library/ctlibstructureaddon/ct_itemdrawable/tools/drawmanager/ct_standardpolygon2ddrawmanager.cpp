@@ -1,45 +1,28 @@
 #include "ct_standardpolygon2ddrawmanager.h"
 #include "ct_itemdrawable/ct_polygon2d.h"
-
-#include "ct_global/ct_context.h"
-
-#include <QObject>
-
-
+#include "painterinterface.h"
 
 const QString CT_StandardPolygon2DDrawManager::INDEX_CONFIG_DRAW_POINTS = CT_StandardPolygon2DDrawManager::staticInitConfigDrawPoints();
 const QString CT_StandardPolygon2DDrawManager::INDEX_CONFIG_DRAW_LINES = CT_StandardPolygon2DDrawManager::staticInitConfigDrawLines();
 const QString CT_StandardPolygon2DDrawManager::INDEX_CONFIG_DRAW_CENTROID = CT_StandardPolygon2DDrawManager::staticInitConfigCentroid();
 
-CT_StandardPolygon2DDrawManager::CT_StandardPolygon2DDrawManager(QString drawConfigurationName) : CT_StandardAbstractShape2DDrawManager(drawConfigurationName.isEmpty() ? CT_Polygon2D::staticName() : drawConfigurationName)
+CT_StandardPolygon2DDrawManager::CT_StandardPolygon2DDrawManager(QString drawConfigurationName) : SuperClass(drawConfigurationName.isEmpty() ? CT_Polygon2D::staticName() : drawConfigurationName)
 {
     
 }
 
-CT_StandardPolygon2DDrawManager::~CT_StandardPolygon2DDrawManager()
-{
-}
-
 void CT_StandardPolygon2DDrawManager::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
 {
-    CT_StandardAbstractShape2DDrawManager::draw(view, painter, itemDrawable);
+    SuperClass::draw(view, painter, itemDrawable);
 
     const CT_Polygon2D &item = dynamic_cast<const CT_Polygon2D&>(itemDrawable);
 
-    bool drawPoints = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_POINTS).toBool();
-    bool drawLines = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_LINES).toBool();
-    bool drawCentroid = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_CENTROID).toBool();
-    bool useAltZVal = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_USE_ALTERNATIVE_ZVALUE).toBool();
-    double zVal = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_Z_VALUE).toDouble();
-
-    double zPlane = CT_Context::staticInstance()->getZPlaneFor2DShapes();
-
-    if (useAltZVal)
-    {
-        zPlane = zVal;
-    } else if (item.isZValueDefined()) {
-        zPlane = item.getZValue();
-    }
+    const bool drawPoints = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_POINTS).toBool();
+    const bool drawLines = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_LINES).toBool();
+    const bool drawCentroid = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_CENTROID).toBool();
+    const bool useAltZVal = drawConfiguration()->variableValue(INDEX_CONFIG_USE_ALTERNATIVE_ZVALUE).toBool();
+    const double zVal = drawConfiguration()->variableValue(INDEX_CONFIG_Z_VALUE).toDouble();
+    const double zPlane = (item.isZValueDefined() ? item.zValue() : (useAltZVal ? zVal : CT_Polygon2D::Z_PLANE_FOR_2D_SHAPES));
 
     if(drawPoints || drawLines)
     {
@@ -55,9 +38,9 @@ void CT_StandardPolygon2DDrawManager::draw(GraphicsViewInterface &view, PainterI
 
 CT_ItemDrawableConfiguration CT_StandardPolygon2DDrawManager::createDrawConfiguration(QString drawConfigurationName) const
 {
-    CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
+    CT_ItemDrawableConfiguration item(drawConfigurationName);
 
-    item.addAllConfigurationOf(CT_StandardAbstractShape2DDrawManager::createDrawConfiguration(drawConfigurationName));
+    item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
     item.addNewConfiguration(CT_StandardPolygon2DDrawManager::staticInitConfigDrawPoints() , QObject::tr("Dessiner les sommets"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(CT_StandardPolygon2DDrawManager::staticInitConfigDrawLines() , QObject::tr("Dessiner les côtés"), CT_ItemDrawableConfiguration::Bool, true);
     item.addNewConfiguration(CT_StandardPolygon2DDrawManager::staticInitConfigCentroid() , QObject::tr("Dessiner centroid"), CT_ItemDrawableConfiguration::Bool, false);

@@ -1,31 +1,26 @@
 #include "ct_standardplanarbsplinedrawmanager.h"
 
 #include "ct_itemdrawable/ct_planarbspline.h"
-
-#include <QDebug>
+#include "painterinterface.h"
 
 const QString CT_StandardPlanarBSplineDrawManager::INDEX_CONFIG_DRAW_CONTROL_POINTS= CT_StandardPlanarBSplineDrawManager::staticInitConfigDrawControlPoints();
 const QString CT_StandardPlanarBSplineDrawManager::INDEX_CONFIG_CONTROL_POINTS_SIZE = CT_StandardPlanarBSplineDrawManager::staticInitConfigControlPointsSize();
 const QString CT_StandardPlanarBSplineDrawManager::INDEX_CONFIG_DRAW_POLYLINE = CT_StandardPlanarBSplineDrawManager::staticInitConfigDrawPolyline();
 
-CT_StandardPlanarBSplineDrawManager::CT_StandardPlanarBSplineDrawManager(QString drawConfigurationName) : CT_StandardAbstractShapeDrawManager(drawConfigurationName.isEmpty() ? CT_PlanarBSpline::staticName() : drawConfigurationName)
-{
-}
-
-CT_StandardPlanarBSplineDrawManager::~CT_StandardPlanarBSplineDrawManager()
+CT_StandardPlanarBSplineDrawManager::CT_StandardPlanarBSplineDrawManager(QString drawConfigurationName) : SuperClass(drawConfigurationName.isEmpty() ? CT_PlanarBSpline::staticName() : drawConfigurationName)
 {
 }
 
 void CT_StandardPlanarBSplineDrawManager::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
 {
-    CT_StandardAbstractShapeDrawManager::draw(view, painter, itemDrawable);
+    SuperClass::draw(view, painter, itemDrawable);
 
-    const CT_PlanarBSpline &item = dynamic_cast<const CT_PlanarBSpline&>(itemDrawable);
-    const CT_PlanarBSplineData &data =  (const CT_PlanarBSplineData&)item.getData();
+    const CT_PlanarBSpline& item = dynamic_cast<const CT_PlanarBSpline&>(itemDrawable);
+    const CT_PlanarBSplineData& data =  (const CT_PlanarBSplineData&)item.getData();
 
-    bool drawCP = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_CONTROL_POINTS).toBool();
-    int CPsize = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_CONTROL_POINTS_SIZE).toInt();
-    bool drawPolyline = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_DRAW_POLYLINE).toBool();
+    bool drawCP = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_CONTROL_POINTS).toBool();
+    int CPsize = drawConfiguration()->variableValue(INDEX_CONFIG_CONTROL_POINTS_SIZE).toInt();
+    bool drawPolyline = drawConfiguration()->variableValue(INDEX_CONFIG_DRAW_POLYLINE).toBool();
 
 
     const QVector<Eigen::Vector3d> &cps = data.getControlPoints();
@@ -34,23 +29,24 @@ void CT_StandardPlanarBSplineDrawManager::draw(GraphicsViewInterface &view, Pain
     if (drawCP)
     {
         painter.setPointSize(CPsize);
-        for (int i = 0 ; i < cps.size() ; i++)
+        const int size = cps.size();
+        for (int i = 0 ; i < size ; i++)
         {
             painter.drawPoint(cps[i](0), cps[i](1), cps[i](2));
         }
         painter.restoreDefaultPointSize();
     }
 
-    int size = polyline.size();
+    const int size = polyline.size()-1;
     if (drawPolyline)
     {
-        if (size > 1)
+        if (size > 0)
         {
-            for (int i = 0 ; i < size - 1 ; i++)
+            for (int i = 0 ; i < size ; i++)
             {
                 painter.drawLine(polyline[i](0), polyline[i](1), polyline[i](2),polyline[i+1](0), polyline[i+1](1), polyline[i+1](2));
             }
-            painter.drawLine(polyline[size-1](0), polyline[size-1](1), polyline[size-1](2),polyline[0](0), polyline[0](1), polyline[0](2));
+            painter.drawLine(polyline[size](0), polyline[size](1), polyline[size](2),polyline[0](0), polyline[0](1), polyline[0](2));
         }
     }
 
@@ -74,9 +70,9 @@ QString CT_StandardPlanarBSplineDrawManager::staticInitConfigDrawPolyline()
 
 CT_ItemDrawableConfiguration CT_StandardPlanarBSplineDrawManager::createDrawConfiguration(QString drawConfigurationName) const
 {
-    CT_ItemDrawableConfiguration item = CT_ItemDrawableConfiguration(drawConfigurationName);
+    CT_ItemDrawableConfiguration item(drawConfigurationName);
 
-    item.addAllConfigurationOf(CT_StandardAbstractShapeDrawManager::createDrawConfiguration(drawConfigurationName));
+    item.addAllConfigurationOf(SuperClass::createDrawConfiguration(drawConfigurationName));
 
     // Adding lines to this config dialog box
     item.addNewConfiguration(staticInitConfigDrawControlPoints(), QObject::tr("Dessiner les Points de contrôle"), CT_ItemDrawableConfiguration::Bool, true);

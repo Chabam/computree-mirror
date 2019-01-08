@@ -41,37 +41,29 @@
  * It represents a polygon in 2D.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Polyline2D : public CT_AbstractShape2D
+class CTLIBSTRUCTUREADDON_EXPORT CT_Polyline2D : public CT_AbstractShape2D
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Polyline2D, CT_AbstractShape2D, 2D polyline)
+    using SuperClass = CT_AbstractShape2D;
 
 public:    
 
     CT_Polyline2D();
-    /**
-      * \brief Contructeur avec une instance des donnees (CT_Polyline2DData*), ne peut etre NULL ! (Supprime dans le destructeur de la classe).
-      */
-    CT_Polyline2D(const CT_OutAbstractSingularItemModel *model,
-                const CT_AbstractResult *result,
-                CT_Polyline2DData *data);
-
-    CT_Polyline2D(const QString &modelName,
-                const CT_AbstractResult *result,
-                CT_Polyline2DData *data);
+    CT_Polyline2D(CT_Polyline2DData *data);
+    CT_Polyline2D(const CT_Polyline2D& other) = default;
 
     const QVector<Eigen::Vector2d *> &getVertices() const;
 
     inline int getNumberOfVertices() const {return getVertices().size();}
 
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model,
-                const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_Polyline2D)
 
 private:
     const static CT_StandardPolyline2DDrawManager POLYLINE2D_DRAW_MANAGER;
 
     CT_DEFAULT_IA_BEGIN(CT_Polyline2D)
-    CT_DEFAULT_IA_V3(CT_Polyline2D, CT_AbstractCategory::staticInitDataSize(), &CT_Polyline2D::getNumberOfVertices, QObject::tr("Number Of Vertices"), "nov")
+    CT_DEFAULT_IA_V2(CT_Polyline2D, CT_AbstractCategory::staticInitDataSize(), &CT_Polyline2D::getNumberOfVertices, QObject::tr("Number Of Vertices"))
     CT_DEFAULT_IA_END(CT_Polyline2D)
 };
 

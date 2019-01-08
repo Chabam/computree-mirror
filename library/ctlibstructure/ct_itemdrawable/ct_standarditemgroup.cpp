@@ -1075,7 +1075,7 @@ void CT_StandardItemGroup::staticCopyItemsFromXToBackupIfChildrenItemsAreStillPr
     parentGroupModel->visitItems(visitor);
 }
 
-CT_StandardItemGroup::IChildrensIteratorQtStyleSharedPtr CT_StandardItemGroup::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
+CT_StandardItemGroup::IChildrensIteratorQtStylePtr CT_StandardItemGroup::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
 {
     // is a group ?
     if(dynamic_cast<const CT_OutAbstractGroupModel*>(outModel) != NULL) {
@@ -1084,9 +1084,9 @@ CT_StandardItemGroup::IChildrensIteratorQtStyleSharedPtr CT_StandardItemGroup::c
         GroupContainerType* groupContainer = groupContainerWithOutModel(outModel);
 
         if(groupContainer != NULL)
-            return IChildrensIteratorQtStyleSharedPtr(new GroupQtIterator(groupContainer->begin(), groupContainer->end()));
+            return IChildrensIteratorQtStylePtr(new GroupQtIterator(groupContainer->begin(), groupContainer->end()));
 
-        return IChildrensIteratorQtStyleSharedPtr(NULL);
+        return IChildrensIteratorQtStylePtr(NULL);
     }
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
@@ -1096,10 +1096,10 @@ CT_StandardItemGroup::IChildrensIteratorQtStyleSharedPtr CT_StandardItemGroup::c
     if(ct != NULL)
     {
         if(!ct->willBeRemovedLater())
-            return IChildrensIteratorQtStyleSharedPtr(new ItemQtIterator(ct->item()));
+            return IChildrensIteratorQtStylePtr(new ItemQtIterator(ct->item()));
     }
 
-    return IChildrensIteratorQtStyleSharedPtr(NULL);
+    return IChildrensIteratorQtStylePtr(NULL);
 }
 
 CT_StandardItemGroup::ItemContainerType* CT_StandardItemGroup::itemContainerWithOutModel(const CT_OutAbstractModel* outModel) const
