@@ -115,7 +115,9 @@ HEADERS += \
     ct_attributes/ct_attributescolor.h \
     ct_attributes/ct_attributesnormal.h \
     ct_attributes/ct_attributesscalart.h \
-    ct_attributes/ct_attributesscalart.hpp
+    ct_attributes/ct_attributesscalart.hpp \
+    ct_normalcloud/tools/iestimatorobserverandcontroller.h \
+    ct_normalcloud/tools/normalsestimator.h
 
 SOURCES += \ 
     ct_normal.cpp \
@@ -161,4 +163,5 @@ SOURCES += \
     ct_attributes/abstract/ct_abstractattributesscalar.cpp \
     ct_attributes/ct_attributescolor.cpp \
     ct_attributes/ct_attributesnormal.cpp \
-    ct_attributes/ct_attributesscalart.cpp
+    ct_attributes/ct_attributesscalart.cpp \
+    ct_normalcloud/tools/normalsestimator.cpp
