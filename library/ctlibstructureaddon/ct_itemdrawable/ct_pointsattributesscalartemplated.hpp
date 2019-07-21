@@ -5,16 +5,16 @@
 
 template<typename SCALAR>
 CT_PointsAttributesScalarTemplated<SCALAR>::CT_PointsAttributesScalarTemplated() :
-    CT_AbstractPointAttributesScalar(),
-    CT_AttributesScalarT<SCALAR>()
+    SuperClass1(),
+    SuperClass2()
 {
 }
 
 template<typename SCALAR>
 CT_PointsAttributesScalarTemplated<SCALAR>::CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
                                                                                CT_StandardCloudStdVectorT<SCALAR>* collection) :
-    CT_AbstractPointAttributesScalar(pcir),
-    CT_AttributesScalarT<SCALAR>(collection)
+    SuperClass1(pcir),
+    SuperClass2(collection)
 {
 }
 
@@ -23,8 +23,8 @@ CT_PointsAttributesScalarTemplated<SCALAR>::CT_PointsAttributesScalarTemplated(C
                                                                                CT_StandardCloudStdVectorT<SCALAR>* collection,
                                                                                const SCALAR& min,
                                                                                const SCALAR& max) :
-    CT_AbstractPointAttributesScalar(pcir),
-    CT_AttributesScalarT<SCALAR>(collection, min, max)
+    SuperClass1(pcir),
+    SuperClass2(collection, min, max)
 {
 }
 

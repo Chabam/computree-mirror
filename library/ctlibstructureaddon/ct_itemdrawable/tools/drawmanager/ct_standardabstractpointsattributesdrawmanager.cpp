@@ -4,7 +4,7 @@
 #include "ct_pointcloudindex/abstract/ct_abstractpointcloudindex.h"
 #include "painterinterface.h"
 
-CT_StandardAbstractPointsAttributesDrawManager::CT_StandardAbstractPointsAttributesDrawManager() : CT_AbstractItemDrawableDrawManager()
+CT_StandardAbstractPointsAttributesDrawManager::CT_StandardAbstractPointsAttributesDrawManager() : SuperClass()
 {
 }
 

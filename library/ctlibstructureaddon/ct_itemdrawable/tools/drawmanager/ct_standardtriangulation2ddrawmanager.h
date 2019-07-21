@@ -5,13 +5,16 @@
 
 class CT_Triangulation2D;
 
-class PLUGINSHAREDSHARED_EXPORT CT_StandardTriangulation2DDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardTriangulation2DDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
-public:
-    CT_StandardTriangulation2DDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardTriangulation2DDrawManager();
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+public:
+    CT_StandardTriangulation2DDrawManager(QString drawConfigurationName = QObject::tr("Triangulation2D"));
+
+    void draw(GraphicsViewInterface& view,
+              PainterInterface& painter,
+              const CT_AbstractItemDrawable& itemDrawable) const override;
 
 protected:
 
@@ -25,7 +28,7 @@ protected:
     static QString staticInitConfigHullVisible();
     static QString staticInitConfigVoronoiVisible();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 
     void drawNodes(GraphicsViewInterface &view, PainterInterface &painter, const CT_Triangulation2D &item) const;
     void drawEdges(GraphicsViewInterface &view, PainterInterface &painter, const CT_Triangulation2D &item) const;

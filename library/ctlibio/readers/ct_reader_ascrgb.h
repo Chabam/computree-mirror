@@ -1,6 +1,8 @@
 #ifndef CT_READER_ASCRGB_H
 #define CT_READER_ASCRGB_H
 
+#include "ctlibio/ctlibio_global.h"
+
 #include "ct_reader/abstract/ct_abstractreader.h"
 
 #include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
@@ -8,39 +10,42 @@
 #include "ct_itemdrawable/ct_scene.h"
 #include "ct_itemdrawable/ct_pointsattributescolor.h"
 
-#include "ctlibio/ctlibio_global.h"
-#include "ct_reader_ascrgb_def_models.h"
-
 class CTLIBIO_EXPORT CT_Reader_ASCRGB : public CT_AbstractReader, public CT_ReaderPointsFilteringExtension
 {
     Q_OBJECT
+    typedef CT_AbstractReader SuperClass;
 
 public:
     CT_Reader_ASCRGB();
+    CT_Reader_ASCRGB(const CT_Reader_ASCRGB& other) = default;
 
-    virtual QString GetReaderName() const;
+    QString displayableName() const override;
 
-    virtual CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
-
-    bool setFilePath(const QString &filepath);
+    //CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
 
     void setRadiusFilter(const double &radius);
     void setRadiusFilter(const double &radius, const double &zmin, const double &zmax);
 
-    CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_ASCRGB)
+    READER_ALL_COPY_IMP(CT_Reader_ASCRGB)
 
 private:
     double   m_filterRadius;
     double   _zminFilter;
     double   _zmaxFilter;
 
+    using Colors = CT_PointsAttributesColor;
+
+    CT_HandleOutSingularItem<CT_Scene>          m_hOutScene;
+    CT_HandleOutSingularItem<Colors>            m_hOutColors;
+
     bool isInsideRadius(const CT_Point &point);
 
 protected:
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
-    bool protectedReadFile();
+    bool preVerifyFile(const QString& filepath, QFile& fileOpenReadOnly) const override;
+
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+
+    bool internalReadFile(CT_StandardItemGroup* group) override;
 };
 
 #endif // CT_READER_ASCRGB_H

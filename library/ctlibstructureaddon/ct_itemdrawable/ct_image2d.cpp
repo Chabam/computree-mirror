@@ -33,10 +33,10 @@ template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<float>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<double>)
-template<>
+/*template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<long>)
 template<>
-CT_DEFAULT_IA_INIT(CT_Image2D<unsigned long>)
+CT_DEFAULT_IA_INIT(CT_Image2D<unsigned long>)*/
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<qint8>)
 template<>
@@ -47,12 +47,12 @@ template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<quint16>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<qint32>)
-template<>
+/*template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<quint32>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<qint64>)
 template<>
-CT_DEFAULT_IA_INIT(CT_Image2D<quint64>)
+CT_DEFAULT_IA_INIT(CT_Image2D<quint64>)*/
 
 /////////////////////////////////////////////////////////////////////
 /// Specialisations for bool type ///////////////////////////////////
@@ -100,7 +100,7 @@ bool CT_Image2D<bool>::setMinValueAtIndex(const size_t index, const bool value)
 }
 
 template<>
-bool CT_Image2D<bool>::addValueAtIndex(const size_t index, const bool value)
+bool CT_Image2D<bool>::addValueAtIndex(const size_t /*index*/, const bool /*value*/)
 {
     //bool currentValue = _data[index];
     return true;//setValueAtIndex(index, value + currentValue);
@@ -144,7 +144,7 @@ QString CT_Image2D<bool>::valueAtIndexAsString(const size_t index) const
     return "F";
 }
 
-template<>
+/*template<>
 QString CT_Image2D<unsigned long>::valueAtIndexAsString(const size_t index) const
 {
     return QString::number(valueAtIndex(index), 'g', 50);
@@ -155,3 +155,4 @@ QString CT_Image2D<unsigned long>::NAAsString() const
 {
     return QString::number(NA(), 'g', 50);
 }
+*/

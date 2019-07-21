@@ -1,13 +1,14 @@
 #ifndef CT_HANDLEWITHMULTIPLEMODELT_H
 #define CT_HANDLEWITHMULTIPLEMODELT_H
 
-#include "ct_model/outModel/abstract/ct_outabstractmodel.h"
+#include "ct_handlewithmultipleabstractmodel.h"
 #include <QList>
 #include <QVector>
 
 template<class ModelT>
-class CT_HandleWithMultipleModelT {
+class CT_HandleWithMultipleModelT : public CT_HandleWithMultipleAbstractModel<typename ModelT::PublicSuperClass> {
 public:
+    using AbstractModelType = typename ModelT::PublicSuperClass;
     using ModelType = ModelT;
     using ModelsCollectionType = QVector<ModelType*>;
 
@@ -37,6 +38,10 @@ public:
         }
 
         return NULL;
+    }
+
+    AbstractModelType* findAbstractModelWithParent(const CT_OutAbstractModel* parentModel) const final {
+        return findModelWithParent(parentModel);
     }
 
     int nModels() const { return m_models.size(); }

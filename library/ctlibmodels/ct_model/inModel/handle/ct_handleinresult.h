@@ -13,7 +13,7 @@ public:
     using ResultType = ResultT;
 
     CT_HandleInResult() : SuperClass() {
-        static_assert(std::is_convertible<ResultT, IResultGroupForModel>::value, "CT_HandleInResult is only compatible with classes that inherit from IResultGroupForModel");
+        static_assert(std::is_convertible<ResultT*, IResultGroupForModel*>::value, "CT_HandleInResult is only compatible with classes that inherit from IResultGroupForModel");
     }
 };
 #endif // CT_HANDLEINRESULT_H

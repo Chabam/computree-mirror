@@ -5,6 +5,7 @@
 
 #include <QMatrix4x4>
 
+template<class OPFGroup>
 class CT_OutOPFNodeGroupModel;
 
 /**
@@ -12,34 +13,34 @@ class CT_OutOPFNodeGroupModel;
  *
  * This class has other method to save elements from a opf file
  */
-class PLUGINSHAREDSHARED_EXPORT CT_TOPFNodeGroup : public CT_TNodeGroup
+class CTLIBSTRUCTUREADDON_EXPORT CT_TOPFNodeGroup : public CT_TNodeGroup
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_TOPFNodeGroup, CT_TNodeGroup, OPF node group)
+
+    using SuperClass = CT_TNodeGroup;
 
 public:
     CT_TOPFNodeGroup();
 
     /**
-     * @brief Create a group with a model defined in your step and the result that will contains your ItemDrawable
+     * @brief Copy constructor.
      *
-     * @warning The model and/or the result can be NULL but you must set them with method "setModel()" and "changeResult()" before finish
-     *          your step computing !!!
-     */
-    CT_TOPFNodeGroup(const CT_OutOPFNodeGroupModel *model,
-                     const CT_AbstractResult *result);
-
-    /**
-     * @brief Create a group with a name of model defined in your step (typically a DEF_...)
-     *        and the result that will contains your ItemDrawable
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - ID
+     *          - Pointer of base and alternative draw manager
+     *          - Pointer of context
+     *          - Removed later flags
      *
-     * @warning The modelName can not be empty and the result can not be NULL to use this constructor
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     *          - Parent container is set to NULL
+     *          - Childrens (items, sucessor, components, branches) was not copied (you must copy the CT_TTreeGroup that will set the structure)
      */
-    CT_TOPFNodeGroup(const QString &modelName,
-                     const CT_AbstractResult *result);
-
-
-    CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_TOPFNodeGroup(const CT_TOPFNodeGroup& other) = default;
 
     /**
      * @brief Set ID readed in OPF File
@@ -50,12 +51,18 @@ public:
      * @brief Set the matrix readed in OPF File
      */
     void setOPFMatrix(const QMatrix4x4 &matrix);
+
+    /**
+     * @brief Returns the matrix readed in OPF File
+     */
     QMatrix4x4 opfMatrix() const;
 
     /**
      * @brief Returns the specific model for CT_TOPFNodeGroup
      */
-    CT_OutOPFNodeGroupModel* opfModel() const;
+    CT_OutOPFNodeGroupModel<CT_TOPFNodeGroup>* opfModel() const;
+
+    CT_ITEM_COPY_IMP(CT_TOPFNodeGroup)
 
 private:
     QMatrix4x4  m_opfMatrix;

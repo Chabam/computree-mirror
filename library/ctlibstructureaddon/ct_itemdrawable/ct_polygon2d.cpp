@@ -27,8 +27,6 @@
 
 #include "ct_polygon2d.h"
 
-#include <limits>
-
 CT_DEFAULT_IA_INIT(CT_Polygon2D)
 
 const CT_StandardPolygon2DDrawManager CT_Polygon2D::POLYGON2D_DRAW_MANAGER;
@@ -43,46 +41,8 @@ CT_Polygon2D::CT_Polygon2D(CT_Polygon2DData* data) : SuperClass(data)
     setBaseDrawManager(&POLYGON2D_DRAW_MANAGER);
 }
 
-CT_Polygon2D::CT_Polygon2D(const QString &modelName,
-                         const CT_AbstractResult *result,
-                         CT_Polygon2DData *data) : SuperClass(modelName, result, data)
+const QVector<Eigen::Vector2d>& CT_Polygon2D::getVertices() const
 {
-    setBaseDrawManager(&POLYGON2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        _minCoordinates(0) = data->_min(0);
-        _minCoordinates(1) = data->_min(1);
-
-        _maxCoordinates(0) = data->_max(0);
-        _maxCoordinates(1) = data->_max(1);
-    } else {
-        _minCoordinates(0) = 0;
-        _minCoordinates(1) = 0;
-
-        _maxCoordinates(0) = 0;
-        _maxCoordinates(1) = 0;
-    }
-    _minCoordinates(2) = 0;
-    _maxCoordinates(2) = 0;
-}
-
-
-const QVector<Eigen::Vector2d*>& CT_Polygon2D::getVertices() const
-{
-    return ((const CT_Polygon2DData&)getData()).getVertices();
-}
-
-CT_AbstractItemDrawable* CT_Polygon2D::copy(const CT_OutAbstractItemModel *model,
-                                           const CT_AbstractResult *result,
-                                           CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Polygon2D *polygon = new CT_Polygon2D((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_Polygon2DData&)getData()).clone() : NULL);
-    polygon->setId(id());
-
-    polygon->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return polygon;
+    return dataConstCastAs<CT_Polygon2DData>()->getVertices();
 }
 

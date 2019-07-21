@@ -29,29 +29,6 @@
 
 CT_DEFAULT_IA_INIT(CT_PlotGridManager)
 
-CT_PlotGridManager::CT_PlotGridManager() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_PlotGridManager::CT_PlotGridManager() : SuperClass()
 {
-}
-
-CT_PlotGridManager::CT_PlotGridManager(const CT_OutAbstractSingularItemModel *model,
-                                   const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
-{
-}
-
-CT_PlotGridManager::CT_PlotGridManager(const QString &modelName,
-                                   const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
-{
-}
-
-CT_PlotGridManager::~CT_PlotGridManager()
-{
-}
-
-CT_AbstractItemDrawable *CT_PlotGridManager::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_PlotGridManager *cpy = new CT_PlotGridManager((const CT_OutAbstractSingularItemModel*)model, result);
-
-    return cpy;
 }

@@ -3,9 +3,11 @@
 template<class OPFGroup>
 CT_OutOPFNodeGroupModel<OPFGroup>::CT_OutOPFNodeGroupModel(const QString& displayableName,
                                                            const QString& shortDescription,
-                                                           const QString& detailledDescription) : SuperClass(displayableName,
-                                                                                                             shortDescription,
-                                                                                                             detailledDescription)
+                                                           const QString& detailledDescription,
+                                                           OPFGroup* prototype) : SuperClass(displayableName,
+                                                                                             shortDescription,
+                                                                                             detailledDescription,
+                                                                                             prototype)
 {
     m_level = 0;
 }

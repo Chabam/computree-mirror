@@ -125,7 +125,7 @@ void CT_MeshModel::endDrawMultipleEdge(GraphicsViewInterface &view, PainterInter
         ((CT_StandardMeshModelDrawManager*)baseDrawManager())->endDrawMultipleEdge(view, painter, this->mesh());
 }
 
-const CT_AbstractPointCloudIndex* CT_MeshModel::getPointCloudIndex() const
+const CT_AbstractPointCloudIndex* CT_MeshModel::pointCloudIndex() const
 {
     if(m_mesh == NULL)
         return NULL;
@@ -133,7 +133,7 @@ const CT_AbstractPointCloudIndex* CT_MeshModel::getPointCloudIndex() const
     return m_mesh->abstractVert();
 }
 
-const CT_AbstractFaceCloudIndex* CT_MeshModel::getFaceCloudIndex() const
+const CT_AbstractFaceCloudIndex* CT_MeshModel::faceCloudIndex() const
 {
     if(m_mesh == NULL)
         return NULL;
@@ -141,7 +141,7 @@ const CT_AbstractFaceCloudIndex* CT_MeshModel::getFaceCloudIndex() const
     return m_mesh->abstractFace();
 }
 
-const CT_AbstractEdgeCloudIndex* CT_MeshModel::getEdgeCloudIndex() const
+const CT_AbstractEdgeCloudIndex* CT_MeshModel::edgeCloudIndex() const
 {
     if(m_mesh == NULL)
         return NULL;
@@ -149,7 +149,7 @@ const CT_AbstractEdgeCloudIndex* CT_MeshModel::getEdgeCloudIndex() const
     return m_mesh->abstractHedge();
 }
 
-CT_PCIR CT_MeshModel::getPointCloudIndexRegistered() const
+CT_PCIR CT_MeshModel::pointCloudIndexRegistered() const
 {
     if(m_mesh == NULL)
         return CT_PCIR(NULL);
@@ -157,7 +157,7 @@ CT_PCIR CT_MeshModel::getPointCloudIndexRegistered() const
     return m_mesh->registeredVert();
 }
 
-CT_FCIR CT_MeshModel::getFaceCloudIndexRegistered() const
+CT_FCIR CT_MeshModel::faceCloudIndexRegistered() const
 {
     if(m_mesh == NULL)
         return CT_FCIR(NULL);
@@ -165,7 +165,7 @@ CT_FCIR CT_MeshModel::getFaceCloudIndexRegistered() const
     return m_mesh->registeredFace();
 }
 
-CT_ECIR CT_MeshModel::getEdgeCloudIndexRegistered() const
+CT_ECIR CT_MeshModel::edgeCloudIndexRegistered() const
 {
     if(m_mesh == NULL)
         return CT_ECIR(NULL);

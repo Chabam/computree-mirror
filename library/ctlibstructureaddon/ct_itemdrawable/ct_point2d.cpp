@@ -50,14 +50,3 @@ double CT_Point2D::y() const
 {
     return ((const CT_Point2DData&)getData()).y();
 }
-
-CT_AbstractItemDrawable* CT_Point2D::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Point2D *point = new CT_Point2D((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_Point2DData&)getData()).clone() : NULL);
-    point->setId(id());
-    point->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return point;
-}
-

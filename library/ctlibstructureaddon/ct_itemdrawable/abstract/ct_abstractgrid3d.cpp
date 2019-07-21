@@ -27,19 +27,18 @@
 
 #include "ct_abstractgrid3d.h"
 
-
-CT_AbstractGrid3D::CT_AbstractGrid3D() : CT_AbstractItemDrawableWithoutPointCloud()
+CT_AbstractGrid3D::CT_AbstractGrid3D() : SuperClass()
 {
+    _res = 1;
+    _dimx = 0;
+    _dimy = 0;
+    _dimz = 0;
 }
 
-CT_AbstractGrid3D::CT_AbstractGrid3D(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(model, result)
+CT_AbstractGrid3D::CT_AbstractGrid3D(size_t dimx, size_t dimy, size_t dimz, double resolution)
 {
-}
-
-CT_AbstractGrid3D::CT_AbstractGrid3D(const QString &modelName, const CT_AbstractResult *result) : CT_AbstractItemDrawableWithoutPointCloud(modelName, result)
-{
-}
-
-CT_AbstractGrid3D::~CT_AbstractGrid3D()
-{
+    _res = resolution;
+    _dimx = dimx;
+    _dimy = dimy;
+    _dimz = dimz;
 }

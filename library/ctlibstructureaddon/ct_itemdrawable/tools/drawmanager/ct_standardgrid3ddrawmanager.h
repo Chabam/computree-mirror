@@ -7,11 +7,12 @@
 template< typename DataT>
 class CT_StandardGrid3DDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardGrid3DDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardGrid3DDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
 protected:
 
@@ -52,11 +53,10 @@ protected:
 };
 
 template<>
-PLUGINSHAREDSHARED_EXPORT void CT_StandardGrid3DDrawManager<bool>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+CTLIBSTRUCTUREADDON_EXPORT void CT_StandardGrid3DDrawManager<bool>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT CT_ItemDrawableConfiguration CT_StandardGrid3DDrawManager<bool>::createDrawConfiguration(QString drawConfigurationName) const;
-
+CTLIBSTRUCTUREADDON_EXPORT CT_ItemDrawableConfiguration CT_StandardGrid3DDrawManager<bool>::createDrawConfiguration(QString drawConfigurationName) const;
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp"
 

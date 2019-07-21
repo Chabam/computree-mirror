@@ -5,8 +5,8 @@
 
 template<typename StructType>
 CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT() :
-    CT_AbstractPointAttributesScalar(),
-    CT_AbstractAttributesScalar(),
+    SuperClass1(),
+    SuperClass2(),
     m_collection(NULL),
     m_autoDeleteCollection(false),
     m_mask(StructMASK(0)),
@@ -22,8 +22,8 @@ CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT(Struc
                                                                            CT_StandardCloudStdVectorT<StructType>* collection,
                                                                            CT_PCIR pcir,
                                                                            bool autoDeleteCollection) :
-    CT_AbstractPointAttributesScalar(pcir),
-    CT_AbstractAttributesScalar(),
+    SuperClass1(pcir),
+    SuperClass2(),
     m_collection(collection),
     m_autoDeleteCollection(autoDeleteCollection),
     m_mask(mask),
@@ -47,8 +47,8 @@ CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT(Struc
                                                                            CT_StandardCloudStdVectorT<StructType> *collection,
                                                                            CT_PCIR pcir,
                                                                            bool autoDeleteCollection) :
-    CT_AbstractPointAttributesScalar(pcir),
-    CT_AbstractAttributesScalar(),
+    SuperClass1(pcir),
+    SuperClass2(),
     m_collection(collection),
     m_autoDeleteCollection(autoDeleteCollection),
     m_mask(mask),
@@ -60,8 +60,8 @@ CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT(Struc
 
 template<typename StructType>
 CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT(const CT_PointsAttributesScalarMaskT<StructType>& other) :
-    CT_AbstractPointAttributesScalar(other),
-    CT_AbstractAttributesScalar(other),
+    SuperClass1(other),
+    SuperClass2(other),
     m_collection(other.m_collection),
     m_autoDeleteCollection(false),
     m_mask(other.m_mask),

@@ -14,4 +14,9 @@ public:
     }
 };
 
+using CT_HandleOutStdIntItemAttribute = CT_HandleOutStdItemAttribute<int>;
+using CT_HandleOutStdDoubleItemAttribute = CT_HandleOutStdItemAttribute<double>;
+using CT_HandleOutStdBoolItemAttribute = CT_HandleOutStdItemAttribute<bool>;
+using CT_HandleOutStdStringItemAttribute = CT_HandleOutStdItemAttribute<QString>;
+
 #endif // CT_HANDLEOUTSTDITEMATTRIBUTE_H

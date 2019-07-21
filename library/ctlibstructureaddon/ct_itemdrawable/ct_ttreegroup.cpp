@@ -1,47 +1,40 @@
 #include "ct_ttreegroup.h"
 
-CT_TTreeGroup::CT_TTreeGroup() : CT_AbstractStandardItemGroup()
+CT_TTreeGroup::CT_TTreeGroup() : SuperClass()
 {
-    m_rootNode = NULL;
+    m_rootNode = nullptr;
 }
 
-CT_TTreeGroup::CT_TTreeGroup(const CT_OutAbstractGroupModel *model,
-                             const CT_AbstractResult *result) : CT_AbstractStandardItemGroup(model, result)
+bool CT_TTreeGroup::visitChildrensForTreeView(const CT_AbstractItem::ChildrensVisitor& visitor) const
 {
-    m_rootNode = NULL;
+    QMutexLocker lockerI(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
+    QMutexLocker lockerG(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
+
+    if(m_rootNode != nullptr)
+        return visitor(m_rootNode);
+
+    const auto visitorI = [&visitor](const CT_AbstractSingularItemDrawable* item) -> bool {
+
+        if(!visitor(item))
+            return false;
+
+        return true;
+    };
+
+    return visitSingularItems(visitorI);
 }
 
-CT_TTreeGroup::CT_TTreeGroup(const QString &modelName,
-                             const CT_AbstractResult *result) : CT_AbstractStandardItemGroup(modelName, result)
+bool CT_TTreeGroup::setRootNodeWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup* root)
 {
-    m_rootNode = NULL;
-}
-
-CT_TTreeGroup::~CT_TTreeGroup()
-{
-}
-
-QVector<CT_AbstractItem *> CT_TTreeGroup::childrensForGui() const
-{
-    QVector<CT_AbstractItem *> r;
-
-    if(m_rootNode != NULL)
-        r.append(m_rootNode);
-
-    return r;
-}
-
-bool CT_TTreeGroup::setRootNode(CT_TNodeGroup *root)
-{
-    if(m_rootNode != NULL)
+    if(m_rootNode != nullptr)
     {
         if(!removeNode(m_rootNode))
             return false;
 
-        m_rootNode = NULL;
+        m_rootNode = nullptr;
     }
 
-    if(!addNode(root))
+    if(!addNode(outModel, root))
         return false;
 
     m_rootNode = root;
@@ -50,19 +43,19 @@ bool CT_TTreeGroup::setRootNode(CT_TNodeGroup *root)
     return true;
 }
 
-bool CT_TTreeGroup::addSuccessor(CT_TNodeGroup *current, CT_TNodeGroup *successor)
+bool CT_TTreeGroup::addSuccessorWithOutModel(CT_TNodeGroup* current, const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup* successor)
 {
-    return current->setSuccessor(successor);
+    return current->setSuccessorWithOutModel(outModel, successor);
 }
 
-bool CT_TTreeGroup::addComponent(CT_TNodeGroup *complex, CT_TNodeGroup *component)
+bool CT_TTreeGroup::addComponentWithOutModel(CT_TNodeGroup* complex, const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup* component)
 {
-    return complex->addComponent(component);
+    return complex->addComponentWithOutModel(outModel, component);
 }
 
-bool CT_TTreeGroup::addBranch(CT_TNodeGroup *bearer, CT_TNodeGroup *son)
+bool CT_TTreeGroup::addBranchWithOutModel(CT_TNodeGroup* bearer, const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup* son)
 {
-    return bearer->addBranch(son);
+    return bearer->addBranchWithOutModel(outModel, son);
 }
 
 CT_TNodeGroup* CT_TTreeGroup::rootNode() const
@@ -70,39 +63,38 @@ CT_TNodeGroup* CT_TTreeGroup::rootNode() const
     return m_rootNode;
 }
 
-CT_AbstractItemDrawable* CT_TTreeGroup::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
+CT_AbstractItemDrawable* CT_TTreeGroup::copy(const CT_OutAbstractItemModel* model, const CT_AbstractResult* result) const
 {
     const CT_OutAbstractGroupModel *newModel = dynamic_cast< const CT_OutAbstractGroupModel* >(model);
 
-    CT_TTreeGroup *itemGroup = new CT_TTreeGroup(newModel, result);
-    itemGroup->setId(id());
-    itemGroup->setAlternativeDrawManager(getAlternativeDrawManager());
+    CT_TTreeGroup* itemGroup = new CT_TTreeGroup(*this);
+    itemGroup->setModel(model);
+    itemGroup->setResult(result);
 
-    if(newModel == NULL)
+    if(newModel == nullptr)
         return itemGroup;
 
     // create the hash map of new models [old model, new model]
-    if(m_rootNode != NULL)
+    if(m_rootNode != nullptr)
     {
-        QHash<QString, CT_OutAbstractGroupModel*> modelsMap;
+        QHash<int, CT_OutAbstractGroupModel*> modelsMap;
 
-        QListIterator<DEF_CT_AbstractGroupModelOut*> it(newModel->groups());
+        const auto visitor = [&modelsMap](const CT_OutAbstractModel* mm) -> bool {
+            if(dynamic_cast<CT_TNodeGroup*>(mm->prototype()) != nullptr)
+                modelsMap.insert(mm->uniqueIndex(), (CT_OutAbstractGroupModel*)mm);
 
-        while(it.hasNext())
-        {
-            DEF_CT_AbstractGroupModelOut *mm = it.next();
+            return true;
+        };
 
-            if(CT_TNodeGroup::staticGetType() == mm->itemDrawable()->getType())
-                modelsMap.insert(mm->uniqueName(), (CT_OutAbstractGroupModel*)mm);
-        }
+        newModel->visitOutChildrens(visitor);
 
         // we must copy recursively all nodes and set it the new model
         CT_TNodeGroup *root = recursiveCopyNodes(newModel, result, itemGroup, m_rootNode, modelsMap);
 
-        if((root == NULL) || !itemGroup->setRootNode(root))
+        if((root == nullptr) || !itemGroup->setRootNodeWithOutModel((DEF_CT_AbstractGroupModelOut*)root->model(), root))
         {
             delete itemGroup;
-            itemGroup = NULL;
+            itemGroup = nullptr;
         }
     }
 
@@ -113,41 +105,41 @@ CT_TNodeGroup* CT_TTreeGroup::recursiveCopyNodes(const CT_OutAbstractGroupModel 
                                                  const CT_AbstractResult *result,
                                                  CT_TTreeGroup *group,
                                                  CT_TNodeGroup *node,
-                                                 const QHash<QString, CT_OutAbstractGroupModel*> &modelsMap)
+                                                 const QHash<int, CT_OutAbstractGroupModel*> &modelsMap) const
 {
     CT_OutAbstractGroupModel *newNodeModel;
 
-    if((newNodeModel = modelsMap.value(node->model()->uniqueName(), NULL)) == NULL)
-        return NULL;
+    if((newNodeModel = modelsMap.value(node->model()->uniqueIndex(), nullptr)) == nullptr)
+        return nullptr;
 
-    CT_TNodeGroup *newNode = (CT_TNodeGroup*)node->copy(newNodeModel, result, CT_ResultCopyModeList());
+    CT_TNodeGroup *newNode = (CT_TNodeGroup*)node->copy(newNodeModel, result);
     newNode->setTopologyTree(group);
 
     CT_TNodeGroup *successor = node->successor();
 
-    if(successor != NULL)
+    if(successor != nullptr)
     {
         successor = recursiveCopyNodes(newModel, result, group, successor, modelsMap);
 
-        if((successor == NULL) || (!newNode->setSuccessor(successor)))
+        if((successor == nullptr) || (!newNode->setSuccessorWithOutModel((DEF_CT_AbstractGroupModelOut*)successor->model(), successor)))
         {
             delete newNode;
             delete successor;
-            return NULL;
+            return nullptr;
         }
     }
 
     CT_TNodeGroup *rootComponent = node->rootComponent();
 
-    if(rootComponent != NULL)
+    if(rootComponent != nullptr)
     {
         rootComponent = recursiveCopyNodes(newModel, result, group, rootComponent, modelsMap);
 
-        if((rootComponent == NULL) || (!newNode->addComponent(rootComponent)))
+        if((rootComponent == nullptr) || (!newNode->addComponentWithOutModel((DEF_CT_AbstractGroupModelOut*)rootComponent->model(), rootComponent)))
         {
             delete newNode;
             delete rootComponent;
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -159,20 +151,21 @@ CT_TNodeGroup* CT_TTreeGroup::recursiveCopyNodes(const CT_OutAbstractGroupModel 
 
         branch = recursiveCopyNodes(newModel, result, group, branch, modelsMap);
 
-        if((branch == NULL) || (!newNode->addBranch(branch)))
+        if((branch == nullptr) || (!newNode->addBranchWithOutModel((DEF_CT_AbstractGroupModelOut*)branch->model(), branch)))
         {
             delete newNode;
             delete branch;
-            return NULL;
+            return nullptr;
         }
     }
 
     return newNode;
 }
 
-bool CT_TTreeGroup::addNode(CT_TNodeGroup *n)
+bool CT_TTreeGroup::addNode(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup* n)
 {
-    return internalAddGroupToNewGroupsCollection(n);
+    addGroupWithOutModel(outModel, n);
+    return true;
 }
 
 bool CT_TTreeGroup::removeNode(CT_TNodeGroup *n)

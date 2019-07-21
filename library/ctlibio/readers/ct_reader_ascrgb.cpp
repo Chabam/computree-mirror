@@ -6,84 +6,18 @@
 #include <QDebug>
 
 #include "ct_colorcloud/ct_colorcloudstdvector.h"
-#include "ct_global/ct_context.h"
+#include "ct_cloudindex/registered/ct_standardnotmodifiablecloudindexregisteredt.h"
+#include "ct_log/ct_logmanager.h"
 #include "ct_point.h"
 
 #include <limits>
 
-CT_Reader_ASCRGB::CT_Reader_ASCRGB() : CT_AbstractReader(), CT_ReaderPointsFilteringExtension()
+CT_Reader_ASCRGB::CT_Reader_ASCRGB() : SuperClass(), CT_ReaderPointsFilteringExtension()
 {
     m_filterRadius = 0;
     _zminFilter = -std::numeric_limits<double>::max();
     _zmaxFilter = std::numeric_limits<double>::max();
-}
 
-QString CT_Reader_ASCRGB::GetReaderName() const
-{
-    return tr("Points, fichier ASCII (XYZRGB, sans entête, RGB [0;1])");
-}
-
-CT_StepsMenu::LevelPredefined CT_Reader_ASCRGB::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
-}
-
-bool CT_Reader_ASCRGB::setFilePath(const QString &filepath)
-{
-    // Test File validity
-    if(QFile::exists(filepath))
-    {
-        QFile f(filepath);
-
-        if (f.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            QTextStream stream(&f);
-
-            stream.readLine();
-            QString line = stream.readLine();
-            if (!line.isNull())
-            {
-                QStringList values = line.split(" ");
-                if (values.size() >= 3) {
-                    f.close();
-                    return CT_AbstractReader::setFilePath(filepath);
-                } else {
-                    PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'a pas le bon format (colonnes manquantes).")).arg(filepath));
-                }
-            } else {
-                PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 est vide.")).arg(filepath));
-            }
-
-            f.close();
-        } else {
-            PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'est pas accessible.")).arg(filepath));
-        }
-    } else {
-        PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'existe pas.")).arg(filepath));
-    }
-
-    return false;
-}
-
-void CT_Reader_ASCRGB::setRadiusFilter(const double &radius)
-{
-    m_filterRadius = radius;
-}
-
-void CT_Reader_ASCRGB::setRadiusFilter(const double &radius, const double &zmin, const double &zmax)
-{
-    m_filterRadius = radius;
-    _zminFilter = zmin;
-    _zmaxFilter = zmax;
-}
-
-CT_AbstractReader* CT_Reader_ASCRGB::copy() const
-{
-    return new CT_Reader_ASCRGB();
-}
-
-void CT_Reader_ASCRGB::protectedInit()
-{
     addNewReadableFormat(FileFormat("asc", tr("Fichiers de points ASCII (XYZRGB, sans entête, RGB [0;1])")));
 
     setToolTip(tr("Charge un fichier de points au format ASCII, sans entête, ordonné, avec les champs suivants :<br>"
@@ -95,12 +29,26 @@ void CT_Reader_ASCRGB::protectedInit()
                   "- B  : Composante Bleue, valeur entre 0 et 1 (optionnel)<br>"));
 }
 
-void CT_Reader_ASCRGB::protectedCreateOutItemDrawableModelList()
+QString CT_Reader_ASCRGB::displayableName() const
 {
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
+    return tr("Points, fichier ASCII (XYZRGB, sans entête, RGB [0;1])");
+}
 
-    addOutItemDrawableModel(DEF_CT_Reader_ASCRGB_sceneOut, new CT_Scene(), tr("Scène"));
-    addOutItemDrawableModel(DEF_CT_Reader_ASCRGB_colorOut, new CT_PointsAttributesColor(), tr("Attribut de points (couleurs)"));
+/*CT_StepsMenu::LevelPredefined CT_Reader_ASCRGB::getReaderSubMenuName() const
+{
+    return CT_StepsMenu::LP_Points;
+}*/
+
+void CT_Reader_ASCRGB::setRadiusFilter(const double &radius)
+{
+    m_filterRadius = radius;
+}
+
+void CT_Reader_ASCRGB::setRadiusFilter(const double &radius, const double &zmin, const double &zmax)
+{
+    m_filterRadius = radius;
+    _zminFilter = zmin;
+    _zmaxFilter = zmax;
 }
 
 bool readPoint(QStringList &values, CT_Point &point)
@@ -166,9 +114,36 @@ bool CT_Reader_ASCRGB::isInsideRadius(const CT_Point &point)
     return true;
 }
 
-bool CT_Reader_ASCRGB::protectedReadFile()
+bool CT_Reader_ASCRGB::preVerifyFile(const QString& filepath, QFile& fileOpenReadOnly) const
 {
-    // Test File validity
+    QTextStream stream(&fileOpenReadOnly);
+
+    stream.readLine();
+
+    const QString line = stream.readLine();
+
+    if(!line.isNull())
+    {
+        QStringList values = line.split(" ");
+        if (values.size() >= 3)
+            return true;
+        else
+            PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'a pas le bon format (colonnes manquantes).")).arg(filepath));
+    } else {
+        PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 est vide.")).arg(filepath));
+    }
+
+    return false;
+}
+
+void CT_Reader_ASCRGB::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
+{
+    manager.addItem(m_hOutScene, tr("Scène"));
+    manager.addItem(m_hOutColors, tr("Attribut de points (couleurs)"));
+}
+
+bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
+{
     if(QFile::exists(filepath()))
     {
         QFile f(filepath());
@@ -206,7 +181,7 @@ bool CT_Reader_ASCRGB::protectedReadFile()
                 QStringList values = line.split(" ", QString::SkipEmptyParts);
                 bool ok = readPoint(values, point);
 
-                // FIXME: converted radius filter to lambda
+                // FIXME: convert radius filter to lambda
                 if (!ok || isPointFiltered(point) || !isInsideRadius(point))
                     continue;
 
@@ -230,16 +205,14 @@ bool CT_Reader_ASCRGB::protectedReadFile()
             {
                 CT_NMPCIR pcir = PS_REPOSITORY->registerUndefinedSizePointCloud(pointCloud);
 
-                CT_Scene *scene = new CT_Scene(NULL, NULL, pcir);
+                CT_Scene *scene = new CT_Scene(pcir);
                 scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
+                group->addSingularItem(m_hOutScene, scene);
 
-                CT_PointsAttributesColor *colors = new CT_PointsAttributesColor(NULL, NULL, pcir, colorCloud);
-
-                addOutItemDrawable(DEF_CT_Reader_ASCRGB_sceneOut, scene);
-                addOutItemDrawable(DEF_CT_Reader_ASCRGB_colorOut, colors);
+                Colors* colors = new Colors(pcir, colorCloud);
+                group->addSingularItem(m_hOutColors, colors);
 
                 return true;
-
             }
             else
             {

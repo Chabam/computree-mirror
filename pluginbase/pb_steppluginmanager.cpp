@@ -78,11 +78,14 @@
 #include "ctlibio/readers/ct_reader_obj.h"
 #include "ctlibio/readers/ct_reader_ascrgb.h"
 #include "ctlibio/readers/ct_reader_larchitect_grid.h"
+*/
 #include "ctlibio/readers/ct_reader_opf.h"
+/*
 #include "ctliblas/readers/ct_reader_las.h"
 #include "ctliblas/readers/ct_reader_lasv2.h"
+*/
 #include "ctlibio/readers/ct_reader_gdal.h"
-#include "ctlibio/readers/ct_reader_terrascanprj.h"
+/*#include "ctlibio/readers/ct_reader_terrascanprj.h"
 #include "ctlibio/readers/ct_reader_asciigrid3d.h"
 #include "ctlibio/readers/ct_reader_pgm.h"
 #include "ctlibio/readers/ct_reader_pbm.h"
@@ -100,13 +103,13 @@
 /*#include "tools/pb_exportertools.h"
 
 #include "ct_step/ct_stepinitializedata.h"
-
-#include "ct_tools/ct_gdaltools.h"*/
+*/
 
 #include <QMessageBox>
 #include <QSettings>
 
 #ifdef USE_GDAL
+#include "readers/tools/gdal/ct_gdaltools.h"
 #include "gdal_priv.h"
 #endif
 
@@ -170,7 +173,7 @@ CT_AbstractReader* PB_StepPluginManager::readerAvailableByUniqueName(const QStri
             return reader;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 const QMap<QString, CT_AbstractExporter *> &PB_StepPluginManager::exportersAvailable() const
@@ -275,11 +278,11 @@ bool PB_StepPluginManager::loadReaders()
 
     CT_StandardReaderSeparator* sep = addNewSeparator(new CT_StandardReaderSeparator("Readers"));
     sep->addReader(new CT_Reader_XYB());
+    sep->addReader(new CT_Reader_OPF());
     /*sep->addReader(new CT_Reader_PTX());
     sep->addReader(new CT_Reader_OBJ());
     sep->addReader(new CT_Reader_LArchitect_Grid());
     sep->addReader(new CT_Reader_ASCRGB());
-    sep->addReader(new CT_Reader_OPF());
     sep->addReader(new CT_Reader_LAS());
     sep->addReader(new CT_Reader_LASV2());
     sep->addReader(new CT_Reader_TerraScanPrj());
@@ -304,35 +307,35 @@ bool PB_StepPluginManager::loadMetrics()
     //addNewMetric(new CT_CloudMetrics());
     return true;
 }
-/*
+
 #ifdef USE_GDAL
-bool GDALExporterLessThan(const PB_GDALExporter *s1, const PB_GDALExporter *s2)
+/*bool GDALExporterLessThan(const PB_GDALExporter *s1, const PB_GDALExporter *s2)
 {
     return s1->getExporterCustomName() < s2->getExporterCustomName();
-}
+}*/
 
 bool GDALReaderLessThan(const CT_Reader_GDAL *s1, const CT_Reader_GDAL *s2)
 {
-    return s1->GetReaderName() < s2->GetReaderName();
+    return s1->uniqueName() < s2->uniqueName();
 }
 #endif
-*/
+
 bool PB_StepPluginManager::loadAfterAllPluginsLoaded()
-{/*
+{
     // load gdal drivers and create readers and exporters
 #ifdef USE_GDAL
     GDALAllRegister();
     GDALDriverManager *driverManager = GetGDALDriverManager();
 
-    int count = driverManager->GetDriverCount();
+    const int count = driverManager->GetDriverCount();
 
     if(count > 0) {
 
         CT_StandardReaderSeparator *sepR;
-        CT_StandardExporterSeparator *sepE = NULL;
+        CT_StandardExporterSeparator *sepE = nullptr;
 
         QList<CT_Reader_GDAL*> gdalReaderC;
-        QList<PB_GDALExporter*> gdalExpoC;
+        //QList<PB_GDALExporter*> gdalExpoC;
 
         for(int i=0; i<count; ++i) {
             GDALDriver *driver = driverManager->GetDriver(i);
@@ -342,14 +345,14 @@ bool PB_StepPluginManager::loadAfterAllPluginsLoaded()
             {
                 gdalReaderC.append(new CT_Reader_GDAL(driver));
 
-                if (driver->GetMetadataItem(GDAL_DCAP_CREATE) != NULL)
+                if (driver->GetMetadataItem(GDAL_DCAP_CREATE) != nullptr)
                 {
-                    gdalExpoC.append(new PB_GDALExporter(driver));
+                    //gdalExpoC.append(new PB_GDALExporter(driver));
                 }
             }
         }
 
-        if(!gdalExpoC.isEmpty()) {
+        /*if(!gdalExpoC.isEmpty()) {
             sepE = addNewSeparator(new CT_StandardExporterSeparator("GDAL"));
 
             qSort(gdalExpoC.begin(), gdalExpoC.end(), GDALExporterLessThan);
@@ -358,25 +361,23 @@ bool PB_StepPluginManager::loadAfterAllPluginsLoaded()
 
             while(itGD.hasNext())
                 sepE->addExporter(itGD.next());
-        }
+        }*/
 
         if(!gdalReaderC.isEmpty()) {
-
-
             qSort(gdalReaderC.begin(), gdalReaderC.end(), GDALReaderLessThan);
 
             QListIterator<CT_Reader_GDAL*> itGD(gdalReaderC);
 
             while(itGD.hasNext()) {
                 CT_Reader_GDAL *reader = itGD.next();
-                sepR = addNewSeparator(new CT_StandardReaderSeparator(reader->GetReaderName()));
+                sepR = addNewSeparator(new CT_StandardReaderSeparator(reader->displayableName()));
                 sepR->addReader(reader);
             }
         }
     }
 #endif
 
-    initRasterMetricsCollection();
+    /*initRasterMetricsCollection();
     initXyzMetricsCollection();
     initXyzFiltersCollection();*/
     initReadersCollection();/*
@@ -389,7 +390,7 @@ bool PB_StepPluginManager::loadAfterAllPluginsLoaded()
     }
 */
     for(CT_AbstractReader* reader : m_readersOfAllPlugins) {
-        addNewStep(new PB_StepGenericLoadFile(reader->copy()), CT_StepsMenu::LO_Load, CT_StepsMenu::LP_Points/*reader->getReaderSubMenuName()*/);
+        addNewStep(new PB_StepGenericLoadFile(reader->copyFull()), CT_StepsMenu::LO_Load, CT_StepsMenu::LP_Points/*reader->getReaderSubMenuName()*/);
     }
 
     return true;

@@ -51,7 +51,7 @@ public:
                       double spacing,
                       double size);
     CT_PlotListInGrid(const CT_PlotListInGrid& other);
-    ~CT_PlotListInGrid();
+    ~CT_PlotListInGrid() override;
 
     bool hasBoundingBox() const override {return true;}
 
@@ -86,7 +86,7 @@ protected:
 
 private:
     CT_DEFAULT_IA_BEGIN(CT_PlotListInGrid)
-//    CT_DEFAULT_IA_V3(CT_PlotListInGrid, CT_AbstractCategory::staticInitDataNumber(), &CT_PlotListInGrid::getPlotNumber, QObject::tr("Nombre de placettes"), "ndp")
+//    CT_DEFAULT_IA_V2(CT_PlotListInGrid, CT_AbstractCategory::staticInitDataNumber(), &CT_PlotListInGrid::getPlotNumber, QObject::tr("Nombre de placettes"))
     CT_DEFAULT_IA_END(CT_PlotListInGrid)
 
     void computeMinMax(const Eigen::Vector2d &refCoords);

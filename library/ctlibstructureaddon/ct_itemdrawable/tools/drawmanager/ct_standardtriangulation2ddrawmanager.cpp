@@ -2,20 +2,12 @@
 
 #include "ct_itemdrawable/ct_triangulation2d.h"
 
-#include <QObject>
-
-
 const QString CT_StandardTriangulation2DDrawManager::INDEX_CONFIG_NODES_VISIBLE = CT_StandardTriangulation2DDrawManager::staticInitConfigNodesVisible();
 const QString CT_StandardTriangulation2DDrawManager::INDEX_CONFIG_EDGES_VISIBLE = CT_StandardTriangulation2DDrawManager::staticInitConfigEdgesVisible();
 const QString CT_StandardTriangulation2DDrawManager::INDEX_CONFIG_HULL_VISIBLE = CT_StandardTriangulation2DDrawManager::staticInitConfigHullVisible();
 const QString CT_StandardTriangulation2DDrawManager::INDEX_CONFIG_VORONOI_VISIBLE = CT_StandardTriangulation2DDrawManager::staticInitConfigVoronoiVisible();
 
-CT_StandardTriangulation2DDrawManager::CT_StandardTriangulation2DDrawManager(QString drawConfigurationName) : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(drawConfigurationName.isEmpty() ? CT_Triangulation2D::staticName() : drawConfigurationName)
-{
-    
-}
-
-CT_StandardTriangulation2DDrawManager::~CT_StandardTriangulation2DDrawManager()
+CT_StandardTriangulation2DDrawManager::CT_StandardTriangulation2DDrawManager(QString drawConfigurationName) : SuperClass(drawConfigurationName.isEmpty() ? CT_Triangulation2D::staticName() : drawConfigurationName)
 {
 }
 
@@ -25,17 +17,17 @@ void CT_StandardTriangulation2DDrawManager::draw(GraphicsViewInterface &view, Pa
 
     const CT_Triangulation2D &item = dynamic_cast<const CT_Triangulation2D&>(itemDrawable);
 
-    if(getDrawConfiguration()->getVariableValue(INDEX_CONFIG_NODES_VISIBLE).toBool())
+    if(drawConfiguration()->variableValue(INDEX_CONFIG_NODES_VISIBLE).toBool())
         drawNodes(view, painter, item);
 
 
-    if(getDrawConfiguration()->getVariableValue(INDEX_CONFIG_EDGES_VISIBLE).toBool())
+    if(drawConfiguration()->variableValue(INDEX_CONFIG_EDGES_VISIBLE).toBool())
         drawEdges(view, painter, item);
 
-    if(getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HULL_VISIBLE).toBool())
+    if(drawConfiguration()->variableValue(INDEX_CONFIG_HULL_VISIBLE).toBool())
         drawHull(view, painter, item);
 
-    if(getDrawConfiguration()->getVariableValue(INDEX_CONFIG_VORONOI_VISIBLE).toBool())
+    if(drawConfiguration()->variableValue(INDEX_CONFIG_VORONOI_VISIBLE).toBool())
         drawVoronoi(view, painter, item);
 }
 
@@ -139,7 +131,7 @@ void CT_StandardTriangulation2DDrawManager::drawHull(GraphicsViewInterface &view
         for (int j = 0 ; j < vertices.size() ; j++)
         {
             Eigen::Vector3d *p1 = vertices.at(j)->getData();
-            Eigen::Vector3d *p2 = NULL;
+            Eigen::Vector3d *p2 = nullptr;
 
             if (j < vertices.size() - 1)
             {

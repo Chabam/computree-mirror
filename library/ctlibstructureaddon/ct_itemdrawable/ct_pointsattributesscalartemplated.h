@@ -12,6 +12,9 @@ class CT_PointsAttributesScalarTemplated : public CT_AbstractPointAttributesScal
 {
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_PointsAttributesScalarTemplated, SCALAR, CT_AbstractPointAttributesScalar, Point %1 attributes)
 
+    using SuperClass1 = CT_AbstractPointAttributesScalar;
+    using SuperClass2 = CT_AttributesScalarT<SCALAR>;
+
 public:
     CT_PointsAttributesScalarTemplated();
 

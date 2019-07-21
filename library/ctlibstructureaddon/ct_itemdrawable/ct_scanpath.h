@@ -35,7 +35,7 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_ScanPath : public CT_AbstractItemDrawableWit
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_ScanPath, CT_AbstractItemDrawableWithoutPointCloud, Scan Path)
-    using SuperClass = SuperClass;
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
 
 public:
 

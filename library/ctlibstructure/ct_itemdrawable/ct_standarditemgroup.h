@@ -236,7 +236,7 @@ public:
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const CT_OutAbstractModel* outModel = outItemHandle.findModelWithParent(model());
+        const CT_OutAbstractModel* outModel = outItemHandle.findAbstractModelWithParent(model());
 
         if(outModel == NULL)
             qFatal("CT_StandardItemGroup::assignModelToItemToAdd(...) --> outModel == NULL");
@@ -260,7 +260,7 @@ public:
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findModelWithParent(model());
+        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
 
         // now we can add the item with the right model
         addSingularItemWithOutModel(outModelToUse, item);
@@ -272,7 +272,7 @@ public:
      * @param item : the item to add (life in memory of this item will be managed by this group)
      * @warning There is no verification made to check that this item can be added or not to this group. Be sure what you do.
      */
-    void addSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel, CT_AbstractSingularItemDrawable* item);
+    virtual void addSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel, CT_AbstractSingularItemDrawable* item);
 
     /**
      * @brief Remove an item from the group. The item is not really removed but a flag is set to know that on the
@@ -292,7 +292,7 @@ public:
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findModelWithParent(model());
+        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
 
         Q_ASSERT(outModelToUse != NULL);
 
@@ -446,7 +446,7 @@ public:
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const DEF_CT_AbstractGroupModelOut* outModelToUse = outGroupHandle.findModelWithParent(model());
+        const DEF_CT_AbstractGroupModelOut* outModelToUse = outGroupHandle.findAbstractModelWithParent(model());
 
         // now we can add the group with the right model
         addGroupWithOutModel(outModelToUse, group);
@@ -478,7 +478,7 @@ public:
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const DEF_CT_AbstractGroupModelOut* outModelToUse = outGroupHandle.findModelWithParent(model());
+        const DEF_CT_AbstractGroupModelOut* outModelToUse = outGroupHandle.findAbstractModelWithParent(model());
 
         Q_ASSERT(outModelToUse != NULL);
 
@@ -794,8 +794,10 @@ private:
 
     const static CT_StandardStandardItemGroupDrawManager SIG_DRAW_MANAGER;
 
+protected:
     LockAccessTool      m_lockAccessTool;
 
+private:
     /**
      * @brief Collection of new groups added to this group
      */
@@ -888,7 +890,7 @@ private:
     Iterator internalXXXWithOutputHandle(const OutHandleType& outGroupHandle) const {
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const CT_OutAbstractModel* outModelToUse = outGroupHandle.findModelWithParent(model());
+        const CT_OutAbstractModel* outModelToUse = outGroupHandle.findAbstractModelWithParent(model());
 
         Q_ASSERT(outModelToUse != NULL);
 
@@ -998,7 +1000,7 @@ private:
                                                                  std::true_type) const {
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const CT_OutAbstractModel* outModelToUse = outItemHandle.findModelWithParent(model());
+        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
 
         Q_ASSERT(outModelToUse != NULL);
 
@@ -1026,7 +1028,7 @@ private:
                                                                  std::true_type) const {
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const CT_OutAbstractModel* outModelToUse = outGroupHandle.findModelWithParent(model());
+        const DEF_CT_AbstractGroupModelOut* outModelToUse = outGroupHandle.findAbstractModelWithParent(model());
 
         Q_ASSERT(outModelToUse != NULL);
 

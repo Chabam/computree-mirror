@@ -14,7 +14,7 @@ CT_StdItemAttributeWrapperT<ClassType,VType>::CT_StdItemAttributeWrapperT(const 
                                                                           getter gMethod) : SuperClass(category),
     m_gMethod(gMethod)
 {
-    static_assert(std::is_convertible<ClassType, CT_AbstractItem>::value, "CT_StdItemAttributeWrapperT is only compatible with classes that inherit from CT_AbstractItem");
+    static_assert(std::is_convertible<ClassType*, CT_AbstractItem*>::value, "CT_StdItemAttributeWrapperT is only compatible with classes that inherit from CT_AbstractItem");
 }
 
 template <class ClassType, typename VType>

@@ -60,7 +60,7 @@ public:
     /**
       * \brief Retourne un cercle 2D  partir du nuage de points pass en paramtre.
       *
-      * \return NULL si le nombre de points est infrieur  3.
+      * \return NULL si le nombre de points est inférieur à 3.
       */
     static CT_Circle* staticCreateZAxisAlignedCircleFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                    double z = 0);

@@ -7,6 +7,8 @@
 
 class CTLIBSTRUCTUREADDON_EXPORT CT_StandardAbstractPointsAttributesDrawManager : public CT_AbstractItemDrawableDrawManager
 {
+    using SuperClass = CT_AbstractItemDrawableDrawManager;
+
 public:
     CT_StandardAbstractPointsAttributesDrawManager();
 

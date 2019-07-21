@@ -12,7 +12,7 @@ class CT_OutOPFNodeGroupModel : public CT_OutStdGroupModel<OPFGroup>
 {
     typedef CT_OutStdGroupModel<OPFGroup> SuperClass;
 
-public:    
+public:
     /**
      * @brief Construct a model
      * @param displayableName : a displayable name (name displayed in gui for user information). Empty by default.
@@ -21,7 +21,8 @@ public:
      */
     CT_OutOPFNodeGroupModel(const QString& displayableName = "",
                             const QString& shortDescription = "",
-                            const QString& detailledDescription = "");
+                            const QString& detailledDescription = "",
+                            OPFGroup* prototype = NULL);
 
     /**
      * @brief Copy constructor

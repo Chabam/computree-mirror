@@ -649,6 +649,12 @@ protected:
      */
     virtual bool preInputConfigure();
 
+    /**
+     * @brief Called after the pre input dialog has been displayed and user accept the change OR after pre settings has
+     *        been restored
+     */
+    virtual void finalizePreSettings() {}
+
     /************ INPUTS DECLARATION ************/
 
     /**
@@ -687,6 +693,12 @@ protected:
      * @return Returns false if the user cancel the configuration.
      */
     virtual bool postInputConfigure();
+
+    /**
+     * @brief Called after the post input dialog has been displayed and user accept the change OR after post settings has
+     *        been restored
+     */
+    virtual void finalizePostSettings() {}
 
     /************ OUTPUTS DECLARATION ************/
 

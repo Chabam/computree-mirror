@@ -15,7 +15,7 @@ public:
     using InResultModelCopyType = CT_InResultModelGroupToCopy;
 
     CT_HandleInGroup() : SuperClass() {
-        static_assert(std::is_convertible<GroupT, IGroupForModel>::value, "CT_HandleInGroup is only compatible with classes that inherit from IGroupForModel");
+        static_assert(std::is_convertible<GroupT*, IGroupForModel*>::value, "CT_HandleInGroup is only compatible with classes that inherit from IGroupForModel");
     }
 };
 #endif // CT_HANDLEINGROUP_H

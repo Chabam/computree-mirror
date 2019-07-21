@@ -4,20 +4,24 @@ contains ( QT_VERSION, "^5.*" ) {
     QT *= widgets
 }
 
+CHECK_CAN_USE_GDAL = 1
+CHECK_CAN_USE_OPENCV = 1
+
 include(../library_shared.pri)
+include(../../include_all.pri)
 
 TARGET = ctlibio
 
 DEFINES += CTLIBIO_LIBRARY
 
 HEADERS +=  \
-#    readers/ct_reader_ascrgb.h \
+    readers/ct_reader_ascrgb.h \
 #    readers/ct_reader_ascrgb_def_models.h \
-#    readers/ct_reader_gdal.h \
+    readers/ct_reader_gdal.h \
 #    readers/ct_reader_gdal_def_models.h \
 #    readers/ct_reader_larchitect_grid.h \
 #    readers/ct_reader_larchitect_grid_def_models.h \
-#    readers/ct_reader_opf.h \
+    readers/ct_reader_opf.h \
 #    readers/ct_reader_opf_def_models.h \
 #    readers/ct_reader_terrascanprj.h \
 #    readers/ct_reader_terrascanprj_def_models.h \
@@ -73,12 +77,13 @@ HEADERS +=  \
 #    readers/tools/ply/iplyreaderlistener.h \
 #    readers/ct_reader_trajectory.h \
 #    readers/ct_reader_trajectory_def_model.h
+    readers/tools/gdal/ct_gdaltools.h
 
 SOURCES += \ 
-#    readers/ct_reader_ascrgb.cpp \
-#    readers/ct_reader_gdal.cpp \
+    readers/ct_reader_ascrgb.cpp \
+    readers/ct_reader_gdal.cpp \
 #    readers/ct_reader_larchitect_grid.cpp \
-#    readers/ct_reader_opf.cpp \
+    readers/ct_reader_opf.cpp \
 #    readers/ct_reader_terrascanprj.cpp \
     readers/ct_reader_xyb.cpp \
 #    readers/ct_reader_obj.cpp \
@@ -87,7 +92,7 @@ SOURCES += \
 #    readers/ct_reader_pbm.cpp \
 #    readers/ct_reader_points_ascii.cpp \
 #    readers/ct_reader_idxyz.cpp \
-    readers/headers/ct_xybheader.cpp \
+    readers/headers/ct_xybheader.cpp
 #    readers/ct_reader_ptx.cpp \
 #    readers/tools/ply/plyheader.cpp \
 #    readers/tools/ply/internal/plyelement.cpp \

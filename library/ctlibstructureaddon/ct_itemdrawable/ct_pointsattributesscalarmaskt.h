@@ -40,20 +40,15 @@ class CT_PointsAttributesScalarMaskT : public CT_AbstractPointAttributesScalar, 
 {
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_PointsAttributesScalarMaskT, StructType, CT_AbstractPointAttributesScalar, Point %1 attributes)
 
+    using SuperClass1 = CT_AbstractPointAttributesScalar;
+    using SuperClass2 = CT_AbstractAttributesScalar;
+
 public:
 
     typedef typename StructType::MASK StructMASK;
 
     CT_PointsAttributesScalarMaskT();
     CT_PointsAttributesScalarMaskT(StructMASK mask,
-                                   quint16 shiftRight,
-                                   CT_StandardCloudStdVectorT<StructType> *collection,
-                                   CT_PCIR pcir,
-                                   bool autoDeleteCollection = true);
-
-    CT_PointsAttributesScalarMaskT(const QString &modelName,
-                                   const CT_AbstractResult *result,
-                                   StructMASK mask,
                                    quint16 shiftRight,
                                    CT_StandardCloudStdVectorT<StructType> *collection,
                                    CT_PCIR pcir,
@@ -91,7 +86,7 @@ public:
      */
     CT_PointsAttributesScalarMaskT(const CT_PointsAttributesScalarMaskT<StructType>& other);
 
-    virtual ~CT_PointsAttributesScalarMaskT();
+    ~CT_PointsAttributesScalarMaskT() override;
 
     double dMin() const;
 

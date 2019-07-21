@@ -53,7 +53,7 @@ public:
     CT_Polyline2D(CT_Polyline2DData *data);
     CT_Polyline2D(const CT_Polyline2D& other) = default;
 
-    const QVector<Eigen::Vector2d *> &getVertices() const;
+    const QVector<Eigen::Vector2d>& getVertices() const;
 
     inline int getNumberOfVertices() const {return getVertices().size();}
 

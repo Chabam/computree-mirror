@@ -36,38 +36,29 @@
 /**
  * @brief It represents a 3D sphere, defined by a center and a radius in meters.
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Sphere : public CT_AbstractShape
+class CTLIBSTRUCTUREADDON_EXPORT CT_Sphere : public CT_AbstractShape
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Sphere, CT_AbstractShape, Sphere)
 
+    using SuperClass = CT_AbstractShape;
+
 public:
     CT_Sphere();
-
-    CT_Sphere(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              CT_SphereData *data);
-
-    CT_Sphere(const QString &modelName,
-              const CT_AbstractResult *result,
-              CT_SphereData *data);
+    CT_Sphere(CT_SphereData* data);
+    CT_Sphere(const CT_Sphere& other) = default;
 
     /**
      * @brief Returns the radius of the sphere
      */
     double getRadius() const;
 
-    /**
-     * @brief Copy methods
-     * @param copyModeList : not used
-     */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-    virtual CT_AbstractItemDrawable* copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_Sphere)
 
 private:
 
     CT_DEFAULT_IA_BEGIN(CT_Sphere)
-    CT_DEFAULT_IA_V3(CT_Sphere, CT_AbstractCategory::staticInitDataRadius(), &CT_Sphere::getRadius, QObject::tr("Rayon de la sphere"), "ns")
+    CT_DEFAULT_IA_V2(CT_Sphere, CT_AbstractCategory::staticInitDataRadius(), &CT_Sphere::getRadius, QObject::tr("Rayon de la sphere"))
     CT_DEFAULT_IA_END(CT_Sphere)
 
     const static CT_StandardSphereDrawManager   SPHERE_DRAW_MANAGER;

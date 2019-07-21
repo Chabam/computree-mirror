@@ -15,7 +15,7 @@ public:
     using InResultModelCopyType = CT_InResultModelGroupToCopy;
 
     CT_HandleInItem() : SuperClass() {
-        static_assert(std::is_convertible<ItemT, ISingularItemDrawableForModel>::value, "CT_HandleInItem is only compatible with classes that inherit from ISingularItemDrawableForModel");
+        static_assert(std::is_convertible<ItemT*, ISingularItemDrawableForModel*>::value, "CT_HandleInItem is only compatible with classes that inherit from ISingularItemDrawableForModel");
     }
 };
 

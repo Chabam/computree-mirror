@@ -23,21 +23,21 @@ void CT_StandardPolyline2DDrawManager::draw(GraphicsViewInterface &view, Painter
 
     if(drawPoints || drawLines)
     {
-        const QVector<Eigen::Vector2d*>&vertices = item.getVertices();
+        const QVector<Eigen::Vector2d>& vertices = item.getVertices();
         int size = vertices.size();
 
         for (int i = 0 ; i < size ; i++)
         {
-            Eigen::Vector2d *pt1 = vertices.at(i);
+            const Eigen::Vector2d& pt1 = vertices.at(i);
 
             if(drawPoints)
             {
-                painter.drawPoint((*pt1)(0), (*pt1)(1), zPlane);
+                painter.drawPoint(pt1(0), pt1(1), zPlane);
             }
             if(drawLines && (i < size - 1))
             {
-                Eigen::Vector2d *pt2 = vertices.at(i+1);
-                painter.drawLine((*pt1)(0), (*pt1)(1), zPlane, (*pt2)(0), (*pt2)(1), zPlane);
+                const Eigen::Vector2d& pt2 = vertices.at(i+1);
+                painter.drawLine(pt1(0), pt1(1), zPlane, pt2(0), pt2(1), zPlane);
             }
         }
     }

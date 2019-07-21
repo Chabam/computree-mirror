@@ -27,8 +27,6 @@
 
 #include "ct_polyline2d.h"
 
-#include <limits>
-
 CT_DEFAULT_IA_INIT(CT_Polyline2D)
 
 const CT_StandardPolyline2DDrawManager CT_Polyline2D::POLYLINE2D_DRAW_MANAGER;
@@ -38,69 +36,13 @@ CT_Polyline2D::CT_Polyline2D() : CT_AbstractShape2D()
     setBaseDrawManager(&POLYLINE2D_DRAW_MANAGER);
 }
 
-CT_Polyline2D::CT_Polyline2D(const CT_OutAbstractSingularItemModel *model,
-                         const CT_AbstractResult *result,
-                         CT_Polyline2DData *data) : CT_AbstractShape2D(model, result, data)
+CT_Polyline2D::CT_Polyline2D(CT_Polyline2DData* data) : SuperClass(data)
 {
     setBaseDrawManager(&POLYLINE2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        _minCoordinates(0) = data->_minX;
-        _minCoordinates(1) = data->_minY;
-
-        _maxCoordinates(0) = data->_maxX;
-        _maxCoordinates(1) = data->_maxY;
-    } else {
-        _minCoordinates(0) = 0;
-        _minCoordinates(1) = 0;
-
-        _maxCoordinates(0) = 0;
-        _maxCoordinates(1) = 0;
-    }
-    _minCoordinates(2) = 0;
-    _maxCoordinates(2) = 0;
 }
 
-CT_Polyline2D::CT_Polyline2D(const QString &modelName,
-                         const CT_AbstractResult *result,
-                         CT_Polyline2DData *data) : CT_AbstractShape2D(modelName, result, data)
+const QVector<Eigen::Vector2d>& CT_Polyline2D::getVertices() const
 {
-    setBaseDrawManager(&POLYLINE2D_DRAW_MANAGER);
-
-    if (data != NULL)
-    {
-        _minCoordinates(0) = data->_minX;
-        _minCoordinates(1) = data->_minY;
-
-        _maxCoordinates(0) = data->_maxX;
-        _maxCoordinates(1) = data->_maxY;
-    } else {
-        _minCoordinates(0) = 0;
-        _minCoordinates(1) = 0;
-
-        _maxCoordinates(0) = 0;
-        _maxCoordinates(1) = 0;
-    }
-    _minCoordinates(2) = 0;
-    _maxCoordinates(2) = 0;
-}
-
-const QVector<Eigen::Vector2d*>& CT_Polyline2D::getVertices() const
-{
-    return ((const CT_Polyline2DData&)getData()).getVertices();
-}
-
-CT_AbstractItemDrawable* CT_Polyline2D::copy(const CT_OutAbstractItemModel *model,
-                                           const CT_AbstractResult *result,
-                                           CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Polyline2D *polygon = new CT_Polyline2D((const CT_OutAbstractSingularItemModel *)model, result, (getPointerData() != NULL) ? ((const CT_Polyline2DData&)getData()).clone() : NULL);
-    polygon->setId(id());
-
-    polygon->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return polygon;
+    return dataConstCastAs<CT_Polyline2DData>()->getVertices();
 }
 

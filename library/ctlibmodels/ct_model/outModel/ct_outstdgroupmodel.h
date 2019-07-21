@@ -10,9 +10,11 @@
 template<class StdGroup>
 class CT_OutStdGroupModel : public DEF_CT_AbstractGroupModelOut
 {
-    typedef DEF_CT_AbstractGroupModelOut SuperClass;
+    using SuperClass = DEF_CT_AbstractGroupModelOut;
 
 public:
+    using PublicSuperClass = DEF_CT_AbstractGroupModelOut;
+
     /**
      * @brief Construct a model
      * @param displayableName : a displayable name (name displayed in gui for user information). Empty by default.

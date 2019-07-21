@@ -53,9 +53,9 @@
   *          };
   */
 #define CT_TYPE_IMPL_MACRO(ThisClassName, SuperClassName, Name) public: \
-    virtual QString name() const {return staticName();} \
+    QString name() const override {return staticName();} \
     static QString staticName() {return #Name;} \
-    QString type() const { return staticType(); } \
+    QString type() const override { return staticType(); } \
     static QString staticType() { QString statType = SuperClassName::staticType() + "/" + #ThisClassName; return statType; } \
     static void staticInitNameTypeCorresp() { ThisClassName::addNameTypeCorresp(staticType(), staticName()); } \
     CT_StaticMethodInvoker INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&staticInitNameTypeCorresp);
@@ -74,9 +74,9 @@
   *          };
   */
 #define CT_TYPE_TEMPLATED_IMPL_MACRO(ThisClassName, TemplateType, SuperClassName, Name) public: \
-    virtual QString name() const {return staticName();} \
+    QString name() const override {return staticName();} \
     static QString staticName() { return QString(#Name).contains("%1") ? QString(#Name).arg(CT_TypeInfo::name<TemplateType>()) : QString("%1<%2>").arg(#Name).arg(CT_TypeInfo::name<TemplateType>()); } \
-    QString type() const { return staticType(); } \
+    QString type() const override { return staticType(); } \
     static QString staticType() { return SuperClassName::staticType() + "/" + #ThisClassName + "<" + CT_TypeInfo::name<TemplateType>() + ">"; } \
     static void staticInitNameTypeCorresp() { ThisClassName::addNameTypeCorresp(staticType(), staticName()); } \
     CT_StaticMethodInvoker INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&staticInitNameTypeCorresp);

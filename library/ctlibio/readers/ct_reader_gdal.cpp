@@ -4,27 +4,25 @@
 #include "gdal_priv.h"
 #include "gdal.h"
 #include "ogrsf_frmts.h"
+#include "readers/tools/gdal/ct_gdaltools.h"
 #endif
 
-#ifdef USE_OPENCV
-#include "ct_itemdrawable/ct_image2d.h"
-#endif
+#include "ct_log/ct_logmanager.h"
 
-#include "ct_itemdrawable/ct_point2d.h"
-#include "ct_itemdrawable/ct_polygon2d.h"
-#include "ct_itemdrawable/ct_polyline2d.h"
-#include "ct_tools/ct_gdaltools.h"
-
-CT_Reader_GDAL::CT_Reader_GDAL() : CT_AbstractReader()
+CT_Reader_GDAL::CT_Reader_GDAL() : SuperClass()
 {
+#ifdef USE_GDAL
+    m_driver = nullptr;
+#endif
 }
 
-CT_Reader_GDAL::CT_Reader_GDAL(const CT_Reader_GDAL &other) : CT_AbstractReader(other)
+CT_Reader_GDAL::CT_Reader_GDAL(const CT_Reader_GDAL &other) : SuperClass(other)
 {
 #ifdef USE_GDAL
     m_driver = other.m_driver;
+    m_nameFromDriver = other.m_nameFromDriver;
 
-    const QList<CT_OutStdGroupModel*> &layersModel = outGroupsModel();
+    /*const QList<CT_OutStdGroupModel*> &layersModel = outGroupsModel();
     QListIterator<CT_OutStdGroupModel*> itL(layersModel);
 
     QHashIterator<QString, CT_OutStdSingularItemModel*> it(other.m_models);
@@ -32,14 +30,14 @@ CT_Reader_GDAL::CT_Reader_GDAL(const CT_Reader_GDAL &other) : CT_AbstractReader(
     while(it.hasNext()) {
         it.next();
 
-        CT_OutStdSingularItemModel *model = NULL;
+        CT_OutStdSingularItemModel *model = nullptr;
 
         itL.toFront();
 
-        while(itL.hasNext() && (model == NULL))
+        while(itL.hasNext() && (model == nullptr))
             model = (CT_OutStdSingularItemModel*)itL.next()->findModelInTree(it.key());
 
-        Q_ASSERT(model != NULL);
+        Q_ASSERT(model != nullptr);
 
         m_models.insert(it.key(), model);
     }
@@ -49,52 +47,49 @@ CT_Reader_GDAL::CT_Reader_GDAL(const CT_Reader_GDAL &other) : CT_AbstractReader(
     while(itAttr.hasNext()) {
         itAttr.next();
 
-        CT_OutStdItemAttributeModel *model = NULL;
+        CT_OutStdItemAttributeModel *model = nullptr;
 
         itL.toFront();
 
-        while(itL.hasNext() && (model == NULL))
+        while(itL.hasNext() && (model == nullptr))
             model = (CT_OutStdItemAttributeModel*)itL.next()->findModelInTree(it.key());
 
-        Q_ASSERT(model != NULL);
+        Q_ASSERT(model != nullptr);
 
         m_attrModels.insert(it.key(), model);
-    }
-
-    updateNameFromDriver();
+    }*/
 #endif
 }
 
 #ifdef USE_GDAL
-CT_Reader_GDAL::CT_Reader_GDAL(const GDALDriver *driver)
+CT_Reader_GDAL::CT_Reader_GDAL(const GDALDriver* driver)
 {
-    m_driver = (GDALDriver*)driver;
-
-    updateNameFromDriver();
+    m_driver = const_cast<GDALDriver*>(driver);
+    init();
 }
-#endif
 
 CT_Reader_GDAL::~CT_Reader_GDAL()
 {
+    clearHandles();
 }
+#endif
 
 QString CT_Reader_GDAL::getTypeOfDriver() const
 {
 #ifdef USE_GDAL
-    if (m_driver->GetMetadataItem(GDAL_DCAP_RASTER) != NULL && m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) == NULL) {return "Raster";}
-    if (m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) != NULL && m_driver->GetMetadataItem(GDAL_DCAP_RASTER) == NULL) {return "Vector";}
+    if(m_driver == nullptr) return QString();
+    if((m_driver->GetMetadataItem(GDAL_DCAP_RASTER) != nullptr) && (m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) == nullptr)) return "Raster";
+    if((m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) != nullptr) && (m_driver->GetMetadataItem(GDAL_DCAP_RASTER) == nullptr)) return "Vector";
 #endif
 
-    return "";
+    return QString();
 }
 
-bool CT_Reader_GDAL::setFilePath(const QString &filepath)
+bool CT_Reader_GDAL::postVerifyFile(const QString& filepath)
 {
     #ifdef USE_GDAL
-    if(m_driver != NULL) {
-        if(canBeOpened(filepath))
-            return CT_AbstractReader::setFilePath(filepath);
-    }
+    if(m_driver != nullptr)
+        return canBeOpened(filepath);
     #else
     Q_UNUSED(filepath)
     #endif
@@ -102,16 +97,323 @@ bool CT_Reader_GDAL::setFilePath(const QString &filepath)
     return false;
 }
 
-CT_AbstractReader* CT_Reader_GDAL::copy() const
+void CT_Reader_GDAL::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
     #ifdef USE_GDAL
-    return new CT_Reader_GDAL(m_driver);
-    #else
-    return new CT_Reader_GDAL();
-#endif
+    GDALDataset *data = getDataSet(filepath());
+
+    if(data != nullptr)
+    {
+        int n = data->GetRasterCount();
+
+        if(n != 0) {
+            for(int i=0; i<n; ++i) {
+                const QString name = GDALGetColorInterpretationName(data->GetRasterBand(i+1)->GetColorInterpretation());
+
+                RasterHandleType* handle = new RasterHandleType();
+                m_rasterHandles.append(handle);
+
+                manager.addItem(*handle, (name.isEmpty() || (name == "Undefined")) ? QString("Raster %1").arg(i) : name);
+            }
+        } else {
+            n = data->GetLayerCount();
+
+            for(int i=0; i<n; ++i) {
+                LayerHandleType* layerHandle = new LayerHandleType();
+                m_layerHandles.append(layerHandle);
+                manager.addGroup(*layerHandle, tr("Layer %1").arg(i));
+
+                OGRLayer *poLayer = data->GetLayer(i);
+
+                OGRFeature *poFeature;
+
+                poLayer->ResetReading();
+
+                OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+
+                QStringList canNotBeLoaded;
+                Point2DHandleType* point2DHandle = nullptr;
+                Polygon2DHandleType* polygon2DHandle = nullptr;
+                Polyline2DHandleType* polyline2DHandle = nullptr;
+
+                while(((poFeature = poLayer->GetNextFeature()) != nullptr)
+                      && ((point2DHandle == nullptr) || (polygon2DHandle == nullptr) || (polyline2DHandle == nullptr)))
+                {
+                    OGRGeometry *poGeometry = poFeature->GetGeometryRef();
+
+                    if(poGeometry != nullptr)
+                        createGeometryModel(poFDefn, poGeometry, canNotBeLoaded, manager, *layerHandle, point2DHandle, polygon2DHandle, polyline2DHandle);
+
+                    OGRFeature::DestroyFeature( poFeature );
+                }
+            }
+        }
+
+        GDALClose(data);
+    }
+    #endif
 }
 
-QString CT_Reader_GDAL::GetReaderName() const
+#ifdef USE_GDAL
+bool CT_Reader_GDAL::createGeometryModel(OGRFeatureDefn *poFDefn,
+                                         OGRGeometry *poGeometry,
+                                         QStringList &canNotBeLoaded,
+                                         CT_ReaderOutModelStructureManager& manager,
+                                         LayerHandleType& layerHandle,
+                                         Point2DHandleType*& point2DHandle,
+                                         Polygon2DHandleType*& polygon2DHandle,
+                                         Polyline2DHandleType*& polyline2DHandle)
+{
+    OGRwkbGeometryType geoT = wkbFlatten(poGeometry->getGeometryType());
+
+    if((geoT == wkbPoint) || (geoT == wkbMultiPoint)) {
+
+        if(point2DHandle == nullptr) {
+            point2DHandle = new Point2DHandleType();
+            m_pointHandles.insert(&layerHandle, point2DHandle);
+
+            manager.addItem(layerHandle, *point2DHandle, tr("Points"));
+            createAttributesModel(poFDefn, manager, layerHandle, *point2DHandle);
+        }
+
+        return true;
+    }
+    else if((geoT == wkbPolygon) || (geoT == wkbMultiPolygon)) {
+
+        if(polygon2DHandle == nullptr) {
+            polygon2DHandle = new Polygon2DHandleType();
+            m_polygoneHandles.insert(&layerHandle, polygon2DHandle);
+
+            manager.addItem(layerHandle, *polygon2DHandle, tr("Polygones"));
+            createAttributesModel(poFDefn, manager, layerHandle, *polygon2DHandle);
+        }
+
+        return true;
+    }
+    else if((geoT == wkbLineString) || (geoT == wkbMultiLineString)) {
+
+        if(polyline2DHandle == nullptr) {
+            polyline2DHandle = new Polyline2DHandleType();
+            m_polylineHandles.insert(&layerHandle, polyline2DHandle);
+
+            manager.addItem(layerHandle, *polyline2DHandle, tr("Polylignes"));
+            createAttributesModel(poFDefn, manager, layerHandle, *polyline2DHandle);
+        }
+
+        return true;
+    } else if(geoT == wkbGeometryCollection) {
+
+        OGRGeometryCollection *multi = (OGRGeometryCollection*)poGeometry;
+
+        int n = multi->getNumGeometries();
+
+        for(int j=0; (j<n) && ((point2DHandle == nullptr) || (polygon2DHandle == nullptr) || (polyline2DHandle == nullptr)); ++j) {
+
+            OGRGeometry *poGeometry2 = multi->getGeometryRef(j);
+
+            createGeometryModel(poFDefn,
+                                poGeometry2,
+                                canNotBeLoaded,
+                                manager,
+                                layerHandle,
+                                point2DHandle,
+                                polygon2DHandle,
+                                polyline2DHandle);
+        }
+
+        return true;
+    }
+
+    const QString geoName = poGeometry->getGeometryName();
+
+    if(!canNotBeLoaded.contains(geoName)) {
+        canNotBeLoaded.append(geoName);
+        PS_LOG->addDebugMessage(LogInterface::reader, tr("Impossible de charger des éléments du type : ") + geoName);
+    }
+
+    return false;
+}
+
+bool CT_Reader_GDAL::createPolyline(OGRFeature *poFeature,
+                                    OGRFeatureDefn *poFDefn,
+                                    OGRLineString *line,
+                                    LayerHandleType* layerHandle,
+                                    CT_StandardItemGroup *rootGroup)
+{
+    const int n = line->getNumPoints();
+
+    if(n > 0) {
+
+        QVector<Eigen::Vector2d> vertices(n);
+
+        OGRPoint point;
+
+        for(int j=0; j<n; ++j) {
+            line->getPoint(j, &point);
+            vertices[j] = Eigen::Vector2d(point.getX(), point.getY());
+        }
+
+        CT_StandardItemGroup* layer = layerHandle->createInstance();
+        rootGroup->addGroup(*layerHandle, layer);
+
+        Polyline2DHandleType* itemHandle = m_polylineHandles.value(layerHandle, nullptr);
+        CT_Polyline2D* item = itemHandle->createInstance(new CT_Polyline2DData(vertices));
+        layer->addSingularItem(*itemHandle, item);
+
+        createAttributes(poFeature, poFDefn, layerHandle, itemHandle, item);
+
+        return true;
+    }
+
+    return false;
+}
+
+bool CT_Reader_GDAL::createPolygon(OGRFeature *poFeature,
+                   OGRFeatureDefn *poFDefn,
+                   OGRPolygon *polygon,
+                   LayerHandleType* layerHandle,
+                   CT_StandardItemGroup *rootGroup)
+{
+    const OGRLinearRing *ring = polygon->getExteriorRing();
+
+    if(ring != nullptr) {
+        int n = ring->getNumPoints();
+
+        QVector<Eigen::Vector2d> vertices(n);
+
+        OGRPoint point;
+
+        for(int j=0; j<n; ++j) {
+            ring->getPoint(j, &point);
+            vertices[j] = Eigen::Vector2d(point.getX(), point.getY());
+        }
+
+        CT_StandardItemGroup* layer = layerHandle->createInstance();
+        rootGroup->addGroup(*layerHandle, layer);
+
+        Polygon2DHandleType* itemHandle = m_polygoneHandles.value(layerHandle, nullptr);
+        CT_Polygon2D* item = itemHandle->createInstance(new CT_Polygon2DData(vertices));
+        layer->addSingularItem(*itemHandle, item);
+
+        createAttributes(poFeature, poFDefn, layerHandle, itemHandle, item);
+
+        return true;
+    }
+
+    return false;
+}
+
+bool CT_Reader_GDAL::createPoint(OGRFeature *poFeature,
+                 OGRFeatureDefn *poFDefn,
+                 OGRPoint *point,
+                 LayerHandleType* layerHandle,
+                 CT_StandardItemGroup *rootGroup)
+{
+
+    CT_StandardItemGroup* layer = layerHandle->createInstance();
+    rootGroup->addGroup(*layerHandle, layer);
+
+    Point2DHandleType* itemHandle = m_pointHandles.value(layerHandle, nullptr);
+    CT_Point2D* item = itemHandle->createInstance(new CT_Point2DData(point->getX(), point->getY()));
+    layer->addSingularItem(*itemHandle, item);
+
+    createAttributes(poFeature, poFDefn, layerHandle, itemHandle, item);
+
+    return true;
+}
+#endif
+
+bool CT_Reader_GDAL::internalReadFile(CT_StandardItemGroup* group)
+{
+    #ifdef USE_GDAL
+
+    GDALDataset *data = getDataSet(filepath());
+
+    if(data == nullptr)
+        return false;
+
+    int count = data->GetRasterCount();
+
+    if(count > 0) {
+        double padfTransform[6];
+
+        for(int i=0; i<count; ++i) {
+
+            GDALRasterBand *poBand = data->GetRasterBand(i+1);
+
+            poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
+
+            const int nXSize = poBand->GetXSize();
+            const int nYSize = poBand->GetYSize();
+
+            const double xMin = padfTransform[0];
+            const double yMin = padfTransform[3] - nYSize*padfTransform[1];
+
+            const double na = poBand->GetNoDataValue();
+
+            RasterHandleType* rasterHandle = m_rasterHandles.at(i);
+            auto raster = rasterHandle->createInstance(xMin,
+                                                       yMin,
+                                                       nXSize,
+                                                       nYSize,
+                                                       padfTransform[1], 0, na, na);
+
+            float *pafScanline = (float *) CPLMalloc(sizeof(float)*nXSize);
+
+            size_t index = 0;
+
+            for(int y=0; y<nYSize; ++y) {
+                poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float32, 0, 0 );
+
+                for(int x=0; x<nXSize; ++x) {
+                    raster->index(x, y, index);
+                    raster->setValueAtIndex(index, pafScanline[x]);
+                }
+            }
+
+            CPLFree(pafScanline);
+
+            raster->computeMinMax();
+
+            group->addSingularItem(*rasterHandle, raster);
+        }
+    } else {
+        count = data->GetLayerCount();
+
+        for(int i=0; i<count; ++i) {
+
+            OGRLayer *poLayer = data->GetLayer(i);
+
+            LayerHandleType* layerHandle = m_layerHandles.at(i);
+
+            OGRFeature *poFeature;
+
+            poLayer->ResetReading();
+
+            OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+
+            while( (poFeature = poLayer->GetNextFeature()) != nullptr )
+            {
+                OGRGeometry *poGeometry = poFeature->GetGeometryRef();
+
+                if(poGeometry != nullptr)
+                    convertGeometryToCT(poGeometry, poFeature, poFDefn, layerHandle, group);
+
+                OGRFeature::DestroyFeature( poFeature );
+            }
+        }
+    }
+
+    GDALClose(data);
+
+    return true;
+    #else
+
+    return false;
+    #endif
+}
+
+QString CT_Reader_GDAL::displayableName() const
 {
     #ifdef USE_GDAL
     if(!m_nameFromDriver.isEmpty())
@@ -120,23 +422,26 @@ QString CT_Reader_GDAL::GetReaderName() const
     return metaObject()->className();
 }
 
-QString CT_Reader_GDAL::GetReaderClassName() const
+QString CT_Reader_GDAL::uniqueName() const
 {
-    return GetReaderName();
+    return displayableName();
 }
 
-CT_StepsMenu::LevelPredefined CT_Reader_GDAL::getReaderSubMenuName() const
+/*CT_StepsMenu::LevelPredefined CT_Reader_GDAL::getReaderSubMenuName() const
 {
     QString driverType = getTypeOfDriver();
     if (driverType == "Raster") {return CT_StepsMenu::LP_Raster;}
     if (driverType == "Vector") {return CT_StepsMenu::LP_Vector;}
     return CT_StepsMenu::LP_Others;
-}
+}*/
 
-void CT_Reader_GDAL::protectedInit()
+void CT_Reader_GDAL::init()
 {
     #ifdef USE_GDAL
-    if(m_driver != NULL) {
+    if(m_driver != nullptr) {
+
+        updateNameFromDriver();
+
         QStringList ext = CT_GdalTools::staticGdalDriverExtension(m_driver);
 
         if(ext.isEmpty())
@@ -144,10 +449,10 @@ void CT_Reader_GDAL::protectedInit()
 
         addNewReadableFormat(FileFormat(ext, CT_GdalTools::staticGdalDriverName(m_driver)));
 
-
-        QString driverType = getTypeOfDriver();
+        const QString driverType = getTypeOfDriver();
 
         QString toolTip = tr("Reader GDAL de type : %1").arg(driverType.isEmpty()?tr("Inconnu"):driverType);
+
         if (driverType == "Raster")
         {
             toolTip.append("<br>");
@@ -169,443 +474,55 @@ void CT_Reader_GDAL::protectedInit()
             if ((i + 1) < ext.size()) {toolTip.append(" ");}
         }
         setToolTip(toolTip);
-
     }
-    #endif
+#endif
 }
 
 #ifdef USE_GDAL
-struct ModelsBackup {
-    ModelsBackup() : geometryModel(NULL) {}
-
-    CT_OutStdSingularItemModel*         geometryModel;
-    QList<CT_OutStdItemAttributeModel*> attributesModel;
-};
-
-QString uniqueNameToItemModelUniqueName(QString modelUniqueName,
-                                        int layerIndex)
+void CT_Reader_GDAL::clearHandles()
 {
-    return modelUniqueName.arg(layerIndex);
+    qDeleteAll(m_rasterHandles);
+    m_rasterHandles.clear();
+
+    qDeleteAll(m_layerHandles);
+    m_layerHandles.clear();
+
+    qDeleteAll(m_pointHandles);
+    m_pointHandles.clear();
+
+    qDeleteAll(m_polygoneHandles);
+    m_polygoneHandles.clear();
+
+    qDeleteAll(m_polylineHandles);
+    m_polylineHandles.clear();
+
+    qDeleteAll(m_itemAttributeHandles);
+    m_itemAttributeHandles.clear();
 }
 
-QString uniqueNameToAttributeModelUniqueName(QString modelUniqueName,
-                                             int layerIndex,
-                                             int iField)
-{
-    return modelUniqueName.arg(layerIndex) + "_" + QString().setNum(iField);
-}
-
-CT_AbstractItemAttribute* createAttributeWithGoodType(OGRFeatureDefn *poFDefn,
-                                                      int iField,
-                                                      CT_OutAbstractItemAttributeModel* model,
-                                                      OGRFeature *poFeature = NULL)
+CT_AbstractItemAttribute* CT_Reader_GDAL::createAttributeWithGoodType(OGRFeatureDefn *poFDefn,
+                                                                      int iField,
+                                                                      OGRFeature *poFeature)
 {
     OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
 
     switch( poFieldDefn->GetType() )
     {
-        case OFTInteger:
-            return CT_IACreator::create<int>(model, PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), NULL, ((poFeature != NULL) ? poFeature->GetFieldAsInteger(iField) : 0));
+    case OFTInteger:
+        return new CT_StdItemAttributeT<int>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), ((poFeature != nullptr) ? poFeature->GetFieldAsInteger(iField) : 0));
 
-        case OFTReal:
-            return CT_IACreator::create<double>(model, PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), NULL, ((poFeature != NULL) ? poFeature->GetFieldAsDouble(iField) : 0));
-
-        default:
-            return CT_IACreator::create<QString>(model, PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), NULL, QString((poFeature != NULL) ? poFeature->GetFieldAsString(iField) : ""));
+    case OFTReal:
+        return new CT_StdItemAttributeT<double>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), ((poFeature != nullptr) ? poFeature->GetFieldAsDouble(iField) : 0));
     }
 
-    return NULL;
+    return new CT_StdItemAttributeT<QString>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), QString((poFeature != nullptr) ? poFeature->GetFieldAsString(iField) : QString()));
 }
 
-void createAttributesModel(OGRFeatureDefn *poFDefn,
-                           int layerIndex,
-                           QString modelUniqueName,
-                           ModelsBackup& modelBackup)
-{
-    if(!modelBackup.attributesModel.isEmpty() || (modelBackup.geometryModel == NULL))
-        return;
-
-    for( int iField = 0; iField < poFDefn->GetFieldCount(); iField++ )
-    {
-        OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
-
-        // create an empty item attribute with a model and a result NULL. This attribute will only be used in model.
-        CT_AbstractItemAttribute *attModel = createAttributeWithGoodType(poFDefn, iField, NULL);
-
-        // create the model
-        CT_OutStdItemAttributeModel *model = new CT_OutStdItemAttributeModel(uniqueNameToAttributeModelUniqueName(modelUniqueName, layerIndex, iField), attModel, QString(poFieldDefn->GetNameRef()));
-
-        modelBackup.geometryModel->addItemAttribute(model);
-
-        modelBackup.attributesModel.append(model);
-    }
-}
-
-bool createGeometryModel(OGRFeatureDefn *poFDefn,
-                         OGRGeometry *poGeometry,
-                         int layerIndex,
-                         QStringList &canNotBeLoaded,
-                         ModelsBackup& pointModel,
-                         ModelsBackup& polygoneModel,
-                         ModelsBackup& polylineModel)
-{
-    OGRwkbGeometryType geoT = wkbFlatten(poGeometry->getGeometryType());
-
-    if((geoT == wkbPoint) || (geoT == wkbMultiPoint)) {
-
-        if(pointModel.geometryModel == NULL) {
-            pointModel.geometryModel = new CT_OutStdSingularItemModel(uniqueNameToItemModelUniqueName(DEF_CT_Reader_GDAL_pointOut, layerIndex), new CT_Point2D(), QObject::tr("Points"));
-
-            createAttributesModel(poFDefn, layerIndex, DEF_CT_Reader_GDAL_pointAttrOut, pointModel);
-        }
-
-        return true;
-    }
-    else if((geoT == wkbPolygon) || (geoT == wkbMultiPolygon)) {
-
-        if(polygoneModel.geometryModel == NULL) {
-            polygoneModel.geometryModel = new CT_OutStdSingularItemModel(uniqueNameToItemModelUniqueName(DEF_CT_Reader_GDAL_polygoneOut, layerIndex), new CT_Polygon2D(), QObject::tr("Polygones"));
-
-            createAttributesModel(poFDefn, layerIndex, DEF_CT_Reader_GDAL_polygoneAttrOut, polygoneModel);
-        }
-
-        return true;
-    }
-    else if((geoT == wkbLineString) || (geoT == wkbMultiLineString)) {
-
-        if(polylineModel.geometryModel == NULL) {
-            polylineModel.geometryModel = new CT_OutStdSingularItemModel(uniqueNameToItemModelUniqueName(DEF_CT_Reader_GDAL_polylineOut, layerIndex), new CT_Polyline2D(), QObject::tr("Polylignes"));
-
-            createAttributesModel(poFDefn, layerIndex, DEF_CT_Reader_GDAL_polylineAttrOut, polylineModel);
-        }
-
-        return true;
-    } else if(geoT == wkbGeometryCollection) {
-
-        OGRGeometryCollection *multi = (OGRGeometryCollection*)poGeometry;
-
-        int n = multi->getNumGeometries();
-
-        for(int j=0; j<n; ++j) {
-
-            OGRGeometry *poGeometry2 = multi->getGeometryRef(j);
-
-            if(!createGeometryModel(poFDefn,
-                                    poGeometry2,
-                                    layerIndex,
-                                    canNotBeLoaded,
-                                    pointModel,
-                                    polygoneModel,
-                                    polylineModel))
-                return false;
-        }
-
-        return true;
-    }
-
-    QString geoName = poGeometry->getGeometryName();
-
-    if(!canNotBeLoaded.contains(geoName))
-        canNotBeLoaded.append(geoName);
-
-    return false;
-}
-#endif
-
-void CT_Reader_GDAL::protectedCreateOutItemDrawableModelList()
-{
-    #ifdef USE_GDAL
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    GDALDataset *data = getDataSet(filepath());
-
-    if(data != NULL) {
-        int n = data->GetRasterCount();
-
-        if(n != 0) {
-#ifdef USE_OPENCV
-
-            for(int i=0; i<n; ++i) {
-                QString name = GDALGetColorInterpretationName(data->GetRasterBand(i+1)->GetColorInterpretation());
-                addOutItemDrawableModel(QString(DEF_CT_Reader_GDAL_rasterOut).arg(i), new CT_Image2D<float>(), (name.isEmpty() || (name == "Undefined")) ? QString("Raster %1").arg(i) : name);
-            }
-#endif
-        } else {
-            n = data->GetLayerCount();
-
-            for(int i=0; i<n; ++i) {
-
-                CT_OutStdGroupModel *layerModel = new CT_OutStdGroupModel(QString(DEF_CT_Reader_GDAL_layerOut).arg(i), new CT_StandardItemGroup(), tr("Layer %1").arg(i));
-
-                ModelsBackup pointModel;
-                ModelsBackup polygoneModel;
-                ModelsBackup polylineModel;
-
-                OGRLayer *poLayer = data->GetLayer(i);
-
-                OGRFeature *poFeature;
-
-                poLayer->ResetReading();
-
-                OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-
-                QStringList canNotBeLoaded;
-
-                while( ((poFeature = poLayer->GetNextFeature()) != NULL)
-                       && ((pointModel.geometryModel == NULL)
-                       || (polygoneModel.geometryModel == NULL)
-                       || (polylineModel.geometryModel == NULL)))
-                {
-                    OGRGeometry *poGeometry = poFeature->GetGeometryRef();
-
-                    if(poGeometry != NULL)
-                        createGeometryModel(poFDefn, poGeometry, i, canNotBeLoaded, pointModel, polygoneModel, polylineModel);
-
-                    OGRFeature::DestroyFeature( poFeature );
-                }
-
-                if(pointModel.geometryModel != NULL) {
-                    layerModel->addItem(pointModel.geometryModel);
-                    m_models.insert(pointModel.geometryModel->uniqueName(), pointModel.geometryModel);
-
-                    foreach (CT_OutStdItemAttributeModel* model, pointModel.attributesModel) {
-                        m_attrModels.insert(model->uniqueName(), model);
-                    }
-                }
-
-                if(polygoneModel.geometryModel != NULL) {
-                    layerModel->addItem(polygoneModel.geometryModel);
-                    m_models.insert(polygoneModel.geometryModel->uniqueName(), polygoneModel.geometryModel);
-
-                    foreach (CT_OutStdItemAttributeModel* model, polygoneModel.attributesModel) {
-                        m_attrModels.insert(model->uniqueName(), model);
-                    }
-                }
-
-                if(polylineModel.geometryModel != NULL) {
-                    layerModel->addItem(polylineModel.geometryModel);
-                    m_models.insert(polylineModel.geometryModel->uniqueName(), polylineModel.geometryModel);
-
-                    foreach (CT_OutStdItemAttributeModel* model, polylineModel.attributesModel) {
-                        m_attrModels.insert(model->uniqueName(), model);
-                    }
-                }
-
-                if(layerModel->isEmpty())
-                    delete layerModel;
-                else
-                    addOutGroupModel(layerModel);
-
-                foreach (QString st, canNotBeLoaded) {
-                    PS_LOG->addDebugMessage(LogInterface::reader, tr("Impossible de charger des éléments du type : ") + st);
-                }
-            }
-        }
-
-        GDALClose(data);
-    }
-    #endif
-}
-
-
-#ifdef USE_GDAL
-bool createAttributes(OGRFeature *poFeature,
-                      OGRFeatureDefn *poFDefn,
-                      int layerIndex,
-                      QString modelUniqueName,
-                      CT_AbstractSingularItemDrawable* item,
-                      const QHash<QString, CT_OutStdItemAttributeModel*> &attrModels)
-{
-    for( int iField = 0; iField < poFDefn->GetFieldCount(); iField++ )
-    {
-        // create the item attribute
-        CT_AbstractItemAttribute *att = createAttributeWithGoodType(poFDefn, iField, attrModels.value(uniqueNameToAttributeModelUniqueName(modelUniqueName, layerIndex, iField)), poFeature);
-
-        item->addItemAttribute(att);
-    }
-
-    return true;
-}
-
-bool createPolyline(OGRFeature *poFeature,
-                    OGRFeatureDefn *poFDefn,
-                    OGRLineString *line,
-                    CT_StandardItemGroup *group,
-                    int layerIndex,
-                    const QHash<QString, CT_OutStdSingularItemModel*> &models,
-                    const QHash<QString, CT_OutStdItemAttributeModel*> &attrModels)
-{
-    int n = line->getNumPoints();
-
-    if(n > 0) {
-
-        QVector<Eigen::Vector2d *> vertices(n);
-
-        OGRPoint point;
-
-        for(int j=0; j<n; ++j) {
-            line->getPoint(j, &point);
-            vertices[j] = new Eigen::Vector2d(point.getX(), point.getY());
-        }
-
-        CT_Polyline2D* polyline = new CT_Polyline2D(models.value(uniqueNameToItemModelUniqueName(DEF_CT_Reader_GDAL_polylineOut, layerIndex)), NULL, new CT_Polyline2DData(vertices, false));
-
-        createAttributes(poFeature, poFDefn, layerIndex, DEF_CT_Reader_GDAL_polylineAttrOut, polyline, attrModels);
-
-        return group->addItemDrawable(polyline);
-    }
-
-    return false;
-}
-
-bool createPolygon(OGRFeature *poFeature,
-                   OGRFeatureDefn *poFDefn,
-                   OGRPolygon *polygon,
-                   CT_StandardItemGroup *group,
-                   int layerIndex,
-                   const QHash<QString, CT_OutStdSingularItemModel*> &models,
-                   const QHash<QString, CT_OutStdItemAttributeModel*> &attrModels)
-{
-    const OGRLinearRing *ring = polygon->getExteriorRing();
-
-    if(ring != NULL) {
-        int n = ring->getNumPoints();
-
-        QVector<Eigen::Vector2d *> vertices(n);
-
-        OGRPoint point;
-
-        for(int j=0; j<n; ++j) {
-            ring->getPoint(j, &point);
-            vertices[j] = new Eigen::Vector2d(point.getX(), point.getY());
-        }
-
-        CT_Polygon2D* polygon2D = new CT_Polygon2D(models.value(uniqueNameToItemModelUniqueName(DEF_CT_Reader_GDAL_polygoneOut, layerIndex)), NULL, new CT_Polygon2DData(vertices, false));
-
-        createAttributes(poFeature, poFDefn, layerIndex, DEF_CT_Reader_GDAL_polygoneAttrOut, polygon2D, attrModels);
-
-        return group->addItemDrawable(polygon2D);
-    }
-
-    return false;
-}
-
-bool createPoint(OGRFeature *poFeature,
-                 OGRFeatureDefn *poFDefn,
-                 OGRPoint *point,
-                 CT_StandardItemGroup *group,
-                 int layerIndex,
-                 const QHash<QString, CT_OutStdSingularItemModel*> &models,
-                 const QHash<QString, CT_OutStdItemAttributeModel*> &attrModels)
-{
-    CT_Point2D* point2D = new CT_Point2D(models.value(uniqueNameToItemModelUniqueName(DEF_CT_Reader_GDAL_pointOut, layerIndex)), NULL, new CT_Point2DData(point->getX(), point->getY()));
-
-    createAttributes(poFeature, poFDefn, layerIndex, DEF_CT_Reader_GDAL_pointAttrOut, point2D, attrModels);
-
-    return group->addItemDrawable(point2D);
-}
-#endif
-
-bool CT_Reader_GDAL::protectedReadFile()
-{
-    #ifdef USE_GDAL
-
-    GDALDataset *data = getDataSet(filepath());
-
-    if(data == NULL)
-        return false;
-
-    int count = data->GetRasterCount();
-
-    if(count > 0) {
-#ifdef USE_OPENCV
-
-        for(int i=0; i<count; ++i) {
-
-            GDALRasterBand *poBand = data->GetRasterBand(i+1);
-
-            double padfTransform[6];
-            poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
-
-            int nXSize = poBand->GetXSize();
-            int nYSize = poBand->GetYSize();
-
-            double xMin = padfTransform[0];
-            double yMin = padfTransform[3] - nYSize*padfTransform[1];
-
-            double na = poBand->GetNoDataValue();
-
-            CT_Image2D<float> *grid = new CT_Image2D<float>(NULL,
-                                       NULL,
-                                       xMin,
-                                       yMin,
-                                       nXSize,
-                                       nYSize,
-                                       padfTransform[1],
-                                       0,
-                                       na,
-                                       na);
-
-            float *pafScanline = (float *) CPLMalloc(sizeof(float)*nXSize);
-
-            size_t index = 0;
-
-            for(int y=0; y<nYSize; ++y) {
-                poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float32, 0, 0 );
-
-                for(int x=0; x<nXSize; ++x) {
-                    grid->index(x, y, index);
-                    grid->setValueAtIndex(index, pafScanline[x]);
-                }
-            }
-
-            CPLFree(pafScanline);
-
-            grid->computeMinMax();
-
-            addOutItemDrawable(QString(DEF_CT_Reader_GDAL_rasterOut).arg(i), grid);
-        }
-#endif
-    } else {
-        count = data->GetLayerCount();
-
-        for(int i=0; i<count; ++i) {
-
-            OGRLayer *poLayer = data->GetLayer(i);
-
-            OGRFeature *poFeature;
-
-            poLayer->ResetReading();
-
-            OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-
-            while( (poFeature = poLayer->GetNextFeature()) != NULL )
-            {
-                OGRGeometry *poGeometry = poFeature->GetGeometryRef();
-
-                if(poGeometry != NULL)
-                    convertGeometryToCT(poGeometry, poFeature, poFDefn, i);
-
-                OGRFeature::DestroyFeature( poFeature );
-            }
-
-        }
-    }
-
-    GDALClose(data);
-
-    return true;
-    #endif
-
-    return false;
-}
-
-#ifdef USE_GDAL
 bool CT_Reader_GDAL::canBeOpened(const QString &filepath) const
 {
     GDALDataset *d = getDataSet(filepath);
 
-    if(d == NULL)
+    if(d == nullptr)
         return false;
 
     GDALClose(d);
@@ -614,52 +531,47 @@ bool CT_Reader_GDAL::canBeOpened(const QString &filepath) const
 
 GDALDataset* CT_Reader_GDAL::getDataSet(const QString &filepath) const
 {
-    GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(filepath.toStdString().data(), GDAL_OF_RASTER | GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, NULL, NULL);
+    GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(filepath.toStdString().data(), GDAL_OF_RASTER | GDAL_OF_VECTOR | GDAL_OF_READONLY, nullptr, nullptr, nullptr);
 
-    if((poDataset != NULL) && (poDataset->GetDriver() == m_driver))
+    if((poDataset != nullptr) && (poDataset->GetDriver() == m_driver))
         return poDataset;
 
-    if(poDataset != NULL)
+    if(poDataset != nullptr)
         GDALClose(poDataset);
 
-    return NULL;
+    return nullptr;
 }
 
-void CT_Reader_GDAL::convertGeometryToCT(OGRGeometry *poGeometry, OGRFeature *poFeature, OGRFeatureDefn *poFDefn, int layerIndex)
+bool CT_Reader_GDAL::convertGeometryToCT(OGRGeometry *poGeometry, OGRFeature *poFeature, OGRFeatureDefn *poFDefn, LayerHandleType* layerHandle, CT_StandardItemGroup* rootGroup)
 {
     OGRwkbGeometryType geoT = wkbFlatten(poGeometry->getGeometryType());
-
-    CT_StandardItemGroup *group = NULL;
 
     bool ok = false;
 
     if(geoT == wkbLineString) {
-        ok = createPolyline(poFeature, poFDefn, (OGRLineString*)poGeometry, (group = new CT_StandardItemGroup(NULL, NULL)), layerIndex, m_models, m_attrModels);
+        ok = createPolyline(poFeature, poFDefn, (OGRLineString*)poGeometry, layerHandle, rootGroup);
     } else if(geoT == wkbPolygon) {
-        ok = createPolygon(poFeature, poFDefn, (OGRPolygon*)poGeometry, (group = new CT_StandardItemGroup(NULL, NULL)), layerIndex, m_models, m_attrModels);
+        ok = createPolygon(poFeature, poFDefn, (OGRPolygon*)poGeometry, layerHandle, rootGroup);
     } else if(geoT == wkbPoint) {
-        ok = createPoint(poFeature, poFDefn, (OGRPoint*)poGeometry, (group = new CT_StandardItemGroup(NULL, NULL)), layerIndex, m_models, m_attrModels);
+        ok = createPoint(poFeature, poFDefn, (OGRPoint*)poGeometry, layerHandle, rootGroup);
     } else if((geoT == wkbGeometryCollection) || (geoT == wkbMultiLineString) || (geoT == wkbMultiPolygon) || (geoT == wkbMultiPoint)) {
 
         OGRGeometryCollection *multi = (OGRGeometryCollection*)poGeometry;
 
-        int n = multi->getNumGeometries();
+        const int n = multi->getNumGeometries();
 
         for(int j=0; j<n; ++j)
-            convertGeometryToCT(multi->getGeometryRef(j), poFeature, poFDefn, layerIndex);
+            convertGeometryToCT(multi->getGeometryRef(j), poFeature, poFDefn, layerHandle, rootGroup);
     }
 
-    if(!ok)
-        delete group;
-    else
-        addOutGroup(QString(DEF_CT_Reader_GDAL_layerOut).arg(layerIndex), group);
+    return ok;
 }
 
 void CT_Reader_GDAL::updateNameFromDriver()
 {
-    if(m_driver != NULL)
+    if(m_driver != nullptr)
         m_nameFromDriver = QString("%1 %2").arg(getTypeOfDriver()).arg(CT_GdalTools::staticGdalDriverName(m_driver));
     else
-        m_nameFromDriver = "";
+        m_nameFromDriver = QString();
 }
 #endif

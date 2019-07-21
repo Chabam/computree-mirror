@@ -10,9 +10,11 @@
 template<class SingularItem>
 class CT_OutStdSingularItemModel : public DEF_CT_AbstractItemDrawableModelOut
 {
-    typedef DEF_CT_AbstractItemDrawableModelOut SuperClass;
+    using SuperClass = DEF_CT_AbstractItemDrawableModelOut;
 
 public:
+
+    using PublicSuperClass = DEF_CT_AbstractItemDrawableModelOut;
 
     /**
      * @brief Construct a model

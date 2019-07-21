@@ -94,32 +94,32 @@ public:
     /**
      * @brief Returns the point cloud index
      */
-    const CT_AbstractPointCloudIndex* getPointCloudIndex() const;
+    const CT_AbstractPointCloudIndex* pointCloudIndex() const;
 
     /**
      * @brief Returns the face cloud index
      */
-    const CT_AbstractFaceCloudIndex* getFaceCloudIndex() const;
+    const CT_AbstractFaceCloudIndex* faceCloudIndex() const;
 
     /**
      * @brief Returns the edge cloud index
      */
-    const CT_AbstractEdgeCloudIndex* getEdgeCloudIndex() const;
+    const CT_AbstractEdgeCloudIndex* edgeCloudIndex() const;
 
     /**
      * @brief Returns the point cloud index registered
      */
-    CT_PCIR getPointCloudIndexRegistered() const;
+    CT_PCIR pointCloudIndexRegistered() const;
 
     /**
      * @brief Returns the face cloud index registered
      */
-    CT_FCIR getFaceCloudIndexRegistered() const;
+    CT_FCIR faceCloudIndexRegistered() const;
 
     /**
      * @brief Returns the edge cloud index registered
      */
-    CT_ECIR getEdgeCloudIndexRegistered() const;
+    CT_ECIR edgeCloudIndexRegistered() const;
 
     CT_ITEM_COPY_IMP(CT_MeshModel)
 

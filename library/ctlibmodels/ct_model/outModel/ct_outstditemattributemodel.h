@@ -13,6 +13,9 @@ class CT_OutStdItemAttributeModel : public DEF_CT_OutAbstractIAModel
     using SuperClass = DEF_CT_OutAbstractIAModel;
 
 public:
+
+    using PublicSuperClass = DEF_CT_OutAbstractIAModel;
+
     /**
      * @brief Construct an output model that has a unique index (by default at -1 so it was invalid)
      * @param category : the category to set to the prototype that will be created in the constructor.

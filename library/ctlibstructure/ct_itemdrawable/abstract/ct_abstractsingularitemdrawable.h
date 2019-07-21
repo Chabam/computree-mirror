@@ -84,7 +84,7 @@ public:
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this item
-        const CT_OutAbstractItemAttributeModel* outModelToUse = outItemAttributeHandle.findModelWithParent(model());
+        const CT_OutAbstractItemAttributeModel* outModelToUse = outItemAttributeHandle.findAbstractModelWithParent(model());
 
         // now we can add the item with the right model
         addItemAttributeWithOutModel(outModelToUse, itemAttribute);

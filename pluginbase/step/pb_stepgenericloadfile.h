@@ -20,8 +20,6 @@ public:
     PB_StepGenericLoadFile(CT_AbstractReader* reader);
     ~PB_StepGenericLoadFile();
 
-    void init();
-
     /**
      * @brief Redefined to return the unique name of the reader
      */
@@ -76,7 +74,6 @@ protected:
 private:
     CT_HandleOutResultGroup                 m_hOutResult;
     CT_HandleOutStdGroup                    m_hOutRootGroup;
-    CT_HandleOutSingularItem<CT_FileHeader> m_hOutFileHeader;
 
     CT_AbstractReader*                      m_reader;
 

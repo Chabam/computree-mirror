@@ -1,33 +1,29 @@
 #include "ct_reader_opf.h"
 
-#include "ct_itemdrawable/model/outModel/ct_outstdgroupmodel.h"
-#include "ct_itemdrawable/model/outModel/ct_outopfnodegroupmodel.h"
-#include "ct_attributes/model/outModel/ct_outstditemattributemodel.h"
-#include "ct_itemdrawable/ct_itemattributelist.h"
-#include "ct_itemdrawable/ct_ttreegroup.h"
-#include "ct_itemdrawable/ct_topfnodegroup.h"
-#include "ct_itemdrawable/ct_opfmeshmodel.h"
-#include "ct_attributes/ct_stditemattributet.h"
 #include "ct_mesh/tools/ct_meshallocatort.h"
 #include "ct_mesh/ct_face.h"
 #include "ct_mesh/ct_edge.h"
 #include "ct_math/ct_mathpoint.h"
-#include "ct_color.h"
 #include "ct_view/ct_genericconfigurablewidget.h"
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 
+#include "ct_log/ct_logmanager.h"
+
 #include <QFile>
-#include <QtXml>
 #include <limits>
 
 const QVector<QString> CT_Reader_OPF::TOPOLOGY_NAMES = QVector<QString>() << "topology" << "decomp" << "follow" << "branch";
 
-CT_Reader_OPF::CT_Reader_OPF() : CT_AbstractReader()
+CT_Reader_OPF::CT_Reader_OPF() : SuperClass()
 {
     m_loadMeshes = false;
+
+    addNewReadableFormat(FileFormat("opf", tr("Fichiers AmapStudio .opf")));
+
+    setToolTip(tr("Charge un fichier décrivant l'architecture de végétaux au format OPF, créé par le logiciel AMAPStudio.<br>http://amapstudio.cirad.fr"));
 }
 
-CT_Reader_OPF::CT_Reader_OPF(const CT_Reader_OPF &other) : CT_AbstractReader(other)
+CT_Reader_OPF::CT_Reader_OPF(const CT_Reader_OPF &other) : SuperClass(other)
 {
     m_loadMeshes = other.m_loadMeshes;
     m_typesNew = other.m_typesNew;
@@ -38,14 +34,14 @@ CT_Reader_OPF::CT_Reader_OPF(const CT_Reader_OPF &other) : CT_AbstractReader(oth
     m_attributes = other.m_attributes;
     m_totalNode = other.m_totalNode;
 
-    const QList<CT_OutStdGroupModel*> &topology = outGroupsModel();
+    /*const QList<CT_OutStdGroupModel*> &topology = outGroupsModel();
 
-    CT_OutStdGroupModel *topologyModel = NULL;
+    CT_OutStdGroupModel *topologyModel = nullptr;
 
     if(!topology.isEmpty())
         topologyModel = topology.first();
 
-    if(topologyModel != NULL) {
+    if(topologyModel != nullptr) {
         QHashIterator<QString, CT_OutAbstractModel*> it(other.m_models);
 
         while(it.hasNext()) {
@@ -56,31 +52,30 @@ CT_Reader_OPF::CT_Reader_OPF(const CT_Reader_OPF &other) : CT_AbstractReader(oth
             else {
                 CT_OutAbstractModel *model = (CT_OutAbstractModel*)topologyModel->findModelInTree(it.key());
 
-                Q_ASSERT(model != NULL);
+                Q_ASSERT(model != nullptr);
 
                 m_models.insert(it.key(), model);
             }
         }
-    }
+    }*/
 }
 
 CT_Reader_OPF::~CT_Reader_OPF()
 {
-    clearDrawManagers();
-    clearOtherModels();
     clearMeshes();
     clearShapes();
+    clearHandles();
 }
 
-QString CT_Reader_OPF::GetReaderName() const
+QString CT_Reader_OPF::displayableName() const
 {
     return tr("Fichier AmapStudio - OPF");
 }
 
-CT_StepsMenu::LevelPredefined CT_Reader_OPF::getReaderSubMenuName() const
+/*CT_StepsMenu::LevelPredefined CT_Reader_OPF::getReaderSubMenuName() const
 {
     return CT_StepsMenu::LP_Others;
-}
+}*/
 
 void CT_Reader_OPF::recursiveReadTopologyForModel(rapidxml::xml_node<> *node,
                                                   int &totalNode,
@@ -102,7 +97,7 @@ void CT_Reader_OPF::recursiveReadTopologyForModel(rapidxml::xml_node<> *node,
 
     rapidxml::xml_node<> *nextNode = node->first_node();
 
-    while(nextNode != NULL)
+    while(nextNode != nullptr)
     {
         QString name = nextNode->name();
 
@@ -135,18 +130,17 @@ void CT_Reader_OPF::recursiveReadTopology(rapidxml::xml_node<> *xmlNode,
     rapidxml::xml_attribute<>* idAttribute = xmlNode->first_attribute("id");
 
     node->setOPFID(idAttribute ? QString(idAttribute->value()).toInt() : 0);
-    QString typeName = xmlNode->first_attribute("class")->value();
+    const QString typeName = xmlNode->first_attribute("class")->value();
 
     CT_ItemAttributeList *attList = new CT_ItemAttributeList();
-    attList->setModel((CT_OutAbstractItemModel*)m_models.value(typeName + "_attList", NULL));
-    node->addItemDrawable(attList);
+    node->addSingularItem(*m_attListHandles.value(typeName + "_a"), attList);
 
     rapidxml::xml_node<> *xmlChild = xmlNode->first_node();
 
-    while(xmlChild != NULL)
+    while(xmlChild != nullptr)
     {
-        QString name = xmlChild->name();
-        CT_TOPFNodeGroup *newNode = NULL;
+        const QString name = xmlChild->name();
+        CT_TOPFNodeGroup *newNode = nullptr;
 
         if(name == "geometry")
         {
@@ -154,36 +148,27 @@ void CT_Reader_OPF::recursiveReadTopology(rapidxml::xml_node<> *xmlNode,
         }
         else if(((name == "decomp") || (name == "follow")))
         {
-            QString typeName2 = xmlChild->first_attribute("class")->value();
+            const QString typeName2 = xmlChild->first_attribute("class")->value();
 
             newNode = new CT_TOPFNodeGroup();
-            newNode->setModel(static_cast<CT_OutAbstractItemModel*>(m_models.value(typeName2, NULL)));
-
-            node->addComponent(newNode);
+            node->addComponent(*m_nodeHandles.value(typeName2), newNode);
         }
         else if(name == "branch")
         {
-            QString typeName2 = xmlChild->first_attribute("class")->value();
+            const QString typeName2 = xmlChild->first_attribute("class")->value();
 
             newNode = new CT_TOPFNodeGroup();
-            newNode->setModel(static_cast<CT_OutAbstractItemModel*>(m_models.value(typeName2, NULL)));
-
-            node->addBranch(newNode);
+            node->addBranch(*m_nodeHandles.value(typeName2), newNode);
         }
         else if(m_attributes.contains(name))
         {
             CT_AbstractItemAttribute *att = staticCreateAttributeForType(m_attributes.value(name).m_type, xmlChild->value());
 
-            if(att != NULL)
-            {
-                CT_OutAbstractItemAttributeModel *model = static_cast<CT_OutAbstractItemAttributeModel*>(m_models.value(typeName + "_" + name, NULL));
-                att->setModel(model);
-
-                attList->addItemAttribute(att);
-            }
+            if(att != nullptr)
+                attList->addItemAttribute(*m_attHandles.value(typeName + "_" + name), att);
         }
 
-        if(newNode != NULL)
+        if(newNode != nullptr)
         {
             recursiveReadTopology(xmlChild,
                                   newNode,
@@ -196,56 +181,52 @@ void CT_Reader_OPF::recursiveReadTopology(rapidxml::xml_node<> *xmlNode,
     }
 }
 
-bool CT_Reader_OPF::setFilePath(const QString &filepath)
+bool CT_Reader_OPF::postVerifyFile(const QString& filepath)
 {
     QHash<QString, CT_OPF_Attribute>    attributes;
     QHash<QString, CT_OPF_Type>         types;
     int                                 totalNode = 0;
 
-    // Test File validity
-    if(QFile::exists(filepath))
+    rapidxml::file<> xmlFile(filepath.toLatin1().data());
+    rapidxml::xml_document<> doc;
+    doc.parse<0>(xmlFile.data());
+
+    rapidxml::xml_node<> *root = doc.first_node("opf");
+
+    if(root != nullptr)
     {
-        rapidxml::file<> xmlFile(filepath.toLatin1().data());
-        rapidxml::xml_document<> doc;
-        doc.parse<0>(xmlFile.data());
+        rapidxml::xml_node<> *node = nullptr;
 
-        rapidxml::xml_node<> *root = doc.first_node("opf");
+        node = root->first_node();
 
-        if(root != NULL)
+        while(node != nullptr)
         {
-            rapidxml::xml_node<> *node = NULL;
+            QString nn = node->name();
 
-            node = root->first_node();
-
-            while(node != NULL)
+            if(nn == "attributeBDD")
             {
-                QString nn = node->name();
+                rapidxml::xml_node<> *child = node->first_node();
 
-                if(nn == "attributeBDD")
+                while(child  != nullptr)
                 {
-                    rapidxml::xml_node<> *child = node->first_node();
+                    QString name = child->first_attribute("name")->value();
 
-                    while(child  != NULL)
-                    {
-                        QString name = child->first_attribute("name")->value();
+                    attributes.insert(name, CT_OPF_Attribute(name, child->first_attribute("class")->value()));
 
-                        attributes.insert(name, CT_OPF_Attribute(name, child->first_attribute("class")->value()));
-
-                        child = child->next_sibling();
-                    }
+                    child = child->next_sibling();
                 }
-                else if(TOPOLOGY_NAMES.contains(nn))
-                {
-                    recursiveReadTopologyForModel(node,
-                                                  totalNode,
-                                                  types,
-                                                  attributes);
-                    node = NULL;
-                }
-
-                if(node != NULL)
-                    node = node->next_sibling();
             }
+            else if(TOPOLOGY_NAMES.contains(nn))
+            {
+                recursiveReadTopologyForModel(node,
+                                              totalNode,
+                                              types,
+                                              attributes);
+                node = nullptr;
+            }
+
+            if(node != nullptr)
+                node = node->next_sibling();
         }
     }
 
@@ -255,10 +236,149 @@ bool CT_Reader_OPF::setFilePath(const QString &filepath)
         m_attributesNew = attributes;
         m_totalNodeNew = totalNode;
 
-        return CT_AbstractReader::setFilePath(filepath);
+        return true;
     }
-    else {
-        PS_LOG->addErrorMessage(LogInterface::reader, tr("No types found in %1").arg(filepath));
+
+    PS_LOG->addErrorMessage(LogInterface::reader, tr("No types found in %1").arg(filepath));
+    return false;
+}
+
+void CT_Reader_OPF::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
+{
+    clearHandles();
+
+    QHash<QString, CT_OutAbstractItemAttributeModel*>   attributesOriginalModels;
+
+    // Tree Group
+    manager.addGroup(m_topologyHandle, tr("Topologie"));
+
+    QHashIterator<QString, CT_OPF_Type> it(m_types);
+
+    while(it.hasNext())
+    {
+        it.next();
+
+        const CT_OPF_Type &type = it.value();
+
+        // Node Group
+        NodeGroupHandleType* nodeHandle = new NodeGroupHandleType();
+        manager.addGroup(m_topologyHandle, *nodeHandle, type.m_name);
+        //nodeHandle->firstModel()->setOPFLevel(type.m_level);
+        m_nodeHandles.insert(type.m_name, nodeHandle);
+
+        // Mesh model
+        MeshHandleType* meshHandle = new MeshHandleType();
+        manager.addItem(*nodeHandle, *meshHandle, tr("Mesh"));
+        m_meshHandles.insert(type.m_name + "_m", meshHandle);
+
+        // Attribute list
+        AttributeListHandleType* attListHandle = new AttributeListHandleType();
+        manager.addItem(*nodeHandle, *attListHandle, type.m_name);
+        m_attListHandles.insert(type.m_name + "_a", attListHandle);
+
+        QHashIterator<QString, CT_OPF_Attribute> itA(type.m_attributes);
+
+        while(itA.hasNext())
+        {
+            itA.next();
+
+            const CT_OPF_Attribute &attribute = itA.value();
+
+            if((attribute.m_type == "String") || (attribute.m_type == "Color"))
+                createAndAddItemAttributeHandle<AttributeStringHandleType>(manager, *attListHandle, type, attribute);
+            else if(attribute.m_type == "Integer")
+                createAndAddItemAttributeHandle<AttributeIntHandleType>(manager, *attListHandle, type, attribute);
+            else if((attribute.m_type == "Double")
+                    || (attribute.m_type == "Metre")
+                    || (attribute.m_type == "Centimetre")
+                    || (attribute.m_type == "Millimetre")
+                    || (attribute.m_type == "10E-5 Metre"))
+                createAndAddItemAttributeHandle<AttributeDoubleHandleType>(manager, *attListHandle, type, attribute);
+            else if(attribute.m_type == "Boolean")
+                createAndAddItemAttributeHandle<AttributeBoolHandleType>(manager, *attListHandle, type, attribute);
+            else
+                PS_LOG->addWarningMessage(LogInterface::reader, "CT_Reader_OPF::staticCreateAttributeForType ( type = " + attribute.m_type + " ) => Unknown Type");
+        }
+    }
+}
+
+bool CT_Reader_OPF::internalReadFile(CT_StandardItemGroup* rootGroup)
+{
+    clearMeshes();
+    clearShapes();
+
+    // Test File validity
+    if(QFile::exists(filepath()))
+    {
+        rapidxml::file<> xmlFile(filepath().toLatin1().data());
+        rapidxml::xml_document<> doc;
+        doc.parse<0>(xmlFile.data());
+
+        rapidxml::xml_node<> *xmlRoot = doc.first_node("opf");
+
+        int nNodeReaded = 0;
+
+        if(xmlRoot != nullptr)
+        {
+            CT_TTreeGroup *tree = new CT_TTreeGroup();
+            rootGroup->addGroup(m_topologyHandle, tree);
+
+            rapidxml::xml_node<> *xmlNode = nullptr;
+
+            xmlNode = xmlRoot->first_node();
+
+            while(xmlNode != nullptr)
+            {
+                CT_TOPFNodeGroup *node = nullptr;
+
+                QString nn = xmlNode->name();
+
+                if(nn == "meshBDD")
+                {
+                    if(m_loadMeshes)
+                    {
+                        rapidxml::xml_node<> *xmlMesh = xmlNode->first_node("mesh");
+
+                        while(xmlMesh != nullptr)
+                        {
+                            readMesh(xmlMesh);
+                            xmlMesh = xmlMesh->next_sibling();
+                        }
+                    }
+                }
+                else if(nn == "shapeBDD")
+                {
+                    if(m_loadMeshes)
+                    {
+                        rapidxml::xml_node<> *xmlShape = xmlNode->first_node("shape");
+
+                        while(xmlShape != nullptr)
+                        {
+                            readShape(xmlShape);
+                            xmlShape = xmlShape->next_sibling();
+                        }
+                    }
+                }
+                else if(nn == "topology")
+                {
+                    const QString typeName = xmlNode->first_attribute("class")->value();
+
+                    node = new CT_TOPFNodeGroup();
+                    tree->setRootNode(*m_nodeHandles.value(typeName), node);
+                }
+
+                if(node != nullptr)
+                {
+                    recursiveReadTopology(xmlNode,
+                                          node,
+                                          nNodeReaded);
+                }
+
+                xmlNode = xmlNode->next_sibling();
+            }
+        }
+
+        return true;
     }
 
     return false;
@@ -270,9 +390,7 @@ bool CT_Reader_OPF::configure()
     dialog.addBool("", "", tr("Charger le modèle 3D ? (lent si activé)"), m_loadMeshes, tr("Ralentit les performances lors du chargement des mesh"));
 
     if(CT_ConfigurableWidgetToDialog::exec(&dialog) == QDialog::Accepted) {
-        m_types = m_typesNew;
-        m_attributes = m_attributesNew;
-        m_totalNode = m_totalNodeNew;
+        finalizeSettings();
         return true;
     }
 
@@ -300,6 +418,8 @@ bool CT_Reader_OPF::restoreSettings(SettingsReaderInterface &reader)
     if(reader.parameter(this, "LoadMeshes", value))
         m_loadMeshes = value.toBool();
 
+    finalizeSettings();
+
     return true;
 }
 
@@ -310,42 +430,45 @@ CT_AbstractReader* CT_Reader_OPF::copy() const
 
 CT_AbstractItemAttribute* CT_Reader_OPF::staticCreateAttributeForType(const QString &type, const QString &value)
 {
-    CT_AbstractItemAttribute *att = NULL;
-
     if((type == "String") || (type == "Color"))
-    {
-        att = new CT_StdItemAttributeT<QString>(NULL, PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), NULL, value);
-    }
-    else if(type == "Integer")
-    {
-        att = new CT_StdItemAttributeT<int>(NULL, PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), NULL, value.toInt());
-    }
-    else if((type == "Double")
+        return new CT_StdItemAttributeT<QString>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), value);
+
+    if(type == "Integer")
+        return new CT_StdItemAttributeT<int>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), value.toInt());
+
+    if((type == "Double")
             || (type == "Metre")
             || (type == "Centimetre")
             || (type == "Millimetre")
             || (type == "10E-5 Metre"))
-    {
-        att = new CT_StdItemAttributeT<double>(NULL, PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), NULL, value.toDouble());
-    }
-    else if(type == "Boolean")
-    {
-        att = new CT_StdItemAttributeT<bool>(NULL, PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), NULL, value.toLower() == "true");
-    }
-    else
-    {
-        PS_LOG->addWarningMessage(LogInterface::reader, "CT_Reader_OPF::staticCreateAttributeForType ( type = " + type + " ) => Unknown Type");
-    }
+        return new CT_StdItemAttributeT<double>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), value.toDouble());
 
-    return att;
+    if(type == "Boolean")
+        return new CT_StdItemAttributeT<bool>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), value.toLower() == "true");
+
+    return nullptr;
 }
 
-void CT_Reader_OPF::clearOtherModels()
+void CT_Reader_OPF::finalizeSettings()
 {
-    /*qDeleteAll(m_attributesOriginalModels.begin(), m_attributesOriginalModels.end());
-    m_attributesOriginalModels.clear();*/
+    m_types = m_typesNew;
+    m_attributes = m_attributesNew;
+    m_totalNode = m_totalNodeNew;
+}
 
-    m_models.clear();
+void CT_Reader_OPF::clearHandles()
+{
+    qDeleteAll(m_nodeHandles.begin(), m_nodeHandles.end());
+    m_nodeHandles.clear();
+
+    qDeleteAll(m_meshHandles.begin(), m_meshHandles.end());
+    m_meshHandles.clear();
+
+    qDeleteAll(m_attListHandles.begin(), m_attListHandles.end());
+    m_attListHandles.clear();
+
+    qDeleteAll(m_attHandles.begin(), m_attHandles.end());
+    m_attHandles.clear();
 }
 
 void CT_Reader_OPF::clearMeshes()
@@ -359,12 +482,6 @@ void CT_Reader_OPF::clearShapes()
     m_shapes.clear();
 }
 
-void CT_Reader_OPF::clearDrawManagers()
-{
-    qDeleteAll(m_drawManager.begin(), m_drawManager.end());
-    m_drawManager.clear();
-}
-
 void CT_Reader_OPF::readMesh(rapidxml::xml_node<> *xmlNode)
 {
     int id = QString(xmlNode->first_attribute("Id")->value()).toInt();
@@ -376,7 +493,7 @@ void CT_Reader_OPF::readMesh(rapidxml::xml_node<> *xmlNode)
 
     rapidxml::xml_node<> *xmlChild = xmlNode->first_node();
 
-    while(xmlChild != NULL)
+    while(xmlChild != nullptr)
     {
         QString nn = xmlChild->name();
 
@@ -387,7 +504,7 @@ void CT_Reader_OPF::readMesh(rapidxml::xml_node<> *xmlNode)
 
             QListIterator<QString> it(points);
 
-            int size = points.size()/3;
+            const int size = points.size()/3;
 
             CT_MutablePointIterator itP = CT_MeshAllocator::AddVertices(mesh->m_mesh, size);
             debPointIndex = itP.next().cIndex();
@@ -412,7 +529,7 @@ void CT_Reader_OPF::readMesh(rapidxml::xml_node<> *xmlNode)
         {
             rapidxml::xml_node<> *xmlFace = xmlChild->first_node("face");
 
-            while(xmlFace != NULL)
+            while(xmlFace != nullptr)
             {
                 QString tmp = QString(xmlFace->value()).trimmed();
                 QStringList points = tmp.split(QRegExp("\\s+"));
@@ -475,24 +592,24 @@ void CT_Reader_OPF::readShape(rapidxml::xml_node<> *xmlNode)
 
     rapidxml::xml_node<> *xmlChild = xmlNode->first_node("meshIndex");
 
-    if(xmlChild != NULL)
-        m_shapes.insert(id, m_meshes.value(QString(xmlChild->value()).toInt(), NULL));
+    if(xmlChild != nullptr)
+        m_shapes.insert(id, m_meshes.value(QString(xmlChild->value()).toInt(), nullptr));
 }
 
 void CT_Reader_OPF::readGeometry(rapidxml::xml_node<> *xmlNode, CT_TOPFNodeGroup *node, const QString &typeName)
 {
-    CT_OPF_Mesh *mesh = NULL;
+    CT_OPF_Mesh *mesh = nullptr;
     double dUp = 1, dDwn = 1;
 
     rapidxml::xml_node<> *xmlChild = xmlNode->first_node();
 
-    while(xmlChild != NULL)
+    while(xmlChild != nullptr)
     {
         QString nn = xmlChild->name();
 
         if(nn == "shapeIndex")
         {
-            mesh = m_shapes.value(QString(xmlChild->value()).toInt(), NULL);
+            mesh = m_shapes.value(QString(xmlChild->value()).toInt(), nullptr);
         }
         else if(nn == "mat")
         {
@@ -518,7 +635,7 @@ void CT_Reader_OPF::readGeometry(rapidxml::xml_node<> *xmlNode, CT_TOPFNodeGroup
 
     if(m_loadMeshes)
     {
-        if(mesh != NULL)
+        if(mesh != nullptr)
         {
             Eigen::Vector3d min, max;
             mesh->getBoundingBox(min, max);
@@ -527,7 +644,7 @@ void CT_Reader_OPF::readGeometry(rapidxml::xml_node<> *xmlNode, CT_TOPFNodeGroup
         }
         else
         {
-            if(m_cylinderMesh.m_mesh == NULL)
+            if(m_cylinderMesh.m_mesh == nullptr)
             {
                 m_cylinderMesh.m_mesh = new CT_Mesh();
                 m_cylinderMesh.m_mesh->createCylinder(0.5,0.5,10);
@@ -646,176 +763,11 @@ void CT_Reader_OPF::transformAndCreateMesh(CT_Mesh *mesh, Eigen::Vector3d &min, 
         }
     }
 
-    CT_OPFMeshModel *meshModel = new CT_OPFMeshModel((CT_OutAbstractSingularItemModel*)m_models.value(typeName +  + "_mesh", NULL), NULL, newMesh);
+    CT_OPFMeshModel *meshModel = new CT_OPFMeshModel(newMesh);
     meshModel->setDUp(dUp);
     meshModel->setDDown(dDwn);
 
-    node->addItemDrawable(meshModel);
-}
-
-void CT_Reader_OPF::protectedInit()
-{
-    addNewReadableFormat(FileFormat("opf", tr("Fichiers AmapStudio .opf")));
-
-    setToolTip(tr("Charge un fichier décrivant l'architecture de végétaux au format OPF, créé par le logiciel AMAPStudio.<br>http://amapstudio.cirad.fr"));
-}
-
-void CT_Reader_OPF::protectedCreateOutItemDrawableModelList()
-{
-    clearOtherModels();
-    QHash<QString, CT_OutAbstractItemAttributeModel*>   attributesOriginalModels;
-
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    // Tree Group
-    CT_OutStdGroupModel *topology = new CT_OutStdGroupModel(DEF_CT_Reader_OPF_topologyOut, new CT_TTreeGroup(), tr("Topologie"));
-    m_models.insert(topology->uniqueName(), topology);
-
-    QHashIterator<QString, CT_OPF_Type> it(m_types);
-
-    while(it.hasNext())
-    {
-        it.next();
-
-        const CT_OPF_Type &type = it.value();
-
-        // Node Group
-        CT_OutOPFNodeGroupModel *node = new CT_OutOPFNodeGroupModel(type.m_name, new CT_TOPFNodeGroup(), type.m_name);
-        node->setOPFLevel(type.m_level);
-        m_models.insert(node->uniqueName(), node);
-
-        // Mesh model
-        CT_OutStdSingularItemModel *mesh = new CT_OutStdSingularItemModel(type.m_name + "_mesh", new CT_OPFMeshModel(), tr("Mesh"));
-        m_models.insert(mesh->uniqueName(), mesh);
-
-
-        // Attribute list
-        CT_OutStdSingularItemModel *attList = new CT_OutStdSingularItemModel(type.m_name + "_attList", new CT_ItemAttributeList(), type.m_name);
-        m_models.insert(attList->uniqueName(), attList);
-
-        QHashIterator<QString, CT_OPF_Attribute> itA(type.m_attributes);
-
-        while(itA.hasNext())
-        {
-            itA.next();
-
-            const CT_OPF_Attribute &attribute = itA.value();
-
-            CT_AbstractItemAttribute *att = staticCreateAttributeForType(attribute.m_type);
-
-            if(att != NULL)
-            {
-                CT_OutAbstractItemAttributeModel *oAttModel = attributesOriginalModels.value(attribute.m_name, NULL);
-
-                if(oAttModel == NULL)
-                {
-                    // Attribute
-                    oAttModel = new CT_OutStdItemAttributeModel(attribute.m_name, att, attribute.m_name);
-                    attributesOriginalModels.insert(oAttModel->uniqueName(), oAttModel);
-                }
-
-                oAttModel = (CT_OutAbstractItemAttributeModel*)oAttModel->copy();
-                oAttModel->setUniqueName(type.m_name + "_" + attribute.m_name);
-
-                m_models.insert(oAttModel->uniqueName(), oAttModel);
-
-                attList->addItemAttribute(oAttModel);
-            }
-        }
-
-        node->addItem(mesh);
-        node->addItem(attList);
-        topology->addGroup(node);
-    }
-
-    addOutGroupModel(topology);
-}
-
-bool CT_Reader_OPF::protectedReadFile()
-{
-    clearMeshes();
-    clearShapes();
-    clearDrawManagers();
-
-    // Test File validity
-    if(QFile::exists(filepath()))
-    {
-        rapidxml::file<> xmlFile(filepath().toLatin1().data());
-        rapidxml::xml_document<> doc;
-        doc.parse<0>(xmlFile.data());
-
-        rapidxml::xml_node<> *xmlRoot = doc.first_node("opf");
-
-        int nNodeReaded = 0;
-
-        if(xmlRoot != NULL)
-        {
-            CT_TTreeGroup *tree = new CT_TTreeGroup();
-            tree->setModel(outGroupsModel().first());
-
-            rapidxml::xml_node<> *xmlNode = NULL;
-
-            xmlNode = xmlRoot->first_node();
-
-            while(xmlNode != NULL)
-            {
-                CT_TOPFNodeGroup *node = NULL;
-
-                QString nn = xmlNode->name();
-
-                if(nn == "meshBDD")
-                {
-                    if(m_loadMeshes)
-                    {
-                        rapidxml::xml_node<> *xmlMesh = xmlNode->first_node("mesh");
-
-                        while(xmlMesh != NULL)
-                        {
-                            readMesh(xmlMesh);
-                            xmlMesh = xmlMesh->next_sibling();
-                        }
-                    }
-                }
-                else if(nn == "shapeBDD")
-                {
-                    if(m_loadMeshes)
-                    {
-                        rapidxml::xml_node<> *xmlShape = xmlNode->first_node("shape");
-
-                        while(xmlShape != NULL)
-                        {
-                            readShape(xmlShape);
-                            xmlShape = xmlShape->next_sibling();
-                        }
-                    }
-                }
-                else if(nn == "topology")
-                {
-                    QString typeName = xmlNode->first_attribute("class")->value();
-
-                    node = new CT_TOPFNodeGroup();
-                    node->setModel(static_cast<CT_OutAbstractItemModel*>(m_models.value(typeName, NULL)));
-
-                    tree->setRootNode(node);
-                }
-
-                if(node != NULL)
-                {
-                    recursiveReadTopology(xmlNode,
-                                          node,
-                                          nNodeReaded);
-                }
-
-                xmlNode = xmlNode->next_sibling();
-            }
-
-            addOutGroup(DEF_CT_Reader_OPF_topologyOut, tree);
-        }
-
-        return true;
-    }
-
-    return false;
+    node->addSingularItem(*m_meshHandles.value(typeName +  + "_m"), meshModel);
 }
 
 // CT_OPF_Mesh //

@@ -53,7 +53,7 @@ public:
     CT_Polygon2D(CT_Polygon2DData* data);
     CT_Polygon2D(const CT_Polygon2D& other) = default;
 
-    const QVector<Eigen::Vector2d*>& getVertices() const;
+    const QVector<Eigen::Vector2d>& getVertices() const;
 
     inline int getNumberOfVertices() const {return getVertices().size();}
     inline void computeCentroid() const {((CT_Polygon2DData*) getDataNotConst())->computeCentroid();}

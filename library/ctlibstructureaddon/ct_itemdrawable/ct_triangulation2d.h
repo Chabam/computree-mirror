@@ -28,10 +28,7 @@
 #ifndef CT_TRIANGULATION2D_H
 #define CT_TRIANGULATION2D_H
 
-#include "pluginShared_global.h"
-
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
-
 #include "ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.h"
 
 #include "ct_math/delaunay2d/ct_delaunaytriangulation.h"
@@ -42,31 +39,26 @@
  * \brief <b>ItemDrawable managing a 2D triangulation</b>
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Triangulation2D : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_Triangulation2D : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Triangulation2D, CT_AbstractItemDrawableWithoutPointCloud, 2D triangulation)
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
 
 public:
     CT_Triangulation2D();
-    CT_Triangulation2D(const CT_OutAbstractSingularItemModel *model,
-                const CT_AbstractResult *result, CT_DelaunayTriangulation *delaunay);
+    CT_Triangulation2D(CT_DelaunayTriangulation* delaunay);
+    CT_Triangulation2D(const CT_Triangulation2D& other);
+    ~CT_Triangulation2D() override;
 
-    CT_Triangulation2D(const QString &modelName,
-                const CT_AbstractResult *result, CT_DelaunayTriangulation *delaunay);
+    CT_DelaunayTriangulation* getDelaunayT() const;
 
-    ~CT_Triangulation2D();
-
-    CT_DelaunayTriangulation *getDelaunayT() const;
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_Triangulation2D)
 
 private:
-
     const static CT_StandardTriangulation2DDrawManager   TRIANGULATION2D_DRAW_MANAGER;
 
 protected:
-
     CT_DelaunayTriangulation   *_delaunay;
 };
 

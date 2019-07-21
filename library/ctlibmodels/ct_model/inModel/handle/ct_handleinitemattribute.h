@@ -19,7 +19,7 @@ public:
     using InResultModelCopyType = CT_InResultModelGroupToCopy;
 
     CT_HandleInItemAttribute() : SuperClass()  {
-        static_assert(std::is_convertible<ItemAttributeT, IItemAttributeForModel>::value, "CT_HandleInItemAttribute is only compatible with classes that inherit from IItemAttributeForModel");
+        static_assert(std::is_convertible<ItemAttributeT*, IItemAttributeForModel*>::value, "CT_HandleInItemAttribute is only compatible with classes that inherit from IItemAttributeForModel");
     }
 };
 

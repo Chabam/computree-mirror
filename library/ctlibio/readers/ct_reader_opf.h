@@ -2,8 +2,14 @@
 #define CT_READER_OPF_H
 
 #include "ct_reader/abstract/ct_abstractreader.h"
-#include "ct_attributes/abstract/ct_abstractitemattribute.h"
-#include "ct_itemdrawable/tools/drawmanager/abstract/ct_abstractitemdrawabledrawmanager.h"
+
+#include "ct_model/outModel/ct_outopfnodegroupmodel.h"
+
+#include "ct_itemdrawable/ct_ttreegroup.h"
+#include "ct_itemdrawable/ct_topfnodegroup.h"
+#include "ct_itemdrawable/ct_opfmeshmodel.h"
+#include "ct_itemdrawable/ct_itemattributelist.h"
+
 #include "ct_mesh/ct_mesh.h"
 #include "ct_point.h"
 
@@ -67,7 +73,6 @@ private:
 };
 
 class QXmlStreamReader;
-class CT_TOPFNodeGroup;
 
 /**
  * @brief Read OPF File (http://amapstudio.cirad.fr/)
@@ -75,36 +80,48 @@ class CT_TOPFNodeGroup;
 class CTLIBIO_EXPORT CT_Reader_OPF : public CT_AbstractReader
 {
     Q_OBJECT
-    typedef CT_AbstractReader SuperClass;
+    using SuperClass = CT_AbstractReader;
 
 public:
     CT_Reader_OPF();
     CT_Reader_OPF(const CT_Reader_OPF &other);
-    ~CT_Reader_OPF();
+    ~CT_Reader_OPF() override;
 
-    QString GetReaderName() const;
+    QString displayableName() const override;
 
-    CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
-
-    bool setFilePath(const QString &filepath);
-    bool configure();
+    //CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    bool configure() override;
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
 
     CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_OPF)
+    READER_ALL_COPY_IMP(CT_Reader_OPF)
 
     static CT_AbstractItemAttribute* staticCreateAttributeForType(const QString &type, const QString &value = "");
 
 private:
+    using TopologyHandleType = CT_HandleOutGroup<CT_TTreeGroup, CT_OutOPFNodeGroupModel>;
+    using NodeGroupHandleType = CT_HandleOutGroup<CT_TOPFNodeGroup, CT_OutOPFNodeGroupModel>;
+    using MeshHandleType = CT_HandleOutSingularItem<CT_OPFMeshModel>;
+    using AttributeListHandleType = CT_HandleOutSingularItem<CT_ItemAttributeList>;
+    using AttributeIntHandleType = CT_HandleOutStdIntItemAttribute;
+    using AttributeDoubleHandleType = CT_HandleOutStdDoubleItemAttribute;
+    using AttributeBoolHandleType = CT_HandleOutStdBoolItemAttribute;
+    using AttributeStringHandleType = CT_HandleOutStdStringItemAttribute;
+    using AbstractAttributeHandle = CT_AbstractHandleOutItemAttribute;
+
+    TopologyHandleType                                  m_topologyHandle;
+    QHash<QString, NodeGroupHandleType*>                m_nodeHandles;
+    QHash<QString, MeshHandleType*>                     m_meshHandles;
+    QHash<QString, AttributeListHandleType*>            m_attListHandles;
+    QHash<QString, AbstractAttributeHandle*>            m_attHandles;
+
     bool                                                m_loadMeshes;
     QHash<QString, CT_OPF_Type>                         m_types;
     QHash<QString, CT_OPF_Attribute>                    m_attributes;
-    QHash<QString, CT_OutAbstractModel*>                m_models;
     QHash<int, CT_OPF_Mesh*>                            m_meshes;
     QHash<int, CT_OPF_Mesh*>                            m_shapes;
-    QList<CT_AbstractItemDrawableDrawManager*>          m_drawManager;
 
     int                                                 m_totalNode;
 
@@ -117,10 +134,18 @@ private:
 
     static const QVector<QString>                       TOPOLOGY_NAMES;
 
-    void clearOtherModels();
+    void finalizeSettings();
+
+    template<typename HandleType>
+    void createAndAddItemAttributeHandle(CT_ReaderOutModelStructureManager& manager, AttributeListHandleType& parentHandle, const CT_OPF_Type &type, const CT_OPF_Attribute &attribute) {
+        HandleType* attHandle = new HandleType();
+        manager.addItemAttributeAndFindCategory(parentHandle, *attHandle, CT_AbstractCategory::DATA_VALUE, attribute.m_name);
+        m_attHandles.insert(type.m_name + "_" + attribute.m_name, attHandle);
+    }
+
+    void clearHandles();
     void clearMeshes();
     void clearShapes();
-    void clearDrawManagers();
 
     void readMesh(rapidxml::xml_node<> *xmlNode);
     void readShape(rapidxml::xml_node<> *xmlNode);
@@ -139,8 +164,15 @@ private:
                                int &nNodeReaded);
 
 protected:
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
+    /**
+     * @brief Redefined to verify that file can be opened.
+     */
+    bool postVerifyFile(const QString &filepath) override;
+
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+
+    bool internalReadFile(CT_StandardItemGroup* rootGroup) override;
+
     bool protectedReadFile();
 };
 

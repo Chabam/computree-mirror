@@ -17,16 +17,9 @@ PB_StepGenericLoadFile::~PB_StepGenericLoadFile()
     delete m_reader;
 }
 
-void PB_StepGenericLoadFile::init()
-{
-    //m_reader->init(false);
-
-    CT_AbstractStepLoadFile::init();
-}
-
 QString PB_StepGenericLoadFile::name() const
 {
-    return m_reader->metaObject()->className();
+    return m_reader->uniqueName();
 }
 
 QString PB_StepGenericLoadFile::displayableName() const
@@ -100,7 +93,7 @@ bool PB_StepGenericLoadFile::setFilePath(const QString& newFilePath)
 {
     const QString fp = filePath();
 
-    if(CT_AbstractStepLoadFile::setFilePath(newFilePath))
+    if(SuperClass::setFilePath(newFilePath))
     {
         if(m_reader->setFilePath(filePath()))
             return true;
@@ -115,12 +108,12 @@ bool PB_StepGenericLoadFile::setFilePath(const QString& newFilePath)
 
 CT_VirtualAbstractStep* PB_StepGenericLoadFile::createNewInstance() const
 {
-    return new PB_StepGenericLoadFile(m_reader->copy());
+    return new PB_StepGenericLoadFile(m_reader->copyFull());
 }
 
 bool PB_StepGenericLoadFile::preInputConfigure()
 {
-    if(CT_AbstractStepLoadFile::preInputConfigure())
+    if(SuperClass::preInputConfigure())
     {
         if(m_reader->filepath().isEmpty() || m_reader->configure()) {
             setSettingsModified(true);
@@ -138,7 +131,7 @@ void PB_StepGenericLoadFile::declareInputModels(CT_StepInModelStructureManager& 
 
 bool PB_StepGenericLoadFile::postInputConfigure()
 {
-    if(CT_AbstractStepLoadFile::postInputConfigure())
+    if(SuperClass::postInputConfigure())
     {
         if(m_reader->configure()) {
             setSettingsModified(true);
@@ -153,12 +146,7 @@ void PB_StepGenericLoadFile::declareOutputModels(CT_StepOutModelStructureManager
 {
     manager.addResult(m_hOutResult);
     manager.setRootGroup(m_hOutResult, m_hOutRootGroup);
-    m_reader->declareOutputModelsInGroup(manager, m_hOutRootGroup);
-
-    CT_FileHeader* header = m_reader->createHeaderPrototype();
-
-    if(header != NULL)
-        manager.addItem(m_hOutRootGroup, m_hOutFileHeader, tr("Entête de fichier"), "", "", header);
+    m_reader->declareOutputModelsInGroupWithHeader(manager, m_hOutRootGroup);
 }
 
 void PB_StepGenericLoadFile::compute()
@@ -169,14 +157,6 @@ void PB_StepGenericLoadFile::compute()
         outRes->addRootGroup(m_hOutRootGroup, rootGroup);
 
         m_reader->readFile(rootGroup);
-
-        if(m_hOutFileHeader.isValid()) {
-            CT_FileHeader* header = m_reader->readHeader();
-
-            Q_ASSERT(header != NULL);
-
-            rootGroup->addSingularItem(m_hOutFileHeader, header);
-        }
     }
 }
 
@@ -187,5 +167,5 @@ void PB_StepGenericLoadFile::readerProgressChanged(int progress)
 
 void PB_StepGenericLoadFile::readerFilePathModified()
 {
-    CT_AbstractStepLoadFile::setFilePath(m_reader->filepath());
+    SuperClass::setFilePath(m_reader->filepath());
 }

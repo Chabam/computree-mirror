@@ -1,18 +1,6 @@
 #include "ct_abstractpointsattributescontainer.h"
 
-CT_AbstractPointsAttributesContainer::CT_AbstractPointsAttributesContainer() : CT_AbstractSingularItemDrawable()
-{
-}
-
-CT_AbstractPointsAttributesContainer::CT_AbstractPointsAttributesContainer(const CT_OutAbstractSingularItemModel *model,
-                                                                           const CT_AbstractResult *result) : CT_AbstractSingularItemDrawable(model,
-                                                                                                                                              result)
-{
-}
-
-CT_AbstractPointsAttributesContainer::CT_AbstractPointsAttributesContainer(const QString &modelName,
-                                                                           const CT_AbstractResult *result) : CT_AbstractSingularItemDrawable(modelName,
-                                                                                                                                              result)
+CT_AbstractPointsAttributesContainer::CT_AbstractPointsAttributesContainer() : SuperClass()
 {
 }
 

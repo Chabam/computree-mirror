@@ -6,16 +6,20 @@
 
 #include <type_traits>
 
-template<class GroupT>
-class CT_HandleOutGroup : public CT_HandleWithMultipleModelT<CT_OutStdGroupModel<GroupT>> {
+// CT_AbstractHandleOutGroup can only be used with method to add a group in a result or in another group. It can
+// not be used with other handle to add a group handle !
+using CT_AbstractHandleOutGroup = CT_HandleWithMultipleAbstractModel<DEF_CT_AbstractGroupModelOut>;
 
-    using SuperClass = CT_HandleWithMultipleModelT<CT_OutStdGroupModel<GroupT>> ;
+template<class GroupT, template<class GroupT> class ModelT = CT_OutStdGroupModel>
+class CT_HandleOutGroup : public CT_HandleWithMultipleModelT<ModelT<GroupT>> {
+
+    using SuperClass = CT_HandleWithMultipleModelT<ModelT<GroupT>> ;
 
 public:
     using GroupType = GroupT;
 
     CT_HandleOutGroup() : SuperClass() {
-        static_assert(std::is_convertible<GroupT, IGroupForModel>::value, "CT_HandleOutGroup is only compatible with classes that inherit from IGroupForModel");
+        static_assert(std::is_convertible<GroupT*, IGroupForModel*>::value, "CT_HandleOutGroup is only compatible with classes that inherit from IGroupForModel");
     }
 
     template<typename... Args>

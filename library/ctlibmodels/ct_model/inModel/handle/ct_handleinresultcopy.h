@@ -14,7 +14,7 @@ public:
     using ResultType = ResultT;
 
     CT_HandleInResultCopy() : SuperClass() {
-        static_assert(std::is_convertible<ResultT, IResultGroupForModel>::value, "CT_HandleInResultCopy is only compatible with classes that inherit from IResultGroupForModel");
+        static_assert(std::is_convertible<ResultT*, IResultGroupForModel*>::value, "CT_HandleInResultCopy is only compatible with classes that inherit from IResultGroupForModel");
     }
 };
 

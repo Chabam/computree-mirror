@@ -1,18 +1,15 @@
 #include "ct_transformationmatrix.h"
 
+#include <Eigen/Geometry>
+
 CT_DEFAULT_IA_INIT(CT_TransformationMatrix)
 
-CT_TransformationMatrix::CT_TransformationMatrix() : CT_AbstractSingularItemDrawable()
+CT_TransformationMatrix::CT_TransformationMatrix() : SuperClass()
 {
     _transformationMatrix = Eigen::Matrix4d::Identity(4,4);
 }
 
-CT_TransformationMatrix::CT_TransformationMatrix(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result, const Eigen::Matrix4d &trMat) : CT_AbstractSingularItemDrawable(model, result)
-{
-    _transformationMatrix = trMat;
-}
-
-CT_TransformationMatrix::CT_TransformationMatrix(const QString &modelName, const CT_AbstractResult *result, const Eigen::Matrix4d &trMat) : CT_AbstractSingularItemDrawable(modelName, result)
+CT_TransformationMatrix::CT_TransformationMatrix(const Eigen::Matrix4d &trMat) : SuperClass()
 {
     _transformationMatrix = trMat;
 }
@@ -53,11 +50,4 @@ Eigen::Vector3d CT_TransformationMatrix::getTransformed(const Eigen::Vector3d &v
 Eigen::Matrix4d CT_TransformationMatrix::getTransformed(Eigen::Matrix4d &mat) const
 {
     return _transformationMatrix*mat;
-}
-
-CT_AbstractItemDrawable* CT_TransformationMatrix::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList)
-
-    return new CT_TransformationMatrix((const CT_OutAbstractSingularItemModel *)model, result, _transformationMatrix);
 }

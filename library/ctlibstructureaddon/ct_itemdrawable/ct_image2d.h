@@ -395,11 +395,13 @@ CTLIBSTRUCTUREADDON_EXPORT bool CT_Image2D<bool>::addValueAtIndex(const size_t i
 template<>
 CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Image2D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t distance, const bool keepNAs, const CenterMode centermode) const;
 
-template<>
+// TODO : unsigned long not vailable with opencv 4
+/*template<>
 CTLIBSTRUCTUREADDON_EXPORT QString CT_Image2D<unsigned long>::valueAtIndexAsString(const size_t index) const;
 
 template<>
 CTLIBSTRUCTUREADDON_EXPORT QString CT_Image2D<unsigned long>::NAAsString() const;
+*/
 
 // fin des spécialisations
 

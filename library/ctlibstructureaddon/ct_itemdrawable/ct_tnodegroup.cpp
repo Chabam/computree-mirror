@@ -2,93 +2,86 @@
 
 #include "ct_ttreegroup.h"
 
-CT_TNodeGroup::CT_TNodeGroup() : CT_StandardItemGroup()
+CT_TNodeGroup::CT_TNodeGroup() : SuperClass()
 {
-    initConstructor();
+    m_tree = nullptr;
+
+    m_successor = nullptr;
+    m_ancestor = nullptr;
+
+    m_complex = nullptr;
+    m_rootComponent = nullptr;
+    m_lastComponent = nullptr;
+
+    m_bearer = nullptr;
 }
 
-CT_TNodeGroup::CT_TNodeGroup(const CT_OutAbstractGroupModel *model,
-                             const CT_AbstractResult *result) : CT_StandardItemGroup(model, result)
+bool CT_TNodeGroup::visitChildrensForTreeView(const CT_AbstractItem::ChildrensVisitor& visitor) const
 {
-    initConstructor();
-}
-
-CT_TNodeGroup::CT_TNodeGroup(const QString &modelName,
-                             const CT_AbstractResult *result) : CT_StandardItemGroup(modelName, result)
-{
-    initConstructor();
-}
-
-CT_TNodeGroup::~CT_TNodeGroup()
-{
-}
-
-QVector<CT_AbstractItem *> CT_TNodeGroup::childrensForGui() const
-{
-    QVector<CT_AbstractItem *> r;
+    QMutexLocker lockerI(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
+    QMutexLocker lockerG(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
     CT_TNodeGroup *o = m_rootComponent;
 
-    if(o != NULL)
+    if(o != nullptr)
     {
-        r.reserve(5);
+        CT_TNodeGroup* next;
 
-        CT_TNodeGroup *next;
+        if(!visitor(o))
+            return false;
 
-        r.append(o);
-
-        while((next = o->successor()) != NULL)
-            r.append((o = next));
+        while((next = o->successor()) != nullptr) {
+            if(!visitor((o = next)))
+                return false;
+        }
     }
-
-    int currentIndex = r.size();
-
-    r.resize(currentIndex + m_branches.size());
 
     QListIterator<CT_TNodeGroup*> it(m_branches);
 
-    while(it.hasNext())
-        r[currentIndex++] = it.next();
+    while(it.hasNext()) {
+        if(!visitor(it.next()))
+            return false;
+    }
 
-    QHash<QString, CT_GroupItemDrawableContainer*> i = items();
-    QHashIterator<QString, CT_GroupItemDrawableContainer*> itI(i);
+    const auto visitorI = [&visitor](const CT_AbstractSingularItemDrawable* item) -> bool {
 
-    r.resize(currentIndex + i.size());
+        if(!visitor(item))
+            return false;
 
-    while(itI.hasNext())
-        r[currentIndex++] = itI.next().value()->item();
+        return true;
+    };
 
-    return r;
+    return visitSingularItems(visitorI);
 }
 
-bool CT_TNodeGroup::setSuccessor(CT_TNodeGroup *successor)
+bool CT_TNodeGroup::setSuccessorWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup* successor)
 {
-    if(m_successor != NULL)
+    if(m_successor != nullptr)
     {
         if(!recursiveRemoveNode(m_successor))
             return false;
 
-        m_successor = NULL;
+        m_successor = nullptr;
     }
 
-    if(successor == NULL)
+    if(successor == nullptr)
         return true;
 
-    if(!addNode(successor))
+    if(!addNode(outModel, successor))
         return false;
 
     m_successor = successor;
     successor->setAncestor(this);
-    successor->setComplex(NULL);
+    successor->setComplex(nullptr);
 
     return true;
 }
 
-bool CT_TNodeGroup::addComponent(CT_TNodeGroup *component)
+bool CT_TNodeGroup::addComponentWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup *component)
 {
-    if(m_rootComponent == NULL)
+    if(m_rootComponent == nullptr)
     {
-        if(!addNode(component))
+        if(!addNode(outModel, component))
             return false;
 
         m_rootComponent = component;
@@ -98,54 +91,47 @@ bool CT_TNodeGroup::addComponent(CT_TNodeGroup *component)
         return true;
     }
 
-    bool ok = m_lastComponent->setSuccessor(component);
+    bool ok = m_lastComponent->setSuccessorWithOutModel(outModel, component);
 
     if(ok)
         m_lastComponent = component;
 
     return ok;
-
-    /*CT_TNodeGroup *o = m_rootComponent;
-
-    while(o->successor() != NULL)
-        o = o->successor();
-
-    return o->setSuccessor(component);*/
 }
 
-bool CT_TNodeGroup::addBranch(CT_TNodeGroup *son)
+bool CT_TNodeGroup::addBranchWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup *son)
 {
-    if(!addNode(son))
+    if(!addNode(outModel, son))
         return false;
 
     m_branches.append(son);
     son->setBearer(this);
-    son->setComplex(NULL);
-    son->setAncestor(NULL);
+    son->setComplex(nullptr);
+    son->setAncestor(nullptr);
 
     return true;
 }
 
 bool CT_TNodeGroup::removeComponent(CT_TNodeGroup *component, bool recursively)
 {
-    CT_TNodeGroup *complex = component->complex();
+    CT_TNodeGroup* complex = component->complex();
 
-    component->setComplex(NULL);
+    component->setComplex(nullptr);
 
-    if((component->ancestor() != NULL) && recursively) {
+    if((component->ancestor() != nullptr) && recursively) {
         if(m_lastComponent == component)
             m_lastComponent = component->ancestor();
 
-        return component->ancestor()->setSuccessor(NULL);
+        return component->ancestor()->setSuccessorWithOutModel(nullptr, nullptr);
     }
 
     CT_TNodeGroup *suc = component->successor();
     CT_TNodeGroup *anc = component->ancestor();
 
     if(!recursively)
-        component->internalSetSuccessor(NULL);
+        component->internalSetSuccessor(nullptr);
     else
-        suc = NULL;
+        suc = nullptr;
 
     if(!recursiveRemoveNode(component))
     {
@@ -158,7 +144,7 @@ bool CT_TNodeGroup::removeComponent(CT_TNodeGroup *component, bool recursively)
     if(m_lastComponent == component)
         m_lastComponent = anc;
 
-    if(anc != NULL)
+    if(anc != nullptr)
         anc->internalSetSuccessor(suc);
     else {
         Q_ASSERT(component == m_rootComponent);
@@ -166,11 +152,11 @@ bool CT_TNodeGroup::removeComponent(CT_TNodeGroup *component, bool recursively)
         m_rootComponent = suc;
         m_lastComponent = m_rootComponent;
 
-        if(suc != NULL)
+        if(suc != nullptr)
             suc->setComplex(complex);
     }
 
-    if(suc != NULL)
+    if(suc != nullptr)
         suc->setAncestor(anc);
 
 
@@ -226,11 +212,11 @@ size_t CT_TNodeGroup::nComponent() const
 
     CT_TNodeGroup *o = m_rootComponent;
 
-    if(o != NULL)
+    if(o != nullptr)
     {
         ++n;
 
-        while(o->successor() != NULL)
+        while(o->successor() != nullptr)
         {
             o = o->successor();
             ++n;
@@ -240,44 +226,14 @@ size_t CT_TNodeGroup::nComponent() const
     return n;
 }
 
-CT_AbstractItemDrawable* CT_TNodeGroup::copy(const CT_OutAbstractItemModel* model,
-                                             const CT_AbstractResult* result,
-                                             CT_ResultCopyModeList copyModeList)
-{
-    Q_ASSERT(dynamic_cast<const CT_OutAbstractGroupModel*>(model) != NULL);
-    Q_UNUSED(copyModeList)
-
-    const CT_OutAbstractGroupModel* newModel = static_cast<const CT_OutAbstractGroupModel*>(model);
-
-    CT_TNodeGroup* copyGroup = new CT_TNodeGroup(newModel, result);
-    copyGroup->setId(id());
-    copyGroup->setAlternativeDrawManager(getAlternativeDrawManager());
-    this->copyChildrensToGroupIfTheyAreStillPresentInModel(itemGroup);
-
-    // we can not copy successor, etc... because we don't know the model.
-    // It's not important because if the tree is copied it will inform all node
-    // where is the successor, etc...
-
-    return copyGroup;
-}
-
-void CT_TNodeGroup::initConstructor()
-{
-    m_tree = NULL;
-
-    m_successor = NULL;
-    m_ancestor = NULL;
-
-    m_complex = NULL;
-    m_rootComponent = NULL;
-    m_lastComponent = NULL;
-
-    m_bearer = NULL;
-}
-
 CT_TTreeGroup* CT_TNodeGroup::tree() const
 {
     return m_tree;
+}
+
+CT_OutAbstractModel*CT_TNodeGroup::treeModel() const
+{
+    return m_tree->model();
 }
 
 void CT_TNodeGroup::internalSetSuccessor(CT_TNodeGroup *successor)
@@ -300,25 +256,25 @@ void CT_TNodeGroup::setBearer(CT_TNodeGroup *o)
     m_bearer = o;
 }
 
-bool CT_TNodeGroup::addNode(CT_TNodeGroup *n)
+bool CT_TNodeGroup::addNode(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup *n)
 {
-    if(tree() == NULL)
+    if(tree() == nullptr)
         return false;
 
-    if(n->tree() == NULL)
+    if(n->tree() == nullptr)
         n->setTopologyTree(tree());
 
-    return tree()->addNode(n);
+    return tree()->addNode(outModel, n);
 }
 
 bool CT_TNodeGroup::recursiveRemoveNode(CT_TNodeGroup *n)
 {
-    if(tree() == NULL)
+    if(tree() == nullptr)
         return false;
 
     CT_TNodeGroup *s = n->rootComponent();
 
-    if(s != NULL)
+    if(s != nullptr)
     {
         if(!recursiveRemoveNode(s))
             return false;
@@ -326,7 +282,7 @@ bool CT_TNodeGroup::recursiveRemoveNode(CT_TNodeGroup *n)
 
     s = n->successor();
 
-    if(s != NULL)
+    if(s != nullptr)
     {
         if(!recursiveRemoveNode(s))
             return false;

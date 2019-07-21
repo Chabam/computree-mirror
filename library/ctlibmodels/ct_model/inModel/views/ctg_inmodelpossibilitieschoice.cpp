@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QElapsedTimer>
 #include <QPainter>
+#include <QAction>
 
 // CTG_InModelPossibilitiesChoiceItem //
 

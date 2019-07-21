@@ -2,6 +2,6 @@
 
 #include "ct_itemdrawable/ct_pointsattributesnormal.h"
 
-CT_StandardPointsAttributesNormalDrawManager::CT_StandardPointsAttributesNormalDrawManager() : CT_StandardAbstractPointsAttributesDrawManager()
+CT_StandardPointsAttributesNormalDrawManager::CT_StandardPointsAttributesNormalDrawManager() : SuperClass()
 {
 }

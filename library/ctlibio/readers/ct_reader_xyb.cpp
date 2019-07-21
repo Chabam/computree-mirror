@@ -237,7 +237,7 @@ CT_FileHeader* CT_Reader_XYB::internalReadHeader(const QString& filepath, QStrin
     return header;
 }
 
-void CT_Reader_XYB::internalDeclareOutputModelsIn(CT_ReaderOutModelStructureManager& manager)
+void CT_Reader_XYB::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
     manager.addItem(m_hOutScene, tr("Scène"));
     manager.addItem(m_hOutIntensity, tr("Intensité"));

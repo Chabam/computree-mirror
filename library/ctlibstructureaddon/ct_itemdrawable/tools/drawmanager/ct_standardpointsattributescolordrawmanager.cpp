@@ -2,6 +2,6 @@
 
 #include "ct_itemdrawable/ct_pointsattributescolor.h"
 
-CT_StandardPointsAttributesColorDrawManager::CT_StandardPointsAttributesColorDrawManager() : CT_StandardAbstractPointsAttributesDrawManager()
+CT_StandardPointsAttributesColorDrawManager::CT_StandardPointsAttributesColorDrawManager() : SuperClass()
 {
 }

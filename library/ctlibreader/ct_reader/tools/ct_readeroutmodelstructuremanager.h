@@ -43,9 +43,9 @@ public:
     }
 
     template<class HandleInGroup>
-    static CT_ReaderOutModelStructureManager createFromInHandle(CT_OutModelStructureManager& manager, HandleInGroup& hInGroup) :
+    static CT_ReaderOutModelStructureManager createFromInHandle(CT_OutModelStructureManager& manager, HandleInGroup& hInGroup)
     {
-        using InResultModelCopyType = HandleInGroup::InResultModelCopyType;
+        using InResultModelCopyType = typename HandleInGroup::InResultModelCopyType;
 
         CT_InStdGroupModel* inParentModel = hInGroup.model();
 
@@ -59,7 +59,7 @@ public:
 
         Q_ASSERT(inTool != NULL);
 
-        return CT_ReaderOutModelStructureManager(manager, *inParentModel, *inTool);
+        return CT_ReaderOutModelStructureManager(manager, inParentModel, inTool);
     }
 
     /**
@@ -232,6 +232,33 @@ public:
         m_manager.addItemAttribute(parentItem,
                                    itemAttributeHandle,
                                    category,
+                                   displayableName,
+                                   shortDescription,
+                                   detailledDescription,
+                                   prototype);
+    }
+
+    /**
+     * @brief Add an item to a group model
+     * @param parentItem : the handle of an output item model to use to add the new group
+     * @param itemAttributeHandle : the handle of the output item attribute model to use to create the new item attribute model and access it later
+     * @param category : a category string from category manager, per example CT_AbstractCategory::DATA_VALUE
+     * @param displayableName : the displayable that must be set to the new item attribute model
+     * @param shortDescription : the short description that must be set to the new item attribute model
+     * @param detailledDescription : the detailled description that must be set to the new item attribute model
+     */
+    template<class HandleItemParent, class HandleOutItemAttribute>
+    void addItemAttributeAndFindCategory(const HandleItemParent& parentItem,
+                                         HandleOutItemAttribute& itemAttributeHandle,
+                                         const QString& category,
+                                         const QString& displayableName = QString{"Out Item Attribute"},
+                                         const QString& shortDescription = QString{""},
+                                         const QString& detailledDescription = QString{""},
+                                         typename HandleOutItemAttribute::ItemAttributeType* prototype = NULL) {
+
+        m_manager.addItemAttribute(parentItem,
+                                   itemAttributeHandle,
+                                   PS_CATEGORY_MANAGER->findByUniqueName(category),
                                    displayableName,
                                    shortDescription,
                                    detailledDescription,

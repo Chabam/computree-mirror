@@ -17,13 +17,14 @@ HEADERS += \
     ctlibstructureaddon_global.h \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h \
+    ct_itemdrawable/abstract/ct_abstractpointsattributescontainer.h \
+    ct_itemdrawable/abstract/ct_abstractgrid3d.h \
     ct_itemdrawable/ct_scene.h \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.h \
     ct_itemdrawable/ct_loopcounter.h \
     ct_itemdrawable/tools/ct_counter.h \
     ct_itemdrawable/abstract/ct_abstractmeshmodel.h \
-    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.h \
     ct_itemdrawable/abstract/ct_abstractattributes.h \
     ct_itemdrawable/abstract/ct_abstractedgeattributes.h \
     ct_itemdrawable/abstract/ct_abstractedgeattributesscalar.h \
@@ -33,12 +34,6 @@ HEADERS += \
     ct_itemdrawable/abstract/ct_abstractpointsattributes.h \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractpointsattributesdrawmanager.h \
     ct_itemdrawable/ct_itemattributelist.h \
-    ct_itemdrawable/ct_pointsattributescolor.h \
-    ct_itemdrawable/ct_pointsattributesnormal.h \
-    ct_itemdrawable/ct_pointsattributesscalarmaskt.h \
-    ct_itemdrawable/ct_pointsattributesscalarmaskt.hpp \
-    ct_itemdrawable/ct_pointsattributesscalartemplated.h \
-    ct_itemdrawable/ct_pointsattributesscalartemplated.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardscannerdrawmanager.h \
@@ -63,8 +58,8 @@ HEADERS += \
     ct_itemdrawable/ct_faceattributesnormal.h \
     ct_itemdrawable/ct_faceattributesscalart.h \
     ct_itemdrawable/ct_faceattributesscalart.hpp \
-#    ct_itemdrawable/ct_grid3d.h \
-#    ct_itemdrawable/ct_grid3d.hpp \
+    ct_itemdrawable/ct_grid3d.h \
+    ct_itemdrawable/ct_grid3d.hpp \
 #    ct_itemdrawable/ct_grid3d_points.h \
 #    ct_itemdrawable/ct_grid3d_sparse.h \
 #    ct_itemdrawable/ct_grid3d_sparse.hpp \
@@ -85,12 +80,12 @@ HEADERS += \
     ct_itemdrawable/ct_plotlistingrid.h \
     ct_itemdrawable/ct_point2d.h \
     ct_itemdrawable/ct_pointcluster.h \
-#    ct_itemdrawable/ct_pointsattributescolor.h \
-#    ct_itemdrawable/ct_pointsattributesnormal.h \
-#    ct_itemdrawable/ct_pointsattributesscalarmaskt.h \
-#    ct_itemdrawable/ct_pointsattributesscalarmaskt.hpp \
-#    ct_itemdrawable/ct_pointsattributesscalartemplated.h \
-#    ct_itemdrawable/ct_pointsattributesscalartemplated.hpp \
+    ct_itemdrawable/ct_pointsattributescolor.h \
+    ct_itemdrawable/ct_pointsattributesnormal.h \
+    ct_itemdrawable/ct_pointsattributesscalarmaskt.h \
+    ct_itemdrawable/ct_pointsattributesscalarmaskt.hpp \
+    ct_itemdrawable/ct_pointsattributesscalartemplated.h \
+    ct_itemdrawable/ct_pointsattributesscalartemplated.hpp \
     ct_itemdrawable/ct_polygon2d.h \
     ct_itemdrawable/ct_polyline2d.h \
     ct_itemdrawable/ct_profile.h \
@@ -98,45 +93,43 @@ HEADERS += \
     ct_itemdrawable/ct_referencepoint.h \
     ct_itemdrawable/ct_scanpath.h \
     ct_itemdrawable/ct_shootingpatternd.h \
-#    ct_itemdrawable/ct_sphere.h \
-#    ct_itemdrawable/ct_stdpointsattributescontainer.h \
-#    ct_itemdrawable/ct_tnodegroup.h \
-#    ct_itemdrawable/ct_topfnodegroup.h \
-#    ct_itemdrawable/ct_transformationmatrix.h \
-#    ct_itemdrawable/ct_triangulation2d.h \
-#    ct_itemdrawable/ct_ttreegroup.h \
-     ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.h \
-     ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.h \
-     ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.h \
-     ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.h \
-     ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.h \
-     ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.h \
-     ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.h \
+    ct_itemdrawable/ct_sphere.h \
+    ct_itemdrawable/ct_stdpointsattributescontainer.h \
+    ct_itemdrawable/ct_tnodegroup.h \
+    ct_itemdrawable/ct_topfnodegroup.h \
+    ct_itemdrawable/ct_transformationmatrix.h \
+    ct_itemdrawable/ct_triangulation2d.h \
+    ct_itemdrawable/ct_ttreegroup.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardcircledrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.h \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardpolyline2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.h \
     ct_shapedata/ct_boxdata.h \
     ct_shapedata/ct_circledata.h \
     ct_shapedata/ct_cylinderdata.h \
@@ -173,16 +166,17 @@ HEADERS += \
     ct_itemdrawable/tools/ct_itemplateddata4darray.h \
     ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.h
 
-SOURCES += \ 
+SOURCES += \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.cpp \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.cpp \
+    ct_itemdrawable/abstract/ct_abstractpointsattributescontainer.cpp \
+    ct_itemdrawable/abstract/ct_abstractgrid3d.cpp \
     ct_itemdrawable/ct_scene.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.cpp \
     ct_itemdrawable/ct_loopcounter.cpp \
     ct_itemdrawable/tools/ct_counter.cpp \
     ct_itemdrawable/abstract/ct_abstractmeshmodel.cpp \
-    ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp \
     ct_itemdrawable/abstract/ct_abstractattributes.cpp \
     ct_itemdrawable/abstract/ct_abstractedgeattributes.cpp \
     ct_itemdrawable/abstract/ct_abstractedgeattributesscalar.cpp \
@@ -213,13 +207,13 @@ SOURCES += \
     ct_itemdrawable/ct_ellipse.cpp \
     ct_itemdrawable/ct_faceattributescolor.cpp \
     ct_itemdrawable/ct_faceattributesnormal.cpp \
-#    ct_itemdrawable/ct_grid3d.cpp \
+    ct_itemdrawable/ct_grid3d.cpp \
 #    ct_itemdrawable/ct_grid3d_points.cpp \
 #    ct_itemdrawable/ct_grid3d_sparse.cpp \
 #    ct_itemdrawable/ct_grid4d.cpp \
 #    ct_itemdrawable/ct_grid4d_dense.cpp \
 #    ct_itemdrawable/ct_grid4d_sparse.cpp \
-#    ct_itemdrawable/ct_image2d.cpp \
+    ct_itemdrawable/ct_image2d.cpp \
     ct_itemdrawable/ct_line.cpp \
     ct_itemdrawable/ct_line2d.cpp \
     ct_itemdrawable/ct_meshmodel.cpp \
@@ -229,21 +223,19 @@ SOURCES += \
     ct_itemdrawable/ct_plotlistingrid.cpp \
     ct_itemdrawable/ct_point2d.cpp \
     ct_itemdrawable/ct_pointcluster.cpp \
-#    ct_itemdrawable/ct_pointsattributescolor.cpp \
-#    ct_itemdrawable/ct_pointsattributesnormal.cpp \
     ct_itemdrawable/ct_polygon2d.cpp \
     ct_itemdrawable/ct_polyline2d.cpp \
     ct_itemdrawable/ct_profile.cpp \
     ct_itemdrawable/ct_referencepoint.cpp \
     ct_itemdrawable/ct_scanpath.cpp \
     ct_itemdrawable/ct_shootingpatternd.cpp \
-#    ct_itemdrawable/ct_sphere.cpp \
-#    ct_itemdrawable/ct_stdpointsattributescontainer.cpp \
-#    ct_itemdrawable/ct_tnodegroup.cpp \
-#    ct_itemdrawable/ct_topfnodegroup.cpp \
-#    ct_itemdrawable/ct_transformationmatrix.cpp \
-#    ct_itemdrawable/ct_triangulation2d.cpp \
-#    ct_itemdrawable/ct_ttreegroup.cpp \
+    ct_itemdrawable/ct_sphere.cpp \
+    ct_itemdrawable/ct_stdpointsattributescontainer.cpp \
+    ct_itemdrawable/ct_tnodegroup.cpp \
+    ct_itemdrawable/ct_topfnodegroup.cpp \
+    ct_itemdrawable/ct_transformationmatrix.cpp \
+    ct_itemdrawable/ct_triangulation2d.cpp \
+    ct_itemdrawable/ct_ttreegroup.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractshapedrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.cpp \
@@ -253,24 +245,22 @@ SOURCES += \
     ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.cpp \
 #    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardpolyline2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp \
     ct_shapedata/ct_boxdata.cpp \
     ct_shapedata/ct_circledata.cpp \
     ct_shapedata/ct_cylinderdata.cpp \

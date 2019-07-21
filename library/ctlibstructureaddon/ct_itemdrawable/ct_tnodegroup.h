@@ -2,60 +2,105 @@
 #define CT_TNODEGROUP_H
 
 #include "ct_itemdrawable/ct_standarditemgroup.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractgroupmodel.h"
+#include "ctlibstructureaddon_global.h"
 
 class CT_TTreeGroup;
 
 /**
  * @brief A class that you can use with a CT_TTreeGroup to create a topology.
  */
-class PLUGINSHAREDSHARED_EXPORT CT_TNodeGroup : public CT_StandardItemGroup
+class CTLIBSTRUCTUREADDON_EXPORT CT_TNodeGroup : public CT_StandardItemGroup
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_TNodeGroup, CT_StandardItemGroup, Node group)
+
+    using SuperClass = CT_StandardItemGroup;
 
 public:
     CT_TNodeGroup();
 
     /**
-     * @brief Create a group with a model defined in your step and the result that will contains your ItemDrawable
+     * @brief Copy constructor.
      *
-     * @warning The model and/or the result can be NULL but you must set them with method "setModel()" and "changeResult()" before finish
-     *          your step computing !!!
+     *        What is copied :
+     *          - Pointer of the result and model of the original item.
+     *          - ID
+     *          - Pointer of base and alternative draw manager
+     *          - Pointer of context
+     *          - Removed later flags
+     *
+     *        What is initialized differently :
+     *          - Parent is set to NULL
+     *          - isSelected and isDisplayed is set to false
+     *          - Document list is not copied
+     *          - Parent container is set to NULL
+     *          - Childrens (items, sucessor, components, branches) was not copied (you must copy the CT_TTreeGroup that will set the structure)
      */
-    CT_TNodeGroup(const CT_OutAbstractGroupModel *model,
-                  const CT_AbstractResult *result);
+    CT_TNodeGroup(const CT_TNodeGroup& other) = default;
 
     /**
-     * @brief Create a group with a name of model defined in your step (typically a DEF_...)
-     *        and the result that will contains your ItemDrawable
-     *
-     * @warning The modelName can not be empty and the result can not be NULL to use this constructor
+     * @brief Visit childrens but inly for tree view
+     * @return Returns true if no childrens has been visited otherwise returns the result of the visitor.
      */
-    CT_TNodeGroup(const QString &modelName,
-                  const CT_AbstractResult *result);
-    ~CT_TNodeGroup();
-
-    /**
-     * @brief Returns childrens of this group for the GUI
-     */
-    QVector<CT_AbstractItem*> childrensForGui() const;
+    bool visitChildrensForTreeView(const ChildrensVisitor& visitor) const override;
 
     /**
      * @brief Set the successor of the node
      * @warning if a successor already exist it will be removed and can not be used after (it will be deleted from memory at any moment)
      */
-    bool setSuccessor(CT_TNodeGroup *successor);
+    template<typename OutHandleType>
+    bool setSuccessor(const OutHandleType& sucessorGroupHandle, CT_TNodeGroup *successor) {
+        QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
+
+        Q_ASSERT(model() != NULL);
+
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const DEF_CT_AbstractGroupModelOut* outModelToUse = sucessorGroupHandle.findAbstractModelWithParent(treeModel());
+
+        // now we can add the group with the right model
+        return setSuccessorWithOutModel(outModelToUse, successor);
+    }
+
+    bool setSuccessorWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup* successor);
 
     /**
      * @brief Set the root component or if already exist set the successor to the end of successor of the list
      */
-    bool addComponent(CT_TNodeGroup *component);
+    template<typename OutHandleType>
+    bool addComponent(const OutHandleType& componentGroupHandle, CT_TNodeGroup *component) {
+        QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
+
+        Q_ASSERT(model() != NULL);
+
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const DEF_CT_AbstractGroupModelOut* outModelToUse = componentGroupHandle.findAbstractModelWithParent(treeModel());
+
+        // now we can add the group with the right model
+        return addComponentWithOutModel(outModelToUse, component);
+    }
+
+    bool addComponentWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup *component);
 
     /**
      * @brief Add a branch to the list
      */
-    bool addBranch(CT_TNodeGroup *son);
+    template<typename OutHandleType>
+    bool addBranch(const OutHandleType& sonGroupHandle, CT_TNodeGroup *son) {
+        QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
+
+        Q_ASSERT(model() != NULL);
+
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const DEF_CT_AbstractGroupModelOut* outModelToUse = sonGroupHandle.findAbstractModelWithParent(treeModel());
+
+        // now we can add the group with the right model
+        return addBranchWithOutModel(outModelToUse, son);
+    }
+
+    bool addBranchWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup *son);
 
     /**
      * @brief Remove the component passed in parameter
@@ -105,7 +150,7 @@ public:
      */
     size_t nComponent() const;
 
-    CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_TNodeGroup)
 
 private:
     CT_TTreeGroup           *m_tree;
@@ -123,9 +168,8 @@ private:
     QList<CT_TNodeGroup*>   m_iterateList;
 
 protected:
-    void initConstructor();
-
     CT_TTreeGroup* tree() const;
+    CT_OutAbstractModel* treeModel() const;
 
     void internalSetSuccessor(CT_TNodeGroup *successor);
 
@@ -133,7 +177,7 @@ protected:
     void setComplex(CT_TNodeGroup *o);
     void setBearer(CT_TNodeGroup *o);
 
-    bool addNode(CT_TNodeGroup *n);
+    bool addNode(const DEF_CT_AbstractGroupModelOut* outModel, CT_TNodeGroup* n);
     bool recursiveRemoveNode(CT_TNodeGroup *n);
 
     friend class CT_TTreeGroup;

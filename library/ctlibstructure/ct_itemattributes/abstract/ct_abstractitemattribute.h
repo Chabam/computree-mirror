@@ -5,8 +5,6 @@
 #include "ct_categories/abstract/ct_abstractcategory.h"
 #include "ct_model/outModel/abstract/def_ct_outabstractitemattributemodel.h"
 
-class CT_OutAbstractItemAttributeModel;
-
 /**
  * @brief An item attribute is a scalar value of type CT_AbstractCategory::ValueType
  *        and use a category (CT_AbstractCategory) to be classified.

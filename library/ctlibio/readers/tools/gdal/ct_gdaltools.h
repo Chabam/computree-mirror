@@ -14,19 +14,19 @@ public:
     #ifdef USE_GDAL
     static QString staticGdalDriverName(GDALDriver *driver)
     {
-        if(driver != NULL) {
+        if(driver != nullptr) {
             QString name = "GDAL " + QString(driver->GetMetadataItem(GDAL_DMD_LONGNAME));
             name.remove(QRegExp("\\(\\..*\\)"));
 
             return name;
         }
 
-        return "";
+        return QString();
     }
 
     static QStringList staticGdalDriverExtension(GDALDriver *driver)
     {
-        if(driver != NULL) {
+        if(driver != nullptr) {
             QStringList ext = QString(driver->GetMetadataItem(GDAL_DMD_EXTENSION)).split("/");
             QString name = staticGdalDriverName(driver);
 

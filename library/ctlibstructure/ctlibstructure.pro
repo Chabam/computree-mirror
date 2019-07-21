@@ -59,7 +59,7 @@ HEADERS += \
     ct_tools/ct_handleiteratort.h \
     ct_iterator/ct_multicollectioniteratorstdstyle.h
 
-SOURCES += \ 
+SOURCES += \
     ct_global/ct_structurecontext.cpp \
     ct_item/abstract/ct_abstractitem.cpp \
     ct_itemattributes/abstract/ct_abstractitemattribute.cpp \

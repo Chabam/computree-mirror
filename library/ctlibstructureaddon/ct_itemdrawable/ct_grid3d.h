@@ -31,9 +31,6 @@
 #include "ct_itemdrawable/abstract/ct_abstractgrid3d.h"
 #include "ct_itemdrawable/tools/ct_itemplateddata3darray.h"
 
-#include "ct_math/ct_math.h"
-#include <QMutex>
-
 template< typename DataT > class CT_StandardGrid3DDrawManager;
 
 /*!
@@ -47,6 +44,9 @@ template< typename DataT > class CT_StandardGrid3DDrawManager;
 template< typename DataT>
 class CT_Grid3D : public CT_AbstractGrid3D, public CT_ITemplatedData3DArray<DataT>
 {
+    CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Grid3D, DataT, CT_AbstractGrid3D, 3D grid)
+    using SuperClass = CT_AbstractGrid3D;
+
 public:
 
     /*!
@@ -80,21 +80,7 @@ public:
      * \param na Value used to code NA
      * \param initValue Initialisation value for grid cells
      */
-    CT_Grid3D(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              double xmin,
-              double ymin,
-              double zmin,
-              size_t dimx,
-              size_t dimy,
-              size_t dimz,
-              double resolution,
-              DataT na,
-              DataT initValue);
-
-    CT_Grid3D(const QString &modelName,
-              const CT_AbstractResult *result,
-              double xmin,
+    CT_Grid3D(double xmin,
               double ymin,
               double zmin,
               size_t dimx,
@@ -120,9 +106,7 @@ public:
      * \param initValue Initialisation value for grid cells
      * \param coordConstructor Not used, only to ensure constructor different signatures
      */
-    CT_Grid3D(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              double xmin,
+    CT_Grid3D(double xmin,
               double ymin,
               double zmin,
               double xmax,
@@ -132,18 +116,7 @@ public:
               DataT na,
               DataT initValue);
 
-    CT_Grid3D(const QString& model,
-              const CT_AbstractResult *result,
-              double xmin,
-              double ymin,
-              double zmin,
-              double xmax,
-              double ymax,
-              double zmax,
-              double resolution,
-              DataT na,
-              DataT initValue);
-
+    CT_Grid3D(const CT_Grid3D& other) = default;
 
     /*!
      * \brief Factory with min and max (X,Y,Z) coordinates
@@ -161,36 +134,16 @@ public:
      * \param initValue Initialisation value for grid cells
      * \param coordConstructor Not used, only to ensure constructor different signatures
      */
-    static CT_Grid3D<DataT>* createGrid3DFromXYZCoords(const CT_OutAbstractSingularItemModel *model,
-                                                          const CT_AbstractResult *result,
-                                                          double xmin,
-                                                          double ymin,
-                                                          double zmin,
-                                                          double xmax,
-                                                          double ymax,
-                                                          double zmax,
-                                                          double resolution,
-                                                          DataT na,
-                                                          DataT initValue,
-                                                          bool extends = true);
-
-    static CT_Grid3D<DataT>* createGrid3DFromXYZCoords(const QString &modelName,
-                                                          const CT_AbstractResult *result,
-                                                          double xmin,
-                                                          double ymin,
-                                                          double zmin,
-                                                          double xmax,
-                                                          double ymax,
-                                                          double zmax,
-                                                          double resolution,
-                                                          DataT na,
-                                                          DataT initValue,
-                                                          bool extends = true);
-
-    /*!
-     * \brief Destructor
-     */
-    virtual ~CT_Grid3D();
+    static CT_Grid3D<DataT>* createGrid3DFromXYZCoords(double xmin,
+                                                       double ymin,
+                                                       double zmin,
+                                                       double xmax,
+                                                       double ymax,
+                                                       double zmax,
+                                                       double resolution,
+                                                       DataT na,
+                                                       DataT initValue,
+                                                       bool extends = true);
 
     /*!
      * \brief Initialize all grid cells values with val
@@ -201,22 +154,7 @@ public:
      */
     void initGridWithValue(const DataT val);
 
-    virtual QString getType() const;
-    static QString staticGetType();
-
-    virtual QString name() const;
-    static QString staticName();
-
-    /*!
-     * \brief Copy method
-     *
-     * \param model Item model for the copy
-     * \param result Result containing the copy
-     * \param copyModeList Copy mode
-     * \return Item copy
-     */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-    virtual CT_AbstractItemDrawable* copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_Grid3D<DataT>)
 
     const CT_ITemplatedData3DArray<DataT>* iTemplatedData3DArray() const { return this; }
 
@@ -442,17 +380,16 @@ protected:
     QColor              _defaultColor;
 
     CT_DEFAULT_IA_BEGIN(CT_Grid3D<DataT>)
-    CT_DEFAULT_IA_V3(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Grid3D<DataT>::xdim, QObject::tr("X dimension"), "xd")
-    CT_DEFAULT_IA_V3(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Grid3D<DataT>::ydim, QObject::tr("Y dimension"), "yd")
-    CT_DEFAULT_IA_V3(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataZDimension(), &CT_Grid3D<DataT>::zdim, QObject::tr("Z dimension"), "zd")
-    CT_DEFAULT_IA_V3(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Grid3D<DataT>::resolution, QObject::tr("Resolution"), "res")
-    CT_DEFAULT_IA_V3(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Grid3D<DataT>::NA, QObject::tr("NA"), "na")
-    CT_DEFAULT_IA_V3(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Grid3D<DataT>::dataMin, QObject::tr("Min Value"), "min")
-    CT_DEFAULT_IA_V3(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Grid3D<DataT>::dataMax, QObject::tr("Max Value"), "max")
+    CT_DEFAULT_IA_V2(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Grid3D<DataT>::xdim, QObject::tr("X dimension"))
+    CT_DEFAULT_IA_V2(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Grid3D<DataT>::ydim, QObject::tr("Y dimension"))
+    CT_DEFAULT_IA_V2(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataZDimension(), &CT_Grid3D<DataT>::zdim, QObject::tr("Z dimension"))
+    CT_DEFAULT_IA_V2(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Grid3D<DataT>::resolution, QObject::tr("Resolution"))
+    CT_DEFAULT_IA_V2(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Grid3D<DataT>::NA, QObject::tr("NA"))
+    CT_DEFAULT_IA_V2(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Grid3D<DataT>::dataMin, QObject::tr("Min Value"))
+    CT_DEFAULT_IA_V2(CT_Grid3D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Grid3D<DataT>::dataMax, QObject::tr("Max Value"))
     CT_DEFAULT_IA_END(CT_Grid3D<DataT>)
 
     const static CT_StandardGrid3DDrawManager<DataT> ABSGRID3D_DRAW_MANAGER;
-
 };
 
 // Spécialisations
@@ -461,40 +398,40 @@ template<>
 inline bool CT_Grid3D<bool>::NA() const {return false;}
 
 template<>
-PLUGINSHAREDSHARED_EXPORT void CT_Grid3D<bool>::computeMinMax();
+CTLIBSTRUCTUREADDON_EXPORT void CT_Grid3D<bool>::computeMinMax();
 
 template<>
-PLUGINSHAREDSHARED_EXPORT double CT_Grid3D<bool>::ratioValueAtIndex(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT double CT_Grid3D<bool>::ratioValueAtIndex(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT double CT_Grid3D<bool>::valueAtIndexAsDouble(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT double CT_Grid3D<bool>::valueAtIndexAsDouble(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Grid3D<bool>::valueAtIndexAsString(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Grid3D<bool>::valueAtIndexAsString(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Grid3D<bool>::setMaxValueAtIndex(const size_t index, const bool value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Grid3D<bool>::setMaxValueAtIndex(const size_t index, const bool value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Grid3D<bool>::setMinValueAtIndex(const size_t index, const bool value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Grid3D<bool>::setMinValueAtIndex(const size_t index, const bool value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT bool CT_Grid3D<bool>::addValueAtIndex(const size_t index, const bool value);
+CTLIBSTRUCTUREADDON_EXPORT bool CT_Grid3D<bool>::addValueAtIndex(const size_t index, const bool value);
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QList<bool> CT_Grid3D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t levz, const size_t distance, const bool keepNAs, const CenterMode centermode) const;
+CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Grid3D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t levz, const size_t distance, const bool keepNAs, const CenterMode centermode) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Grid3D<unsigned long>::valueAtIndexAsString(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Grid3D<unsigned long>::valueAtIndexAsString(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Grid3D<unsigned long>::NAAsString() const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Grid3D<unsigned long>::NAAsString() const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Grid3D<long int>::valueAtIndexAsString(const size_t index) const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Grid3D<long int>::valueAtIndexAsString(const size_t index) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT QString CT_Grid3D<long int>::NAAsString() const;
+CTLIBSTRUCTUREADDON_EXPORT QString CT_Grid3D<long int>::NAAsString() const;
 
 // fin des spécialisations
 

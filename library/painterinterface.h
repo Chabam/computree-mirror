@@ -4,6 +4,8 @@
 #include <QString>
 #include <QtOpenGL/QGL>
 
+#include "Eigen/Core"
+
 class CT_AbstractCloudIndex;
 class CT_AbstractMeshModel;
 

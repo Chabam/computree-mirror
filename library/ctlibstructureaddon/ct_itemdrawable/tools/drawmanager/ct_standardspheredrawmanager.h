@@ -5,15 +5,16 @@
 
 #include <QObject>
 
-class CT_Sphere;
-
-class PLUGINSHAREDSHARED_EXPORT CT_StandardSphereDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
+class CTLIBSTRUCTUREADDON_EXPORT CT_StandardSphereDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardSphereDrawManager(QString drawConfigurationName = QObject::tr("Sphere"));
-    virtual ~CT_StandardSphereDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface& view,
+              PainterInterface& painter,
+              const CT_AbstractItemDrawable& itemDrawable) const override;
 };
 
 #endif // CT_STANDARDSPHEREDRAWMANAGER_H

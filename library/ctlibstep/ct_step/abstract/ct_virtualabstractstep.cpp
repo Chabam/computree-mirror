@@ -188,7 +188,12 @@ bool CT_VirtualAbstractStep::showPreInputConfigurationDialog()
 {
     createPreInputConfigurationDialog();
 
-    return preInputConfigure();
+    if(preInputConfigure()) {
+        finalizePreSettings();
+        return true;
+    }
+
+    return false;
 }
 
 bool CT_VirtualAbstractStep::showInputResultConfigurationDialog()
@@ -202,7 +207,12 @@ bool CT_VirtualAbstractStep::showPostConfigurationDialog()
 {
     createPostInputConfigurationDialog();
 
-    return postInputConfigure();
+    if(postInputConfigure()) {
+        finalizePostSettings();
+        return true;
+    }
+
+    return false;
 }
 
 bool CT_VirtualAbstractStep::finalizeConfiguration()
@@ -455,6 +465,8 @@ bool CT_VirtualAbstractStep::restorePreSettings(SettingsReaderInterface &reader)
     if(m_preInputConfigDialog != NULL)
         m_preInputConfigDialog->restoreSettings(reader);
 
+    finalizePreSettings();
+
     return true;
 }
 
@@ -481,6 +493,8 @@ bool CT_VirtualAbstractStep::restorePostSettings(SettingsReaderInterface &reader
     // pre-configuration
     if(m_postInputConfigDialog != NULL)
         return m_postInputConfigDialog->restoreSettings(reader);
+
+    finalizePostSettings();
 
     return true;
 }

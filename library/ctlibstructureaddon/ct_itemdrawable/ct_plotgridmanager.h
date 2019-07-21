@@ -46,7 +46,7 @@ public:
 
 private:
     CT_DEFAULT_IA_BEGIN(CT_PlotGridManager)
-//    CT_DEFAULT_IA_V3(CT_PlotGridManager, CT_AbstractCategory::staticInitDataNumber(), &CT_PlotGridManager::getPlotNumber, QObject::tr("Nombre de placettes"), "ndp")
+//    CT_DEFAULT_IA_V2(CT_PlotGridManager, CT_AbstractCategory::staticInitDataNumber(), &CT_PlotGridManager::getPlotNumber, QObject::tr("Nombre de placettes"))
     CT_DEFAULT_IA_END(CT_PlotGridManager)
 
 };

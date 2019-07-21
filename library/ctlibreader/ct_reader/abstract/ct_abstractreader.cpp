@@ -32,15 +32,6 @@ CT_AbstractReader::CT_AbstractReader(const CT_AbstractReader& other)
     m_filepathCanBeModified = other.m_filepathCanBeModified;
 }
 
-CT_AbstractReader::~CT_AbstractReader()
-{
-    /*clearOutItemDrawableModel();
-    clearOutItemDrawable();
-
-    clearOutGroupsModel();
-    clearOutGroups();*/
-}
-
 /*void CT_AbstractReader::init(bool initOutItemDrawableList)
 {
     m_formats.clear();
@@ -80,7 +71,15 @@ bool CT_AbstractReader::setFilePath(const QString& filepath)
 
         if(file.open(QIODevice::ReadOnly))
         {
+            const bool ok = preVerifyFile(filepath, file);
+
             file.close();
+
+            if(!ok)
+                return false;
+
+            if(!postVerifyFile(filepath))
+                return false;
 
             m_filePath = filepath;
 
@@ -128,9 +127,9 @@ bool CT_AbstractReader::restoreSettings(SettingsReaderInterface &reader)
     return true;
 }
 
-void CT_AbstractReader::declareOutputModelsIn(CT_ReaderOutModelStructureManager& manager)
+void CT_AbstractReader::declareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    internalDeclareOutputModelsIn(manager);
+    internalDeclareOutputModels(manager);
 }
 /*
 void CT_AbstractReader::createOutItemDrawableModelList()
@@ -220,6 +219,14 @@ bool CT_AbstractReader::readFile(CT_StandardItemGroup* group)
 
     m_error = internalReadFile(group);
 
+    if(m_hOutFileHeader.isValid()) {
+        CT_FileHeader* header = readHeader();
+
+        Q_ASSERT(header != NULL);
+
+        group->addSingularItem(m_hOutFileHeader, header);
+    }
+
     emit finished();
 
     return m_error;
@@ -238,6 +245,16 @@ void CT_AbstractReader::addNewReadableFormat(const FileFormat &format)
 void CT_AbstractReader::setToolTip(const QString &t)
 {
     m_tooltip = t;
+}
+
+bool CT_AbstractReader::preVerifyFile(const QString&, QFile&) const
+{
+    return true;
+}
+
+bool CT_AbstractReader::postVerifyFile(const QString&)
+{
+    return true;
 }
 
 void CT_AbstractReader::setProgress(int progress)

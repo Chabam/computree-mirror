@@ -18,7 +18,7 @@ public:
     };
 
     CT_HandleInZeroOrMoreGroup() : SuperClass() {
-        static_assert(std::is_convertible<GroupT, IGroupForModel>::value, "CT_HandleInZeroOrMoreGroup is only compatible with classes that inherit from IGroupForModel");
+        static_assert(std::is_convertible<GroupT*, IGroupForModel*>::value, "CT_HandleInZeroOrMoreGroup is only compatible with classes that inherit from IGroupForModel");
     }
 };
 

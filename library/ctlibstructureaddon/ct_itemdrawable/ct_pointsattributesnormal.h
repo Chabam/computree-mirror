@@ -10,6 +10,9 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_PointsAttributesNormal : public CT_AbstractP
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_PointsAttributesNormal, CT_AbstractPointsAttributes, Normal point attributes)
 
+    using SuperClass1 = CT_AbstractPointsAttributes;
+    using SuperClass2 = CT_AttributesNormal;
+
 public:
     CT_PointsAttributesNormal();
 

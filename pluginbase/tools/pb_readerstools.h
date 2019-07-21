@@ -34,7 +34,7 @@ public:
 
                 for(const CT_AbstractReader* reader : readers) {
                     if((canBeAdded == nullptr) || canBeAdded(reader)) {
-                        CT_AbstractReader *readerCpy = reader->copy();
+                        CT_AbstractReader *readerCpy = reader->copyFull();
                         //readerCpy->init(false);
 
                         cToAdd.append(readerCpy);

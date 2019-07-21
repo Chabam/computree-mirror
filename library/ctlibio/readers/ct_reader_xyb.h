@@ -75,7 +75,7 @@ public:
     READER_ALL_COPY_IMP(CT_Reader_XYB)
 
 protected:
-    void internalDeclareOutputModelsIn(CT_ReaderOutModelStructureManager& manager) override;
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
 
     CT_FileHeader* internalReadHeader(const QString &filepath, QString &error) const override;
 

@@ -10,6 +10,9 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_PointsAttributesColor : public CT_AbstractPo
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_PointsAttributesColor, CT_AbstractPointsAttributes, Point color attributes)
 
+    using SuperClass1 = CT_AbstractPointsAttributes;
+    using SuperClass2 = CT_AttributesColor;
+
 public:
     CT_PointsAttributesColor();
 

@@ -29,10 +29,7 @@
 #define CT_ABSTRACTGRID3D_H
 
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
-#include "ct_math/ct_math.h"
-
-#include <Eigen/Core>
-#include <QDebug>
+#include "ctlibstructureaddon_global.h"
 
 #define EPSILON_GRID3D 0.000001    // 10^-6
 
@@ -45,10 +42,12 @@
  * It's usefull to manage generically a grid, without knowing it template type
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_AbstractGrid3D : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractGrid3D : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractGrid3D, CT_AbstractItemDrawableWithoutPointCloud, 3D grid)
+
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
 
 public:
 
@@ -56,11 +55,11 @@ public:
       * \brief Empty Contructor vide
       */
     CT_AbstractGrid3D();
-
-    CT_AbstractGrid3D(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result);
-    CT_AbstractGrid3D(const QString &modelName, const CT_AbstractResult *result);
-
-    virtual ~CT_AbstractGrid3D();
+    CT_AbstractGrid3D(size_t dimx,
+                      size_t dimy,
+                      size_t dimz,
+                      double resolution);
+    CT_AbstractGrid3D(const CT_AbstractGrid3D& other) = default;
 
     /*!
      * \brief Return a [0;1] value for any type (or -1 for NA)
@@ -237,7 +236,7 @@ public:
      */
     inline void getMinCoordinates(Eigen::Vector3d &min) const
     {
-        min = _minCoordinates;
+        min = minCoordinates();
     }
 
     /**
@@ -246,7 +245,7 @@ public:
      */
     inline void getMaxCoordinates(Eigen::Vector3d &max) const
     {
-        max = _maxCoordinates;
+        max = maxCoordinates();
     }
 
     /**
