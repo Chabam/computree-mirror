@@ -74,9 +74,9 @@
 
 */
 #include "ctlibio/readers/ct_reader_xyb.h"
+#include "ctlibio/readers/ct_reader_ascrgb.h"
 /*#include "ctlibio/readers/ct_reader_ptx.h"
 #include "ctlibio/readers/ct_reader_obj.h"
-#include "ctlibio/readers/ct_reader_ascrgb.h"
 #include "ctlibio/readers/ct_reader_larchitect_grid.h"
 */
 #include "ctlibio/readers/ct_reader_opf.h"
@@ -85,12 +85,12 @@
 #include "ctliblas/readers/ct_reader_lasv2.h"
 */
 #include "ctlibio/readers/ct_reader_gdal.h"
+#include "ctlibio/readers/ct_reader_idxyz.h"
 /*#include "ctlibio/readers/ct_reader_terrascanprj.h"
 #include "ctlibio/readers/ct_reader_asciigrid3d.h"
 #include "ctlibio/readers/ct_reader_pgm.h"
 #include "ctlibio/readers/ct_reader_pbm.h"
 #include "ctlibio/readers/ct_reader_points_ascii.h"
-#include "ctlibio/readers/ct_reader_idxyz.h"
 #include "ctlibio/readers/ct_reader_ply.h"
 #include "ctlibio/readers/ct_reader_trajectory.h"
 
@@ -279,10 +279,11 @@ bool PB_StepPluginManager::loadReaders()
     CT_StandardReaderSeparator* sep = addNewSeparator(new CT_StandardReaderSeparator("Readers"));
     sep->addReader(new CT_Reader_XYB());
     sep->addReader(new CT_Reader_OPF());
+    sep->addReader(new CT_Reader_IDXYZ());
+    sep->addReader(new CT_Reader_ASCRGB());
     /*sep->addReader(new CT_Reader_PTX());
     sep->addReader(new CT_Reader_OBJ());
     sep->addReader(new CT_Reader_LArchitect_Grid());
-    sep->addReader(new CT_Reader_ASCRGB());
     sep->addReader(new CT_Reader_LAS());
     sep->addReader(new CT_Reader_LASV2());
     sep->addReader(new CT_Reader_TerraScanPrj());
@@ -290,7 +291,6 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_PGM());
     sep->addReader(new CT_Reader_PBM());
     sep->addReader(new CT_Reader_Points_ASCII());
-    sep->addReader(new CT_Reader_IDXYZ());
     sep->addReader(new CT_Reader_PLY());
     sep->addReader(new CT_Reader_Trajectory());*/
 

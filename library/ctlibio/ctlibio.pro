@@ -38,7 +38,7 @@ HEADERS +=  \
 #    readers/ct_reader_pbm_def_models.h \
 #    readers/ct_reader_points_ascii.h \
 #    readers/ct_reader_points_ascii_def_models.h \
-#    readers/ct_reader_idxyz.h \
+    readers/ct_reader_idxyz.h \
 #    readers/ct_reader_idxyz_def_models.h \
     readers/headers/ct_xybheader.h \
 #    readers/ct_reader_ptx.h \
@@ -91,7 +91,7 @@ SOURCES += \
 #    readers/ct_reader_pgm.cpp \
 #    readers/ct_reader_pbm.cpp \
 #    readers/ct_reader_points_ascii.cpp \
-#    readers/ct_reader_idxyz.cpp \
+    readers/ct_reader_idxyz.cpp \
     readers/headers/ct_xybheader.cpp
 #    readers/ct_reader_ptx.cpp \
 #    readers/tools/ply/plyheader.cpp \

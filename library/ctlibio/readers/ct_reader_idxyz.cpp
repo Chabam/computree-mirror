@@ -2,72 +2,16 @@
 #include <QFile>
 #include <QIODevice>
 #include <QTextStream>
-
 #include <QDebug>
 
-#include "ct_global/ct_context.h"
+#include "ct_log/ct_logmanager.h"
 #include "ct_point.h"
+#include "ct_cloudindex/registered/ct_standardnotmodifiablecloudindexregisteredt.h"
 #include "ct_pointcloudindex/ct_pointcloudindexvector.h"
 
 #include <limits>
 
-CT_Reader_IDXYZ::CT_Reader_IDXYZ() : CT_AbstractReader()
-{
-}
-
-QString CT_Reader_IDXYZ::GetReaderName() const
-{
-    return tr("Clusters de Points, fichier ASCII (ID, X, Y, Z)");
-}
-
-CT_StepsMenu::LevelPredefined CT_Reader_IDXYZ::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
-}
-
-bool CT_Reader_IDXYZ::setFilePath(const QString &filepath)
-{
-    // Test File validity
-    if(QFile::exists(filepath))
-    {
-        QFile f(filepath);
-
-        if (f.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            QTextStream stream(&f);
-
-            stream.readLine();
-            QString line = stream.readLine();
-            if (!line.isNull())
-            {
-                QStringList values = line.split("\t");
-                if (values.size() >= 4) {
-                    f.close();
-                    return CT_AbstractReader::setFilePath(filepath);
-                } else {
-                    PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'a pas le bon format (colonnes manquantes).")).arg(filepath));
-                }
-            } else {
-                PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 est vide.")).arg(filepath));
-            }
-
-            f.close();
-        } else {
-            PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'est pas accessible.")).arg(filepath));
-        }
-    } else {
-        PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'existe pas.")).arg(filepath));
-    }
-
-    return false;
-}
-
-CT_AbstractReader* CT_Reader_IDXYZ::copy() const
-{
-    return new CT_Reader_IDXYZ();
-}
-
-void CT_Reader_IDXYZ::protectedInit()
+CT_Reader_IDXYZ::CT_Reader_IDXYZ() : SuperClass()
 {
     addNewReadableFormat(FileFormat("asc", tr("Fichiers de points ASCII (XYZRGB, sans entête, RGB [0;1])")));
 
@@ -78,20 +22,42 @@ void CT_Reader_IDXYZ::protectedInit()
                   "- Z  : Coordonnée Z<br>"));
 }
 
-void CT_Reader_IDXYZ::protectedCreateOutItemDrawableModelList()
+QString CT_Reader_IDXYZ::displayableName() const
 {
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    addOutItemDrawableModel(DEF_CT_Reader_IDXYZ_sceneOut, new CT_Scene(), tr("Scène fusionnée"));
-
-    CT_OutStdGroupModel *grp = new CT_OutStdGroupModel(DEF_CT_Reader_IDXYZ_groupOut, new CT_StandardItemGroup(), tr("Groupe"));
-    _clusterSceneModel = new CT_OutStdSingularItemModel(DEF_CT_Reader_IDXYZ_sceneClusterOut, new CT_Scene(), tr("Scènes individuelles"));
-    grp->addItem(_clusterSceneModel);
-    addOutGroupModel(grp);
-
+    return tr("Clusters de Points, fichier ASCII (ID, X, Y, Z)");
 }
 
-bool CT_Reader_IDXYZ::protectedReadFile()
+
+bool CT_Reader_IDXYZ::preVerifyFile(const QString& filepath, QFile& fileOpenReadOnly) const
+{
+    QTextStream stream(&fileOpenReadOnly);
+
+    stream.readLine();
+    QString line = stream.readLine();
+    if (!line.isNull())
+    {
+        QStringList values = line.split("\t");
+        if (values.size() >= 4) {
+            return true;
+        } else {
+            PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'a pas le bon format (colonnes manquantes).")).arg(filepath));
+        }
+    } else {
+        PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 est vide.")).arg(filepath));
+    }
+
+    return false;
+}
+
+
+void CT_Reader_IDXYZ::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
+{
+    manager.addItem(m_hOutScene, tr("Scène complète"));
+    manager.addGroup(m_hOutSceneIdGroup, tr("Groupe"));
+    manager.addItem(m_hOutSceneIdGroup, m_hOutSceneId, tr("Scène ID"));
+}
+
+bool CT_Reader_IDXYZ::internalReadFile(CT_StandardItemGroup* group)
 {
     // Test File validity
     if(QFile::exists(filepath()))
@@ -137,13 +103,13 @@ bool CT_Reader_IDXYZ::protectedReadFile()
 
                     if (okID && okX && okY && okZ)
                     {
-                            pReaded(0) = x;
-                            pReaded(1) = y;
-                            pReaded(2) = z;
+                        pReaded(0) = x;
+                        pReaded(1) = y;
+                        pReaded(2) = z;
 
-                            pointCloud->addPoint(pReaded);
-                            indices.append(id);
-                            if (! indexVectors.contains(id)) {indexVectors.insert(id, new CT_PointCloudIndexVector());}
+                        pointCloud->addPoint(pReaded);
+                        indices.append(id);
+                        if (! indexVectors.contains(id)) {indexVectors.insert(id, new CT_PointCloudIndexVector());}
                     }
                 }
 
@@ -154,12 +120,12 @@ bool CT_Reader_IDXYZ::protectedReadFile()
 
             if (pointCloud->size() > 0)
             {
-                CT_Scene *scene = new CT_Scene(NULL, NULL, PS_REPOSITORY->registerUndefinedSizePointCloud(pointCloud));
+                CT_NMPCIR pcir = PS_REPOSITORY->registerUndefinedSizePointCloud(pointCloud);
+                CT_Scene *scene = new CT_Scene(pcir);
                 scene->updateBoundingBox();
+                group->addSingularItem(m_hOutScene, scene);
 
-                addOutItemDrawable(DEF_CT_Reader_IDXYZ_sceneOut, scene);
-
-                const CT_AbstractPointCloudIndex* sceneIndexVector =  scene->getPointCloudIndex();
+                const CT_AbstractPointCloudIndex* sceneIndexVector =  scene->pointCloudIndex();
 
                 for (int i = 0 ; i < indices.size() ; i++)
                 {
@@ -184,18 +150,17 @@ bool CT_Reader_IDXYZ::protectedReadFile()
                     {
                         if (indexVector->size() > 0)
                         {
-                            CT_Scene *sceneId = new CT_Scene(_clusterSceneModel, NULL, PS_REPOSITORY->registerPointCloudIndex(indexVector));
+                            CT_Scene *sceneId = new CT_Scene(PS_REPOSITORY->registerPointCloudIndex(indexVector));
                             sceneId->updateBoundingBox();
                             sceneId->setDisplayableName(QString("Scene_%1").arg(QVariant::fromValue(index).toString()));
 
-                            CT_StandardItemGroup* group = new CT_StandardItemGroup(NULL, NULL);
-                            group->addItemDrawable(sceneId);
-                            addOutGroup(DEF_CT_Reader_IDXYZ_groupOut, group);
+                            CT_StandardItemGroup* groupSc = new CT_StandardItemGroup();
+                            group->addGroup(m_hOutSceneIdGroup, groupSc);
+                            groupSc->addSingularItem(m_hOutSceneId, sceneId);
                         } else {
                             delete indexVector;
                         }
                     }
-
                 }
 
                 return true;
