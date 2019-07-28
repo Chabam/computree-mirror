@@ -198,9 +198,9 @@ bool CT_VirtualAbstractStep::showPreInputConfigurationDialog()
 
 bool CT_VirtualAbstractStep::showInputResultConfigurationDialog()
 {
-    const bool firstTime = mustDeclareInputModels();
+    //const bool firstTime = mustDeclareInputModels();
 
-    return configureInputs(!firstTime);
+    return configureInputs(hasChildrens() /*!firstTime*/);
 }
 
 bool CT_VirtualAbstractStep::showPostConfigurationDialog()

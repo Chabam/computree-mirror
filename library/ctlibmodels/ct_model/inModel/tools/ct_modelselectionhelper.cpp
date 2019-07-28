@@ -156,10 +156,10 @@ bool CT_ModelSelectionHelper::recursiveSelectAllPossibilitiesByDefault()
         m_rootInResultModel->possibilitySavedAt(0)->setSelected(true);
 
         return m_rootInResultModel->recursiveVisitInChildrensOrInModelOfPossibilities([](const CT_InAbstractModel* child) -> bool {
-            if(!child->isOptionnal())
+            if(child->nPossibilitySaved() > 0)
                 return child->possibilitySavedAt(0)->setSelected(true);
 
-            return true;
+            return  true;
         });
     }
 
