@@ -71,7 +71,7 @@ public:
     }
 
     /**
-     * @brief Return the element information for the specified element or NULL if it doesn't exist
+     * @brief Return the element information for the specified element or nullptr if it doesn't exist
      */
     PermanentItemInformation* getElementInformation(const quint32& uniqueIndex);
 

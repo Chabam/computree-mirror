@@ -38,7 +38,7 @@ class CT_VoronoiNodeT;
 class CTLIBMATH_EXPORT CT_NodeT
 {
 public:
-    static QSharedPointer<CT_NodeT> create(Eigen::Vector3d *point, QObject *associate_object = NULL, bool toBeDeleted = false)
+    static QSharedPointer<CT_NodeT> create(Eigen::Vector3d *point, QObject *associate_object = nullptr, bool toBeDeleted = false)
     {
         QSharedPointer<CT_NodeT> ptr(new CT_NodeT(point, associate_object, toBeDeleted));
         ptr.data()->_this = ptr.toWeakRef();
@@ -69,7 +69,7 @@ public:
 
 private:
 
-    CT_NodeT(Eigen::Vector3d *point, QObject *associate_object = NULL, bool toBeDeleted = false);
+    CT_NodeT(Eigen::Vector3d *point, QObject *associate_object = nullptr, bool toBeDeleted = false);
 
     QWeakPointer<CT_NodeT>     _this;              // pointeur de la node
 

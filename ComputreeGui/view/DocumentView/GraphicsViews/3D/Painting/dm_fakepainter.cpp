@@ -8,7 +8,7 @@ DM_FakePainter::DM_FakePainter()
     m_nPoints = 0;
     m_nEdges = 0;
     m_nFaces = 0;
-    m_pIndexBackup = NULL;
+    m_pIndexBackup = nullptr;
 }
 
 void DM_FakePainter::setComputingMode(ComputingModes modes)
@@ -18,12 +18,12 @@ void DM_FakePainter::setComputingMode(ComputingModes modes)
 
 void DM_FakePainter::setForGlobalPointDrawOneByOneTheBackupCloudIndex(CT_PointCloudIndexVector *backup)
 {
-    if(m_pIndexBackup != NULL)
+    if(m_pIndexBackup != nullptr)
         m_pCloudIndexBackup.removeOne(m_pIndexBackup);
 
     m_pIndexBackup = backup;
 
-    if(m_pIndexBackup != NULL)
+    if(m_pIndexBackup != nullptr)
         m_pCloudIndexBackup.append(m_pIndexBackup);
 }
 
@@ -81,7 +81,7 @@ void DM_FakePainter::drawPoints(const CT_AbstractMeshModel *mesh)
 
 void DM_FakePainter::drawPointCloud(const CT_AbstractCloudIndex *pci)
 {
-    if(pci == NULL)
+    if(pci == nullptr)
         return;
 
     if(m_mode.testFlag(CountPoints))
@@ -93,19 +93,19 @@ void DM_FakePainter::drawPointCloud(const CT_AbstractCloudIndex *pci)
 
 void DM_FakePainter::drawEdges(const CT_AbstractMeshModel *mesh)
 {
-    if(mesh == NULL)
+    if(mesh == nullptr)
         return;
 
     const CT_AbstractCloudIndex *eci = mesh->edgeCloudIndex();
 
-    if(eci == NULL)
+    if(eci == nullptr)
         return;
 
     if(m_mode.testFlag(CountEdges))
         m_nEdges += eci->size();
     else if(m_mode.testFlag(BackupEdgeCloudIndex))
         addEdgeIndexes(eci);
-    else if(m_mode.testFlag(BackupPointCloudIndexIfEdge) && (mesh->pointCloudIndex() != NULL))
+    else if(m_mode.testFlag(BackupPointCloudIndexIfEdge) && (mesh->pointCloudIndex() != nullptr))
         addPointIndexes(mesh->pointCloudIndex());
 }
 
@@ -118,19 +118,19 @@ void DM_FakePainter::drawMesh(const CT_AbstractMeshModel *mesh)
 
 void DM_FakePainter::drawFaces(const CT_AbstractMeshModel *mesh)
 {
-    if(mesh == NULL)
+    if(mesh == nullptr)
         return;
 
     const CT_AbstractCloudIndex *fci = mesh->faceCloudIndex();
 
-    if(fci == NULL)
+    if(fci == nullptr)
         return;
 
     if(m_mode.testFlag(CountEdges))
         m_nFaces += fci->size();
     else if(m_mode.testFlag(BackupEdgeCloudIndex))
         addFaceIndexes(fci);
-    else if(m_mode.testFlag(BackupPointCloudIndexIfFace) && (mesh->pointCloudIndex() != NULL))
+    else if(m_mode.testFlag(BackupPointCloudIndexIfFace) && (mesh->pointCloudIndex() != nullptr))
         addPointIndexes(mesh->pointCloudIndex());
 }
 

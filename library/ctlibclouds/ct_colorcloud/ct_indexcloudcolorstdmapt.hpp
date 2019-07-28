@@ -96,7 +96,7 @@ void CT_IndexCloudColorStdMapT<T>::copyColorsOfCloudIndex(CT_AbstractColorCloud 
     {
         CT_AbstractCloudIndexT<T> *ci = dynamic_cast<CT_AbstractCloudIndexT<T>*>(itC.next());
 
-        if(ci != NULL)
+        if(ci != nullptr)
         {
             CT_CloudIndexIteratorT<T> itK(ci);
 

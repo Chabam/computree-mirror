@@ -13,7 +13,7 @@ public:
     /**
      * @brief Returns the used objects processor
      */
-    ObjectsProcessorForPicker* getObjectsProcessorForPicker() const { return NULL; }
+    ObjectsProcessorForPicker* getObjectsProcessorForPicker() const { return nullptr; }
 
     /**
      * @brief Returns true if at least one compute method (of the picker) returns true

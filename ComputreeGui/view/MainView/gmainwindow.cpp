@@ -99,7 +99,7 @@ void GMainWindow::closeEvent(QCloseEvent *ev)
 {
     int res;
 
-    if((res = GUI_MANAGER->asyncRemoveAllStep(NULL)) != -1)
+    if((res = GUI_MANAGER->asyncRemoveAllStep(nullptr)) != -1)
     {
         if(res == 0)
         {
@@ -231,7 +231,7 @@ void GMainWindow::showAboutPluginsDialog()
 
 void GMainWindow::showAboutMemory()
 {
-    GAboutMemory *gMem = new GAboutMemory(NULL);
+    GAboutMemory *gMem = new GAboutMemory(nullptr);
     gMem->setWindowModality(Qt::ApplicationModal);
     gMem->show();
 }
@@ -751,10 +751,10 @@ void GMainWindow::loadConfiguration()
             if(!isMaximized) {
                 resize(size);
                 move(pos);
-            } else {
+            } else if(!windowState().testFlag(Qt::WindowMaximized)){
                 showMaximized();
             }
-        } else {
+        } else if(!windowState().testFlag(Qt::WindowMaximized)){
             setWindowState(Qt::WindowNoState);
             showMaximized();
         }
@@ -798,7 +798,7 @@ void GMainWindow::loadConfiguration()
 
             DM_DocumentView *view = getDocumentManagerView()->getDocumentView(i);
 
-            if(view != NULL) {
+            if(view != nullptr) {
                 if(CONFIG_FILE->value("Size", QVariant()).isNull()) {
                     view->restoreGeometry(geometry);
                 } else {
@@ -833,7 +833,7 @@ void GMainWindow::loadConfiguration()
 
         DM_DocumentView *view = getDocumentManagerView()->getDocumentView(0);
 
-        if(view != NULL)
+        if(view != nullptr)
             view->setMaximized(true);
     }
 
@@ -930,7 +930,7 @@ void GMainWindow::writeConfiguration()
 
         CONFIG_FILE->beginGroup(QString("Doc%1").arg(i));
 
-        if(dynamic_cast<GDocumentViewForGraphics*>(docV) != NULL)
+        if(dynamic_cast<GDocumentViewForGraphics*>(docV) != nullptr)
         {
             if(!((GDocumentViewForGraphics*)docV)->getGraphicsList().isEmpty())
             {
@@ -940,7 +940,7 @@ void GMainWindow::writeConfiguration()
                     type = "3D";
             }
         }
-        else if(dynamic_cast<GDocumentViewForItemModel*>(docV) != NULL)
+        else if(dynamic_cast<GDocumentViewForItemModel*>(docV) != nullptr)
         {
             type = "TAB";
         }
@@ -1029,8 +1029,8 @@ void GMainWindow::loadScriptError(CDM_ScriptProblem &problem)
 
         // set if must show StepLoadFile, StepCanBeAddedFirst and StepGeneric
         view->proxy()->setTypeVisible(DM_StepsFromPluginsModelConstructor::IT_StepCBAF, true);
-        view->proxy()->setTypeVisible(DM_StepsFromPluginsModelConstructor::IT_StepLF, problem.getParentStep() == NULL);
-        view->proxy()->setTypeVisible(DM_StepsFromPluginsModelConstructor::IT_StepG, problem.getParentStep() != NULL);
+        view->proxy()->setTypeVisible(DM_StepsFromPluginsModelConstructor::IT_StepLF, problem.getParentStep() == nullptr);
+        view->proxy()->setTypeVisible(DM_StepsFromPluginsModelConstructor::IT_StepG, problem.getParentStep() != nullptr);
 
         // set the parent step to use
         view->proxy()->setParentStep(problem.getParentStep());
@@ -1061,7 +1061,7 @@ void GMainWindow::loadScriptError(CDM_ScriptProblem &problem)
                 // if a step was choosed by user
                 problem.setSolutionUseStep(view->constructor()->stepFromIndex(view->proxy()->mapToSource(l.first())));
 
-                if(problem.getSolutionUseStep() != NULL)
+                if(problem.getSolutionUseStep() != nullptr)
                     return;
             }
         }
@@ -1170,7 +1170,7 @@ void GMainWindow::getFileExtensionAvailableInStepsOfLevelRecursively(CT_MenuLeve
     for(CT_VirtualAbstractStep* step : steps) {
         CT_AbstractStepLoadFile *lfStep = dynamic_cast<CT_AbstractStepLoadFile*>(step);
 
-        if(lfStep != NULL) {
+        if(lfStep != nullptr) {
             const QList<FileFormat> ffs = lfStep->fileExtensionAccepted();
 
             for(const FileFormat& ff : ffs) {
@@ -1237,7 +1237,7 @@ void GMainWindow::documentToBeClosed(DM_DocumentView *view)
 {
     if(_itemDrawableConfigurationView->getDocumentView() == view)
     {
-        _itemDrawableConfigurationView->setDocument(NULL);
+        _itemDrawableConfigurationView->setDocument(nullptr);
     }
 }
 

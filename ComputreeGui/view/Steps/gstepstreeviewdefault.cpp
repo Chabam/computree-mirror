@@ -17,12 +17,12 @@ GStepsTreeViewDefault::GStepsTreeViewDefault(QWidget *parent) :
 void GStepsTreeViewDefault::indexClicked(const QModelIndex &index)
 {
     if(index.isValid()
-            && (index.model() != NULL))
+            && (index.model() != nullptr))
     {
         QModelIndex newIndex = index.model()->sibling(index.row(), 0, index);
 
         if(newIndex.isValid()
-            && (newIndex.model() != NULL)
+            && (newIndex.model() != nullptr)
             && (newIndex.model()->rowCount(newIndex) > 0)) {
             m_indexToExpand = newIndex;
 

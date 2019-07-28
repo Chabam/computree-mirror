@@ -20,7 +20,7 @@ void QuadsPermanentRenderer::addQuads(const double &cx, const double &cy, const 
 
     const Chunk &ch = createOrGetChunkForShape(Eigen::AlignedBox3d(minD, maxD));
 
-    if(chunk != NULL)
+    if(chunk != nullptr)
         *chunk = (Chunk*)&ch;
 
     Chunk::ShaderParamsType params = Chunk::ShaderParamsType::staticConstructFromValues(cx, cy, cz,

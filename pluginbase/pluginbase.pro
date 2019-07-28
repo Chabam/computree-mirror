@@ -15,29 +15,11 @@ HEADERS += $$CT_LIB_PREFIX/ctlibplugin/pluginentryinterface.h\
     pb_steppluginmanager.h \
 #    actions/pb_actionselectitemdrawablegv.h \
 #    actions/pb_actionshowitemdatagv.h \
-#    exporters/ascid/pb_ascidexporter.h \
-#    exporters/ascrgb/pb_ascrgbexporter.h \
-#    exporters/csv/pb_csvexporter.h \
-#    exporters/csv/pb_csvexportercolumn.h \
-#    exporters/csv/pb_csvexporterconfiguration.h \
-#    exporters/gdal/pb_gdalexporter.h \
-#    exporters/grid2d/pb_grid2dexporter.h \
-#    exporters/grid3d/pb_grid3dastableexporter.h \
-#    exporters/grid3d/pb_grid3dexporter.h \
-#    exporters/groupdata/pb_groupdataexporter.h \
-#    exporters/mesh/pb_meshobjexporter.h \
-#    exporters/pbm/pb_pbmexporter.h \
-#    exporters/pgm/pb_pgmexporter.h \
-#    exporters/polygon2d/pb_polygon2dexporter.h \
-#    exporters/profile/pb_profileexporter.h \
-#    exporters/topology/pb_opfexporter.h \
-#    exporters/xyb/pb_multixybexporter.h \
-#    exporters/xyb/pb_xybexporter.h \
 #    step/pb_stepapplypointfilters.h \
 #    step/pb_stepcomputepointmetrics.h \
 #    step/pb_stepcomputerastermetrics.h \
 #    step/pb_stepexportitemlist.h \
-#    step/pb_stepgenericexporter.h \
+    step/pb_stepgenericexporter.h \
     step/pb_stepgenericloadfile.h \
 #    step/pb_stepuseritemselection.h \
 #    views/actions/pb_actionselectitemdrawablegvoptions.h \
@@ -59,7 +41,7 @@ HEADERS += $$CT_LIB_PREFIX/ctlibplugin/pluginentryinterface.h\
 #    step/pb_steploadfilebyname.h \
 #    tools/pb_configurableelementtools.h \
 #    tools/pb_readerstools.h \
-#    tools/pb_exportertools.h
+    tools/pb_exportertools.h \
     step/pb_stepcreatereaderlist.h \
 #    step/pb_stepusereadertoloadfiles.h
     tools/pb_readerstools.h
@@ -69,29 +51,11 @@ SOURCES += \
     pb_steppluginmanager.cpp \
 #    actions/pb_actionselectitemdrawablegv.cpp \
 #    actions/pb_actionshowitemdatagv.cpp \
-#    exporters/ascid/pb_ascidexporter.cpp \
-#    exporters/ascrgb/pb_ascrgbexporter.cpp \
-#    exporters/csv/pb_csvexporter.cpp \
-#    exporters/csv/pb_csvexportercolumn.cpp \
-#    exporters/csv/pb_csvexporterconfiguration.cpp \
-#    exporters/gdal/pb_gdalexporter.cpp \
-#    exporters/grid2d/pb_grid2dexporter.cpp \
-#    exporters/grid3d/pb_grid3dastableexporter.cpp \
-#    exporters/grid3d/pb_grid3dexporter.cpp \
-#    exporters/groupdata/pb_groupdataexporter.cpp \
-#    exporters/mesh/pb_meshobjexporter.cpp \
-#    exporters/pbm/pb_pbmexporter.cpp \
-#    exporters/pgm/pb_pgmexporter.cpp \
-#    exporters/polygon2d/pb_polygon2dexporter.cpp \
-#    exporters/profile/pb_profileexporter.cpp \
-#    exporters/topology/pb_opfexporter.cpp \
-#    exporters/xyb/pb_multixybexporter.cpp \
-#    exporters/xyb/pb_xybexporter.cpp \
 #    step/pb_stepapplypointfilters.cpp \
 #    step/pb_stepcomputepointmetrics.cpp \
 #    step/pb_stepcomputerastermetrics.cpp \
 #    step/pb_stepexportitemlist.cpp \
-#    step/pb_stepgenericexporter.cpp \
+    step/pb_stepgenericexporter.cpp \
     step/pb_stepgenericloadfile.cpp \
 #    step/pb_stepuseritemselection.cpp \
 #    views/actions/pb_actionselectitemdrawablegvoptions.cpp \

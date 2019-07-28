@@ -19,6 +19,7 @@ HEADERS += \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h \
     ct_itemdrawable/abstract/ct_abstractpointsattributescontainer.h \
     ct_itemdrawable/abstract/ct_abstractgrid3d.h \
+    ct_itemdrawable/abstract/ct_abstractgrid4d.h \
     ct_itemdrawable/ct_scene.h \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.h \
@@ -60,15 +61,15 @@ HEADERS += \
     ct_itemdrawable/ct_faceattributesscalart.hpp \
     ct_itemdrawable/ct_grid3d.h \
     ct_itemdrawable/ct_grid3d.hpp \
-#    ct_itemdrawable/ct_grid3d_points.h \
-#    ct_itemdrawable/ct_grid3d_sparse.h \
-#    ct_itemdrawable/ct_grid3d_sparse.hpp \
-#    ct_itemdrawable/ct_grid4d.h \
-#    ct_itemdrawable/ct_grid4d.hpp \
-#    ct_itemdrawable/ct_grid4d_dense.h \
-#    ct_itemdrawable/ct_grid4d_dense.hpp \
-#    ct_itemdrawable/ct_grid4d_sparse.h \
-#    ct_itemdrawable/ct_grid4d_sparse.hpp \
+    ct_itemdrawable/ct_grid3d_points.h \
+    ct_itemdrawable/ct_grid3d_sparse.h \
+    ct_itemdrawable/ct_grid3d_sparse.hpp \
+    ct_itemdrawable/ct_grid4d.h \
+    ct_itemdrawable/ct_grid4d.hpp \
+    ct_itemdrawable/ct_grid4d_dense.h \
+    ct_itemdrawable/ct_grid4d_dense.hpp \
+    ct_itemdrawable/ct_grid4d_sparse.h \
+    ct_itemdrawable/ct_grid4d_sparse.hpp \
     ct_itemdrawable/ct_image2d.h \
     ct_itemdrawable/ct_image2d.hpp \
     ct_itemdrawable/ct_line.h \
@@ -108,12 +109,12 @@ HEADERS += \
     ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.h \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp \
     ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.h \
@@ -164,13 +165,17 @@ HEADERS += \
     ct_itemdrawable/tools/ct_itemplateddata2darray.h \
     ct_itemdrawable/tools/ct_itemplateddata3darray.h \
     ct_itemdrawable/tools/ct_itemplateddata4darray.h \
-    ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.h
+    ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.h \
+    ct_tools/attributes/ct_abstractattributestocloudworker.h \
+    ct_tools/attributes/ct_attributestocloudworkert.h \
+    ct_tools/attributes/ct_attributestocloudworkert.hpp
 
 SOURCES += \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.cpp \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.cpp \
     ct_itemdrawable/abstract/ct_abstractpointsattributescontainer.cpp \
     ct_itemdrawable/abstract/ct_abstractgrid3d.cpp \
+    ct_itemdrawable/abstract/ct_abstractgrid4d.cpp \
     ct_itemdrawable/ct_scene.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.cpp \
@@ -208,11 +213,11 @@ SOURCES += \
     ct_itemdrawable/ct_faceattributescolor.cpp \
     ct_itemdrawable/ct_faceattributesnormal.cpp \
     ct_itemdrawable/ct_grid3d.cpp \
-#    ct_itemdrawable/ct_grid3d_points.cpp \
-#    ct_itemdrawable/ct_grid3d_sparse.cpp \
-#    ct_itemdrawable/ct_grid4d.cpp \
-#    ct_itemdrawable/ct_grid4d_dense.cpp \
-#    ct_itemdrawable/ct_grid4d_sparse.cpp \
+    ct_itemdrawable/ct_grid3d_points.cpp \
+    ct_itemdrawable/ct_grid3d_sparse.cpp \
+    ct_itemdrawable/ct_grid4d.cpp \
+    ct_itemdrawable/ct_grid4d_dense.cpp \
+    ct_itemdrawable/ct_grid4d_sparse.cpp \
     ct_itemdrawable/ct_image2d.cpp \
     ct_itemdrawable/ct_line.cpp \
     ct_itemdrawable/ct_line2d.cpp \
@@ -244,9 +249,9 @@ SOURCES += \
     ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardellipsedrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.cpp \
-#    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.cpp \
@@ -291,4 +296,5 @@ SOURCES += \
     ct_itemdrawable/abstract/ct_abstractshape2d.cpp \
     ct_itemdrawable/abstract/ct_abstractimage2d.cpp \
     ct_itemdrawable/abstract/ct_abstractprofile.cpp \
-    ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.cpp
+    ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.cpp \
+    ct_tools/attributes/ct_abstractattributestocloudworker.cpp

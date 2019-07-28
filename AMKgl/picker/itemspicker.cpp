@@ -4,7 +4,7 @@ ItemsPicker::ItemsPicker() : GenericPicker()
 {
     m_selectionOperation = nullptr;
     m_checkOperation = nullptr;
-    m_graphicsView = NULL;
+    m_graphicsView = nullptr;
 }
 
 bool ItemsPicker::isValid() const
@@ -12,7 +12,7 @@ bool ItemsPicker::isValid() const
     return (GenericPicker::isValid()
                 && (getSelectionOperation() != nullptr)
                 && (getCheckOperation() != nullptr)
-                && (getGraphicsView() != NULL));
+                && (getGraphicsView() != nullptr));
 }
 
 void ItemsPicker::setSelectionOperation(selectionOperation op)

@@ -40,7 +40,7 @@ class GColorGradientView : public QWidget
     Q_OBJECT
 
 public:
-    GColorGradientView(QWidget *parent = NULL);
+    GColorGradientView(QWidget *parent = nullptr);
     ~GColorGradientView();
     void toggleBackground(bool onOrOff);
     void createBackground(int vertLineSpace = 5, int horLineSpace = 5);

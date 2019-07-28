@@ -18,7 +18,7 @@ void PointCloudChunkManagerByMemoryLimit::beginAddMultiplePoints()
 
 void PointCloudChunkManagerByMemoryLimit::endAddMultiplePoints()
 {
-    if(m_multipleAddActivated && (m_lastChunkUsed != NULL))
+    if(m_multipleAddActivated && (m_lastChunkUsed != nullptr))
         m_lastChunkUsed->endAddMultiplePoints();
 
     m_multipleAddActivated = false;
@@ -27,12 +27,12 @@ void PointCloudChunkManagerByMemoryLimit::endAddMultiplePoints()
 void PointCloudChunkManagerByMemoryLimit::addPoint(const size_t &globalIndex,
                                                    PermanentItemInformation *dispatchInfos)
 {
-    if((m_lastChunkUsed != NULL)
+    if((m_lastChunkUsed != nullptr)
             && (globalIndex >= m_lastChunkUsed->getBeginningOfCloud())
             && (globalIndex <= m_lastChunkUsed->getEndOfCloud())) {
         m_lastChunkUsed->addPoint(globalIndex - m_lastChunkUsed->getBeginningOfCloud(), globalIndex, dispatchInfos);
     } else {
-        if(m_multipleAddActivated && (m_lastChunkUsed != NULL))
+        if(m_multipleAddActivated && (m_lastChunkUsed != nullptr))
             m_lastChunkUsed->endAddMultiplePoints();
 
         size_t localIndex = globalIndex - getBeginningOfCloud();

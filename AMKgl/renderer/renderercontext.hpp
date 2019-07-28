@@ -7,7 +7,7 @@ template<typename Shaders>
 RendererContext<Shaders>::RendererContext(const IGraphicsDocument *doc,
                                           const QOpenGLContext *newOpenglContext)
 {
-    Q_ASSERT(newOpenglContext != NULL);
+    Q_ASSERT(newOpenglContext != nullptr);
 
     m_document = const_cast<IGraphicsDocument*>(doc);
     m_newContext = const_cast<QOpenGLContext*>(newOpenglContext);
@@ -24,12 +24,12 @@ RendererContext<Shaders>::~RendererContext()
 template<typename Shaders>
 bool RendererContext<Shaders>::makeCurrent()
 {
-    if(getDocument() == NULL)
+    if(getDocument() == nullptr)
         return false;
 
     QOpenGLWidget* w = getDocument()->getOpengWidgetWithContext(m_newContext);
 
-    if((w == NULL) || !w->isValid())
+    if((w == nullptr) || !w->isValid())
         return false;
 
     w->makeCurrent();
@@ -52,9 +52,9 @@ void RendererContext<Shaders>::destroyGLShaders()
 template<typename Shaders>
 ChunkCustomUpdateValues* RendererContext<Shaders>::createOrGetChunkCustomUpdateValues(const void* object)
 {
-    ChunkCustomUpdateValues* b = m_customValues.value((void*)object, NULL);
+    ChunkCustomUpdateValues* b = m_customValues.value((void*)object, nullptr);
 
-    if(b == NULL) {
+    if(b == nullptr) {
         b = new ChunkCustomUpdateValues();
         m_customValues.insert((void*)object, b);
     }
@@ -65,9 +65,9 @@ ChunkCustomUpdateValues* RendererContext<Shaders>::createOrGetChunkCustomUpdateV
 template<typename Shaders>
 void RendererContext<Shaders>::destroyChunkCustomUpdateValues(void* object)
 {
-    ChunkCustomUpdateValues* b = m_customValues.value(object, NULL);
+    ChunkCustomUpdateValues* b = m_customValues.value(object, nullptr);
 
-    if(b != NULL) {
+    if(b != nullptr) {
         m_customValues.remove(object);
         delete b;
     }
@@ -76,9 +76,9 @@ void RendererContext<Shaders>::destroyChunkCustomUpdateValues(void* object)
 template<typename Shaders>
 void RendererContext<Shaders>::destroyGLBuffers(void *object)
 {
-    ArrayObjectManagerType* aom = m_arrayObjectManagers.value(object, NULL);
+    ArrayObjectManagerType* aom = m_arrayObjectManagers.value(object, nullptr);
 
-    if(aom != NULL) {
+    if(aom != nullptr) {
         m_arrayObjectManagers.remove(object);
         delete aom;
     }
@@ -89,9 +89,9 @@ void RendererContext<Shaders>::destroyGLBuffers(void *object)
 template<typename Shaders>
 GLuint RendererContext<Shaders>::createOrGetDisplayList(void* object, const size_t& uniqueIndex)
 {
-    DisplayListManager* dlManager = m_displayListsManager.value(object, NULL);
+    DisplayListManager* dlManager = m_displayListsManager.value(object, nullptr);
 
-    if(dlManager == NULL) {
+    if(dlManager == nullptr) {
         dlManager = new DisplayListManager();
         m_displayListsManager.insert(object, dlManager);
     }
@@ -102,9 +102,9 @@ GLuint RendererContext<Shaders>::createOrGetDisplayList(void* object, const size
 template<typename Shaders>
 bool RendererContext<Shaders>::executeOrCreateAndCompileAndExecuteDisplayList(void* object, const size_t& uniqueIndex)
 {
-    DisplayListManager* dlManager = m_displayListsManager.value(object, NULL);
+    DisplayListManager* dlManager = m_displayListsManager.value(object, nullptr);
 
-    if(dlManager == NULL) {
+    if(dlManager == nullptr) {
         dlManager = new DisplayListManager();
         m_displayListsManager.insert(object, dlManager);
     }
@@ -115,9 +115,9 @@ bool RendererContext<Shaders>::executeOrCreateAndCompileAndExecuteDisplayList(vo
 template<typename Shaders>
 void RendererContext<Shaders>::endDisplayList(void* object, const size_t& uniqueIndex)
 {
-    DisplayListManager* dlManager = m_displayListsManager.value(object, NULL);
+    DisplayListManager* dlManager = m_displayListsManager.value(object, nullptr);
 
-    if(dlManager == NULL)
+    if(dlManager == nullptr)
         return;
 
     return dlManager->endDisplayList(uniqueIndex);
@@ -126,9 +126,9 @@ void RendererContext<Shaders>::endDisplayList(void* object, const size_t& unique
 template<typename Shaders>
 void RendererContext<Shaders>::destroyAllDisplayList(void* object)
 {
-    DisplayListManager* dlManager = m_displayListsManager.value(object, NULL);
+    DisplayListManager* dlManager = m_displayListsManager.value(object, nullptr);
 
-    if(dlManager == NULL)
+    if(dlManager == nullptr)
         return;
 
     delete dlManager;
@@ -187,9 +187,9 @@ BufferObjectManager& RendererContext<Shaders>::getBufferObjectManager() const
 template<typename Shaders>
 typename RendererContext<Shaders>::ArrayObjectManagerType& RendererContext<Shaders>::createOrGetArrayObjectManager(void* object)
 {
-    ArrayObjectManagerType* b = m_arrayObjectManagers.value((void*)object, NULL);
+    ArrayObjectManagerType* b = m_arrayObjectManagers.value((void*)object, nullptr);
 
-    if(b == NULL) {
+    if(b == nullptr) {
         b = new ArrayObjectManagerType();
         m_arrayObjectManagers.insert((void*)object, b);
     }

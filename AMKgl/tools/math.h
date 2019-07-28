@@ -79,22 +79,22 @@ public:
     /**
      * @brief Returns true if the point is in ellipse
      */
-    static bool isPointInEllipse(const Eigen::Vector3d &p, const Eigen::Matrix4d &inversedMatrix, Eigen::Vector3d *inversedP = NULL);
+    static bool isPointInEllipse(const Eigen::Vector3d &p, const Eigen::Matrix4d &inversedMatrix, Eigen::Vector3d *inversedP = nullptr);
 
     /**
      * @brief Returns true if the point is in cylinder
      */
-    static bool isPointInCylinder(const Eigen::Vector3d &p, const Eigen::Matrix4d &inversedMatrix, Eigen::Vector3d *inversedP = NULL);
+    static bool isPointInCylinder(const Eigen::Vector3d &p, const Eigen::Matrix4d &inversedMatrix, Eigen::Vector3d *inversedP = nullptr);
 
     /**
      * @brief Returns true if the point is in sphere
      */
-    static bool isPointInSphere(const Eigen::Vector3d &p, const Eigen::Matrix4d &inversedMatrix, Eigen::Vector3d *inversedP = NULL);
+    static bool isPointInSphere(const Eigen::Vector3d &p, const Eigen::Matrix4d &inversedMatrix, Eigen::Vector3d *inversedP = nullptr);
 
     /**
      * @brief Get the closest point to mouse pos
      */
-    static QPoint getClosestPolygonPointToPoint(const QPolygon &pol, const QPoint &p, double &distance, int* index = NULL);
+    static QPoint getClosestPolygonPointToPoint(const QPolygon &pol, const QPoint &p, double &distance, int* index = nullptr);
 
     /**
      * @brief Get the closest point between a point and a triangle

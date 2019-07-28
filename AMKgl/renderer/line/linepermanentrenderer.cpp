@@ -15,7 +15,7 @@ void LinePermanentRenderer::addLine(const Eigen::Vector3d &p1,
 
     const Chunk &ch = createOrGetChunkForObject(center);
 
-    if(chunk != NULL)
+    if(chunk != nullptr)
         *chunk = (Chunk*)&ch;
 
     addObjectVertex(ch, p1, info, c1);

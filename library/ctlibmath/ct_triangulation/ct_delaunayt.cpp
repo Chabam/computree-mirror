@@ -284,11 +284,11 @@ void CT_DelaunayT::removeNode(QSharedPointer<CT_NodeT> nd)
         for(int i=last_n; i>0; --i)
         {
             index.at(i).data()->getInversedEdge().data()->setHullEdge(index.at(i-1).data()->getInversedEdge());
-            index.at(i).data()->getInversedEdge().data()->setInversedEdge(QSharedPointer<CT_EdgeT>(NULL));
+            index.at(i).data()->getInversedEdge().data()->setInversedEdge(QSharedPointer<CT_EdgeT>(nullptr));
         }
 
         index.first().data()->getInversedEdge().data()->setHullEdge(start.data()->getHullEdge());
-        index.first().data()->getInversedEdge().data()->setInversedEdge(QSharedPointer<CT_EdgeT>(NULL));
+        index.first().data()->getInversedEdge().data()->setInversedEdge(QSharedPointer<CT_EdgeT>(nullptr));
 
         QListIterator< QSharedPointer<CT_NodeT> > it(list_nodes_around);
 
@@ -478,9 +478,9 @@ void CT_DelaunayT::expandTri(QSharedPointer<CT_EdgeT> e, QSharedPointer<CT_NodeT
 
 void CT_DelaunayT::expandHull(QSharedPointer<CT_NodeT> nd)
 {
-    QSharedPointer<CT_EdgeT> e1, e2, e3(NULL), enext;
+    QSharedPointer<CT_EdgeT> e1, e2, e3(nullptr), enext;
     QSharedPointer<CT_EdgeT> e = _hull_edge_start;
-    QSharedPointer<CT_EdgeT> comedge(NULL), lastbe(NULL);
+    QSharedPointer<CT_EdgeT> comedge(nullptr), lastbe(nullptr);
 
     while(true)
     {
@@ -529,7 +529,7 @@ void CT_DelaunayT::expandHull(QSharedPointer<CT_NodeT> nd)
 int CT_DelaunayT::searchEdge(QSharedPointer<CT_EdgeT> e, QSharedPointer<CT_NodeT> nd)
 {
     int f2,f3,f4;
-    QSharedPointer<CT_EdgeT> e0(NULL);
+    QSharedPointer<CT_EdgeT> e0(nullptr);
 
     f2 = e.data()->getLeftEdge().data()->onSide(nd);
     if(f2 == -1)

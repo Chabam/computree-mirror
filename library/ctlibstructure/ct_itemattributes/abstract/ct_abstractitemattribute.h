@@ -24,7 +24,7 @@ public:
 
     /**
      * @brief Create an attribute with a category.
-     * @param category : the category of the item attribute. Must not be NULL !
+     * @param category : the category of the item attribute. Must not be nullptr !
      */
     CT_AbstractItemAttribute(const CT_AbstractCategory* category);
 
@@ -99,7 +99,7 @@ public:
       * @brief Methods to get the value in bool type
       *
       * @param item : the item to which this item attribute belongs
-      * @param ok : false if the value can not be converted to the type you want. ok can be NULL if you don't want
+      * @param ok : false if the value can not be converted to the type you want. ok can be nullptr if you don't want
       *        to know the validity of the conversion.
       */
     virtual bool toBool(const CT_AbstractItem* item, bool* ok) const = 0;
@@ -108,7 +108,7 @@ public:
       * @brief Methods to get the value in double type
       *
       * @param item : the item to which this item attribute belongs
-      * @param ok : false if the value can not be converted to the type you want. ok can be NULL if you don't want
+      * @param ok : false if the value can not be converted to the type you want. ok can be nullptr if you don't want
       *        to know the validity of the conversion.
       */
     virtual double toDouble(const CT_AbstractItem* item, bool* ok) const = 0;
@@ -117,7 +117,7 @@ public:
       * @brief Methods to get the value in float type
       *
       * @param item : the item to which this item attribute belongs
-      * @param ok : false if the value can not be converted to the type you want. ok can be NULL if you don't want
+      * @param ok : false if the value can not be converted to the type you want. ok can be nullptr if you don't want
       *        to know the validity of the conversion.
       */
     virtual float toFloat(const CT_AbstractItem* item, bool* ok) const = 0;
@@ -126,7 +126,7 @@ public:
       * @brief Methods to get the value in long double type
       *
       * @param item : the item to which this item attribute belongs
-      * @param ok : false if the value can not be converted to the type you want. ok can be NULL if you don't want
+      * @param ok : false if the value can not be converted to the type you want. ok can be nullptr if you don't want
       *        to know the validity of the conversion.
       */
     virtual long double toLongDouble(const CT_AbstractItem* item, bool* ok) const = 0;
@@ -135,7 +135,7 @@ public:
       * @brief Methods to get the value in int type
       *
       * @param item : the item to which this item attribute belongs
-      * @param ok : false if the value can not be converted to the type you want. ok can be NULL if you don't want
+      * @param ok : false if the value can not be converted to the type you want. ok can be nullptr if you don't want
       *        to know the validity of the conversion.
       */
     virtual int toInt(const CT_AbstractItem* item, bool* ok) const = 0;
@@ -144,7 +144,7 @@ public:
       * @brief Methods to get the value in uint64 type
       *
       * @param item : the item to which this item attribute belongs
-      * @param ok : false if the value can not be converted to the type you want. ok can be NULL if you don't want
+      * @param ok : false if the value can not be converted to the type you want. ok can be nullptr if you don't want
       *        to know the validity of the conversion.
       */
     virtual quint64 toUInt64(const CT_AbstractItem* item, bool* ok) const = 0;
@@ -153,7 +153,7 @@ public:
       * @brief Methods to get the value in size_t type
       *
       * @param item : the item to which this item attribute belongs
-      * @param ok : false if the value can not be converted to the type you want. ok can be NULL if you don't want
+      * @param ok : false if the value can not be converted to the type you want. ok can be nullptr if you don't want
       *        to know the validity of the conversion.
       */
     virtual size_t toSizeT(const CT_AbstractItem* item, bool* ok) const = 0;
@@ -162,7 +162,7 @@ public:
       * @brief Methods to get the value in QString type
       *
       * @param item : the item to which this item attribute belongs
-      * @param ok : false if the value can not be converted to the type you want. ok can be NULL if you don't want
+      * @param ok : false if the value can not be converted to the type you want. ok can be nullptr if you don't want
       *        to know the validity of the conversion.
       */
     virtual QString toString(const CT_AbstractItem* item, bool* ok) const = 0;
@@ -187,7 +187,7 @@ public:
      * @brief Returns a copy of the item attribute
      * @param model : the new model that must be set to the copy
      * @param result : the new result that will contains the copy
-     * @return NULL if it was an error otherwise a copy of the item
+     * @return nullptr if it was an error otherwise a copy of the item
      */
     virtual CT_AbstractItemAttribute* copy(const DEF_CT_OutAbstractIAModel* model, const CT_AbstractResult* result) const = 0;
 
@@ -206,7 +206,7 @@ private:
 
         ICategoryForModel* category() const override { return m_pointer->category(); }
         int valueType() const override { return static_cast<int>(m_pointer->valueType()); }
-        IItemAttributeForModel* copyItemAttribute() const override { return m_pointer->copy(NULL, NULL); }
+        IItemAttributeForModel* copyItemAttribute() const override { return m_pointer->copy(nullptr, nullptr); }
     };
 
     /**

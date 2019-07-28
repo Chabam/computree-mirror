@@ -23,7 +23,7 @@ template<typename Type, class ItemTTT>
 class DM_ItemDrawableType
 {
 public:
-    DM_ItemDrawableType() { m_backup = NULL; }
+    DM_ItemDrawableType() { m_backup = nullptr; }
     DM_ItemDrawableType(const Type &type);
     DM_ItemDrawableType(const Type &type, const DM_ItemDrawableTypeBackup<ItemTTT> *backup);
 

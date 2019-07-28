@@ -10,7 +10,7 @@ MeshObjectsPickerByModel::MeshObjectsPickerByModel(const quint8& nVertexPerObjec
     m_checkOperation = nullptr;
     m_selectionOperation = nullptr;
     m_nVertexPerObject = nVertexPerObject;
-    m_model = NULL;
+    m_model = nullptr;
 }
 
 void MeshObjectsPickerByModel::setModel(const ItemModel *model)
@@ -78,7 +78,7 @@ void MeshObjectsPickerByModel::visitChunk(const IChunk* chunk)
 {
     MeshObjectsPicker* pPicker = static_cast<MeshObjectsPicker*>(lastPicker());
 
-    if(pPicker != NULL)
+    if(pPicker != nullptr)
         pPicker->visitChunk(chunk);
 }
 

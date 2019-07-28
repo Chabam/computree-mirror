@@ -37,13 +37,13 @@
 CT_DelaunayTriangulation::CT_DelaunayTriangulation()
 {
     _corners.resize(4);
-    _corners[0] = NULL;
-    _corners[1] = NULL;
-    _corners[2] = NULL;
-    _corners[3] = NULL;
+    _corners[0] = nullptr;
+    _corners[1] = nullptr;
+    _corners[2] = nullptr;
+    _corners[3] = nullptr;
 
 
-    _refTriangle = NULL;
+    _refTriangle = nullptr;
 
     _initialized = false;
     _neighborsComputed = false;
@@ -54,7 +54,7 @@ CT_DelaunayTriangulation::CT_DelaunayTriangulation()
     _maxx = -std::numeric_limits<double>::max();
     _maxy = -std::numeric_limits<double>::max();
 
-    std::srand(time(NULL));
+    std::srand(time(nullptr));
 }
 
 CT_DelaunayTriangulation::~CT_DelaunayTriangulation()
@@ -66,10 +66,10 @@ void CT_DelaunayTriangulation::clear(bool clearToInsert)
 {
     _initialized = false;
 
-    if (_corners[0] != NULL) {delete _corners[0];_corners[0] = NULL;}
-    if (_corners[1] != NULL) {delete _corners[1];_corners[1] = NULL;}
-    if (_corners[2] != NULL) {delete _corners[2];_corners[2] = NULL;}
-    if (_corners[3] != NULL) {delete _corners[3];_corners[3] = NULL;}
+    if (_corners[0] != nullptr) {delete _corners[0];_corners[0] = nullptr;}
+    if (_corners[1] != nullptr) {delete _corners[1];_corners[1] = nullptr;}
+    if (_corners[2] != nullptr) {delete _corners[2];_corners[2] = nullptr;}
+    if (_corners[3] != nullptr) {delete _corners[3];_corners[3] = nullptr;}
 
     qDeleteAll(_duplicatePositions.keys());
     _duplicatePositions.clear();
@@ -237,22 +237,22 @@ void CT_DelaunayTriangulation::computeTriangles()
 {
 
 //    CT_DelaunayTriangle* tri = _refTriangle;
-//    CT_DelaunayTriangle* n1 = NULL;
+//    CT_DelaunayTriangle* n1 = nullptr;
 
-//    if (tri != NULL) {_triangles.append(tri);}
+//    if (tri != nullptr) {_triangles.append(tri);}
 
 //    for (int i = 0 ; i < _triangles.size() ; i++)
 //    {
 //        tri = _triangles.at(i);
 
 //        n1 = tri->_n12;
-//        if ((n1 != NULL) && (!_triangles.contains(n1))) {_triangles.append(n1);}
+//        if ((n1 != nullptr) && (!_triangles.contains(n1))) {_triangles.append(n1);}
 
 //        n1 = tri->_n23;
-//        if ((n1 != NULL) && (!_triangles.contains(n1))) {_triangles.append(n1);}
+//        if ((n1 != nullptr) && (!_triangles.contains(n1))) {_triangles.append(n1);}
 
 //        n1 = tri->_n31;
-//        if ((n1 != NULL) && (!_triangles.contains(n1))) {_triangles.append(n1);}
+//        if ((n1 != nullptr) && (!_triangles.contains(n1))) {_triangles.append(n1);}
 
 //    }
 
@@ -517,7 +517,7 @@ bool CT_DelaunayTriangulation::doInsertion()
 
     // initialisations
     t1 = _refTriangle;
-    t2 = NULL;
+    t2 = nullptr;
 
     QTime time;
 
@@ -554,7 +554,7 @@ bool CT_DelaunayTriangulation::doInsertion()
             // 1) find the triangle which contains the point to be inserted
             // faster way, actually used (walk through the triangulation from refTriangle)
 
-            t1old = NULL; // to avoid infinite loops
+            t1old = nullptr; // to avoid infinite loops
             while ((!t1->contains(xt, yt)) && t1old != t1)
             {
                 t1old = t1;
@@ -577,7 +577,7 @@ bool CT_DelaunayTriangulation::doInsertion()
                 // 2) create two lists :
                 // - destrLst : contains triangle "to destroy"
                 // - borderLst : contains the sides of the polygon formed by "to destroy" triangles
-                // a side is composed of two vertices, and one bording triangle (or NULL if don't exist)
+                // a side is composed of two vertices, and one bording triangle (or nullptr if don't exist)
 
                 destrLst.append(t1);
                 t1->setToRemoveFlag(true);
@@ -589,9 +589,9 @@ bool CT_DelaunayTriangulation::doInsertion()
                     // for n12 neighbor triangle
                     n1 = t2->_n12;
 
-                    if ((n1 == NULL) || !n1->getToRemoveFlag())
+                    if ((n1 == nullptr) || !n1->getToRemoveFlag())
                     {
-                        if ((n1 != NULL) && n1->circleContains(xt,yt))
+                        if ((n1 != nullptr) && n1->circleContains(xt,yt))
                         {
                             destrLst.append(n1);
                             n1->setToRemoveFlag(true);
@@ -603,8 +603,8 @@ bool CT_DelaunayTriangulation::doInsertion()
                     // for n23 neighbor triangle
                     n1 = t2->_n23;
 
-                    if ((n1 == NULL) || !n1->getToRemoveFlag()) {
-                        if ((n1 != NULL) && n1->circleContains (xt,yt))
+                    if ((n1 == nullptr) || !n1->getToRemoveFlag()) {
+                        if ((n1 != nullptr) && n1->circleContains (xt,yt))
                         {
                             destrLst.append(n1);
                             n1->setToRemoveFlag(true);
@@ -616,8 +616,8 @@ bool CT_DelaunayTriangulation::doInsertion()
                     // for n31 neighbor triangle
                     n1 = t2->_n31;
 
-                    if ((n1 == NULL) || !n1->getToRemoveFlag()) {
-                        if ((n1 != NULL) && n1->circleContains (xt,yt)) {
+                    if ((n1 == nullptr) || !n1->getToRemoveFlag()) {
+                        if ((n1 != nullptr) && n1->circleContains (xt,yt)) {
                             destrLst.append(n1);
                             n1->setToRemoveFlag(true);
                         } else {
@@ -658,7 +658,7 @@ bool CT_DelaunayTriangulation::doInsertion()
 
                 n1 = sd_tri;
                 t1->_n12 = n1;
-                if (n1 != NULL) {n1->setNeighbor(vFirst, vNext, t1);}
+                if (n1 != nullptr) {n1->setNeighbor(vFirst, vNext, t1);}
 
                 _refTriangle = t1;
                 // NB: so the refTriangle is set to be the first triangle created this step
@@ -690,7 +690,7 @@ bool CT_DelaunayTriangulation::doInsertion()
 
                     n1 = sd_tri;
                     t2->_n12 = n1;
-                    if (n1 != NULL) {n1->setNeighbor (vBase, vNext, t2);}
+                    if (n1 != nullptr) {n1->setNeighbor (vBase, vNext, t2);}
                     t2->_n31 = t1;
                     t1->_n23 = t2;
 
@@ -740,7 +740,7 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
 
     // initialisations
     t1 = _refTriangle;
-    t2 = NULL;
+    t2 = nullptr;
 
     // is the point in the triangulation, else add to outOfBoundsVertices list
     // and DO NOT insert
@@ -753,7 +753,7 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
         // 1) find the triangle which contains the point to be inserted
         // faster way, actually used (walk through the triangulation from refTriangle)
 
-        t1old = NULL; // to avoid infinite loops
+        t1old = nullptr; // to avoid infinite loops
         while ((!t1->contains(x, y)) && t1old != t1)
         {
             t1old = t1;
@@ -777,7 +777,7 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
 
             // 2) create one list :
             // - borderLst : contains the sides of the polygon formed by "to destroy" triangles
-            // a side is composed of two vertices, and one bording triangle (or NULL if don't exist)
+            // a side is composed of two vertices, and one bording triangle (or nullptr if don't exist)
 
             _refTriangle = t1;
             destrLst.append(t1);
@@ -789,9 +789,9 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
                 // for n12 neighbor triangle
                 n1 = t2->_n12;
 
-                if ((n1 == NULL) || !destrLst.contains(n1))
+                if ((n1 == nullptr) || !destrLst.contains(n1))
                 {
-                    if ((n1 != NULL) && n1->circleContains(x,y))
+                    if ((n1 != nullptr) && n1->circleContains(x,y))
                     {
                         destrLst.append(n1);
                     } else {
@@ -802,8 +802,8 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
                 // for n23 neighbor triangle
                 n1 = t2->_n23;
 
-                if ((n1 == NULL) || !destrLst.contains(n1)) {
-                    if ((n1 != NULL) && n1->circleContains (x,y))
+                if ((n1 == nullptr) || !destrLst.contains(n1)) {
+                    if ((n1 != nullptr) && n1->circleContains (x,y))
                     {
                         destrLst.append(n1);
                     } else {
@@ -814,8 +814,8 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
                 // for n31 neighbor triangle
                 n1 = t2->_n31;
 
-                if ((n1 == NULL) || !destrLst.contains(n1)) {
-                    if ((n1 != NULL) && n1->circleContains (x,y)) {
+                if ((n1 == nullptr) || !destrLst.contains(n1)) {
+                    if ((n1 != nullptr) && n1->circleContains (x,y)) {
                         destrLst.append(n1);
                     } else {
                         borderLst.appendSide(n1, t2->_v3, t2->_v1);
@@ -883,25 +883,25 @@ void CT_DelaunayTriangulation::updateCornersZValues()
              if (!_corners.contains(neighbour))
              {
                  Eigen::Vector3d* data = neighbour->getData();
-                 if (data != NULL) {zmean += (*data)(2); cpt++;}
+                 if (data != nullptr) {zmean += (*data)(2); cpt++;}
              }
          }
 
          Eigen::Vector3d* dataCorner = corner->getData();
 
-         if (dataCorner!= NULL && cpt > 0) {(*dataCorner)(2) = zmean / (double)cpt;}
+         if (dataCorner!= nullptr && cpt > 0) {(*dataCorner)(2) = zmean / (double)cpt;}
     }
 }
 
 const CT_DelaunayTriangle* CT_DelaunayTriangulation::findTriangleContainingPoint(double x, double y, CT_DelaunayTriangle* refTriangle)
 {
-    if (refTriangle == NULL)
+    if (refTriangle == nullptr)
     {
         refTriangle = _refTriangle;
     }
 
     CT_DelaunayTriangle* t1 = refTriangle;
-    CT_DelaunayTriangle* t1old = NULL; // to avoid infinite loops
+    CT_DelaunayTriangle* t1old = nullptr; // to avoid infinite loops
 
     while ((!t1->contains(x, y)) && t1old != t1)
     {
@@ -916,7 +916,7 @@ const CT_DelaunayTriangle *CT_DelaunayTriangulation::getZCoordForXY(double x, do
 {
     const CT_DelaunayTriangle* triangle = findTriangleContainingPoint(x, y, refTriangle);
 
-    if (!triangle->contains(x, y)) {outZ = NAN; return NULL;}
+    if (!triangle->contains(x, y)) {outZ = NAN; return nullptr;}
 
     Eigen::Vector3d vt1 = *(triangle->getVertex1()->getDataConst());
     Eigen::Vector3d vt2 = *(triangle->getVertex2()->getDataConst());

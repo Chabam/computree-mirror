@@ -190,9 +190,9 @@ void GraphicsViewDebugMode::drawChunksInformations(GraphicsViewInterface &view, 
 
     GGraphicsViewImp* gv = graphicsViewToDebug();
 
-    PermanentItemScene* scene = graphicsViewToDebug()->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL);
+    PermanentItemScene* scene = graphicsViewToDebug()->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
 
-    if(scene != NULL) {
+    if(scene != nullptr) {
         QString previousType;
 
         ApplyCustomFunctionToObjectVisitor visitor;
@@ -218,9 +218,9 @@ void GraphicsViewDebugMode::drawChunksInformations(GraphicsViewInterface &view, 
 
 void GraphicsViewDebugMode::setAutomaticColorToChunk()
 {
-    PermanentItemScene* scene = graphicsViewToDebug()->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL);
+    PermanentItemScene* scene = graphicsViewToDebug()->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
 
-    if(scene != NULL) {
+    if(scene != nullptr) {
         QVector<Basic::LocalColor> colors(6);
         colors[0] = Qt::magenta;
         colors[1] = Qt::green;
@@ -265,7 +265,7 @@ void GraphicsViewDebugMode::showPickingPolygonIn3D(bool enabled)
     if(enabled) {
         ActionPickAnyElements* picking = graphicsViewToDebug()->getPickingAction();
 
-        if(picking != NULL) {
+        if(picking != nullptr) {
             const QPolygon p = picking->getLastPolygon();
 
             m_polygonToShowIn3D = ShapeToVolume::staticTriangulatePolygonAndConvertItToPlanes(p, *graphicsViewToDebug()->amkglCamera());
@@ -279,9 +279,9 @@ void GraphicsViewDebugMode::showPickingPolygonIn3D(bool enabled)
 
 void GraphicsViewDebugMode::showSelectionResult()
 {
-    PermanentItemScene* scene = graphicsViewToDebug()->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL);
+    PermanentItemScene* scene = graphicsViewToDebug()->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
 
-    if(scene != NULL) {
+    if(scene != nullptr) {
         QVector<TrianglePlane>& polygons = m_polygonToShowIn3D;
 
         ApplyCustomFunctionToGlobalPointsVisitor visitor;

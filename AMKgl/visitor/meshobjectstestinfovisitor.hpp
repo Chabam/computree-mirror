@@ -38,7 +38,7 @@ void MeshObjectsTestInfoVisitor<FoundedCloudIndex>::visitChunk(const IChunk* chu
     const size_t firstGlobalIndex = objectChunk->getBeginningOfObjectCloud();
     GLuint* foi = objectChunk->getFirstObjectIndex();
 
-    if(foin != NULL) {
+    if(foin != nullptr) {
         for(size_t i=0; i<nObjects; ++i)
         {
             const GLuint& localIndex = foi[i];

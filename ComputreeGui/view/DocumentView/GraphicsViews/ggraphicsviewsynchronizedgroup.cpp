@@ -60,11 +60,11 @@ GGraphicsViewSynchronizedGroup::~GGraphicsViewSynchronizedGroup()
 
 void GGraphicsViewSynchronizedGroup::addAllGraphicsFromDocumentView(const GDocumentViewForGraphics *view)
 {
-    if(view != NULL)
+    if(view != nullptr)
     {
         QTreeWidgetItem *pItem = getItemForType(view->getType());
 
-        if(pItem == NULL)
+        if(pItem == nullptr)
         {
             pItem = createItemForType(ui->treeWidgetDocument->invisibleRootItem(), view->getType());
             ui->treeWidgetDocument->invisibleRootItem()->addChild(pItem);
@@ -72,7 +72,7 @@ void GGraphicsViewSynchronizedGroup::addAllGraphicsFromDocumentView(const GDocum
 
         QList<DM_AbstractViewSynchronizedGroup*> lGroups = _dmSynchroGroupMap.value(view->getType(), QList<DM_AbstractViewSynchronizedGroup*>() );
 
-        DM_GraphicsViewSynchronizedGroup *syncGroup = NULL;
+        DM_GraphicsViewSynchronizedGroup *syncGroup = nullptr;
 
         if(lGroups.isEmpty())
         {
@@ -110,11 +110,11 @@ void GGraphicsViewSynchronizedGroup::addAllGraphicsFromDocumentView(const GDocum
 
 void GGraphicsViewSynchronizedGroup::removeDocumentView(const GDocumentViewForGraphics *view)
 {
-    if(view != NULL)
+    if(view != nullptr)
     {
         QTreeWidgetItem *pItem = getItemForType(view->getType());
 
-        if(pItem != NULL)
+        if(pItem != nullptr)
         {
             QString name = view->getSubWindow()->windowTitle();
 
@@ -166,7 +166,7 @@ void GGraphicsViewSynchronizedGroup::removeDocumentView(const GDocumentViewForGr
             {
                 DM_ItemModelViewSynchronizedGroup *gg = dynamic_cast<DM_ItemModelViewSynchronizedGroup*>(itG.next());
 
-                if(gg != NULL)
+                if(gg != nullptr)
                     gg->removeDocumentView(view);
             }
         }
@@ -175,14 +175,14 @@ void GGraphicsViewSynchronizedGroup::removeDocumentView(const GDocumentViewForGr
 
 void GGraphicsViewSynchronizedGroup::syncItemModelWith(const GItemModelView *view)
 {
-    if(view != NULL)
+    if(view != nullptr)
     {
         GDocumentView *documentView = view->documentView();
         QString type = documentView->getType();
 
         QTreeWidgetItem *pItem = getItemForType(type);
 
-        if(pItem == NULL)
+        if(pItem == nullptr)
         {
             pItem = createItemForType(ui->treeWidgetDocument->invisibleRootItem(), type);
             ui->treeWidgetDocument->invisibleRootItem()->addChild(pItem);
@@ -191,10 +191,10 @@ void GGraphicsViewSynchronizedGroup::syncItemModelWith(const GItemModelView *vie
         QList<DM_AbstractViewSynchronizedGroup*> lGroups = _dmSynchroGroupMap.value(type, QList<DM_AbstractViewSynchronizedGroup*>() );
         QListIterator<DM_AbstractViewSynchronizedGroup*> it(lGroups);
 
-        DM_ItemModelViewSynchronizedGroup *syncGroup = NULL;
+        DM_ItemModelViewSynchronizedGroup *syncGroup = nullptr;
 
         while(it.hasNext()
-              && (syncGroup == NULL))
+              && (syncGroup == nullptr))
         {
             DM_ItemModelViewSynchronizedGroup *g = (DM_ItemModelViewSynchronizedGroup*)it.next();
 
@@ -202,7 +202,7 @@ void GGraphicsViewSynchronizedGroup::syncItemModelWith(const GItemModelView *vie
                 syncGroup = g;
         }
 
-        if(syncGroup == NULL)
+        if(syncGroup == nullptr)
         {
             syncGroup = new DM_ItemModelViewSynchronizedGroup();
             syncGroup->setItemModelView(documentView);
@@ -263,7 +263,7 @@ void GGraphicsViewSynchronizedGroup::itemModelViewClosed(DM_DocumentView *view)
     QString type = view->getType();
     QTreeWidgetItem *pItem = getItemForType(type);
 
-    if(pItem != NULL)
+    if(pItem != nullptr)
     {
         QList<DM_AbstractViewSynchronizedGroup*> lGroups = _dmSynchroGroupMap.value(type, QList<DM_AbstractViewSynchronizedGroup*>() );
         QMutableListIterator<DM_AbstractViewSynchronizedGroup*> it(lGroups);
@@ -293,19 +293,19 @@ void GGraphicsViewSynchronizedGroup::itemModelViewClosed(DM_DocumentView *view)
 
 QTreeWidgetItem* GGraphicsViewSynchronizedGroup::getItemForType(QString type) const
 {
-    QTreeWidgetItem *item = NULL;
+    QTreeWidgetItem *item = nullptr;
 
     int n = ui->treeWidgetDocument->invisibleRootItem()->childCount();
     int i = 0;
 
     while((i<n)
-          && (item == NULL))
+          && (item == nullptr))
     {
         item = ui->treeWidgetDocument->invisibleRootItem()->child(i);
 
         if(item->text(0) != type)
         {
-            item = NULL;
+            item = nullptr;
         }
 
         ++i;

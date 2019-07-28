@@ -19,17 +19,17 @@ GPointsAttributesManager::GPointsAttributesManager(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_manager = NULL;
-    m_doc = NULL;
-    m_itemPointRootColor = NULL;
-    m_itemPointRootScalar = NULL;
-    m_itemPointRootNormal = NULL;
-    m_itemFaceRootColor = NULL;
-    m_itemFaceRootScalar = NULL;
-    m_itemFaceRootNormal = NULL;
-    m_itemEdgeRootColor = NULL;
-    m_itemEdgeRootScalar = NULL;
-    m_itemEdgeRootNormal = NULL;
+    m_manager = nullptr;
+    m_doc = nullptr;
+    m_itemPointRootColor = nullptr;
+    m_itemPointRootScalar = nullptr;
+    m_itemPointRootNormal = nullptr;
+    m_itemFaceRootColor = nullptr;
+    m_itemFaceRootScalar = nullptr;
+    m_itemFaceRootNormal = nullptr;
+    m_itemEdgeRootColor = nullptr;
+    m_itemEdgeRootScalar = nullptr;
+    m_itemEdgeRootNormal = nullptr;
     m_internalSetColor = false;
 
     ui->pushButtonGradientColorPicker->setStandardColors();
@@ -57,7 +57,7 @@ void GPointsAttributesManager::setManager(const DM_AttributesManager *man)
 {
     m_manager = (DM_AttributesManager*)man;
 
-    if(m_manager != NULL)
+    if(m_manager != nullptr)
         m_manager->clearInvalid();
 
     initTreeView();
@@ -67,7 +67,7 @@ void GPointsAttributesManager::setDocument(const GDocumentViewForGraphics *doc)
 {
     m_doc = (GDocumentViewForGraphics*)doc;
 
-    if(m_doc != NULL)
+    if(m_doc != nullptr)
         ui->checkBoxShowNormals->setChecked(m_doc->mustShowNormals());
 }
 
@@ -136,11 +136,11 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
 
         CT_AbstractAttributesScalar *pas = dynamic_cast<CT_AbstractAttributesScalar*>(pa);
 
-        if(pas != NULL)
+        if(pas != nullptr)
         {
             AttributesScalarType *dpas = (AttributesScalarType*)m_manager->getAttributesFromInterface(pa);
 
-            if(dpas == NULL)
+            if(dpas == nullptr)
             {
                 dpas = new AttributesScalarType();
                 dpas->setTypeAttributes(pa, pas);
@@ -154,11 +154,11 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
         {
             CT_AttributesColor *pac = dynamic_cast<CT_AttributesColor*>(pa);
 
-            if(pac != NULL)
+            if(pac != nullptr)
             {
                 AttributesColorType *dpac = dynamic_cast<AttributesColorType*>(m_manager->getAttributesFromInterface(pa));
 
-                if(dpac == NULL)
+                if(dpac == nullptr)
                 {
                     dpac = new AttributesColorType();
                     dpac->setTypeAttributes(pa, pac);
@@ -172,11 +172,11 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
             {
                 CT_AttributesNormal *pan = dynamic_cast<CT_AttributesNormal*>(pa);
 
-                if(pan != NULL)
+                if(pan != nullptr)
                 {
                     AttributesNormalType *dpan = dynamic_cast<AttributesNormalType*>(m_manager->getAttributesFromInterface(pa));
 
-                    if(dpan == NULL)
+                    if(dpan == nullptr)
                     {
                         dpan = new AttributesNormalType();
                         dpan->setTypeAttributes(pa, pan);
@@ -213,7 +213,7 @@ void GPointsAttributesManager::constructHeader()
 
 void GPointsAttributesManager::checkAndSave(DM_AbstractAttributesScalar *pas)
 {
-    if((pas != NULL)
+    if((pas != nullptr)
             && (ui->pushButtonSave->isEnabled()))
     {
         int ret = QMessageBox::question(this, tr("Enregistrer"), tr("Vous n'avez pas enregistré le gradient. Voulez vous le faire maintenant ?"), QMessageBox::Yes | QMessageBox::No);
@@ -344,7 +344,7 @@ void GPointsAttributesManager::addToScalarRoot<CT_AbstractEdgeAttributes>(const 
 
 void GPointsAttributesManager::addToScalarRoot(const QList<QStandardItem *> &items, QStandardItem *&root, QStandardItem *model)
 {
-    if(root == NULL)
+    if(root == nullptr)
     {
         root = new QStandardItem(tr("Gradients"));
         root->setEditable(false);
@@ -379,7 +379,7 @@ void GPointsAttributesManager::addToColorRoot<CT_AbstractEdgeAttributes>(const Q
 
 void GPointsAttributesManager::addToColorRoot(const QList<QStandardItem *> &items, QStandardItem *&root, QStandardItem *model)
 {
-    if(root == NULL)
+    if(root == nullptr)
     {
         root = new QStandardItem(tr("Couleurs"));
         root->setEditable(false);
@@ -414,7 +414,7 @@ void GPointsAttributesManager::addToNormalRoot<CT_AbstractEdgeAttributes>(const 
 
 void GPointsAttributesManager::addToNormalRoot(const QList<QStandardItem *> &items, QStandardItem *&root, QStandardItem *model)
 {
-    if(root == NULL)
+    if(root == nullptr)
     {
         root = new QStandardItem(tr("Normales"));
         root->setEditable(false);
@@ -507,7 +507,7 @@ void GPointsAttributesManager::saveCurrentGradientTo(DM_AbstractAttributesScalar
             {
                 DM_AbstractAttributesScalar *pass = dynamic_cast<DM_AbstractAttributesScalar*>(it.next());
 
-                if((pass != NULL)
+                if((pass != nullptr)
                         && (pass != pas)
                         && (pass->isUsedSharedGradient()))
                 {
@@ -551,7 +551,7 @@ DM_AbstractAttributes *GPointsAttributesManager::attributesSelected() const
     QModelIndexList list = ui->treeView->selectionModel()->selectedIndexes();
 
     if(list.isEmpty())
-        return NULL;
+        return nullptr;
 
     return (DM_AbstractAttributes*)m_model.itemFromIndex(list.first())->data().value<void*>();
 }
@@ -600,7 +600,7 @@ void GPointsAttributesManager::pushButtonConfigureClicked()
     DM_AbstractAttributes *dpa = (DM_AbstractAttributes*)pushButton->property("userdata").value<void*>();
     DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>(dpa);
 
-    if(pas != NULL)
+    if(pas != nullptr)
     {
         GMinMaxAttributesScalarConfiguration dialog(this);
         dialog.setAttributes(pas);
@@ -613,14 +613,14 @@ void GPointsAttributesManager::itemChanged(QStandardItem *item)
 {
     DM_AbstractAttributes *pa = (DM_AbstractAttributes*)item->data().value<void*>();
 
-    if(pa != NULL)
+    if(pa != nullptr)
     {
         // use shared gradient
         if(item->column() == 2)
         {
             DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>(pa);
 
-            if(pas != NULL)
+            if(pas != nullptr)
             {
                 pas->setUseSharedGradient(item->checkState() == Qt::Checked);
 
@@ -633,7 +633,7 @@ void GPointsAttributesManager::itemChanged(QStandardItem *item)
                     {
                         DM_AbstractAttributesScalar *pass = dynamic_cast<DM_AbstractAttributesScalar*>(it.next());
 
-                        if((pass != NULL)
+                        if((pass != nullptr)
                                 && (pass != pas)
                                 && (pass->isUsedSharedGradient()))
                         {
@@ -696,7 +696,7 @@ void GPointsAttributesManager::on_checkBoxShowNormals_stateChanged(int state)
 
 void GPointsAttributesManager::on_doubleSpinBoxNormalsLength_valueChanged(double v)
 {
-    if(m_doc != NULL) {
+    if(m_doc != nullptr) {
         GDocumentViewForGraphics::NormalsConfiguration c = m_doc->getNormalsConfiguration();
 
         if(v != c.normalLength)
@@ -706,7 +706,7 @@ void GPointsAttributesManager::on_doubleSpinBoxNormalsLength_valueChanged(double
 
 void GPointsAttributesManager::on_pushButtonNormalsColorPicker_colorChanged(QColor c)
 {
-    if(m_doc != NULL) {
+    if(m_doc != nullptr) {
         GDocumentViewForGraphics::NormalsConfiguration co = m_doc->getNormalsConfiguration();
 
         if(c != co.normalColor)
@@ -726,7 +726,7 @@ void GPointsAttributesManager::on_doubleSpinBoxGradientArrowValue_editingFinishe
     GradientArrow arr = ui->colorGradientView->currentArrow();
     DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>(attributesSelected());
 
-    if((pas != NULL) && (arr.index() != -1)) {
+    if((pas != nullptr) && (arr.index() != -1)) {
 
         double range = pas->max() - pas->min();
 
@@ -749,7 +749,7 @@ void GPointsAttributesManager::treeView_currentRowChanged(const QModelIndex &cur
 {
     QStandardItem *pItem = m_model.itemFromIndex(previous);
 
-    if((pItem != NULL)
+    if((pItem != nullptr)
             && !pItem->data().isNull())
     {
         DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>((DM_AbstractAttributes*)pItem->data().value<void*>());
@@ -763,12 +763,12 @@ void GPointsAttributesManager::treeView_currentRowChanged(const QModelIndex &cur
 
     QStandardItem *cItem = m_model.itemFromIndex(current);
 
-    if((cItem != NULL)
+    if((cItem != nullptr)
             && !cItem->data().isNull())
     {
         DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>((DM_AbstractAttributes*)cItem->data().value<void*>());
 
-        if(pas != NULL)
+        if(pas != nullptr)
         {
             editAttributesScalar(pas);
             return;
@@ -776,7 +776,7 @@ void GPointsAttributesManager::treeView_currentRowChanged(const QModelIndex &cur
 
         DM_AbstractAttributesNormal *pan = dynamic_cast<DM_AbstractAttributesNormal*>((DM_AbstractAttributes*)cItem->data().value<void*>());
 
-        if(pan != NULL)
+        if(pan != nullptr)
         {
             editAttributesNormal(pan);
             return;
@@ -792,7 +792,7 @@ void GPointsAttributesManager::updateArrowValue(qreal val, GradientArrow arr)
 
     DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>(attributesSelected());
 
-    if((pas != NULL) && (arr.index() != -1)) {
+    if((pas != nullptr) && (arr.index() != -1)) {
 
         double range = pas->max() - pas->min();
 

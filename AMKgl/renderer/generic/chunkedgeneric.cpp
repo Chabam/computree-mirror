@@ -20,19 +20,19 @@ ChunkedGeneric::ChunkedGeneric(const uint& uniqueKey,
                                const Eigen::Vector3d &offset) : Chunk<GenericRendererContext>(uniqueKey, objectType, offset)
 {
     m_colors = new ColorArray();
-    m_normals = NULL;
+    m_normals = nullptr;
     m_glMode = glMode;
     m_nPoints = 0;
     m_fastStride = 1;
     m_maxNumberOfPointsInFastDrawMode = 0;
 
     m_infosAccess = new InfoCloud(m_infos, nElementPerObject);
-    m_colorsAccess = NULL;
+    m_colorsAccess = nullptr;
 
-    if(m_colors != NULL)
+    if(m_colors != nullptr)
         m_colorsAccess = new ColorCloud(*m_colors, nElementPerObject);
 
-    if(m_normals != NULL)
+    if(m_normals != nullptr)
         m_normalsAccess = new NormalCloud(*m_normals, nElementPerObject);
 
     m_mutex = new QMutex(QMutex::Recursive);
@@ -62,19 +62,19 @@ void ChunkedGeneric::addPoint(const Eigen::Vector3f& point,
         m_vertexes.resize(newSize, point);
         m_infos.resize(newSize, info);
 
-        if(m_colors != NULL)
+        if(m_colors != nullptr)
             m_colors->resize(newSize, color);
 
-        if(m_normals != NULL)
+        if(m_normals != nullptr)
             m_normals->resize(newSize, normal);
     } else {
         m_vertexes[m_nPoints] = point;
         m_infos[m_nPoints] = info;
 
-        if(m_colors != NULL)
+        if(m_colors != nullptr)
             (*m_colors)[m_nPoints] = color;
 
-        if(m_normals != NULL)
+        if(m_normals != nullptr)
             (*m_normals)[m_nPoints] = normal;
     }
 
@@ -403,7 +403,7 @@ bool ChunkedGeneric::internalUpdate()
 {
     GenericRendererContext* context = getCurrentContext();
 
-    if(context == NULL)
+    if(context == nullptr)
         return false;
 
     if(isUpdated())
@@ -434,7 +434,7 @@ bool ChunkedGeneric::internalUpdate()
 
     GenericRendererShaders& shaders = context->getShaders();
 
-    if(shaders.getShaderProgram() == NULL) {
+    if(shaders.getShaderProgram() == nullptr) {
         setNormalDrawModeUsed(getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
         setFastDrawModeUsed(getNormalDrawModeUsed());
         setUpdated(true);
@@ -448,7 +448,7 @@ bool ChunkedGeneric::internalUpdate()
     QOpenGLFunctions_2_0* func = context->getOpenglContext()->versionFunctions<QOpenGLFunctions_2_0>();
 
     // if the graphics card don't have this feature we must use the draw mode BASIC
-    if(func == NULL)
+    if(func == nullptr)
         setNormalDrawModeUsed(getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
     else
         func->initializeOpenGLFunctions();
@@ -460,7 +460,7 @@ bool ChunkedGeneric::internalUpdate()
 
     setFastDrawModeUsed(getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
 
-    if(mustUseVBO() && (func != NULL)) {
+    if(mustUseVBO() && (func != nullptr)) {
 
         BufferObjectManager& bufferObjects = context->getBufferObjectManager();
 
@@ -562,12 +562,12 @@ void ChunkedGeneric::drawRaw(DrawInfo &info)
 
     context->getShaders().setVertexAttributeToShader(fv);
 
-    if(fc != NULL)
+    if(fc != nullptr)
         context->getShaders().setColorAttributeToShader(fc);
     else
         context->getShaders().setUseColorAttribute(false);
 
-    if(fn != NULL)
+    if(fn != nullptr)
         context->getShaders().setNormalAttributeToShader(fn);
     else
         context->getShaders().setUseNormalAttribute(false);
@@ -660,10 +660,10 @@ void ChunkedGeneric::moveObjectsFromTo(const size_t &from, const size_t &to, con
     std::memcpy(&((*(m_vertexes.begin()+toM))(0)), &((*(m_vertexes.begin()+fromM))(0)), sizeof(Vertex)*sizeM);
     std::memcpy(&(*(m_infos.begin()+toM)), &(*(m_infos.begin()+fromM)), sizeof(Info)*sizeM);
 
-    if(m_colors != NULL)
+    if(m_colors != nullptr)
         std::memcpy(&((*(m_colors->begin()+toM))(0)), &((*(m_colors->begin()+fromM))(0)), sizeof(Color)*sizeM);
 
-    if(m_normals != NULL)
+    if(m_normals != nullptr)
         std::memcpy(&((*(m_normals->begin()+toM))(0)), &((*(m_normals->begin()+fromM))(0)), sizeof(Normal)*sizeM);
 }
 
@@ -686,14 +686,14 @@ void ChunkedGeneric::internalSetNumberOfObjects(const size_t &n, const bool &shr
     if(shrinkToFit)
         m_infos.shrink_to_fit();
 
-    if(m_colors != NULL) {
+    if(m_colors != nullptr) {
         m_colors->resize(m_nPoints);
 
         if(shrinkToFit)
             m_colors->shrink_to_fit();
     }
 
-    if(m_normals != NULL) {
+    if(m_normals != nullptr) {
         m_normals->resize(m_nPoints);
 
         if(shrinkToFit)
@@ -708,7 +708,7 @@ bool ChunkedGeneric::isUpdated() const
 
     GenericRendererContext* context = getCurrentContext();
 
-    if(context == NULL)
+    if(context == nullptr)
         return true;
 
     ChunkCustomUpdateValues* cuv = context->createOrGetChunkCustomUpdateValues(this);
@@ -728,12 +728,12 @@ void ChunkedGeneric::updateOnlyVAO()
 
         GenericRendererContext* context = getCurrentContext();
 
-        if(context == NULL)
+        if(context == nullptr)
             return;
 
         BufferObjectManager& bufferObjects = context->getBufferObjectManager();
 
-        if(getColorCloud() != NULL && !bufferObjects.getColorsBO(this, GENERIC_OBJECT_COLORS_BO_UI).isCreated())
+        if(getColorCloud() != nullptr && !bufferObjects.getColorsBO(this, GENERIC_OBJECT_COLORS_BO_UI).isCreated())
             setUpdated(false);
 
         if(isUpdated()) {
@@ -757,7 +757,7 @@ void ChunkedGeneric::updateOnlyVAO()
 
         GenericRendererContext* context = getCurrentContext();
 
-        if(context == NULL)
+        if(context == nullptr)
           return;
 
         context->destroyAllDisplayList(this);
@@ -769,7 +769,7 @@ void ChunkedGeneric::updateInfoBO()
     if(((getNormalDrawModeUsed() == DM_VBO)
             || (getNormalDrawModeUsed() == DM_VAO)) && mustUseVBO()) {
 
-        if(getCurrentContext() == NULL)
+        if(getCurrentContext() == nullptr)
             return;
 
         BufferObjectManager& buffers = getCurrentContext()->getBufferObjectManager();
@@ -782,7 +782,7 @@ void ChunkedGeneric::updateColorBO()
     if(((getNormalDrawModeUsed() == DM_VBO)
             || (getNormalDrawModeUsed() == DM_VAO)) && mustUseVBO()) {
 
-        if(getCurrentContext() == NULL)
+        if(getCurrentContext() == nullptr)
             return;
 
         BufferObjectManager& buffers = getCurrentContext()->getBufferObjectManager();
@@ -795,7 +795,7 @@ void ChunkedGeneric::updateNormalBO()
     if(((getNormalDrawModeUsed() == DM_VBO)
             || (getNormalDrawModeUsed() == DM_VAO)) && mustUseVBO()) {
 
-        if(getCurrentContext() == NULL)
+        if(getCurrentContext() == nullptr)
             return;
 
         BufferObjectManager& buffers = getCurrentContext()->getBufferObjectManager();
@@ -831,7 +831,7 @@ ChunkedGeneric::NormalArray* ChunkedGeneric::getNormalArray() const
 ChunkedGeneric::Vertex* ChunkedGeneric::getFirstVertex() const
 {
     if(m_vertexes.empty())
-        return NULL;
+        return nullptr;
 
     return &(const_cast<VertexArray&>(m_vertexes)[0]);
 }
@@ -839,23 +839,23 @@ ChunkedGeneric::Vertex* ChunkedGeneric::getFirstVertex() const
 ChunkedGeneric::Info* ChunkedGeneric::getFirstInfo() const
 {
     if(m_infos.empty())
-        return NULL;
+        return nullptr;
 
     return &(const_cast<InfoArray&>(m_infos)[0]);
 }
 
 ChunkedGeneric::Color* ChunkedGeneric::getFirstColor() const
 {
-    if((m_colors == NULL) || m_colors->empty())
-        return NULL;
+    if((m_colors == nullptr) || m_colors->empty())
+        return nullptr;
 
     return &((*m_colors)[0]);
 }
 
 ChunkedGeneric::Normal* ChunkedGeneric::getFirstNormal() const
 {
-    if((m_normals == NULL) || m_normals->empty())
-        return NULL;
+    if((m_normals == nullptr) || m_normals->empty())
+        return nullptr;
 
     return &((*m_normals)[0]);
 }

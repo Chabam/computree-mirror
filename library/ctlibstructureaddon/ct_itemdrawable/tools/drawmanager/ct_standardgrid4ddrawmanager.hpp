@@ -4,6 +4,8 @@
 #include "ct_standardgrid4ddrawmanager.h"
 
 #include "ct_itemdrawable/ct_grid4d.h"
+#include "painterinterface.h"
+
 #include <QDebug>
 
 // Initialise static attributes
@@ -26,21 +28,15 @@ template< typename DataT > const QString CT_StandardGrid4DDrawManager<DataT>::IN
 
 template< typename DataT >
 CT_StandardGrid4DDrawManager<DataT>::CT_StandardGrid4DDrawManager(QString drawConfigurationName)
-    : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager( drawConfigurationName.isEmpty() ? CT_Grid4D<DataT>::staticName() : drawConfigurationName )
+    : SuperClass( drawConfigurationName.isEmpty() ? CT_Grid4D<DataT>::staticName() : drawConfigurationName )
 {
 
 }
-
-template< typename DataT >
-CT_StandardGrid4DDrawManager<DataT>::~CT_StandardGrid4DDrawManager()
-{
-}
-
 
 template< typename DataT >
 void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
 {
-    CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::draw(view, painter, itemDrawable);
+    SuperClass::draw(view, painter, itemDrawable);
 
     const CT_Grid4D<DataT> &item = dynamic_cast<const CT_Grid4D<DataT>&>(itemDrawable);
 

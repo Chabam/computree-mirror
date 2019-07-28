@@ -69,7 +69,6 @@ HEADERS += ct_model/abstract/ct_abstractgroupmodelt.h \
     ct_model/inModel/manager/ct_inmodelstructuremanager.h \
     ct_model/inModel/handle/ct_handleinitemattribute.h \
     ct_model/inModel/handle/ct_handleinzeroormoregroup.h \
-    ct_model/handle/ct_handleminmaxwithmodelt.h \
     ct_model/inModel/handle/ct_handleinresultcopy.h \
     ct_model/outModel/tools/ct_outresultmodelgrouptocopypossibilities.h \
     ct_model/outModel/manager/ct_outmodelstructuremanager.h \
@@ -87,7 +86,9 @@ HEADERS += ct_model/abstract/ct_abstractgroupmodelt.h \
     ct_model/inModel/views/ctg_inresultmodelpossibilities.h \
     ct_model/inModel/tools/ct_modelselectionhelper.h \
     ../settingsinterfaces.h \
-    ct_model/handle/ct_handlewithmultipleabstractmodel.h
+    ct_model/handle/ct_handlewithmultipleabstractmodel.h \
+    ct_model/inModel/handle/abstract/ct_abstractinhandlewithmodelt.h \
+    ct_model/inModel/handle/ct_inhandleminmaxwithmodelt.h
 
 SOURCES += \ 
     ct_model/inModel/ct_inresultmodelgroup.cpp \

@@ -33,7 +33,7 @@ public:
     {
         m_csm = AMKglEA->getCoordinateSystemManager();
 
-        m_lastChunkUsed = NULL;
+        m_lastChunkUsed = nullptr;
         m_lastCoordinateSystemIndexUsed = std::numeric_limits<uint>::max();
     }
 
@@ -55,11 +55,11 @@ public:
      */
     ChunkT& createOrGetChunkFromUniqueIndex(const size_t& uniqueIndex)
     {
-        if((m_lastChunkUsed == NULL) || (uniqueIndex != m_lastCoordinateSystemIndexUsed)) {
+        if((m_lastChunkUsed == nullptr) || (uniqueIndex != m_lastCoordinateSystemIndexUsed)) {
             m_lastCoordinateSystemIndexUsed = (uint)uniqueIndex;
-            m_lastChunkUsed = m_chunksByCoordinateSystem.value((uint)uniqueIndex, NULL);
+            m_lastChunkUsed = m_chunksByCoordinateSystem.value((uint)uniqueIndex, nullptr);
 
-            if(m_lastChunkUsed == NULL)
+            if(m_lastChunkUsed == nullptr)
                 m_lastChunkUsed = &this->createAndAddNewChunk(this->getBeginningOfCloud(), this->getCloudSize());
         }
 
@@ -92,7 +92,7 @@ public:
     {
         m_chunksByCoordinateSystem.clear();
 
-        m_lastChunkUsed = NULL;
+        m_lastChunkUsed = nullptr;
         m_lastCoordinateSystemIndexUsed = std::numeric_limits<uint>::max();
 
         GenericCloudChunkManagerByCoordinateSuperClass::deleteChunksFromMemory();
@@ -160,7 +160,7 @@ protected:
      */
     void chunkAboutToBeDeleted(ChunkT* chunk)
     {
-        m_lastChunkUsed = NULL;
+        m_lastChunkUsed = nullptr;
         m_lastCoordinateSystemIndexUsed = std::numeric_limits<uint>::max();
 
         if(!m_chunksByCoordinateSystem.isEmpty()) {

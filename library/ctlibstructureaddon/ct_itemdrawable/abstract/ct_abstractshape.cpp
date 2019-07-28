@@ -29,7 +29,7 @@
 
 
 CT_AbstractShape::CT_AbstractShape() : SuperClass(),
-    _data(NULL)
+    _data(nullptr)
 {
 }
 
@@ -39,7 +39,7 @@ CT_AbstractShape::CT_AbstractShape(CT_ShapeData* data) : SuperClass(),
 }
 
 CT_AbstractShape::CT_AbstractShape(const CT_AbstractShape& other) : SuperClass(other),
-    _data((other._data != NULL) ? other._data->copy() : NULL)
+    _data((other._data != nullptr) ? other._data->copy() : nullptr)
 {
 }
 

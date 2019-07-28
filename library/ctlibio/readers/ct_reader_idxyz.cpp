@@ -11,7 +11,7 @@
 
 #include <limits>
 
-CT_Reader_IDXYZ::CT_Reader_IDXYZ() : SuperClass()
+CT_Reader_IDXYZ::CT_Reader_IDXYZ(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     addNewReadableFormat(FileFormat("asc", tr("Fichiers de points ASCII (XYZRGB, sans entête, RGB [0;1])")));
 
@@ -22,11 +22,14 @@ CT_Reader_IDXYZ::CT_Reader_IDXYZ() : SuperClass()
                   "- Z  : Coordonnée Z<br>"));
 }
 
+CT_Reader_IDXYZ::CT_Reader_IDXYZ(const CT_Reader_IDXYZ& other) : SuperClass(other)
+{
+}
+
 QString CT_Reader_IDXYZ::displayableName() const
 {
     return tr("Clusters de Points, fichier ASCII (ID, X, Y, Z)");
 }
-
 
 bool CT_Reader_IDXYZ::preVerifyFile(const QString& filepath, QFile& fileOpenReadOnly) const
 {
@@ -130,9 +133,9 @@ bool CT_Reader_IDXYZ::internalReadFile(CT_StandardItemGroup* group)
                 for (int i = 0 ; i < indices.size() ; i++)
                 {
                     size_t indice = indices.at(i);
-                    CT_PointCloudIndexVector* indexVector = indexVectors.value(indice, NULL);
+                    CT_PointCloudIndexVector* indexVector = indexVectors.value(indice, nullptr);
 
-                    if (indexVector != NULL)
+                    if (indexVector != nullptr)
                     {
                         size_t pointIndex = sceneIndexVector->indexAt(i);
                         indexVector->addIndex(pointIndex);
@@ -146,7 +149,7 @@ bool CT_Reader_IDXYZ::internalReadFile(CT_StandardItemGroup* group)
                     size_t index = it.key();
                     CT_PointCloudIndexVector* indexVector = it.value();
 
-                    if (indexVector != NULL)
+                    if (indexVector != nullptr)
                     {
                         if (indexVector->size() > 0)
                         {

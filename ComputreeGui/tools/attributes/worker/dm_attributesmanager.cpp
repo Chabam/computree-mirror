@@ -31,7 +31,7 @@ void DM_AttributesManager::clearInvalid()
 
     while(it.hasNext())
     {
-        if(it.next()->abstractAttributes() == NULL)
+        if(it.next()->abstractAttributes() == nullptr)
             it.remove();
     }
 }
@@ -48,7 +48,7 @@ DM_AbstractAttributes *DM_AttributesManager::getAttributesFromInterface(const CT
             return da;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 const QList<DM_AbstractAttributes *>& DM_AttributesManager::attributes() const

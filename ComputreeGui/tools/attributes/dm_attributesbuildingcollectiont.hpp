@@ -15,7 +15,7 @@ bool DM_AttributesBuildingCollectionT<Type>::buildFrom(CT_VirtualAbstractStep *s
 {
     m_collection.clear();
 
-    if(step == NULL)
+    if(step == nullptr)
         return false;
 
     recursiveBuildAttributesFromStep(step);
@@ -41,7 +41,7 @@ void DM_AttributesBuildingCollectionT<Type>::recursiveBuildAttributesFromStep(co
 
             Type* proto = dynamic_cast<Type*>(child->prototype());
 
-            if(proto != NULL) {
+            if(proto != nullptr) {
                 auto iterator = CT_SingleModelIteratorStdStyleForResultGroup<Type>::createCompleteIterator(child);
 
                 for(Type* tt : iterator) {

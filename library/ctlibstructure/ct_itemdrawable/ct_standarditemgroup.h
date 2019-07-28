@@ -42,12 +42,12 @@ protected:
         public:
             using self_type = InternalIterator;
 
-            InternalIterator() : m_currentValue(NULL) {}
+            InternalIterator() : m_currentValue(nullptr) {}
             InternalIterator(const InternalIterator& other) = default;
             InternalIterator(const CT_AbstractSingularItemDrawable* item) : m_currentValue(const_cast<CT_AbstractSingularItemDrawable*>(item)) {}
 
             self_type& operator++() {
-                m_currentValue = NULL;
+                m_currentValue = nullptr;
                 return *this;
             }
 
@@ -78,7 +78,7 @@ protected:
         inline CT_AbstractSingularItemDrawable* item() const { return m_item; }
 
         const_iterator constBegin() const { return const_iterator(m_item); }
-        const_iterator constEnd() const { return const_iterator(NULL); }
+        const_iterator constEnd() const { return const_iterator(nullptr); }
 
         SingularItemContainer* copy()
         {
@@ -159,10 +159,10 @@ public:
      *          - Removed later flags
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
-     *          - Parent container is set to NULL
+     *          - Parent container is set to nullptr
      *          - Childrens was not copied
      */
     CT_StandardItemGroup(const CT_StandardItemGroup& other);
@@ -231,15 +231,15 @@ public:
      */
     template<typename OutHandleType>
     void assignModelToItemToAdd(const OutHandleType& outItemHandle, CT_AbstractItemDrawable* item) {
-        if(model() == NULL)
-            qFatal("CT_StandardItemGroup::assignModelToItemToAdd(...) --> model() == NULL");
+        if(model() == nullptr)
+            qFatal("CT_StandardItemGroup::assignModelToItemToAdd(...) --> model() == nullptr");
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
         const CT_OutAbstractModel* outModel = outItemHandle.findAbstractModelWithParent(model());
 
-        if(outModel == NULL)
-            qFatal("CT_StandardItemGroup::assignModelToItemToAdd(...) --> outModel == NULL");
+        if(outModel == nullptr)
+            qFatal("CT_StandardItemGroup::assignModelToItemToAdd(...) --> outModel == nullptr");
 
         item->setModel(outModel);
     }
@@ -254,7 +254,7 @@ public:
      */
     template<typename OutHandleType>
     void addSingularItem(const OutHandleType& outItemHandle, CT_AbstractSingularItemDrawable* item) {
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
@@ -286,7 +286,7 @@ public:
      */
     template<typename OutHandleType>
     bool removeSingularItemWithOutHandle(const OutHandleType& outItemHandle) {
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
@@ -294,7 +294,7 @@ public:
         // that his parent match with the model of this group
         const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
 
-        Q_ASSERT(outModelToUse != NULL);
+        Q_ASSERT(outModelToUse != nullptr);
 
         // now we can remove the item with the right model
         removeSingularItemWithOutModel(outModelToUse);
@@ -369,7 +369,7 @@ public:
      */
     template<typename HandleType>
     SingularItemIteratorT<typename HandleType::ItemType> singularItems(const HandleType& itemHandle) const {
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
         return internalSingularItems(itemHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
@@ -409,7 +409,7 @@ public:
      */
     template<typename HandleType>
     const typename HandleType::ItemType* singularItem(const HandleType& itemHandle) const {
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
         return internalSingularItem(itemHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
@@ -418,7 +418,7 @@ public:
     /**
      * @brief Returns the singular item that use the specified output model
      * @param outModel : the model of the item to find. The model of the item will be used to find it in the collection.
-     * @return NULL if no item that use this model has been found or if it must be removed later
+     * @return nullptr if no item that use this model has been found or if it must be removed later
      */
     CT_AbstractSingularItemDrawable* singularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel) const;
 
@@ -442,7 +442,7 @@ public:
     void addGroup(const OutHandleType& outGroupHandle, CT_StandardItemGroup* group) {
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
@@ -472,7 +472,7 @@ public:
      */
     template<typename OutHandleType>
     bool removeGroupWithOutHandle(const OutHandleType& outGroupHandle) {
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
@@ -480,7 +480,7 @@ public:
         // that his parent match with the model of this group
         const DEF_CT_AbstractGroupModelOut* outModelToUse = outGroupHandle.findAbstractModelWithParent(model());
 
-        Q_ASSERT(outModelToUse != NULL);
+        Q_ASSERT(outModelToUse != nullptr);
 
         // now we can remove the group with the right model
         removeGroupsWithOutModel(outModelToUse);
@@ -530,7 +530,7 @@ public:
      */
     template<typename HandleType>
     GroupIterator groups(const HandleType& groupHandle) const {
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
         return internalGroups(groupHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
@@ -585,7 +585,7 @@ public:
      */
     template<typename HandleType>
     const typename HandleType::GroupType* group(const HandleType& groupHandle) const {
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
         return internalGroup(groupHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
@@ -594,7 +594,7 @@ public:
     /**
      * @brief Returns the group that use the specified output model
      * @param outModel : the model of the group to find. The model of the item will be used to find it in the collection.
-     * @return NULL if no item that use this model has been found or if it must be removed later
+     * @return nullptr if no item that use this model has been found or if it must be removed later
      */
     CT_StandardItemGroup* groupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel) const;
 
@@ -613,7 +613,7 @@ public:
 
     /**
      * @brief Returns the parentGroup of this group
-     * @return NULL if the group is a root group (the parent group is the result)
+     * @return nullptr if the group is a root group (the parent group is the result)
      */
     CT_StandardItemGroup* parentGroup() const;
 
@@ -778,11 +778,11 @@ private:
     public:
         ItemQtIterator(const CT_AbstractItemDrawable* item) : m_current(const_cast<CT_AbstractItemDrawable*>(item)) {}
 
-        bool hasNext() const override { return m_current != NULL; }
+        bool hasNext() const override { return m_current != nullptr; }
 
         CT_AbstractItem* next() override {
             CT_AbstractItem* c = m_current;
-            m_current = NULL;
+            m_current = nullptr;
             return c;
         }
 
@@ -834,12 +834,12 @@ private:
     void*               m_context;
 
     /**
-     * @brief Returns the item container that use the specified model or NULL if no container was found
+     * @brief Returns the item container that use the specified model or nullptr if no container was found
      */
     ItemContainerType* itemContainerWithOutModel(const CT_OutAbstractModel* outModel) const;
 
     /**
-     * @brief Returns the group container that use the specified model or NULL if no container was found
+     * @brief Returns the group container that use the specified model or nullptr if no container was found
      */
     GroupContainerType* groupContainerWithOutModel(const CT_OutAbstractModel* outModel) const;
 
@@ -892,7 +892,7 @@ private:
         // that his parent match with the model of this group
         const CT_OutAbstractModel* outModelToUse = outGroupHandle.findAbstractModelWithParent(model());
 
-        Q_ASSERT(outModelToUse != NULL);
+        Q_ASSERT(outModelToUse != nullptr);
 
         const ContainerType* ct = groupContainerWithOutModel(outModelToUse);
 
@@ -901,7 +901,7 @@ private:
 
         std::vector<info> infos;
 
-        if(ct != NULL) {
+        if(ct != nullptr) {
             infos.resize(1);
             infos[0] = qMakePair(ct->constBegin(), ct->constEnd());
         }
@@ -914,7 +914,7 @@ private:
         const CT_InAbstractModel* inOriginalModel = inHandle.model();
         const CT_InAbstractResultModel* inOriginalResultModel = dynamic_cast<CT_InAbstractResultModel*>(inOriginalModel->rootModel());
 
-        Q_ASSERT(inOriginalResultModel != NULL);
+        Q_ASSERT(inOriginalResultModel != nullptr);
 
         const int nResultPossibility = inOriginalResultModel->nPossibilitySaved();
 
@@ -950,7 +950,7 @@ private:
                 if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == myModelUI) {
                     const ContainerType* ct = this->containerWithOutModel<ContainerType>(outModel);
 
-                    if((ct != NULL) && (ct->nToKeep() > 0))
+                    if((ct != nullptr) && (ct->nToKeep() > 0))
                         infos.push_back(qMakePair(ct->constBegin(), ct->constEnd()));
                 }
             }
@@ -964,7 +964,7 @@ private:
     template<typename ContainerType, typename InHandleType>
     const typename ContainerType::ElementType* internalFirstXXXWithInputHandle(const InHandleType& inHandle) const {
 
-        const typename ContainerType::ElementType* found = NULL;
+        const typename ContainerType::ElementType* found = nullptr;
 
         const CT_OutAbstractModel::UniqueIndexType myModelUI = model()->uniqueIndex();
 
@@ -978,7 +978,7 @@ private:
                 if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == myModelUI) {
                     const ContainerType* ct = this->containerWithOutModel<ContainerType>(outModel);
 
-                    if((ct != NULL) && (ct->nToKeep() > 0)) {
+                    if((ct != nullptr) && (ct->nToKeep() > 0)) {
                         found = *ct->constBegin();
                         return false;
                     }
@@ -1002,7 +1002,7 @@ private:
         // that his parent match with the model of this group
         const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
 
-        Q_ASSERT(outModelToUse != NULL);
+        Q_ASSERT(outModelToUse != nullptr);
 
         return singularItemWithOutModel(outModelToUse);
     }
@@ -1030,7 +1030,7 @@ private:
         // that his parent match with the model of this group
         const DEF_CT_AbstractGroupModelOut* outModelToUse = outGroupHandle.findAbstractModelWithParent(model());
 
-        Q_ASSERT(outModelToUse != NULL);
+        Q_ASSERT(outModelToUse != nullptr);
 
         return groupWithOutModel(outModelToUse);
     }

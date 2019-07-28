@@ -187,50 +187,50 @@ public:
     void unlock();
 
     /**
-     * @brief Returns the color cloud, or NULL if it was not created.
+     * @brief Returns the color cloud, or nullptr if it was not created.
      */
     Basic::AbstractColorCloud* getObjectColorCloud() const { return m_objectColorCloud; }
 
     /**
-     * @brief Returns the normal cloud, or NULL if it was not created.
+     * @brief Returns the normal cloud, or nullptr if it was not created.
      */
     Basic::AbstractNormalCloud* getObjectNormalCloud() const { return m_objectNormalCloud; }
 
     /**
-     * @brief Returns the normal cloud, or NULL if it was not created.
+     * @brief Returns the normal cloud, or nullptr if it was not created.
      */
     Basic::AbstractInfoCloud* getObjectInfoCloud() const { return m_objectInfoCloud; }
 
     /**
      * @brief Returns the color cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractColorCloud* createOrGetObjectColorCloud();
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractNormalCloud* createOrGetObjectNormalCloud();
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractInfoCloud* createOrGetObjectInfoCloud();
 
     /**
-     * @brief Returns the color cloud to use, or NULL if we must no use it
+     * @brief Returns the color cloud to use, or nullptr if we must no use it
      */
     GlobalColorCloud* getGlobalColorCloud() const;
 
     /**
-     * @brief Returns the normal cloud to use, or NULL if we must no use it
+     * @brief Returns the normal cloud to use, or nullptr if we must no use it
      */
     GlobalNormalCloud* getGlobalNormalCloud() const;
 
     /**
-     * @brief Returns the normal cloud to use, or NULL if we must no use it
+     * @brief Returns the normal cloud to use, or nullptr if we must no use it
      */
     GlobalInfoCloud* getGlobalInfoCloud() const;
 
@@ -339,7 +339,7 @@ private:
     Basic::AbstractInfoCloud*       m_objectInfoCloud;
 
     /**
-     * @brief Not NULL if developper access it.
+     * @brief Not nullptr if developper access it.
      */
     GlobalInfoCloud*                m_globalInfoCloud;
 
@@ -429,17 +429,17 @@ private:
     void setContextUpdated(PointRendererContext* context, bool status);
 
     /**
-     * @brief If the member m_objectColorCloud is NULL it will be created
+     * @brief If the member m_objectColorCloud is nullptr it will be created
      */
     void createObjectColorCloudMemberIfNot();
 
     /**
-     * @brief If the member m_objectNormalCloud is NULL it will be created
+     * @brief If the member m_objectNormalCloud is nullptr it will be created
      */
     void createObjectNormalCloudMemberIfNot();
 
     /**
-     * @brief If the member m_objectInfoCloud is NULL it will be created
+     * @brief If the member m_objectInfoCloud is nullptr it will be created
      */
     void createObjectInfoCloudMemberIfNot();
 

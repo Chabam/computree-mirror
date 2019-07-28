@@ -4,8 +4,8 @@
 
 CT_AbstractItem::CT_AbstractItem()
 {
-    m_model = NULL;
-    m_result = NULL;
+    m_model = nullptr;
+    m_result = nullptr;
 }
 
 CT_AbstractItem::CT_AbstractItem(const CT_AbstractItem& other) :

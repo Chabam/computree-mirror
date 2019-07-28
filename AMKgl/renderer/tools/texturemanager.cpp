@@ -20,7 +20,7 @@ bool TextureManager::createNew1DTextureOrUseExisting(const QString &uniqueName,
                                                   minificationFilter,
                                                   magnificationFilter);
 
-    if(info == NULL) {
+    if(info == nullptr) {
         QOpenGLTexture* texture = new QOpenGLTexture(QOpenGLTexture::Target1D);
         texture->setFormat(serverFormat);
         texture->setMinificationFilter(minificationFilter);
@@ -54,7 +54,7 @@ QOpenGLTexture* TextureManager::getTextureAndUpdateDataIfNecessary(const QString
 {
     TextureInfo* info = getTextureByName(uniqueName);
 
-    Q_ASSERT(info != NULL);
+    Q_ASSERT(info != nullptr);
 
     TextureData newData(data, dataSize);
 
@@ -74,7 +74,7 @@ void TextureManager::setDataToBeUpdated(const QString &uniqueName)
 {
     TextureInfo* info = getTextureByName(uniqueName);
 
-    Q_ASSERT(info != NULL);
+    Q_ASSERT(info != nullptr);
 
     info->lastData = TextureData();
 }
@@ -96,7 +96,7 @@ TextureManager::TextureInfo* TextureManager::getTextureThatCanBeShared(const QSt
             return info;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 TextureManager::TextureInfo* TextureManager::getTextureByName(const QString &uniqueName) const
@@ -110,7 +110,7 @@ TextureManager::TextureInfo* TextureManager::getTextureByName(const QString &uni
             return info;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 TextureManager::TextureInfo::TextureInfo(const QString &un,
@@ -127,7 +127,7 @@ TextureManager::TextureInfo::~TextureInfo()
 
 TextureManager::TextureData::TextureData()
 {
-    data = NULL;
+    data = nullptr;
     dataSize = 0;
 }
 

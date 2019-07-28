@@ -29,7 +29,7 @@ public:
     /**
      * @brief Set the input point cloud
      * @param ci : point cloud indexes
-     * @return true if the input cloud is not NULL
+     * @return true if the input cloud is not nullptr
      */
     bool setPointCloud(const CT_AbstractPointCloudIndex* ci);
 
@@ -88,7 +88,7 @@ protected:
     /**
      * @brief Call to update min and max if you want to use it
      * @param force : If "isMinAndMaxUpdated" return true the method will do nothing, set "force" to true if you want to force the update.
-     * @return false if input cloud is NULL
+     * @return false if input cloud is nullptr
      */
     bool updateMinMax(bool force = false);
 

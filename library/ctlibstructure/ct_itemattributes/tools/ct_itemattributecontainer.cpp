@@ -17,9 +17,9 @@ CT_ItemAttributeContainer::~CT_ItemAttributeContainer()
 
 bool CT_ItemAttributeContainer::addItemAttribute(CT_AbstractItemAttribute *att)
 {
-    QList<CT_AbstractItemAttribute *> *l = m_attributes.value(att->result(), NULL);
+    QList<CT_AbstractItemAttribute *> *l = m_attributes.value(att->result(), nullptr);
 
-    if(l == NULL)
+    if(l == nullptr)
     {
         l = new QList<CT_AbstractItemAttribute *>();
         m_attributes.insert(att->result(), l);
@@ -32,9 +32,9 @@ bool CT_ItemAttributeContainer::addItemAttribute(CT_AbstractItemAttribute *att)
 void CT_ItemAttributeContainer::removeItemAttribute(CT_AbstractItemAttribute *att)
 {
     CT_AbstractResult *res = att->result();
-    QList<CT_AbstractItemAttribute *> *l = m_attributes.value(res, NULL);
+    QList<CT_AbstractItemAttribute *> *l = m_attributes.value(res, nullptr);
 
-    if(l != NULL)
+    if(l != nullptr)
     {
         if(l->removeOne(att))
             delete att;
@@ -51,7 +51,7 @@ void CT_ItemAttributeContainer::removeItemAttributeFromResult(const CT_AbstractR
 {
     QList<CT_AbstractItemAttribute *>* l = m_attributes.take(const_cast<CT_AbstractResult*>(result));
 
-    if(l != NULL)
+    if(l != nullptr)
         qDeleteAll(l->begin(), l->end());
 
     delete l;
@@ -77,9 +77,9 @@ bool CT_ItemAttributeContainer::visitItemAttributes(const CT_ItemAttributeContai
 
 bool CT_ItemAttributeContainer::visitItemAttributesOfResult(const CT_AbstractResult* result, const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const
 {
-    const QList<CT_AbstractItemAttribute*>* l = m_attributes.value(const_cast<CT_AbstractResult*>(result), NULL);
+    const QList<CT_AbstractItemAttribute*>* l = m_attributes.value(const_cast<CT_AbstractResult*>(result), nullptr);
 
-    if(l != NULL) {
+    if(l != nullptr) {
         for(const CT_AbstractItemAttribute* att : *l) {
             if(!visitor(att))
                 return false;
@@ -91,9 +91,9 @@ bool CT_ItemAttributeContainer::visitItemAttributesOfResult(const CT_AbstractRes
 
 bool CT_ItemAttributeContainer::visitItemAttributesOfOutModel(const CT_OutAbstractItemAttributeModel* outModel, const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const
 {
-    const QList<CT_AbstractItemAttribute*>* l = m_attributes.value(static_cast<CT_AbstractResult*>(outModel->result()), NULL);
+    const QList<CT_AbstractItemAttribute*>* l = m_attributes.value(static_cast<CT_AbstractResult*>(outModel->result()), nullptr);
 
-    if(l != NULL) {
+    if(l != nullptr) {
         const QString uIndex = outModel->uniqueIndex();
 
         for(const CT_AbstractItemAttribute* att : *l) {
@@ -113,9 +113,9 @@ bool CT_ItemAttributeContainer::visitItemAttributesOfInModel(const CT_InAbstract
 {
     const auto visitorAdapter = [this, &visitor](const CT_InStdModelPossibility* possibility) -> bool {
 
-        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), NULL);
+        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), nullptr);
 
-        if(collection != NULL) {
+        if(collection != nullptr) {
             const QString uIndex = possibility->outModel()->uniqueIndex();
 
             for(CT_AbstractItemAttribute* att : *collection)
@@ -160,9 +160,9 @@ QList<CT_AbstractItemAttribute *> CT_ItemAttributeContainer::itemAttributes() co
 
 QList<CT_AbstractItemAttribute *> CT_ItemAttributeContainer::itemAttributesFromResult(const CT_AbstractResult* result) const
 {
-    QList<CT_AbstractItemAttribute *>* l = m_attributes.value(const_cast<CT_AbstractResult*>(result), NULL);
+    QList<CT_AbstractItemAttribute *>* l = m_attributes.value(const_cast<CT_AbstractResult*>(result), nullptr);
 
-    if(l == NULL)
+    if(l == nullptr)
         return QList<CT_AbstractItemAttribute *>();
 
     return *l;
@@ -170,9 +170,9 @@ QList<CT_AbstractItemAttribute *> CT_ItemAttributeContainer::itemAttributesFromR
 
 CT_AbstractItemAttribute* CT_ItemAttributeContainer::itemAttributeFromOutModel(const CT_OutAbstractItemAttributeModel* outModel) const
 {
-    const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(outModel->result()), NULL);
+    const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(outModel->result()), nullptr);
 
-    if(collection != NULL) {
+    if(collection != nullptr) {
         const QString uIndex = outModel->uniqueIndex();
 
         for(CT_AbstractItemAttribute* att : *collection)
@@ -183,7 +183,7 @@ CT_AbstractItemAttribute* CT_ItemAttributeContainer::itemAttributeFromOutModel(c
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 QList<CT_AbstractItemAttribute*> CT_ItemAttributeContainer::itemAttributesFromInModel(const CT_InAbstractItemAttributeModel* inModel) const
@@ -192,9 +192,9 @@ QList<CT_AbstractItemAttribute*> CT_ItemAttributeContainer::itemAttributesFromIn
 
     const auto visitor = [this, &l](const CT_InStdModelPossibility* possibility) -> bool {
 
-        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), NULL);
+        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), nullptr);
 
-        if(collection != NULL) {
+        if(collection != nullptr) {
             const QString uIndex = possibility->outModel()->uniqueIndex();
 
             for(CT_AbstractItemAttribute* att : *collection)
@@ -215,13 +215,13 @@ QList<CT_AbstractItemAttribute*> CT_ItemAttributeContainer::itemAttributesFromIn
 
 CT_AbstractItemAttribute* CT_ItemAttributeContainer::firstItemAttributeFromInModel(const CT_InAbstractItemAttributeModel* inModel) const
 {
-    CT_AbstractItemAttribute* found = NULL;
+    CT_AbstractItemAttribute* found = nullptr;
 
     const auto visitor = [this, &found](const CT_InStdModelPossibility* possibility) -> bool {
 
-        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), NULL);
+        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), nullptr);
 
-        if(collection != NULL) {
+        if(collection != nullptr) {
             const QString uIndex = possibility->outModel()->uniqueIndex();
 
             for(CT_AbstractItemAttribute* att : *collection)

@@ -27,8 +27,7 @@ public:
     CT_Reader_GDAL();
     CT_Reader_GDAL(const CT_Reader_GDAL &other);
     #ifdef USE_GDAL
-    CT_Reader_GDAL(const GDALDriver *driver);
-    ~CT_Reader_GDAL() override;
+    CT_Reader_GDAL(const GDALDriver *driver, int defaultMenuLevel = 0, int rasterMenuLevel = -1, int vectorMenuLevel = -1);
 
     GDALDriver* getDriver() const { return m_driver; }
     #endif
@@ -42,11 +41,6 @@ public:
      * @brief Returns the unique name (you can use it to compare readers because it was unique).
      */
     QString uniqueName() const override;
-
-    /**
-     * @brief Returns the sub menu level where we can store this reader
-     */
-    //CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
 
     /**
      * @brief Returns "Raster" for raster and "Vector" for vector otherwise returns an empty string
@@ -90,18 +84,6 @@ private:
     GDALDriver                                      *m_driver;
     QString                                         m_nameFromDriver;
 
-    QList<RasterHandleType*>                        m_rasterHandles;
-    QList<LayerHandleType*>                         m_layerHandles;
-    QHash<LayerHandleType*, Point2DHandleType*>     m_pointHandles;
-    QHash<LayerHandleType*, Polygon2DHandleType*>   m_polygoneHandles;
-    QHash<LayerHandleType*, Polyline2DHandleType*>  m_polylineHandles;
-    QHash<QPair<AbstractItemHandle*, int>, AbstractAttributeHandle*>     m_itemAttributeHandles;
-
-    /**
-     * @brief Clear all collection of handles and delete handles from memory
-     */
-    void clearHandles();
-
     /**
      * @brief Return true if the file can be opened by this driver
      */
@@ -109,7 +91,7 @@ private:
 
     /**
      * @brief Get the dataset from the file.
-     * @return NULL if the file can not be read or is was an error
+     * @return nullptr if the file can not be read or is was an error
      */
     GDALDataset* getDataSet(const QString &filepath) const;
 
@@ -137,21 +119,21 @@ private:
             case OFTInteger: {
                 AttributeIntHandleType* itemAttributeHandle = new AttributeIntHandleType();
                 manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE);
-                m_itemAttributeHandles.insert(qMakePair((AbstractItemHandle*)&itemHandle, iField), itemAttributeHandle);
+                registerHandlePtr(QString("ia%1%2").arg(size_t(&itemHandle)).arg(iField), itemAttributeHandle);
                 break;
             }
 
             case OFTReal:{
                 AttributeDoubleHandleType* itemAttributeHandle = new AttributeDoubleHandleType();
                 manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE);
-                m_itemAttributeHandles.insert(qMakePair((AbstractItemHandle*)&itemHandle, iField), itemAttributeHandle);
+                registerHandlePtr(QString("ia%1%2").arg(size_t(&itemHandle)).arg(iField), itemAttributeHandle);
                 break;
             }
 
             default:{
                 AttributeStringHandleType* itemAttributeHandle = new AttributeStringHandleType();
                 manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE);
-                m_itemAttributeHandles.insert(qMakePair((AbstractItemHandle*)&itemHandle, iField), itemAttributeHandle);
+                registerHandlePtr(QString("ia%1%2").arg(size_t(&itemHandle)).arg(iField), itemAttributeHandle);
                 break;
             }
             }
@@ -187,7 +169,7 @@ private:
         {
             // create the item attribute
             CT_AbstractItemAttribute *att = createAttributeWithGoodType(poFDefn, iField, poFeature);
-            AbstractAttributeHandle* attributeHandle = m_itemAttributeHandles.value(qMakePair((AbstractItemHandle*)itemHandle, iField), nullptr);
+            AbstractAttributeHandle* attributeHandle = registeredHandlePtr<AbstractAttributeHandle>(QString("ia%1%2").arg(size_t(itemHandle)).arg(iField));
             item->addItemAttribute(*attributeHandle, att);
         }
 

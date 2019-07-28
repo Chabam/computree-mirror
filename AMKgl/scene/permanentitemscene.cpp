@@ -54,7 +54,7 @@ void PermanentItemScene::removedFrom(const IGraphicsDocument* doc, const QOpenGL
 
     m_documents.remove(nDoc, const_cast<QOpenGLContext*>(newContext));
 
-    if(m_documents.value(nDoc, NULL) == NULL)
+    if(m_documents.value(nDoc, nullptr) == nullptr)
         m_documents.remove(nDoc);
 
     m_objectsScene->removedFrom(doc, newContext);
@@ -213,9 +213,9 @@ void PermanentItemScene::visitObjectsOfTypes(const QList<Scene::ObjectType> &typ
 
 void PermanentItemScene::visitObjectsOfOneItem(const Item *item, IObjectsVisitor &visitor)
 {
-    PermanentItemInformation* info = m_itemsWithInfo.value((Item*)item, NULL);
+    PermanentItemInformation* info = m_itemsWithInfo.value((Item*)item, nullptr);
 
-    if(info != NULL) {
+    if(info != nullptr) {
         PermanentItemInformation::ObjectCollectionIterator it(info->getObjectsCollection());
 
         while(it.hasNext() && visitor.mustContinueVisit()) {
@@ -229,9 +229,9 @@ void PermanentItemScene::visitObjectsOfOneItem(const Item *item, IObjectsVisitor
 
 void PermanentItemScene::visitObjectsOfTypesOfOneItem(const Item *item, const QList<Scene::ObjectType> &types, IObjectsVisitor &visitor)
 {
-    PermanentItemInformation* info = m_itemsWithInfo.value((Item*)item, NULL);
+    PermanentItemInformation* info = m_itemsWithInfo.value((Item*)item, nullptr);
 
-    if(info != NULL) {
+    if(info != nullptr) {
         PermanentItemInformation::ObjectCollectionIterator it(info->getObjectsCollection());
 
         while(it.hasNext() && visitor.mustContinueVisit()) {
@@ -287,9 +287,9 @@ void PermanentItemScene::setItemVisible(const Item *item, bool visible)
 {
     QMutexLocker locker(getMutex());
 
-    PermanentItemInformation *info = m_itemsWithInfo.value((Item*)item, NULL);
+    PermanentItemInformation *info = m_itemsWithInfo.value((Item*)item, nullptr);
 
-    if(info != NULL)
+    if(info != nullptr)
         info->setVisible(visible);
 }
 
@@ -297,9 +297,9 @@ bool PermanentItemScene::isItemVisible(const Item *item) const
 {
     QMutexLocker locker(getMutex());
 
-    PermanentItemInformation *info = m_itemsWithInfo.value((Item*)item, NULL);
+    PermanentItemInformation *info = m_itemsWithInfo.value((Item*)item, nullptr);
 
-    if(info != NULL)
+    if(info != nullptr)
         return info->isVisible();
 
     return false;
@@ -330,7 +330,7 @@ PermanentItemInformation* PermanentItemScene::getPermanentItemInformation(const 
 {
     QMutexLocker locker(getMutex());
 
-    return m_itemsWithInfo.value((Item*)item, NULL);
+    return m_itemsWithInfo.value((Item*)item, nullptr);
 }
 
 size_t PermanentItemScene::countPoints() const
@@ -432,7 +432,7 @@ void PermanentItemScene::internalRemoveItem(const Item *item)
 {
     QMutexLocker locker(m_mutex);
 
-    disconnect(item, NULL, this, NULL);
+    disconnect(item, nullptr, this, nullptr);
 }
 
 PermanentItemInformation* PermanentItemScene::takePermanentItemInformation(const Item *item)
@@ -452,7 +452,7 @@ bool PermanentItemScene::mustBeUpdated() const
 
 void PermanentItemScene::itemSelectionChanged(bool selected, Item *item)
 {
-    PermanentItemInformation* info = m_itemsWithInfo.value(item, NULL);
+    PermanentItemInformation* info = m_itemsWithInfo.value(item, nullptr);
 
     if(selected)
         ItemsPickingTools::staticApplyOperationToObjectOfAnItem(item,

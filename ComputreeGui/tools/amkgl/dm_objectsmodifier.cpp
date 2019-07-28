@@ -90,7 +90,7 @@ void DM_ObjectsModifier::scale(const size_t& objectIndex,
 
 bool DM_ObjectsModifier::isColorsAvailable() const
 {
-    return m_colorcloud != NULL;
+    return m_colorcloud != nullptr;
 }
 
 const CT_Color& DM_ObjectsModifier::getColor(const size_t &objectIndex, const size_t &vertexIndex) const
@@ -124,7 +124,7 @@ void DM_ObjectsModifier::setColor(const size_t &objectIndex, const size_t &verte
 
 bool DM_ObjectsModifier::isNormalsAvailable() const
 {
-    return m_normalcloud != NULL;
+    return m_normalcloud != nullptr;
 }
 
 const CT_Normal& DM_ObjectsModifier::getNormal(const size_t &objectIndex, const size_t &vertexIndex) const
@@ -158,7 +158,7 @@ void DM_ObjectsModifier::setNormal(const size_t &objectIndex, const size_t &vert
 
 bool DM_ObjectsModifier::isInfosAvailable() const
 {
-    return m_infocloud != NULL;
+    return m_infocloud != nullptr;
 }
 
 bool DM_ObjectsModifier::isVisible(const size_t &objectIndex) const

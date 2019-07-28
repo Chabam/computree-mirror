@@ -22,8 +22,8 @@ typename CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::CT_Abstract
 {
     QMutexLocker locker(this->m_mutex);
 
-    if(index == NULL)
-        return CT_AbstractModifiableCIR(NULL);
+    if(index == nullptr)
+        return CT_AbstractModifiableCIR(nullptr);
 
     CT_AbstractModifiableCIR cir = CT_AbstractModifiableCIR(this->template createNewIndexRegistered< CT_StandardModifiableCloudIndexRegisteredT<T>, CT_AbstractModifiableCloudIndexT<T> >(index));
 
@@ -38,7 +38,7 @@ typename CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::CT_Abstract
     QMutexLocker locker(this->m_mutex);
 
     if(cir_collection.isEmpty())
-        return CT_AbstractNotModifiableCIR(NULL);
+        return CT_AbstractNotModifiableCIR(nullptr);
 
     size_t begin = cir_collection.first()->first();
     size_t end = cir_collection.first()->last()+1;
@@ -51,7 +51,7 @@ typename CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::CT_Abstract
         CT_AbstractCIR cir = it.next();
 
         if(cir->first() != end)
-            return CT_AbstractNotModifiableCIR(NULL);
+            return CT_AbstractNotModifiableCIR(nullptr);
 
         end = cir->last()+1;
     }

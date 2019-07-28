@@ -158,7 +158,7 @@ public:
 
     /**
       * \brief Recherche le premier ItemDrawable dans la liste a partir du modele
-      * \return NULL si aucun ItemDrawable n'est de ce type
+      * \return nullptr si aucun ItemDrawable n'est de ce type
       */
     virtual CT_AbstractItemDrawable* findFirstItemDrawable(const CT_OutAbstractModel &model) const = 0;
 
@@ -205,7 +205,7 @@ public:
     /**
      * @brief Create a new document with 3D View
      */
-    virtual DocumentInterface* new3DDocument(float pointSize = 1.0, bool orthographic = false, QColor *color = NULL) = 0;
+    virtual DocumentInterface* new3DDocument(float pointSize = 1.0, bool orthographic = false, QColor *color = nullptr) = 0;
 
     /**
      * @brief Create a new document with 2D View

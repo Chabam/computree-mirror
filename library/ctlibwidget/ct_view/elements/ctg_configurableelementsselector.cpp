@@ -9,7 +9,7 @@ CTG_ConfigurableElementsSelector::CTG_ConfigurableElementsSelector(QWidget *pare
 {
     ui->setupUi(this);
 
-    m_selectedContainerToModify = NULL;
+    m_selectedContainerToModify = nullptr;
     m_readOnly = readOnly;
 
     ui->pushButtonAddAll->setDisabled(m_readOnly);
@@ -51,7 +51,7 @@ bool CTG_ConfigurableElementsSelector::setElementsSelected(QList<CT_AbstractConf
 
     m_selectedContainerToModify = elements;
 
-    if(elements != NULL) {
+    if(elements != nullptr) {
         QList<QListWidgetItem*> transfered;
 
         if(!addSelectedElementsToUI(*elements, transfered)) {
@@ -62,7 +62,7 @@ bool CTG_ConfigurableElementsSelector::setElementsSelected(QList<CT_AbstractConf
                 transferFromSelectedToAvailable(item);
             }
 
-            m_selectedContainerToModify = NULL;
+            m_selectedContainerToModify = nullptr;
             return false;
         }
     }
@@ -74,7 +74,7 @@ QList<CT_AbstractConfigurableElement *> CTG_ConfigurableElementsSelector::takeEl
 {
     QList<CT_AbstractConfigurableElement *> l;
 
-    if(m_selectedContainerToModify != NULL)
+    if(m_selectedContainerToModify != nullptr)
         return l;
 
     if(!saveConfigurationOfAllElementsSelected())
@@ -122,7 +122,7 @@ bool CTG_ConfigurableElementsSelector::addSelectedElementsToUI(const QList<CT_Ab
         QListWidgetItem *item = findItemInAvailableElementByUniqueName(el->getUniqueName());
 
         // item not found or item already added
-        if(item == NULL)
+        if(item == nullptr)
             return false;
 
         QListWidgetItem *cpy = copyItem(item);
@@ -164,7 +164,7 @@ void CTG_ConfigurableElementsSelector::setConfigurableWidgetToItem(CT_AbstractCo
 {
     item->setData(Qt::UserRole+2, qVariantFromValue((void*)cw));
 
-    if(cw != NULL)
+    if(cw != nullptr)
         cw->setDisabled(readOnly());
 }
 
@@ -201,7 +201,7 @@ bool CTG_ConfigurableElementsSelector::saveConfigurationOfAllElementsSelected()
 
         CT_AbstractConfigurableWidget *wid = configurableWidgetFromItem(item);
 
-        if(wid != NULL) {
+        if(wid != nullptr) {
             QString err;
             if(!wid->canAcceptIt(&err) || !wid->updateElement(&err)) {
                 QMessageBox::critical(this, tr("Erreur"), err);
@@ -215,7 +215,7 @@ bool CTG_ConfigurableElementsSelector::saveConfigurationOfAllElementsSelected()
 
 bool CTG_ConfigurableElementsSelector::updateSelectedElementContainerToModify()
 {
-    if(m_selectedContainerToModify == NULL)
+    if(m_selectedContainerToModify == nullptr)
         return true;
 
     QList<CT_AbstractConfigurableElement*> newElements;
@@ -232,7 +232,7 @@ bool CTG_ConfigurableElementsSelector::updateSelectedElementContainerToModify()
 
 bool CTG_ConfigurableElementsSelector::selectedContainerIsSetAndContains(CT_AbstractConfigurableElement *el) const
 {
-    if(m_selectedContainerToModify != NULL)
+    if(m_selectedContainerToModify != nullptr)
         return m_selectedContainerToModify->contains(el);
 
     return false;
@@ -249,7 +249,7 @@ QListWidgetItem *CTG_ConfigurableElementsSelector::findItemInAvailableElementByU
             return bItem;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void CTG_ConfigurableElementsSelector::clearSelectedListWithoutSave()
@@ -288,11 +288,11 @@ void CTG_ConfigurableElementsSelector::clearItem(QListWidgetItem *item)
 {
     if(!selectedContainerIsSetAndContains(configurableElementFromItem(item))) {
         delete configurableElementFromItem(item);
-        setConfigurableElementToItem(NULL, item);
+        setConfigurableElementToItem(nullptr, item);
     }
 
     delete configurableWidgetFromItem(item);
-    setConfigurableWidgetToItem(NULL, item);
+    setConfigurableWidgetToItem(nullptr, item);
 }
 
 void CTG_ConfigurableElementsSelector::clearAvailable()
@@ -307,7 +307,7 @@ void CTG_ConfigurableElementsSelector::clearAvailable()
 
 void CTG_ConfigurableElementsSelector::transferFromAvailableToSelected(QListWidgetItem *item)
 {
-    if(item == NULL)
+    if(item == nullptr)
         return;
 
     QListWidgetItem *cpy = copyItem(item);
@@ -317,7 +317,7 @@ void CTG_ConfigurableElementsSelector::transferFromAvailableToSelected(QListWidg
 
 void CTG_ConfigurableElementsSelector::transferFromSelectedToAvailable(QListWidgetItem *item)
 {
-    if(item == NULL)
+    if(item == nullptr)
         return;
 
     clearItem(item);
@@ -349,14 +349,14 @@ void CTG_ConfigurableElementsSelector::on_listWidgetSelected_currentItemChanged(
     Q_UNUSED(previous)
 
     if(!readOnly())
-        ui->pushButtonRemove->setEnabled(current != NULL);
+        ui->pushButtonRemove->setEnabled(current != nullptr);
 
     ui->scrollAreaConfiguration->takeWidget();
 
-    if(current != NULL) {
+    if(current != nullptr) {
         ui->scrollAreaConfiguration->setWidget( configurableWidgetFromItem(current) );
 
-        if(ui->scrollAreaConfiguration->widget() != NULL)
+        if(ui->scrollAreaConfiguration->widget() != nullptr)
             ui->scrollAreaConfiguration->setMinimumWidth(ui->scrollAreaConfiguration->widget()->width());
     }
 }

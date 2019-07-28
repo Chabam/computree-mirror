@@ -201,7 +201,7 @@ public:
      * \param  (Eigen::Vector2d*) Point générant l'erreur maximale
      * \return (double) Valeur absolue de l'erreur maximale
      */
-    double getMaxError(Eigen::Vector2d* errorPoint = NULL)
+    double getMaxError(Eigen::Vector2d* errorPoint = nullptr)
     {
         if (_n() < 2) {return 0;}
 

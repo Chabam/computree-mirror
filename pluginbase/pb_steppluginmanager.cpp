@@ -33,8 +33,8 @@
 #include "ct_exporter/ct_standardexporterseparator.h"
 #include "ct_reader/ct_standardreaderseparator.h"
 
-/*#include "step/pb_stepgenericexporter.h"
-#include "step/pb_stepuseritemselection.h"*/
+#include "step/pb_stepgenericexporter.h"
+//#include "step/pb_stepuseritemselection.h"
 #include "step/pb_stepgenericloadfile.h"
 /*#include "step/pb_stepcreatereaderlist.h"
 #include "step/pb_steplooponfiles.h"
@@ -59,7 +59,9 @@
 #include "exporters/grid2d/pb_grid2dexporter.h"
 #include "exporters/grid3d/pb_grid3dexporter.h"
 #include "exporters/grid3d/pb_grid3dastableexporter.h"
+*/
 #include "exporters/xyb/pb_xybexporter.h"
+/*
 #include "exporters/xyb/pb_multixybexporter.h"
 #include "exporters/ascrgb/pb_ascrgbexporter.h"
 #include "exporters/groupdata/pb_groupdataexporter.h"
@@ -100,10 +102,7 @@
 
 #include "tools/pb_configurableelementtools.h"*/
 #include "tools/pb_readerstools.h"
-/*#include "tools/pb_exportertools.h"
-
-#include "ct_step/ct_stepinitializedata.h"
-*/
+#include "tools/pb_exportertools.h"
 
 #include <QMessageBox>
 #include <QSettings>
@@ -247,14 +246,26 @@ bool PB_StepPluginManager::loadActions()
     return true;
 }
 
+#ifdef USE_GDAL
+/*bool GDALExporterLessThan(const PB_GDALExporter *s1, const PB_GDALExporter *s2)
+{
+    return s1->uniqueName() < s2->uniqueName();
+}*/
+
+bool GDALReaderLessThan(const CT_Reader_GDAL *s1, const CT_Reader_GDAL *s2)
+{
+    return s1->uniqueName() < s2->uniqueName();
+}
+#endif
+
 bool PB_StepPluginManager::loadExporters()
 {
     clearExporters();
 
-    /*CT_StandardExporterSeparator *sep = addNewSeparator(new CT_StandardExporterSeparator("Exporters"));
-    sep->addExporter(new PB_CSVExporter());
+    CT_StandardExporterSeparator *sep = addNewSeparator(new CT_StandardExporterSeparator("Exporters"));
+    sep->addExporter(new PB_XYBExporter(CT_StepsMenu::LP_Points));
+    /*sep->addExporter(new PB_CSVExporter());
     sep->addExporter(new PB_GroupDataExporter());
-    sep->addExporter(new PB_XYBExporter());
     //sep->addExporter(new PB_MultiXYBExporter());
     sep->addExporter(new PB_ASCRGBExporter());
     sep->addExporter(new PB_ASCIDExporter());
@@ -269,6 +280,41 @@ bool PB_StepPluginManager::loadExporters()
     sep->addExporter(new PB_PgmExporter());
     sep->addExporter(new CT_Exporter_LAS());*/
 
+#ifdef USE_GDAL
+    GDALDriverManager *driverManager = GetGDALDriverManager();
+
+    const int count = driverManager->GetDriverCount();
+
+    if(count > 0) {
+
+        //QList<PB_GDALExporter*> gdalExpoC;
+
+        for(int i=0; i<count; ++i) {
+            GDALDriver *driver = driverManager->GetDriver(i);
+            QString name = CT_GdalTools::staticGdalDriverName(driver);
+
+            if(!name.isEmpty())
+            {
+                if (driver->GetMetadataItem(GDAL_DCAP_CREATE) != nullptr)
+                {
+                    //gdalExpoC.append(new PB_GDALExporter(driver));
+                }
+            }
+        }
+
+        /*if(!gdalExpoC.isEmpty()) {
+            sep = addNewSeparator(new CT_StandardExporterSeparator("GDAL"));
+
+            qSort(gdalExpoC.begin(), gdalExpoC.end(), GDALExporterLessThan);
+
+            QListIterator<PB_GDALExporter*> itGD(gdalExpoC);
+
+            while(itGD.hasNext())
+                sep->addExporter(itGD.next());
+        }*/
+    }
+#endif
+
     return true;
 }
 
@@ -277,10 +323,11 @@ bool PB_StepPluginManager::loadReaders()
     clearReaders();
 
     CT_StandardReaderSeparator* sep = addNewSeparator(new CT_StandardReaderSeparator("Readers"));
-    sep->addReader(new CT_Reader_XYB());
-    sep->addReader(new CT_Reader_OPF());
-    sep->addReader(new CT_Reader_IDXYZ());
-    sep->addReader(new CT_Reader_ASCRGB());
+    sep->addReader(new CT_Reader_XYB(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_OPF(CT_StepsMenu::LP_Others));
+    sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_IDXYZ(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
     /*sep->addReader(new CT_Reader_PTX());
     sep->addReader(new CT_Reader_OBJ());
     sep->addReader(new CT_Reader_LArchitect_Grid());
@@ -293,6 +340,38 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_Points_ASCII());
     sep->addReader(new CT_Reader_PLY());
     sep->addReader(new CT_Reader_Trajectory());*/
+    // load gdal drivers and create readers and exporters
+
+#ifdef USE_GDAL
+    GDALAllRegister();
+    GDALDriverManager *driverManager = GetGDALDriverManager();
+
+    const int count = driverManager->GetDriverCount();
+
+    if(count > 0) {
+        QList<CT_Reader_GDAL*> gdalReaderC;
+
+        for(int i=0; i<count; ++i) {
+            GDALDriver *driver = driverManager->GetDriver(i);
+            QString name = CT_GdalTools::staticGdalDriverName(driver);
+
+            if(!name.isEmpty())
+                gdalReaderC.append(new CT_Reader_GDAL(driver, CT_StepsMenu::LP_Raster, CT_StepsMenu::LP_Vector, CT_StepsMenu::LP_Others));
+        }
+
+        if(!gdalReaderC.isEmpty()) {
+            qSort(gdalReaderC.begin(), gdalReaderC.end(), GDALReaderLessThan);
+
+            QListIterator<CT_Reader_GDAL*> itGD(gdalReaderC);
+
+            while(itGD.hasNext()) {
+                CT_Reader_GDAL *reader = itGD.next();
+                sep = addNewSeparator(new CT_StandardReaderSeparator(reader->displayableName()));
+                sep->addReader(reader);
+            }
+        }
+    }
+#endif
 
     return true;
 }
@@ -308,89 +387,22 @@ bool PB_StepPluginManager::loadMetrics()
     return true;
 }
 
-#ifdef USE_GDAL
-/*bool GDALExporterLessThan(const PB_GDALExporter *s1, const PB_GDALExporter *s2)
-{
-    return s1->getExporterCustomName() < s2->getExporterCustomName();
-}*/
-
-bool GDALReaderLessThan(const CT_Reader_GDAL *s1, const CT_Reader_GDAL *s2)
-{
-    return s1->uniqueName() < s2->uniqueName();
-}
-#endif
-
 bool PB_StepPluginManager::loadAfterAllPluginsLoaded()
 {
-    // load gdal drivers and create readers and exporters
-#ifdef USE_GDAL
-    GDALAllRegister();
-    GDALDriverManager *driverManager = GetGDALDriverManager();
-
-    const int count = driverManager->GetDriverCount();
-
-    if(count > 0) {
-
-        CT_StandardReaderSeparator *sepR;
-        CT_StandardExporterSeparator *sepE = nullptr;
-
-        QList<CT_Reader_GDAL*> gdalReaderC;
-        //QList<PB_GDALExporter*> gdalExpoC;
-
-        for(int i=0; i<count; ++i) {
-            GDALDriver *driver = driverManager->GetDriver(i);
-            QString name = CT_GdalTools::staticGdalDriverName(driver);
-
-            if(!name.isEmpty())
-            {
-                gdalReaderC.append(new CT_Reader_GDAL(driver));
-
-                if (driver->GetMetadataItem(GDAL_DCAP_CREATE) != nullptr)
-                {
-                    //gdalExpoC.append(new PB_GDALExporter(driver));
-                }
-            }
-        }
-
-        /*if(!gdalExpoC.isEmpty()) {
-            sepE = addNewSeparator(new CT_StandardExporterSeparator("GDAL"));
-
-            qSort(gdalExpoC.begin(), gdalExpoC.end(), GDALExporterLessThan);
-
-            QListIterator<PB_GDALExporter*> itGD(gdalExpoC);
-
-            while(itGD.hasNext())
-                sepE->addExporter(itGD.next());
-        }*/
-
-        if(!gdalReaderC.isEmpty()) {
-            qSort(gdalReaderC.begin(), gdalReaderC.end(), GDALReaderLessThan);
-
-            QListIterator<CT_Reader_GDAL*> itGD(gdalReaderC);
-
-            while(itGD.hasNext()) {
-                CT_Reader_GDAL *reader = itGD.next();
-                sepR = addNewSeparator(new CT_StandardReaderSeparator(reader->displayableName()));
-                sepR->addReader(reader);
-            }
-        }
-    }
-#endif
-
     /*initRasterMetricsCollection();
     initXyzMetricsCollection();
     initXyzFiltersCollection();*/
-    initReadersCollection();/*
+    initReadersCollection();
     initExportersCollection();
 
     QList<CT_AbstractExporter*> exporters = m_exportersOfAllPlugins.values();
 
     for(CT_AbstractExporter* exporter : exporters) {
-        addNewStep(new PB_StepGenericExporter(*createNewStepInitializeData(NULL, true), exporter->copy()), CT_StepsMenu::LO_Export, exporter->getExporterSubMenuName());
+        addNewStep(new PB_StepGenericExporter(exporter->copy()), CT_StepsMenu::LO_Export, CT_StepsMenu::LevelPredefined(exporter->subMenuLevel()));
     }
-*/
+
     for(CT_AbstractReader* reader : m_readersOfAllPlugins) {
-        addNewStep(new PB_StepGenericLoadFile(reader->copyFull()), CT_StepsMenu::LO_Load, CT_StepsMenu::LP_Points/*reader->getReaderSubMenuName()*/);
+        addNewStep(new PB_StepGenericLoadFile(reader->copyFull()), CT_StepsMenu::LO_Load, CT_StepsMenu::LevelPredefined(reader->subMenuLevel()));
     }
 
     return true;
@@ -449,7 +461,7 @@ void PB_StepPluginManager::initReadersCollection()
 {
     PB_ReadersTools::initAvailableReaders(m_readersOfAllPlugins, nullptr);
 }
-/*
+
 void PB_StepPluginManager::initExportersCollection()
 {
     PB_ExporterTools::initAvailableExporters(m_exportersOfAllPlugins, nullptr);
@@ -458,7 +470,7 @@ void PB_StepPluginManager::initExportersCollection()
                                                  return exporter->canExportPoints() && exporter->canExportPieceByPiece();
                                              });
 }
-*/
+
 #ifdef USE_GDAL
 void PB_StepPluginManager::staticGdalErrorHandler(CPLErr eErrClass, int err_no, const char *msg)
 {

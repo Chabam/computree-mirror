@@ -35,7 +35,7 @@
 
 GTreeStepContextMenu::GTreeStepContextMenu(CDM_StepManager &stepManager, QWidget *parent) : m_stepManager(stepManager), QMenu(parent)
 {
-    _selectedStep = NULL;
+    _selectedStep = nullptr;
 }
 
 void GTreeStepContextMenu::setSelectedStep(CT_VirtualAbstractStep *step)
@@ -60,26 +60,26 @@ void GTreeStepContextMenu::reload()
 
     QAction *action = new QAction(tr("Exécuter"), this);
     action->setIcon(QIcon(":/Icones/Icones/play.png"));
-    action->setEnabled((selectedStep() != NULL)
+    action->setEnabled((selectedStep() != nullptr)
                        && ((!selectedStep()->needInputResults())
-                           || ((selectedStep()->parentStep() != NULL)
+                           || ((selectedStep()->parentStep() != nullptr)
                                && (selectedStep()->parentStep()->nOutResult() > 0))));
     connect(action, SIGNAL(triggered()), this, SLOT(executeStepRequired()));
     addAction(action);
 
     action = new QAction(tr("Config. paramètres"), this);
     action->setIcon(QIcon(":/Icones/Icones/preferences-system.png"));
-    action->setEnabled(selectedStep() != NULL);
+    action->setEnabled(selectedStep() != nullptr);
     connect(action, SIGNAL(triggered()), this, SLOT(configureStepRequired()));
     addAction(action);
 
     action = new QAction(tr("Config. résultats d'entrée"), this);
     action->setIcon(QIcon(":/Icones/Icones/preferences-system.png"));
-    action->setEnabled((selectedStep() != NULL) && selectedStep()->needInputResults());
+    action->setEnabled((selectedStep() != nullptr) && selectedStep()->needInputResults());
     connect(action, SIGNAL(triggered()), this, SLOT(configureInputResultOfStepRequired()));
     addAction(action);
 
-    if((selectedStep() != NULL) && selectedStep()->isModifiable())
+    if((selectedStep() != nullptr) && selectedStep()->isModifiable())
     {
         action = new QAction(tr("Modifier (mode manuel)"), this);
         action->setIcon(QIcon(":/Icones/Icones/hand.png"));
@@ -89,7 +89,7 @@ void GTreeStepContextMenu::reload()
 
     action = new QAction(tr("Supprimer"), this);
     action->setIcon(QIcon(":/Icones/Icones/delete.png"));
-    action->setEnabled(selectedStep() != NULL);
+    action->setEnabled(selectedStep() != nullptr);
     connect(action, SIGNAL(triggered()), this, SLOT(deleteStepRequired()));
     addAction(action);
 
@@ -130,13 +130,13 @@ void GTreeStepContextMenu::executeStepRequired()
 
 void GTreeStepContextMenu::modifyStepRequired()
 {
-    if(selectedStep() != NULL)
+    if(selectedStep() != nullptr)
         m_stepManager.executeModifyStep(selectedStep());
 }
 
 void GTreeStepContextMenu::configureInputResultOfStepRequired()
 {
-    if(selectedStep() != NULL && !m_stepManager.isRunning())
+    if(selectedStep() != nullptr && !m_stepManager.isRunning())
     {
         if(selectedStep()->showInputResultConfigurationDialog())
             selectedStep()->finalizeConfiguration();
@@ -145,7 +145,7 @@ void GTreeStepContextMenu::configureInputResultOfStepRequired()
 
 void GTreeStepContextMenu::configureStepRequired()
 {
-    if(selectedStep() != NULL && !m_stepManager.isRunning())
+    if(selectedStep() != nullptr && !m_stepManager.isRunning())
     {
         if(selectedStep()->showPostConfigurationDialog())
             selectedStep()->finalizeConfiguration();
@@ -154,19 +154,19 @@ void GTreeStepContextMenu::configureStepRequired()
 
 void GTreeStepContextMenu::showStepInformations()
 {
-    if(selectedStep() != NULL)
+    if(selectedStep() != nullptr)
         GAboutStepDialog(selectedStep()).exec();
 }
 
 void GTreeStepContextMenu::deleteStepRequired()
 {
-    if(selectedStep() != NULL)
-        GUI_MANAGER->asyncRemoveStep(*selectedStep(), NULL);
+    if(selectedStep() != nullptr)
+        GUI_MANAGER->asyncRemoveStep(*selectedStep(), nullptr);
 }
 
 void GTreeStepContextMenu::locateStepInMenu()
 {
-    if(selectedStep() != NULL)
+    if(selectedStep() != nullptr)
         emit locateSelectedStepInMenu(selectedStep());
 }
 
@@ -177,12 +177,12 @@ bool GTreeStepContextMenu::checkIfCanExecuteStepAndShowWarningMessage(bool execu
 
     if(oneStepInDebugMode && !executeInDebugMode)
     {
-        continueExecution = QMessageBox::warning(NULL, tr("Attention"), tr("Une ou plusieurs étapes sont en mode debug or vous allez lancer"
+        continueExecution = QMessageBox::warning(nullptr, tr("Attention"), tr("Une ou plusieurs étapes sont en mode debug or vous allez lancer"
                                                                            " les traitements en mode normal."), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel) == QMessageBox::Yes;
     }
     else if(!oneStepInDebugMode && executeInDebugMode)
     {
-        continueExecution = QMessageBox::warning(NULL, tr("Attention"), tr("Aucune étape n'est en mode debug or vous allez lancer"
+        continueExecution = QMessageBox::warning(nullptr, tr("Attention"), tr("Aucune étape n'est en mode debug or vous allez lancer"
                                                                            " les traitements dans ce mode."), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel) == QMessageBox::Yes;
     }
 

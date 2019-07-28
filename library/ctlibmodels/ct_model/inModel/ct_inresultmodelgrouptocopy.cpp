@@ -10,14 +10,14 @@ CT_InResultModelGroupToCopy::CT_InResultModelGroupToCopy(const QString& displaya
                                                          bool recursive) : SuperClass(displayableName,
                                                                                       shortDescription,
                                                                                       recursive),
-    m_tool(NULL)
+    m_tool(nullptr)
 {
 }
 
 CT_InResultModelGroupToCopy::CT_InResultModelGroupToCopy(const CT_InResultModelGroupToCopy& other,
                                                          const bool& withPossibilities) : SuperClass(other,
                                                                                                      withPossibilities),
-    m_tool(NULL)
+    m_tool(nullptr)
 {
 }
 
@@ -33,7 +33,7 @@ CT_InResultModelGroupToCopy::ToolToModifyResultModelCopiesType* CT_InResultModel
 
     const auto visitor = [this](const CT_InStdModelPossibility* possibility) -> bool {
 
-        MODELS_ASSERT(dynamic_cast<const CT_InStdResultModelPossibility*>(possibility) != NULL);
+        MODELS_ASSERT(dynamic_cast<const CT_InStdResultModelPossibility*>(possibility) != nullptr);
 
         // the possibility is always a possibility for a result model
         const CT_InStdResultModelPossibility* resultPossibility = static_cast<const CT_InStdResultModelPossibility*>(possibility);
@@ -63,7 +63,7 @@ CT_InAbstractModel* CT_InResultModelGroupToCopy::copy(bool withPossibilities) co
 
 int CT_InResultModelGroupToCopy::nOutResultModelCopiesCreated() const
 {
-    if(m_tool == NULL)
+    if(m_tool == nullptr)
         return 0;
 
     return m_tool->nResultModels();
@@ -77,5 +77,5 @@ CT_InResultModelGroupToCopy::ToolToModifyResultModelCopiesType* CT_InResultModel
 void CT_InResultModelGroupToCopy::deleteToolToModifyResultModelCopies()
 {
     delete m_tool;
-    m_tool = NULL;
+    m_tool = nullptr;
 }

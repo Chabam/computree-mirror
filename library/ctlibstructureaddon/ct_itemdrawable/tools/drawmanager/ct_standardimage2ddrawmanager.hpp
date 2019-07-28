@@ -71,7 +71,7 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
             }
         }
 
-        std::srand (std::time(NULL));
+        std::srand (std::time(nullptr));
         QMutableMapIterator<DataT, QColor> it(colors);
         while (it.hasNext())
         {

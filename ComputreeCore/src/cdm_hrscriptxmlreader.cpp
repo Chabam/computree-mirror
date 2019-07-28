@@ -15,8 +15,8 @@
 
 CDM_HRScriptXmlReader::CDM_HRScriptXmlReader()
 {
-    m_pluginManager = NULL;
-    m_stepManager = NULL;
+    m_pluginManager = nullptr;
+    m_stepManager = nullptr;
 }
 
 void CDM_HRScriptXmlReader::setPluginManager(const CDM_PluginManager *pm)
@@ -276,9 +276,9 @@ void CDM_HRScriptXmlReader::processWorkflow()
 
     while(!rootStepEL.isNull() && (loadErrorStrategy == LES_Continue)) {
 
-        CT_VirtualAbstractStep* rootStep = recursiveAddAndLoadStep(rootStepEL, NULL, loadErrorStrategy);
+        CT_VirtualAbstractStep* rootStep = recursiveAddAndLoadStep(rootStepEL, nullptr, loadErrorStrategy);
 
-        if(rootStep != NULL)
+        if(rootStep != nullptr)
             rootStepsAdded.append(rootStep);
 
         rootStepEL = rootStepEL.nextSiblingElement("Step");
@@ -329,14 +329,14 @@ CT_VirtualAbstractStep* CDM_HRScriptXmlReader::recursiveAddAndLoadStep(QDomEleme
     QString pluginName;
     QString stepKey;
     int stepID;
-    CT_AbstractStepPlugin* plugin = NULL;
+    CT_AbstractStepPlugin* plugin = nullptr;
 
     if(extractInformationsToCreateStep(currentStepEL, parentStep, pluginName, stepKey, stepID, &plugin, loadErrorStrategy)) {
 
         CT_VirtualAbstractStep* newStep = createStepFromOriginal(stepKey, parentStep, plugin, loadErrorStrategy);
 
-        if(newStep == NULL)
-            return NULL;
+        if(newStep == nullptr)
+            return nullptr;
 
         // return false if manually configured
         if(!processStepPreSettings(newStep, stepID, stepKey, parentStep, pluginName, loadErrorStrategy)) {
@@ -344,27 +344,27 @@ CT_VirtualAbstractStep* CDM_HRScriptXmlReader::recursiveAddAndLoadStep(QDomEleme
             // if manually configuration was canceled
             if(loadErrorStrategy != LES_Continue) {
                 delete newStep;
-                return NULL;
+                return nullptr;
             }
         } else if(!processStepInputSettings(newStep, stepID, stepKey, parentStep, pluginName, loadErrorStrategy)) {
 
             // if manually configuration was canceled
             if(loadErrorStrategy != LES_Continue) {
                 delete newStep;
-                return NULL;
+                return nullptr;
             }
         } else if(!processStepPostSettings(newStep, stepID, stepKey, parentStep, pluginName, loadErrorStrategy)) {
 
             // if manually configuration was canceled
             if(loadErrorStrategy != LES_Continue) {
                 delete newStep;
-                return NULL;
+                return nullptr;
             }
         }
 
         if(!processStepOthersSettings(newStep, stepID, stepKey, parentStep, pluginName, loadErrorStrategy)) {
             delete newStep;
-            return NULL;
+            return nullptr;
         }
 
         const bool debugOn = currentStepEL.attribute("debug", "false") == "true";
@@ -380,14 +380,14 @@ CT_VirtualAbstractStep* CDM_HRScriptXmlReader::recursiveAddAndLoadStep(QDomEleme
 
             m_errors += err + QObject::tr("\r\n");
 
-            CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_NoSolution, err, NULL, parentStep, m_pluginManager->getPluginIndex(plugin), pluginName, stepKey);
+            CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_NoSolution, err, nullptr, parentStep, m_pluginManager->getPluginIndex(plugin), pluginName, stepKey);
 
-            if(scriptLoadCallBack() != NULL)
+            if(scriptLoadCallBack() != nullptr)
                 scriptLoadCallBack()->loadScriptError(problem);
 
             loadErrorStrategy = (problem.getSolutionKeepSteps() ? LES_StopAndKeep : LES_StopAndClear);
 
-            return NULL;
+            return nullptr;
         }
 
         QDomElement childEL = currentStepEL.firstChildElement("Step");
@@ -395,7 +395,7 @@ CT_VirtualAbstractStep* CDM_HRScriptXmlReader::recursiveAddAndLoadStep(QDomEleme
         if(!childEL.isNull())
             recursiveAddAndLoadStep(childEL, newStep, loadErrorStrategy);
 
-        if(parentStep != NULL) {
+        if(parentStep != nullptr) {
             currentStepEL = currentStepEL.nextSiblingElement("Step");
 
             while(!currentStepEL.isNull()) {
@@ -407,7 +407,7 @@ CT_VirtualAbstractStep* CDM_HRScriptXmlReader::recursiveAddAndLoadStep(QDomEleme
         return newStep;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool CDM_HRScriptXmlReader::recursiveVerifyIfFoundAll(QDomElement currentStepEL, bool hasParentStep) const
@@ -415,10 +415,10 @@ bool CDM_HRScriptXmlReader::recursiveVerifyIfFoundAll(QDomElement currentStepEL,
     QString pluginName;
     QString stepKey;
     int stepID;
-    CT_AbstractStepPlugin* plugin = NULL;
+    CT_AbstractStepPlugin* plugin = nullptr;
     LoadErrorStrategy loadErrorStrategy = LES_StopAndClear; // LES_StopAndClear to disable search plugin or step manually
 
-    if(extractInformationsToCreateStep(currentStepEL, NULL, pluginName, stepKey, stepID, &plugin, loadErrorStrategy)) {
+    if(extractInformationsToCreateStep(currentStepEL, nullptr, pluginName, stepKey, stepID, &plugin, loadErrorStrategy)) {
         QDomElement childEL = currentStepEL.firstChildElement("Step");
 
         if(!childEL.isNull()) {
@@ -447,7 +447,7 @@ bool CDM_HRScriptXmlReader::extractInformationsToCreateStep(QDomElement currentS
     pluginName = CDM_XMLTools::decodeEntities(currentStepEL.attribute("plugin", ""));
     stepKey = CDM_XMLTools::decodeEntities(currentStepEL.attribute("type", ""));
     stepID = currentStepEL.attribute("id", "-1").toInt(&ok);
-    *plugin = NULL;
+    *plugin = nullptr;
 
     if((stepID == -1) || !ok) {
 
@@ -455,18 +455,18 @@ bool CDM_HRScriptXmlReader::extractInformationsToCreateStep(QDomElement currentS
 
         m_errors += err + QObject::tr("\r\n");
 
-        CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_NoSolution, err, NULL, parentStep, -1, "", stepKey);
+        CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_NoSolution, err, nullptr, parentStep, -1, "", stepKey);
 
-        if(scriptLoadCallBack() != NULL)
+        if(scriptLoadCallBack() != nullptr)
             scriptLoadCallBack()->loadScriptError(problem);
 
         loadErrorStrategy = (problem.getSolutionKeepSteps() ? LES_StopAndKeep : LES_StopAndClear);
-        return NULL;
+        return nullptr;
     }
 
     *plugin = findPlugin(pluginName, stepKey, loadErrorStrategy);
 
-    if((*plugin) == NULL)
+    if((*plugin) == nullptr)
         return false;
 
     stepKey = findStepInPlugin(stepKey, parentStep, (*plugin), loadErrorStrategy);
@@ -481,14 +481,14 @@ CT_AbstractStepPlugin* CDM_HRScriptXmlReader::findPlugin(QString pluginName, con
 {
     CT_AbstractStepPlugin* plugin = m_pluginManager->getPlugin(pluginName);
 
-    if(plugin == NULL) {
+    if(plugin == nullptr) {
         const QString err = QObject::tr("Le plugin \"%1\" pour l'étape \"%2\" ne semble pas être chargé.").arg(pluginName).arg(stepKey);
 
         m_errors += err + QObject::tr("\r\n");
 
-        CDM_ScriptProblem problem(*m_pluginManager, ((loadErrorStrategy != LES_Continue) ? CDM_ScriptProblem::TOP_NoSolution : CDM_ScriptProblem::TOP_PluginNotFound), err, NULL, NULL, -1, pluginName);
+        CDM_ScriptProblem problem(*m_pluginManager, ((loadErrorStrategy != LES_Continue) ? CDM_ScriptProblem::TOP_NoSolution : CDM_ScriptProblem::TOP_PluginNotFound), err, nullptr, nullptr, -1, pluginName);
 
-        if(scriptLoadCallBack() != NULL)
+        if(scriptLoadCallBack() != nullptr)
             scriptLoadCallBack()->loadScriptError(problem);
 
         pluginName = m_pluginManager->getPluginName(problem.getSolutionPluginToUse());
@@ -496,7 +496,7 @@ CT_AbstractStepPlugin* CDM_HRScriptXmlReader::findPlugin(QString pluginName, con
         if(!pluginName.isEmpty())
             plugin = m_pluginManager->getPlugin(pluginName);
 
-        if(plugin == NULL)
+        if(plugin == nullptr)
             loadErrorStrategy = (problem.getSolutionKeepSteps() ? LES_StopAndKeep : LES_StopAndClear);
     }
 
@@ -509,7 +509,7 @@ QString CDM_HRScriptXmlReader::findStepInPlugin(QString stepKey, CT_VirtualAbstr
 
     CT_VirtualAbstractStep *step = plugin->getStepFromKey(stepKey);
 
-    if(step == NULL)
+    if(step == nullptr)
     {
         const QString pluginName = m_pluginManager->getPluginName(plugin);
 
@@ -517,16 +517,16 @@ QString CDM_HRScriptXmlReader::findStepInPlugin(QString stepKey, CT_VirtualAbstr
 
         m_errors += err + QObject::tr("\r\n");
 
-        CDM_ScriptProblem problem(*m_pluginManager, ((loadErrorStrategy != LES_Continue) ? CDM_ScriptProblem::TOP_NoSolution : CDM_ScriptProblem::TOP_StepNotFound), err, NULL, parentStep, pluginIndex, pluginName, stepKey);
+        CDM_ScriptProblem problem(*m_pluginManager, ((loadErrorStrategy != LES_Continue) ? CDM_ScriptProblem::TOP_NoSolution : CDM_ScriptProblem::TOP_StepNotFound), err, nullptr, parentStep, pluginIndex, pluginName, stepKey);
 
-        if(scriptLoadCallBack() != NULL) {
+        if(scriptLoadCallBack() != nullptr) {
             scriptLoadCallBack()->loadScriptError(problem);
             step = problem.getSolutionUseStep();
         }
 
         stepKey = "";
 
-        if(step != NULL)
+        if(step != nullptr)
             stepKey = plugin->getKeyForStep(*step);
         else
             loadErrorStrategy = (problem.getSolutionKeepSteps() ? LES_StopAndKeep : LES_StopAndClear);
@@ -540,7 +540,7 @@ CT_VirtualAbstractStep* CDM_HRScriptXmlReader::createStepFromOriginal(const QStr
     CT_VirtualAbstractStep *originalStep = plugin->getStepFromKey(stepKey);
     CT_VirtualAbstractStep* copyStep = plugin->createNewInstanceOfStep(*originalStep, parentStep);
 
-    if(copyStep == NULL)
+    if(copyStep == nullptr)
     {
         const int pluginIndex = m_pluginManager->getPluginIndex(plugin);
         const QString pluginName = m_pluginManager->getPluginName(plugin);
@@ -551,7 +551,7 @@ CT_VirtualAbstractStep* CDM_HRScriptXmlReader::createStepFromOriginal(const QStr
 
         CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_NoSolution, err, copyStep, parentStep, pluginIndex, pluginName, stepKey);
 
-        if(scriptLoadCallBack() != NULL)
+        if(scriptLoadCallBack() != nullptr)
             scriptLoadCallBack()->loadScriptError(problem);
 
         loadErrorStrategy = (problem.getSolutionKeepSteps() ? LES_StopAndKeep : LES_StopAndClear);
@@ -589,17 +589,17 @@ CDM_HRScriptXmlReader::DomElementCallerInfo* CDM_HRScriptXmlReader::findDomEleme
         return info;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CDM_HRScriptXmlReader::DomElementCallerInfo* CDM_HRScriptXmlReader::findDomElementForCaller(const QObject *caller)
 {
-    if(!m_parametersStack.isEmpty() && dynamic_cast<const CT_VirtualAbstractStep*>(caller) != NULL)
+    if(!m_parametersStack.isEmpty() && dynamic_cast<const CT_VirtualAbstractStep*>(caller) != nullptr)
         return m_parametersStack.first();
 
-    DomElementCallerInfo* elInfo = m_callerDomElements.value((QObject*)caller, NULL);
+    DomElementCallerInfo* elInfo = m_callerDomElements.value((QObject*)caller, nullptr);
 
-    if(elInfo == NULL) {
+    if(elInfo == nullptr) {
 
         if(!m_parametersStack.isEmpty()) {
             DomElementCallerInfo* parent = m_parametersStack.last();
@@ -633,7 +633,7 @@ QDomElement CDM_HRScriptXmlReader::getNextParameterOrFindCurrentAndAddItInInfo(C
 {
     QDomElement child;
 
-    if(info == NULL)
+    if(info == nullptr)
         return child;
 
     if(!info->currentParameters.contains(parameterName)) {
@@ -661,7 +661,7 @@ QDomElement CDM_HRScriptXmlReader::getNextParameterOrFindCurrentAndAddItInInfo(C
 
 bool CDM_HRScriptXmlReader::processStepPreSettings(CT_VirtualAbstractStep* step, const int &stepID, const QString& stepKey, CT_VirtualAbstractStep* parentStep, const QString& pluginName, LoadErrorStrategy& loadErrorStrategy)
 {
-    DomElementCallerInfo* info = NULL;
+    DomElementCallerInfo* info = nullptr;
 
     if(!m_domPreParameters.isNull())
         info = findDomElementForStepAndCreateInfo(stepID, m_domPreParameters);
@@ -670,7 +670,7 @@ bool CDM_HRScriptXmlReader::processStepPreSettings(CT_VirtualAbstractStep* step,
 
     m_allParametersFounded = true;
 
-    if(info != NULL) {
+    if(info != nullptr) {
         m_parametersStack.append(info);
         ok = step->restorePreSettings(*this);
         qDeleteAll(m_parametersStack.begin(), m_parametersStack.end());
@@ -690,7 +690,7 @@ bool CDM_HRScriptXmlReader::processStepPreSettings(CT_VirtualAbstractStep* step,
 
         CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_StepPreParamsCanNotBeConfigured, err, step, parentStep, -1, pluginName, stepKey);
 
-        if(scriptLoadCallBack() != NULL)
+        if(scriptLoadCallBack() != nullptr)
             scriptLoadCallBack()->loadScriptError(problem);
 
         if(!problem.isConfigureStepWellConfigured())
@@ -704,7 +704,7 @@ bool CDM_HRScriptXmlReader::processStepPreSettings(CT_VirtualAbstractStep* step,
 
 bool CDM_HRScriptXmlReader::processStepInputSettings(CT_VirtualAbstractStep *step, const int &stepID, const QString& stepKey, CT_VirtualAbstractStep* parentStep, const QString& pluginName, LoadErrorStrategy& loadErrorStrategy)
 {    
-    DomElementCallerInfo* info = NULL;
+    DomElementCallerInfo* info = nullptr;
 
     if(!m_domInputModels.isNull())
         info = findDomElementForStepAndCreateInfo(stepID, m_domInputModels);
@@ -713,7 +713,7 @@ bool CDM_HRScriptXmlReader::processStepInputSettings(CT_VirtualAbstractStep *ste
 
     m_allParametersFounded = true;
 
-    if(info != NULL) {
+    if(info != nullptr) {
         m_parametersStack.append(info);
         ok = step->restoreInputSettings(*this);
         qDeleteAll(m_parametersStack.begin(), m_parametersStack.end());
@@ -733,7 +733,7 @@ bool CDM_HRScriptXmlReader::processStepInputSettings(CT_VirtualAbstractStep *ste
 
         CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_StepInputParamsCanNotBeConfigured, err, step, parentStep, -1, pluginName, stepKey);
 
-        if(scriptLoadCallBack() != NULL)
+        if(scriptLoadCallBack() != nullptr)
             scriptLoadCallBack()->loadScriptError(problem);
 
         if(!problem.isConfigureStepWellConfigured())
@@ -747,7 +747,7 @@ bool CDM_HRScriptXmlReader::processStepInputSettings(CT_VirtualAbstractStep *ste
 
 bool CDM_HRScriptXmlReader::processStepPostSettings(CT_VirtualAbstractStep *step, const int &stepID, const QString& stepKey, CT_VirtualAbstractStep* parentStep, const QString& pluginName, LoadErrorStrategy& loadErrorStrategy)
 {
-    DomElementCallerInfo* info = NULL;
+    DomElementCallerInfo* info = nullptr;
 
     if(!m_domPostParameters.isNull())
         info = findDomElementForStepAndCreateInfo(stepID, m_domPostParameters);
@@ -756,7 +756,7 @@ bool CDM_HRScriptXmlReader::processStepPostSettings(CT_VirtualAbstractStep *step
 
     m_allParametersFounded = true;
 
-    if(info != NULL) {
+    if(info != nullptr) {
         m_parametersStack.append(info);
         ok = step->restorePostSettings(*this);
         qDeleteAll(m_parametersStack.begin(), m_parametersStack.end());
@@ -776,7 +776,7 @@ bool CDM_HRScriptXmlReader::processStepPostSettings(CT_VirtualAbstractStep *step
 
         CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_StepPostParamsCanNotBeConfigured, err, step, parentStep, -1, pluginName, stepKey);
 
-        if(scriptLoadCallBack() != NULL)
+        if(scriptLoadCallBack() != nullptr)
             scriptLoadCallBack()->loadScriptError(problem);
 
         if(!problem.isConfigureStepWellConfigured())
@@ -797,7 +797,7 @@ bool CDM_HRScriptXmlReader::processStepOthersSettings(CT_VirtualAbstractStep *st
 
     bool ok = false;
 
-    if(info != NULL) {
+    if(info != nullptr) {
         m_parametersStack.append(info);
         ok = step->restoreOthersSettings(*this);
         qDeleteAll(m_parametersStack.begin(), m_parametersStack.end());
@@ -815,7 +815,7 @@ bool CDM_HRScriptXmlReader::processStepOthersSettings(CT_VirtualAbstractStep *st
 
         CDM_ScriptProblem problem(*m_pluginManager, CDM_ScriptProblem::TOP_NoSolution, err, step, parentStep, -1, pluginName, stepKey);
 
-        if(scriptLoadCallBack() != NULL)
+        if(scriptLoadCallBack() != nullptr)
             scriptLoadCallBack()->loadScriptError(problem);
 
         loadErrorStrategy = (problem.getSolutionKeepSteps() ? LES_StopAndKeep : LES_StopAndClear);

@@ -12,7 +12,7 @@ CT_AbstractCloudSyncToGlobalCloudManager::CT_AbstractCloudSyncToGlobalCloudManag
 CT_AbstractCloudSyncToGlobalCloudManager::~CT_AbstractCloudSyncToGlobalCloudManager()
 {
     while(!m_crArray.isEmpty())
-        m_crArray.takeLast()->setSyncCloudManager(NULL);
+        m_crArray.takeLast()->setSyncCloudManager(nullptr);
 }
 
 CT_AbstractGlobalCloudManager* CT_AbstractCloudSyncToGlobalCloudManager::globalCloudManager() const

@@ -75,14 +75,14 @@ private:
                            QString filePath,
                            DM_DocumentManagerView *view,
                            DM_AsynchroneProgress *progress,
-                           DM_AsynchroneProgress *secondProgress = NULL)
+                           DM_AsynchroneProgress *secondProgress = nullptr)
         {
             _aop = aop;
             _res = res;
-            _itemModel = NULL;
-            _exporter = NULL;
+            _itemModel = nullptr;
+            _exporter = nullptr;
 
-            if(itemList != NULL)
+            if(itemList != nullptr)
             {
                 _itemList = *itemList;
             }
@@ -192,9 +192,9 @@ public:
      * @param options : to specify otions (example : if you want that no step is running. example 2 : if you want that the StepManager don't clear automatically resuls, etc...).
      * @param wait : true if you want to wait until the current operation is finished. If true the workflow is blocked (not the gui thread)
      * @return A object that you must delete when yo have finished your operation to free the access to other elements in the gui. If the
-     *         variable 'wait' is false and a current operation is in progress the method return NULL.
+     *         variable 'wait' is false and a current operation is in progress the method return nullptr.
      */
-    DM_AsyncOperation* requestExclusiveAsyncOperation(const DM_AbstractAsyncOperationOptions *options = NULL, bool wait = true);
+    DM_AsyncOperation* requestExclusiveAsyncOperation(const DM_AbstractAsyncOperationOptions *options = nullptr, bool wait = true);
 
     /**
       * \brief Gre l'ajout des CT_AbstractItemDrawable d'un rsultat aux diffrentes
@@ -223,7 +223,7 @@ public:
       *  vues qui en ont besoin. (Asynchrone)
       *
       * \param itemList : la liste des itemsDrawable
-      * \param view : la vue à laquelle il faut ajouter les items. NULL si vous voulez ajouter au document actif
+      * \param view : la vue à laquelle il faut ajouter les items. nullptr si vous voulez ajouter au document actif
       * \param context : le context a renvoyer lorsque l'action est termin (voir signal correspondant)
       * \return false si une demande a dj t formul et n'est pas termine
       */
@@ -263,7 +263,7 @@ public:
       * \brief Gère la suppression de la liste des ItemDrawables passé en paramètres du document passé en paramètre (Asynchrone)
       *
       * \param itemList : la liste des itemsDrawable
-      * \param view : le document duquel il faut supprimer les éléments. NULL si vous voulez ajouter au document actif
+      * \param view : le document duquel il faut supprimer les éléments. nullptr si vous voulez ajouter au document actif
       * \param context : le context a renvoyer lorsque l'action est terminé (voir signal correspondant)
       * \return false si une demande a déjà été formul et n'est pas terminé
       */
@@ -286,7 +286,7 @@ public:
     virtual int asyncRemoveAllStep(DM_Context *context);
 
     /**
-      * \brief Gere l'exportation. Appel les methodes de l'exportateur : configureExport(...) puis avec un thread export(...)
+      * \brief Gere l'exportation. Appel les methodes de l'exportateur : configure(...) puis avec un thread export(...)
       *
       *        ATTNENTION : veuillez spécifier à l'exportateur le chemin du fichier avant d'appeler cette méthode
       *

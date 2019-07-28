@@ -27,18 +27,16 @@
 
 #include "ct_grid3d_sparse.h"
 
-#ifdef USE_OPENCV
-
 template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<bool>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<float>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<double>)
-template<>
+/*template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<long>)
 template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<unsigned long>)
+CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<unsigned long>)*/
 template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<qint8>)
 template<>
@@ -49,13 +47,13 @@ template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<quint16>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<qint32>)
-template<>
+/*template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<quint32>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<qint64>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<quint64>)
-
+*/
 /////////////////////////////////////////////////////////////////////
 /// Specialisations for bool type ///////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -111,7 +109,7 @@ bool CT_Grid3D_Sparse<bool>::addValueAtIndex(const size_t index, const bool valu
 template<>
 QList<bool> CT_Grid3D_Sparse<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t levz, const size_t distance, const bool keepNAs, const CenterMode centermode) const
 {
-    Q_UNUSED(keepNAs);
+    Q_UNUSED(keepNAs)
 
     QList<bool> liste;
 
@@ -152,7 +150,7 @@ QString CT_Grid3D_Sparse<bool>::valueAtIndexAsString(const size_t index) const
     return "F";
 }
 
-template<>
+/*template<>
 QString CT_Grid3D_Sparse<unsigned long>::valueAtIndexAsString(const size_t index) const
 {
     return QString::number(valueAtIndex(index), 'g', 50);
@@ -163,5 +161,4 @@ QString CT_Grid3D_Sparse<unsigned long>::NAAsString() const
 {
     return QString::number(NA(), 'g', 50);
 }
-
-#endif
+*/

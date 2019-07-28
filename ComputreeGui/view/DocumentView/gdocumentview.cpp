@@ -129,7 +129,7 @@ bool GDocumentView::isVisible() const
 
 bool GDocumentView::canClose() const
 {
-    return ((closeFilter() == NULL) || closeFilter()->canClose(this));
+    return ((closeFilter() == nullptr) || closeFilter()->canClose(this));
 }
 
 ///////////////// PROTECTED //////////////

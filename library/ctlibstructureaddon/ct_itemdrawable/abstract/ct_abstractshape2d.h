@@ -45,7 +45,7 @@ public:
     CT_AbstractShape2D();
 
     /**
-     * @brief Construct with a data. Cannot be NULL !
+     * @brief Construct with a data. Cannot be nullptr !
      */
     CT_AbstractShape2D(CT_Shape2DData* data);
 
@@ -64,7 +64,7 @@ public:
      *          - Z Value and if z value is defined
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */

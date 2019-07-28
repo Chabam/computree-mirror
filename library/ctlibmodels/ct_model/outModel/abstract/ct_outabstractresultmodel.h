@@ -37,7 +37,7 @@ public:
 
     /**
      * @brief Create the result and return it. The result of this model will be changed to the created result.
-     * @return NULL if it was a problem
+     * @return nullptr if it was a problem
      */
     virtual IResultForModel* createResult() = 0;
 

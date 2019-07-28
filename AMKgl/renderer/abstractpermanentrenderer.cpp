@@ -2,7 +2,7 @@
 
 AbstractPermanentRenderer::AbstractPermanentRenderer()
 {
-    m_attributesAccessor = NULL;
+    m_attributesAccessor = nullptr;
     m_currentColor = Basic::LocalColor(QColor(Qt::white));
 }
 
@@ -18,7 +18,7 @@ IAttributesAccessor* AbstractPermanentRenderer::getAttributesAccessor() const
 
 AnyElementAttributesProvider* AbstractPermanentRenderer::getAnyElementsAttributesProvider() const
 {
-    return ((getAttributesAccessor() == NULL) ? NULL : getAttributesAccessor()->getAnyElementsAttributesProvider());
+    return ((getAttributesAccessor() == nullptr) ? nullptr : getAttributesAccessor()->getAnyElementsAttributesProvider());
 }
 
 FlagsPropertyManager* AbstractPermanentRenderer::getFlagsPropertyManager() const

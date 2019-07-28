@@ -3,8 +3,8 @@
 CT_AbstractModel::CT_AbstractModel(const QString& displayableName) :
     m_displayableName(displayableName),
     m_shortDescription(displayableName),
-    m_parentModel(NULL),
-    m_step(NULL)
+    m_parentModel(nullptr),
+    m_step(nullptr)
 {
 }
 
@@ -12,7 +12,7 @@ CT_AbstractModel::CT_AbstractModel(const CT_AbstractModel& other) :
     m_displayableName(other.m_displayableName),
     m_shortDescription(other.m_shortDescription),
     m_fullDescription(other.m_fullDescription),
-    m_parentModel(NULL),
+    m_parentModel(nullptr),
     m_step(other.m_step)
 {
 }
@@ -89,7 +89,7 @@ CT_AbstractModel* CT_AbstractModel::rootModel() const
 {
     CT_AbstractModel* root = const_cast<CT_AbstractModel*>(this);
 
-    while(root->parentModel() != NULL)
+    while(root->parentModel() != nullptr)
         root = root->parentModel();
 
     return root;

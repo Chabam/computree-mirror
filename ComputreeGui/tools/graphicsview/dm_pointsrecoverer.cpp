@@ -17,7 +17,7 @@ QList<CT_AbstractCloudIndex *> DM_PointsRecoverer::recoverDrawnGlobalPointsInIte
 {
     m_fakePainter.clear();
 
-    if(optionnalCloudIndexForPointDrawOneByOne != NULL) {
+    if(optionnalCloudIndexForPointDrawOneByOne != nullptr) {
         m_fakePainter.setForGlobalPointDrawOneByOneTheBackupCloudIndex(optionnalCloudIndexForPointDrawOneByOne);
     } else {
         m_pIndexBackup.clear();
@@ -41,7 +41,7 @@ QList<CT_AbstractCloudIndex *> DM_PointsRecoverer::recoverGlobalPointsInItemDraw
     while(it.hasNext()) {
         CT_IAccessPointCloud *ap = dynamic_cast<CT_IAccessPointCloud*>(it.next());
 
-        if((ap != NULL) && (ap->pointCloudIndex() != NULL))
+        if((ap != nullptr) && (ap->pointCloudIndex() != nullptr))
             l.append((CT_AbstractCloudIndex*)ap->pointCloudIndex());
     }
 

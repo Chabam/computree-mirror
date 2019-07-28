@@ -13,6 +13,7 @@ public:
     using ModelsCollectionType = QVector<ModelType*>;
 
     CT_HandleWithMultipleModelT() {}
+    CT_HandleWithMultipleModelT(const CT_HandleWithMultipleModelT& other) = delete;
     virtual ~CT_HandleWithMultipleModelT() { disconnectModels(); }
 
     void setModels(const ModelType* model) { disconnectModels(); m_models.clear(); m_models.append(const_cast<ModelType*>(model)); connectModels(); }
@@ -37,7 +38,7 @@ public:
                 return model;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     AbstractModelType* findAbstractModelWithParent(const CT_OutAbstractModel* parentModel) const final {

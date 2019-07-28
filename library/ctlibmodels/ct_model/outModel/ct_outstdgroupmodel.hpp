@@ -6,7 +6,7 @@ CT_OutStdGroupModel<StdGroup>::CT_OutStdGroupModel(const QString& displayableNam
                                                    const QString& detailledDescription,
                                                    StdGroup* prototype) : SuperClass(displayableName)
 {
-    setPrototype((prototype == NULL) ? new StdGroup() : prototype);
+    setPrototype((prototype == nullptr) ? new StdGroup() : prototype);
     setShortDescription(shortDescription);
     setDetailledDescription(detailledDescription);
 }
@@ -43,7 +43,7 @@ typename CT_OutStdGroupModel<StdGroup>::GroupType* CT_OutStdGroupModel<StdGroup>
             return group;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 template<class StdGroup>
@@ -56,5 +56,5 @@ typename CT_OutStdGroupModel<StdGroup>::ItemType* CT_OutStdGroupModel<StdGroup>:
             return item;
     }
 
-    return NULL;
+    return nullptr;
 }

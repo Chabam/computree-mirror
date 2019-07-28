@@ -7,7 +7,7 @@ GCameraCoordinatesOptions::GCameraCoordinatesOptions(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    _camController = NULL;
+    _camController = nullptr;
     m_updateInProgress = false;
 
     ui->label_7->setVisible(false);
@@ -46,13 +46,13 @@ void GCameraCoordinatesOptions::showEvent(QShowEvent *ev)
 
 void GCameraCoordinatesOptions::disconnectCamController(DM_GraphicsViewCamera *cc)
 {
-    if(cc != NULL)
-        disconnect(cc, NULL, this, NULL);
+    if(cc != nullptr)
+        disconnect(cc, nullptr, this, nullptr);
 }
 
 void GCameraCoordinatesOptions::connectCamController(DM_GraphicsViewCamera *cc)
 {
-    if(cc != NULL)
+    if(cc != nullptr)
     {
         connect(cc, SIGNAL(coordinatesChanged()), this, SLOT(updateView()), Qt::DirectConnection);
     }
@@ -60,7 +60,7 @@ void GCameraCoordinatesOptions::connectCamController(DM_GraphicsViewCamera *cc)
 
 void GCameraCoordinatesOptions::updateView(DM_GraphicsViewCamera *cc)
 {
-    if(cc != NULL && !m_updateInProgress)
+    if(cc != nullptr && !m_updateInProgress)
     {
         double q0, q1, q2, q3;
         cc->getOrientation(q0, q1, q2, q3);
@@ -86,13 +86,13 @@ void GCameraCoordinatesOptions::updateView()
 
 void GCameraCoordinatesOptions::on_pushButtonRAZHome_clicked()
 {
-    if(_camController != NULL)
+    if(_camController != nullptr)
         _camController->homePosition();
 }
 
 void GCameraCoordinatesOptions::on_pushButtonValid_clicked()
 {
-    if(_camController != NULL)
+    if(_camController != nullptr)
     {        
         m_updateInProgress = true;
         _camController->setSceneCenter(ui->doubleSpinBoxCX->value(),

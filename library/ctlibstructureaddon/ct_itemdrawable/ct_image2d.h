@@ -102,7 +102,7 @@ public:
      *          - OpenCv mat
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */
@@ -350,6 +350,7 @@ public:
 
     CT_ITEM_COPY_IMP(CT_Image2D<DataT>)
 
+protected:
     DataT               _NAdata;    /*!< Valeur codant NA */
 
     DataT               _dataMax;   /*!< valeur maximale du raster*/

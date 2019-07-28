@@ -52,8 +52,8 @@ public:
 
     bool mustContinueVisit() const { return true; }
     void setCurrentInformation(const ItemModel *model, const PermanentItemScene *scene);
-    AMKgl::ItemModel* getCurrentModel() const { return NULL; }
-    PermanentItemScene* getCurrentScene() const { return NULL; }
+    AMKgl::ItemModel* getCurrentModel() const { return nullptr; }
+    PermanentItemScene* getCurrentScene() const { return nullptr; }
 
     void addPointsToCompute(const Eigen::Vector3d &offset, std::vector<GLuint> &indices, const size_t& firstPointGlobalIndex);
 

@@ -2,7 +2,7 @@
 #include "ct_abstractstepplugin.h"
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 
-CDM_CitationInfo::CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager) : QObject(NULL)
+CDM_CitationInfo::CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager) : QObject(nullptr)
 {
     _stepManager = stepManager;
     _pluginManager = pluginManager;

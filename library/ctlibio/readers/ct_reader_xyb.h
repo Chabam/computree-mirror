@@ -21,18 +21,13 @@ class CTLIBIO_EXPORT CT_Reader_XYB : public CT_AbstractReader, public CT_ReaderP
     typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_XYB();
-    CT_Reader_XYB(const CT_Reader_XYB& other) = default;
+    CT_Reader_XYB(int subMenuLevel = 0);
+    CT_Reader_XYB(const CT_Reader_XYB& other);
 
     /**
      * @brief Returns a displayable name of the reader
      */
     QString displayableName() const override;
-
-    /**
-     * @brief Returns the sub menu level where we can store this reader
-     */
-    //CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
 
     /**
      * @brief Redefined to check the validity of the file. Returns false if the file is not compatible.

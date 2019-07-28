@@ -30,10 +30,10 @@ public:
      *          - Removed later flags
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
-     *          - Parent container is set to NULL
+     *          - Parent container is set to nullptr
      *          - Childrens (items, sucessor, components, branches) was not copied (you must copy the CT_TTreeGroup that will set the structure)
      */
     CT_TNodeGroup(const CT_TNodeGroup& other) = default;
@@ -52,7 +52,7 @@ public:
     bool setSuccessor(const OutHandleType& sucessorGroupHandle, CT_TNodeGroup *successor) {
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
@@ -71,7 +71,7 @@ public:
     bool addComponent(const OutHandleType& componentGroupHandle, CT_TNodeGroup *component) {
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
@@ -90,7 +90,7 @@ public:
     bool addBranch(const OutHandleType& sonGroupHandle, CT_TNodeGroup *son) {
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group

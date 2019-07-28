@@ -33,7 +33,7 @@ public:
      */
     void addPoint(const Eigen::Vector3d &p,
                  const ElementInfo &info = 0,
-                 IChunk** chunk = NULL,
+                 IChunk** chunk = nullptr,
                  const Color &color = Color(255,255,255,255));
 };
 

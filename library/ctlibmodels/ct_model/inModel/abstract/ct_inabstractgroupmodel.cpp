@@ -13,5 +13,5 @@ CT_InAbstractGroupModel::CT_InAbstractGroupModel(const CT_InAbstractGroupModel& 
 bool CT_InAbstractGroupModel::canBeComparedWith(const CT_OutAbstractModel &model) const
 {
     // ok if the out model represent a group
-    return (dynamic_cast<const CT_OutAbstractGroupModel*>(&model) != NULL);
+    return (dynamic_cast<const CT_OutAbstractGroupModel*>(&model) != nullptr);
 }

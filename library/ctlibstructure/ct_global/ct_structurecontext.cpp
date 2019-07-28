@@ -4,12 +4,12 @@
 #include "ct_categories/tools/ct_categorymanager.h"
 #include "ct_categories/ct_stdcategory.h"
 
-CT_StructureContext* CT_StructureContext::UNIQUE_INSTANCE = NULL;
+CT_StructureContext* CT_StructureContext::UNIQUE_INSTANCE = nullptr;
 
 CT_StructureContext::CT_StructureContext()
 {
-    m_categoryManager = NULL;
-    m_defaultItemAttributeManager = NULL;
+    m_categoryManager = nullptr;
+    m_defaultItemAttributeManager = nullptr;
 }
 
 CT_StructureContext::~CT_StructureContext()

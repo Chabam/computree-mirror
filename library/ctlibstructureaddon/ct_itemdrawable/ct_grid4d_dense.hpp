@@ -1,17 +1,13 @@
 #ifndef CT_GRID4D_DENSE_HPP
 #define CT_GRID4D_DENSE_HPP
 
-#ifdef USE_OPENCV
-
 #include "ct_itemdrawable/ct_grid4d_dense.h"
 
 #include <math.h>
 #include <typeinfo>
 
-#include "ct_math/ct_math.h"
-
 template< typename DataT>
-CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense() : CT_Grid4D<DataT>()
+CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense() : SuperClass()
 {
     int ncells[1];
     ncells[0] = this->nCells();
@@ -19,9 +15,13 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense() : CT_Grid4D<DataT>()
 }
 
 template< typename DataT>
-CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const CT_OutAbstractSingularItemModel *model,
-                                        const CT_AbstractResult *result,
-                                        double wmin,
+CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const CT_Grid4D_Dense<DataT>& other) : SuperClass(other)
+{
+    _data = other._data.clone();
+}
+
+template< typename DataT>
+CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(double wmin,
                                         double xmin,
                                         double ymin,
                                         double zmin,
@@ -34,9 +34,7 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const CT_OutAbstractSingularItemModel *m
                                         double resy,
                                         double resz,
                                         DataT na,
-                                        DataT initValue) : CT_Grid4D<DataT>(model,
-                                                                            result,
-                                                                            wmin,
+                                        DataT initValue) : SuperClass(wmin,
                                                                             xmin,
                                                                             ymin,
                                                                             zmin,
@@ -57,47 +55,7 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const CT_OutAbstractSingularItemModel *m
 }
 
 template< typename DataT>
-CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const QString &modelName,
-                                        const CT_AbstractResult *result,
-                                        double wmin,
-                                        double xmin,
-                                        double ymin,
-                                        double zmin,
-                                        size_t dimw,
-                                        size_t dimx,
-                                        size_t dimy,
-                                        size_t dimz,
-                                        double resw,
-                                        double resx,
-                                        double resy,
-                                        double resz,
-                                        DataT na,
-                                        DataT initValue) : CT_Grid4D<DataT>(modelName,
-                                                                            result,
-                                                                            wmin,
-                                                                            xmin,
-                                                                            ymin,
-                                                                            zmin,
-                                                                            dimw,
-                                                                            dimx,
-                                                                            dimy,
-                                                                            dimz,
-                                                                            resw,
-                                                                            resx,
-                                                                            resy,
-                                                                            resz,
-                                                                            na)
-{
-    int ncells[1];
-    ncells[0] = this->nCells();
-    this->_data.create(1, ncells);
-    initGridWithValue(initValue);
-}
-
-template< typename DataT>
-CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const CT_OutAbstractSingularItemModel *model,
-                                        const CT_AbstractResult *result,
-                                        double wmin,
+CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(double wmin,
                                         double xmin,
                                         double ymin,
                                         double zmin,
@@ -110,9 +68,7 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const CT_OutAbstractSingularItemModel *m
                                         double resy,
                                         double resz,
                                         DataT na,
-                                        DataT initValue) : CT_Grid4D<DataT>(model,
-                                                                            result,
-                                                                            wmin,
+                                        DataT initValue) : SuperClass(wmin,
                                                                             xmin,
                                                                             ymin,
                                                                             zmin,
@@ -128,44 +84,6 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const CT_OutAbstractSingularItemModel *m
 {
     int ncells[1];
     ncells[0] = this->nCells();
-    initGridWithValue(initValue);
-}
-
-template< typename DataT>
-CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(const QString& modelName,
-                                        const CT_AbstractResult *result,
-                                        double wmin,
-                                        double xmin,
-                                        double ymin,
-                                        double zmin,
-                                        double wmax,
-                                        double xmax,
-                                        double ymax,
-                                        double zmax,
-                                        double resw,
-                                        double resx,
-                                        double resy,
-                                        double resz,
-                                        DataT na,
-                                        DataT initValue) : CT_Grid4D<DataT>(modelName,
-                                                                            result,
-                                                                            wmin,
-                                                                            xmin,
-                                                                            ymin,
-                                                                            zmin,
-                                                                            wmax,
-                                                                            xmax,
-                                                                            ymax,
-                                                                            zmax,
-                                                                            resw,
-                                                                            resx,
-                                                                            resy,
-                                                                            resz,
-                                                                            na)
-{
-    int ncells[1];
-    ncells[0] = this->nCells();
-    this->_data.create(1, ncells);
     initGridWithValue(initValue);
 }
 
@@ -279,82 +197,5 @@ void CT_Grid4D_Dense<DataT>::initGridWithValue(const DataT val)
     this->_dataMin = val;
     this->_dataMax = val;
 }
-
-template< typename DataT>
-CT_AbstractItemDrawable* CT_Grid4D_Dense<DataT>::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_Grid4D_Dense<DataT>* cpy = new CT_Grid4D_Dense<DataT>((const CT_OutAbstractSingularItemModel *)model, result, this->_bot.w(), this->_bot.x(), this->_bot.y(), this->_bot.z(), this->_dimw, this->_dimx, this->_dimy, this->_dimz, this->_resw, this->_resx, this->_resy, this->_resz, this->_NAdata, this->_NAdata);
-    cpy->setId(this->id());
-
-    size_t ncells = this->nCells();
-    for (size_t i = 0 ; i < ncells ; i++)
-    {
-        cpy->setValueAtIndex(i, valueAtIndex(i));
-    }
-
-    if ( ncells > 0 )
-    {
-        cpy->computeMinMax();
-    }
-
-    cpy->setAlternativeDrawManager( this->getAlternativeDrawManager() );
-
-    return cpy;
-}
-
-template< typename DataT>
-CT_AbstractItemDrawable* CT_Grid4D_Dense<DataT>::copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_Grid4D_Dense<DataT>* cpy = new CT_Grid4D_Dense<DataT>(modelName, result, this->_bot.w(), this->_bot.x(), this->_bot.y(), this->_bot.z(), this->_dimw, this->_dimx, this->_dimy, this->_dimz, this->_resw, this->_resx, this->_resy, this->_resz, this->_NAdata, this->_NAdata);
-    cpy->setId(this->id());
-
-    size_t ncells = this->nCells();
-    for (size_t i = 0 ; i < ncells ; i++)
-    {
-        cpy->setValueAtIndex(i, valueAtIndex(i));
-    }
-
-    if ( ncells > 0 )
-    {
-        cpy->computeMinMax();
-    }
-
-    cpy->setAlternativeDrawManager( this->getAlternativeDrawManager() );
-
-    return cpy;
-}
-
-template< typename DataT>
-QString CT_Grid4D_Dense<DataT>::getType() const
-{
-    return staticGetType();
-}
-
-template< typename DataT>
-QString CT_Grid4D_Dense<DataT>::staticGetType()
-{
-    QString type = CT_AbstractGrid4D::staticGetType() + "/CT_Grid4D_Dense<" + CT_TypeInfo::name<DataT>() + ">";
-    CT_AbstractItemDrawable::addNameTypeCorresp(type, staticName());
-    return type;
-}
-
-template< typename DataT>
-QString CT_Grid4D_Dense<DataT>::name() const
-{
-    return staticName();
-}
-
-template< typename DataT>
-QString CT_Grid4D_Dense<DataT>::staticName()
-{
-    return CT_Grid4D_Dense<DataT>::tr("4D grid<%1>, dense").arg(CT_TypeInfo::name<DataT>());
-}
-
-
-#endif
 
 #endif // CT_GRID4D_DENSE_HPP

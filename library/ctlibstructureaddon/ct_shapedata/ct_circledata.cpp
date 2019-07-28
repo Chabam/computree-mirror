@@ -89,7 +89,7 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloud(c
                                                                                double z)
 {
     return staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(pointCloudIndex,
-                                                                             NULL,
+                                                                             nullptr,
                                                                              z);
 }
 
@@ -101,11 +101,11 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWi
     size_t size = pointCloudIndex.size();
 
     if(size < 3)
-        return NULL;
+        return nullptr;
 
-    std::vector<CT_Point>* newPointCloud = NULL;
+    std::vector<CT_Point>* newPointCloud = nullptr;
 
-    if(preProcessingAction != NULL)
+    if(preProcessingAction != nullptr)
         newPointCloud = new std::vector<CT_Point>(size);
 
     double somme_x = 0;
@@ -134,7 +134,7 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWi
 
         CT_Point p = it.currentPoint();
 
-        if(preProcessingAction != NULL)
+        if(preProcessingAction != nullptr)
         {
             CT_Point& newP = (*newPointCloud)[i];
 
@@ -191,7 +191,7 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWi
     double radiusT = sqrt(c + (a*a) + (b*b));
     double rmse = 0;
 
-    if(newPointCloud != NULL)
+    if(newPointCloud != nullptr)
     {
         for(i=0; i<size; ++i)
         {

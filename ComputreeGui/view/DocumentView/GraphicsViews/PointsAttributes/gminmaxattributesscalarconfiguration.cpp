@@ -7,7 +7,7 @@ GMinMaxAttributesScalarConfiguration::GMinMaxAttributesScalarConfiguration(QWidg
 {
     ui->setupUi(this);
 
-    m_pa = NULL;
+    m_pa = nullptr;
 }
 
 GMinMaxAttributesScalarConfiguration::~GMinMaxAttributesScalarConfiguration()

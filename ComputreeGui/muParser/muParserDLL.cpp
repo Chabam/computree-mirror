@@ -68,7 +68,7 @@ public:
   ParserTag()
     :pParser(new mu::Parser())
     ,exc()
-    ,errHandler(NULL)
+    ,errHandler(nullptr)
     ,bError(false)
   {}
  

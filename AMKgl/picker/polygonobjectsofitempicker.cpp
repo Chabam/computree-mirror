@@ -491,9 +491,9 @@ bool PolygonObjectsOfItemPicker::checkLine(const Eigen::Vector3d &p1,
     if(!ok) {
 
         Eigen::Vector3d tmp;
-        Eigen::Vector3d* intersectionPoint = NULL;
+        Eigen::Vector3d* intersectionPoint = nullptr;
 
-        if(getIntersectionInterceptor() != NULL)
+        if(getIntersectionInterceptor() != nullptr)
             intersectionPoint = &tmp;
 
         // check if the segment intersect with one of the plane of the polygon
@@ -511,7 +511,7 @@ bool PolygonObjectsOfItemPicker::checkLine(const Eigen::Vector3d &p1,
                                                                             intersectionPoint);
         }
 
-        if(ok && (intersectionPoint != NULL))
+        if(ok && (intersectionPoint != nullptr))
             addIntersectionPoint(*intersectionPoint);
     }
 
@@ -534,9 +534,9 @@ bool PolygonObjectsOfItemPicker::checkTriangle(const Eigen::Vector3d &p1,
     if(!ok) {
 
         Eigen::Vector3d tmp;
-        Eigen::Vector3d* intersectionPoint = NULL;
+        Eigen::Vector3d* intersectionPoint = nullptr;
 
-        if(getIntersectionInterceptor() != NULL)
+        if(getIntersectionInterceptor() != nullptr)
             intersectionPoint = &tmp;
 
         size = m_polygonPlanes.size();
@@ -578,7 +578,7 @@ bool PolygonObjectsOfItemPicker::checkTriangle(const Eigen::Vector3d &p1,
             }
         }
 
-        if(ok && (intersectionPoint != NULL))
+        if(ok && (intersectionPoint != nullptr))
             addIntersectionPoint(*intersectionPoint);
     }
 
@@ -688,7 +688,7 @@ bool PolygonObjectsOfItemPicker::checkBox(const double &cx, const double &cy, co
         }
     }
 
-    if(ok && (intersectionPoint != NULL))
+    if(ok && (intersectionPoint != nullptr))
         addIntersectionPoint(*intersectionPoint);
 
     return ok;

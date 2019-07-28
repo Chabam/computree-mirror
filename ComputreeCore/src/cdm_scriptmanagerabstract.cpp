@@ -2,7 +2,7 @@
 
 CDM_ScriptManagerAbstract::CDM_ScriptManagerAbstract(CDM_PluginManager &pluginManager)
 {
-    m_callBack = NULL;
+    m_callBack = nullptr;
     setPluginManager(pluginManager);
 }
 

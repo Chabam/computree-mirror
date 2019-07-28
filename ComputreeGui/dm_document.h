@@ -285,7 +285,7 @@ public:
 
     /**
       * \brief Retoune le n ime CT_AbstractItemDrawable de la liste
-      * \return NULL si il l'index dpasse la port de la liste
+      * \return nullptr si il l'index dpasse la port de la liste
       */
     CT_AbstractItemDrawable* getItemDrawable(int i) const;
 
@@ -298,7 +298,7 @@ public:
 
     /**
       * \brief Recherche le premier CT_AbstractItemDrawable dans la liste  partir de son type
-      * \return NULL si aucun CT_AbstractItemDrawable n'est de ce type
+      * \return nullptr si aucun CT_AbstractItemDrawable n'est de ce type
       */
     CT_AbstractItemDrawable* findFirstItemDrawable(const CT_OutAbstractModel &model) const;
 
@@ -337,7 +337,7 @@ protected:
     QHash<CT_AbstractItemDrawable *, DM_AbstractInfo *> *createItemInformationsForResult(CT_AbstractResult *result);
 
     /**
-     * @brief Overload this method if you want to create your own item information. By default return NULL;
+     * @brief Overload this method if you want to create your own item information. By default return nullptr;
      */
     virtual DM_AbstractInfo* createNewItemInformation(const CT_AbstractItemDrawable *item) const;
 

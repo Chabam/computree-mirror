@@ -4,17 +4,17 @@
 
 DM_ItemDrawableConfigurationAndGraphicsViewSynchronizer::DM_ItemDrawableConfigurationAndGraphicsViewSynchronizer()
 {
-    m_managerView = NULL;
+    m_managerView = nullptr;
 }
 
 void DM_ItemDrawableConfigurationAndGraphicsViewSynchronizer::setItemDrawableConfigurationView(GItemDrawableConfigurationManagerView *managerView)
 {
-    if(m_managerView != NULL)
-        disconnect(m_managerView, NULL, this, NULL);
+    if(m_managerView != nullptr)
+        disconnect(m_managerView, nullptr, this, nullptr);
 
     m_managerView = managerView;
 
-    if(m_managerView != NULL)
+    if(m_managerView != nullptr)
         connect(m_managerView, SIGNAL(applyNewConfiguration(CT_ItemDrawableConfiguration*)), this, SLOT(valueHasChangedForConfiguration(CT_ItemDrawableConfiguration*)), Qt::DirectConnection);
 }
 
@@ -22,6 +22,6 @@ void DM_ItemDrawableConfigurationAndGraphicsViewSynchronizer::valueHasChangedFor
 {
     GDocumentViewForGraphics *doc = dynamic_cast<GDocumentViewForGraphics*>(m_managerView->getDocumentView());
 
-    if(doc != NULL)
+    if(doc != nullptr)
         doc->updateDrawing3DOfItemDrawablesInGraphicsView(m_managerView->itemDrawablesForConfiguration(config));
 }

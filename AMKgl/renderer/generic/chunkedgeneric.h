@@ -192,35 +192,35 @@ public:
     void unlock();
 
     /**
-     * @brief Returns the color cloud, or NULL if it was not created.
+     * @brief Returns the color cloud, or nullptr if it was not created.
      */
     Basic::AbstractColorCloud* getObjectColorCloud() const { return getColorCloud(); }
 
     /**
-     * @brief Returns the normal cloud, or NULL if it was not created.
+     * @brief Returns the normal cloud, or nullptr if it was not created.
      */
     Basic::AbstractNormalCloud* getObjectNormalCloud() const { return getNormalCloud(); }
 
     /**
-     * @brief Returns the normal cloud, or NULL if it was not created.
+     * @brief Returns the normal cloud, or nullptr if it was not created.
      */
     Basic::AbstractInfoCloud* getObjectInfoCloud() const { return getInfoCloud(); }
 
     /**
      * @brief Returns the color cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractColorCloud* createOrGetObjectColorCloud() { return getColorCloud(); }
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractNormalCloud* createOrGetObjectNormalCloud() { return getNormalCloud(); }
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractInfoCloud* createOrGetObjectInfoCloud() { return getInfoCloud(); }
 
@@ -330,22 +330,22 @@ private:
     void internalSetNumberOfObjects(const size_t& n, const bool& shrinkToFit);
 
     /**
-     * @brief Returns the vertex array to use, or NULL if we must no use it
+     * @brief Returns the vertex array to use, or nullptr if we must no use it
      */
     VertexArray* getVertexArray() const;
 
     /**
-     * @brief Returns the info array to use, or NULL if we must no use it
+     * @brief Returns the info array to use, or nullptr if we must no use it
      */
     InfoArray* getInfoArray() const;
 
     /**
-     * @brief Returns the color array to use, or NULL if we must no use it
+     * @brief Returns the color array to use, or nullptr if we must no use it
      */
     ColorArray* getColorArray() const;
 
     /**
-     * @brief Returns the normal array to use, or NULL if we must no use it
+     * @brief Returns the normal array to use, or nullptr if we must no use it
      */
     NormalArray* getNormalArray() const;
 

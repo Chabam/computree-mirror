@@ -5,11 +5,11 @@
 
 CT_MenuLevel* CT_MenuLevel::staticCreateOrGetLevelInParentLevel(const QString &customDisplayableName, CT_MenuLevel *parentLevel)
 {
-    Q_ASSERT(parentLevel != NULL);
+    Q_ASSERT(parentLevel != nullptr);
 
     CT_MenuLevel* level = parentLevel->levelFromDisplayableName(customDisplayableName);
 
-    if(level == NULL) {
+    if(level == nullptr) {
         level = new CT_MenuLevel(customDisplayableName);
         parentLevel->addLevel(level);
     }
@@ -112,26 +112,26 @@ CT_MenuLevel* CT_MenuLevel::parentLevel() const
 
 CT_MenuLevel::CT_MenuLevel()
 {
-    m_parent = NULL;
+    m_parent = nullptr;
 }
 
 CT_MenuLevel::CT_MenuLevel(const QString &displayableName)
 {
     m_displayableName = displayableName;
-    m_parent = NULL;
+    m_parent = nullptr;
 }
 
 CT_MenuLevel::~CT_MenuLevel()
 {
     for(CT_VirtualAbstractStep* s : m_steps) {
-        disconnect(s, NULL, this, NULL);
+        disconnect(s, nullptr, this, nullptr);
         delete s;
     }
 
     const LevelCollection levs = levels();
 
     for(CT_MenuLevel* l : levs) {
-        disconnect(l, NULL, this, NULL);
+        disconnect(l, nullptr, this, nullptr);
         delete l;
     }
 }
@@ -207,7 +207,7 @@ CT_MenuLevel* CT_MenuLevel::levelFromDisplayableName(const QString& name)
             return l;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool CT_MenuLevel::isAFavoriteSubLevel() const
@@ -215,7 +215,7 @@ bool CT_MenuLevel::isAFavoriteSubLevel() const
     const QString favoritesName = CT_StepsMenu::staticOperationToDisplayableName(CT_StepsMenu::LO_Favorites);
     CT_MenuLevel* l = const_cast<CT_MenuLevel*>(this);
 
-    while((l = l->parentLevel()) != NULL)
+    while((l = l->parentLevel()) != nullptr)
     {
         if(l->displayableName() == favoritesName)
             return true;

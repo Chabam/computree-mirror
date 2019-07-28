@@ -6,8 +6,8 @@
 template<typename T>
 CT_AbstractCloudIndexRegisteredT<T>::CT_AbstractCloudIndexRegisteredT() : CT_AbstractCloudIndexRegistered()
 {
-    m_ci = NULL;
-    m_cirm = NULL;
+    m_ci = nullptr;
+    m_cirm = nullptr;
 }
 
 template<typename T>
@@ -39,7 +39,7 @@ template<typename T>
 CT_AbstractCloudIndexRegisteredT<T>::CT_AbstractCloudIndexRegisteredT(CT_AbstractCloudIndexT<T> *ci) : CT_AbstractCloudIndexRegistered()
 {
     m_ci = ci;
-    m_cirm = NULL;
+    m_cirm = nullptr;
 }
 
 template<typename T>

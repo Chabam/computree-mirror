@@ -9,13 +9,13 @@
 class CTLIBCLOUDS_EXPORT CT_AttributesNormal
 {
 public:
-    CT_AttributesNormal(CT_AbstractNormalCloud* cloud = NULL);
+    CT_AttributesNormal(CT_AbstractNormalCloud* cloud = nullptr);
 
     /**
      * @brief Copy constructor
      *
      *        What is copied :
-     *          - Normal cloud is copied (call method "copy()") if not NULL
+     *          - Normal cloud is copied (call method "copy()") if not nullptr
      *
      *        What is initialized differently :
      */

@@ -34,9 +34,9 @@ CT_DelaunayTriangle::CT_DelaunayTriangle(CT_DelaunayVertex *v1t, CT_DelaunayVert
     _v2 = v2t;
     _v3 = v3t;
 
-    _n12 = NULL;
-    _n23 = NULL;
-    _n31 = NULL;
+    _n12 = nullptr;
+    _n23 = nullptr;
+    _n31 = nullptr;
 
     _toRemove = false;
 
@@ -45,12 +45,12 @@ CT_DelaunayTriangle::CT_DelaunayTriangle(CT_DelaunayVertex *v1t, CT_DelaunayVert
 
 CT_DelaunayTriangle::~CT_DelaunayTriangle()
 {
-    _v1 = NULL;
-    _v2 = NULL;
-    _v3 = NULL;
-    _n12 = NULL;
-    _n23 = NULL;
-    _n31 = NULL;
+    _v1 = nullptr;
+    _v2 = nullptr;
+    _v3 = nullptr;
+    _n12 = nullptr;
+    _n23 = nullptr;
+    _n31 = nullptr;
 }
 
 void CT_DelaunayTriangle::init(CT_DelaunayVertex *v1t, CT_DelaunayVertex *v2t, CT_DelaunayVertex *v3t)
@@ -59,9 +59,9 @@ void CT_DelaunayTriangle::init(CT_DelaunayVertex *v1t, CT_DelaunayVertex *v2t, C
     _v2 = v2t;
     _v3 = v3t;
 
-    _n12 = NULL;
-    _n23 = NULL;
-    _n31 = NULL;
+    _n12 = nullptr;
+    _n23 = nullptr;
+    _n31 = nullptr;
 
     _toRemove = false;
 
@@ -236,7 +236,7 @@ CT_DelaunayVertex *CT_DelaunayTriangle::getThirdVertex(CT_DelaunayVertex *vt1, C
     if      ((vt1 == _v1) && (vt2 == _v2)) {return _v3;}
     else if ((vt1 == _v2) && (vt2 == _v3)) {return _v1;}
     else if ((vt1 == _v1) && (vt2 == _v3)) {return _v2;}
-    else {return NULL;}
+    else {return nullptr;}
 }
 
 CT_DelaunayVertex *CT_DelaunayTriangle::getThirdVertex(const QVector<CT_DelaunayVertex *> &vt)
@@ -244,7 +244,7 @@ CT_DelaunayVertex *CT_DelaunayTriangle::getThirdVertex(const QVector<CT_Delaunay
     if      ((vt.at(0) == _v1) && (vt.at(1) == _v2)) {return _v3;}
     else if ((vt.at(0) == _v2) && (vt.at(1) == _v3)) {return _v1;}
     else if ((vt.at(0) == _v1) && (vt.at(1) == _v3)) {return _v2;}
-    else                                           {return NULL;}
+    else                                           {return nullptr;}
 }
 
 CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt)
@@ -256,7 +256,7 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
     bool n23ok = false;
     bool n31ok = false;
 
-    if (_n12 != NULL)
+    if (_n12 != nullptr)
     {
         dx = _v2->x() - _v1->x();
         dy = _v2->y() - _v1->y();
@@ -278,7 +278,7 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
         }
     }
 
-    if (_n23 != NULL)
+    if (_n23 != nullptr)
     {
         dx = _v3->x()-_v2->x();
         dy = _v3->y()-_v2->y();
@@ -302,7 +302,7 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
         }
     }
 
-    if (_n31 != NULL)
+    if (_n31 != nullptr)
     {
         dx = _v1->x()-_v3->x();
         dy = _v1->y()-_v3->y();

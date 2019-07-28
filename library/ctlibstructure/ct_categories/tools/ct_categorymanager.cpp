@@ -2,11 +2,11 @@
 
 #include "ct_categories/abstract/ct_abstractcategory.h"
 
-CT_CategoryManager* CT_CategoryManager::UNIQUE_INSTANCE = NULL;
+CT_CategoryManager* CT_CategoryManager::UNIQUE_INSTANCE = nullptr;
 
 CT_CategoryManager* CT_CategoryManager::CM()
 {
-    if(UNIQUE_INSTANCE == NULL)
+    if(UNIQUE_INSTANCE == nullptr)
         UNIQUE_INSTANCE = new CT_CategoryManager();
 
     return UNIQUE_INSTANCE;
@@ -28,7 +28,7 @@ void CT_CategoryManager::registerCategory(CT_AbstractCategory *c)
 
 const CT_AbstractCategory* CT_CategoryManager::findByUniqueName(const QString& uniqueName) const
 {
-    return m_categories.value(uniqueName, NULL);
+    return m_categories.value(uniqueName, nullptr);
 }
 
 QList<const CT_AbstractCategory *> CT_CategoryManager::categories() const

@@ -3,10 +3,10 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h"
 #include "ct_itemdrawable/ct_grid3d.h"
+#include "painterinterface.h"
+
 #include <typeinfo>
 #include <QObject>
-
-#include "qdebug.h"
 
 template< typename DataT > const QString CT_StandardGrid3D_SparseDrawManager<DataT>::INDEX_CONFIG_WIRE_MODE_ENABLED = CT_StandardGrid3D_SparseDrawManager<DataT>::staticInitConfigWireModeEnabled();
 template< typename DataT > const QString CT_StandardGrid3D_SparseDrawManager<DataT>::INDEX_CONFIG_LOW_THRESHOLDS_ENABLED = CT_StandardGrid3D_SparseDrawManager<DataT>::staticInitConfigLowThresholdsEnabled();
@@ -26,41 +26,35 @@ template< typename DataT > const QString CT_StandardGrid3D_SparseDrawManager<Dat
 
 template< typename DataT >
 CT_StandardGrid3D_SparseDrawManager<DataT>::CT_StandardGrid3D_SparseDrawManager(QString drawConfigurationName)
-    : CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager(drawConfigurationName.isEmpty() ? CT_Grid3D<DataT>::staticName() : drawConfigurationName)
+    : SuperClass(drawConfigurationName.isEmpty() ? CT_Grid3D<DataT>::staticName() : drawConfigurationName)
 {
     
 }
 
 template< typename DataT >
-CT_StandardGrid3D_SparseDrawManager<DataT>::~CT_StandardGrid3D_SparseDrawManager()
-{
-}
-
-template< typename DataT >
 void CT_StandardGrid3D_SparseDrawManager<DataT>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const
 {
-#ifdef USE_OPENCV
-    CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager::draw(view, painter, itemDrawable);
+    SuperClass::draw(view, painter, itemDrawable);
 
     const CT_Grid3D_Sparse<DataT> &item = dynamic_cast<const CT_Grid3D_Sparse<DataT>&>(itemDrawable);
 
     // Getting the configuration values
     GLenum  drawingMode;
-    bool    wireMode = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_WIRE_MODE_ENABLED).toBool();
-    bool    uselowThresh = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_LOW_THRESHOLDS_ENABLED).toBool();
-    bool    usehighThresh = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIGH_THRESHOLDS_ENABLED).toBool();
-    double  lowThresh = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_LOW_THRESHOLDS_VALUE).toDouble();
-    double  highThresh = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIGH_THRESHOLDS_VALUE).toDouble();
-    double  reductionCoef = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_REDUCTION_COEF).toDouble();
-    int     transparencyValue = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
-    bool    usePredefinedColors = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_USE_PREDEFINED_COLORS).toBool();
+    bool    wireMode = drawConfiguration()->variableValue(INDEX_CONFIG_WIRE_MODE_ENABLED).toBool();
+    bool    uselowThresh = drawConfiguration()->variableValue(INDEX_CONFIG_LOW_THRESHOLDS_ENABLED).toBool();
+    bool    usehighThresh = drawConfiguration()->variableValue(INDEX_CONFIG_HIGH_THRESHOLDS_ENABLED).toBool();
+    double  lowThresh = drawConfiguration()->variableValue(INDEX_CONFIG_LOW_THRESHOLDS_VALUE).toDouble();
+    double  highThresh = drawConfiguration()->variableValue(INDEX_CONFIG_HIGH_THRESHOLDS_VALUE).toDouble();
+    double  reductionCoef = drawConfiguration()->variableValue(INDEX_CONFIG_REDUCTION_COEF).toDouble();
+    int     transparencyValue = drawConfiguration()->variableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
+    bool    usePredefinedColors = drawConfiguration()->variableValue(INDEX_CONFIG_USE_PREDEFINED_COLORS).toBool();
 
-    size_t     nXinf = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
-    size_t     nXsup = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
-    size_t     nYinf = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
-    size_t     nYsup = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
-    size_t     nZinf = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
-    size_t     nZsup = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
+    size_t     nXinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
+    size_t     nXsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
+    size_t     nYinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
+    size_t     nYsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
+    size_t     nZinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
+    size_t     nZsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
 
     size_t xinf = nXinf;
     size_t yinf = nYinf;
@@ -142,7 +136,6 @@ void CT_StandardGrid3D_SparseDrawManager<DataT>::draw(GraphicsViewInterface &vie
     }
 
     painter.setColor(color);
-#endif
 }
 
 template< typename DataT >

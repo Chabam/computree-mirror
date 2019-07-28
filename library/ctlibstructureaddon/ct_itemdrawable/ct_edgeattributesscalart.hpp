@@ -10,7 +10,7 @@ CT_EdgeAttributesScalarT<SCALAR>::CT_EdgeAttributesScalarT() : SuperClass(), CT_
 
 template<typename SCALAR>
 CT_EdgeAttributesScalarT<SCALAR>::CT_EdgeAttributesScalarT(CT_ECIR pcir) : SuperClass(pcir),
-    CT_AttributesScalarT<SCALAR>(pcir.data() != NULL ? pcir->size() : 0)
+    CT_AttributesScalarT<SCALAR>(pcir.data() != nullptr ? pcir->size() : 0)
 {
 }
 

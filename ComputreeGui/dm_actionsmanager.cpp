@@ -4,7 +4,7 @@
 
 DM_ActionsManager::DM_ActionsManager() : CDM_ActionsManager()
 {
-    m_docManager = NULL;
+    m_docManager = nullptr;
 
     connect(this, SIGNAL(actionToRemove(CT_AbstractAction*)), this, SLOT(slotActionToBeRemoved(CT_AbstractAction*)), Qt::DirectConnection);
 }
@@ -21,7 +21,7 @@ DM_DocumentManagerView *DM_ActionsManager::documentManagerView() const
 
 void DM_ActionsManager::slotActionToBeRemoved(CT_AbstractAction *action)
 {
-    if(m_docManager != NULL)
+    if(m_docManager != nullptr)
     {
         int size = m_docManager->nbDocumentView();
 

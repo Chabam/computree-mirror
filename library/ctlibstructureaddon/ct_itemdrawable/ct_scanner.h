@@ -64,7 +64,7 @@ public:
     *  \brief Default constructor
     *
     *  Default constructor of the class
-    *  Each attribute will be set to 0 or NULL
+    *  Each attribute will be set to 0 or nullptr
     *  Each vector will be empty
     *  \warning The _zVector attribute is set to (0,0,1) by default
     *
@@ -109,7 +109,7 @@ public:
      *          - Min and Max coordinates (bounding box)
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */

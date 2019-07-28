@@ -26,7 +26,7 @@ public:
                                 const QString& displayableName = "",
                                 const QString& shortDescription = "",
                                 const QString& detailledDescription = "",
-                                ItemAttribute* prototype = NULL);
+                                ItemAttribute* prototype = nullptr);
     /**
      * @brief Copy constructor
      * @warning The parent model will not be copied !

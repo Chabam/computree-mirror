@@ -5,7 +5,7 @@
 CT_AbstractItemAttribute::CT_AbstractItemAttribute() : SuperClass()
 {
     m_iaTool.m_pointer = this;
-    m_category = NULL;
+    m_category = nullptr;
 }
 
 CT_AbstractItemAttribute::CT_AbstractItemAttribute(const CT_AbstractItemAttribute& other) : SuperClass(other),
@@ -30,7 +30,7 @@ CT_AbstractItemAttribute::CT_AbstractItemAttribute(const CT_AbstractCategory* ca
 {
     m_iaTool.m_pointer = this;
 
-    Q_ASSERT_X(category != NULL, "CT_AbstractItemAttribute constructor", "When you create a ItemAttribute the category must not be null !");
+    Q_ASSERT_X(category != nullptr, "CT_AbstractItemAttribute constructor", "When you create a ItemAttribute the category must not be null !");
     m_category = const_cast<CT_AbstractCategory*>(category);
 }
 
@@ -41,9 +41,9 @@ bool CT_AbstractItemAttribute::isValid() const
 
 QString CT_AbstractItemAttribute::displayableName() const
 {
-    if(SuperClass::model() != NULL)
+    if(SuperClass::model() != nullptr)
         return SuperClass::model()->displayableName();
-    else if(m_category != NULL)
+    else if(m_category != nullptr)
         return m_category->displayableName();
 
     return QString();
@@ -51,7 +51,7 @@ QString CT_AbstractItemAttribute::displayableName() const
 
 void CT_AbstractItemAttribute::setCategory(const CT_AbstractCategory* category)
 {
-    Q_ASSERT(m_category == NULL);
+    Q_ASSERT(m_category == nullptr);
 
     m_category = const_cast<CT_AbstractCategory*>(category);
 }
@@ -78,5 +78,5 @@ IItemAttributeToolForModel* CT_AbstractItemAttribute::itemAttributeToolForModel(
 
 CT_AbstractItemAttribute::IChildrensIteratorQtStylePtr CT_AbstractItemAttribute::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel*) const
 {
-    return NULL; // no childrens
+    return nullptr; // no childrens
 }

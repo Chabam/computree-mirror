@@ -48,8 +48,7 @@ protected:
     static QString staticInitConfigZsup();
     static QString staticInitConfigShowTrueOnly();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
-
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 };
 
 template<>

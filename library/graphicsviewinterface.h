@@ -530,12 +530,12 @@ public:
     virtual GraphicsViewOptionsInterface& getOptions() = 0;
 
     /**
-     * @brief Return the color cloud for the type passed in parameter. Can be NULL if it was not created.
+     * @brief Return the color cloud for the type passed in parameter. Can be nullptr if it was not created.
      */
     virtual QSharedPointer<CT_StandardColorCloudRegistered> colorCloudOf(ColorCloudType type) const = 0;
 
     /**
-     * @brief Return the normal cloud for the type passed in parameter. Can be NULL if it was not created.
+     * @brief Return the normal cloud for the type passed in parameter. Can be nullptr if it was not created.
      */
     virtual QSharedPointer<CT_StandardNormalCloudRegistered> normalCloudOf(NormalCloudType type) const = 0;
 
@@ -671,17 +671,17 @@ public:
     virtual void select(const QPolygon& polygon) = 0;
 
     /**
-     * @brief Returns all points (indices) selected. Can be NULL if no points where selected.
+     * @brief Returns all points (indices) selected. Can be nullptr if no points where selected.
      */
     virtual CT_SPCIR getSelectedPoints() const = 0;
 
     /**
-     * @brief Returns all faces (indices) selected. Can be NULL if no faces where selected.
+     * @brief Returns all faces (indices) selected. Can be nullptr if no faces where selected.
      */
     virtual CT_SFCIR getSelectedFaces() const = 0;
 
     /**
-     * @brief Returns all edges (indices) selected. Can be NULL if no edges where selected.
+     * @brief Returns all edges (indices) selected. Can be nullptr if no edges where selected.
      */
     virtual CT_SECIR getSelectedEdges() const = 0;
 

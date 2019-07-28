@@ -7,8 +7,8 @@
 template<class Item>
 DM_ItemDrawableTreeViewModelBuilderT<Item>::DM_ItemDrawableTreeViewModelBuilderT() : DM_AbstractWorker()
 {
-    m_collection = NULL;
-    m_itemModelBuilder = NULL;
+    m_collection = nullptr;
+    m_itemModelBuilder = nullptr;
     m_nLevel = 1;
     m_itemsToUpdate.clear();
 
@@ -162,7 +162,7 @@ void DM_ItemDrawableTreeViewModelBuilderT<Item>::apply()
             int level = 0;
             Item *parent = pair.first->parent();
 
-            while(parent != NULL)
+            while(parent != nullptr)
             {
                 ++level;
                 parent = parent->parent();
@@ -192,7 +192,7 @@ void DM_ItemDrawableTreeViewModelBuilderT<Item>::apply()
             int level = 0;
             Item *parent = pair.first->parent();
 
-            while(parent != NULL)
+            while(parent != nullptr)
             {
                 ++level;
                 parent = parent->parent();

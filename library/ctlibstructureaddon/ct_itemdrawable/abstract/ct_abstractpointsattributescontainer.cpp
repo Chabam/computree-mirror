@@ -6,7 +6,7 @@ CT_AbstractPointsAttributesContainer::CT_AbstractPointsAttributesContainer() : S
 
 CT_AbstractPointsAttributes* CT_AbstractPointsAttributesContainer::pointsAttributesAt(const int &key) const
 {
-    return m_att.value(key, NULL);
+    return m_att.value(key, nullptr);
 }
 
 void CT_AbstractPointsAttributesContainer::internalInsertAttributes(const int &key, const CT_AbstractPointsAttributes *att)

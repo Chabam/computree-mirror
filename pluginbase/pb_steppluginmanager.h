@@ -73,21 +73,21 @@ public:
     const QList<CT_AbstractReader *>& readersAvailable() const;
 
     /**
-     * @brief Search in all available readers the reader with the specified classname and return it if founded, NULL otherwise
+     * @brief Search in all available readers the reader with the specified classname and return it if founded, nullptr otherwise
      * @param readerClassName : the classname of the reader
-     * @return Returns the reader with the specified classname if founded, NULL otherwise
+     * @return Returns the reader with the specified classname if founded, nullptr otherwise
      */
     CT_AbstractReader* readerAvailableByUniqueName(const QString &readerClassName) const;
 
     /**
      * @brief Returns a collection that contains a copy of exporters available in all plugins. The key
-     *        is constructed like this : QString("%2 - %1").arg(exporter->getExporterName()).arg(format.description())
+     *        is constructed like this : QString("%2 - %1").arg(exporter->uniqueName()).arg(format.description())
      */
     const QMap<QString, CT_AbstractExporter*>& exportersAvailable() const;
 
     /**
      * @brief Returns a collection that contains a copy of exporters available in all plugins that can export points piece by piece. The key
-     *        is constructed like this : QString("%2 - %1").arg(exporter->getExporterName()).arg(format.description())
+     *        is constructed like this : QString("%2 - %1").arg(exporter->uniqueName()).arg(format.description())
      */
     const QMap<QString, CT_AbstractExporter*>& exportersForPointsWithPieceByPieceAvailable() const;
 protected:
@@ -144,7 +144,7 @@ private:
     /**
      * @brief Search in all plugins exporters available and add it to the collection
      */
-    //void initExportersCollection();
+    void initExportersCollection();
 };
 
 #endif // PB_STEPPLUGINMANAGER_H

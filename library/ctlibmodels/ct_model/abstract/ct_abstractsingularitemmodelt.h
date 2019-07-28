@@ -44,12 +44,12 @@ public:
     void clearItemAttributes();
 
     /*!
-     * @brief Returns the parent group. NULL if it was not set.
+     * @brief Returns the parent group. nullptr if it was not set.
      */
     GroupModelT* parentGroup() const;
 
     /*!
-     * @brief Returns the root group. NULL if this item has no parent group.
+     * @brief Returns the root group. nullptr if this item has no parent group.
      */
     GroupModelT* rootGroup() const;
 

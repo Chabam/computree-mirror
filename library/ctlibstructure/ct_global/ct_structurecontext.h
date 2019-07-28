@@ -16,7 +16,7 @@ public:
 
     static CT_StructureContext* staticInstance()
     {
-        if(UNIQUE_INSTANCE == NULL) {
+        if(UNIQUE_INSTANCE == nullptr) {
             UNIQUE_INSTANCE = new CT_StructureContext();
             UNIQUE_INSTANCE->init();
         }
@@ -27,7 +27,7 @@ public:
     static void deleteStaticInstance()
     {
         delete UNIQUE_INSTANCE;
-        UNIQUE_INSTANCE = NULL;
+        UNIQUE_INSTANCE = nullptr;
     }
 
     ~CT_StructureContext();

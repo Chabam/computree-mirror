@@ -16,13 +16,13 @@ void PermanentItemSceneRemover::addItemToRemove(const Item *item)
 {
     PermanentItemInformation *info = m_scene.takePermanentItemInformation(item);
 
-    if(info != NULL) {
+    if(info != nullptr) {
 
         Backup b;
         b.item = (Item*)item;
         b.info = info;
         b.deleteIt = true;
-        b.graphicsView = NULL;
+        b.graphicsView = nullptr;
 
         m_itemsBackup.insert(info->getIndex(), b);
 
@@ -34,7 +34,7 @@ void PermanentItemSceneRemover::addItemToUpdate(const Item *item, GraphicsView& 
 {
     PermanentItemInformation *info = m_scene.takePermanentItemInformation(item);
 
-    if(info != NULL) {
+    if(info != nullptr) {
 
         Backup b;
         b.item = (Item*)item;
@@ -119,7 +119,7 @@ void PermanentItemSceneRemover::compute()
 
             ++offsetForIndex;
         } else {
-            m_scene.addItemUpdated(m_scene.m_items.value(infoIndex, NULL), *backup.graphicsView, m_scene.m_items.indexOf(backup.item), backup.color);
+            m_scene.addItemUpdated(m_scene.m_items.value(infoIndex, nullptr), *backup.graphicsView, m_scene.m_items.indexOf(backup.item), backup.color);
         }
     }
 
@@ -130,7 +130,7 @@ void PermanentItemSceneRemover::compute()
 
     while(itI.hasNext()) {
         Item* item = itI.next();
-        PermanentItemInformation* info = m_scene.m_itemsWithInfo.value(item, NULL);
+        PermanentItemInformation* info = m_scene.m_itemsWithInfo.value(item, nullptr);
         Q_ASSERT_X(info->getIndex() == offsetForIndex, "PermanentItemSceneRemover", QString("Index Error, must be %1 and is %2").arg(offsetForIndex).arg(info->getIndex()).toLatin1());
         ++offsetForIndex;
     }
@@ -189,9 +189,9 @@ void PermanentItemSceneRemover::shifItemInformation(PermanentItemInformation *in
 
     while(itC.hasNext()) {
         itC.next();
-        MergedItemInformation::VectorOfMergedObjectInformation *mergedInfo = m_infoMerged.m_objects.value(itC.key(), NULL);
+        MergedItemInformation::VectorOfMergedObjectInformation *mergedInfo = m_infoMerged.m_objects.value(itC.key(), nullptr);
 
-        if(mergedInfo != NULL)
+        if(mergedInfo != nullptr)
             itC.value()->setBegin(itC.value()->begin() - mergedInfo->totalCount);
     }
 }
@@ -202,9 +202,9 @@ PermanentItemSceneRemover::MergedItemInformation::VectorOfMergedObjectInformatio
         return m_lastVectorUsed;
 
     m_lastChunkUsed = (IChunk*)chunk;
-    m_lastVectorUsed = m_objects.value(m_lastChunkUsed, NULL);
+    m_lastVectorUsed = m_objects.value(m_lastChunkUsed, nullptr);
 
-    if(m_lastVectorUsed == NULL) {
+    if(m_lastVectorUsed == nullptr) {
         m_lastVectorUsed = new VectorOfMergedObjectInformation();
         m_objects.insert(m_lastChunkUsed, m_lastVectorUsed);
     }
@@ -241,6 +241,6 @@ void PermanentItemSceneRemover::MergedItemInformation::clear()
     qDeleteAll(m_objects.begin(), m_objects.end());
     m_objects.clear();
 
-    m_lastChunkUsed = NULL;
-    m_lastVectorUsed = NULL;
+    m_lastChunkUsed = nullptr;
+    m_lastVectorUsed = nullptr;
 }

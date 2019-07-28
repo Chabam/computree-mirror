@@ -28,7 +28,7 @@ public:
      * @return return the cloud registered
      */
     template< class CloudRegistered, class Cloud, typename CastOptionnalParameter >
-    QSharedPointer< CloudRegistered > createNewCloud(void *optionnalParameterForConstructor = NULL)
+    QSharedPointer< CloudRegistered > createNewCloud(void *optionnalParameterForConstructor = nullptr)
     {
         QMutexLocker locker(&this->m_mutex);
 

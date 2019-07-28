@@ -34,13 +34,13 @@ QString CDM_StdIOParser::parseLine(const QString &line)
 {
     QString error = XSTR_TO_QSTRING(IOCmd_RESPONSE_OK_BEGIN) + XSTR_TO_QSTRING(IOCmd_RESPONSE_OK_END);
 
-    if(_parserActionManager != NULL)
+    if(_parserActionManager != nullptr)
     {
         QString newCmd;
 
         CDM_IParserAction *pAction = _parserActionManager->findAction(line, &newCmd);
 
-        if(pAction != NULL)
+        if(pAction != nullptr)
         {
             if(!pAction->execute(newCmd))
             {
@@ -58,8 +58,8 @@ QString CDM_StdIOParser::parseLine(const QString &line)
         QString tmp = _script;
         _script = "";
 
-        if((_scriptMan != NULL)
-                && (_stepMan != NULL))
+        if((_scriptMan != nullptr)
+                && (_stepMan != nullptr))
         {
             if(_stepMan->isRunning())
                 return QCoreApplication::translate("parseLine", "Un processus est deja en cours, veuillez recommencer plus tard.");
@@ -79,11 +79,11 @@ QString CDM_StdIOParser::parseLine(const QString &line)
             else
                 error = XSTR_TO_QSTRING(IOCmd_RESPONSE_ERROR_BEGIN) + error + XSTR_TO_QSTRING(IOCmd_RESPONSE_ERROR_END);
         }
-        else if(_scriptMan == NULL)
+        else if(_scriptMan == nullptr)
         {
             return XSTR_TO_QSTRING(IOCmd_RESPONSE_ERROR_BEGIN) + "Aucun manageur de script connu" + XSTR_TO_QSTRING(IOCmd_RESPONSE_ERROR_END);
         }
-        else if(_stepMan == NULL)
+        else if(_stepMan == nullptr)
         {
             return XSTR_TO_QSTRING(IOCmd_RESPONSE_ERROR_BEGIN) + "Aucun manageur d'etape connu" + XSTR_TO_QSTRING(IOCmd_RESPONSE_ERROR_END);
         }

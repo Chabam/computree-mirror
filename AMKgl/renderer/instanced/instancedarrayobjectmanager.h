@@ -96,7 +96,7 @@ public:
                 ok = shaders.bindAndSetInfoAttributeToShader(bufferObjects.getInfosBO(chunk, INSTANCED_INFOS_BO_UI), context);
 
             if(ok) {
-                if(customAttributesCollection != NULL) {
+                if(customAttributesCollection != nullptr) {
                     CustomVertexAttributeCollectionIterator it(*customAttributesCollection);
 
                     while(ok && it.hasNext()) {
@@ -225,7 +225,7 @@ public:
                 ok = shaders.bindAndSetInfoAttributeToShader(bufferObjects.getInfosBO(chunk, INSTANCED_INFOS_BO_UI), context);
 
             if(ok) {
-                if(customFastAttributesCollection != NULL) {
+                if(customFastAttributesCollection != nullptr) {
                     CustomVertexAttributeCollectionIterator it(*customFastAttributesCollection);
 
                     while(ok && it.hasNext()) {

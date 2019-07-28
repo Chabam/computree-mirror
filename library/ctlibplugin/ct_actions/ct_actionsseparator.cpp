@@ -12,10 +12,10 @@ CT_ActionsSeparator::~CT_ActionsSeparator()
 
 bool CT_ActionsSeparator::addAction(CT_AbstractAction *action)
 {
-    if(action != NULL)
+    if(action != nullptr)
         m_actions.append(action);
 
-    return (action != NULL);
+    return (action != nullptr);
 }
 
 QString CT_ActionsSeparator::title() const

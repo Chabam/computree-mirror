@@ -6,7 +6,7 @@
 template<typename FoundedCloudIndex>
 GlobalPointsTestInfoVisitor<FoundedCloudIndex>::GlobalPointsTestInfoVisitor()
 {
-    m_infoCloud = NULL;
+    m_infoCloud = nullptr;
     m_testFunction = nullptr;
 
     m_foundedPoints = new FoundedCloudIndex();
@@ -31,7 +31,7 @@ void GlobalPointsTestInfoVisitor<FoundedCloudIndex>::addPointsToCompute(const Ei
 {
     Q_UNUSED(offset)
 
-    if((m_infoCloud != NULL)
+    if((m_infoCloud != nullptr)
             && (m_testFunction != nullptr)) {
 
         std::vector<GLuint>::const_iterator it = indices.begin();

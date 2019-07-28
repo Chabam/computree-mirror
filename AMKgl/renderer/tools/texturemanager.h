@@ -45,7 +45,7 @@ public:
      * @param clientPixelType : the pixel type of data
      * @param dataSize : the number of data
      * @param data : pointer to the first data
-     * @return NULL if texture was not created, otherwise return the updated texture that you can use now
+     * @return nullptr if texture was not created, otherwise return the updated texture that you can use now
      */
     QOpenGLTexture* getTextureAndUpdateDataIfNecessary(const QString& uniqueName,
                                                        QOpenGLTexture::PixelFormat clientFormat,
@@ -85,7 +85,7 @@ private:
     TextureCollection           m_uniqueTextures;
 
     /**
-     * @brief Returns the existing texture that can be shared if it was already created or NULL if not.
+     * @brief Returns the existing texture that can be shared if it was already created or nullptr if not.
      */
     TextureInfo* getTextureThatCanBeShared(const QString& uniqueName,
                                            QOpenGLTexture::TextureFormat serverFormat,
@@ -93,7 +93,7 @@ private:
                                            QOpenGLTexture::Filter magnificationFilter) const;
 
     /**
-     * @brief Returns the existing texture if it was already created or NULL if not.
+     * @brief Returns the existing texture if it was already created or nullptr if not.
      */
     TextureInfo* getTextureByName(const QString& uniqueName) const;
 };

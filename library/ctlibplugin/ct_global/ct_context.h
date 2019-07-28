@@ -16,7 +16,7 @@ class CTLIBPLUGIN_EXPORT CT_Context
 public:
     static CT_Context* staticInstance()
     {
-        if(UNIQUE_INSTANCE == NULL)
+        if(UNIQUE_INSTANCE == nullptr)
             UNIQUE_INSTANCE = new CT_Context();
 
         return UNIQUE_INSTANCE;
@@ -25,7 +25,7 @@ public:
     static void deleteStaticInstance()
     {
         delete UNIQUE_INSTANCE;
-        UNIQUE_INSTANCE = NULL;
+        UNIQUE_INSTANCE = nullptr;
     }
 
     /**

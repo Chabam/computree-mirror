@@ -47,7 +47,7 @@ CT_DoubleSpinBox::CT_DoubleSpinBox(double min,
 
     _data._multValue = multValue;
 
-    _doubleSpinBoxCreated = NULL;
+    _doubleSpinBoxCreated = nullptr;
 }
 
 void CT_DoubleSpinBox::saveSettings(SettingsWriterInterface &writer) const
@@ -71,7 +71,7 @@ bool CT_DoubleSpinBox::restoreSettings(SettingsReaderInterface &reader)
 
 QWidget* CT_DoubleSpinBox::createWidget(QWidget &parent)
 {
-    if(_doubleSpinBoxCreated == NULL)
+    if(_doubleSpinBoxCreated == nullptr)
     {
         _doubleSpinBoxCreated = new QDoubleSpinBox(&parent);
 

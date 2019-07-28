@@ -46,7 +46,7 @@ GItemDrawableConfigurationManagerView::GItemDrawableConfigurationManagerView(QWi
 
     ui->checkBoxAutoApply->setChecked(true);
 
-    _doc = NULL;
+    _doc = nullptr;
 
     initView();
 }
@@ -71,10 +71,10 @@ void GItemDrawableConfigurationManagerView::setDocument(DM_DocumentView *doc)
 {
     if(doc != _doc)
     {
-        if(_doc != NULL)
+        if(_doc != nullptr)
         {
-            disconnect(_doc, NULL, m_configBuilder, NULL);
-            disconnect(m_configBuilder, NULL, this, NULL);
+            disconnect(_doc, nullptr, m_configBuilder, nullptr);
+            disconnect(m_configBuilder, nullptr, this, nullptr);
 
             m_configBuilder->clear();
         }
@@ -83,7 +83,7 @@ void GItemDrawableConfigurationManagerView::setDocument(DM_DocumentView *doc)
 
         initView();
 
-        if(_doc != NULL)
+        if(_doc != nullptr)
         {
             connect(_doc, SIGNAL(itemDrawableAdded(CT_AbstractItemDrawable&)), m_configBuilder, SLOT(addItemDrawable(CT_AbstractItemDrawable&)), Qt::DirectConnection);
             connect(_doc, SIGNAL(itemDrawableToBeRemoved(CT_AbstractItemDrawable&)), m_configBuilder, SLOT(removeItemDrawable(CT_AbstractItemDrawable&)), Qt::DirectConnection);
@@ -104,7 +104,7 @@ void GItemDrawableConfigurationManagerView::initView()
     ui->widgetComboBox->clear();
     clearTableWidget();
 
-    if(_doc != NULL)
+    if(_doc != nullptr)
     {
         setTableHeader();
 
@@ -171,7 +171,7 @@ void GItemDrawableConfigurationManagerView::on_widgetComboBox_currentItemChanged
 
         clearTableWidget();
 
-        if(config != NULL)
+        if(config != nullptr)
         {
             setTableHeader();
 
@@ -244,11 +244,11 @@ void GItemDrawableConfigurationManagerView::on_tableWidgetConfiguration_itemChan
         r++;
     }
 
-    if((_doc != NULL) && firstColumn)
+    if((_doc != nullptr) && firstColumn)
     {
         CT_ItemDrawableConfiguration *config = m_configBuilder->getConfigurationWithName(ui->widgetComboBox->currentItemText()).configuration();
 
-        if(config != NULL)
+        if(config != nullptr)
         {
             int i = item->row();
 
@@ -319,11 +319,11 @@ void GItemDrawableConfigurationManagerView::tableWidgetComboBoxIndexChanged(QStr
             ++row;
     }
 
-    if((_doc != NULL) && firstColumn)
+    if((_doc != nullptr) && firstColumn)
     {
         CT_ItemDrawableConfiguration *config = m_configBuilder->getConfigurationWithName(ui->widgetComboBox->currentItemText()).configuration();
 
-        if(config != NULL)
+        if(config != nullptr)
         {
             int i = row;
 
@@ -365,6 +365,6 @@ void GItemDrawableConfigurationManagerView::on_pushButtonApply_clicked()
 {
     CT_ItemDrawableConfiguration *config = m_configBuilder->getConfigurationWithName(ui->widgetComboBox->currentItemText()).configuration();
 
-    if(config != NULL)
+    if(config != nullptr)
         emit applyNewConfiguration(config);
 }

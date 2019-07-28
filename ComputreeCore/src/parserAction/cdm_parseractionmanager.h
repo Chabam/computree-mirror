@@ -13,7 +13,7 @@ public:
     virtual ~CDM_ParserActionManager();
 
     virtual bool addAction(const QString &cmd, CDM_IParserAction *action);
-    CDM_IParserAction* findAction(const QString &fullCmd, QString *newCmd = NULL) const;
+    CDM_IParserAction* findAction(const QString &fullCmd, QString *newCmd = nullptr) const;
 
     QStringList getAllActionCmd() const;
 

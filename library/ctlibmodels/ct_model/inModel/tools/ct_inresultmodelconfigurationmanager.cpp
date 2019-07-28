@@ -6,7 +6,7 @@
 
 CT_InResultModelConfigurationManager::CT_InResultModelConfigurationManager(CT_InModelStructureManager& inManager) : m_inModelsStructureManager(inManager)
 {
-    m_inputModelsConfigurationDialog = NULL;
+    m_inputModelsConfigurationDialog = nullptr;
 }
 
 CT_InResultModelConfigurationManager::~CT_InResultModelConfigurationManager()
@@ -22,9 +22,9 @@ CT_InResultModelConfigurationManager::CreateDialogReturn CT_InResultModelConfigu
     if(!checkIfMustCreateOrShowConfigurationDialog())
         returnVal = CT_InResultModelConfigurationManager::CreateNotNecessary;
 
-    if(m_inputModelsConfigurationDialog == NULL)
+    if(m_inputModelsConfigurationDialog == nullptr)
     {
-        m_inputModelsConfigurationDialog = new CTG_InResultModelConfiguration(NULL);
+        m_inputModelsConfigurationDialog = new CTG_InResultModelConfiguration(nullptr);
         m_inputModelsConfigurationDialog->setWindowTitle(m_inputModelsConfigurationDialog->windowTitle());
         m_inputModelsConfigurationDialog->setInResultModelManager(&m_inModelsStructureManager);
         m_inputModelsConfigurationDialog->setWindowFlags(m_inputModelsConfigurationDialog->windowFlags() | Qt::WindowMaximizeButtonHint);
@@ -36,7 +36,7 @@ CT_InResultModelConfigurationManager::CreateDialogReturn CT_InResultModelConfigu
 CT_InResultModelConfigurationManager::ConfigureReturn CT_InResultModelConfigurationManager::configureInResultModel()
 {
     if(checkIfMustCreateOrShowConfigurationDialog()) {
-        Q_ASSERT(m_inputModelsConfigurationDialog != NULL);
+        Q_ASSERT(m_inputModelsConfigurationDialog != nullptr);
         return (m_inputModelsConfigurationDialog->exec() == QDialog::Accepted) ? CT_InResultModelConfigurationManager::ConfigureSuccess : CT_InResultModelConfigurationManager::ConfigureCanceled;
     }
 
@@ -56,7 +56,7 @@ CT_InResultModelConfigurationManager::ConfigureReturn CT_InResultModelConfigurat
 
 void CT_InResultModelConfigurationManager::showReadOnlyInResultModel()
 {
-    if(m_inputModelsConfigurationDialog != NULL)
+    if(m_inputModelsConfigurationDialog != nullptr)
     {
         m_inputModelsConfigurationDialog->setReadOnly(true);
         m_inputModelsConfigurationDialog->exec();
@@ -85,7 +85,7 @@ bool CT_InResultModelConfigurationManager::restoreSettings(SettingsReaderInterfa
     });
 
     delete m_inputModelsConfigurationDialog;
-    m_inputModelsConfigurationDialog = NULL;
+    m_inputModelsConfigurationDialog = nullptr;
 
     createInResultModelConfigurationDialog();
 
@@ -97,7 +97,7 @@ bool CT_InResultModelConfigurationManager::restoreSettings(SettingsReaderInterfa
         return true;
 
     delete m_inputModelsConfigurationDialog;
-    m_inputModelsConfigurationDialog = NULL;
+    m_inputModelsConfigurationDialog = nullptr;
 
     return false;
 }
@@ -117,5 +117,5 @@ bool CT_InResultModelConfigurationManager::checkIfMustCreateOrShowConfigurationD
 void CT_InResultModelConfigurationManager::aboutToBeDeleted()
 {
     delete m_inputModelsConfigurationDialog;
-    m_inputModelsConfigurationDialog = NULL;
+    m_inputModelsConfigurationDialog = nullptr;
 }

@@ -169,12 +169,12 @@ private:
     /**
      * @brief Returns true if line intersect with the polygon
      */
-    bool isLineIntersectPolygon(const QPolygon &pol, const QLineF &line, QPointF* intersectionPoint = NULL) const;
+    bool isLineIntersectPolygon(const QPolygon &pol, const QLineF &line, QPointF* intersectionPoint = nullptr) const;
 
     /**
      * @brief Returns true if line intersect with another line
      */
-    bool isLineIntersectLine(const QLineF &line1, const QLineF &line2, QPointF* intersectionPoint = NULL) const;
+    bool isLineIntersectLine(const QLineF &line1, const QLineF &line2, QPointF* intersectionPoint = nullptr) const;
 
     /**
      * @brief Order points of the polygon in clockwise order

@@ -165,13 +165,13 @@ pcl::PointCloud<pcl::PointNormal> normalsEstimator::getNormals(int nbNeighborsNo
 
 void normalsEstimator::setProgress(int p)
 {
-    if(m_observer != NULL)
+    if(m_observer != nullptr)
         m_observer->setEstimationProgress(p);
 }
 
 bool normalsEstimator::mustStop() const
 {
-    if(m_observer != NULL)
+    if(m_observer != nullptr)
         return m_observer->mustStopEstimation();
 
     return false;

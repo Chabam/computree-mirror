@@ -25,7 +25,7 @@ public:
     CT_OutStdSingularItemModel(const QString& displayableName = "",
                                const QString& shortDescription = "",
                                const QString& detailledDescription = "",
-                               SingularItem* prototype = NULL);
+                               SingularItem* prototype = nullptr);
 
     /**
      * @brief Copy constructor

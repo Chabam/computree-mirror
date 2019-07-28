@@ -15,7 +15,7 @@ public:
 
     void draw(AMKgl::GraphicsView& graphicsView, AMKgl::ItemPainter& painter) {}
 
-    AMKgl::ItemModel* model() const { return NULL; }
+    AMKgl::ItemModel* model() const { return nullptr; }
 
 public slots:
     void setSelected(bool s) {}

@@ -27,7 +27,7 @@ public:
      */
     QList<CT_AbstractCloudIndex*> recoverDrawnGlobalPointsInItemDrawable(const QList<CT_AbstractItemDrawable *> &items,
                                                                          GraphicsViewInterface &graphicsView,
-                                                                         CT_PointCloudIndexVector *optionnalCloudIndexForPointDrawOneByOne = NULL);
+                                                                         CT_PointCloudIndexVector *optionnalCloudIndexForPointDrawOneByOne = nullptr);
 
     /**
      * @brief Recover contained points in multiple itemdrawable.

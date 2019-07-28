@@ -16,12 +16,10 @@ class CTLIBIO_EXPORT CT_Reader_ASCRGB : public CT_AbstractReader, public CT_Read
     typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_ASCRGB();
-    CT_Reader_ASCRGB(const CT_Reader_ASCRGB& other) = default;
+    CT_Reader_ASCRGB(int subMenuLevel = 0);
+    CT_Reader_ASCRGB(const CT_Reader_ASCRGB& other);
 
     QString displayableName() const override;
-
-    //CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
 
     void setRadiusFilter(const double &radius);
     void setRadiusFilter(const double &radius, const double &zmin, const double &zmax);

@@ -17,7 +17,7 @@
 template<typename Type>
 DM_AttributesScalarT<Type>::DM_AttributesScalarT() : DM_AbstractAttributesScalar()
 {
-    m_as = NULL;
+    m_as = nullptr;
     m_autoAdjust = true;
     m_manualMin = 0;
     m_manualMax = 1;
@@ -122,7 +122,7 @@ QLinearGradient DM_AttributesScalarT<Type>::gradient() const
 template<typename Type>
 bool DM_AttributesScalarT<Type>::process(GDocumentViewForGraphics *doc)
 {
-    if(m_as == NULL)
+    if(m_as == nullptr)
         return false;
 
     double range = m_manualMax-m_manualMin;
@@ -136,9 +136,9 @@ bool DM_AttributesScalarT<Type>::process(GDocumentViewForGraphics *doc)
     const CT_AbstractCloudIndex *index = abstractTypeAttributes()->abstractCloudIndex();
     size_t size = index->size();
 
-    AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetColorCloud();
+    AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloud();
 
-    if(colorArray != NULL)
+    if(colorArray != nullptr)
     {
         QList<ConcurrentMapInfo*>   list;
 
@@ -185,7 +185,7 @@ bool DM_AttributesScalarT<Type>::process(GDocumentViewForGraphics *doc)
 template<typename Type>
 void DM_AttributesScalarT<Type>::attributesDeleted()
 {
-    m_as = NULL;
+    m_as = nullptr;
 }
 
 template<typename Type>

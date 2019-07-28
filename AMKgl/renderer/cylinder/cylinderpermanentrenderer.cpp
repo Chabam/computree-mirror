@@ -30,7 +30,7 @@ void CylinderPermanentRenderer::addCylinder(const double &cx, const double &cy, 
 
     const Chunk &ch = createOrGetChunkForShape(Eigen::AlignedBox3d(minD, maxD));
 
-    if(chunk != NULL)
+    if(chunk != nullptr)
         *chunk = (Chunk*)&ch;
 
     params = Chunk::ShaderParamsType::staticConstructFromValues(cx, cy, cz,

@@ -15,7 +15,7 @@ public:
     virtual ~TreeViewInterface() {}
 
     /**
-     * @brief Convert a QModelIndex to a CT_AbstractItemDrawable. Can return NULL if the QModelIndex is not valid.
+     * @brief Convert a QModelIndex to a CT_AbstractItemDrawable. Can return nullptr if the QModelIndex is not valid.
      */
     virtual CT_AbstractItemDrawable* itemDrawableFromIndex(const QModelIndex &index) const = 0;
 

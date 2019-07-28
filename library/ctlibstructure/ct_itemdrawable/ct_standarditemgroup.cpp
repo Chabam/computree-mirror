@@ -7,9 +7,9 @@
 const CT_StandardStandardItemGroupDrawManager CT_StandardItemGroup::SIG_DRAW_MANAGER;
 
 CT_StandardItemGroup::CT_StandardItemGroup() : SuperClass(),
-    m_context(NULL),
+    m_context(nullptr),
     m_removedLaterFlags(Nothing),
-    m_parentContainer(NULL)
+    m_parentContainer(nullptr)
 {
     setBaseDrawManager(&SIG_DRAW_MANAGER);
 }
@@ -17,7 +17,7 @@ CT_StandardItemGroup::CT_StandardItemGroup() : SuperClass(),
 CT_StandardItemGroup::CT_StandardItemGroup(const CT_StandardItemGroup& other) : SuperClass(other),
     m_context(other.m_context),
     m_removedLaterFlags(other.m_removedLaterFlags),
-    m_parentContainer(NULL)
+    m_parentContainer(nullptr)
 {
 }
 
@@ -221,19 +221,19 @@ IItemDrawableToolForModel* CT_StandardItemGroup::itemToolForModel() const
 
 void CT_StandardItemGroup::addSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel, CT_AbstractSingularItemDrawable* item)
 {
-    Q_ASSERT(item != NULL);
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(item != nullptr);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(outModel->parentModel() == model());
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
     const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
 
-    ItemContainerType* container = m_newItemsAdded.value(key, NULL);
+    ItemContainerType* container = m_newItemsAdded.value(key, nullptr);
 
     // if the container already exist it means that this item was
     // already be added to this group
-    if(container != NULL) {
+    if(container != nullptr) {
         // so we undo the "remove later" flag
         container->undoWillBeRemovedLater();
         return;
@@ -248,14 +248,14 @@ void CT_StandardItemGroup::addSingularItemWithOutModel(const DEF_CT_AbstractItem
 
 bool CT_StandardItemGroup::removeSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel)
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
     ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
-    if(ct != NULL)
+    if(ct != nullptr)
     {
         ct->setWillBeRemovedLater();
         return true;
@@ -266,7 +266,7 @@ bool CT_StandardItemGroup::removeSingularItemWithOutModel(const DEF_CT_AbstractI
 
 bool CT_StandardItemGroup::removeSingularItem(const CT_AbstractSingularItemDrawable* item)
 {
-    Q_ASSERT(item != NULL);
+    Q_ASSERT(item != nullptr);
     Q_ASSERT(item->parentGroup() == this);
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
@@ -276,7 +276,7 @@ bool CT_StandardItemGroup::removeSingularItem(const CT_AbstractSingularItemDrawa
 
 bool CT_StandardItemGroup::containsSingularItemInSelectedPossibilitiesOfInModel(const DEF_CT_AbstractItemDrawableModelIn* inModel) const
 {
-    Q_ASSERT(inModel != NULL);
+    Q_ASSERT(inModel != nullptr);
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
@@ -293,14 +293,14 @@ bool CT_StandardItemGroup::containsSingularItemInSelectedPossibilitiesOfInModel(
 
 bool CT_StandardItemGroup::containsSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel) const
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
     ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
-    if(ct == NULL)
+    if(ct == nullptr)
         return false;
 
     return !ct->willBeRemovedLater();
@@ -481,20 +481,20 @@ CT_StandardItemGroup::SingularItemIterator CT_StandardItemGroup::backupSingularI
 
 CT_AbstractSingularItemDrawable* CT_StandardItemGroup::singularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel) const
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
     const ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
-    return ((ct == NULL) || ct->willBeRemovedLater()) ? NULL : ct->item();
+    return ((ct == nullptr) || ct->willBeRemovedLater()) ? nullptr : ct->item();
 }
 
 bool CT_StandardItemGroup::visitSingularItemsInSelectedPossibilitiesOfInModel(const DEF_CT_AbstractItemDrawableModelIn* inModel,
                                                                               const CT_StandardItemGroup::SingularItemVisitor& visitor) const
 {
-    Q_ASSERT(inModel != NULL);
+    Q_ASSERT(inModel != nullptr);
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
@@ -502,7 +502,7 @@ bool CT_StandardItemGroup::visitSingularItemsInSelectedPossibilitiesOfInModel(co
 
         const CT_AbstractSingularItemDrawable* item = this->singularItemWithOutModel(static_cast<DEF_CT_AbstractItemDrawableModelOut*>(possibility->outModel()));
 
-        if(item != NULL) {
+        if(item != nullptr) {
             if(!visitor(item))
                 return false;
         }
@@ -516,17 +516,17 @@ bool CT_StandardItemGroup::visitSingularItemsInSelectedPossibilitiesOfInModel(co
 void CT_StandardItemGroup::addGroupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel,
                                                 CT_StandardItemGroup* group)
 {
-    Q_ASSERT(group != NULL);
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(group != nullptr);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(outModel->parentModel() == model());
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
     const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
 
-    GroupContainerType* container = m_newGroupsAdded.value(key, NULL);
+    GroupContainerType* container = m_newGroupsAdded.value(key, nullptr);
 
-    if(container == NULL) {
+    if(container == nullptr) {
         container = new GroupContainerType(m_lockAccessTool);
         m_newGroupsAdded.insert(key, container);
     } else {
@@ -549,14 +549,14 @@ void CT_StandardItemGroup::addGroupWithOutModel(const DEF_CT_AbstractGroupModelO
 
 bool CT_StandardItemGroup::removeGroupsWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel)
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
     GroupContainerType* container = groupContainerWithOutModel(outModel);
 
-    if(container == NULL)
+    if(container == nullptr)
         return false;
 
     static const auto visitor = [](const CT_StandardItemGroup* group) -> bool {
@@ -571,8 +571,8 @@ bool CT_StandardItemGroup::removeGroupsWithOutModel(const DEF_CT_AbstractGroupMo
 
 bool CT_StandardItemGroup::removeGroup(CT_StandardItemGroup* group)
 {
-    Q_ASSERT(group != NULL);
-    Q_ASSERT(group->model() != NULL);
+    Q_ASSERT(group != nullptr);
+    Q_ASSERT(group->model() != nullptr);
     Q_ASSERT(group->parentGroup() == this);
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
@@ -763,17 +763,17 @@ int CT_StandardItemGroup::nGroupInTotal() const
 
 CT_StandardItemGroup* CT_StandardItemGroup::groupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel) const
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
 
     GroupContainerType* container = groupContainerWithOutModel(outModel);
 
-    if(container == NULL)
+    if(container == nullptr)
         return false;
 
-    CT_StandardItemGroup* group = NULL;
+    CT_StandardItemGroup* group = nullptr;
     container->visitElementsToKeep([&group](const CT_StandardItemGroup* gr) -> bool {
         group = const_cast<CT_StandardItemGroup*>(gr);
         return false;
@@ -784,7 +784,7 @@ CT_StandardItemGroup* CT_StandardItemGroup::groupWithOutModel(const DEF_CT_Abstr
 
 bool CT_StandardItemGroup::visitGroupsInSelectedPossibilitiesOfInModel(const DEF_CT_AbstractGroupModelIn* inModel, const CT_StandardItemGroup::GroupVisitor& visitor) const
 {
-    Q_ASSERT(inModel != NULL);
+    Q_ASSERT(inModel != nullptr);
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
@@ -792,7 +792,7 @@ bool CT_StandardItemGroup::visitGroupsInSelectedPossibilitiesOfInModel(const DEF
 
         const CT_StandardItemGroup* group = this->groupWithOutModel(static_cast<DEF_CT_AbstractGroupModelOut*>(possibility->outModel()));
 
-        if(group != NULL) {
+        if(group != nullptr) {
             if(!visitor(group))
                 return false;
         }
@@ -805,14 +805,14 @@ bool CT_StandardItemGroup::visitGroupsInSelectedPossibilitiesOfInModel(const DEF
 
 bool CT_StandardItemGroup::containsGroupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel) const
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
 
     GroupContainerType* container = groupContainerWithOutModel(outModel);
 
-    if(container == NULL)
+    if(container == nullptr)
         return false;
 
     return (container->nToKeep() != 0);
@@ -860,11 +860,11 @@ bool CT_StandardItemGroup::atLeastOneChildMustBeRemovedLater() const
 
 void CT_StandardItemGroup::setBeRemovedLater()
 {
-    Q_ASSERT(parentContainer() != NULL);
+    Q_ASSERT(parentContainer() != nullptr);
 
     parentContainer()->lock();
 
-    if(parentGroup() != NULL)
+    if(parentGroup() != nullptr)
         parentGroup()->setAtLeastOneChildMustBeRemovedLater();
 
     parentContainer()->setToBeRemovedLater(this);
@@ -884,7 +884,7 @@ void CT_StandardItemGroup::setAtLeastOneChildMustBeRemovedLater()
 
     m_removedLaterFlags |= ChildRemoveLater;
 
-    if(parentGroup() != NULL)
+    if(parentGroup() != nullptr)
         parentGroup()->setAtLeastOneChildMustBeRemovedLater();
 
     parentContainer()->unlock();
@@ -892,7 +892,7 @@ void CT_StandardItemGroup::setAtLeastOneChildMustBeRemovedLater()
 
 void CT_StandardItemGroup::undoWillBeRemovedLater()
 {
-    Q_ASSERT(parentContainer() != NULL);
+    Q_ASSERT(parentContainer() != nullptr);
 
     parentContainer()->lock();
 
@@ -983,7 +983,7 @@ CT_AbstractItemDrawable* CT_StandardItemGroup::copy(const CT_OutAbstractItemMode
     c->setModel(model);
     c->setResult(result);
 
-    if(model != NULL)
+    if(model != nullptr)
         copyChildrensToGroupIfTheyAreStillPresentInModel(c);
 
     return c;
@@ -1021,10 +1021,10 @@ void CT_StandardItemGroup::staticCopyGroupsFromXToBackupIfChildrenGroupsAreStill
 
         // if the unique index of the child group model is not present in the mapSource
         // it is because it was a new group that will be added when step compute
-        GroupContainerType* containerSource = mapSource.value(key, NULL);
+        GroupContainerType* containerSource = mapSource.value(key, nullptr);
 
         // if child group model is still present
-        if(containerSource != NULL) {
+        if(containerSource != nullptr) {
 
             // we copy all groups and add it to a new container
             GroupContainerType* containerCopy = new GroupContainerType(parentGroup.m_lockAccessTool);
@@ -1063,10 +1063,10 @@ void CT_StandardItemGroup::staticCopyItemsFromXToBackupIfChildrenItemsAreStillPr
 
         // if the unique index of the child item model is not present in the mapSource
         // it is because it was a new item that will be added when step compute
-        ItemContainerType* containerSource = mapSource.value(key, NULL);
+        ItemContainerType* containerSource = mapSource.value(key, nullptr);
 
         // if child item model is still present
-        if(containerSource != NULL)
+        if(containerSource != nullptr)
             parentGroup.m_itemsCopied.insert(newKey, containerSource->copy()); // when copy => autoDelete of the container is set to false
 
         return true;
@@ -1078,54 +1078,54 @@ void CT_StandardItemGroup::staticCopyItemsFromXToBackupIfChildrenItemsAreStillPr
 CT_StandardItemGroup::IChildrensIteratorQtStylePtr CT_StandardItemGroup::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
 {
     // is a group ?
-    if(dynamic_cast<const CT_OutAbstractGroupModel*>(outModel) != NULL) {
+    if(dynamic_cast<const CT_OutAbstractGroupModel*>(outModel) != nullptr) {
         QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
 
         GroupContainerType* groupContainer = groupContainerWithOutModel(outModel);
 
-        if(groupContainer != NULL)
+        if(groupContainer != nullptr)
             return IChildrensIteratorQtStylePtr(new GroupQtIterator(groupContainer->begin(), groupContainer->end()));
 
-        return IChildrensIteratorQtStylePtr(NULL);
+        return IChildrensIteratorQtStylePtr(nullptr);
     }
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
     ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
-    if(ct != NULL)
+    if(ct != nullptr)
     {
         if(!ct->willBeRemovedLater())
             return IChildrensIteratorQtStylePtr(new ItemQtIterator(ct->item()));
     }
 
-    return IChildrensIteratorQtStylePtr(NULL);
+    return IChildrensIteratorQtStylePtr(nullptr);
 }
 
 CT_StandardItemGroup::ItemContainerType* CT_StandardItemGroup::itemContainerWithOutModel(const CT_OutAbstractModel* outModel) const
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
 
     const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
 
-    ItemContainerType* ct = m_newItemsAdded.value(key, NULL);
+    ItemContainerType* ct = m_newItemsAdded.value(key, nullptr);
 
-    if(ct == NULL)
-        ct = m_itemsCopied.value(key, NULL);
+    if(ct == nullptr)
+        ct = m_itemsCopied.value(key, nullptr);
 
     return ct;
 }
 
 CT_StandardItemGroup::GroupContainerType* CT_StandardItemGroup::groupContainerWithOutModel(const CT_OutAbstractModel* outModel) const
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
 
     const OutModelKeyType key = CT_StandardItemGroup::outModelKey(outModel);
 
-    GroupContainerType* groupContainer = m_newGroupsAdded.value(key, NULL);
+    GroupContainerType* groupContainer = m_newGroupsAdded.value(key, nullptr);
 
-    if(groupContainer == NULL)
-        groupContainer = m_groupsCopied.value(key, NULL);
+    if(groupContainer == nullptr)
+        groupContainer = m_groupsCopied.value(key, nullptr);
 
     return groupContainer;
 }

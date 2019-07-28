@@ -82,7 +82,7 @@ public:
     QStandardItemModel* model() const;
 
     /**
-     * @brief Convert an index to a step if this index contains a step, otherwise returns NULL.
+     * @brief Convert an index to a step if this index contains a step, otherwise returns nullptr.
      */
     CT_VirtualAbstractStep* stepFromIndex(const QModelIndex &index) const;
 

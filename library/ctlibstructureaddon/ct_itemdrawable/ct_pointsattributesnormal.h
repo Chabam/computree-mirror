@@ -32,10 +32,10 @@ public:
      *          - Center coordinates
      *          - Default Color
      *          - Shared pointer to point cloud index registered
-     *          - Normal cloud is copied (call method "copy()") if not NULL
+     *          - Normal cloud is copied (call method "copy()") if not nullptr
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */

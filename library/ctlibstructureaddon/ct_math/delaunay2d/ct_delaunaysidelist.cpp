@@ -29,9 +29,9 @@
 
 CT_DelaunaySideList::CT_DelaunaySideList()
 {
-    _removed_tri = NULL;
-    _removed_v1 = NULL;
-    _removed_v2 = NULL;
+    _removed_tri = nullptr;
+    _removed_v1 = nullptr;
+    _removed_v2 = nullptr;
 }
 
 CT_DelaunaySideList::~CT_DelaunaySideList()
@@ -45,9 +45,9 @@ void CT_DelaunaySideList::clear()
     _v1.clear();
     _v2.clear();
 
-    _removed_tri = NULL;
-    _removed_v1 = NULL;
-    _removed_v2 = NULL;
+    _removed_tri = nullptr;
+    _removed_v1 = nullptr;
+    _removed_v2 = nullptr;
 }
 
 void CT_DelaunaySideList::appendSide(CT_DelaunayTriangle *trit, CT_DelaunayVertex *v1t, CT_DelaunayVertex *v2t)
@@ -71,9 +71,9 @@ void CT_DelaunaySideList::removeSide(int i, bool keep)
         _v1.removeAt(i);
         _v2.removeAt(i);
 
-        _removed_tri = NULL;
-        _removed_v1 = NULL;
-        _removed_v2 = NULL;
+        _removed_tri = nullptr;
+        _removed_v1 = nullptr;
+        _removed_v2 = nullptr;
     }
 }
 
@@ -82,7 +82,7 @@ CT_DelaunayVertex* CT_DelaunaySideList::swap(int i, CT_DelaunayVertex *vt) const
 {
     if      (vt == _v1[i]) {return _v2[i];}
     else if (vt == _v2[i]) {return _v1[i];}
-    else                {return NULL;}
+    else                {return nullptr;}
 }
 
 bool CT_DelaunaySideList::sidesEquals(int i, int j) const

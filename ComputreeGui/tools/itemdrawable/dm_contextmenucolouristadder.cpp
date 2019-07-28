@@ -19,9 +19,9 @@
 
 DM_ContextMenuColouristAdder::DM_ContextMenuColouristAdder(IColouristContextMenuAccess &access, QObject *parent) : m_itemAccess(access), QObject(parent)
 {
-    m_docManager = NULL;
-    m_autoColorProducer = NULL;
-    m_colorPicker = new QtColorPicker(NULL, -1, true, false);
+    m_docManager = nullptr;
+    m_autoColorProducer = nullptr;
+    m_colorPicker = new QtColorPicker(nullptr, -1, true, false);
 }
 
 DM_ContextMenuColouristAdder::~DM_ContextMenuColouristAdder()
@@ -51,7 +51,7 @@ void DM_ContextMenuColouristAdder::setLinearGradientToUseForColorization(const Q
 
 void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
 {
-    if(m_docManager == NULL)
+    if(m_docManager == nullptr)
         return;
 
     QMenu *menu = contextMenu->addMenu(tr("Couleur uni"));
@@ -64,7 +64,7 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
         action->setData(i);
     }
 
-    if(m_autoColorProducer != NULL)
+    if(m_autoColorProducer != nullptr)
     {
         menu = contextMenu->addMenu(tr("Couleur automatique (Couleur distincte)"));
 
@@ -92,7 +92,7 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
     {
         CT_OutAbstractSingularItemModel *model = dynamic_cast<CT_OutAbstractSingularItemModel*>(it.next());
 
-        if((model != NULL) && !model->isEmpty())
+        if((model != nullptr) && !model->isEmpty())
         {
             if(!finalModels.contains((CT_OutAbstractSingularItemModel*)model->recursiveOriginalModelWithAStep()))
                 finalModels.append(model);
@@ -125,7 +125,7 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
     {
         GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(i));
 
-        if(graphicsDoc != NULL) {
+        if(graphicsDoc != nullptr) {
             QMenu *subMenu = menu->addMenu(tr("%1").arg(graphicsDoc->getNumber()));
 
             QAction *action = subMenu->addAction(tr("X"), this, SLOT(colorByPointsCoordinate()));
@@ -145,7 +145,7 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
     {
         GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(i));
 
-        if(graphicsDoc != NULL) {
+        if(graphicsDoc != nullptr) {
             QMenu *subMenu = menu->addMenu(tr("%1").arg(graphicsDoc->getNumber()));
 
             QAction *action = subMenu->addAction(tr("X"), this, SLOT(colorByPointsCoordinate()));
@@ -242,10 +242,10 @@ void DM_ContextMenuColouristAdder::colorByAttributeAndGradient()
     while(it.hasNext()) {
         CT_AbstractSingularItemDrawable *item = dynamic_cast<CT_AbstractSingularItemDrawable*>(it.next());
 
-        if(item != NULL) {
+        if(item != nullptr) {
             CT_AbstractItemAttribute *att = item->itemAttributeWithOutModel(info.m_model);
 
-            if(att != NULL) {
+            if(att != nullptr) {
                 ok = true;
 
                 double value = 0;
@@ -317,7 +317,7 @@ void DM_ContextMenuColouristAdder::colorByPointsCoordinate()
 
     GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(docIndex));
 
-    if(graphicsDoc == NULL)
+    if(graphicsDoc == nullptr)
         return;
 
     QList<GGraphicsView*> graphics = graphicsDoc->getGraphicsList();
@@ -327,7 +327,7 @@ void DM_ContextMenuColouristAdder::colorByPointsCoordinate()
 
     GGraphicsView *view = graphics.first();
 
-    AMKgl::GlobalColorCloud *colorCloud = graphicsDoc->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetColorCloud();
+    AMKgl::GlobalColorCloud *colorCloud = graphicsDoc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloud();
 
     QList<CT_AbstractItemDrawable*> items = m_itemAccess.getItemDrawableToColorize();
     QListIterator<CT_AbstractItemDrawable*> it(items);

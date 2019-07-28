@@ -34,7 +34,7 @@ CT_RadioButton::CT_RadioButton(QString text, int &value, int excludeValue, QStri
     _data._text = text;
     _description = description;
 
-    _rdCreated = NULL;
+    _rdCreated = nullptr;
 }
 
 void CT_RadioButton::saveSettings(SettingsWriterInterface &writer) const
@@ -55,7 +55,7 @@ bool CT_RadioButton::restoreSettings(SettingsReaderInterface &reader)
 
 QWidget* CT_RadioButton::createWidget(QWidget &parent)
 {
-    if(_rdCreated == NULL)
+    if(_rdCreated == nullptr)
     {
         _rdCreated = new QRadioButton(_data._text, &parent);
         _rdCreated->setChecked((*(_data._value)) == _data._excludeValue);

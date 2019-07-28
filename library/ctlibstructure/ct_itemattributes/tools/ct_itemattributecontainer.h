@@ -80,19 +80,19 @@ public:
 
     /**
      * @brief Returns the item attribute corresponding to the OUTPUT model passed in parameter
-     * @return NULL if item attribute don't exist in this singular item
+     * @return nullptr if item attribute don't exist in this singular item
      */
     CT_AbstractItemAttribute* itemAttributeFromOutModel(const CT_OutAbstractItemAttributeModel* outModel) const;
 
     /**
      * @brief Returns a list of item attributes corresponding to the possibility selected of the INPUT model passed in parameter
-     * @return NULL if item attribute don't exist in this singular item
+     * @return nullptr if item attribute don't exist in this singular item
      */
     QList<CT_AbstractItemAttribute*> itemAttributesFromInModel(const CT_InAbstractItemAttributeModel* inModel) const;
 
     /**
      * @brief Returns the first item attribute corresponding to the possibility selected of the INPUT model passed in parameter
-     * @return NULL if item attribute don't exist in this singular item
+     * @return nullptr if item attribute don't exist in this singular item
      */
     CT_AbstractItemAttribute* firstItemAttributeFromInModel(const CT_InAbstractItemAttributeModel* inModel) const;
 

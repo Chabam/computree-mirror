@@ -27,7 +27,7 @@ public:
 
     /**
      * @brief Find a category by a unique name
-     * @return NULL if the category was not found
+     * @return nullptr if the category was not found
      */
     const CT_AbstractCategory* findByUniqueName(const QString& uniqueName) const;
 

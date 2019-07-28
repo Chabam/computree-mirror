@@ -19,11 +19,11 @@ CT_StepsMenu::~CT_StepsMenu()
 CT_MenuLevel* CT_StepsMenu::createOrGetRootLevel(CT_StepsMenu::LevelOperationType operation)
 {
     if(operation == LO_InternalUse)
-        return NULL;
+        return nullptr;
 
     CT_MenuLevel* level = levelFromOperation(operation);
 
-    if(level == NULL) {
+    if(level == nullptr) {
         level = new CT_MenuLevel(staticOperationToDisplayableName(operation));
         m_rootLevels.insert(operation, level);
     }
@@ -34,9 +34,9 @@ CT_MenuLevel* CT_StepsMenu::createOrGetRootLevel(CT_StepsMenu::LevelOperationTyp
 CT_MenuLevel* CT_StepsMenu::levelFromOperation(CT_StepsMenu::LevelOperationType operation) const
 {
     if(operation == LO_InternalUse)
-        return NULL;
+        return nullptr;
 
-    return m_rootLevels.value(operation, NULL);
+    return m_rootLevels.value(operation, nullptr);
 }
 
 QList<CT_MenuLevel*> CT_StepsMenu::levels() const
@@ -46,14 +46,14 @@ QList<CT_MenuLevel*> CT_StepsMenu::levels() const
 
 bool CT_StepsMenu::removeLevelFromFavorites(CT_MenuLevel* level)
 {
-    Q_ASSERT(level != NULL);
+    Q_ASSERT(level != nullptr);
 
     CT_MenuLevel* favorites = levelFromOperation(LO_Favorites);
 
-    if(favorites != NULL) {
+    if(favorites != nullptr) {
         CT_MenuLevel* pLevel = level;
 
-        while((pLevel = pLevel->parentLevel()) != NULL) {
+        while((pLevel = pLevel->parentLevel()) != nullptr) {
             if(pLevel == favorites) {
                 delete level;
                 return true;

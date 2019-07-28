@@ -26,11 +26,11 @@
                                          \
                                             auto inResultModelCopy = dynamic_cast<InResultModelCopyType*>(inParentModel->rootModel()); \
                                          \
-                                            MODELS_ASSERT(inResultModelCopy != NULL); \
+                                            MODELS_ASSERT(inResultModelCopy != nullptr); \
                                          \
                                             auto tool = inResultModelCopy->toolToModifyResultModelCopies(); \
                                          \
-                                            MODELS_ASSERT(tool != NULL); \
+                                            MODELS_ASSERT(tool != nullptr); \
                                          \
                                             FuncNameInputTool(inParentModel, tool, outHandle, std::forward<ConstructorArgs>(constructorArgs)...); \
                                         } \
@@ -156,7 +156,7 @@ public:
                   const QString& displayableName = QString{"Out Group"},
                   const QString& shortDescription = QString{""},
                   const QString& detailledDescription = QString{""},
-                  typename HandleOutGroup::GroupType* prototype = NULL) {
+                  typename HandleOutGroup::GroupType* prototype = nullptr) {
 
         internalAddGroup(parentGroup,
                          groupHandle,
@@ -188,7 +188,7 @@ public:
                  const QString& displayableName = QString{"Out Item"},
                  const QString& shortDescription = QString{""},
                  const QString& detailledDescription = QString{""},
-                 typename HandleOutItem::ItemType* prototype = NULL) {
+                 typename HandleOutItem::ItemType* prototype = nullptr) {
         internalAddItem(parentGroup,
                         itemHandle,
                         std::integral_constant<bool, IsAnOutputModel<HandleOutItem::ModelType>::Is>(),
@@ -221,7 +221,7 @@ public:
                           const QString& displayableName = QString{"Out Item Attribute"},
                           const QString& shortDescription = QString{""},
                           const QString& detailledDescription = QString{""},
-                          typename HandleOutItemAttribute::ItemAttributeType* prototype = NULL) {
+                          typename HandleOutItemAttribute::ItemAttributeType* prototype = nullptr) {
 
         internalAddItemAttribute(parentItem,
                                  itemAttributeHandle,
@@ -291,7 +291,7 @@ private:
      *        from memory by this class or not
      */
     struct OutModelInfo {
-        OutModelInfo() : model(NULL), mustBeAutoDelete(true) {}
+        OutModelInfo() : model(nullptr), mustBeAutoDelete(true) {}
         OutModelInfo(CT_OutAbstractResultModel* m, bool autoDeleteIt) : model(m), mustBeAutoDelete(autoDeleteIt) {}
 
         ~OutModelInfo() {
@@ -321,8 +321,8 @@ private:
                            ConstructorArgs&& ...constructorArgs) {
         MODELS_ASSERT(!handleResult.isValid());
 
-        // NULL = no root group model to pass to the output result model
-        auto resultModel = new HandleOutResult::ModelType(NULL, std::forward<ConstructorArgs>(constructorArgs)...);
+        // nullptr = no root group model to pass to the output result model
+        auto resultModel = new HandleOutResult::ModelType(nullptr, std::forward<ConstructorArgs>(constructorArgs)...);
         handleResult.setModel(resultModel);
 
         m_results.append(new OutModelInfo(resultModel, true));
@@ -360,7 +360,7 @@ private:
 
         auto inModel = handleInResultCopy.model();
 
-        MODELS_ASSERT(!m_inResultsCopy.contains(inModel) || (inModel->toolToModifyResultModelCopies() == NULL));
+        MODELS_ASSERT(!m_inResultsCopy.contains(inModel) || (inModel->toolToModifyResultModelCopies() == nullptr));
 
         m_inResultsCopy.insert(inModel);
 
@@ -388,12 +388,12 @@ private:
                                     HandleOutGroup& rootGroupHandle,
                                     std::true_type,
                                     ConstructorArgs&& ...constructorArgs) {
-        MODELS_ASSERT((handleResult.model() != NULL)
+        MODELS_ASSERT((handleResult.model() != nullptr)
                  && !rootGroupHandle.isValid());
 
         auto tool = handleResult.model()->toolToModifyResultModelCopies();
 
-        MODELS_ASSERT(tool != NULL);
+        MODELS_ASSERT(tool != nullptr);
 
         auto rootGroupModelPrototypeToCopy = new HandleOutGroup::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);
 
@@ -431,8 +431,8 @@ private:
                                 std::false_type,
                                 ConstructorArgs&& ...constructorArgs) {
 
-        MODELS_ASSERT((handleResult.model() != NULL)
-                 && (handleResult.model()->rootGroup() == NULL)
+        MODELS_ASSERT((handleResult.model() != nullptr)
+                 && (handleResult.model()->rootGroup() == nullptr)
                  && !rootGroupHandle.isValid());
 
         auto rootGroupModel = new HandleOutGroup::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);

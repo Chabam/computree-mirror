@@ -27,7 +27,7 @@ ActionPickAnyElements::ActionPickAnyElements()
     m_pickType = PT_None;
     m_selectionType = ST_Select;
     m_maxElementsToPick = 0;
-    m_glViewer = NULL;
+    m_glViewer = nullptr;
     m_polygonPickingTools = new PolygonForPicking();
     m_rectanglePickingTools = new RectangleForPicking();
 
@@ -252,7 +252,7 @@ bool ActionPickAnyElements::pick()
 {
     bool ok = false;
 
-    if(m_glViewer->getDocument() != NULL) {
+    if(m_glViewer->getDocument() != nullptr) {
         if(getPickType() == PT_Polygone)
             ok = m_polygonPickingTools->closePolygon();
         else if(getPickType() == PT_Rectangle)
@@ -392,7 +392,7 @@ bool ActionPickAnyElements::pick()
                 GLdouble modelViewMatrix[16];
                 m_glViewer->camera()->getModelViewMatrix(modelViewMatrix);
 
-                PolygonMeshObjectsPickerByModel* picker = NULL;
+                PolygonMeshObjectsPickerByModel* picker = nullptr;
                 QList<Scene::ObjectType> objectToVisit;
 
                 QVector<Plane> polygonPlanes = ShapeToVolume::staticConvertPolygonToPlanes(getPolygon(), *m_glViewer->camera());
@@ -472,12 +472,12 @@ bool ActionPickAnyElements::pick()
 
 void ActionPickAnyElements::redrawOverlay()
 {
-    if(m_glViewer != NULL)
+    if(m_glViewer != nullptr)
         m_glViewer->redraw(Viewer::RedrawOnlyOverlay);
 }
 
 void ActionPickAnyElements::redrawAll()
 {
-    if(m_glViewer != NULL)
+    if(m_glViewer != nullptr)
         m_glViewer->redraw(Viewer::RedrawAll);
 }

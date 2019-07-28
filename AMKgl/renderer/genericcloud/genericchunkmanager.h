@@ -41,7 +41,7 @@ public:
         m_drawModeToUse = DM_VAO;
         m_glMode = glMode;
         m_nVertexPerObject = nVertexPerObject;
-        m_contextAccessor = NULL;
+        m_contextAccessor = nullptr;
     }
 
     virtual ~GenericChunkManager()
@@ -161,7 +161,7 @@ public:
             while(it != end) {
                 (*it)->setCurrentContext(context);
                 (*it)->updateInCurrentContext();
-                (*it)->setCurrentContext(NULL);
+                (*it)->setCurrentContext(nullptr);
                 ++it;
             }
 
@@ -170,7 +170,7 @@ public:
             while(itO != endO) {
                 (*itO)->setCurrentContext(context);
                 (*itO)->updateInCurrentContext();
-                (*itO)->setCurrentContext(NULL);
+                (*itO)->setCurrentContext(nullptr);
                 ++itO;
             }
         }
@@ -196,7 +196,7 @@ public:
         while(it != end) {
             (*it)->setCurrentContext(c);
             (*it)->updateInCurrentContext();
-            (*it)->setCurrentContext(NULL);
+            (*it)->setCurrentContext(nullptr);
             ++it;
         }
 
@@ -208,7 +208,7 @@ public:
         while(itO != endO) {
             (*itO)->setCurrentContext(c);
             (*itO)->updateInCurrentContext();
-            (*itO)->setCurrentContext(NULL);
+            (*itO)->setCurrentContext(nullptr);
             ++itO;
         }
     }
@@ -246,7 +246,7 @@ public:
             while(it != end) {
                 (*it)->setCurrentContext(context);
                 (*it)->updateInfoInCurrentContext();
-                (*it)->setCurrentContext(NULL);
+                (*it)->setCurrentContext(nullptr);
                 ++it;
             }
 
@@ -255,7 +255,7 @@ public:
             while(itO != endO) {
                 (*itO)->setCurrentContext(context);
                 (*itO)->updateInfoInCurrentContext();
-                (*itO)->setCurrentContext(NULL);
+                (*itO)->setCurrentContext(nullptr);
                 ++itO;
             }
         }
@@ -279,7 +279,7 @@ public:
         while(it != end) {
             (*it)->setCurrentContext(c);
             (*it)->updateInfoInCurrentContext();
-            (*it)->setCurrentContext(NULL);
+            (*it)->setCurrentContext(nullptr);
             ++it;
         }
 
@@ -291,7 +291,7 @@ public:
         while(itO != endO) {
             (*itO)->setCurrentContext(c);
             (*itO)->updateInfoInCurrentContext();
-            (*itO)->setCurrentContext(NULL);
+            (*itO)->setCurrentContext(nullptr);
             ++itO;
         }
     }
@@ -329,7 +329,7 @@ public:
             while(it != end) {
                 (*it)->setCurrentContext(context);
                 (*it)->updateColorInCurrentContext();
-                (*it)->setCurrentContext(NULL);
+                (*it)->setCurrentContext(nullptr);
                 ++it;
             }
 
@@ -338,7 +338,7 @@ public:
             while(itO != endO) {
                 (*itO)->setCurrentContext(context);
                 (*itO)->updateColorInCurrentContext();
-                (*itO)->setCurrentContext(NULL);
+                (*itO)->setCurrentContext(nullptr);
                 ++itO;
             }
         }
@@ -362,7 +362,7 @@ public:
         while(it != end) {
             (*it)->setCurrentContext(c);
             (*it)->updateColorInCurrentContext();
-            (*it)->setCurrentContext(NULL);
+            (*it)->setCurrentContext(nullptr);
             ++it;
         }
 
@@ -374,7 +374,7 @@ public:
         while(itO != endO) {
             (*itO)->setCurrentContext(c);
             (*itO)->updateColorInCurrentContext();
-            (*itO)->setCurrentContext(NULL);
+            (*itO)->setCurrentContext(nullptr);
             ++itO;
         }
     }
@@ -412,7 +412,7 @@ public:
             while(it != end) {
                 (*it)->setCurrentContext(context);
                 (*it)->updateNormalInCurrentContext();
-                (*it)->setCurrentContext(NULL);
+                (*it)->setCurrentContext(nullptr);
                 ++it;
             }
 
@@ -421,7 +421,7 @@ public:
             while(itO != endO) {
                 (*itO)->setCurrentContext(context);
                 (*itO)->updateNormalInCurrentContext();
-                (*itO)->setCurrentContext(NULL);
+                (*itO)->setCurrentContext(nullptr);
                 ++itO;
             }
         }
@@ -445,7 +445,7 @@ public:
         while(it != end) {
             (*it)->setCurrentContext(c);
             (*it)->updateNormalInCurrentContext();
-            (*it)->setCurrentContext(NULL);
+            (*it)->setCurrentContext(nullptr);
             ++it;
         }
 
@@ -457,7 +457,7 @@ public:
         while(itO != endO) {
             (*itO)->setCurrentContext(c);
             (*itO)->updateNormalInCurrentContext();
-            (*itO)->setCurrentContext(NULL);
+            (*itO)->setCurrentContext(nullptr);
             ++itO;
         }
     }
@@ -494,7 +494,7 @@ public:
             while(it != end) {
                 (*it)->setCurrentContext(context);
                 (*it)->updateOnlyVAOInCurrentContext();
-                (*it)->setCurrentContext(NULL);
+                (*it)->setCurrentContext(nullptr);
                 ++it;
             }
 
@@ -503,7 +503,7 @@ public:
             while(itO != endO) {
                 (*itO)->setCurrentContext(context);
                 (*itO)->updateOnlyVAOInCurrentContext();
-                (*itO)->setCurrentContext(NULL);
+                (*itO)->setCurrentContext(nullptr);
                 ++itO;
             }
         }
@@ -526,7 +526,7 @@ public:
         while(it != end) {
             (*it)->setCurrentContext(c);
             (*it)->updateOnlyVAOInCurrentContext();
-            (*it)->setCurrentContext(NULL);
+            (*it)->setCurrentContext(nullptr);
             ++it;
         }
 
@@ -538,7 +538,7 @@ public:
         while(itO != endO) {
             (*itO)->setCurrentContext(c);
             (*itO)->updateOnlyVAOInCurrentContext();
-            (*itO)->setCurrentContext(NULL);
+            (*itO)->setCurrentContext(nullptr);
             ++itO;
         }
     }
@@ -590,7 +590,7 @@ public:
     {
         QMutexLocker locker(m_mutex);
 
-        RendererContext* c = m_contextAccessor->getContexts().value(const_cast<QOpenGLContext*>(context), NULL);
+        RendererContext* c = m_contextAccessor->getContexts().value(const_cast<QOpenGLContext*>(context), nullptr);
 
         typename ChunkCollection::iterator it = m_chunks.begin();
         typename ChunkCollection::iterator end = m_chunks.end();
@@ -612,7 +612,7 @@ public:
             ++itO;
         }
 
-        if(c != NULL)
+        if(c != nullptr)
             c->destroyGL();
     }
 
@@ -736,7 +736,7 @@ public:
         while(it != end) {
             (*it)->setCurrentContext(c);
             (*it)->draw(info);
-            (*it)->setCurrentContext(NULL);
+            (*it)->setCurrentContext(nullptr);
             ++it;
         }
 
@@ -748,7 +748,7 @@ public:
         while(itO != endO) {
             (*itO)->setCurrentContext(c);
             (*itO)->draw(info);
-            (*itO)->setCurrentContext(NULL);
+            (*itO)->setCurrentContext(nullptr);
             ++itO;
         }
     }
@@ -770,7 +770,7 @@ public:
         while(it != end) {
             (*it)->setCurrentContext(c);
             (*it)->fastDraw(info);
-            (*it)->setCurrentContext(NULL);
+            (*it)->setCurrentContext(nullptr);
             ++it;
         }
 
@@ -782,7 +782,7 @@ public:
         while(itO != endO) {
             (*itO)->setCurrentContext(c);
             (*itO)->fastDraw(info);
-            (*itO)->setCurrentContext(NULL);
+            (*itO)->setCurrentContext(nullptr);
             ++itO;
         }
     }
@@ -804,7 +804,7 @@ public:
         while(it != end) {
             (*it)->setCurrentContext(c);
             (*it)->postDraw(info);
-            (*it)->setCurrentContext(NULL);
+            (*it)->setCurrentContext(nullptr);
             ++it;
         }
 
@@ -816,7 +816,7 @@ public:
         while(itO != endO) {
             (*itO)->setCurrentContext(c);
             (*itO)->postDraw(info);
-            (*itO)->setCurrentContext(NULL);
+            (*itO)->setCurrentContext(nullptr);
             ++itO;
         }
     }

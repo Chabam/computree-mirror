@@ -27,7 +27,7 @@ public:
 
     /**
      * @brief Create an item attribute with a category and a pointer to the member method of specified class.
-     * @param category : the category of the item attribute. Must not be NULL !
+     * @param category : the category of the item attribute. Must not be nullptr !
      * @param gMethod : the pointer to the member method of the specified class.
      */
     CT_StdItemAttributeWrapperT(const CT_AbstractCategory* category, getter gMethod);

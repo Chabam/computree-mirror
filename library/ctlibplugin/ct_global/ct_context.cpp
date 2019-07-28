@@ -2,11 +2,11 @@
 
 #include "ct_log/ct_logmanager.h"
 
-CT_Context* CT_Context::UNIQUE_INSTANCE = NULL;
+CT_Context* CT_Context::UNIQUE_INSTANCE = nullptr;
 
 CT_Context::CT_Context() :
-    m_coreInterface(NULL),
-    m_guiManager(NULL)
+    m_coreInterface(nullptr),
+    m_guiManager(nullptr)
 {
 }
 
@@ -27,12 +27,12 @@ LogInterface* CT_Context::log() const
 
 PluginManagerInterface* CT_Context::pluginManager() const
 {
-    return (m_coreInterface == NULL) ? NULL : m_coreInterface->pluginManager();
+    return (m_coreInterface == nullptr) ? nullptr : m_coreInterface->pluginManager();
 }
 
 DocumentManagerInterface* CT_Context::documentManager() const
 {
-    return (m_guiManager == NULL) ? NULL : m_guiManager->documentManager();
+    return (m_guiManager == nullptr) ? nullptr : m_guiManager->documentManager();
 }
 
 void CT_Context::setCore(const CoreInterface* core)

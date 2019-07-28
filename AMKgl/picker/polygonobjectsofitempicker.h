@@ -242,7 +242,7 @@ public:
                   const Eigen::Vector3f& widthAxisDirection = Eigen::Vector3f(1, 0, 0),
                   const Eigen::Vector3f& lengthAxisDirection = Eigen::Vector3f(0, 0, 1),
                   bool filled = true,
-                  Eigen::Vector3d *intersectionPoint = NULL) const;
+                  Eigen::Vector3d *intersectionPoint = nullptr) const;
 
     /**
      * @brief Call this method to check if the ellipse is in the selection or intersect with it. Don't call the select or check operation !

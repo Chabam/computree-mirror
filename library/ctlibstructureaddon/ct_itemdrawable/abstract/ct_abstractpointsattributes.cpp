@@ -6,14 +6,14 @@ CT_StandardAbstractPointsAttributesDrawManager CT_AbstractPointsAttributes::APA_
 
 CT_AbstractPointsAttributes::CT_AbstractPointsAttributes() : SuperClass()
 {
-    m_apci = NULL;
+    m_apci = nullptr;
     setBaseDrawManager(&APA_DRAW_MANAGER);
 }
 
 CT_AbstractPointsAttributes::CT_AbstractPointsAttributes(CT_PCIR pcir) : CT_AbstractPointsAttributes()
 {
     m_pcir = pcir;
-    m_apci =(m_pcir.data() == NULL ? NULL : m_pcir->abstractCloudIndexT());
+    m_apci =(m_pcir.data() == nullptr ? nullptr : m_pcir->abstractCloudIndexT());
 }
 
 const CT_AbstractPointCloudIndex* CT_AbstractPointsAttributes::pointCloudIndex() const

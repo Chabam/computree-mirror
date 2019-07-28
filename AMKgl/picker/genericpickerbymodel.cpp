@@ -5,9 +5,9 @@
 
 GenericPickerByModel::GenericPickerByModel()
 {
-    m_lastPicker = NULL;
-    m_model = NULL;
-    m_scene = NULL;
+    m_lastPicker = nullptr;
+    m_model = nullptr;
+    m_scene = nullptr;
 }
 
 GenericPickerByModel::~GenericPickerByModel()
@@ -17,9 +17,9 @@ GenericPickerByModel::~GenericPickerByModel()
 
 GenericPicker& GenericPickerByModel::createOrGetPickerForModel(const ItemModel *model)
 {
-    GenericPicker *picker = m_pickers.value((ItemModel*)model, NULL);
+    GenericPicker *picker = m_pickers.value((ItemModel*)model, nullptr);
 
-    if(picker == NULL) {
+    if(picker == nullptr) {
         picker = createNewPicker();
 
         initPicker(picker);
@@ -32,7 +32,7 @@ GenericPicker& GenericPickerByModel::createOrGetPickerForModel(const ItemModel *
 
 GenericPicker* GenericPickerByModel::getPickerForModel(const ItemModel *model) const
 {
-    return m_pickers.value((ItemModel*)model, NULL);
+    return m_pickers.value((ItemModel*)model, nullptr);
 }
 
 bool GenericPickerByModel::isValid() const
@@ -62,7 +62,7 @@ void GenericPickerByModel::setCurrentInformation(const ItemModel *model,
 AnyElementAttributesProvider* GenericPickerByModel::getAnyElementsAttributesProvider(const ItemModel *model) const
 {
     GenericPicker* picker = getPickerForModel(model);
-    return ((picker == NULL) ? NULL : picker->getAnyElementsAttributesProvider());
+    return ((picker == nullptr) ? nullptr : picker->getAnyElementsAttributesProvider());
 }
 
 ItemModel *GenericPickerByModel::getCurrentModel() const

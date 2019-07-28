@@ -2,9 +2,9 @@
 #define CT_ABSTRACTATTRIBUTESTOCLOUDWORKER_H
 
 #include <QObject>
-#include "pluginShared_global.h"
+#include "ctlibstructureaddon_global.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_AbstractAttributesToCloudWorker : public QObject
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractAttributesToCloudWorker : public QObject
 {
     Q_OBJECT
 

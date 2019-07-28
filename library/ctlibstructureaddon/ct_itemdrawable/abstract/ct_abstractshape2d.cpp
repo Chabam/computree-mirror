@@ -33,7 +33,7 @@ CT_DEFAULT_IA_INIT(CT_AbstractShape2D)
 double CT_AbstractShape2D::Z_PLANE_FOR_2D_SHAPES = 0;
 
 CT_AbstractShape2D::CT_AbstractShape2D() : SuperClass(),
-    _data(NULL),
+    _data(nullptr),
     _zValue(0),
     _zValueDefined(false)
 {
@@ -44,7 +44,7 @@ CT_AbstractShape2D::CT_AbstractShape2D(CT_Shape2DData* data) : SuperClass(),
     _zValue(0),
     _zValueDefined(false)
 {
-    Q_ASSERT(_data != NULL);
+    Q_ASSERT(_data != nullptr);
 
     Eigen::Vector3d min, max;
     _data->getBoundingBox(min, max);
@@ -52,7 +52,7 @@ CT_AbstractShape2D::CT_AbstractShape2D(CT_Shape2DData* data) : SuperClass(),
 }
 
 CT_AbstractShape2D::CT_AbstractShape2D(const CT_AbstractShape2D& other) : SuperClass(other),
-    _data((other._data != NULL) ? other._data->copy() : NULL),
+    _data((other._data != nullptr) ? other._data->copy() : nullptr),
     _zValue(other._zValue),
     _zValueDefined(other._zValueDefined)
 {

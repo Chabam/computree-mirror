@@ -63,7 +63,7 @@ void CT_HoughTransform::getHoughtDistances(QList<CT_HoughTransform::HoughObject 
 
 double CT_HoughTransform::findBestHoughtObjects(QList<CT_HoughTransform::HoughObject *> &objects, double minDist, CT_HoughTransform::HoughObject* bestObject)
 {
-    bestObject = NULL;
+    bestObject = nullptr;
     double bestScore = 0;
 
     for (int i = 0 ; i < objects.size() ; i++)

@@ -4,8 +4,8 @@ MeshObjectsPicker::MeshObjectsPicker() : GenericPicker()
 {
     m_selectionOperation = nullptr;
     m_checkOperation = nullptr;
-    m_globalObjectProvider = NULL;
-    m_globalPCProvider = NULL;
+    m_globalObjectProvider = nullptr;
+    m_globalPCProvider = nullptr;
 }
 
 bool MeshObjectsPicker::isValid() const
@@ -13,8 +13,8 @@ bool MeshObjectsPicker::isValid() const
     return (GenericPicker::isValid()
                 && (getSelectionOperation() != nullptr)
                 && (getCheckOperation() != nullptr)
-                && (m_globalObjectProvider != NULL)
-                && (m_globalPCProvider != NULL));
+                && (m_globalObjectProvider != nullptr)
+                && (m_globalPCProvider != nullptr));
 }
 
 void MeshObjectsPicker::setSelectionOperation(selectionOperation op)

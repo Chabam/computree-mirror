@@ -4,7 +4,7 @@ ItemsPickerByModel::ItemsPickerByModel() : GenericPickerByModel()
 {
     m_selectionOperation = nullptr;
     m_checkOperation = nullptr;
-    m_graphicsView = NULL;
+    m_graphicsView = nullptr;
 }
 
 ItemsPicker& ItemsPickerByModel::createOrGetItemsPickerForModel(const ItemModel *model)
@@ -46,7 +46,7 @@ void ItemsPickerByModel::addItemDrawableToCompute(const Item *item)
 {
     ItemsPicker* pPicker = static_cast<ItemsPicker*>(lastPicker());
 
-    if(pPicker != NULL)
+    if(pPicker != nullptr)
         pPicker->addItemDrawableToCompute(item);
 }
 

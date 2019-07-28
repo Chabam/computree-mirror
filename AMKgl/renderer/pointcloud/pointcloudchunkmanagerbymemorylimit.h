@@ -30,32 +30,32 @@ public:
 
     /**
      * @brief Add a point by its global index
-     * @param dispatchInfos : a pointer to a list that will contains informations on where is dispatched points (NULL if you don't want this information)
+     * @param dispatchInfos : a pointer to a list that will contains informations on where is dispatched points (nullptr if you don't want this information)
      */
     void addPoint(const size_t &globalIndex,
-                  PermanentItemInformation* dispatchInfos = NULL);
+                  PermanentItemInformation* dispatchInfos = nullptr);
 
     /**
      * @brief Add a point by its global and local index and define the chunkIndex too
      * @param globalIndex : the global index of the point in the cloud
      * @param localIndex : globalIndex - getBeginningOfCloud()
      * @param chunkIndex : chunkIndex = localIndex/getChunkMaxSize();
-     * @param dispatchInfos : a pointer to a list that will contains informations on where is dispatched points (NULL if you don't want this information)
+     * @param dispatchInfos : a pointer to a list that will contains informations on where is dispatched points (nullptr if you don't want this information)
      */
     void addPoint(const size_t &globalIndex,
                   const size_t &localIndex,
                   const size_t &chunkIndex,
-                  PermanentItemInformation* dispatchInfos = NULL);
+                  PermanentItemInformation* dispatchInfos = nullptr);
 
     /**
      * @brief Add all points between the begin and end index ((globalIndexBegin+count)-1) included
      * @param globalIndexBegin : index to start to add
      * @param count : last index to add
-     * @param dispatchInfos : a pointer to a list that will contains informations on where is dispatched points (NULL if you don't want this information)
+     * @param dispatchInfos : a pointer to a list that will contains informations on where is dispatched points (nullptr if you don't want this information)
      */
     void addPointsFrom(size_t globalIndexBegin,
                        size_t count,
-                       PermanentItemInformation *dispatchInfos = NULL);
+                       PermanentItemInformation *dispatchInfos = nullptr);
 private:
 
     /**

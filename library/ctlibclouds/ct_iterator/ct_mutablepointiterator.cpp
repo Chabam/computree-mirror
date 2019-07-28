@@ -21,8 +21,8 @@ CT_MutablePointIterator::CT_MutablePointIterator(CT_CIR cir)
 
 CT_MutablePointIterator::CT_MutablePointIterator(const CT_MutablePointIterator &it)
 {
-    if(it.m_it == NULL)
-        m_it = NULL;
+    if(it.m_it == nullptr)
+        m_it = nullptr;
     else
         m_it = new CT_PointIterator(*it.m_it);
 

@@ -47,7 +47,7 @@ class PrototypeToolForModel : public IPrototypeToolForModel {
 public:
     using ModelType = ModelT;
 
-    PrototypeToolForModel() : m_model(NULL) {}
+    PrototypeToolForModel() : m_model(nullptr) {}
 
     void setModel(const CT_OutAbstractModel* model) { m_model = const_cast<CT_OutAbstractModel*>(model); }
     CT_OutAbstractModel* model() const { return m_model; }
@@ -69,7 +69,7 @@ public:
 template<typename ConcreteClass>
 class ItemAttributeToolForModel : public IItemAttributeToolForModel {
 public:
-    ItemAttributeToolForModel() : m_cat(NULL) {}
+    ItemAttributeToolForModel() : m_cat(nullptr) {}
 
     ICategoryForModel* category() const { return m_cat; }
     int valueType() const { return ConcreteClass::ValueType; }
@@ -104,7 +104,7 @@ class StepToolForModel : public IStepToolForModel {
 public:
     using OutResultsVisitor = std::function<bool(const IResultForModel* model)>;
 
-    StepToolForModel() : res(NULL) {}
+    StepToolForModel() : res(nullptr) {}
     ~StepToolForModel() { delete res; }
 
     QString displayableCustomName() const { return "Step"; }
@@ -112,7 +112,7 @@ public:
     bool isStepAPrototype() const { return true; }
 
     bool visitStepHisOutResults(const OutResultsVisitor& visitor) const {
-        if(res != NULL)
+        if(res != nullptr)
             return visitor(res);
 
         return true;
@@ -344,6 +344,7 @@ private Q_SLOTS:
     void testInHandleStructureStaticCheck();
     void testOutHandleStructureStaticCheck();
     void testInHandleStructureCreation();
+    void testInHandleStructureCreationWithAbstractHandle();
     void testOutHandleStructureCreation();
 
     void testHandleResultCopyAddItemRemoveGroup();
@@ -364,9 +365,9 @@ void TestModels::testInZeroOrMoreCreation()
     QVERIFY(model.shortDescription() != QString());
     QVERIFY(model.detailledDescription() == QString());
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.minimumNumberOfPossibilityToSelect() == 0);
     QVERIFY(model.maximumNumberOfPossibilityThatCanBeSelected() == 0);
     QVERIFY(model.isOptionnal() == true);
@@ -381,7 +382,7 @@ void TestModels::testInZeroOrMoreCreation()
     QVERIFY(model.nPossibilitySelected() == 0);
     QVERIFY(model.itemType() != QString());
     QVERIFY(model.itemShortType() != QString());
-    QVERIFY(model.parentGroup() == NULL);
+    QVERIFY(model.parentGroup() == nullptr);
     QVERIFY(model.rootGroup() == &model);
 
     CT_InZeroOrMoreGroupModel* cpy = static_cast<CT_InZeroOrMoreGroupModel*>(model.copy(true));
@@ -406,7 +407,7 @@ void TestModels::testInZeroOrMoreCreation()
     QVERIFY(cpy->nPossibilitySelected() == model.nPossibilitySelected());
     QVERIFY(cpy->itemType() == model.itemType());
     QVERIFY(cpy->itemShortType() == model.itemShortType());
-    QVERIFY(cpy->parentGroup() == NULL);
+    QVERIFY(cpy->parentGroup() == nullptr);
     QVERIFY(cpy->rootGroup() == cpy);
 
     delete cpy;
@@ -435,9 +436,9 @@ void TestModels::testInSingularItemCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == detailledDescription);
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.minimumNumberOfPossibilityToSelect() == minSelect);
     QVERIFY(model.maximumNumberOfPossibilityThatCanBeSelected() == maxSelect);
     QVERIFY(model.isOptionnal() == false);
@@ -453,8 +454,8 @@ void TestModels::testInSingularItemCreation()
     QVERIFY(model.itemType() == itemType);
     QVERIFY(model.itemShortType() == itemShortType);
     QVERIFY(model.itemNameFromType() == itemNameFromType);
-    QVERIFY(model.parentGroup() == NULL);
-    QVERIFY(model.rootGroup() == NULL);
+    QVERIFY(model.parentGroup() == nullptr);
+    QVERIFY(model.rootGroup() == nullptr);
 
     CT_InStdSingularItemModel* cpy = static_cast<CT_InStdSingularItemModel*>(model.copy(true));
     QVERIFY(cpy->displayableName() == model.displayableName());
@@ -478,8 +479,8 @@ void TestModels::testInSingularItemCreation()
     QVERIFY(cpy->nPossibilitySelected() == model.nPossibilitySelected());
     QVERIFY(cpy->itemType() == model.itemType());
     QVERIFY(cpy->itemShortType() == model.itemShortType());
-    QVERIFY(cpy->parentGroup() == NULL);
-    QVERIFY(cpy->rootGroup() == NULL);
+    QVERIFY(cpy->parentGroup() == nullptr);
+    QVERIFY(cpy->rootGroup() == nullptr);
 
     delete cpy;
 }
@@ -508,9 +509,9 @@ void TestModels::testInStdGroupCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == detailledDescription);
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.minimumNumberOfPossibilityToSelect() == minSelect);
     QVERIFY(model.maximumNumberOfPossibilityThatCanBeSelected() == maxSelect);
     QVERIFY(model.isOptionnal() == false);
@@ -526,7 +527,7 @@ void TestModels::testInStdGroupCreation()
     QVERIFY(model.itemType() == groupType);
     QVERIFY(model.itemNameFromType() == groupNameFromType);
     QVERIFY(model.itemShortType() == groupShortType);
-    QVERIFY(model.parentGroup() == NULL);
+    QVERIFY(model.parentGroup() == nullptr);
     QVERIFY(model.rootGroup() == &model);
 
     CT_InStdGroupModel* cpy = static_cast<CT_InStdGroupModel*>(model.copy(true));
@@ -551,7 +552,7 @@ void TestModels::testInStdGroupCreation()
     QVERIFY(cpy->nPossibilitySelected() == model.nPossibilitySelected());
     QVERIFY(cpy->itemType() == model.itemType());
     QVERIFY(cpy->itemShortType() == model.itemShortType());
-    QVERIFY(cpy->parentGroup() == NULL);
+    QVERIFY(cpy->parentGroup() == nullptr);
     QVERIFY(cpy->rootGroup() == cpy);
 
     delete cpy;
@@ -579,9 +580,9 @@ void TestModels::testInStdItemAttributeCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == detailledDescription);
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.minimumNumberOfPossibilityToSelect() == minSelect);
     QVERIFY(model.maximumNumberOfPossibilityThatCanBeSelected() == maxSelect);
     QVERIFY(model.isOptionnal() == false);
@@ -631,9 +632,9 @@ void TestModels::testInResultNotNeedInputCreation()
     QVERIFY(model.shortDescription() == model.displayableName());
     QVERIFY(model.detailledDescription() == QString());
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.minimumNumberOfPossibilityToSelect() == 0);
     QVERIFY(model.maximumNumberOfPossibilityThatCanBeSelected() == 0);
     QVERIFY(model.isOptionnal() == true);
@@ -689,9 +690,9 @@ void TestModels::testInResultGroupCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == QString());
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.minimumNumberOfPossibilityToSelect() == 1);
     QVERIFY(model.maximumNumberOfPossibilityThatCanBeSelected() == 1);
     QVERIFY(model.isOptionnal() == false);
@@ -707,7 +708,7 @@ void TestModels::testInResultGroupCreation()
     QVERIFY(model.isRecursive() == recursive);
     QVERIFY(model.originalModel() == &model);
     QVERIFY(model.recursiveOriginalModel() == &model);
-    QVERIFY(model.rootGroup() == NULL);
+    QVERIFY(model.rootGroup() == nullptr);
 
     CT_InResultModelGroup* cpy = static_cast<CT_InResultModelGroup*>(model.copy(true));
     QVERIFY(cpy->displayableName() == model.displayableName());
@@ -732,7 +733,7 @@ void TestModels::testInResultGroupCreation()
     QVERIFY(cpy->isRecursive() == model.isRecursive());
     QVERIFY(cpy->originalModel() == &model);
     QVERIFY(cpy->recursiveOriginalModel() == &model);
-    QVERIFY(cpy->rootGroup() == NULL);
+    QVERIFY(cpy->rootGroup() == nullptr);
 
     delete cpy;
 }
@@ -749,9 +750,9 @@ void TestModels::testInResultGroupToCopyCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == QString());
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.minimumNumberOfPossibilityToSelect() == 1);
     QVERIFY(model.maximumNumberOfPossibilityThatCanBeSelected() == 1);
     QVERIFY(model.isOptionnal() == false);
@@ -767,7 +768,7 @@ void TestModels::testInResultGroupToCopyCreation()
     QVERIFY(model.isRecursive() == recursive);
     QVERIFY(model.originalModel() == &model);
     QVERIFY(model.recursiveOriginalModel() == &model);
-    QVERIFY(model.rootGroup() == NULL);
+    QVERIFY(model.rootGroup() == nullptr);
 
     CT_InResultModelGroupToCopy* cpy = static_cast<CT_InResultModelGroupToCopy*>(model.copy(true));
     QVERIFY(cpy->displayableName() == model.displayableName());
@@ -792,7 +793,7 @@ void TestModels::testInResultGroupToCopyCreation()
     QVERIFY(cpy->isRecursive() == model.isRecursive());
     QVERIFY(cpy->originalModel() == &model);
     QVERIFY(cpy->recursiveOriginalModel() == &model);
-    QVERIFY(model.rootGroup() == NULL);
+    QVERIFY(model.rootGroup() == nullptr);
 
     delete cpy;
 }
@@ -811,21 +812,21 @@ void TestModels::testOutSingularItemCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == detailledDescription);
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.uniqueIndex() == -1);
     QVERIFY(model.recursiveOriginalModel() == &model);
     QVERIFY(model.originalModel() == &model);
-    QVERIFY(model.recursiveOriginalModelWithAResult() == NULL);
-    QVERIFY(model.recursiveOriginalModelWithAStep() == NULL);
+    QVERIFY(model.recursiveOriginalModelWithAResult() == nullptr);
+    QVERIFY(model.recursiveOriginalModelWithAStep() == nullptr);
     QVERIFY(model.isVisible() == false);
-    QVERIFY(model.prototype() != NULL);
+    QVERIFY(model.prototype() != nullptr);
     QVERIFY(model.itemDrawable() == model.prototype());
-    QVERIFY(model.result() == NULL);
+    QVERIFY(model.result() == nullptr);
     QVERIFY(model.recursiveFinalize() == true);
-    QVERIFY(model.parentGroup() == NULL);
-    QVERIFY(model.rootGroup() == NULL);
+    QVERIFY(model.parentGroup() == nullptr);
+    QVERIFY(model.rootGroup() == nullptr);
 }
 
 void TestModels::testOutStdGroupCreation()
@@ -842,20 +843,20 @@ void TestModels::testOutStdGroupCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == detailledDescription);
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.uniqueIndex() == -1);
     QVERIFY(model.recursiveOriginalModel() == &model);
     QVERIFY(model.originalModel() == &model);
-    QVERIFY(model.recursiveOriginalModelWithAResult() == NULL);
-    QVERIFY(model.recursiveOriginalModelWithAStep() == NULL);
+    QVERIFY(model.recursiveOriginalModelWithAResult() == nullptr);
+    QVERIFY(model.recursiveOriginalModelWithAStep() == nullptr);
     QVERIFY(model.isVisible() == false);
-    QVERIFY(model.prototype() != NULL);
+    QVERIFY(model.prototype() != nullptr);
     QVERIFY(model.itemDrawable() == model.prototype());
-    QVERIFY(model.result() == NULL);
+    QVERIFY(model.result() == nullptr);
     QVERIFY(model.recursiveFinalize() == true);
-    QVERIFY(model.parentGroup() == NULL);
+    QVERIFY(model.parentGroup() == nullptr);
     QVERIFY(model.rootGroup() == &model);
 }
 
@@ -874,20 +875,20 @@ void TestModels::testOutOpfGroupCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == detailledDescription);
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.uniqueIndex() == -1);
     QVERIFY(model.recursiveOriginalModel() == &model);
     QVERIFY(model.originalModel() == &model);
-    QVERIFY(model.recursiveOriginalModelWithAResult() == NULL);
-    QVERIFY(model.recursiveOriginalModelWithAStep() == NULL);
+    QVERIFY(model.recursiveOriginalModelWithAResult() == nullptr);
+    QVERIFY(model.recursiveOriginalModelWithAStep() == nullptr);
     QVERIFY(model.isVisible() == false);
-    QVERIFY(model.prototype() != NULL);
+    QVERIFY(model.prototype() != nullptr);
     QVERIFY(model.itemDrawable() == model.prototype());
-    QVERIFY(model.result() == NULL);
+    QVERIFY(model.result() == nullptr);
     QVERIFY(model.recursiveFinalize() == true);
-    QVERIFY(model.parentGroup() == NULL);
+    QVERIFY(model.parentGroup() == nullptr);
     QVERIFY(model.rootGroup() == &model);
     QVERIFY(model.opfLevel() == 0);
     model.setOPFLevel(opfLevel);
@@ -900,7 +901,7 @@ void TestModels::testOutStdItemAttributeCreation()
     const QString displayableName("dn");
     const QString shortDescription("sd");
 
-    CT_OutStdItemAttributeModel<ItemAttributeForTest<0>> model((ICategoryForModel*)NULL,
+    CT_OutStdItemAttributeModel<ItemAttributeForTest<0>> model(static_cast<ICategoryForModel*>(nullptr),
                                                                displayableName,
                                                                shortDescription);
 
@@ -908,18 +909,18 @@ void TestModels::testOutStdItemAttributeCreation()
     QVERIFY(model.shortDescription() == shortDescription);
     QVERIFY(model.detailledDescription() == QString());
     QVERIFY(model.isEmpty() == true);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.uniqueIndex() == -1);
     QVERIFY(model.recursiveOriginalModel() == &model);
     QVERIFY(model.originalModel() == &model);
-    QVERIFY(model.recursiveOriginalModelWithAResult() == NULL);
-    QVERIFY(model.recursiveOriginalModelWithAStep() == NULL);
+    QVERIFY(model.recursiveOriginalModelWithAResult() == nullptr);
+    QVERIFY(model.recursiveOriginalModelWithAStep() == nullptr);
     QVERIFY(model.isVisible() == false);
-    QVERIFY(model.prototype() != NULL);
+    QVERIFY(model.prototype() != nullptr);
     QVERIFY(model.itemAttribute() == model.prototype());
-    QVERIFY(model.result() == NULL);
+    QVERIFY(model.result() == nullptr);
     QVERIFY(model.recursiveFinalize() == true);
     QVERIFY(model.isADefaultItemAttributeModel() == false);
 }
@@ -947,25 +948,25 @@ void TestModels::testOutResultGroupCreation()
     QVERIFY(model.shortDescription() == resultShortDescription);
     QVERIFY(model.detailledDescription() == QString());
     QVERIFY(model.isEmpty() == false);
-    QVERIFY(model.parentModel() == NULL);
+    QVERIFY(model.parentModel() == nullptr);
     QVERIFY(model.rootModel() == &model);
-    QVERIFY(model.step() == NULL);
+    QVERIFY(model.step() == nullptr);
     QVERIFY(model.uniqueIndex() == -1);
     QVERIFY(model.recursiveOriginalModel() == &model);
     QVERIFY(model.originalModel() == &model);
-    QVERIFY(model.recursiveOriginalModelWithAResult() == NULL);
-    QVERIFY(model.recursiveOriginalModelWithAStep() == NULL);
+    QVERIFY(model.recursiveOriginalModelWithAResult() == nullptr);
+    QVERIFY(model.recursiveOriginalModelWithAStep() == nullptr);
     QVERIFY(model.isVisible() == false);
-    QVERIFY(model.prototype() != NULL);
-    QVERIFY(dynamic_cast<ResultGroupForTest*>(model.prototype()) != NULL);
-    QVERIFY(model.result() == NULL);
+    QVERIFY(model.prototype() != nullptr);
+    QVERIFY(dynamic_cast<ResultGroupForTest*>(model.prototype()) != nullptr);
+    QVERIFY(model.result() == nullptr);
     QVERIFY(model.recursiveFinalize() == true);
     QVERIFY(model.resultName() == resultName);
     QVERIFY(model.rootGroup() == rootGroup);
 
     IResultForModel* r = model.createResult();
 
-    QVERIFY(r != NULL);
+    QVERIFY(r != nullptr);
 
     QVERIFY(model.recursiveOriginalModelWithAResult() == &model);
     QVERIFY(rootGroup->parentModel() == &model);
@@ -973,7 +974,7 @@ void TestModels::testOutResultGroupCreation()
     QVERIFY(rootGroup->recursiveOriginalModel() == rootGroup);
     QVERIFY(rootGroup->originalModel() == rootGroup);
     QVERIFY(rootGroup->recursiveOriginalModelWithAResult() == rootGroup);
-    QVERIFY(rootGroup->recursiveOriginalModelWithAStep() == NULL);
+    QVERIFY(rootGroup->recursiveOriginalModelWithAStep() == nullptr);
 
     delete r;
 }
@@ -1031,8 +1032,8 @@ void TestModels::testOutResultGroupCopyCreation()
     IResultForModel* rStep1 = outStep1->createResult();
     QVERIFY(outStep1->result() == rStep1);
 
-    QVERIFY(rStep1 != NULL);
-    QVERIFY(dynamic_cast<ResultGroupForTest*>(rStep1) != NULL);
+    QVERIFY(rStep1 != nullptr);
+    QVERIFY(dynamic_cast<ResultGroupForTest*>(rStep1) != nullptr);
     QVERIFY(static_cast<ResultGroupForTest*>(rStep1)->name() == finalResultName);
 
     step1.setResult(rStep1);
@@ -1070,7 +1071,7 @@ void TestModels::testOutResultGroupCopyCreation()
     IResultForModel* rStep2 = outStep2.createResult();
     QVERIFY(outStep2.result() == rStep2);
 
-    QVERIFY(rStep2 != NULL);
+    QVERIFY(rStep2 != nullptr);
     QVERIFY(static_cast<ResultGroupForTest*>(rStep2)->name() == finalResultName);
 
     step2.setResult(rStep2);
@@ -1098,7 +1099,7 @@ void TestModels::testOutResultGroupCopyCreation()
     IResultForModel* rStep3 = outStep3.createResult();
     QVERIFY(outStep3.result() == rStep3);
 
-    QVERIFY(rStep3 != NULL);
+    QVERIFY(rStep3 != nullptr);
     QVERIFY(static_cast<ResultGroupForTest*>(rStep3)->name() == finalResultName);
 
     step3.setResult(rStep3);
@@ -1428,16 +1429,16 @@ void TestModels::testInHandleStructureStaticCheck()
     inManager.addResult(handleResultCopy, "coucou", "sd", false);
     auto handleRootGroup3 = inManager.setZeroOrMoreRootGroup<StdGroupForTest>(handleResultCopy);
 
-    QVERIFY(handleResult.model() != NULL);
-    QVERIFY(handleRootGroup.model() != NULL);
-    QVERIFY(handleGroup.model() != NULL);
-    QVERIFY(handleItem.model() != NULL);
-    QVERIFY(handleItem2.model() != NULL);
-    QVERIFY(handleItemAttribute.model() != NULL);
-    QVERIFY(handleResult2.model() != NULL);
-    QVERIFY(handleRootGroup2.model() != NULL);
-    QVERIFY(handleResultCopy.model() != NULL);
-    QVERIFY(handleRootGroup3.model() != NULL);
+    QVERIFY(handleResult.model() != nullptr);
+    QVERIFY(handleRootGroup.model() != nullptr);
+    QVERIFY(handleGroup.model() != nullptr);
+    QVERIFY(handleItem.model() != nullptr);
+    QVERIFY(handleItem2.model() != nullptr);
+    QVERIFY(handleItemAttribute.model() != nullptr);
+    QVERIFY(handleResult2.model() != nullptr);
+    QVERIFY(handleRootGroup2.model() != nullptr);
+    QVERIFY(handleResultCopy.model() != nullptr);
+    QVERIFY(handleRootGroup3.model() != nullptr);
 }
 
 void TestModels::testOutHandleStructureStaticCheck()
@@ -1466,7 +1467,7 @@ void TestModels::testOutHandleStructureStaticCheck()
     outManager.addItemAttribute(handleItem2, handleItemAttribute, &category, "itemInGroup", "sd", "dd");
 
     try{
-        outManager.addResult(handleResultCopy1, "coucou", "sd", false);
+        outManager.addResult(handleResultCopy1, "coucou", "sd");
     } catch(TestException) {
         qDebug() << "Exception catched";
         outManagerCantAddAInResultCopyInAddResultMethod = true;
@@ -1524,23 +1525,23 @@ void TestModels::testInHandleStructureCreation()
     CT_HandleInItem<ItemForTest>                                handleItem1;
     CT_HandleInItemAttribute<AbstractItemAttributeForTest, valueType>       handleItem1Attribute;
 
-    QVERIFY(handleResult.model() == NULL);
-    QVERIFY(handleGroup1.model() == NULL);
-    QVERIFY(handleGroup2.model() == NULL);
-    QVERIFY(handleItem1.model() == NULL);
-    QVERIFY(handleItem2.model() == NULL);
-    QVERIFY(handleItem1Attribute.model() == NULL);
+    QVERIFY(handleResult.model() == nullptr);
+    QVERIFY(handleGroup1.model() == nullptr);
+    QVERIFY(handleGroup2.model() == nullptr);
+    QVERIFY(handleItem1.model() == nullptr);
+    QVERIFY(handleItem2.model() == nullptr);
+    QVERIFY(handleItem1Attribute.model() == nullptr);
 
     inManager.addResult(handleResult, resultDisplayableName, resultShortDescription, resultRecursive);
 
-    QVERIFY(handleResult.model() != NULL);
+    QVERIFY(handleResult.model() != nullptr);
     QVERIFY(handleResult.model()->displayableName() == resultDisplayableName);
     QVERIFY(handleResult.model()->shortDescription() == resultShortDescription);
     QVERIFY(handleResult.model()->isRecursive() == resultRecursive);
 
     auto handleRootGroup = inManager.setZeroOrMoreRootGroup<StdGroupForTest>(handleResult);
 
-    QVERIFY(handleRootGroup.model() != NULL);
+    QVERIFY(handleRootGroup.model() != nullptr);
     QVERIFY(handleRootGroup.model()->parentModel() == handleResult.model());
 
     inManager.addGroup(handleRootGroup,
@@ -1549,7 +1550,7 @@ void TestModels::testInHandleStructureCreation()
                        shortDescription,
                        detailledDescription);
 
-    QVERIFY(handleGroup1.model() != NULL);
+    QVERIFY(handleGroup1.model() != nullptr);
     QVERIFY(handleGroup1.model()->parentModel() == handleRootGroup.model());
     QVERIFY(handleGroup1.model()->displayableName() == displayableName);
     QVERIFY(handleGroup1.model()->shortDescription() == shortDescription);
@@ -1561,7 +1562,7 @@ void TestModels::testInHandleStructureCreation()
                        shortDescription,
                        detailledDescription);
 
-    QVERIFY(handleGroup2.model() != NULL);
+    QVERIFY(handleGroup2.model() != nullptr);
     QVERIFY(handleGroup1.model()->parentModel() == handleRootGroup.model());
     QVERIFY(handleGroup2.model()->displayableName() == displayableName);
     QVERIFY(handleGroup2.model()->shortDescription() == shortDescription);
@@ -1573,7 +1574,7 @@ void TestModels::testInHandleStructureCreation()
                       shortDescription,
                       detailledDescription);
 
-    QVERIFY(handleItem1.model() != NULL);
+    QVERIFY(handleItem1.model() != nullptr);
     QVERIFY(handleItem1.model()->parentModel() == handleGroup2.model());
     QVERIFY(handleItem1.model()->displayableName() == displayableName);
     QVERIFY(handleItem1.model()->shortDescription() == shortDescription);
@@ -1585,7 +1586,7 @@ void TestModels::testInHandleStructureCreation()
                       shortDescription,
                       detailledDescription);
 
-    QVERIFY(handleItem2.model() != NULL);
+    QVERIFY(handleItem2.model() != nullptr);
     QVERIFY(handleItem2.model()->parentModel() == handleGroup1.model());
     QVERIFY(handleItem2.model()->displayableName() == displayableName);
     QVERIFY(handleItem2.model()->shortDescription() == shortDescription);
@@ -1598,7 +1599,125 @@ void TestModels::testInHandleStructureCreation()
                                shortDescription,
                                detailledDescription);
 
-    QVERIFY(handleItem1Attribute.model() != NULL);
+    QVERIFY(handleItem1Attribute.model() != nullptr);
+    QVERIFY(handleItem1Attribute.model()->parentModel() == handleItem1.model());
+    QVERIFY(handleItem1Attribute.model()->displayableName() == displayableName);
+    QVERIFY(handleItem1Attribute.model()->shortDescription() == shortDescription);
+    QVERIFY(handleItem1Attribute.model()->detailledDescription() == detailledDescription);
+    QVERIFY(handleItem1Attribute.model()->valueType() == valueType);
+    QVERIFY(handleItem1Attribute.model()->categoriesType() == categories);
+}
+
+void TestModels::testInHandleStructureCreationWithAbstractHandle()
+{
+    // input :
+    // handleResult
+    //   |
+    //   |---handleRootGroup
+    //          |--- handleGroup1
+    //          |       |--- handleItem2
+    //          |
+    //          |--- handleGroup2
+    //                  |--- handleItem1
+    //                          |--- handleItem1Attribute
+
+    const QString resultDisplayableName("rdn");
+    const QString resultShortDescription("rsd");
+    const bool resultRecursive = false;
+
+    const QString displayableName("dn");
+    const QString shortDescription("sd");
+    const QString detailledDescription("dd");
+    constexpr int valueType = 5;
+    const QStringList categories{"0", "1"};
+
+    CT_InModelStructureManager inManager;
+
+    CT_HandleInResult<ResultGroupForTest>               handleResult;
+    CT_HandleInGroup<StdGroupForTest>                       handleGroup1;
+    CT_HandleInItem<ItemForTest2>                               handleItem2;
+    CT_HandleInGroup<StdGroupForTest>                       handleGroup2;
+    CT_HandleInItem<ItemForTest>                                handleItem1;
+    CT_HandleInItemAttribute<AbstractItemAttributeForTest, valueType>       handleItem1Attribute;
+
+    CT_AbstractHandleInGroup*           abstractHandleGroup = &handleGroup1;
+    CT_AbstractHandleInItem*            abstractHandleItem1 = &handleItem1;
+
+    QVERIFY(handleResult.model() == nullptr);
+    QVERIFY(handleGroup1.model() == nullptr);
+    QVERIFY(handleGroup2.model() == nullptr);
+    QVERIFY(handleItem1.model() == nullptr);
+    QVERIFY(handleItem2.model() == nullptr);
+    QVERIFY(handleItem1Attribute.model() == nullptr);
+
+    inManager.addResult(handleResult, resultDisplayableName, resultShortDescription, resultRecursive);
+
+    QVERIFY(handleResult.model() != nullptr);
+    QVERIFY(handleResult.model()->displayableName() == resultDisplayableName);
+    QVERIFY(handleResult.model()->shortDescription() == resultShortDescription);
+    QVERIFY(handleResult.model()->isRecursive() == resultRecursive);
+
+    auto handleRootGroup = inManager.setZeroOrMoreRootGroup<StdGroupForTest>(handleResult);
+
+    QVERIFY(handleRootGroup.model() != nullptr);
+    QVERIFY(handleRootGroup.model()->parentModel() == handleResult.model());
+
+    inManager.addGroup(handleRootGroup,
+                       handleGroup1,
+                       displayableName,
+                       shortDescription,
+                       detailledDescription);
+
+    QVERIFY(handleGroup1.model() != nullptr);
+    QVERIFY(handleGroup1.model()->parentModel() == handleRootGroup.model());
+    QVERIFY(handleGroup1.model()->displayableName() == displayableName);
+    QVERIFY(handleGroup1.model()->shortDescription() == shortDescription);
+    QVERIFY(handleGroup1.model()->detailledDescription() == detailledDescription);
+
+    inManager.addGroup(handleRootGroup,
+                       handleGroup2,
+                       displayableName,
+                       shortDescription,
+                       detailledDescription);
+
+    QVERIFY(handleGroup2.model() != nullptr);
+    QVERIFY(handleGroup1.model()->parentModel() == handleRootGroup.model());
+    QVERIFY(handleGroup2.model()->displayableName() == displayableName);
+    QVERIFY(handleGroup2.model()->shortDescription() == shortDescription);
+    QVERIFY(handleGroup2.model()->detailledDescription() == detailledDescription);
+
+    inManager.addItem(handleGroup2,
+                      handleItem1,
+                      displayableName,
+                      shortDescription,
+                      detailledDescription);
+
+    QVERIFY(handleItem1.model() != nullptr);
+    QVERIFY(handleItem1.model()->parentModel() == handleGroup2.model());
+    QVERIFY(handleItem1.model()->displayableName() == displayableName);
+    QVERIFY(handleItem1.model()->shortDescription() == shortDescription);
+    QVERIFY(handleItem1.model()->detailledDescription() == detailledDescription);
+
+    inManager.addItem(*abstractHandleGroup,
+                      handleItem2,
+                      displayableName,
+                      shortDescription,
+                      detailledDescription);
+
+    QVERIFY(handleItem2.model() != nullptr);
+    QVERIFY(handleItem2.model()->parentModel() == handleGroup1.model());
+    QVERIFY(handleItem2.model()->displayableName() == displayableName);
+    QVERIFY(handleItem2.model()->shortDescription() == shortDescription);
+    QVERIFY(handleItem2.model()->detailledDescription() == detailledDescription);
+
+    inManager.addItemAttribute(*abstractHandleItem1,
+                               handleItem1Attribute,
+                               categories,
+                               displayableName,
+                               shortDescription,
+                               detailledDescription);
+
+    QVERIFY(handleItem1Attribute.model() != nullptr);
     QVERIFY(handleItem1Attribute.model()->parentModel() == handleItem1.model());
     QVERIFY(handleItem1Attribute.model()->displayableName() == displayableName);
     QVERIFY(handleItem1Attribute.model()->shortDescription() == shortDescription);
@@ -1641,7 +1760,7 @@ void TestModels::testOutHandleStructureCreation()
     CT_HandleOutItem<ItemForTest>                                   handleItem1;
     CT_HandleOutItemAttribute<ItemAttributeForTest<valueType>>          handleItem1Attribute;
 
-    QVERIFY(handleResult.model() == NULL);
+    QVERIFY(handleResult.model() == nullptr);
     QVERIFY(handleRootGroup.nModels() == 0);
     QVERIFY(handleGroup1.nModels() == 0);
     QVERIFY(handleItem2.nModels() == 0);
@@ -1651,11 +1770,11 @@ void TestModels::testOutHandleStructureCreation()
 
     outManager.addResult(handleResult, resultName, resultDisplayableName, resultShortDescription);
 
-    QVERIFY(handleResult.model() != NULL);
+    QVERIFY(handleResult.model() != nullptr);
     QVERIFY(handleResult.model()->resultName() == resultName);
     QVERIFY(handleResult.model()->displayableName() == resultDisplayableName);
     QVERIFY(handleResult.model()->shortDescription() == resultShortDescription);
-    QVERIFY(handleResult.model()->prototype() != NULL);
+    QVERIFY(handleResult.model()->prototype() != nullptr);
 
     outManager.setRootGroup(handleResult,
                             handleRootGroup,
@@ -1663,12 +1782,12 @@ void TestModels::testOutHandleStructureCreation()
                             shortDescription,
                             detailledDescription);
 
-    QVERIFY(handleRootGroup.firstModel() != NULL);
+    QVERIFY(handleRootGroup.firstModel() != nullptr);
     QVERIFY(handleRootGroup.firstModel()->parentModel() == handleResult.model());
     QVERIFY(handleRootGroup.firstModel()->displayableName() == displayableName);
     QVERIFY(handleRootGroup.firstModel()->shortDescription() == shortDescription);
     QVERIFY(handleRootGroup.firstModel()->detailledDescription() == detailledDescription);
-    QVERIFY(handleRootGroup.firstModel()->prototype() != NULL);
+    QVERIFY(handleRootGroup.firstModel()->prototype() != nullptr);
 
     outManager.addGroup(handleRootGroup,
                         handleGroup1,
@@ -1676,12 +1795,12 @@ void TestModels::testOutHandleStructureCreation()
                         shortDescription,
                         detailledDescription);
 
-    QVERIFY(handleGroup1.firstModel() != NULL);
+    QVERIFY(handleGroup1.firstModel() != nullptr);
     QVERIFY(handleGroup1.firstModel()->parentModel() == handleRootGroup.firstModel());
     QVERIFY(handleGroup1.firstModel()->displayableName() == displayableName);
     QVERIFY(handleGroup1.firstModel()->shortDescription() == shortDescription);
     QVERIFY(handleGroup1.firstModel()->detailledDescription() == detailledDescription);
-    QVERIFY(handleGroup1.firstModel()->prototype() != NULL);
+    QVERIFY(handleGroup1.firstModel()->prototype() != nullptr);
 
     outManager.addGroup(handleRootGroup,
                         handleGroup2,
@@ -1689,12 +1808,12 @@ void TestModels::testOutHandleStructureCreation()
                         shortDescription,
                         detailledDescription);
 
-    QVERIFY(handleGroup2.firstModel() != NULL);
+    QVERIFY(handleGroup2.firstModel() != nullptr);
     QVERIFY(handleGroup1.firstModel()->parentModel() == handleRootGroup.firstModel());
     QVERIFY(handleGroup2.firstModel()->displayableName() == displayableName);
     QVERIFY(handleGroup2.firstModel()->shortDescription() == shortDescription);
     QVERIFY(handleGroup2.firstModel()->detailledDescription() == detailledDescription);
-    QVERIFY(handleGroup2.firstModel()->prototype() != NULL);
+    QVERIFY(handleGroup2.firstModel()->prototype() != nullptr);
 
     outManager.addItem(handleGroup2,
                        handleItem1,
@@ -1702,12 +1821,12 @@ void TestModels::testOutHandleStructureCreation()
                        shortDescription,
                        detailledDescription);
 
-    QVERIFY(handleItem1.firstModel() != NULL);
+    QVERIFY(handleItem1.firstModel() != nullptr);
     QVERIFY(handleItem1.firstModel()->parentModel() == handleGroup2.firstModel());
     QVERIFY(handleItem1.firstModel()->displayableName() == displayableName);
     QVERIFY(handleItem1.firstModel()->shortDescription() == shortDescription);
     QVERIFY(handleItem1.firstModel()->detailledDescription() == detailledDescription);
-    QVERIFY(handleItem1.firstModel()->prototype() != NULL);
+    QVERIFY(handleItem1.firstModel()->prototype() != nullptr);
 
     outManager.addItem(handleGroup1,
                        handleItem2,
@@ -1715,12 +1834,12 @@ void TestModels::testOutHandleStructureCreation()
                        shortDescription,
                        detailledDescription);
 
-    QVERIFY(handleItem2.firstModel() != NULL);
+    QVERIFY(handleItem2.firstModel() != nullptr);
     QVERIFY(handleItem2.firstModel()->parentModel() == handleGroup1.firstModel());
     QVERIFY(handleItem2.firstModel()->displayableName() == displayableName);
     QVERIFY(handleItem2.firstModel()->shortDescription() == shortDescription);
     QVERIFY(handleItem2.firstModel()->detailledDescription() == detailledDescription);
-    QVERIFY(handleItem2.firstModel()->prototype() != NULL);
+    QVERIFY(handleItem2.firstModel()->prototype() != nullptr);
 
     outManager.addItemAttribute(handleItem1,
                                 handleItem1Attribute,
@@ -1729,12 +1848,12 @@ void TestModels::testOutHandleStructureCreation()
                                 shortDescription,
                                 detailledDescription);
 
-    QVERIFY(handleItem1Attribute.firstModel() != NULL);
+    QVERIFY(handleItem1Attribute.firstModel() != nullptr);
     QVERIFY(handleItem1Attribute.firstModel()->parentModel() == handleItem1.firstModel());
     QVERIFY(handleItem1Attribute.firstModel()->displayableName() == displayableName);
     QVERIFY(handleItem1Attribute.firstModel()->shortDescription() == shortDescription);
     QVERIFY(handleItem1Attribute.firstModel()->detailledDescription() == detailledDescription);
-    QVERIFY(handleItem1Attribute.firstModel()->prototype() != NULL);
+    QVERIFY(handleItem1Attribute.firstModel()->prototype() != nullptr);
     QVERIFY(dynamic_cast<AbstractItemAttributeForTest*>(handleItem1Attribute.firstModel()->prototype())->itemAttributeToolForModel()->valueType() == valueType);
     QVERIFY(dynamic_cast<AbstractItemAttributeForTest*>(handleItem1Attribute.firstModel()->prototype())->itemAttributeToolForModel()->category() == &category);
 
@@ -1790,7 +1909,8 @@ void TestModels::testHandleResultCopyAddItemRemoveGroup()
     outManager1.setRootGroup(handleResultOut1, handleRootGroupOut1);
     outManager1.addGroup(handleRootGroupOut1, handleGroupOut1_1);
     outManager1.addGroup(handleRootGroupOut1, handleGroupOut1_2);
-    outManager1.finalize([&currentUniqueIndexForOut]()->int { return currentUniqueIndexForOut++; });
+    auto indexGenerator = [&currentUniqueIndexForOut]()->int { return currentUniqueIndexForOut++; };
+    outManager1.finalize(indexGenerator);
 
     QCOMPARE(currentUniqueIndexForOut, 4);
 
@@ -1824,15 +1944,15 @@ void TestModels::testHandleResultCopyAddItemRemoveGroup()
     QCOMPARE(handleItemOut2_1.nModels(), 3);
 
     // verify that the copy has been correctly created
-    CT_OutAbstractResultModel* outResModel = NULL;
+    CT_OutAbstractResultModel* outResModel = nullptr;
 
     outManager2.visitResults([&outResModel](CT_OutAbstractResultModel* outResultModel) -> bool {
-        Q_ASSERT(outResModel == NULL);
+        Q_ASSERT(outResModel == nullptr);
         outResModel = outResultModel;
         return true;
     });
 
-    QVERIFY(outResModel != NULL);
+    QVERIFY(outResModel != nullptr);
 
     QSet<QString> handleItemOut2_1_addedTo;
 
@@ -1868,7 +1988,7 @@ void TestModels::testHandleResultCopyAddItemRemoveGroup()
     outManager2.addItem(handleGroupIn, handleItemOut2_1);
     QCOMPARE(handleItemOut2_1.nModels(), 0);
 
-    outManager2.finalize([&currentUniqueIndexForOut]()->int { return currentUniqueIndexForOut++; } );
+    outManager2.finalize(indexGenerator);
 
     QCOMPARE(currentUniqueIndexForOut, 5);
 }
@@ -1923,7 +2043,7 @@ void TestModels::testWidgetSelection()
     QVERIFY(handleResultIn.model()->recursiveFindAllPossibilitiesInModel(*handleResultOut1.model()) == true);
 
     int n = 0;
-    char* bla = NULL;
+    char* bla = nullptr;
 
     QApplication app(n, &bla);
     CT_InResultModelConfigurationManager cm(inManager);
@@ -1975,7 +2095,7 @@ void TestModels::testWidgetSelection2()
     QVERIFY(handleResultIn.model()->recursiveFindAllPossibilitiesInModel(*handleResultOut1.model()) == true);
 
     int n = 0;
-    char* bla = NULL;
+    char* bla = nullptr;
 
     QApplication app(n, &bla);
     CT_InResultModelConfigurationManager cm(inManager);

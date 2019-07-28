@@ -5,7 +5,7 @@
 
 MeshFacePermanentRenderer::MeshFacePermanentRenderer() : SuperClass(GL_TRIANGLES, 3, 0, 0)
 {
-    m_chunkForOutliers = NULL;
+    m_chunkForOutliers = nullptr;
     m_attributesCloudProvider = new FaceCloudAttributesProvider();
 
     setChunkForOutliersCreator(this);
@@ -78,7 +78,7 @@ MeshFacePermanentRenderer::SuperClass::OtherChunkCollection MeshFacePermanentRen
 {
     OtherChunkCollection c = SuperClass::getOthersChunk();
 
-    if(m_chunkForOutliers != NULL)
+    if(m_chunkForOutliers != nullptr)
         c.push_back(m_chunkForOutliers);
 
     return c;
@@ -86,7 +86,7 @@ MeshFacePermanentRenderer::SuperClass::OtherChunkCollection MeshFacePermanentRen
 
 MeshObjectNM::OutlierChunkType& MeshFacePermanentRenderer::createOrGetChunkForOutliers()
 {
-    if(m_chunkForOutliers == NULL) {
+    if(m_chunkForOutliers == nullptr) {
         m_chunkForOutliers = new MeshObjectNM::OutlierChunkType(Scene::TriangleGlobalCloud,
                                                                 GL_TRIANGLES,
                                                                 3,

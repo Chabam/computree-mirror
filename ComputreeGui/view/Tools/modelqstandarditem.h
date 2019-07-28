@@ -8,7 +8,7 @@ class CT_AbstractModel;
 class ModelQStandardItem : public QStandardItem
 {
 public:
-    ModelQStandardItem() : QStandardItem() { setModel(NULL); }
+    ModelQStandardItem() : QStandardItem() { setModel(nullptr); }
 
     void setModel(const CT_AbstractModel *model) { _model = (CT_AbstractModel*)model; }
     CT_AbstractModel* getModel() const { return _model; }

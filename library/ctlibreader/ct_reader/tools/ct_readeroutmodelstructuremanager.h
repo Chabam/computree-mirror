@@ -18,8 +18,8 @@ public:
     CT_ReaderOutModelStructureManager(CT_OutModelStructureManager& manager, CT_HandleOutStdGroup& hOutGroup) :
         m_manager(manager),
         m_hOutGroup(&hOutGroup),
-        m_inParentModel(NULL),
-        m_inTool(NULL)
+        m_inParentModel(nullptr),
+        m_inTool(nullptr)
     {
     }
 
@@ -27,7 +27,7 @@ public:
                                       const CT_InStdGroupModel* inParentModel,
                                       const ToolToModifyResultModelCopiesType* inTool) :
         m_manager(manager),
-        m_hOutGroup(NULL),
+        m_hOutGroup(nullptr),
         m_inParentModel(const_cast<CT_InStdGroupModel*>(inParentModel)),
         m_inTool(const_cast<ToolToModifyResultModelCopiesType*>(inTool))
     {
@@ -49,15 +49,15 @@ public:
 
         CT_InStdGroupModel* inParentModel = hInGroup.model();
 
-        Q_ASSERT(inParentModel != NULL);
+        Q_ASSERT(inParentModel != nullptr);
 
         InResultModelCopyType* inResultModelCopy = dynamic_cast<InResultModelCopyType*>(inParentModel->rootModel());
 
-        Q_ASSERT(inResultModelCopy != NULL);
+        Q_ASSERT(inResultModelCopy != nullptr);
 
         ToolToModifyResultModelCopiesType* inTool = inResultModelCopy->toolToModifyResultModelCopies();
 
-        Q_ASSERT(inTool != NULL);
+        Q_ASSERT(inTool != nullptr);
 
         return CT_ReaderOutModelStructureManager(manager, inParentModel, inTool);
     }
@@ -74,9 +74,9 @@ public:
                   const QString& displayableName = QString{"Out Group"},
                   const QString& shortDescription = QString{""},
                   const QString& detailledDescription = QString{""},
-                  typename HandleOutGroup::GroupType* prototype = NULL) {
+                  typename HandleOutGroup::GroupType* prototype = nullptr) {
 
-        if(m_hOutGroup != NULL) {
+        if(m_hOutGroup != nullptr) {
             this->addGroup(*m_hOutGroup,
                            groupHandle,
                            displayableName,
@@ -109,7 +109,7 @@ public:
                   const QString& displayableName = QString{"Out Group"},
                   const QString& shortDescription = QString{""},
                   const QString& detailledDescription = QString{""},
-                  typename HandleOutGroup::GroupType* prototype = NULL) {
+                  typename HandleOutGroup::GroupType* prototype = nullptr) {
         m_manager.addGroup(parentGroup,
                            groupHandle,
                            displayableName,
@@ -131,8 +131,8 @@ public:
                  const QString& displayableName = QString{"Out Item"},
                  const QString& shortDescription = QString{""},
                  const QString& detailledDescription = QString{""},
-                 typename HandleOutItem::ItemType* prototype = NULL) {
-        if(m_hOutGroup != NULL) {
+                 typename HandleOutItem::ItemType* prototype = nullptr) {
+        if(m_hOutGroup != nullptr) {
             this->addItem(*m_hOutGroup,
                           itemHandle,
                           displayableName,
@@ -165,7 +165,7 @@ public:
                  const QString& displayableName = QString{"Out Item"},
                  const QString& shortDescription = QString{""},
                  const QString& detailledDescription = QString{""},
-                 typename HandleOutItem::ItemType* prototype = NULL) {
+                 typename HandleOutItem::ItemType* prototype = nullptr) {
         m_manager.addItem(parentGroup,
                           itemHandle,
                           displayableName,
@@ -188,9 +188,9 @@ public:
                           const QString& displayableName = QString{"Out Item Attribute"},
                           const QString& shortDescription = QString{""},
                           const QString& detailledDescription = QString{""},
-                          typename HandleOutItemAttribute::ItemAttributeType* prototype = NULL) {
+                          typename HandleOutItemAttribute::ItemAttributeType* prototype = nullptr) {
 
-        if(m_hOutGroup != NULL) {
+        if(m_hOutGroup != nullptr) {
             this->addItemAttribute(*m_hOutGroup,
                                    itemAttributeHandle,
                                    category,
@@ -227,7 +227,7 @@ public:
                           const QString& displayableName = QString{"Out Item Attribute"},
                           const QString& shortDescription = QString{""},
                           const QString& detailledDescription = QString{""},
-                          typename HandleOutItemAttribute::ItemAttributeType* prototype = NULL) {
+                          typename HandleOutItemAttribute::ItemAttributeType* prototype = nullptr) {
 
         m_manager.addItemAttribute(parentItem,
                                    itemAttributeHandle,
@@ -254,7 +254,7 @@ public:
                                          const QString& displayableName = QString{"Out Item Attribute"},
                                          const QString& shortDescription = QString{""},
                                          const QString& detailledDescription = QString{""},
-                                         typename HandleOutItemAttribute::ItemAttributeType* prototype = NULL) {
+                                         typename HandleOutItemAttribute::ItemAttributeType* prototype = nullptr) {
 
         m_manager.addItemAttribute(parentItem,
                                    itemAttributeHandle,

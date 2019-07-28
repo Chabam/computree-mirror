@@ -12,7 +12,7 @@
 
 #include <limits>
 
-CT_Reader_ASCRGB::CT_Reader_ASCRGB() : SuperClass(), CT_ReaderPointsFilteringExtension()
+CT_Reader_ASCRGB::CT_Reader_ASCRGB(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {
     m_filterRadius = 0;
     _zminFilter = -std::numeric_limits<double>::max();
@@ -29,15 +29,17 @@ CT_Reader_ASCRGB::CT_Reader_ASCRGB() : SuperClass(), CT_ReaderPointsFilteringExt
                   "- B  : Composante Bleue, valeur entre 0 et 1 (optionnel)<br>"));
 }
 
+CT_Reader_ASCRGB::CT_Reader_ASCRGB(const CT_Reader_ASCRGB& other) : SuperClass(other)
+{
+    m_filterRadius = other.m_filterRadius;
+    _zminFilter = other._zminFilter;
+    _zmaxFilter = other._zmaxFilter;
+}
+
 QString CT_Reader_ASCRGB::displayableName() const
 {
     return tr("Points, fichier ASCII (XYZRGB, sans entête, RGB [0;1])");
 }
-
-/*CT_StepsMenu::LevelPredefined CT_Reader_ASCRGB::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
-}*/
 
 void CT_Reader_ASCRGB::setRadiusFilter(const double &radius)
 {

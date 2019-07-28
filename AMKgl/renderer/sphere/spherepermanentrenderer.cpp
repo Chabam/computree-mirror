@@ -38,7 +38,7 @@ void SpherePermanentRenderer::addSphere(const double &cx, const double &cy, cons
 
     ((SphereChunk*)&ch)->setPermanentRenderer(this);
 
-    if(chunk != NULL)
+    if(chunk != nullptr)
         *chunk = (SphereChunk*)&ch;
 
     params = SphereChunk::ShaderParamsType::staticConstructFromValues(cx, cy, cz,

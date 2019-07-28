@@ -7,7 +7,7 @@ CT_OutStdItemAttributeModel<ItemAttribute>::CT_OutStdItemAttributeModel(const IC
                                                                         const QString& detailledDescription,
                                                                         ItemAttribute* prototype) : SuperClass(displayableName)
 {
-    if(prototype == NULL) {
+    if(prototype == nullptr) {
         prototype = new ItemAttribute();
         prototype->setCategory(static_cast<const ItemAttribute::CategoryType*>(category));
     }

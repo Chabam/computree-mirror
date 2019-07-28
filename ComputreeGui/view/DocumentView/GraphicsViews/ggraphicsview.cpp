@@ -44,7 +44,7 @@ GGraphicsView::~GGraphicsView()
 
 void GGraphicsView::setCurrentAction(CT_AbstractActionForGraphicsView *action)
 {
-    if(action != NULL)
+    if(action != nullptr)
     {
         action->setDocument(getDocumentView());
         action->setGraphicsView(this);
@@ -55,7 +55,7 @@ void GGraphicsView::setCurrentAction(CT_AbstractActionForGraphicsView *action)
 
 void GGraphicsView::setCurrentInternalAction(CT_AbstractActionForGraphicsView *action)
 {
-    if(action != NULL)
+    if(action != nullptr)
     {
         action->setDocument(getDocumentView());
         action->setGraphicsView(this);
@@ -66,7 +66,7 @@ void GGraphicsView::setCurrentInternalAction(CT_AbstractActionForGraphicsView *a
 
 void GGraphicsView::setDefaultAction(CT_AbstractActionForGraphicsView *action)
 {
-    if(action != NULL)
+    if(action != nullptr)
     {
         action->setDocument(getDocumentView());
         action->setGraphicsView(this);
@@ -82,12 +82,12 @@ DM_ActionsHandler* GGraphicsView::actionsHandler() const
 
 void GGraphicsView::addActionOptions(ActionOptionsInterface *options)
 {
-    if(getDocumentView() != NULL)
+    if(getDocumentView() != nullptr)
         getDocumentView()->addActionOptions(options);
 }
 
 void GGraphicsView::removeActionOptions(ActionOptionsInterface *options)
 {
-    if(getDocumentView() != NULL)
+    if(getDocumentView() != nullptr)
         getDocumentView()->removeActionOptions(options);
 }

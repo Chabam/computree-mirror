@@ -33,7 +33,7 @@ CT_AttributesScalarT<SCALAR>::CT_AttributesScalarT(CT_StandardCloudStdVectorT<SC
 
 template<typename SCALAR>
 CT_AttributesScalarT<SCALAR>::CT_AttributesScalarT(const CT_AttributesScalarT<SCALAR>& other) :
-    m_collection((other.m_collection != NULL) ? dynamic_cast< CT_StandardCloudStdVectorT<SCALAR>*>(other.m_collection->copy()) : NULL),
+    m_collection((other.m_collection != nullptr) ? dynamic_cast< CT_StandardCloudStdVectorT<SCALAR>*>(other.m_collection->copy()) : nullptr),
     m_min(other.m_min),
     m_max(other.m_max)
 {

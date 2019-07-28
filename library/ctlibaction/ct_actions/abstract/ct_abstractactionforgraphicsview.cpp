@@ -4,7 +4,7 @@
 
 CT_AbstractActionForGraphicsView::CT_AbstractActionForGraphicsView() : CT_AbstractAction()
 {
-    m_gView = NULL;
+    m_gView = nullptr;
 }
 
 void CT_AbstractActionForGraphicsView::setGraphicsView(const GraphicsViewInterface *view)
@@ -26,7 +26,7 @@ void CT_AbstractActionForGraphicsView::registerOption(CT_GAbstractActionOptions 
 {
     CT_GAbstractActionForGraphicsViewOptions *gvOptions = dynamic_cast<CT_GAbstractActionForGraphicsViewOptions*>(options);
 
-    if(gvOptions != NULL)
+    if(gvOptions != nullptr)
         connect(gvOptions, SIGNAL(drawing3DChanged()), this, SLOT(setDrawing3DChanged()));
 
     CT_AbstractAction::registerOption(options);

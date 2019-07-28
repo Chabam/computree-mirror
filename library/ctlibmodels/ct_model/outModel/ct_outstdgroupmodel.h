@@ -24,7 +24,7 @@ public:
     CT_OutStdGroupModel(const QString& displayableName = "Group",
                         const QString& shortDescription = "",
                         const QString& detailledDescription = "",
-                        StdGroup* prototype = NULL);
+                        StdGroup* prototype = nullptr);
 
     /**
      * @brief Copy constructor
@@ -35,14 +35,14 @@ public:
     /**
      * @brief Find a group by it's unique index
      * @param uniqueIndex : the unique index of the group to search
-     * @return Returns NULL if group was not founded, otherwise returns the group with the unique index specified
+     * @return Returns nullptr if group was not founded, otherwise returns the group with the unique index specified
      */
     SuperClass::GroupType* findGroup(const int& uniqueIndex) const;
 
     /**
      * @brief Find an item by it's unique index
      * @param uniqueIndex : the unique index of the item to search
-     * @return Returns NULL if item was not founded, otherwise returns the item with the unique index specified
+     * @return Returns nullptr if item was not founded, otherwise returns the item with the unique index specified
      */
     SuperClass::ItemType* findItem(const int& uniqueIndex) const;
 

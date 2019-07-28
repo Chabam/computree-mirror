@@ -24,7 +24,7 @@
 
 GDocumentViewForItemModel::GDocumentViewForItemModel(GDocumentManagerView &manager, QString title) : GDocumentView(manager, title)
 {
-    m_layoutViews= NULL;
+    m_layoutViews= nullptr;
 }
 
 GDocumentViewForItemModel::~GDocumentViewForItemModel()
@@ -91,7 +91,7 @@ void GDocumentViewForItemModel::endRemoveMultipleItemDrawable()
 
 bool GDocumentViewForItemModel::acceptAction(const CT_AbstractAction *action) const
 {
-    return (action == NULL) || (dynamic_cast<const CT_AbstractActionForTreeView*>(action) != NULL);
+    return (action == nullptr) || (dynamic_cast<const CT_AbstractActionForTreeView*>(action) != nullptr);
 }
 
 bool GDocumentViewForItemModel::setCurrentAction(CT_AbstractAction *action, bool deleteAction)
@@ -110,8 +110,8 @@ bool GDocumentViewForItemModel::setCurrentAction(CT_AbstractAction *action, bool
 
     while(it.hasNext())
     {
-        if(action == NULL)
-            it.next()->setCurrentAction(NULL);
+        if(action == nullptr)
+            it.next()->setCurrentAction(nullptr);
         else
             it.next()->setCurrentAction(dynamic_cast<CT_AbstractActionForTreeView*>(action->copy()));
     }
@@ -138,8 +138,8 @@ bool GDocumentViewForItemModel::setDefaultAction(CT_AbstractAction *action, bool
 
     while(it.hasNext())
     {
-        if(action == NULL)
-            it.next()->setDefaultAction(NULL);
+        if(action == nullptr)
+            it.next()->setDefaultAction(nullptr);
         else
             it.next()->setDefaultAction(dynamic_cast<CT_AbstractActionForTreeView*>(action->copy()));
     }
@@ -153,7 +153,7 @@ bool GDocumentViewForItemModel::setDefaultAction(CT_AbstractAction *action, bool
 CT_AbstractAction* GDocumentViewForItemModel::currentAction() const
 {
     if(m_views.isEmpty())
-        return NULL;
+        return nullptr;
 
     return m_views.first()->actionsHandler()->currentAction();
 }
@@ -161,7 +161,7 @@ CT_AbstractAction* GDocumentViewForItemModel::currentAction() const
 CT_AbstractAction* GDocumentViewForItemModel::defaultAction() const
 {
     if(m_views.isEmpty())
-        return NULL;
+        return nullptr;
 
     return m_views.first()->actionsHandler()->defaultAction();
 }
@@ -197,7 +197,7 @@ void GDocumentViewForItemModel::addSelectedItemToDocument(const int &number)
         {
             QList<CT_AbstractItemDrawable *> items = getItemDrawableCorrespondingToRowSelected();
 
-            GUI_MANAGER->asyncAddAllItemDrawableOfListOnView(items, doc, NULL);
+            GUI_MANAGER->asyncAddAllItemDrawableOfListOnView(items, doc, nullptr);
 
             return;
         }
@@ -216,7 +216,7 @@ QList<CT_AbstractItemDrawable*> GDocumentViewForItemModel::getItemDrawableCorres
         QStandardItem *item = m_model->itemFromIndex(((QSortFilterProxyModel*)m_treeView->model())->mapToSource(it.next()));
         CT_AbstractItemDrawable *id = (CT_AbstractItemDrawable*)item->data().value<void*>();
 
-        if(id != NULL)
+        if(id != nullptr)
             listItem.append(id);
     }
 
@@ -225,7 +225,7 @@ QList<CT_AbstractItemDrawable*> GDocumentViewForItemModel::getItemDrawableCorres
 
 /*void GDocumentViewForItemModel::setReferencesToUseOfItemDrawable(const CT_AbstractItemDrawable *item)
 {
-    if(item != NULL)
+    if(item != nullptr)
     {
         m_currentType = m_typeBuilder.getTypeForItemDrawable(*item);
         m_dataReferencesOfModel = item->getModel()->displayableName();
@@ -258,7 +258,7 @@ QList<CT_AbstractItemDrawable*> GDocumentViewForItemModel::getItemDrawableCorres
         m_dataReferencesToUse.clear();
 
         QCompleter *lastC = m_lineFilter->completer();
-        m_lineFilter->setCompleter(NULL);
+        m_lineFilter->setCompleter(nullptr);
 
         delete lastC;
     }
@@ -381,7 +381,7 @@ void GDocumentViewForItemModel::slotMustRemoveItem(DM_ItemDrawableType type)
     if(m_comboBox->comboBox()->count() == 1)
     {
         m_comboBox->setEmptyText(tr("Aucun élément"));
-        setReferencesToUseOfItemDrawable(NULL);
+        setReferencesToUseOfItemDrawable(nullptr);
     }
     #else
     if(type.type() == m_currentType)
@@ -389,13 +389,13 @@ void GDocumentViewForItemModel::slotMustRemoveItem(DM_ItemDrawableType type)
 
     if(m_typeBuilder.isEmpty())
     {
-        setReferencesToUseOfItemDrawable(NULL);
+        setReferencesToUseOfItemDrawable(nullptr);
         slotComboBoxItemActivated(m_currentType);
     }
     else if(m_currentType.isEmpty())
     {
         m_currentType = m_typeBuilder.types().first().type();
-        setReferencesToUseOfItemDrawable(NULL);
+        setReferencesToUseOfItemDrawable(nullptr);
         slotComboBoxItemActivated(m_currentType);
     }
     #endif
@@ -434,7 +434,7 @@ void GDocumentViewForItemModel::slotRemoveItemDrawable(CT_AbstractItemDrawable &
 
 /*void GDocumentViewForItemModel::slotComboBoxItemActivated(const QString &text)
 {
-    setReferencesToUseOfItemDrawable(NULL);
+    setReferencesToUseOfItemDrawable(nullptr);
 
     if(m_typeBuilder.existTypeWithName(text))
     {
@@ -475,7 +475,7 @@ void GDocumentViewForItemModel::slotCollapsed(const QModelIndex &i)
 
 /*void GDocumentViewForItemModel::slotTimerRefreshTimeOut()
 {
-    setReferencesToUseOfItemDrawable(NULL);
+    setReferencesToUseOfItemDrawable(nullptr);
     construct();
 }*/
 
@@ -635,7 +635,7 @@ void GDocumentViewForItemModel::slotColorSolid()
     MyQStandardItem *myItem = (MyQStandardItem*)item;
     CT_AbstractItemDrawable *itemDrawable = myItem->itemDrawable();
 
-    if(itemDrawable != NULL)
+    if(itemDrawable != nullptr)
     {
         if(myItem->columnType() == MyQStandardItem::ItemDrawableSelection)
         {

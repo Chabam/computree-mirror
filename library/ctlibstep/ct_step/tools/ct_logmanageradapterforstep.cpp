@@ -2,7 +2,7 @@
 
 #include "ct_log/ct_logmanager.h"
 
-CT_LogManagerAdapterForStep* CT_LogManagerAdapterForStep::UNIQUE_INSTANCE = NULL;
+CT_LogManagerAdapterForStep* CT_LogManagerAdapterForStep::UNIQUE_INSTANCE = nullptr;
 
 void CT_LogManagerAdapterForStep::addMessage(const int& severity, const QString& s, const QString& filter)
 {

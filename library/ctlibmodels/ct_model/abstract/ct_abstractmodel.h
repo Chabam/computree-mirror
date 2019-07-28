@@ -122,7 +122,7 @@ public:
 
     /**
      * @brief Returns the root model of the hierarchy.
-     *        Go up recursively in the structure and stop when the method "parentModel()" return NULL.
+     *        Go up recursively in the structure and stop when the method "parentModel()" return nullptr.
      */
     CT_AbstractModel* rootModel() const;
 
@@ -166,12 +166,12 @@ private:
     QString                 m_fullDescription;
 
     /**
-     * @brief The parent model (NULL if it was the root of the hierarchy)
+     * @brief The parent model (nullptr if it was the root of the hierarchy)
      */
     CT_AbstractModel*       m_parentModel;
 
     /**
-     * @brief The step which has created this model (NULL if this model was not created in a step)
+     * @brief The step which has created this model (nullptr if this model was not created in a step)
      */
     IStepForModel*          m_step;
 };

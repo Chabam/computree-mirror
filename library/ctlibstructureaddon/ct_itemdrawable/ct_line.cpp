@@ -53,8 +53,8 @@ CT_Line* CT_Line::staticCreateLineFromPointCloud(const CT_AbstractPointCloudInde
 
     CT_LineData* data = CT_LineData::staticCreateLineDataFromPointCloud(pointCloudIndex);
 
-    if(data == NULL)
-        return NULL;
+    if(data == nullptr)
+        return nullptr;
 
     return new CT_Line(data);
 }

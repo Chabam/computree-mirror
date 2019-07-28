@@ -208,19 +208,19 @@ public:
 
     /**
      * @brief Returns the item attribute corresponding to the specified output model that was added by a specific type of item and classes that he inherit.
-     * @return NULL if type has no default item attributes or has no default attributes with this model
+     * @return nullptr if type has no default item attributes or has no default attributes with this model
      */
     CT_AbstractItemAttribute* itemAttributeFromOutModel(const CT_OutAbstractItemAttributeModel* outModel, const QString& itemType) const;
 
     /**
      * @brief Returns a list of item attributes corresponding to selected possibilities of specified input model that was added by a specific type of item and classes that he inherit.
-     * @return NULL if type has no default item attributes or has no default attributes with this model
+     * @return nullptr if type has no default item attributes or has no default attributes with this model
      */
     QList<CT_AbstractItemAttribute*> itemAttributesFromInModel(const CT_InAbstractItemAttributeModel* inModel, const QString& itemType) const;
 
     /**
      * @brief Returns the item attribute corresponding to the first selected possibility of specified input model that was added by a specific type of item and classes that he inherit.
-     * @return NULL if type has no default item attributes or has no default attributes with this model
+     * @return nullptr if type has no default item attributes or has no default attributes with this model
      */
     CT_AbstractItemAttribute* firstItemAttributeFromInModel(const CT_InAbstractItemAttributeModel* inModel, const QString& itemType) const;
 
@@ -241,7 +241,7 @@ private:
     static const CT_AbstractCategory* staticInternalGetCategoryFromUniqueName(const QString& categoryUniqueName) {
         const CT_AbstractCategory* cat = PS_CATEGORY_MANAGER->findByUniqueName(categoryUniqueName);
 
-        Q_ASSERT_X(cat != NULL, "CT_DefaultItemAttributeManager::addItemAttribute", qPrintable(QString("You created a default item attribute but the category with name \"") + categoryUniqueName + "\" was not registered !"));
+        Q_ASSERT_X(cat != nullptr, "CT_DefaultItemAttributeManager::addItemAttribute", qPrintable(QString("You created a default item attribute but the category with name \"") + categoryUniqueName + "\" was not registered !"));
 
         return cat;
     }
@@ -266,7 +266,7 @@ private:
 
         DefaultItemAttributesCollection* newL = m_collection.value(useClassName);
 
-        if(newL == NULL)
+        if(newL == nullptr)
         {
             newL = new DefaultItemAttributesCollection();
             m_collection.insert(useClassName, newL);

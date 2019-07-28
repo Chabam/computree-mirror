@@ -12,7 +12,7 @@ QString CT_AbstractAction::TYPE_OTHER = "Autre";
 
 CT_AbstractAction::CT_AbstractAction()
 {
-    m_doc = NULL;
+    m_doc = nullptr;
     m_finished = false;
     m_suspended = false;
 }

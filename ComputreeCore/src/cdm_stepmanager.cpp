@@ -18,12 +18,12 @@ CDM_StepManager::CDM_StepManager(const CDM_ScriptManagerAbstract *scriptManager,
 {
     setScriptManager(scriptManager);
 
-    _beginStep = NULL;
-    m_currentStep = NULL;
+    _beginStep = nullptr;
+    m_currentStep = nullptr;
     _debugMode = false;
     _stop = false;
     _action = None;
-    m_guiContext = NULL;
+    m_guiContext = nullptr;
     m_actionsManager = (CDM_ActionsManager*)actionManager;
     _force = false;
     m_debugAutoMode = false;
@@ -65,7 +65,7 @@ CDM_ScriptManagerAbstract* CDM_StepManager::getScriptManager() const
 
 bool CDM_StepManager::addStep(CT_VirtualAbstractStep *step, CT_VirtualAbstractStep *parent)
 {
-    if(parent == NULL)
+    if(parent == nullptr)
     {
         _stepRootList.append(step);
         //createThread(*step);
@@ -100,7 +100,7 @@ bool CDM_StepManager::removeStep(CT_VirtualAbstractStep *step)
         return false;
     }
 
-    if(step->parentStep() != NULL)
+    if(step->parentStep() != nullptr)
     {
         emit stepToBeRemoved(step);
 
@@ -162,7 +162,7 @@ bool CDM_StepManager::executeStep(CT_VirtualAbstractStep *beginStep)
 
 bool CDM_StepManager::executeModifyStep(CT_VirtualAbstractStep *beginStep)
 {
-    if(isRunning() || (beginStep == NULL) || !beginStep->isModifiable())
+    if(isRunning() || (beginStep == nullptr) || !beginStep->isModifiable())
         return false;
 
     return internalExecuteModifyStep(beginStep, false);
@@ -198,7 +198,7 @@ bool CDM_StepManager::quitManualMode()
 {
     QMutexLocker locker(&_mutex);
 
-    if(m_currentStep == NULL)
+    if(m_currentStep == nullptr)
         return false;
 
     m_currentStep->quitManualMode();
@@ -214,7 +214,7 @@ void CDM_StepManager::stop()
     m_debugAutoMode = false;
     _debugMode = false;
 
-    if(m_currentStep != NULL)
+    if(m_currentStep != nullptr)
         m_currentStep->stop();
 }
 
@@ -260,7 +260,7 @@ bool CDM_StepManager::checkOneStepIsInDebugModeFromStep(CT_VirtualAbstractStep *
 {
     QList<CT_VirtualAbstractStep*> stepChildList;
 
-    if(step != NULL)
+    if(step != nullptr)
     {
         if(step->isDebugModeOn())
             return true;
@@ -288,7 +288,7 @@ bool CDM_StepManager::isInManualMode() const
 {
     QMutexLocker locker((QMutex*)&_mutex);
 
-    if(m_currentStep == NULL)
+    if(m_currentStep == nullptr)
         return false;
 
     return m_currentStep->isInManualMode();
@@ -326,7 +326,7 @@ bool CDM_StepManager::internalExecuteStep(CT_VirtualAbstractStep *beginStep, boo
     _action = ExecuteStep;
     _debugMode = debugMode;
     _stop = false;
-    _force = (beginStep != NULL);
+    _force = (beginStep != nullptr);
 
     //save script before launch to get the user the ability to recover the tree of steps if a crash was happening !
     _scripManager->writeScript(CDM_SCRIPT_BACKUP_FILEPATH, true, *this);
@@ -345,7 +345,7 @@ bool CDM_StepManager::internalExecuteModifyStep(CT_VirtualAbstractStep *beginSte
     _action = ExecuteModifyStep;
     _debugMode = debugMode;
     _stop = false;
-    _force = (beginStep != NULL);
+    _force = (beginStep != nullptr);
 
     emit started(true);
 
@@ -389,7 +389,7 @@ void CDM_StepManager::run()
         {
             restart = false;
 
-            if(_beginStep == NULL)
+            if(_beginStep == nullptr)
             {
                 bool continueLoop = true;
 
@@ -403,12 +403,12 @@ void CDM_StepManager::run()
                 }
 
                 if(restart)
-                    _beginStep = NULL;
+                    _beginStep = nullptr;
             }
             else
             {
                 recursiveExecuteStep(*_beginStep, restart, _force);
-                _beginStep = NULL;
+                _beginStep = nullptr;
             }
 
         }while(restart);
@@ -445,7 +445,7 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
         // que l'etape n'a pas besoin de resultat
 
         if((step.needInputResults()
-            && (step.parentStep() != NULL)
+            && (step.parentStep() != nullptr)
             && !step.parentStep()->isStopped()
             && (step.parentStep()->errorCode() == 0))
             || !step.needInputResults())
@@ -462,7 +462,7 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
             emit stepBeginExecuted(&step);
 
             // lance l'tape
-            if((_action == ExecuteModifyStep) && (_beginStep != NULL) && (&step == _beginStep) && step.isModifiable())
+            if((_action == ExecuteModifyStep) && (_beginStep != nullptr) && (&step == _beginStep) && step.isModifiable())
                 step.executeModify();
             else
                 step.execute();
@@ -472,9 +472,9 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
             _mutex.lock();
             disconnectStepAfterRunning(&step);
 
-            step.setGuiContext(NULL);
+            step.setGuiContext(nullptr);
 
-            m_currentStep = NULL;
+            m_currentStep = nullptr;
             _mutex.unlock();
 
             forceAfterExecute = true;
@@ -558,7 +558,7 @@ bool CDM_StepManager::ackDebugMode(int jumpNStep, bool callPostWait)
 {
     QMutexLocker locker(&_mutex);
 
-    if(m_currentStep != NULL)
+    if(m_currentStep != nullptr)
     {
         if(callPostWait)
             m_currentStep->postWaitForAckIfInDebugMode();
@@ -596,11 +596,11 @@ void CDM_StepManager::slotStepRequiredManualMode()
 {
     CT_VirtualAbstractStep *step = (CT_VirtualAbstractStep*)sender();
 
-    if(step != NULL)
+    if(step != nullptr)
     {
         // si on ne connait pas le contexte donc on
         // tourne en mode batch
-        if(m_guiContext == NULL)
+        if(m_guiContext == nullptr)
         {
             step->quitManualMode(); // on quitte le mode manuel car il n'est pas possible
         }
@@ -623,7 +623,7 @@ void CDM_StepManager::slotStepManualModeCompleted()
 {
     CT_VirtualAbstractStep *step = (CT_VirtualAbstractStep*)sender();
 
-    if(step != NULL)
+    if(step != nullptr)
     {
         emit stepInManualMode(false);
         emit stepQuitManualMode(step);
@@ -639,7 +639,7 @@ void CDM_StepManager::setDefaultQLocale(QString name)
 
 void CDM_StepManager::slotRemoveActionsAfterStepExecuted()
 {
-    if(m_actionsManager != NULL)
+    if(m_actionsManager != nullptr)
         m_actionsManager->clearActions();
 }
 

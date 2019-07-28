@@ -11,7 +11,7 @@
 CT_InResultModelGroup::CT_InResultModelGroup(const QString& displayableName,
                                              const QString& shortDescription,
                                              bool recursive) : SuperClass(displayableName),
-    m_rootGroup(NULL)
+    m_rootGroup(nullptr)
 {
     setShortDescription(shortDescription.isEmpty() ? displayableName : shortDescription);
     setRecursive(recursive);
@@ -21,7 +21,7 @@ CT_InResultModelGroup::CT_InResultModelGroup(const QString& displayableName,
 
 CT_InResultModelGroup::CT_InResultModelGroup(const CT_InResultModelGroup& other,
                                              const bool& withPossibilities) : SuperClass(other),
-    m_rootGroup((other.m_rootGroup != NULL) ? static_cast<DEF_CT_AbstractGroupModelIn*>(other.m_rootGroup->copy(withPossibilities)) : NULL)
+    m_rootGroup((other.m_rootGroup != nullptr) ? static_cast<DEF_CT_AbstractGroupModelIn*>(other.m_rootGroup->copy(withPossibilities)) : nullptr)
 {
     if(withPossibilities)
         staticCopyPossibilitiesToModel(&other, this);
@@ -84,7 +84,7 @@ CT_InStdGroupModel* CT_InResultModelGroup::addStdGroupModel(DEF_CT_AbstractGroup
                                                             const quint8& minPossibility,
                                                             const int& maxPossibility)
 {
-    MODELS_ASSERT(parentGroup != NULL);
+    MODELS_ASSERT(parentGroup != nullptr);
     MODELS_ASSERT(!groupType.isEmpty());
     MODELS_ASSERT(!displayableName.isEmpty());
 
@@ -110,7 +110,7 @@ CT_InStdSingularItemModel* CT_InResultModelGroup::addStdItemModel(DEF_CT_Abstrac
                                                                   const quint8& minPossibility,
                                                                   const int& maxPossibility)
 {
-    MODELS_ASSERT(parentGroup != NULL);
+    MODELS_ASSERT(parentGroup != nullptr);
     MODELS_ASSERT(!itemType.isEmpty());
     MODELS_ASSERT(!displayableName.isEmpty());
 
@@ -136,7 +136,7 @@ CT_InStdItemAttributeModel* CT_InResultModelGroup::addStdItemAttributeModel(DEF_
                                                                             const quint8& minPossibility,
                                                                             const int& maxPossibility)
 {
-    MODELS_ASSERT(parentItem != NULL);
+    MODELS_ASSERT(parentItem != nullptr);
     MODELS_ASSERT(!categoriesType.isEmpty());
     MODELS_ASSERT(!displayableName.isEmpty());
 
@@ -149,7 +149,7 @@ CT_InStdItemAttributeModel* CT_InResultModelGroup::addStdItemAttributeModel(DEF_
 
 bool CT_InResultModelGroup::visitChildrens(const CT_AbstractModel::ChildrenVisitor& visitor) const
 {
-    if(rootGroup() != NULL)
+    if(rootGroup() != nullptr)
         return visitor(rootGroup());
 
     return true;
@@ -157,7 +157,7 @@ bool CT_InResultModelGroup::visitChildrens(const CT_AbstractModel::ChildrenVisit
 
 bool CT_InResultModelGroup::isEmpty() const
 {
-    return (rootGroup() == NULL);
+    return (rootGroup() == nullptr);
 }
 
 void CT_InResultModelGroup::saveSettings(SettingsWriterInterface& writer) const
@@ -200,11 +200,11 @@ bool CT_InResultModelGroup::restoreSettings(SettingsReaderInterface& reader)
         bool continueLoop = true;
 
         while(continueLoop
-              && (sp != NULL))
+              && (sp != nullptr))
         {
             sp = sp->parentStep();
 
-            if(sp != NULL)
+            if(sp != nullptr)
             {
                 // get all OUTPUT models of this step that represent results
                 QList<CT_OutAbstractResultModel*> outputResultModels = sp->getOutResultModels();
@@ -229,5 +229,5 @@ CT_InAbstractModel* CT_InResultModelGroup::copy(bool withPossibilities) const
 bool CT_InResultModelGroup::canBeComparedWith(const CT_OutAbstractModel& model) const
 {
     // if the OUTPUT model represent a CT_ResultGroup it's ok !
-    return (dynamic_cast<const CT_OutAbstractResultModelGroup*>(&model) != NULL);
+    return (dynamic_cast<const CT_OutAbstractResultModelGroup*>(&model) != nullptr);
 }

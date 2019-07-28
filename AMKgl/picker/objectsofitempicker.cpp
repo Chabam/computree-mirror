@@ -7,14 +7,14 @@
 
 ObjectsOfItemPicker::ObjectsOfItemPicker() : ObjectsProcessorForPicker()
 {
-    m_item = NULL;
-    m_itemInfo = NULL;
-    m_scene = NULL;
+    m_item = nullptr;
+    m_itemInfo = nullptr;
+    m_scene = nullptr;
     m_selectionOperation = nullptr;
     m_selectionOperationOriginal = nullptr;
     m_checkOperation = nullptr;
     m_checkOperationOriginal = nullptr;
-    m_graphicsView = NULL;
+    m_graphicsView = nullptr;
 
     setSelectionOperationEnabled(false);
     setCheckOperationEnabled(false);
@@ -22,13 +22,13 @@ ObjectsOfItemPicker::ObjectsOfItemPicker() : ObjectsProcessorForPicker()
 
 bool ObjectsOfItemPicker::isValid() const
 {
-    return (m_item != NULL)
-            && (m_itemInfo != NULL)
-            && (m_scene != NULL)
+    return (m_item != nullptr)
+            && (m_itemInfo != nullptr)
+            && (m_scene != nullptr)
             && (m_selectionOperation != nullptr)
             && (m_checkOperation != nullptr)
-            && (getAnyElementsAttributesProvider() != NULL)
-            && (getGraphicsView() != NULL);
+            && (getAnyElementsAttributesProvider() != nullptr)
+            && (getGraphicsView() != nullptr);
 }
 
 void ObjectsOfItemPicker::setItem(const Item *item, const PermanentItemScene* scene)
@@ -45,7 +45,7 @@ Item* ObjectsOfItemPicker::getItem() const
 
 AnyElementAttributesProvider* ObjectsOfItemPicker::getAnyElementsAttributesProvider() const
 {
-    return m_scene == NULL ? NULL : m_scene->getAnyElementsAttributesProvider();
+    return m_scene == nullptr ? nullptr : m_scene->getAnyElementsAttributesProvider();
 }
 
 ObjectsOfItemPicker::ItemInfo* ObjectsOfItemPicker::getItemInformation() const

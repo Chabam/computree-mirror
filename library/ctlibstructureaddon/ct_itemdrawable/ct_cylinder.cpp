@@ -77,8 +77,8 @@ CT_Cylinder* CT_Cylinder::staticCreate3DCylinderFromPointCloud(const CT_Abstract
     CT_CylinderData *data = CT_CylinderData::staticCreate3DCylinderDataFromPointCloud(pointCloudIndex,
                                                                                       pointCloudBarycenter);
 
-    if(data == NULL)
-        return NULL;
+    if(data == nullptr)
+        return nullptr;
 
     return new CT_Cylinder(data);
 }

@@ -9,7 +9,7 @@ void PointPermanentRenderer::addPoint(const Eigen::Vector3d &p, const ElementInf
 {
     const Chunk &ch = createOrGetChunkForObject(p);
 
-    if(chunk != NULL)
+    if(chunk != nullptr)
         *chunk = (Chunk*)&ch;
 
     addObjectVertex(ch, p, info, color);

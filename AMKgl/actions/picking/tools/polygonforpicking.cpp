@@ -438,7 +438,7 @@ bool PolygonForPicking::isLineIntersectLine(const QLineF &line1, const QLineF &l
 
             intersect = true;
 
-            if(intersectionPoint != NULL)
+            if(intersectionPoint != nullptr)
                 *intersectionPoint = intersection;
         }
     } else if(type == QLineF::UnboundedIntersection) {
@@ -446,7 +446,7 @@ bool PolygonForPicking::isLineIntersectLine(const QLineF &line1, const QLineF &l
                 && Math::distancePointSegment(line2, intersection) < 2) {
             intersect = true;
 
-            if(intersectionPoint != NULL)
+            if(intersectionPoint != nullptr)
                 *intersectionPoint = intersection;
         }
     }

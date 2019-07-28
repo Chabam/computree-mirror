@@ -32,23 +32,22 @@
 #include "ct_accessor/ct_pointaccessor.h"
 
 
-class PLUGINSHAREDSHARED_EXPORT CT_Grid3D_Points : public CT_AbstractGrid3D
+class CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D_Points : public CT_AbstractGrid3D
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_Grid3D_Points, CT_AbstractGrid3D, Point 3D Grid)
 
+    using SuperClass = CT_AbstractGrid3D;
+
 public:
-
     CT_Grid3D_Points();
-
+    CT_Grid3D_Points(const CT_Grid3D_Points& other);
     ~CT_Grid3D_Points();
 
 
     /*!
      * \brief Contructor with integer column and row coordinates
      *
-     * \param model Item model for creation
-     * \param result Result containing the item
      * \param xmin Minimum X coordinate (bottom left corner)
      * \param ymin Minimum Y coordinate (bottom left corner)
      * \param zmin Minimum Z coordinate (bottom left corner)
@@ -57,19 +56,7 @@ public:
      * \param dimz Number of zlevels
      * \param resolution Size of a cell
      */
-    CT_Grid3D_Points(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              double xmin,
-              double ymin,
-              double zmin,
-              size_t dimx,
-              size_t dimy,
-              size_t dimz,
-              double resolution);
-
-    CT_Grid3D_Points(const QString &modelName,
-              const CT_AbstractResult *result,
-              double xmin,
+    CT_Grid3D_Points(double xmin,
               double ymin,
               double zmin,
               size_t dimx,
@@ -91,20 +78,7 @@ public:
      * \param resolution Size of a cell
      * \param coordConstructor Not used, only to ensure constructor different signatures
      */
-    static CT_Grid3D_Points* createGrid3DFromXYZCoords(const CT_OutAbstractSingularItemModel *model,
-                                                          const CT_AbstractResult *result,
-                                                          double xmin,
-                                                          double ymin,
-                                                          double zmin,
-                                                          double xmax,
-                                                          double ymax,
-                                                          double zmax,
-                                                          double resolution,
-                                                          bool extends = true);
-
-    static CT_Grid3D_Points* createGrid3DFromXYZCoords(const QString &modelName,
-                                                          const CT_AbstractResult *result,
-                                                          double xmin,
+    static CT_Grid3D_Points* createGrid3DFromXYZCoords(double xmin,
                                                           double ymin,
                                                           double zmin,
                                                           double xmax,
@@ -130,15 +104,14 @@ public:
 
 
     // Neutralize useless Methods
-    virtual double ratioValueAtIndex(const size_t index) const {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
-    virtual double valueAtIndexAsDouble(const size_t index) const {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
-    virtual QString NAAsString() const {qDebug() << "This method should not be used in this context";return 0;}
-    virtual QString valueAtIndexAsString(const size_t index) const {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
-    virtual void computeMinMax() {qDebug() << "This method should not be used in this context";}
-    virtual void setValueAtIndexFromDouble(const size_t &index, const double &value) {Q_UNUSED(index); Q_UNUSED(value); qDebug() << "This method should not be used in this context";}
+    double ratioValueAtIndex(const size_t index) const override {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
+    double valueAtIndexAsDouble(const size_t index) const override {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
+    QString NAAsString() const override {qDebug() << "This method should not be used in this context";return 0;}
+    QString valueAtIndexAsString(const size_t index) const override {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
+    void computeMinMax() override {qDebug() << "This method should not be used in this context";}
+    void setValueAtIndexFromDouble(const size_t &index, const double &value) override {Q_UNUSED(index); Q_UNUSED(value); qDebug() << "This method should not be used in this context";}
 
-
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_Grid3D_Points)
 
 private:
     QMap<size_t, QList<size_t>* >    _cells;

@@ -77,10 +77,10 @@ CT_VirtualAbstractStep *DM_StepsFromPluginsModelConstructor::stepFromIndex(const
 {
     QStandardItem *item = m_model->itemFromIndex(index);
 
-    if((item != NULL) && (item->data(DR_Type).toInt() & IT_Step))
+    if((item != nullptr) && (item->data(DR_Type).toInt() & IT_Step))
         return (CT_VirtualAbstractStep*)item->data(DR_Pointer).value<void*>();
 
-    return NULL;
+    return nullptr;
 }
 
 QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForLevelAndSubLevelRecursively(const CT_MenuLevel *level, bool rootLevel)
@@ -120,9 +120,9 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForLevelA
         CT_VirtualAbstractStep *step = itS.next();
         QList<QStandardItem*> items;
 
-        if(dynamic_cast<CT_AbstractStepLoadFile*>(step) != NULL)
+        if(dynamic_cast<CT_AbstractStepLoadFile*>(step) != nullptr)
             items = createItemsForStep(step, IT_StepLF);
-        else if(dynamic_cast<CT_AbstractStepCanBeAddedFirst*>(step) != NULL)
+        else if(dynamic_cast<CT_AbstractStepCanBeAddedFirst*>(step) != nullptr)
             items = createItemsForStep(step, IT_StepCBAF);
         else
             items = createItemsForStep(step, IT_StepG);
@@ -186,7 +186,7 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForStep(C
 
     QStandardItem *item = new QStandardItem(nfs.stepKey);
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)NULL), DR_Pointer);
+    item->setData(qVariantFromValue((void*)nullptr), DR_Pointer);
     item->setData((int)IT_StepNF, DR_Type);
     item->setData((int)IT_StepNF, DR_SecondaryType);
     l << item;
@@ -198,7 +198,7 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForStep(C
 
     item = new QStandardItem(pluginName);
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)NULL), DR_Pointer);
+    item->setData(qVariantFromValue((void*)nullptr), DR_Pointer);
     item->setData((int)IT_Plugin, DR_Type);
     item->setData((int)IT_StepNF, DR_SecondaryType);
     l << item;

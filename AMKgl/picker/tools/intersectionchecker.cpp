@@ -21,7 +21,7 @@ bool IntersectionChecker::staticDoesAPlaneIntersectWithAPlane(const Eigen::Vecto
     if ( dnorm < 1e-6 )
     return false;
 
-    if(intersectionLine != NULL) {
+    if(intersectionLine != nullptr) {
         /* Determine intersection point with the best suited coordinate plane. */
 
         double abs ;
@@ -61,16 +61,16 @@ bool IntersectionChecker::staticDoesAPlaneIntersectWithAPlane(const Eigen::Vecto
 
 bool IntersectionChecker::staticDoesAFilledTriangleIntersectWithAPlane(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2, const Eigen::Vector3d &p3, const Eigen::Vector3d &v0, const Eigen::Vector3d &v1, const Eigen::Vector3d &v2, const Eigen::Vector3d &v3, Eigen::Vector3d intersectionLine[], bool infinitePlane)
 {
-    Eigen::Vector3d* intersectionPoint = NULL;
+    Eigen::Vector3d* intersectionPoint = nullptr;
 
-    if(intersectionLine != NULL)
+    if(intersectionLine != nullptr)
         intersectionPoint = &intersectionLine[0];
 
     bool ok = staticDoesASegmentIntersectWithAPlane(p1, p2, v0, v1, v2, v3, intersectionPoint, true, infinitePlane);
 
     if(ok) {
 
-        if(intersectionLine != NULL)
+        if(intersectionLine != nullptr)
             intersectionPoint = &intersectionLine[1];
 
         ok = staticDoesASegmentIntersectWithAPlane(p2, p3, v0, v1, v2, v3, intersectionPoint, true, infinitePlane);
@@ -93,7 +93,7 @@ bool IntersectionChecker::staticDoesALineIntersectWithACylinder(const Eigen::Vec
 {
     double t0, t1;
 
-    if(intersectionPoint != NULL)
+    if(intersectionPoint != nullptr)
         intersectionPoint[1] = Eigen::Vector3d(0,0,0);
 
     const Eigen::Vector3d lineDirection = p2-p1;
@@ -128,14 +128,14 @@ bool IntersectionChecker::staticDoesALineIntersectWithACylinder(const Eigen::Vec
     if (th<=0)
         return false;
 
-    if(intersectionPoint != NULL)
+    if(intersectionPoint != nullptr)
         intersectionPoint[0] = lineStart + (lineDirection*th);
 
     // hit the cylinder bit
     if (t0<=0)
         return false;
 
-    if(intersectionPoint != NULL)
+    if(intersectionPoint != nullptr)
         intersectionPoint[1] = lineStart + (lineDirection*t0);
 
     return true;*/
@@ -150,7 +150,7 @@ bool IntersectionChecker::staticDoesALineIntersectWithACylinder(const Eigen::Vec
             double th = t0 + (t1-t0) * (y0+0.5) / (y0-y1);
             if (th<=0) return false;
 
-            if(intersectionPoint != NULL)
+            if(intersectionPoint != nullptr)
                 intersectionPoint[0] = lineStart + (lineDirection*th);
 
             return true;
@@ -161,7 +161,7 @@ bool IntersectionChecker::staticDoesALineIntersectWithACylinder(const Eigen::Vec
         // hit the cylinder bit
         if (t0<=0) return false;
 
-        if(intersectionPoint != NULL)
+        if(intersectionPoint != nullptr)
             intersectionPoint[0] = lineStart + (lineDirection*t0);
 
         return true;
@@ -176,7 +176,7 @@ bool IntersectionChecker::staticDoesALineIntersectWithACylinder(const Eigen::Vec
             double th = t0 + (t1-t0) * (y0-0.5) / (y0-y1);
             if (th<=0) return false;
 
-            if(intersectionPoint != NULL)
+            if(intersectionPoint != nullptr)
                 intersectionPoint[0] = lineStart + (lineDirection*th);
 
             return true;
@@ -194,7 +194,7 @@ bool IntersectionChecker::staticDoestASegmentIntersectAUnitCircle(bool filled, c
     Eigen::Vector3d closest;
     Math::getClosestPointBetweenPointAndSegment(Eigen::Vector3d(0,0,0), p1, p2, closest);
 
-    if(closestP != NULL)
+    if(closestP != nullptr)
         *closestP = closest;
 
     const double val = closest.norm();

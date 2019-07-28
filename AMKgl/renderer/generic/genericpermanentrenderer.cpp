@@ -10,10 +10,10 @@
 GenericPermanentRenderer::GenericPermanentRenderer(GLenum glMode) : PermanentRenderer< GenericRendererContext >()
 {
     m_mutex = new QMutex(QMutex::Recursive);
-    m_lastChunkUsed = NULL;
+    m_lastChunkUsed = nullptr;
     m_lastCsKeyUsed = std::numeric_limits<uint>::max();
     m_glMode = glMode;
-    m_attributesAccessor = NULL;
+    m_attributesAccessor = nullptr;
     m_drawMode = DM_VAO;
     m_coordinateSystemManager = AMKglEA->getCoordinateSystemManager();
 }
@@ -44,7 +44,7 @@ void GenericPermanentRenderer::updateInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->update();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -69,7 +69,7 @@ void GenericPermanentRenderer::updateInfoInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->updateInfoBO();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -94,7 +94,7 @@ void GenericPermanentRenderer::updateColorInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->updateColorBO();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -119,7 +119,7 @@ void GenericPermanentRenderer::updateNormalInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->updateNormalBO();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -144,7 +144,7 @@ void GenericPermanentRenderer::updateOnlyVAOInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->updateOnlyVAO();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -169,9 +169,9 @@ void GenericPermanentRenderer::destroyGL(const QOpenGLContext *context)
 {
     QMutexLocker locker(m_mutex);
 
-    GenericRendererContext *c = getContexts().value(const_cast<QOpenGLContext*>(context), NULL);
+    GenericRendererContext *c = getContexts().value(const_cast<QOpenGLContext*>(context), nullptr);
 
-    if(c != NULL)
+    if(c != nullptr)
         c->destroyGL();
 }
 
@@ -190,15 +190,15 @@ const GenericPermanentRenderer::Chunk& GenericPermanentRenderer::createOrGetChun
             uniqueKey,
             offset);
 
-    if(chunkUniqueKey != NULL)
+    if(chunkUniqueKey != nullptr)
         *chunkUniqueKey = uniqueKey;
 
     if(m_lastCsKeyUsed == uniqueKey)
         return *m_lastChunkUsed;
 
-    Chunk* ch = m_chunks.value(uniqueKey, NULL);
+    Chunk* ch = m_chunks.value(uniqueKey, nullptr);
 
-    if(ch == NULL) {
+    if(ch == nullptr) {
         ch = new Chunk(uniqueKey,
                        getTypeOfObjectDrawn(),
                        m_glMode,
@@ -239,7 +239,7 @@ void GenericPermanentRenderer::clearVertex()
     m_chunks.clear();
 
     m_lastCsKeyUsed = std::numeric_limits<uint>::max();
-    m_lastChunkUsed = NULL;
+    m_lastChunkUsed = nullptr;
 }
 
 size_t GenericPermanentRenderer::countVertex() const
@@ -288,7 +288,7 @@ void GenericPermanentRenderer::draw(DrawInfo &info)
         itC.next();
         itC.value()->setCurrentContext(c);
         itC.value()->draw(info);
-        itC.value()->setCurrentContext(NULL);
+        itC.value()->setCurrentContext(nullptr);
     }
 }
 
@@ -304,7 +304,7 @@ void GenericPermanentRenderer::fastDraw(DrawInfo &info)
         itC.next();
         itC.value()->setCurrentContext(c);
         itC.value()->fastDraw(info);
-        itC.value()->setCurrentContext(NULL);
+        itC.value()->setCurrentContext(nullptr);
     }
 }
 
@@ -320,7 +320,7 @@ void GenericPermanentRenderer::postDraw(DrawInfo &info)
         itC.next();
         itC.value()->setCurrentContext(c);
         itC.value()->postDraw(info);
-        itC.value()->setCurrentContext(NULL);
+        itC.value()->setCurrentContext(nullptr);
     }
 }
 

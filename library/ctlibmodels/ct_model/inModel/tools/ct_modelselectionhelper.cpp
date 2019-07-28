@@ -12,7 +12,7 @@ QHash<CT_InAbstractResultModel*, CT_ModelSelectionHelper::CacheResult*> CT_Model
 
 CT_ModelSelectionHelper::CT_ModelSelectionHelper(const CT_InAbstractResultModel* inResultModel)
 {
-    Q_ASSERT(inResultModel != NULL);
+    Q_ASSERT(inResultModel != nullptr);
 
     m_rootInResultModel = const_cast<CT_InAbstractResultModel*>(inResultModel);
 
@@ -69,9 +69,9 @@ CT_ModelSelectionHelper::~CT_ModelSelectionHelper()
 
 bool CT_ModelSelectionHelper::recursiveCanSelectAllPossibilitiesByDefault() const
 {
-    CacheResult* cached = CACHED_GRAPHS.value(m_rootInResultModel, NULL);
+    CacheResult* cached = CACHED_GRAPHS.value(m_rootInResultModel, nullptr);
 
-    if(cached != NULL)
+    if(cached != nullptr)
         return cached->m_canSelectAllPossibilitiesByDefault;
 
     cached = new CacheResult();
@@ -143,7 +143,7 @@ bool CT_ModelSelectionHelper::recursiveCanSelectAllPossibilitiesByDefault() cons
 
     // if one model is optionnal in the structure we can not choose it by default, the user must do a choice
     if(size > 0)
-        return !m_validGraphsByRootPossibility.value(keys.first(), NULL)->hasOneModelOptional();
+        return !m_validGraphsByRootPossibility.value(keys.first(), nullptr)->hasOneModelOptional();
 
     return true;*/
 }
@@ -188,7 +188,7 @@ bool CT_ModelSelectionHelper::selectAtLeastOnePossibility()
 
     // We select only one choice for a possibility
     while(it.hasNext())
-        m_validGraphsByRootPossibility.value(it.next(), NULL)->select();
+        m_validGraphsByRootPossibility.value(it.next(), nullptr)->select();
 
     return true;
 }
@@ -210,14 +210,14 @@ bool CT_ModelSelectionHelper::selectOneGraphForPossibilityOfRootModel(const CT_I
     /*if(!canSelectOneGraphForPossibilityOfRootModel(possibility, index))
         return false;
 
-    CT_InModelGraph *graph = NULL;
+    CT_InModelGraph *graph = nullptr;
 
     if(index < 0)
         graph = getOneOfTheBestGraphForPossibilityOfRootModel(possibility);
     else
         graph = m_validGraphsByRootPossibility.values((CT_InStdModelPossibility*)possibility).at(index);
 
-    Q_ASSERT(graph != NULL);
+    Q_ASSERT(graph != nullptr);
 
     graph->select();
 
@@ -308,7 +308,7 @@ void CT_ModelSelectionHelper::recursiveConstructGraphs(QList<CT_InModelGraph *> 
 
 CT_ModelSelectionHelper::CT_InModelGraph *CT_ModelSelectionHelper::getOneOfTheBestGraphForPossibilityOfRootModel(const CT_InStdModelPossibility *possibility) const
 {
-    CT_ModelSelectionHelper::CT_InModelGraph *bestGraph = NULL;
+    CT_ModelSelectionHelper::CT_InModelGraph *bestGraph = nullptr;
 
     QList<CT_InModelGraph*> values = m_validGraphsByRootPossibility.values((CT_InStdModelPossibility*)possibility);
 
@@ -336,7 +336,7 @@ CT_ModelSelectionHelper::CT_InModelGraph *CT_ModelSelectionHelper::getOneOfTheBe
 
 CT_ModelSelectionHelper::CT_InModelGraph::CT_InModelGraph()
 {
-    m_rootNode = NULL;
+    m_rootNode = nullptr;
 }
 
 CT_ModelSelectionHelper::CT_InModelGraph::~CT_InModelGraph()
@@ -363,7 +363,7 @@ bool CT_ModelSelectionHelper::CT_InModelGraph::canSetPossibilityForModel(const C
 {
     CT_InModelGraphNode *node = staticRecursiveSearchNodeOfModel(m_rootNode, model);
 
-    Q_ASSERT(node != NULL);
+    Q_ASSERT(node != nullptr);
 
     // if it is the root node or a children of the root node we always set the possibility.
     // explanation : 1. the root node (result) don't have a parent so the possibility can always be set.
@@ -374,31 +374,31 @@ bool CT_ModelSelectionHelper::CT_InModelGraph::canSetPossibilityForModel(const C
     // get the parent model of the out model of the possibility to set
     CT_OutAbstractModel *parentOutModel = (CT_OutAbstractModel*)possibility->outModel()->parentModel();
 
-    // if it was NULL -> it is a result model
-    // if the parent was NULL -> it is a root group
-    if((parentOutModel == NULL) || (parentOutModel->parentModel() == NULL))
+    // if it was nullptr -> it is a result model
+    // if the parent was nullptr -> it is a root group
+    if((parentOutModel == nullptr) || (parentOutModel->parentModel() == nullptr))
         return true;
 
     CT_InAbstractModel *parentModel = static_cast<CT_InAbstractModel*>(model->parentModel());
 
-    Q_ASSERT(parentModel != NULL);
+    Q_ASSERT(parentModel != nullptr);
 
     CT_InModelGraphNode *parentNode = staticRecursiveSearchNodeOfModel(m_rootNode, parentModel);
 
-    Q_ASSERT(parentNode != NULL);
+    Q_ASSERT(parentNode != nullptr);
 
-    if((parentNode->m_possibility == NULL) && !parentNode->m_model->needOutputModel())
+    if((parentNode->m_possibility == nullptr) && !parentNode->m_model->needOutputModel())
         return true;
 
-    if(parentNode->m_model->isObligatory() && (parentNode->m_possibility != NULL)) {
-        Q_ASSERT(parentNode->m_possibility != NULL);
+    if(parentNode->m_model->isObligatory() && (parentNode->m_possibility != nullptr)) {
+        Q_ASSERT(parentNode->m_possibility != nullptr);
 
         if(parentNode->m_possibility->outModel() == possibility->outModel()->parentModel()) {
 
             CT_InModelGraphNode *nodeP = staticRecursiveSearchNodeOfOutModel(m_rootNode, possibility->outModel());
 
             // the out model of the possibility must not be already used by another model !
-            return (nodeP == NULL);
+            return (nodeP == nullptr);
         }
     }
 
@@ -420,7 +420,7 @@ bool CT_ModelSelectionHelper::CT_InModelGraph::setPossibilityForModel(const CT_I
 CT_InStdModelPossibility* CT_ModelSelectionHelper::CT_InModelGraph::possibilityForModel(const CT_InAbstractModel *model) const
 {
     CT_InModelGraphNode *node = staticRecursiveSearchNodeOfModel(m_rootNode, model);
-    Q_ASSERT(node != NULL);
+    Q_ASSERT(node != nullptr);
 
     return node->m_possibility;
 }
@@ -444,7 +444,7 @@ CT_ModelSelectionHelper::CT_InModelGraph *CT_ModelSelectionHelper::CT_InModelGra
 {
     CT_ModelSelectionHelper::CT_InModelGraph *graph = new CT_ModelSelectionHelper::CT_InModelGraph();
 
-    if(m_rootNode == NULL)
+    if(m_rootNode == nullptr)
         return graph;
 
     graph->m_rootNode = m_rootNode->cloneAlone();
@@ -456,7 +456,7 @@ CT_ModelSelectionHelper::CT_InModelGraph *CT_ModelSelectionHelper::CT_InModelGra
 
 int CT_ModelSelectionHelper::CT_InModelGraph::howManyPossibilitiesIsNotNullInStructure() const
 {
-    return staticRecursiveCountPossibilityNotNULL(m_rootNode);
+    return staticRecursiveCountPossibilityNotnullptr(m_rootNode);
 }
 
 void CT_ModelSelectionHelper::CT_InModelGraph::debugPrint()
@@ -479,14 +479,14 @@ void CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveConstructStructure
 
 bool CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveIsValid(const CT_ModelSelectionHelper::CT_InModelGraphNode *node)
 {
-    if(node == NULL)
+    if(node == nullptr)
         return true;
 
-    Q_ASSERT(node->m_model != NULL);
+    Q_ASSERT(node->m_model != nullptr);
 
-    if((node->m_possibility == NULL) && (node->m_model->isOptionnal()))
+    if((node->m_possibility == nullptr) && (node->m_model->isOptionnal()))
         return true;
-    else if(node->m_possibility == NULL)
+    else if(node->m_possibility == nullptr)
         return false;
 
     QListIterator<CT_InModelGraphNode*> it(node->m_childrensNode);
@@ -501,8 +501,8 @@ bool CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveIsValid(const CT_M
 
 CT_ModelSelectionHelper::CT_InModelGraphNode* CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveSearchNodeOfModel(const CT_ModelSelectionHelper::CT_InModelGraphNode *node, const CT_InAbstractModel *model)
 {
-    if(node == NULL)
-        return NULL;
+    if(node == nullptr)
+        return nullptr;
 
     if(node->m_model == model)
         return (CT_ModelSelectionHelper::CT_InModelGraphNode*)node;
@@ -512,19 +512,19 @@ CT_ModelSelectionHelper::CT_InModelGraphNode* CT_ModelSelectionHelper::CT_InMode
     while(it.hasNext()) {
         CT_InModelGraphNode *foundedNode;
 
-        if((foundedNode = staticRecursiveSearchNodeOfModel(it.next(), model)) != NULL)
+        if((foundedNode = staticRecursiveSearchNodeOfModel(it.next(), model)) != nullptr)
             return foundedNode;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CT_ModelSelectionHelper::CT_InModelGraphNode *CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveSearchNodeOfOutModel(const CT_ModelSelectionHelper::CT_InModelGraphNode *node, const CT_OutAbstractModel *outModel)
 {
-    if(node == NULL)
-        return NULL;
+    if(node == nullptr)
+        return nullptr;
 
-    if((node->m_possibility != NULL) && (node->m_possibility->outModel() == outModel))
+    if((node->m_possibility != nullptr) && (node->m_possibility->outModel() == outModel))
         return (CT_ModelSelectionHelper::CT_InModelGraphNode*)node;
 
     QListIterator<CT_InModelGraphNode*> it(node->m_childrensNode);
@@ -532,19 +532,19 @@ CT_ModelSelectionHelper::CT_InModelGraphNode *CT_ModelSelectionHelper::CT_InMode
     while(it.hasNext()) {
         CT_InModelGraphNode *foundedNode;
 
-        if((foundedNode = staticRecursiveSearchNodeOfOutModel(it.next(), outModel)) != NULL)
+        if((foundedNode = staticRecursiveSearchNodeOfOutModel(it.next(), outModel)) != nullptr)
             return foundedNode;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveSelectPossibility(CT_ModelSelectionHelper::CT_InModelGraphNode *node, bool select)
 {
-    if(node == NULL)
+    if(node == nullptr)
         return;
 
-    if(node->m_possibility != NULL)
+    if(node->m_possibility != nullptr)
         node->m_possibility->setSelected(select);
 
     QListIterator<CT_InModelGraphNode*> it(node->m_childrensNode);
@@ -569,10 +569,10 @@ void CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveClone(CT_ModelSele
 
 bool CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveIsOneModelOptional(CT_ModelSelectionHelper::CT_InModelGraphNode *node)
 {
-    if(node == NULL)
+    if(node == nullptr)
         return false;
 
-    Q_ASSERT(node->m_model != NULL);
+    Q_ASSERT(node->m_model != nullptr);
 
     if(node->m_model->isOptionnal())
         return true;
@@ -587,20 +587,20 @@ bool CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveIsOneModelOptional
     return false;
 }
 
-int CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveCountPossibilityNotNULL(CT_ModelSelectionHelper::CT_InModelGraphNode *node)
+int CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveCountPossibilityNotnullptr(CT_ModelSelectionHelper::CT_InModelGraphNode *node)
 {
-    if(node == NULL)
+    if(node == nullptr)
         return 0;
 
     int count = 0;
 
-    if(node->m_possibility != NULL)
+    if(node->m_possibility != nullptr)
         count = 1;
 
     QListIterator<CT_InModelGraphNode*> it(node->m_childrensNode);
 
     while(it.hasNext())
-        count += staticRecursiveCountPossibilityNotNULL(it.next());
+        count += staticRecursiveCountPossibilityNotnullptr(it.next());
 
     return count;
 }
@@ -609,7 +609,7 @@ void CT_ModelSelectionHelper::CT_InModelGraph::staticRecursiveDebugPrintGraph(CT
 {
     QString preStringNext = preString;
 
-    if(node->m_possibility != NULL) {
+    if(node->m_possibility != nullptr) {
         qDebug() << preString << node->m_possibility->outModel()->displayableName() << "(" << node->m_model->displayableName() << ")";
         preStringNext += "\t";
     }

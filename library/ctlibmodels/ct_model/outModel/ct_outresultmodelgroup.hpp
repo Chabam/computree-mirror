@@ -11,7 +11,7 @@ CT_OutResultModelGroup<ResultGroup>::CT_OutResultModelGroup(DEF_CT_AbstractGroup
     setShortDescription(shortDescription);
     setPrototype(new ResultGroup());
 
-    if(m_rootGroup != NULL)
+    if(m_rootGroup != nullptr)
         m_rootGroup->setParentModel(this);
 }
 
@@ -41,7 +41,7 @@ void CT_OutResultModelGroup<ResultGroup>::setRootGroup(DEF_CT_AbstractGroupModel
 
     m_rootGroup = rootGroup;
 
-    if(m_rootGroup != NULL)
+    if(m_rootGroup != nullptr)
         m_rootGroup->setParentModel(this);
 }
 

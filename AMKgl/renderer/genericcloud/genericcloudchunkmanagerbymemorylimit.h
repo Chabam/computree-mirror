@@ -50,7 +50,7 @@ public:
                                                                                        cloudSize)
     {
         m_chunkMaxSize = (chunkMaxSize == 0 ? 209715198/ObjectSizeInBytes : chunkMaxSize);
-        m_lastChunkUsed = NULL;
+        m_lastChunkUsed = nullptr;
         m_lastChunkIndexUsed = 0;
     }
 
@@ -86,7 +86,7 @@ public:
      */
     size_t getChunkUniqueIndexForObjectAt(const size_t& globalObjectIndex) const
     {
-        if((m_lastChunkUsed != NULL)
+        if((m_lastChunkUsed != nullptr)
                 && (globalObjectIndex >= m_lastChunkUsed->getBeginningOfCloud())
                 && (globalObjectIndex <= m_lastChunkUsed->getEndOfCloud())) {
             return m_lastChunkIndexUsed;
@@ -184,7 +184,7 @@ protected:
      */
     void chunkAboutToBeDeleted(ChunkT* chunk)
     {
-        m_lastChunkUsed = NULL;
+        m_lastChunkUsed = nullptr;
 
         GenericCloudChunkManagerByMemoryLimitSuperClass::chunkAboutToBeDeleted(chunk);
     }

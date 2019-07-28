@@ -14,7 +14,7 @@
 CDM_HRScriptXMLWriter::CDM_HRScriptXMLWriter()
 {
     m_error = false;
-    m_pluginManager = NULL;
+    m_pluginManager = nullptr;
 }
 
 void CDM_HRScriptXMLWriter::setPluginManager(const CDM_PluginManager *pm)
@@ -420,7 +420,7 @@ QString CDM_HRScriptXMLWriter::convertPathToRelativePathAndAddToPrePath(QString 
 
 QDomElement CDM_HRScriptXMLWriter::getOrCreateDomElementForCaller(const QObject *caller)
 {
-    if(!m_parametersStack.isEmpty() && dynamic_cast<const CT_VirtualAbstractStep*>(caller) != NULL)
+    if(!m_parametersStack.isEmpty() && dynamic_cast<const CT_VirtualAbstractStep*>(caller) != nullptr)
         return m_parametersStack.first();
 
     QDomElement el = m_callerDomElements.value((QObject*)caller, QDomElement());

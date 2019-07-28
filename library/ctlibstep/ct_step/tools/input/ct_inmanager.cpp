@@ -52,7 +52,7 @@ bool CT_InManager::needInputs() const
     return m_inModelsStructureManager.needInputs();
 }
 
-bool CT_InManager::haveAllInputBeenFoundInOutputOfThisStepOrRecursively(const CT_VirtualAbstractStep* step) const
+bool CT_InManager::wereAllInputsFoundInOutputsOfThisStepOrRecursively(const CT_VirtualAbstractStep* step) const
 {
     QVector<CT_InAbstractResultModel*> resModels(m_inModelsStructureManager.nResults());
     int currentIndex = 0;
@@ -62,14 +62,14 @@ bool CT_InManager::haveAllInputBeenFoundInOutputOfThisStepOrRecursively(const CT
         return true;
     });
 
-    const bool result = findInputsInOutputOfThisStepOrRecursivelyWithSpecifiedResultModels(step, resModels.begin(), resModels.end());
+    const bool result = findInputsInOutputsOfThisStepOrRecursivelyWithSpecifiedResultModels(step, resModels.begin(), resModels.end());
 
     qDeleteAll(resModels);
 
     return result;
 }
 
-bool CT_InManager::findInputsInOutputOfThisStepOrRecursively(const CT_VirtualAbstractStep* step)
+bool CT_InManager::findInputsInOutputsOfThisStepOrRecursively(const CT_VirtualAbstractStep* step)
 {
     QVector<CT_InAbstractResultModel*> resModels(m_inModelsStructureManager.nResults());
     int currentIndex = 0;
@@ -79,7 +79,7 @@ bool CT_InManager::findInputsInOutputOfThisStepOrRecursively(const CT_VirtualAbs
         return true;
     });
 
-    return findInputsInOutputOfThisStepOrRecursivelyWithSpecifiedResultModels(step, resModels.begin(), resModels.end());
+    return findInputsInOutputsOfThisStepOrRecursivelyWithSpecifiedResultModels(step, resModels.begin(), resModels.end());
 }
 
 CT_InManager::ConfigureReturn CT_InManager::configureInputs(bool forceReadOnly)
@@ -141,8 +141,8 @@ int CT_InManager::nResults() const
         return inResultModel->possibilitiesGroup()->visitSelectedPossibilities([&n](const CT_InStdModelPossibility* p) -> bool {
             const CT_OutAbstractModel* outModel = p->outModel();
 
-            Q_ASSERT(outModel != NULL);
-            Q_ASSERT(dynamic_cast<CT_AbstractResult*>(outModel->result()) != NULL);
+            Q_ASSERT(outModel != nullptr);
+            Q_ASSERT(dynamic_cast<CT_AbstractResult*>(outModel->result()) != nullptr);
 
             ++n;
 
@@ -159,8 +159,8 @@ void CT_InManager::setResultsBusy(bool busy)
         return inResultModel->possibilitiesGroup()->visitSelectedPossibilities([&busy](const CT_InStdModelPossibility* p) -> bool {
             const CT_OutAbstractModel* outModel = p->outModel();
 
-            Q_ASSERT(outModel != NULL);
-            Q_ASSERT(dynamic_cast<CT_AbstractResult*>(outModel->result()) != NULL);
+            Q_ASSERT(outModel != nullptr);
+            Q_ASSERT(dynamic_cast<CT_AbstractResult*>(outModel->result()) != nullptr);
 
             static_cast<CT_AbstractResult*>(outModel->result())->setBusy(busy);
 
@@ -184,11 +184,11 @@ bool CT_InManager::restoreSettings(SettingsReaderInterface& reader)
     return m_inModelConfigurationManager->restoreSettings(reader);
 }
 
-bool CT_InManager::findInputsInOutputOfThisStepOrRecursivelyWithSpecifiedResultModels(const CT_VirtualAbstractStep* step,
+bool CT_InManager::findInputsInOutputsOfThisStepOrRecursivelyWithSpecifiedResultModels(const CT_VirtualAbstractStep* step,
                                                                                       QVector<CT_InAbstractResultModel*>::iterator begin,
                                                                                       QVector<CT_InAbstractResultModel*>::iterator end) const
 {
-    if(step == NULL)
+    if(step == nullptr)
         return !needInputs();
 
     if(!needInputs())
@@ -202,7 +202,7 @@ bool CT_InManager::findInputsInOutputOfThisStepOrRecursivelyWithSpecifiedResultM
 
     QSet<CT_InAbstractResultModel*> modelsThatHaveFound;
 
-    while((parentStep != NULL) && atLeastOneModelIsRecursive) {
+    while((parentStep != nullptr) && atLeastOneModelIsRecursive) {
         CT_OutModelStructureManager* omsm = parentStep->outManager()->outModelStructureManager();
 
         atLeastOneModelIsRecursive = false;

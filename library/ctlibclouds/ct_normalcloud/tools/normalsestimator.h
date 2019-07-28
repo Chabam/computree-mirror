@@ -30,7 +30,7 @@ typedef boost::property_map< GraphPoisson, boost::edge_weight_t>::type WeightMap
 class CTLIBCLOUDS_EXPORT normalsEstimator
 {
 public:
-    normalsEstimator(pcl::PointCloud<pcl::PointXYZ> pPointCloud, const IEstimatorObserverAndController *obs = NULL);
+    normalsEstimator(pcl::PointCloud<pcl::PointXYZ> pPointCloud, const IEstimatorObserverAndController *obs = nullptr);
     pcl::PointCloud<pcl::PointNormal> getNormals(int nbNeighborsNormals);
 
 private:

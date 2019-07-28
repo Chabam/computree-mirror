@@ -67,7 +67,7 @@ public:
     /**
       * \brief Retourne une ligne 3D (rgression linaire)  partir du nuage de points pass en paramtre.
       *
-      * \return NULL si le nombre de points est infrieur  2.
+      * \return nullptr si le nombre de points est infrieur  2.
       */
     static CT_Line* staticCreateLineFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex);
 

@@ -23,7 +23,7 @@ public:
 
     /**
      * @brief Create an attribute with a category and a data that will never change.
-     * @param category : the category of the item attribute. Must not be NULL !
+     * @param category : the category of the item attribute. Must not be nullptr !
      * @param data : the data.
      */
     CT_StdItemAttributeT(const CT_AbstractCategory* category, const VType& data);

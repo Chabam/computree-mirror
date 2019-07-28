@@ -22,7 +22,7 @@ public:
     CT_OutOPFNodeGroupModel(const QString& displayableName = "",
                             const QString& shortDescription = "",
                             const QString& detailledDescription = "",
-                            OPFGroup* prototype = NULL);
+                            OPFGroup* prototype = nullptr);
 
     /**
      * @brief Copy constructor

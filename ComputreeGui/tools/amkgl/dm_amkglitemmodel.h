@@ -7,7 +7,7 @@
 
 class DM_AMKglItemModelIterator {
 public:
-    CT_AbstractItemDrawable* operator *() const { return NULL; }
+    CT_AbstractItemDrawable* operator *() const { return nullptr; }
     DM_AMKglItemModelIterator& operator ++() { return *this; }
     DM_AMKglItemModelIterator& operator --() { return *this; }
     bool operator !=(const DM_AMKglItemModelIterator& other) const { Q_UNUSED(other) return false; }

@@ -31,7 +31,7 @@ CT_DEFAULT_IA_INIT(CT_LoopCounter)
 
 CT_LoopCounter::CT_LoopCounter() : SuperClass(),
     _counter(QSharedPointer<CT_Counter>()),
-    _beginStep(NULL)
+    _beginStep(nullptr)
 {
 }
 

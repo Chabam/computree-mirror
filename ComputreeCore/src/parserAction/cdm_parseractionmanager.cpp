@@ -14,8 +14,8 @@ bool CDM_ParserActionManager::addAction(const QString &cmd, CDM_IParserAction *a
 {
     QString newCmd;
 
-    if((action == NULL)
-            || (findAction(cmd) != NULL))
+    if((action == nullptr)
+            || (findAction(cmd) != nullptr))
         return false;
 
     _actions.append(qMakePair(cmd, action));
@@ -33,7 +33,7 @@ CDM_IParserAction* CDM_ParserActionManager::findAction(const QString &fullCmd, Q
 
         if(fullCmd.startsWith(pair.first))
         {
-            if(newCmd != NULL)
+            if(newCmd != nullptr)
             {
                 QString tmp = fullCmd;
 
@@ -45,7 +45,7 @@ CDM_IParserAction* CDM_ParserActionManager::findAction(const QString &fullCmd, Q
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 QStringList CDM_ParserActionManager::getAllActionCmd() const

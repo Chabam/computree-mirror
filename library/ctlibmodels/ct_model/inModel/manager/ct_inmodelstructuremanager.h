@@ -221,9 +221,22 @@ private:
     void checkNotNeedInputResultIsNotPresent() const;
 
     template<class Parent, class Child>
-    static constexpr void checkStructureValidity() {
+    static constexpr void checkStructureValidity(std::true_type) {
         static_assert((Parent::MinValue > 0)
                       || ((Parent::MinValue == 0) && (Child::MinValue == 0)), "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0).");
+    }
+
+    template<class Parent, class Child>
+    static constexpr void checkStructureValidity(std::false_type) {
+        // parent is abstract so we can not check at compilation time
+    }
+
+    template<class Parent, class Child>
+    static void checkStructureValidityAtRunTime(const Parent& parent, const Child& child) {
+        #define QT_FORCE_ASSERTS
+        Q_ASSERT_X((parent.minimum() > 0)
+                      || ((parent.minimum() == 0) && (child.minimum() == 0)), "checkStructureValidityAtRunTime", "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0).");
+        #undef QT_FORCE_ASSERTS
     }
 
     /*****************************************************/
@@ -254,7 +267,7 @@ private:
     void internalSetZeroOrMoreRootGroup(const HandleInResult& handleResult,
                                         HandleZeroOrMore& handleRootGroup,
                                         std::true_type) {
-        MODELS_ASSERT((handleResult.model()->rootGroup() == NULL) && !handleRootGroup.isValid());
+        MODELS_ASSERT((handleResult.model()->rootGroup() == nullptr) && !handleRootGroup.isValid());
 
         auto rootGroupModel = HandleZeroOrMore::ModelType::create<HandleZeroOrMore::GroupType>();
 
@@ -278,7 +291,7 @@ private:
                               HandleInGroup& rootGroupHandle,
                               std::true_type,
                               ConstructorArgs&& ...constructorArgs) {
-        MODELS_ASSERT((handleResult.model()->rootGroup() == NULL) && !rootGroupHandle.isValid());
+        MODELS_ASSERT((handleResult.model()->rootGroup() == nullptr) && !rootGroupHandle.isValid());
 
         auto rootGroupModel = HandleInGroup::ModelType::create<HandleInGroup::GroupType>(std::forward<ConstructorArgs>(constructorArgs)...,
                                                                                          HandleInGroup::MinValue,
@@ -305,7 +318,9 @@ private:
                           std::true_type,
                           ConstructorArgs&& ...constructorArgs) {
 
-        checkStructureValidity<HandleInGroupParent, HandleInGroup>();
+        checkStructureValidity<HandleInGroupParent, HandleInGroup>(std::integral_constant<bool, IsAnInputAbstractHandle<HandleInGroupParent>::value>());
+        checkStructureValidityAtRunTime<HandleInGroupParent, HandleInGroup>(parentGroup, groupHandle);
+
         MODELS_ASSERT(parentGroup.isValid() && !groupHandle.isValid());
 
         auto groupModel = HandleInGroup::ModelType::create<HandleInGroup::GroupType>(std::forward<ConstructorArgs>(constructorArgs)...,
@@ -333,7 +348,9 @@ private:
                          std::true_type,
                          ConstructorArgs&& ...constructorArgs) {
 
-        checkStructureValidity<HandleInGroupParent, HandleInItem>();
+        checkStructureValidity<HandleInGroupParent, HandleInItem>(std::integral_constant<bool, IsAnInputAbstractHandle<HandleInGroupParent>::value>());
+        checkStructureValidityAtRunTime<HandleInGroupParent, HandleInItem>(parentGroup, itemHandle);
+
         MODELS_ASSERT(parentGroup.isValid() && !itemHandle.isValid());
 
         auto itemModel = HandleInItem::ModelType::create<HandleInItem::ItemType>(std::forward<ConstructorArgs>(constructorArgs)...,
@@ -361,7 +378,9 @@ private:
                                   std::true_type,
                                   ConstructorArgs&& ...constructorArgs) {
 
-        checkStructureValidity<HandleInItemParent, HandleInItemAttribute>();
+        checkStructureValidity<HandleInItemParent, HandleInItemAttribute>(std::integral_constant<bool, IsAnInputAbstractHandle<HandleInItemParent>::value>());
+        checkStructureValidityAtRunTime<HandleInItemParent, HandleInItemAttribute>(parentItem, itemAttributeHandle);
+
         MODELS_ASSERT(parentItem.isValid() && !itemAttributeHandle.isValid());
 
         auto itemAttributeModel = HandleInItemAttribute::ModelType::create(HandleInItemAttribute::ValueType,

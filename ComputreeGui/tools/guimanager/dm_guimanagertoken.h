@@ -18,7 +18,7 @@ class DM_GuiManagerToken : public QObject
 public:
     /**
      * @brief Create a token with a async options. When the options signal 'passed' is emitted this token
-     *        emit the signal 'passed'. options can't be NULL.
+     *        emit the signal 'passed'. options can't be nullptr.
      */
     DM_GuiManagerToken(const DM_AbstractAsyncOperationOptions *options);
 

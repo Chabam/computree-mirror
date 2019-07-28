@@ -6,9 +6,9 @@
 template<class Model, class Item>
 DM_ItemDrawableTreeViewControllerT<Model, Item>::DM_ItemDrawableTreeViewControllerT(QObject *parent) : DM_AbstractItemTreeViewController(parent)
 {
-    m_standardItemBuilder = NULL;
-    m_treeViewManager = NULL;
-    m_model = NULL;
+    m_standardItemBuilder = nullptr;
+    m_treeViewManager = nullptr;
+    m_model = nullptr;
 
     m_addMultiple = false;
     m_removeMultiple = false;
@@ -185,7 +185,7 @@ void DM_ItemDrawableTreeViewControllerT<Model, Item>::constructModel()
         m_timerRemoveFromView.stop();
         m_tmpItemsToRemove.clear();
 
-        if(aop != NULL)
+        if(aop != nullptr)
         {
             aop->progressDialog()->setCanClose(false);
             aop->progressDialog()->setLabelText(QObject::tr("Veuillez patienter pendant la construction de la table"));
@@ -247,7 +247,7 @@ void DM_ItemDrawableTreeViewControllerT<Model, Item>::refresh(const QList<QPair<
     // add all CT_AbstractItemDrawable of the type to the QTreeView
     DM_AsyncOperation *aop = GUI_MANAGER->requestExclusiveAsyncOperation();
 
-    if(aop != NULL)
+    if(aop != nullptr)
     {
         aop->progressDialog()->setCanClose(false);
         aop->progressDialog()->setLabelText(QObject::tr("Veuillez patienter pendant le rafraichissement de la table"));
@@ -392,7 +392,7 @@ void DM_ItemDrawableTreeViewControllerT<Model, Item>::slotAddTemporaryItemsInTab
     {
         //GUI_LOG->addMessage(LogInterface::debug, LogInterface::gui, QString("slotAddTemporaryItemsInTable"));
 
-        if(aop != NULL)
+        if(aop != nullptr)
         {
             aop->progressDialog()->setCanClose(false);
             aop->progressDialog()->setLabelText(QObject::tr("Veuillez patienter pendant l'ajout des éléments à la table"));
@@ -438,7 +438,7 @@ void DM_ItemDrawableTreeViewControllerT<Model, Item>::slotRemoveTemporaryItemsIn
     {
         GUI_LOG->addMessage(LogInterface::debug, LogInterface::gui, QString("slotRemoveTemporaryItemsInTable : %1").arg(m_tmpItemsToRemove.size()));
 
-        if(aop != NULL)
+        if(aop != nullptr)
         {
             aop->progressDialog()->setCanClose(false);
             aop->progressDialog()->setLabelText(QObject::tr("Veuillez patienter pendant la suppression des éléments de la table"));
@@ -496,7 +496,7 @@ void DM_ItemDrawableTreeViewControllerT<Model, Item>::slotRemoveTemporaryItemsIn
 
             Item *si = m_treeViewManager->itemFromItemDrawable(item);
 
-            if(si != NULL)
+            if(si != nullptr)
                 m_model->removeRow(si->row());
         }
 

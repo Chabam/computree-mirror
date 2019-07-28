@@ -10,7 +10,7 @@
 
 #include <limits>
 
-CT_Reader_XYB::CT_Reader_XYB() : SuperClass(), CT_ReaderPointsFilteringExtension()
+CT_Reader_XYB::CT_Reader_XYB(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {
     m_filterRadius = 0;
     m_zMinFilter = -std::numeric_limits<double>::max();
@@ -20,15 +20,18 @@ CT_Reader_XYB::CT_Reader_XYB() : SuperClass(), CT_ReaderPointsFilteringExtension
     setToolTip(tr("Chargement de points depuis un fichier format binaire XYB (FARO)"));
 }
 
+CT_Reader_XYB::CT_Reader_XYB(const CT_Reader_XYB& other) : SuperClass(other)
+{
+    m_current = other.m_current;
+    m_filterRadius = other.m_filterRadius;
+    m_zMinFilter = other.m_zMinFilter;
+    m_zMaxFilter = other.m_zMaxFilter;
+}
+
 QString CT_Reader_XYB::displayableName() const
 {
     return tr("Points, Fichier XYB");
 }
-
-/*CT_StepsMenu::LevelPredefined CT_Reader_XYB::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
-}*/
 
 bool CT_Reader_XYB::setFilePath(const QString& filepath)
 {
@@ -262,7 +265,7 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
             const qint64 nPoints = (filesize - m_current._offset) / 26;
 
             CT_NMPCIR pcir;
-            CT_StandardCloudStdVectorT<quint16>* collection = NULL;
+            CT_StandardCloudStdVectorT<quint16>* collection = nullptr;
 
             double xmin = std::numeric_limits<double>::max();
             double ymin = std::numeric_limits<double>::max();

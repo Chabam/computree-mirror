@@ -30,7 +30,7 @@
 CT_DEFAULT_IA_INIT(CT_ReaderItem)
 
 CT_ReaderItem::CT_ReaderItem() : SuperClass(),
-    m_reader(NULL),
+    m_reader(nullptr),
     m_mustAutoDeleteReader(false)
 {
 }
@@ -43,7 +43,7 @@ CT_ReaderItem::CT_ReaderItem(CT_AbstractReader* reader,
 }
 
 CT_ReaderItem::CT_ReaderItem(const CT_ReaderItem& other) : SuperClass(other),
-    m_reader((m_reader == NULL) ? NULL : other.m_reader->copyFull()),
+    m_reader((m_reader == nullptr) ? nullptr : other.m_reader->copyFull()),
     m_mustAutoDeleteReader(true)
 {
 }

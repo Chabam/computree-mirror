@@ -8,7 +8,7 @@ bool CT_OutAbstractResultModelGroup::visitChildrens(const CT_AbstractModel::Chil
 {
     const DEF_CT_AbstractGroupModelOut* rootG = rootGroup();
 
-    if(rootG == NULL)
+    if(rootG == nullptr)
         return true;
 
     return visitor(rootG);
@@ -16,6 +16,6 @@ bool CT_OutAbstractResultModelGroup::visitChildrens(const CT_AbstractModel::Chil
 
 bool CT_OutAbstractResultModelGroup::isEmpty() const
 {
-    return (rootGroup() == NULL);
+    return (rootGroup() == nullptr);
 }
 

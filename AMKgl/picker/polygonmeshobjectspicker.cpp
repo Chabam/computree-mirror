@@ -42,7 +42,7 @@ void PolygonMeshObjectsPicker::visitChunk(const IChunk *chunk)
 
     const AbstractChunkGenericCloudObject* objectChunk = dynamic_cast<const AbstractChunkGenericCloudObject*>(chunk);
 
-    if(objectChunk == NULL)
+    if(objectChunk == nullptr)
         return;
 
     QVector<PlaneF> polygonPlanesTransformed;
@@ -55,7 +55,7 @@ void PolygonMeshObjectsPicker::visitChunk(const IChunk *chunk)
 
     const ChunkGenericCloudObjectForOutliers* objectChunkForOutliers = dynamic_cast<const ChunkGenericCloudObjectForOutliers*>(chunk);
 
-    if(objectChunkForOutliers != NULL) {
+    if(objectChunkForOutliers != nullptr) {
 
         const ChunkGenericCloudObjectForOutliers::VertexesAndOffsetCollection& collection = objectChunkForOutliers->getVertexesWithOffset();
 
@@ -155,14 +155,14 @@ void PolygonMeshObjectsPicker::staticTestObjects(const PolygonMeshObjectsPicker:
 
     if(params.m_thisPicker->m_nVertexPerObject == 2) { // Edges
         for(size_t i = params.m_begin; i < params.m_end; ++i) {
-            const GLuint objectIndex = ((params.m_objectIndexes == NULL) ? GLuint(i) : params.m_objectIndexes[i]);
+            const GLuint objectIndex = ((params.m_objectIndexes == nullptr) ? GLuint(i) : params.m_objectIndexes[i]);
             ElementInfo& objectInfo = params.m_firstObjectInfo[objectIndex];
 
             if(params.m_checkOperation(objectInfo)) {
 
-                const FloatPoint& v1 = ((params.m_vertexIndexes == NULL) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
+                const FloatPoint& v1 = ((params.m_vertexIndexes == nullptr) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
                 ++currentObjectVertexIndex;
-                const FloatPoint& v2 = ((params.m_vertexIndexes == NULL) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
+                const FloatPoint& v2 = ((params.m_vertexIndexes == nullptr) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
                 ++currentObjectVertexIndex;
 
                 ok = staticTestEdge(v1,
@@ -183,16 +183,16 @@ void PolygonMeshObjectsPicker::staticTestObjects(const PolygonMeshObjectsPicker:
     } else if(params.m_thisPicker->m_nVertexPerObject == 3) { // Faces
 
         for(size_t i = params.m_begin; i < params.m_end; ++i) {
-            const GLuint objectIndex = ((params.m_objectIndexes == NULL) ? GLuint(i) : params.m_objectIndexes[i]);
+            const GLuint objectIndex = ((params.m_objectIndexes == nullptr) ? GLuint(i) : params.m_objectIndexes[i]);
             ElementInfo& objectInfo = params.m_firstObjectInfo[objectIndex];
 
             if(params.m_checkOperation(objectInfo)) {
 
-                const FloatPoint& v1 = ((params.m_vertexIndexes == NULL) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
+                const FloatPoint& v1 = ((params.m_vertexIndexes == nullptr) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
                 ++currentObjectVertexIndex;
-                const FloatPoint& v2 = ((params.m_vertexIndexes == NULL) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
+                const FloatPoint& v2 = ((params.m_vertexIndexes == nullptr) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
                 ++currentObjectVertexIndex;
-                const FloatPoint& v3 = ((params.m_vertexIndexes == NULL) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
+                const FloatPoint& v3 = ((params.m_vertexIndexes == nullptr) ? params.m_firstVertex[currentObjectVertexIndex] : params.m_firstVertex[params.m_vertexIndexes[currentObjectVertexIndex]]);
                 ++currentObjectVertexIndex;
 
                 ok = staticTestFace(v1,
@@ -337,8 +337,8 @@ PolygonMeshObjectsPicker::ToCompute::ToCompute(PolygonMeshObjectsPicker *picker,
 {
     m_thisPicker = picker;
 
-    m_objectIndexes = NULL;
-    m_vertexIndexes = NULL;
+    m_objectIndexes = nullptr;
+    m_vertexIndexes = nullptr;
 
     m_nObjects = 0;
 

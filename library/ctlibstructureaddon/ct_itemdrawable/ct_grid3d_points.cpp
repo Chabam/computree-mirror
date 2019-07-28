@@ -27,87 +27,39 @@
 
 #include "ct_grid3d_points.h"
 
-
-CT_Grid3D_Points::CT_Grid3D_Points() : CT_AbstractGrid3D()
+CT_Grid3D_Points::CT_Grid3D_Points() : SuperClass()
 {
-    _minCoordinates(0) = 0;
-    _minCoordinates(1) = 0;
-    _minCoordinates(2) = 0;
-    _res = 1;
-    _dimx = 1;
-    _dimy = 1;
-    _dimz = 1;
-    _maxCoordinates(0) = 0;
-    _maxCoordinates(1) = 0;
-    _maxCoordinates(2) = 0;
+}
+
+CT_Grid3D_Points::CT_Grid3D_Points(const CT_Grid3D_Points& other) : SuperClass(other)
+{
+    QMapIterator<size_t, QList<size_t>* > it(other._cells);
+
+    while(it.hasNext()) {
+        it.next();
+        _cells.insert(it.key(), new QList<size_t>(*it.value()));
+    }
+
+    _emptyList = other._emptyList;
 }
 
 CT_Grid3D_Points::~CT_Grid3D_Points()
 {
-    qDeleteAll(_cells.values());
+    qDeleteAll(_cells.begin(), _cells.end());
     _cells.clear();
 }
 
-CT_Grid3D_Points::CT_Grid3D_Points(const CT_OutAbstractSingularItemModel *model,
-                            const CT_AbstractResult *result,
-                            double xmin,
-                            double ymin,
-                            double zmin,
-                            size_t dimx,
-                            size_t dimy,
-                            size_t dimz,
-                            double resolution) : CT_AbstractGrid3D(model, result)
+CT_Grid3D_Points::CT_Grid3D_Points(double xmin,
+                                   double ymin,
+                                   double zmin,
+                                   size_t dimx,
+                                   size_t dimy,
+                                   size_t dimz,
+                                   double resolution) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
 {
-    _minCoordinates(0) = xmin;
-    _minCoordinates(1) = ymin;
-    _minCoordinates(2) = zmin;
-
-    _res = resolution;
-    _dimx = dimx;
-    _dimy = dimy;
-    _dimz = dimz;
-
-    _maxCoordinates(0) = minX() + _res * _dimx;
-    _maxCoordinates(1) = minY() + _res * _dimy;
-    _maxCoordinates(2) = minZ() + _res * _dimz;
-
-    setCenterX (minX() + (maxX() - minX())/2.0);
-    setCenterY (minY() + (maxY() - minY())/2.0);
-    setCenterZ (minZ() + (maxZ() - minZ())/2.0);
 }
 
-CT_Grid3D_Points::CT_Grid3D_Points(const QString &modelName,
-                            const CT_AbstractResult *result,
-                            double xmin,
-                            double ymin,
-                            double zmin,
-                            size_t dimx,
-                            size_t dimy,
-                            size_t dimz,
-                            double resolution) : CT_AbstractGrid3D(modelName, result)
-{
-    _minCoordinates(0) = xmin;
-    _minCoordinates(1) = ymin;
-    _minCoordinates(2) = zmin;
-
-    _res = resolution;
-    _dimx = dimx;
-    _dimy = dimy;
-    _dimz = dimz;
-
-    _maxCoordinates(0) = minX() + _res * _dimx;
-    _maxCoordinates(1) = minY() + _res * _dimy;
-    _maxCoordinates(2) = minZ() + _res * _dimz;
-
-    setCenterX (minX() + (maxX() - minX())/2.0);
-    setCenterY (minY() + (maxY() - minY())/2.0);
-    setCenterZ (minZ() + (maxZ() - minZ())/2.0);
-}
-
-
-CT_Grid3D_Points* CT_Grid3D_Points::createGrid3DFromXYZCoords(const CT_OutAbstractSingularItemModel *model,
-                                                              const CT_AbstractResult *result,
-                                                              double xmin,
+CT_Grid3D_Points* CT_Grid3D_Points::createGrid3DFromXYZCoords(double xmin,
                                                               double ymin,
                                                               double zmin,
                                                               double xmax,
@@ -116,71 +68,8 @@ CT_Grid3D_Points* CT_Grid3D_Points::createGrid3DFromXYZCoords(const CT_OutAbstra
                                                               double resolution,
                                                               bool extends)
 {
-
-
-    size_t dimx = ceil((xmax - xmin)/resolution);
-    size_t dimy = ceil((ymax - ymin)/resolution);
-    size_t dimz = ceil((zmax - zmin)/resolution);
-
-    if (extends)
-    {
-        // to ensure a point exactly on a maximum limit of the grid will be included in the grid
-        while (xmax >= (xmin + dimx * resolution))
-        {
-            dimx++;
-        }
-
-        while (ymax >= (ymin + dimy * resolution))
-        {
-            dimy++;
-        }
-
-        while (zmax >= (zmin + dimz * resolution))
-        {
-            dimz++;
-        }
-    }
-
-    return new CT_Grid3D_Points(model, result, xmin, ymin, zmin, dimx, dimy, dimz, resolution);
+    return CreateGrid3DTFromXYZCoords<CT_Grid3D_Points>(xmin, ymin, zmin, xmax, ymax, zmax, resolution, extends);
 }
-
-CT_Grid3D_Points* CT_Grid3D_Points::createGrid3DFromXYZCoords(const QString &modelName,
-                                                              const CT_AbstractResult *result,
-                                                              double xmin,
-                                                              double ymin,
-                                                              double zmin,
-                                                              double xmax,
-                                                              double ymax,
-                                                              double zmax,
-                                                              double resolution,
-                                                              bool extends)
-{
-    size_t dimx = ceil((xmax - xmin)/resolution);
-    size_t dimy = ceil((ymax - ymin)/resolution);
-    size_t dimz = ceil((zmax - zmin)/resolution);
-
-    if (extends)
-    {
-        // to ensure a point exactly on a maximum limit of the grid will be included in the grid
-        while (xmax >= (xmin + dimx * resolution))
-        {
-            dimx++;
-        }
-
-        while (ymax >= (ymin + dimy * resolution))
-        {
-            dimy++;
-        }
-
-        while (zmax >= (zmin + dimz * resolution))
-        {
-            dimz++;
-        }
-    }
-
-    return new CT_Grid3D_Points(modelName, result, xmin, ymin, zmin, dimx, dimy, dimz, resolution);
-}
-
 
 bool CT_Grid3D_Points::addPoint(size_t pointGlobalIndex)
 {
@@ -404,7 +293,7 @@ size_t CT_Grid3D_Points::getPointsIndicesInsideSphere(size_t gridIndex, double r
                                 const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
                                 n += indices->size();
 
-                                if (indexList != NULL)
+                                if (indexList != nullptr)
                                 {
                                     if (indices->size() > 0)
                                     {
@@ -433,7 +322,7 @@ size_t CT_Grid3D_Points::getPointIndicesIncludingKNearestNeighbours(Eigen::Vecto
 
         while (n < k && radius < maxDist)
         {
-            n = this->getPointsIndicesInsideSphere(index, radius, NULL);
+            n = this->getPointsIndicesInsideSphere(index, radius, nullptr);
             radius += this->resolution();
         }
 
@@ -442,17 +331,3 @@ size_t CT_Grid3D_Points::getPointIndicesIncludingKNearestNeighbours(Eigen::Vecto
 
     return n;
 }
-
-
-
-CT_AbstractItemDrawable* CT_Grid3D_Points::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-    CT_Grid3D_Points* cpy = new CT_Grid3D_Points((const CT_OutAbstractSingularItemModel *)model, result, minX(), minY(), minZ(), _dimx, _dimy, _dimz, _res);
-
-    cpy->setId(id());
-    cpy->setAlternativeDrawManager(getAlternativeDrawManager());
-
-    return cpy;
-}
-

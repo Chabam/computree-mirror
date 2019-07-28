@@ -35,7 +35,7 @@ public:
     IAttributesAccessor* getAttributesAccessor() const;
 
     /**
-     * @brief Returns the provider that get access to attributes if getAttributesAccessor() don't return NULL, otherwise return NULL
+     * @brief Returns the provider that get access to attributes if getAttributesAccessor() don't return nullptr, otherwise return nullptr
      */
     AnyElementAttributesProvider* getAnyElementsAttributesProvider() const;
 
@@ -331,35 +331,35 @@ public:
     virtual quint8 getNumberOfElementPerObject() const = 0;
 
     /**
-     * @brief Returns the color cloud, or NULL if it was not created.
+     * @brief Returns the color cloud, or nullptr if it was not created.
      */
     virtual Basic::AbstractColorCloud* getObjectColorCloud() const = 0;
 
     /**
-     * @brief Returns the normal cloud, or NULL if it was not created.
+     * @brief Returns the normal cloud, or nullptr if it was not created.
      */
     virtual Basic::AbstractNormalCloud* getObjectNormalCloud() const = 0;
 
     /**
-     * @brief Returns the normal cloud, or NULL if it was not created.
+     * @brief Returns the normal cloud, or nullptr if it was not created.
      */
     virtual Basic::AbstractInfoCloud* getObjectInfoCloud() const = 0;
 
     /**
      * @brief Returns the color cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     virtual Basic::AbstractColorCloud* createOrGetObjectColorCloud() = 0;
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     virtual Basic::AbstractNormalCloud* createOrGetObjectNormalCloud() = 0;
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     virtual Basic::AbstractInfoCloud* createOrGetObjectInfoCloud() = 0;
 

@@ -6,7 +6,7 @@
 CDM_StdIOListener::CDM_StdIOListener(QObject *parent) :
     QObject(parent)
 {
-    _parser = NULL;
+    _parser = nullptr;
 
     _cin  = new QTextStream(stdin, QIODevice::ReadOnly);
 
@@ -29,8 +29,8 @@ CDM_StdIOListener::~CDM_StdIOListener()
 
 void CDM_StdIOListener::setParser(CDM_StdIOParser *parser)
 {
-    if(_parser != NULL)
-        disconnect(_parser, NULL, this, NULL);
+    if(_parser != nullptr)
+        disconnect(_parser, nullptr, this, nullptr);
 
     _parser = parser;
 
@@ -75,7 +75,7 @@ void CDM_StdIOListener::parseData(const QString &s)
 {
     emit readedLine(s);
 
-    if(_parser != NULL)
+    if(_parser != nullptr)
     {
         QString response;
 

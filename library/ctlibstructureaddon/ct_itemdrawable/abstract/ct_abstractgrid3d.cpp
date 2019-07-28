@@ -42,3 +42,48 @@ CT_AbstractGrid3D::CT_AbstractGrid3D(size_t dimx, size_t dimy, size_t dimz, doub
     _dimy = dimy;
     _dimz = dimz;
 }
+
+CT_AbstractGrid3D::CT_AbstractGrid3D(double xmin, double ymin, double zmin, size_t dimx, size_t dimy, size_t dimz, double resolution)
+{
+    _res = resolution;
+    _dimx = dimx;
+    _dimy = dimy;
+    _dimz = dimz;
+
+    setBoundingBox(xmin, ymin, zmin,
+                   xmin + resolution * dimx, ymin + resolution * dimy, zmin + resolution * dimz);
+}
+
+CT_AbstractGrid3D::CT_AbstractGrid3D(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax, double resolution)
+{
+    _res = resolution;
+    _dimx = ceil((xmax - xmin)/resolution);
+    _dimy = ceil((ymax - ymin)/resolution);
+    _dimz = ceil((zmax - zmin)/resolution);
+
+    Eigen::Vector3d maxCoordinates(xmin + resolution * _dimx,
+                                   ymin + resolution * _dimy,
+                                   zmin + resolution * _dimz);
+
+    // to ensure a point exactly on a maximum limit of the grid will be included in the grid
+    while (xmax >= maxCoordinates(0))
+    {
+        _dimx++;
+        maxCoordinates(0) = (maxCoordinates(0) + resolution);
+    }
+
+    while (ymax >= maxCoordinates(1))
+    {
+        _dimy++;
+        maxCoordinates(1) = (maxCoordinates(1) + resolution);
+    }
+
+    while (zmax >= maxCoordinates(2))
+    {
+        _dimz++;
+        maxCoordinates(2) = (maxCoordinates(2) + resolution);
+    }
+
+    setBoundingBox(xmin, ymin, zmin,
+                   maxCoordinates(0), maxCoordinates(1), maxCoordinates(2));
+}

@@ -32,7 +32,7 @@ public:
      * @brief Copy constructor.
      *
      *        What is copied :
-     *          - Collection is copied (call "copy()" method) if not NULL
+     *          - Collection is copied (call "copy()" method) if not nullptr
      *          - Min and max value are copied
      *
      *        What is initialized differently :

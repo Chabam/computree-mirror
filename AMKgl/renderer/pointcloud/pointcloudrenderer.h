@@ -36,15 +36,15 @@ public:
     /**
      * @brief Add points to this renderer
      * @param indexes : collection of index of points to add
-     * @param dispatchInfos : a pointer to an object that will contains informations on where is dispatched points (NULL if you don't want this information)
+     * @param dispatchInfos : a pointer to an object that will contains informations on where is dispatched points (nullptr if you don't want this information)
      */
     void addPoints(const CloudIndex *indexes,
-                   PermanentItemInformation* dispatchInfos = NULL);
+                   PermanentItemInformation* dispatchInfos = nullptr);
 
     /**
      * @brief Add one point
      * @param globalIndex : global index of the point
-     * @param dispatchInfos : a pointer to an object that will contains informations on where is dispatched points (NULL if you don't want this information)
+     * @param dispatchInfos : a pointer to an object that will contains informations on where is dispatched points (nullptr if you don't want this information)
      */
     void addPoint(const size_t& globalIndex,
                   PermanentItemInformation* dispatchInfos);

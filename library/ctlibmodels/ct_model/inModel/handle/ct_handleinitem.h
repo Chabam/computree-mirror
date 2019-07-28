@@ -5,6 +5,8 @@
 #include "ct_model/inModel/ct_instdsingularitemmodel.h"
 #include "ct_model/inModel/ct_inresultmodelgrouptocopy.h"
 
+using CT_AbstractHandleInItem = CT_AbstractInHandleWithModelT<CT_InStdSingularItemModel>;
+
 template<class ItemT, int min = 1, int max = 1>
 class CT_HandleInItem : public CT_HandleInBase<CT_InStdSingularItemModel, min, max> {
 

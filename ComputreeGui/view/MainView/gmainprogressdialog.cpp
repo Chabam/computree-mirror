@@ -37,7 +37,7 @@ GMainProgressDialog::GMainProgressDialog(QWidget *parent, Qt::WindowFlags flags)
     _canClose = false;
     m_canceled = false;
 
-    m_data = NULL;
+    m_data = nullptr;
 
     setWindowTitle(tr("Progression"));
 

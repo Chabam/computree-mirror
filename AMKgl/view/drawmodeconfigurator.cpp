@@ -13,7 +13,7 @@ DrawModeConfigurator::DrawModeConfigurator(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_dmAccessor = NULL;
+    m_dmAccessor = nullptr;
 
     initUI();
 }
@@ -32,7 +32,7 @@ void DrawModeConfigurator::setDrawModeAccessor(const DrawModeAccessor *ps)
 
 void DrawModeConfigurator::updateScene()
 {
-    if(m_dmAccessor != NULL) {
+    if(m_dmAccessor != nullptr) {
         int n = ui->tableWidget->rowCount()-1;
 
         for(int i=0; i<n; ++i) {
@@ -81,7 +81,7 @@ void DrawModeConfigurator::initUI()
 
 void DrawModeConfigurator::updateUI()
 {
-    if(m_dmAccessor != NULL) {
+    if(m_dmAccessor != nullptr) {
         int n = ui->tableWidget->rowCount()-1;
 
         for(int i=0; i<n; ++i) {

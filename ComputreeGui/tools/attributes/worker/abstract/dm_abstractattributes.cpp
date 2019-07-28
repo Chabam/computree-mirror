@@ -5,8 +5,8 @@
 DM_AbstractAttributes::DM_AbstractAttributes() : DM_AbstractWorker()
 {
     m_displayAlone = false;
-    m_doc = NULL;
-    m_attributes = NULL;
+    m_doc = nullptr;
+    m_attributes = nullptr;
 }
 
 DM_AbstractAttributes::~DM_AbstractAttributes()
@@ -21,7 +21,7 @@ void DM_AbstractAttributes::setDisplayableName(const QString &name)
 QString DM_AbstractAttributes::displayableName() const
 {
     if(m_name.isEmpty()
-            && (abstractAttributes() != NULL))
+            && (abstractAttributes() != nullptr))
         return abstractAttributes()->model()->displayableName();
 
     return m_name;
@@ -67,12 +67,12 @@ void DM_AbstractAttributes::setAttributes(const CT_AbstractAttributes *att)
 {
     m_attributes = (CT_AbstractAttributes*)att;
 
-    if(att != NULL)
+    if(att != nullptr)
         connect(att, SIGNAL(destroyed()), this, SLOT(slotAttributesDeleted()), Qt::DirectConnection);
 }
 
 void DM_AbstractAttributes::slotAttributesDeleted()
 {
-    m_attributes = NULL;
+    m_attributes = nullptr;
     attributesDeleted();
 }

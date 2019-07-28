@@ -27,6 +27,6 @@ void MeshObjectsVisitor::visitChunk(const IChunk* chunk)
 
     const AbstractChunkGenericCloudObject* objectChunk = dynamic_cast<const AbstractChunkGenericCloudObject*>(chunk);
 
-    if(objectChunk != NULL)
+    if(objectChunk != nullptr)
         m_visitFunction((AbstractChunkGenericCloudObject*)objectChunk);
 }

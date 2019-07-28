@@ -77,7 +77,7 @@ void ChunkedInstanced<RendererContextT>::updateOnlyVAO()
 
         BufferObjectManager& bufferObjects = context->getBufferObjectManager();
 
-        if(getColorCloud() != NULL && !bufferObjects.getColorsBO(this, INSTANCED_COLORS_BO_UI).isCreated())
+        if(getColorCloud() != nullptr && !bufferObjects.getColorsBO(this, INSTANCED_COLORS_BO_UI).isCreated())
             ChunkedInstanced<RendererContextT>::setUpdated(false);
 
         if(ChunkedInstanced<RendererContextT>::isUpdated()) {
@@ -102,7 +102,7 @@ void ChunkedInstanced<RendererContextT>::updateOnlyVAO()
 
         RendererContextT* context = this->getCurrentContext();
 
-        if(context == NULL)
+        if(context == nullptr)
           return;
 
         context->destroyAllDisplayList(this);
@@ -402,7 +402,7 @@ template<typename RendererContextT>
 typename ChunkedInstanced<RendererContextT>::Vertex *ChunkedInstanced<RendererContextT>::getFirstVertex() const
 {
     if(m_vertexArray->empty())
-        return NULL;
+        return nullptr;
 
     return &((*m_vertexArray)[0]);
 }
@@ -410,8 +410,8 @@ typename ChunkedInstanced<RendererContextT>::Vertex *ChunkedInstanced<RendererCo
 template<typename RendererContextT>
 typename ChunkedInstanced<RendererContextT>::Vertex *ChunkedInstanced<RendererContextT>::getFirstVertexForFast() const
 {
-    if((m_fastVertexArray == NULL) || m_fastVertexArray->empty())
-        return NULL;
+    if((m_fastVertexArray == nullptr) || m_fastVertexArray->empty())
+        return nullptr;
 
     return &((*m_fastVertexArray)[0]);
 }
@@ -419,8 +419,8 @@ typename ChunkedInstanced<RendererContextT>::Vertex *ChunkedInstanced<RendererCo
 template<typename RendererContextT>
 GLuint* ChunkedInstanced<RendererContextT>::getFirstIndex() const
 {
-    if((m_normalIndicesArray == NULL) || m_normalIndicesArray->empty())
-        return NULL;
+    if((m_normalIndicesArray == nullptr) || m_normalIndicesArray->empty())
+        return nullptr;
 
     return &((*m_normalIndicesArray)[0]);
 }
@@ -428,8 +428,8 @@ GLuint* ChunkedInstanced<RendererContextT>::getFirstIndex() const
 template<typename RendererContextT>
 GLuint* ChunkedInstanced<RendererContextT>::getFirstIndexForFast() const
 {
-    if((m_fastIndicesArray == NULL) || m_fastIndicesArray->empty())
-        return NULL;
+    if((m_fastIndicesArray == nullptr) || m_fastIndicesArray->empty())
+        return nullptr;
 
     return &((*m_fastIndicesArray)[0]);
 }
@@ -438,7 +438,7 @@ template<typename RendererContextT>
 typename ChunkedInstanced<RendererContextT>::ShaderParamsType* ChunkedInstanced<RendererContextT>::getFirstParam() const
 {
     if(m_shapeArray.empty())
-        return NULL;
+        return nullptr;
 
     return const_cast<ShaderParamsType*>(&(m_shapeArray[0]));
 }
@@ -447,7 +447,7 @@ template<typename RendererContextT>
 typename ChunkedInstanced<RendererContextT>::Color* ChunkedInstanced<RendererContextT>::getFirstColor() const
 {
     if(m_colorArray.empty())
-        return NULL;
+        return nullptr;
 
     return const_cast<Color*>(&(m_colorArray[0]));
 }
@@ -456,7 +456,7 @@ template<typename RendererContextT>
 typename ChunkedInstanced<RendererContextT>::Info* ChunkedInstanced<RendererContextT>::getFirstInfo() const
 {
     if(m_infoArray.empty())
-        return NULL;
+        return nullptr;
 
     return const_cast<Info*>(&(m_infoArray[0]));
 }
@@ -470,7 +470,7 @@ typename ChunkedInstanced<RendererContextT>::ColorCloud* ChunkedInstanced<Render
 template<typename RendererContextT>
 typename ChunkedInstanced<RendererContextT>::NormalCloud* ChunkedInstanced<RendererContextT>::getNormalCloud() const
 {
-    return NULL;
+    return nullptr;
 }
 
 template<typename RendererContextT>
@@ -482,7 +482,7 @@ typename ChunkedInstanced<RendererContextT>::InfoCloud* ChunkedInstanced<Rendere
 template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::basicDraw(DrawInfo& info)
 {
-    if(m_basicDrawFunc != NULL)
+    if(m_basicDrawFunc != nullptr)
         (*m_basicDrawFunc)(m_funcContext, this, info);
     else
         this->basicFastOrNormalDraw(false);
@@ -500,7 +500,7 @@ void ChunkedInstanced<RendererContextT>::displayListDraw(DrawInfo& info)
 template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::rawDraw(DrawInfo& info)
 {
-    if(m_rawDrawFunc != NULL)
+    if(m_rawDrawFunc != nullptr)
         (*m_rawDrawFunc)(m_funcContext, this, info);
     else
         this->rawFastOrNormalDraw(false);
@@ -509,7 +509,7 @@ void ChunkedInstanced<RendererContextT>::rawDraw(DrawInfo& info)
 template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::vboDraw(DrawInfo& info)
 {
-    if(m_VBODrawFunc != NULL)
+    if(m_VBODrawFunc != nullptr)
         (*m_VBODrawFunc)(m_funcContext, this, info);
     else
         this->vboFastOrNormalDraw(false, info);
@@ -518,7 +518,7 @@ void ChunkedInstanced<RendererContextT>::vboDraw(DrawInfo& info)
 template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::vaoDraw(DrawInfo& info)
 {
-    if(m_VAODrawFunc != NULL)
+    if(m_VAODrawFunc != nullptr)
         (*m_VAODrawFunc)(m_funcContext, this, info);
     else
         this->vaoFastOrNormalDraw(false, info);
@@ -527,10 +527,10 @@ void ChunkedInstanced<RendererContextT>::vaoDraw(DrawInfo& info)
 template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::basicFastDraw(DrawInfo& info)
 {
-    if(m_basicFastDrawFunc != NULL) {
+    if(m_basicFastDrawFunc != nullptr) {
         (*m_basicFastDrawFunc)(m_funcContext, this, info);
     } else {
-        bool fastArrayAvailable = (m_fastVertexArray != NULL) || (m_fastIndicesArray != NULL);
+        bool fastArrayAvailable = (m_fastVertexArray != nullptr) || (m_fastIndicesArray != nullptr);
 
         this->basicFastOrNormalDraw(fastArrayAvailable);
     }
@@ -548,28 +548,28 @@ void ChunkedInstanced<RendererContextT>::displayListFastDraw(DrawInfo& info)
 template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::rawFastDraw(DrawInfo& info)
 {
-    if(m_rawFastDrawFunc != NULL)
+    if(m_rawFastDrawFunc != nullptr)
         (*m_rawFastDrawFunc)(m_funcContext, this, info);
     else
-        this->rawFastOrNormalDraw((m_fastVertexArray != NULL) || (m_fastIndicesArray != NULL));
+        this->rawFastOrNormalDraw((m_fastVertexArray != nullptr) || (m_fastIndicesArray != nullptr));
 }
 
 template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::vboFastDraw(DrawInfo& info)
 {
-    if(m_VBOFastDrawFunc != NULL)
+    if(m_VBOFastDrawFunc != nullptr)
         (*m_VBOFastDrawFunc)(m_funcContext, this, info);
     else
-        this->vboFastOrNormalDraw((m_fastVertexArray != NULL) || (m_fastIndicesArray != NULL), info);
+        this->vboFastOrNormalDraw((m_fastVertexArray != nullptr) || (m_fastIndicesArray != nullptr), info);
 }
 
 template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::vaoFastDraw(DrawInfo& info)
 {
-    if(m_VAOFastDrawFunc != NULL)
+    if(m_VAOFastDrawFunc != nullptr)
         (*m_VAOFastDrawFunc)(m_funcContext, this, info);
     else
-        this->vaoFastOrNormalDraw((m_fastVertexArray != NULL) || (m_fastIndicesArray != NULL), info);
+        this->vaoFastOrNormalDraw((m_fastVertexArray != nullptr) || (m_fastIndicesArray != nullptr), info);
 }
 
 template<typename RendererContextT>
@@ -577,19 +577,19 @@ void ChunkedInstanced<RendererContextT>::basicFastOrNormalDraw(bool fast)
 {
     size_t size = 0;
 
-    std::vector<GLuint>* indices = NULL;
+    std::vector<GLuint>* indices = nullptr;
 
     if(fast) {
         indices = m_fastIndicesArray;
 
-        if(m_fastIndicesArray != NULL)
+        if(m_fastIndicesArray != nullptr)
             size = m_fastIndicesArray->size();
         else
             size = m_fastVertexArray->size();
     } else {
         indices = m_normalIndicesArray;
 
-        if(m_normalIndicesArray != NULL)
+        if(m_normalIndicesArray != nullptr)
             size = m_normalIndicesArray->size();
         else
             size = m_vertexArray->size();
@@ -612,7 +612,7 @@ void ChunkedInstanced<RendererContextT>::basicFastOrNormalDraw(bool fast)
 
         std::vector<Eigen::Vector3f>* vA = m_vertexArray;
 
-        if(fast && (m_fastVertexArray != NULL))
+        if(fast && (m_fastVertexArray != nullptr))
             vA = m_fastVertexArray;
 
         ShaderParamsType* fM = getFirstParam();
@@ -629,7 +629,7 @@ void ChunkedInstanced<RendererContextT>::basicFastOrNormalDraw(bool fast)
                 if(ObjectsFlagsTool::staticIsObjectSelected(info)) {
                     glColor4fv(selectionColor);
                     modified = true;
-                } else if(fC != NULL) {
+                } else if(fC != nullptr) {
                     glColor4ubv(&fC[i][0]);
                 } else if(modified) {
                     glColor4fv(currentColor);
@@ -664,12 +664,12 @@ void ChunkedInstanced<RendererContextT>::rawFastOrNormalDraw(bool fast)
 
     QOpenGLFunctions_3_3_Compatibility* func = context->getOpenglContext()->template versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
 
-    Eigen::Vector3f* fv = NULL;
+    Eigen::Vector3f* fv = nullptr;
 
     if(fast)
         fv = this->getFirstVertexForFast();
 
-    if(fv == NULL)
+    if(fv == nullptr)
         fv = this->getFirstVertex();
 
     Info* fi = this->getFirstInfo();
@@ -685,14 +685,14 @@ void ChunkedInstanced<RendererContextT>::rawFastOrNormalDraw(bool fast)
     shaders.setInfoAttributeToShader(fi, context->getOpenglContext());
 
     // color
-    if(fc != NULL)
+    if(fc != nullptr)
         shaders.setColorAttributeToShader(fc, context->getOpenglContext());
 
     // matrix
     shaders.setParamsAttributeToShader(fm, context->getOpenglContext());
 
     // custom vertex attributes
-    if(m_customVertexAttributesCollection != NULL) {
+    if(m_customVertexAttributesCollection != nullptr) {
         CustomVertexAttributeCollectionIterator it(*m_customVertexAttributesCollection);
 
         while(it.hasNext()) {
@@ -710,7 +710,7 @@ void ChunkedInstanced<RendererContextT>::rawFastOrNormalDraw(bool fast)
 
     shaders.disableAttributeOfShader(context->getOpenglContext());
 
-    if((m_customVertexAttributesCollection != NULL) && (shaders.getShaderProgram() != NULL)) {
+    if((m_customVertexAttributesCollection != nullptr) && (shaders.getShaderProgram() != nullptr)) {
         CustomVertexAttributeCollectionIterator it(*m_customVertexAttributesCollection);
 
         while(it.hasNext()) {
@@ -752,7 +752,7 @@ void ChunkedInstanced<RendererContextT>::vboFastOrNormalDraw(bool fast, DrawInfo
             ok = shaders.bindAndSetInfoAttributeToShader(buffers.getInfosBO(this, INSTANCED_INFOS_BO_UI), context->getOpenglContext());
 
         // custom vertex attributes
-        if(m_customVertexAttributesCollection != NULL) {
+        if(m_customVertexAttributesCollection != nullptr) {
             CustomVertexAttributeCollectionIterator it(*m_customVertexAttributesCollection);
 
             while(ok && it.hasNext()) {
@@ -836,7 +836,7 @@ template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::callDrawElements(const size_t &nShapeToDraw,
                                                           QOpenGLFunctions_3_3_Compatibility* func)
 {
-    if(m_normalIndicesArray != NULL) {
+    if(m_normalIndicesArray != nullptr) {
         BufferObjectManager& buffers = this->getCurrentContext()->getBufferObjectManager();
 
         QOpenGLBuffer& ibo = buffers.getIndexBO(this, INSTANCED_SLOW_INDEX_BO_UI);
@@ -859,7 +859,7 @@ template<typename RendererContextT>
 void ChunkedInstanced<RendererContextT>::callFastDrawElements(const size_t &nShapeToDraw,
                                                               QOpenGLFunctions_3_3_Compatibility* func)
 {
-    if(m_fastIndicesArray != NULL) {
+    if(m_fastIndicesArray != nullptr) {
         BufferObjectManager& buffers = this->getCurrentContext()->getBufferObjectManager();
 
         QOpenGLBuffer& fibo = buffers.getIndexBO(this, INSTANCED_FAST_INDEX_BO_UI);
@@ -875,7 +875,7 @@ void ChunkedInstanced<RendererContextT>::callFastDrawElements(const size_t &nSha
         return;
     }
 
-    if(m_fastVertexArray != NULL)
+    if(m_fastVertexArray != nullptr)
         func->glDrawArraysInstanced(m_glMode, 0, (GLsizei)m_fastVertexArray->size(), (GLsizei)nShapeToDraw);
 }
 
@@ -897,7 +897,7 @@ void ChunkedInstanced<RendererContextT>::basicDrawShape(const typename ChunkedIn
     Q_UNUSED(param)
     Q_UNUSED(fast)
 
-    if(indices != NULL) {
+    if(indices != nullptr) {
         for(size_t j=0; j<nVertex; ++j)
             glVertex3fv(&(vertexArray[(*indices)[j]])[0]);
     } else {
@@ -911,7 +911,7 @@ bool ChunkedInstanced<RendererContextT>::internalUpdate()
 {
     RendererContextT* context = this->getCurrentContext();
 
-    if(context == NULL)
+    if(context == nullptr)
         return false;
 
     if(this->isUpdated())
@@ -930,7 +930,7 @@ bool ChunkedInstanced<RendererContextT>::internalUpdate()
 
     ShadersType& shaders = context->getShaders();
 
-    if(shaders.getShaderProgram() == NULL) {
+    if(shaders.getShaderProgram() == nullptr) {
         this->setNormalDrawModeUsed(this->getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
         this->setFastDrawModeUsed(this->getNormalDrawModeUsed());
         this->setUpdated(true);
@@ -945,7 +945,7 @@ bool ChunkedInstanced<RendererContextT>::internalUpdate()
     QOpenGLFunctions_3_3_Compatibility* func = context->getOpenglContext()->template versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
 
     // if the graphics card don't have this feature we must use the draw mode BASIC
-    if(func == NULL) {
+    if(func == nullptr) {
         this->setNormalDrawModeUsed(this->getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
         this->setFastDrawModeUsed(this->getNormalDrawModeUsed());
     } else
@@ -953,7 +953,7 @@ bool ChunkedInstanced<RendererContextT>::internalUpdate()
 
     bool ok = false;
 
-    if(this->mustUseVBO() && (func != NULL)) {
+    if(this->mustUseVBO() && (func != nullptr)) {
 
         BufferObjectManager& bufferObjects = context->getBufferObjectManager();
 
@@ -964,13 +964,13 @@ bool ChunkedInstanced<RendererContextT>::internalUpdate()
 
             if(ok) {
 
-                if(m_fastVertexArray != NULL)
+                if(m_fastVertexArray != nullptr)
                     ok = bufferObjects.createVertexBO<Vertex>(this, INSTANCED_FAST_VERTEX_BO_UI, [](void* object) -> void* { return ((ChunkedInstanced<RendererContextT>*)object)->getFirstVertexForFast(); }, m_fastVertexArray->size());
 
-                if(ok && (m_fastIndicesArray != NULL))
+                if(ok && (m_fastIndicesArray != nullptr))
                     ok = bufferObjects.createIndexBO<Vertex>(this, INSTANCED_FAST_INDEX_BO_UI, [](void* object) -> void* { return ((ChunkedInstanced<RendererContextT>*)object)->getFirstIndexForFast(); }, m_fastIndicesArray->size());
 
-                if(ok && (m_normalIndicesArray != NULL))
+                if(ok && (m_normalIndicesArray != nullptr))
                     ok = bufferObjects.createIndexBO<GLuint>(this, INSTANCED_SLOW_INDEX_BO_UI, [](void* object) -> void* { return ((ChunkedInstanced<RendererContextT>*)object)->getFirstIndex(); }, m_normalIndicesArray->size());
 
                 if(ok) {
@@ -982,7 +982,7 @@ bool ChunkedInstanced<RendererContextT>::internalUpdate()
                     if(ok)
                         bufferObjects.createColorsBO<Color>(this, INSTANCED_COLORS_BO_UI, [](void* object) -> void* { return ((ChunkedInstanced<RendererContextT>*)object)->getFirstColor(); }, m_shapeArray.size());
 
-                    if(ok && (m_customVertexAttributesCollection != NULL)) {
+                    if(ok && (m_customVertexAttributesCollection != nullptr)) {
                         CustomVertexAttributeCollectionIterator it(*m_customVertexAttributesCollection);
 
                         while(ok && it.hasNext()) {

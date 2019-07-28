@@ -92,7 +92,7 @@ public:
      *        If all condition it's ok, the cloud in the QSharedPointer is resized to the 'newSize' and the global cloud is resized to
      *        (current size + (newSize - cloudIndex->size()) )
      *
-     * @return If all condition it's ok the QSharePointer passed in parameter is returned, otherwise a QSharedPointer with data() == NULL.
+     * @return If all condition it's ok the QSharePointer passed in parameter is returned, otherwise a QSharedPointer with data() == nullptr.
      */
     CT_AbstractNotModifiableCIR resizeCloudAndCloudIndex(CT_AbstractNotModifiableCIR cir, const size_t &newSize);
 

@@ -1,6 +1,6 @@
 #include "ct_logmanager.h"
 
-CT_LogManager* CT_LogManager::UNIQUE_INSTANCE = NULL;
+CT_LogManager* CT_LogManager::UNIQUE_INSTANCE = nullptr;
 
 
 CT_LogManager::CT_LogManager() :
@@ -10,7 +10,7 @@ CT_LogManager::CT_LogManager() :
 
 void CT_LogManager::setLogInterfaceToUse(LogInterface* log)
 {
-    if(log == NULL) {
+    if(log == nullptr) {
         m_log = &m_tmpLog;
         return;
     }

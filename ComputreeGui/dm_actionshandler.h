@@ -88,10 +88,10 @@ protected:
     {
         bool val = false;
 
-        if(m_activeAction != NULL)
+        if(m_activeAction != nullptr)
             val = (dynamic_cast<ACTION*>(m_activeAction)->*func)(p);
 
-        if(!val && (m_defaultAction != NULL))
+        if(!val && (m_defaultAction != nullptr))
             val = (dynamic_cast<ACTION*>(m_defaultAction)->*func)(p);
 
         return val;
@@ -102,10 +102,10 @@ protected:
     {
         bool val = false;
 
-        if(m_activeAction != NULL)
+        if(m_activeAction != nullptr)
             val = (((ACTION*)m_activeAction)->*func)(p);
 
-        if(!val && (m_defaultAction != NULL))
+        if(!val && (m_defaultAction != nullptr))
             val = (((ACTION*)m_defaultAction)->*func)(p);
 
         return val;

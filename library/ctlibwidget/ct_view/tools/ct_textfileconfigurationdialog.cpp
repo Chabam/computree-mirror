@@ -115,7 +115,7 @@ void CT_TextFileConfigurationDialog::separator_currentIndexChanged(int index)
 void CT_TextFileConfigurationDialog::nbLines_valueChanged(int arg1)
 {
     QString result = "";
-    if (_file!=NULL && _file->exists() && _file->open(QIODevice::ReadOnly | QIODevice::Text))
+    if (_file!=nullptr && _file->exists() && _file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
         _stream->seek(0);
 
@@ -155,7 +155,7 @@ void CT_TextFileConfigurationDialog::extractFieldsNames()
     int headerNNumericValues = 0;
     bool headerIsNumericValues = false;
 
-    if (_file!=NULL && _file->exists() && _file->open(QIODevice::ReadOnly | QIODevice::Text))
+    if (_file!=nullptr && _file->exists() && _file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
         _stream->seek(0);
         for (int i = 0 ; i < ui->skipLines->value() ; i++)
@@ -444,7 +444,7 @@ void CT_TextFileConfigurationDialog::pb_detect_clicked()
 {
 
     // Detect fieds separator automatically
-    if (_file!=NULL && _file->exists() && _file->open(QIODevice::ReadOnly | QIODevice::Text))
+    if (_file!=nullptr && _file->exists() && _file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
         _stream->seek(0);
 
@@ -479,9 +479,9 @@ void CT_TextFileConfigurationDialog::initConstructor(QString fileName, bool auto
 {
     ui->setupUi(this);
 
-    // Modif michael : problème si on met a NULL ! si on ne clique pas sur le bouton filechoose
-    _stream = NULL;
-    _file = NULL;
+    // Modif michael : problème si on met a nullptr ! si on ne clique pas sur le bouton filechoose
+    _stream = nullptr;
+    _file = nullptr;
     _autoDetect = autoDetect;
 
     if (_autoDetect) {ui->pb_detect->setVisible(false);}

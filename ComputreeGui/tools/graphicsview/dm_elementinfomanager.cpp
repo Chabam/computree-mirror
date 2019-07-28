@@ -20,7 +20,7 @@ DM_ElementInfoManager::DM_ElementInfoManager(CT_Repository::SyncCloudWith syncWi
     m_disableInvisibility = std::numeric_limits<GLubyte>::max()-m_enableInvisibility;
 
     m_infoR = PS_REPOSITORY->createNewCloudT<CT_StdCloudRegisteredT< CT_StandardCloudStdVectorT<GLubyte> >, CT_StandardCloudStdVectorT<GLubyte> >(m_syncWith);
-    m_infoCloud = NULL;
+    m_infoCloud = nullptr;
 
     if(!m_infoR.isNull())
         m_infoCloud = m_infoR->cloudT();
@@ -30,7 +30,7 @@ DM_ElementInfoManager::DM_ElementInfoManager(CT_Repository::SyncCloudWith syncWi
 
 void DM_ElementInfoManager::addIDToSelection(const size_t &id)
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         GLubyte &info = m_infoCloud->tAt(id);
         info |= m_enableSelection;
         m_selectionChanged = true;
@@ -39,7 +39,7 @@ void DM_ElementInfoManager::addIDToSelection(const size_t &id)
 
 void DM_ElementInfoManager::addMultipleIDToSelection(const std::vector<size_t> &idList)
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
 
         std::vector<size_t>::const_iterator it = idList.begin();
         std::vector<size_t>::const_iterator end = idList.end();
@@ -60,7 +60,7 @@ void DM_ElementInfoManager::addMultipleIDToSelection(const std::vector<size_t> &
 
 void DM_ElementInfoManager::addCloudIndexToSelection(const QList<CT_AbstractCloudIndex*> &listID)
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         QListIterator<CT_AbstractCloudIndex*> it(listID);
 
         size_t globalIndex;
@@ -87,7 +87,7 @@ void DM_ElementInfoManager::addCloudIndexToSelection(const QList<CT_AbstractClou
 
 void DM_ElementInfoManager::removeIDFromSelection(const size_t &id)
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         GLubyte &info = m_infoCloud->tAt(id);
         info &= m_disableSelection;
         m_selectionChanged = true;
@@ -96,7 +96,7 @@ void DM_ElementInfoManager::removeIDFromSelection(const size_t &id)
 
 void DM_ElementInfoManager::removeMultipleIDFromSelection(const std::vector<size_t> &idList)
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
 
         std::vector<size_t>::const_iterator it = idList.begin();
         std::vector<size_t>::const_iterator end = idList.end();
@@ -117,7 +117,7 @@ void DM_ElementInfoManager::removeMultipleIDFromSelection(const std::vector<size
 
 void DM_ElementInfoManager::removeCloudIndexFromSelection(const QList<CT_AbstractCloudIndex*> &listID)
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         QListIterator<CT_AbstractCloudIndex*> it(listID);
 
         size_t globalIndex;
@@ -144,7 +144,7 @@ void DM_ElementInfoManager::removeCloudIndexFromSelection(const QList<CT_Abstrac
 
 void DM_ElementInfoManager::addIDToInvisibility(const size_t &id)
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         GLubyte &info = m_infoCloud->tAt(id);
         info |= m_enableInvisibility;
     }
@@ -152,7 +152,7 @@ void DM_ElementInfoManager::addIDToInvisibility(const size_t &id)
 
 void DM_ElementInfoManager::removeIDFromInvisibility(const size_t &id)
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         GLubyte &info = m_infoCloud->tAt(id);
         info &= m_disableInvisibility;
     }
@@ -160,7 +160,7 @@ void DM_ElementInfoManager::removeIDFromInvisibility(const size_t &id)
 
 void DM_ElementInfoManager::clearSelection()
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         size_t size = m_infoCloud->size();
 
         if(size > 0)
@@ -175,7 +175,7 @@ void DM_ElementInfoManager::clearSelection()
 
 void DM_ElementInfoManager::setAllSelectedInvisible()
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         size_t size = m_infoCloud->size();
 
         for(size_t i=0; i<size; ++i) {
@@ -189,7 +189,7 @@ void DM_ElementInfoManager::setAllSelectedInvisible()
 
 void DM_ElementInfoManager::setAllElementVisible()
 {
-    if(m_infoCloud != NULL) {
+    if(m_infoCloud != nullptr) {
         size_t size = m_infoCloud->size();
 
         for(size_t i=0; i<size; ++i) {
@@ -247,5 +247,5 @@ CT_AbstractModifiableCloudIndexT<T>* DM_ElementInfoManager::selectedT() const
 
     delete sel;
 
-    return NULL;
+    return nullptr;
 }

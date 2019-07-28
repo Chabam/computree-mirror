@@ -43,9 +43,9 @@ CT_AbstractItemDrawable::CT_AbstractItemDrawable() : SuperClass()
     m_id = 0;
     m_isSelected = false;
     m_isDisplayedInADocument = false;
-    m_parentItem = NULL;
-    m_baseDrawManager = NULL;
-    m_alternativeDrawManager = NULL;
+    m_parentItem = nullptr;
+    m_baseDrawManager = nullptr;
+    m_alternativeDrawManager = nullptr;
 }
 
 CT_AbstractItemDrawable::CT_AbstractItemDrawable(const CT_AbstractItemDrawable& other) : SuperClass(other),
@@ -53,7 +53,7 @@ CT_AbstractItemDrawable::CT_AbstractItemDrawable(const CT_AbstractItemDrawable& 
     m_isSelected(false),
     m_isDisplayedInADocument(false),
     m_displayableName(other.m_displayableName),
-    m_parentItem(NULL),
+    m_parentItem(nullptr),
     m_baseDrawManager(other.m_baseDrawManager),
     m_alternativeDrawManager(other.m_alternativeDrawManager)
 {
@@ -101,8 +101,8 @@ void CT_AbstractItemDrawable::setDisplayed(const bool& value)
 
 bool CT_AbstractItemDrawable::addDocumentParent(const IDocumentForModel* doc)
 {
-    Q_ASSERT(doc != NULL);
-    Q_ASSERT(model() != NULL);
+    Q_ASSERT(doc != nullptr);
+    Q_ASSERT(model() != nullptr);
 
     auto ret = m_documentsWhereThisItemIs.insert(const_cast<IDocumentForModel*>(doc));
 
@@ -118,8 +118,8 @@ bool CT_AbstractItemDrawable::addDocumentParent(const IDocumentForModel* doc)
 
 void CT_AbstractItemDrawable::removeDocumentParent(const IDocumentForModel* doc)
 {
-    Q_ASSERT(doc != NULL);
-    Q_ASSERT(model() != NULL);
+    Q_ASSERT(doc != nullptr);
+    Q_ASSERT(model() != nullptr);
 
     if(m_documentsWhereThisItemIs.erase(const_cast<IDocumentForModel*>(doc)) != 0) {
         model()->decrementVisibilityInDocument(doc);
@@ -148,7 +148,7 @@ QString CT_AbstractItemDrawable::displayableName() const
     if(!m_displayableName.isEmpty())
         return m_displayableName;
 
-    Q_ASSERT(model() != NULL);
+    Q_ASSERT(model() != nullptr);
 
     return QString("%1_%2").arg(model()->displayableName()).arg(QVariant(id()).toString());
 
@@ -174,7 +174,7 @@ void CT_AbstractItemDrawable::setAlternativeDrawManager(const CT_AbstractItemDra
 {
     m_alternativeDrawManager = const_cast<CT_AbstractItemDrawableDrawManager*>(drawManager);
 
-    if((m_alternativeDrawManager != NULL) && (m_alternativeDrawManager->drawConfiguration() == NULL))
+    if((m_alternativeDrawManager != nullptr) && (m_alternativeDrawManager->drawConfiguration() == nullptr))
         m_alternativeDrawManager->initDrawConfiguration();
 }
 
@@ -197,7 +197,7 @@ void CT_AbstractItemDrawable::setBaseDrawManager(const CT_AbstractItemDrawableDr
 {
     m_baseDrawManager = const_cast<CT_AbstractItemDrawableDrawManager*>(drawManager);
 
-    if((m_baseDrawManager != NULL) && (m_baseDrawManager->drawConfiguration() == NULL))
+    if((m_baseDrawManager != nullptr) && (m_baseDrawManager->drawConfiguration() == nullptr))
         m_baseDrawManager->initDrawConfiguration();
 }
 
@@ -243,13 +243,13 @@ QString CT_AbstractItemDrawable::info()
 
 void CT_AbstractItemDrawable::draw(GraphicsViewInterface& view, PainterInterface& painter)
 {
-    if(m_alternativeDrawManager != NULL)
+    if(m_alternativeDrawManager != nullptr)
     {
         m_alternativeDrawManager->preDraw(view, painter, *this);
         m_alternativeDrawManager->draw(view, painter, *this);
         m_alternativeDrawManager->postDraw(view, painter, *this);
     }
-    else if(m_baseDrawManager != NULL)
+    else if(m_baseDrawManager != nullptr)
     {
         m_baseDrawManager->preDraw(view, painter, *this);
         m_baseDrawManager->draw(view, painter, *this);
@@ -259,13 +259,13 @@ void CT_AbstractItemDrawable::draw(GraphicsViewInterface& view, PainterInterface
 
 CT_ItemDrawableConfiguration* CT_AbstractItemDrawable::drawConfiguration()
 {
-    if(m_alternativeDrawManager != NULL)
+    if(m_alternativeDrawManager != nullptr)
         return (CT_ItemDrawableConfiguration*)m_alternativeDrawManager->drawConfiguration();
 
-    if(m_baseDrawManager != NULL)
+    if(m_baseDrawManager != nullptr)
         return (CT_ItemDrawableConfiguration*)m_baseDrawManager->drawConfiguration();
 
-    return NULL;
+    return nullptr;
 }
 
 QList<CT_ItemDrawableConfiguration*> CT_AbstractItemDrawable::dependantDrawConfigurations() const
@@ -275,7 +275,7 @@ QList<CT_ItemDrawableConfiguration*> CT_AbstractItemDrawable::dependantDrawConfi
     const auto visitor = [&set](const CT_OutAbstractModel* childModel) -> bool {
         CT_AbstractItemDrawable* child = dynamic_cast<CT_AbstractItemDrawable*>(childModel->prototype());
 
-        if(child != NULL)
+        if(child != nullptr)
             set.insert(child->drawConfiguration());
 
         return true;

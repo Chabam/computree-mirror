@@ -133,9 +133,9 @@ public:
 
     CT_DelaunayTriangulation *copy();
 
-    const CT_DelaunayTriangle *findTriangleContainingPoint(double x, double y, CT_DelaunayTriangle *refTriangle = NULL);
+    const CT_DelaunayTriangle *findTriangleContainingPoint(double x, double y, CT_DelaunayTriangle *refTriangle = nullptr);
 
-    const CT_DelaunayTriangle* getZCoordForXY(double x, double y, double &outZ, CT_DelaunayTriangle *refTriangle = NULL);
+    const CT_DelaunayTriangle* getZCoordForXY(double x, double y, double &outZ, CT_DelaunayTriangle *refTriangle = nullptr);
 
     QList<CT_DelaunayVertex *> getNeighboursForCoordinates(double x, double y);
 

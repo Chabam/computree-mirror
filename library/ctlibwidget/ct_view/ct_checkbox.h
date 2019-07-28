@@ -48,26 +48,33 @@ private:
 public:
     CT_CheckBox(QString text, bool &value, QString description = "");
 
-    QString type() const { return metaObject()->className(); }
+    QString type() const final { return metaObject()->className(); }
 
-    void saveSettings(SettingsWriterInterface& writer) const override;
-    bool restoreSettings(SettingsReaderInterface& reader) override;
+    void saveSettings(SettingsWriterInterface& writer) const  final;
+    bool restoreSettings(SettingsReaderInterface& reader)  final;
 
-    QWidget* createWidget(QWidget &parent);
+    QWidget* createWidget(QWidget &parent) final;
 
-    void updateValue();
+    void updateValue() final;
 
-    bool isValueAndWidgetValueDifferent() const;
+    bool isValueAndWidgetValueDifferent() const final;
 
     QVariant getValue() const;
 
     bool setWidgetValue(QVariant val);
+
+public slots:
+    void setEnabled(bool enabled);
+    void setChecked(bool checked);
 
 protected:
 
     CheckBoxData   _data;
     QCheckBox      *_checkBoxCreated;
     QString         _description;
+
+signals:
+    void valueChanged(bool checked);
 };
 
 #endif // CT_CHECKBOX_H

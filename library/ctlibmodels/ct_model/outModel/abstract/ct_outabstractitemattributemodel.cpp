@@ -10,7 +10,7 @@ CT_OutAbstractItemAttributeModel::CT_OutAbstractItemAttributeModel(const CT_OutA
 {
     IItemAttributeForModel* att = other.itemAttribute();
 
-    if(att != NULL)
+    if(att != nullptr)
         setPrototype(other.itemAttribute()->itemAttributeToolForModel()->copyItemAttribute());
 }
 

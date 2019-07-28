@@ -11,7 +11,7 @@ class CT_VirtualAbstractStep;
 class CTLIBSTRUCTUREWIDGET_EXPORT CT_ItemDrawableCollectionHierarchyStep
 {
 public:
-    CT_ItemDrawableCollectionHierarchyStep() { step = NULL; }
+    CT_ItemDrawableCollectionHierarchyStep() { step = nullptr; }
 
     CT_VirtualAbstractStep                              *step;
     QList< CT_ItemDrawableCollectionHierarchyResult >   results;

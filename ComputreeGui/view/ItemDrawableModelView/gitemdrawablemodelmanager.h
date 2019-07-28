@@ -23,7 +23,7 @@ class GItemDrawableModelManager;
 }
 
 struct GActionSetColorByInfo {
-    GActionSetColorByInfo(): m_model(NULL), m_docIndex(-1) {}
+    GActionSetColorByInfo(): m_model(nullptr), m_docIndex(-1) {}
     GActionSetColorByInfo(CT_OutAbstractItemAttributeModel *m, int docI) : m_model(m), m_docIndex(docI) {}
     CT_OutAbstractItemAttributeModel    *m_model;
     int                                 m_docIndex;

@@ -1,8 +1,6 @@
 #ifndef CT_GRID4D_DENSE_H
 #define CT_GRID4D_DENSE_H
 
-#ifdef USE_OPENCV
-
 #include "ct_itemdrawable/ct_grid4d.h"
 #include <typeinfo>
 
@@ -18,6 +16,8 @@
 template< typename DataT>
 class   CT_Grid4D_Dense  : public CT_Grid4D<DataT>
 {
+    CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Grid4D_Dense, DataT, CT_Grid4D<DataT>, 4D dense grid)
+    using SuperClass = CT_Grid4D<DataT>;
 
 public:
     //**********************************************//
@@ -25,9 +25,10 @@ public:
     //**********************************************//
     /**
       * \brief Default constructor
-      *  Each attribute will be set to 0, NULL or will be cleared
+      *  Each attribute will be set to 0, nullptr or will be cleared
       */
     CT_Grid4D_Dense();
+    CT_Grid4D_Dense(const CT_Grid4D_Dense& other);
 
     /*!
      * \brief Initialisation constructor
@@ -51,26 +52,7 @@ public:
      * \param na Value used to code NA
      * \param initValue Initialisation value for grid cells
      */
-    CT_Grid4D_Dense(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              double wmin,
-              double xmin,
-              double ymin,
-              double zmin,
-              size_t dimw,
-              size_t dimx,
-              size_t dimy,
-              size_t dimz,
-              double resw,
-              double resx,
-              double resy,
-              double resz,
-              DataT na,
-              DataT initValue);
-
-    CT_Grid4D_Dense(const QString &modelName,
-              const CT_AbstractResult *result,
-              double wmin,
+    CT_Grid4D_Dense(double wmin,
               double xmin,
               double ymin,
               double zmin,
@@ -108,9 +90,7 @@ public:
      * \param initValue Initialisation value for grid cells
      * \param coordConstructor Not used, only to ensure constructor different signatures
      */
-    CT_Grid4D_Dense(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              double wmin,
+    CT_Grid4D_Dense(double wmin,
               double xmin,
               double ymin,
               double zmin,
@@ -124,47 +104,6 @@ public:
               double resz,
               DataT na,
               DataT initValue);
-
-    /*!
-     * \brief Initialisation constructor
-     *
-     * Grid is created thanks to the bounding box (4D) of the grid
-     *
-     * \param modelName model name for creation
-     * \param result Result containing the item
-     * \param wmin Minimum W coordinate (bottom left corner)
-     * \param xmin Minimum X coordinate (bottom left corner)
-     * \param ymin Minimum Y coordinate (bottom left corner)
-     * \param zmin Minimum Z coordinate (bottom left corner)
-     * \param wmax Maximum W coordinate (top right corner)
-     * \param xmax Maximum X coordinate (top right corner)
-     * \param ymax Maximum Y coordinate (top right corner)
-     * \param zmax Maximum Z coordinate (top right corner)
-     * \param resw Length of a cell on w
-     * \param resx Length of a cell on x
-     * \param resy Length of a cell on y
-     * \param resz Length of a cell on z
-     * \param na Value used to code NA
-     * \param initValue Initialisation value for grid cells
-     * \param coordConstructor Not used, only to ensure constructor different signatures
-     */
-    CT_Grid4D_Dense(const QString& modelName,
-              const CT_AbstractResult *result,
-              double wmin,
-              double xmin,
-              double ymin,
-              double zmin,
-              double wmax,
-              double xmax,
-              double ymax,
-              double zmax,
-              double resw,
-              double resx,
-              double resy,
-              double resz,
-              DataT na,
-              DataT initValue);
-
 
     /*!
      * \brief Factory
@@ -281,23 +220,7 @@ public:
     //**********************************************//
     //          CompuTree Core and GUI tools        //
     //**********************************************//
-    virtual QString getType() const;
-    static QString staticGetType();
-
-    virtual QString name() const;
-    static QString staticName();
-
-    /*!
-     * \brief Copy method
-     *
-     * \param model Item model for the copy
-     * \param result Result containing the copy
-     * \param copyModeList Copy mode
-     * \return Item copy
-     */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-    virtual CT_AbstractItemDrawable* copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-
+    CT_ITEM_COPY_IMP(CT_Grid4D_Dense<DataT>)
 
 protected:
 
@@ -310,7 +233,5 @@ protected:
 
 // Includes the template implementations
 #include "ct_itemdrawable/ct_grid4d_dense.hpp"
-
-#endif
 
 #endif // CT_GRID4D_DENSE_H

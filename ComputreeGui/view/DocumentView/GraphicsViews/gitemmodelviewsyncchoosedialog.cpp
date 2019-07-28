@@ -10,7 +10,7 @@ GItemModelViewSyncChooseDialog::GItemModelViewSyncChooseDialog(QWidget *parent) 
 {
     ui->setupUi(this);
 
-    _syncGroup = NULL;
+    _syncGroup = nullptr;
 }
 
 GItemModelViewSyncChooseDialog::~GItemModelViewSyncChooseDialog()
@@ -20,7 +20,7 @@ GItemModelViewSyncChooseDialog::~GItemModelViewSyncChooseDialog()
 
 bool GItemModelViewSyncChooseDialog::setSyncGroup(DM_ItemModelViewSynchronizedGroup *group)
 {
-    if(group->itemModelView() == NULL)
+    if(group->itemModelView() == nullptr)
         return false;
 
     _syncGroup = group;
@@ -36,7 +36,7 @@ bool GItemModelViewSyncChooseDialog::setSyncGroup(DM_ItemModelViewSynchronizedGr
         DM_DocumentView *dv = manager->getDocumentView(i);
 
         if((dv != group->itemModelView())
-                && (dynamic_cast<GDocumentViewForItemModel*>(dv) == NULL))
+                && (dynamic_cast<GDocumentViewForItemModel*>(dv) == nullptr))
         {
             QCheckBox *cb = new QCheckBox(dv->getTitle(), this);
             cb->setChecked(group->containsDocumentView(dv));

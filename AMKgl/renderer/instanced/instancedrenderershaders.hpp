@@ -3,9 +3,9 @@
 
 #include "instancedrenderershaders.h"
 
-#define INSTANCED_CHECK_PROGRAM_ERROR(FUNC_TO_CALL) if((m_program != NULL) && !(ok = FUNC_TO_CALL)) { \
+#define INSTANCED_CHECK_PROGRAM_ERROR(FUNC_TO_CALL) if((m_program != nullptr) && !(ok = FUNC_TO_CALL)) { \
                                                     delete m_program; \
-                                                    m_program = NULL; \
+                                                    m_program = nullptr; \
                                                   }
 
 #define VERTEXATTRIBUTE_NAME_IN_SHADER "vertex"
@@ -24,7 +24,7 @@ InstancedRendererShaders<ShaderParams>::InstancedRendererShaders(const GLint& gl
 {
     m_vertexShaderPath = vertexShaderPath;
 
-    m_program = NULL;
+    m_program = nullptr;
     m_shaderVertexLocation = -1;
     m_shaderParamsLocation = -1;
     m_shaderColorLocation = -1;
@@ -96,7 +96,7 @@ bool InstancedRendererShaders<ShaderParams>::init(const QOpenGLContext* context)
             if(!ok) {
                 AMKglLOG->addErrorMessage(error);
                 delete m_program;
-                m_program = NULL;
+                m_program = nullptr;
                 return false;
             }
 
@@ -137,7 +137,7 @@ bool InstancedRendererShaders<ShaderParams>::bindAndConfigureByDefaultShader(con
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::bindShader()
 {
-    if(getShaderProgram() == NULL)
+    if(getShaderProgram() == nullptr)
         return false;
 
     return getShaderProgram()->bind();
@@ -152,14 +152,14 @@ void InstancedRendererShaders<ShaderParams>::releaseShader()
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::bindAndSetVertexToShader(QOpenGLBuffer &vertex)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderVertexLocation() == -1)
             || !vertex.isCreated()
             || !vertex.bind())
         return false;
 
 
-    bool ok = setVertexToShader(NULL);
+    bool ok = setVertexToShader(nullptr);
 
     vertex.release();
 
@@ -169,7 +169,7 @@ bool InstancedRendererShaders<ShaderParams>::bindAndSetVertexToShader(QOpenGLBuf
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::setVertexToShader(const Eigen::Vector3f* pointer)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderVertexLocation() == -1))
         return false;
 
@@ -182,13 +182,13 @@ bool InstancedRendererShaders<ShaderParams>::setVertexToShader(const Eigen::Vect
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::bindAndSetCustomVertexAttributeToShader(const std::string& name, GLint tupleSize, GLenum type, GLboolean normalized, GLsizei stride, QOpenGLBuffer &custom, const QOpenGLContext* context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || name.empty()
             || !custom.isCreated()
             || !custom.bind())
         return false;
 
-    bool ok = setCustomVertexAttributeToShader(name, tupleSize, type, normalized, stride, NULL, context);
+    bool ok = setCustomVertexAttributeToShader(name, tupleSize, type, normalized, stride, nullptr, context);
 
     custom.release();
 
@@ -198,14 +198,14 @@ bool InstancedRendererShaders<ShaderParams>::bindAndSetCustomVertexAttributeToSh
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::setCustomVertexAttributeToShader(const std::string& name, GLint tupleSize, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer, const QOpenGLContext* context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || name.empty())
         return false;
 
     // we must use direct function to pass GL_FALSE or GL_TRUE to "normalized" parameter
     QOpenGLFunctions_2_0* func = context->versionFunctions<QOpenGLFunctions_2_0>();
 
-    if(func == NULL)
+    if(func == nullptr)
         return false;
 
     int loc = getShaderProgram()->attributeLocation(name.data());
@@ -230,13 +230,13 @@ bool InstancedRendererShaders<ShaderParams>::setCustomVertexAttributeToShader(co
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::bindAndSetParamsAttributeToShader(QOpenGLBuffer &params, const QOpenGLContext* context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderParamsAttributeLocation() == -1)
             || !params.isCreated()
             || !params.bind())
         return false;
 
-    bool ok = setParamsAttributeToShader(NULL, context);
+    bool ok = setParamsAttributeToShader(nullptr, context);
 
     params.release();
 
@@ -248,7 +248,7 @@ bool InstancedRendererShaders<ShaderParams>::setParamsAttributeToShader(const Sh
 {
     QOpenGLFunctions_3_3_Compatibility* func = context->versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
 
-    if(func == NULL)
+    if(func == nullptr)
         return false;
 
     for (int i = 0; i < m_glValueColumnSize; ++i)
@@ -257,7 +257,7 @@ bool InstancedRendererShaders<ShaderParams>::setParamsAttributeToShader(const Sh
 
         func->glEnableVertexAttribArray(loc);
 
-        if(pointer == NULL) {
+        if(pointer == nullptr) {
             func->glVertexAttribPointer(loc,
                                         m_glValueRowSize,
                                         m_glValueType,
@@ -286,13 +286,13 @@ bool InstancedRendererShaders<ShaderParams>::setParamsAttributeToShader(const Sh
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::bindAndSetColorAttributeToShader(QOpenGLBuffer &color, const QOpenGLContext* context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderColorAttributeLocation() == -1)
             || !color.isCreated()
             || !color.bind())
         return false;
 
-    bool ok = setColorAttributeToShader(NULL, context);
+    bool ok = setColorAttributeToShader(nullptr, context);
 
     color.release();
 
@@ -302,13 +302,13 @@ bool InstancedRendererShaders<ShaderParams>::bindAndSetColorAttributeToShader(QO
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::setColorAttributeToShader(const Color* pointer, const QOpenGLContext* context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderColorAttributeLocation() == -1))
         return false;
 
     QOpenGLFunctions_3_3_Compatibility* func = context->versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
 
-    if(func == NULL)
+    if(func == nullptr)
         return false;
 
     int loc = getShaderColorAttributeLocation();
@@ -330,13 +330,13 @@ bool InstancedRendererShaders<ShaderParams>::setColorAttributeToShader(const Col
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::bindAndSetInfoAttributeToShader(QOpenGLBuffer &info, const QOpenGLContext* context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderInfoAttributeLocation() == -1)
             || !info.isCreated()
             || !info.bind())
         return false;
 
-    bool ok = setInfoAttributeToShader(NULL, context);
+    bool ok = setInfoAttributeToShader(nullptr, context);
 
     info.release();
 
@@ -346,13 +346,13 @@ bool InstancedRendererShaders<ShaderParams>::bindAndSetInfoAttributeToShader(QOp
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::setInfoAttributeToShader(const ElementInfo* pointer, const QOpenGLContext* context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderInfoAttributeLocation() == -1))
         return false;
 
     QOpenGLFunctions_3_3_Compatibility* func = context->versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
 
-    if(func == NULL)
+    if(func == nullptr)
         return false;
 
     int loc = getShaderInfoAttributeLocation();
@@ -374,12 +374,12 @@ bool InstancedRendererShaders<ShaderParams>::setInfoAttributeToShader(const Elem
 template<typename ShaderParams>
 void InstancedRendererShaders<ShaderParams>::disableAttributeOfShader(const QOpenGLContext* context)
 {
-    if(getShaderProgram() == NULL)
+    if(getShaderProgram() == nullptr)
         return;
 
     QOpenGLFunctions_3_3_Compatibility* func = context->versionFunctions<QOpenGLFunctions_3_3_Compatibility>();
 
-    if(func != NULL) {
+    if(func != nullptr) {
         for(int i=0; i<m_glValueColumnSize; ++i)
             func->glVertexAttribDivisor(getShaderParamsAttributeLocation()+i, 0);
 
@@ -426,7 +426,7 @@ template<typename ShaderParams>
 void InstancedRendererShaders<ShaderParams>::destroyGL()
 {
     delete m_program;
-    m_program = NULL;
+    m_program = nullptr;
 
 
     m_shaderVertexLocation = -1;
@@ -440,7 +440,7 @@ void InstancedRendererShaders<ShaderParams>::destroyGL()
 template<typename ShaderParams>
 bool InstancedRendererShaders<ShaderParams>::bindShader(QOpenGLShaderProgram *program)
 {
-    if(program == NULL)
+    if(program == nullptr)
         return false;
 
     return program->bind();
@@ -449,7 +449,7 @@ bool InstancedRendererShaders<ShaderParams>::bindShader(QOpenGLShaderProgram *pr
 template<typename ShaderParams>
 void InstancedRendererShaders<ShaderParams>::releaseShader(QOpenGLShaderProgram *program)
 {
-    if(program != NULL)
+    if(program != nullptr)
         program->release();
 }
 

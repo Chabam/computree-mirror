@@ -17,7 +17,6 @@ void CT_StandardExporterSeparator::addExporter(CT_AbstractExporter* exporter)
 {
     Q_D(CT_StandardExporterSeparator);
     d->_exporters.append(exporter);
-    exporter->init();
 }
 
 QString CT_StandardExporterSeparator::title() const

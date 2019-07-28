@@ -28,11 +28,11 @@ public:
      * @brief Add an object and his vertexes to the founded chunk (search a chunk for the object index)
      * @param objectIndex : object global index
      * @param vertexGlobalIndexes : global indices of vertex (the size of the array must be equal to getNVertexPerObject())
-     * @param chunk : the chunk where the object was added (can be NULL if you don't want to know)
+     * @param chunk : the chunk where the object was added (can be nullptr if you don't want to know)
      */
     virtual void addObjectVertexes(const size_t& objectIndex,
                                    const size_t* vertexGlobalIndexes,
-                                   IChunk** chunk = NULL)
+                                   IChunk** chunk = nullptr)
     {
         size_t chunkI = this->getChunkUniqueIndexForObjectAt(objectIndex);
 

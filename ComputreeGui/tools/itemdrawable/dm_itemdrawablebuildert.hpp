@@ -8,7 +8,7 @@ DM_ItemDrawableBuilderT<T,ItemT>::DM_ItemDrawableBuilderT() : DM_AbstractItemDra
 {
     m_mutex = new QMutex(QMutex::Recursive);
     m_nLevel = 1;
-    m_getter = NULL;
+    m_getter = nullptr;
 }
 
 template<typename T, class ItemT>
@@ -71,7 +71,7 @@ DM_ItemDrawableType<T,ItemT> DM_ItemDrawableBuilderT<T,ItemT>::getType(const T &
 {
     QMutexLocker locker(m_mutex);
 
-    return DM_ItemDrawableType<T,ItemT>(type, m_types.value(type, NULL));
+    return DM_ItemDrawableType<T,ItemT>(type, m_types.value(type, nullptr));
 }
 
 template<typename T, class ItemT>
@@ -92,9 +92,9 @@ void DM_ItemDrawableBuilderT<T,ItemT>::recursiveAddItemDrawable(const ItemT &ite
     lock();
 
     T t = getTypeForItemDrawable(item);
-    DM_ItemDrawableTypeBackup<ItemT> *backup = m_types.value(t, NULL);
+    DM_ItemDrawableTypeBackup<ItemT> *backup = m_types.value(t, nullptr);
 
-    if(backup == NULL)
+    if(backup == nullptr)
     {
         backup = new DM_ItemDrawableTypeBackup<ItemT>();
         m_types.insert(t, backup);
@@ -128,7 +128,7 @@ void DM_ItemDrawableBuilderT<T,ItemT>::recursiveRemoveItemDrawable(const ItemT &
 
     T t = getTypeForItemDrawable(item);
 
-    DM_ItemDrawableTypeBackup<ItemT> *backup = m_types.value(t, NULL);
+    DM_ItemDrawableTypeBackup<ItemT> *backup = m_types.value(t, nullptr);
 
     backup->remove(item, level);
     bool isE = backup->isEmpty();
@@ -186,7 +186,7 @@ template<typename Type, class ItemTTT>
 DM_ItemDrawableType<Type,ItemTTT>::DM_ItemDrawableType(const Type &type)
 {
     m_type = type;
-    m_backup = NULL;
+    m_backup = nullptr;
 }
 
 template<typename Type, class ItemTTT>
@@ -205,13 +205,13 @@ const Type& DM_ItemDrawableType<Type,ItemTTT>::type() const
 template<typename Type, class ItemTTT>
 QList<ItemTTT*> DM_ItemDrawableType<Type,ItemTTT>::itemDrawableCollection() const
 {
-    return (m_backup != NULL ? m_backup->m_itemsWithLevel.uniqueKeys() : QList<ItemTTT*>());
+    return (m_backup != nullptr ? m_backup->m_itemsWithLevel.uniqueKeys() : QList<ItemTTT*>());
 }
 
 template<typename Type, class ItemTTT>
 bool DM_ItemDrawableType<Type,ItemTTT>::isEmpty() const
 {
-    return (m_backup != NULL ? m_backup->m_itemsWithLevel.isEmpty() : true);
+    return (m_backup != nullptr ? m_backup->m_itemsWithLevel.isEmpty() : true);
 }
 
 template<class ItemTT>

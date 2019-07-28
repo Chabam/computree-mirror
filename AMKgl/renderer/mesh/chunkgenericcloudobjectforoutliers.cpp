@@ -58,14 +58,14 @@ void ChunkGenericCloudObjectForOutliers::addObjectVertexes(const size_t& globalO
 
     ++m_nObjects;
 
-    if(chunk != NULL)
+    if(chunk != nullptr)
         *chunk = this;
 }
 
 GLuint* ChunkGenericCloudObjectForOutliers::getFirstObjectIndex() const
 {
     if(m_objectIndexesCloud->size() == 0)
-        return NULL;
+        return nullptr;
 
     return (GLuint*)&(*const_cast<ChunkGenericCloudObjectForOutliers*>(this)->m_objectIndexesCloud)[0];
 }
@@ -73,7 +73,7 @@ GLuint* ChunkGenericCloudObjectForOutliers::getFirstObjectIndex() const
 GLuint* ChunkGenericCloudObjectForOutliers::getFirstVertexIndex() const
 {
     if(m_vertexIndexesCloud->size() == 0)
-        return NULL;
+        return nullptr;
 
     return (GLuint*)&(*const_cast<ChunkGenericCloudObjectForOutliers*>(this)->m_vertexIndexesCloud)[0];
 }
@@ -123,7 +123,7 @@ bool ChunkGenericCloudObjectForOutliers::internalUpdate()
 {
     Context* context = getCurrentContext();
 
-    if(context == NULL)
+    if(context == nullptr)
         return false;
 
     if(isUpdated())
@@ -273,10 +273,10 @@ void ChunkGenericCloudObjectForOutliers::internalSetNumberOfObjects(const size_t
 
 void ChunkGenericCloudObjectForOutliers::createObjectColorCloudMemberIfNot()
 {
-    if(m_objectColorCloud == NULL) {
-        Q_ASSERT(m_objectCloudProvider != NULL);
+    if(m_objectColorCloud == nullptr) {
+        Q_ASSERT(m_objectCloudProvider != nullptr);
         GlobalColorCloud *gcc = m_objectCloudProvider->createOrGetColorCloud();
-        Q_ASSERT(gcc != NULL);
+        Q_ASSERT(gcc != nullptr);
         Q_UNUSED(gcc)
         m_objectColorCloud = new ObjectFuncPointerCloudIndexed<GlobalColor, GlobalGlIndexCloud>([](void* object) -> GlobalColor* { return ((ChunkGenericCloudObjectForOutliers*)object)->getFirstObjectColor(); },
                                                                                                 this,
@@ -287,10 +287,10 @@ void ChunkGenericCloudObjectForOutliers::createObjectColorCloudMemberIfNot()
 
 void ChunkGenericCloudObjectForOutliers::createObjectNormalCloudMemberIfNot()
 {
-    if(m_objectNormalCloud == NULL) {
-        Q_ASSERT(m_objectCloudProvider != NULL);
+    if(m_objectNormalCloud == nullptr) {
+        Q_ASSERT(m_objectCloudProvider != nullptr);
         GlobalNormalCloud* gnc = m_objectCloudProvider->createOrGetNormalCloud();
-        Q_ASSERT(gnc != NULL);
+        Q_ASSERT(gnc != nullptr);
         Q_UNUSED(gnc)
         m_objectNormalCloud = new ObjectFuncPointerCloudIndexed<GlobalNormal, GlobalGlIndexCloud>([](void* object) -> GlobalNormal* { return ((ChunkGenericCloudObjectForOutliers*)object)->getFirstObjectNormal(); },
                                                                                                   this,
@@ -301,10 +301,10 @@ void ChunkGenericCloudObjectForOutliers::createObjectNormalCloudMemberIfNot()
 
 void ChunkGenericCloudObjectForOutliers::createObjectInfoCloudMemberIfNot()
 {
-    if(m_objectInfoCloud == NULL) {
-        Q_ASSERT(m_objectCloudProvider != NULL);
+    if(m_objectInfoCloud == nullptr) {
+        Q_ASSERT(m_objectCloudProvider != nullptr);
         GlobalInfoCloud *gic = m_objectCloudProvider->createOrGetInfoCloud();
-        Q_ASSERT(gic != NULL);
+        Q_ASSERT(gic != nullptr);
         Q_UNUSED(gic)
         m_objectInfoCloud = new ObjectFuncPointerCloudIndexed<ElementInfo, GlobalGlIndexCloud>([](void* object) -> ElementInfo* { return ((ChunkGenericCloudObjectForOutliers*)object)->createOrGetFirstObjectInfo(); },
                                                                                                this,
@@ -316,13 +316,13 @@ void ChunkGenericCloudObjectForOutliers::createObjectInfoCloudMemberIfNot()
 void ChunkGenericCloudObjectForOutliers::deleteAllObjectXXXCloud()
 {
     delete m_objectColorCloud;
-    m_objectColorCloud = NULL;
+    m_objectColorCloud = nullptr;
 
     delete m_objectNormalCloud;
-    m_objectNormalCloud = NULL;
+    m_objectNormalCloud = nullptr;
 
     delete m_objectInfoCloud;
-    m_objectInfoCloud = NULL;
+    m_objectInfoCloud = nullptr;
 }
 
 ChunkGenericCloudObjectForOutliers::VertexesByOffset* ChunkGenericCloudObjectForOutliers::createOrGetVertexesForMiddle(const Eigen::Vector3d &middle)
@@ -333,9 +333,9 @@ ChunkGenericCloudObjectForOutliers::VertexesByOffset* ChunkGenericCloudObjectFor
 
     m_csm->getCoordinateSystemInfosForCoordinates(middle[0], middle[1], middle[2], uniqueKey, chunkOffset);
 
-    VertexesByOffset* vertexes = m_vertexesByNewOffset.value(uniqueKey, NULL);
+    VertexesByOffset* vertexes = m_vertexesByNewOffset.value(uniqueKey, nullptr);
 
-    if(vertexes == NULL) {
+    if(vertexes == nullptr) {
         vertexes = new VertexesByOffset();
         vertexes->offset = chunkOffset;
         vertexes->nPoints = 0;

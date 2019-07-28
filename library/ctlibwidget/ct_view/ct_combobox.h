@@ -20,16 +20,16 @@ private:
 public:
     CT_ComboBox(QStringList valuesList, QString &value, QString description = "");
 
-    QString type() const { return metaObject()->className(); }
+    QString type() const final { return metaObject()->className(); }
 
-    void saveSettings(SettingsWriterInterface& writer) const override;
-    bool restoreSettings(SettingsReaderInterface& reader) override;
+    void saveSettings(SettingsWriterInterface& writer) const final;
+    bool restoreSettings(SettingsReaderInterface& reader) final;
 
-    QWidget* createWidget(QWidget &parent);
+    QWidget* createWidget(QWidget &parent) final;
 
-    void updateValue();
+    void updateValue() final;
 
-    bool isValueAndWidgetValueDifferent() const;
+    bool isValueAndWidgetValueDifferent() const final;
 
     QVariant getValue() const;
 

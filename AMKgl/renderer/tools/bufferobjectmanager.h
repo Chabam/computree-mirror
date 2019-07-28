@@ -60,7 +60,7 @@ public:
      * @param boType : the buffer object type (vertex, color, etc...)
      * @param firstValue : pointer to the first value in the array (it will be used to find the associated BO)
      * @param arraySize : array size (number of vertex)
-     * @return true if buffer object was updated successfully. False if an error append or if "firstValue" is NULL.
+     * @return true if buffer object was updated successfully. False if an error append or if "firstValue" is nullptr.
      */
     bool updateBO(const QOpenGLBuffer::Type& boType,
                   void* firstValue,

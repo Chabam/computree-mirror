@@ -7,7 +7,7 @@ PointsPicker::PointsPicker() : GenericPicker()
 {
     m_selectionOperation = nullptr;
     m_checkOperation = nullptr;
-    m_globalPCProvider = NULL;
+    m_globalPCProvider = nullptr;
 }
 
 bool PointsPicker::isValid() const
@@ -15,7 +15,7 @@ bool PointsPicker::isValid() const
     return (GenericPicker::isValid()
                 && (getSelectionOperation() != nullptr)
                 && (getCheckOperation() != nullptr)
-                && (m_globalPCProvider != NULL));
+                && (m_globalPCProvider != nullptr));
 }
 
 void PointsPicker::setSelectionOperation(selectionOperation op)

@@ -5,7 +5,7 @@
 
 CT_AbstractFilter_XYZ::CT_AbstractFilter_XYZ() : CT_AbstractFilter()
 {
-    _inCloud = NULL;
+    _inCloud = nullptr;
     _outCloud = new CT_PointCloudIndexVector();
     m_minMaxUpdated = true;
 }
@@ -26,9 +26,9 @@ CT_AbstractFilter_XYZ::~CT_AbstractFilter_XYZ()
 
 bool CT_AbstractFilter_XYZ::setPointCloud(const CT_AbstractItemDrawableWithPointCloud *inItem)
 {
-    bool ret = setPointCloud((inItem == NULL) ? NULL : inItem->pointCloudIndex());
+    bool ret = setPointCloud((inItem == nullptr) ? nullptr : inItem->pointCloudIndex());
 
-    if(ret && (inItem != NULL)) {
+    if(ret && (inItem != nullptr)) {
         inItem->boundingBox(m_min, m_max);
         m_minMaxUpdated = true;
     }
@@ -41,7 +41,7 @@ bool CT_AbstractFilter_XYZ::setPointCloud(const CT_AbstractPointCloudIndex *ci)
     m_minMaxUpdated = false;
     _inCloud = (CT_AbstractPointCloudIndex*)ci;
 
-    return (_inCloud != NULL);
+    return (_inCloud != nullptr);
 }
 
 void CT_AbstractFilter_XYZ::updateAll()
@@ -51,10 +51,10 @@ void CT_AbstractFilter_XYZ::updateAll()
 
 bool CT_AbstractFilter_XYZ::filterPointCloudIndex()
 {
-    if(_inCloud == NULL)
+    if(_inCloud == nullptr)
         return false;
 
-    if(_outCloud == NULL)
+    if(_outCloud == nullptr)
         _outCloud = new CT_PointCloudIndexVector();
 
     _outCloud->clear();
@@ -81,7 +81,7 @@ bool CT_AbstractFilter_XYZ::filterPointCloudIndex()
 CT_PointCloudIndexVector* CT_AbstractFilter_XYZ::takeOutputCloudIndex()
 {
     CT_PointCloudIndexVector *out = _outCloud;
-    _outCloud = NULL;
+    _outCloud = nullptr;
 
     return out;
 }
@@ -106,7 +106,7 @@ bool CT_AbstractFilter_XYZ::updateMinMax(bool force)
 {
     m_minMaxUpdated = false;
 
-    if(_inCloud == NULL)
+    if(_inCloud == nullptr)
         return false;
 
     if(!isMinAndMaxUpdated() || force) {

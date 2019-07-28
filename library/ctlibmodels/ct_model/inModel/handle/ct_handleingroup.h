@@ -5,6 +5,8 @@
 #include "ct_model/inModel/ct_instdgroupmodel.h"
 #include "ct_model/inModel/ct_inresultmodelgrouptocopy.h"
 
+using CT_AbstractHandleInGroup = CT_AbstractInHandleWithModelT<CT_InStdGroupModel>;
+
 template<class GroupT, int min = 1, int max = 1>
 class CT_HandleInGroup : public CT_HandleInBase<CT_InStdGroupModel, min, max> {
 

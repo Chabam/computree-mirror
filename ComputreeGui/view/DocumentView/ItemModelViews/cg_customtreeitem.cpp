@@ -6,9 +6,9 @@
 CG_CustomTreeItem::CG_CustomTreeItem()
 {
     m_count = 0;
-    m_parent = NULL;
+    m_parent = nullptr;
     m_column = 0;
-    m_model = NULL;
+    m_model = nullptr;
     m_fetchSize = 30;
     m_fetchMoreEnabled = true;
 
@@ -19,9 +19,9 @@ CG_CustomTreeItem::CG_CustomTreeItem()
 CG_CustomTreeItem::CG_CustomTreeItem(const QString &text)
 {
     m_count = 0;
-    m_parent = NULL;
+    m_parent = nullptr;
     m_column = 0;
-    m_model = NULL;
+    m_model = nullptr;
     m_fetchSize = 30;
     m_fetchMoreEnabled = true;
 
@@ -53,20 +53,20 @@ void CG_CustomTreeItem::removeRow(int r)
 {
     bool send = (m_count > r);
 
-    if((model() != NULL) && send)
+    if((model() != nullptr) && send)
         model()->beginRemoveRows(model()->indexFromItem(this), r, r);
 
     QList<CG_CustomTreeItem *> items = m_items.takeAt(r);
 
     foreach (CG_CustomTreeItem *i, items) {
-        i->setModel(NULL);
+        i->setModel(nullptr);
         delete i;
     }
 
     if(send)
         --m_count;
 
-    if((model() != NULL) && send)
+    if((model() != nullptr) && send)
         model()->endRemoveRows();
 }
 
@@ -74,7 +74,7 @@ void CG_CustomTreeItem::insertRow(int i, const QList<CG_CustomTreeItem *> &items
 {
     bool send = (m_count > i);
 
-    if((model() != NULL) && send)
+    if((model() != nullptr) && send)
         model()->beginInsertRows(model()->indexFromItem(this), i, i);
 
     int c = 0;
@@ -91,19 +91,19 @@ void CG_CustomTreeItem::insertRow(int i, const QList<CG_CustomTreeItem *> &items
     if(send)
         ++m_count;
 
-    if((model() != NULL) && send)
+    if((model() != nullptr) && send)
         model()->endInsertRows();
 }
 
 void CG_CustomTreeItem::replaceRow(int r, const QList<CG_CustomTreeItem *> &items)
 {
-    if(model() != NULL)
+    if(model() != nullptr)
         model()->beginResetModel();
 
     QList<CG_CustomTreeItem *> itemsT = m_items.takeAt(r);
 
     foreach (CG_CustomTreeItem *i, itemsT) {
-        i->setModel(NULL);
+        i->setModel(nullptr);
         delete i;
     }
 
@@ -118,7 +118,7 @@ void CG_CustomTreeItem::replaceRow(int r, const QList<CG_CustomTreeItem *> &item
         ++c;
     }
 
-    if(model() != NULL)
+    if(model() != nullptr)
         model()->endResetModel();
 }
 
@@ -129,7 +129,7 @@ bool CG_CustomTreeItem::hasChildren() const
 
 int CG_CustomTreeItem::row() const
 {
-    if(parent() == NULL)
+    if(parent() == nullptr)
         return 0;
 
     int row = 0;
@@ -291,15 +291,15 @@ void CG_CustomTreeItem::fetchMore(const QModelIndex &parentIndex)
     int reminder = m_items.size() - m_count;
     int itemsToFetch = reminder;
 
-    if(parent() == NULL)
+    if(parent() == nullptr)
         itemsToFetch = qMin(m_fetchSize, reminder);
 
-    if(model() != NULL)
+    if(model() != nullptr)
         model()->beginInsertRows(parentIndex, m_count, m_count + itemsToFetch - 1);
 
     m_count += itemsToFetch;
 
-    if(model() != NULL)
+    if(model() != nullptr)
         model()->endInsertRows();
 }
 
@@ -310,14 +310,14 @@ void CG_CustomTreeItem::setFetchMoreEnabled(bool e)
 
 void CG_CustomTreeItem::clear()
 {
-    if(parent() == NULL)
+    if(parent() == nullptr)
         setFetchMoreEnabled(false);
 
     if(!m_items.isEmpty())
     {
         int n = rowCount();
 
-        if((model() != NULL) && (n > 0))
+        if((model() != nullptr) && (n > 0))
             model()->beginRemoveRows(model()->indexFromItem(this), 0, n-1);
 
         foreach (const QList<CG_CustomTreeItem*> &l, m_items) {
@@ -327,7 +327,7 @@ void CG_CustomTreeItem::clear()
         m_items.clear();
         m_count = 0;
 
-        if((model() != NULL) && (n > 0))
+        if((model() != nullptr) && (n > 0))
             model()->endRemoveRows();
     }
 }
@@ -355,7 +355,7 @@ void CG_CustomTreeItem::setDataWithoutSignal(const QVariant &value, int role)
 
     m_datas.insert(role, value);
 
-    if(model() != NULL)
+    if(model() != nullptr)
         model()->dataOfCustomItemChanged(this);
 }
 

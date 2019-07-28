@@ -13,6 +13,11 @@ class CT_WidgetWithValueReferenceInterface;
 class CT_ButtonGroup;
 class CT_ComboBox;
 class CT_GroupBox;
+class CT_SpinBox;
+class CT_DoubleSpinBox;
+class CT_CheckBox;
+class CT_LineEdit;
+class CT_MultiLineEdit;
 
 /**
  * @brief This is a simple and generic configurable widget. It was a widget with a gridlayout that can be configured
@@ -27,7 +32,7 @@ class CTLIBWIDGET_EXPORT CT_GenericConfigurableWidget : public CT_AbstractConfig
     Q_OBJECT
 
 public:
-    CT_GenericConfigurableWidget(QWidget *parent = NULL);
+    CT_GenericConfigurableWidget(QWidget *parent = nullptr);
     ~CT_GenericConfigurableWidget();
 
     /**
@@ -80,9 +85,9 @@ public:
      * @param maxValue : maximum allowed value
      * @param[out] valueToUpdate : member of your class that will be updated. Note that it's also used to fix input default value.
      * @param description : (optionnal) set a description. It will insert a icon with a tooltip to show description of this parameter.
-     * @return true if add is successful
+     * @return nullptr if an error occured
      */
-    bool addInt(const QString &beforeLabelText,
+    CT_SpinBox* addInt(const QString &beforeLabelText,
                 const QString &afterLabelText,
                 const int &minValue,
                 const int &maxValue,
@@ -108,9 +113,9 @@ public:
      * @param[out] valueToUpdate : member of your class that will be updated. Note that it's also used to fix input default value.
      * @param multValue : (optionnal) Multiplicative factor to the value.
      * @param description : (optionnal) set a description. It will insert a icon with a tooltip to show description of this parameter.
-     * @return true if add is successful
+     * @return nullptr if an error occured
      */
-    bool addDouble(const QString &beforeLabelText,
+    CT_DoubleSpinBox* addDouble(const QString &beforeLabelText,
                    const QString &afterLabelText,
                    const double &minValue,
                    const double &maxValue,
@@ -132,9 +137,9 @@ public:
      * @param checkBoxText Text to show at the right of the checkBox, in the second column.
      * @param[out] valueToUpdate : member of your class that will be updated. Note that it's also used to fix input default value.
      * @param description : (optionnal) set a description. It will insert a icon with a tooltip to show description of this parameter.
-     * @return true if add is successful
+     * @return nullptr if an error occured
      */
-    bool addBool(const QString &beforeLabelText,
+    CT_CheckBox* addBool(const QString &beforeLabelText,
                  const QString &afterLabelText,
                  const QString &checkBoxText,
                  bool &valueToUpdate,
@@ -153,9 +158,9 @@ public:
      * @param afterLabelText : Text to show in the third column. Generally the unit of the value.
      * @param[out] valueToUpdate : member of your class that will be updated. Note that it's also used to fix input default value.
      * @param description : (optionnal) set a description. It will insert a icon with a tooltip to show description of this parameter.
-     * @return true if add is successful
+     * @return nullptr if an error occured
      */
-    bool addString(const QString &beforeLabelText,
+    CT_LineEdit* addString(const QString &beforeLabelText,
                    const QString &afterLabelText,
                    QString &valueToUpdate,
                    const QString &description = "");
@@ -172,9 +177,9 @@ public:
      * @param afterLabelText : Text to show in the third column. Generally the unit of the value.
      * @param[out] valueToUpdate : member of your class that will be updated. Note that it's also used to fix input default value.
      * @param description : (optionnal) set a description. It will insert a icon with a tooltip to show description of this parameter.
-     * @return true if add is successful
+     * @return nullptr if an error occured
      */
-    bool addMultiString(const QString &beforeLabelText,
+    CT_MultiLineEdit* addMultiString(const QString &beforeLabelText,
                         const QString &afterLabelText,
                         QString &valueToUpdate,
                         const QString &description = "");
@@ -193,7 +198,7 @@ public:
      * @param valuesList : List of QString (QStringList) allowed values for the parameter.
      * @param[out] valueToUpdate : member of your class that will be updated. Note that it's also used to fix input default value.
      * @param description : (optionnal) set a description. It will insert a icon with a tooltip to show description of this parameter.
-     * @return the combobox added if successful, NULL otherwise.
+     * @return the combobox added if successful, nullptr otherwise.
      */
     CT_ComboBox* addStringChoice(const QString &beforeLabelText,
                                  const QString &afterLabelText,
@@ -264,7 +269,7 @@ public:
      * @param description : (optionnal) set a description. It will insert a icon with a tooltip to show description of this parameter.
      * @param beforeLabelText : Text to show in the first column. Generally the asking text for the parameter.
      * @param afterLabelText : Text to show in the third column.
-     * @return the button added if successful, NULL otherwise.
+     * @return the button added if successful, nullptr otherwise.
      */
     CT_FileChoiceButton* addFileChoice(const QString &btLabel,
                                        const CT_FileChoiceButton::NeededFileType &filetype,
@@ -349,7 +354,7 @@ protected:
     class HelpButton : public QLabel
     {
     public:
-        HelpButton(QWidget *parent = NULL) : QLabel(parent) {}
+        HelpButton(QWidget *parent = nullptr) : QLabel(parent) {}
 
     protected:
         void enterEvent(QEvent *event) {
@@ -358,7 +363,7 @@ protected:
         }
     };
 
-    CT_GenericConfigurableWidget(bool useScrollArea, QWidget *parent = NULL);
+    CT_GenericConfigurableWidget(bool useScrollArea, QWidget *parent = nullptr);
 
     /**
      * @brief Return the list of widgets added to this object
@@ -424,10 +429,10 @@ protected:
 public slots:
     /**
      * @brief Update the element to match the configuration defined by the user
-     * @param err : (optionnal) will not be empty if an error can be displayed and if different of NULL
-     * @return true if update was successfull, otherwise returns false and filled the "err" parameter if it was not NULL
+     * @param err : (optionnal) will not be empty if an error can be displayed and if different of nullptr
+     * @return true if update was successfull, otherwise returns false and filled the "err" parameter if it was not nullptr
      */
-    bool updateElement(QString *err = NULL);
+    bool updateElement(QString *err = nullptr);
 };
 
 #endif // CT_GENERICCONFIGURABLEWIDGET_H

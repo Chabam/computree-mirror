@@ -82,12 +82,12 @@ public:
     void setContextMenuOnType(QMenu *contextMenu, DM_StepsFromPluginsModelConstructor::ItemType type);
 
     /**
-     * @brief Return the current step selected or NULL if it was not a step
+     * @brief Return the current step selected or nullptr if it was not a step
      */
     CT_VirtualAbstractStep* currentStepSelected() const;
 
     /**
-     * @brief Return the current level selected or NULL if it was not a level
+     * @brief Return the current level selected or nullptr if it was not a level
      */
     CT_MenuLevel* currentLevelSelected() const;
 

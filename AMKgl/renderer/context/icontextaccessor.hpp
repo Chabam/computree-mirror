@@ -43,14 +43,14 @@ typename const IContextAccessor<RendererContextT>::ContextCollection& IContextAc
 template<typename RendererContextT>
 RendererContextT* IContextAccessor<RendererContextT>::getCurrentContext() const
 {
-    return getContexts().value(QOpenGLContext::currentContext(), NULL);
+    return getContexts().value(QOpenGLContext::currentContext(), nullptr);
 }
 
 template<typename RendererContextT>
 IGraphicsDocument* IContextAccessor<RendererContextT>::getCurrentDocument() const
 {
-    if(getCurrentContext() == NULL)
-        return NULL;
+    if(getCurrentContext() == nullptr)
+        return nullptr;
 
     return getCurrentContext()->getDocument();
 }

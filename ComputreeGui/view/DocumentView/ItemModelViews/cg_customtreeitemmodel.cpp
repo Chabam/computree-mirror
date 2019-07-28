@@ -14,7 +14,7 @@ CG_CustomTreeItemModel::CG_CustomTreeItemModel(QObject *parent) :
 
 CG_CustomTreeItemModel::~CG_CustomTreeItemModel()
 {
-    m_root->setModel(NULL);
+    m_root->setModel(nullptr);
     delete m_root;
 }
 
@@ -59,12 +59,12 @@ QVariant CG_CustomTreeItemModel::data(const QModelIndex &index, int role) const
 
     CG_CustomTreeItem *parent = static_cast<CG_CustomTreeItem*>(index.internalPointer())->parent();
 
-    CG_CustomTreeItem *item = NULL;
+    CG_CustomTreeItem *item = nullptr;
 
-    if(parent != NULL)
+    if(parent != nullptr)
         item = parent->child(index.row(), index.column());
 
-    if(item == NULL)
+    if(item == nullptr)
         return QVariant();
 
     return item->data(role);
@@ -106,7 +106,7 @@ QModelIndex CG_CustomTreeItemModel::parent(const QModelIndex &index) const
     CG_CustomTreeItem *childItem = static_cast<CG_CustomTreeItem*>(index.internalPointer());
     CG_CustomTreeItem *parentItem = childItem->parent();
 
-    if (parentItem == invisibleRootItem() || (parentItem == NULL))
+    if (parentItem == invisibleRootItem() || (parentItem == nullptr))
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
@@ -158,7 +158,7 @@ QVariant CG_CustomTreeItemModel::headerData(int section, Qt::Orientation orienta
     if (orientation == Qt::Horizontal)
         headerItem = m_columnHeaderItems.at(section);
 
-    return (headerItem != NULL) ? headerItem->data(role) : QAbstractItemModel::headerData(section, orientation, role);
+    return (headerItem != nullptr) ? headerItem->data(role) : QAbstractItemModel::headerData(section, orientation, role);
 }
 
 void CG_CustomTreeItemModel::setHorizontalHeaderLabels(const QStringList &headers)
@@ -171,7 +171,7 @@ void CG_CustomTreeItemModel::setHorizontalHeaderLabels(const QStringList &header
     {
         CG_CustomTreeItem *item = horizontalHeaderItem(i);
 
-        if(item == NULL)
+        if(item == nullptr)
         {
             item = new CG_CustomTreeItem();
             setHorizontalHeaderItem(i, item);
@@ -184,7 +184,7 @@ void CG_CustomTreeItemModel::setHorizontalHeaderLabels(const QStringList &header
 CG_CustomTreeItem* CG_CustomTreeItemModel::horizontalHeaderItem(int column) const
 {
     if ((column < 0) || (column >= columnCount()))
-        return NULL;
+        return nullptr;
 
     return m_columnHeaderItems.at(column);
 }
@@ -202,14 +202,14 @@ void CG_CustomTreeItemModel::setHorizontalHeaderItem(int column, CG_CustomTreeIt
     if (item == oldItem)
         return;
 
-    if (item != NULL) {
-        if (item->model() == NULL) {
+    if (item != nullptr) {
+        if (item->model() == nullptr) {
             item->setModel(this);
         }
     }
 
-    if (oldItem != NULL)
-        oldItem->setModel(NULL);
+    if (oldItem != nullptr)
+        oldItem->setModel(nullptr);
     delete oldItem;
 
     m_columnHeaderItems.replace(column, item);
@@ -255,7 +255,7 @@ void CG_CustomTreeItemModel::setColumnCount(int c)
         beginInsertColumns(QModelIndex(), m_columnHeaderItems.size(), m_columnCount - 1);
 
         while(m_columnHeaderItems.size() < m_columnCount)
-            m_columnHeaderItems.append(NULL);
+            m_columnHeaderItems.append(nullptr);
 
         endInsertColumns();
     }
@@ -266,7 +266,7 @@ void CG_CustomTreeItemModel::setColumnCount(int c)
         while(m_columnHeaderItems.size() > m_columnCount)
         {
             CG_CustomTreeItem *item = m_columnHeaderItems.takeLast();
-            item->setModel(NULL);
+            item->setModel(nullptr);
             delete item;
         }
 

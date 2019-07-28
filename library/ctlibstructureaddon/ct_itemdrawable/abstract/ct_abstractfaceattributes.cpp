@@ -4,13 +4,13 @@
 
 CT_AbstractFaceAttributes::CT_AbstractFaceAttributes() : SuperClass()
 {
-    m_aci = NULL;
+    m_aci = nullptr;
 }
 
 CT_AbstractFaceAttributes::CT_AbstractFaceAttributes(CT_FCIR cir) : CT_AbstractFaceAttributes()
 {
     m_cir = cir;
-    m_aci =(m_cir.data() == NULL ? NULL : cir->abstractCloudIndexT());
+    m_aci =(m_cir.data() == nullptr ? nullptr : cir->abstractCloudIndexT());
 }
 
 const CT_AbstractFaceCloudIndex* CT_AbstractFaceAttributes::faceCloudIndex() const

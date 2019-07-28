@@ -18,7 +18,7 @@ bool CT_ItemDrawableCollectionBuilderT<Type...>::buildFrom(const CT_VirtualAbstr
     m_collection.clear();
     m_onlyFindModels = forceSearchModels;
 
-    if(step == NULL)
+    if(step == nullptr)
         return false;
 
     recursiveBuildFromStep(step, forceSearchModels);
@@ -88,21 +88,21 @@ void CT_ItemDrawableCollectionBuilderT<Type...>::recursiveBuildFromModels(QList<
 {
     for(CT_OutAbstractModel* model : models)
     {
-        if((model->result() != NULL) || findOnlyModels)
+        if((model->result() != nullptr) || findOnlyModels)
         {
-            CT_AbstractItemDrawable* item = NULL;
+            CT_AbstractItemDrawable* item = nullptr;
 
             CT_OutAbstractSingularItemModel* itemModel = dynamic_cast<CT_OutAbstractSingularItemModel*>(model);
             CT_OutAbstractGroupModel* grModel = dynamic_cast<CT_OutAbstractGroupModel*>(model);
 
-            if(itemModel != NULL)
+            if(itemModel != nullptr)
                 item = itemModel->itemDrawable();
-            else if(grModel != NULL)
+            else if(grModel != nullptr)
                 item = grModel->group();
 
             if(canBeDynamicCastTo<CT_AbstractItemDrawable, Type...>(item))
             {
-                if(grModel != NULL)
+                if(grModel != nullptr)
                 {
                     if(findOnlyModels) {
                         hir.modelsCollection.append(grModel);

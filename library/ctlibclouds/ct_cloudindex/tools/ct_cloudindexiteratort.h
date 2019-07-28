@@ -20,20 +20,20 @@ public:
     {
         m_index = (CT_AbstractCloudIndexT<T>*)index;
         m_startPos = 0;
-        m_endPos = (m_index == NULL) ? 0 : m_index->size();
+        m_endPos = (m_index == nullptr) ? 0 : m_index->size();
 
         toFront();
     }
 
     CT_CloudIndexIteratorT(QSharedPointer<CT_AbstractCloudIndexRegistered> cir)
     {
-        if(cir.data() == NULL)
-            m_index = NULL;
+        if(cir.data() == nullptr)
+            m_index = nullptr;
         else
             m_index = dynamic_cast<CT_AbstractCloudIndexT<T>*>(cir->abstractCloudIndex());
 
         m_startPos = 0;
-        m_endPos = (m_index == NULL) ? 0 : m_index->size();
+        m_endPos = (m_index == nullptr) ? 0 : m_index->size();
 
         toFront();
     }

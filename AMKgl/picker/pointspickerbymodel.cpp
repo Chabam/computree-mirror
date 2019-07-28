@@ -56,7 +56,7 @@ void PointsPickerByModel::addPointsToCompute(const Eigen::Vector3d &offset, std:
 {
     PointsPicker* pPicker = static_cast<PointsPicker*>(lastPicker());
 
-    if(pPicker != NULL)
+    if(pPicker != nullptr)
         pPicker->addPointsToCompute(offset, indices, firstPointGlobalIndex);
 }
 

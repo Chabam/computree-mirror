@@ -56,7 +56,7 @@ public:
     void setRootGroup(const GroupToCopyType* outRootGroupToCopy,
                       CollectionType& allOutModelsCreated)
     {
-        MODELS_ASSERT(outRootGroupToCopy != NULL);
+        MODELS_ASSERT(outRootGroupToCopy != nullptr);
 
         for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
             GroupToCopyType* rootGroupCopy = static_cast<GroupToCopyType*>(outRootGroupToCopy->copy());
@@ -83,7 +83,7 @@ public:
                   const GroupToCopyType* outChildGroupToCopy,
                   CollectionType& allOutModelsCreated)
     {
-        MODELS_ASSERT((inParentGroup != NULL) && (outChildGroupToCopy != NULL));
+        MODELS_ASSERT((inParentGroup != nullptr) && (outChildGroupToCopy != nullptr));
 
         for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
             outResultModel->addGroup(inParentGroup,
@@ -111,7 +111,7 @@ public:
                  const ItemToCopyType* outChildItemToCopy,
                  CollectionType& allOutModelsCreated)
     {
-        MODELS_ASSERT((inParentGroup != NULL) && (outChildItemToCopy != NULL));
+        MODELS_ASSERT((inParentGroup != nullptr) && (outChildItemToCopy != nullptr));
 
         for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
             outResultModel->addItem(inParentGroup,
@@ -139,7 +139,7 @@ public:
                           const ItemAttributeToCopyType* outChildItemAttributeToCopy,
                           CollectionType& allOutModelsCreated)
     {
-        MODELS_ASSERT((inParentItem != NULL) && (outChildItemAttributeToCopy != NULL));
+        MODELS_ASSERT((inParentItem != nullptr) && (outChildItemAttributeToCopy != nullptr));
 
         for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
             outResultModel->addItemAttribute(inParentItem,

@@ -89,7 +89,7 @@ void GTreeView::init()
     m_lineFilter->setPlaceholderText(tr("Filtrer la colonne..."));
     m_lineFilter->setWhatsThis(wt);
 
-    QAction *whatThis = QWhatsThis::createAction(NULL);
+    QAction *whatThis = QWhatsThis::createAction(nullptr);
     whatThis->setText(wt);
 
     #if QT_VERSION < QT_VERSION_CHECK(5,2,0)
@@ -360,7 +360,7 @@ void GTreeView::slotItemDataChanged(CG_CustomTreeItem *item, int role, QVariant 
 
     CT_AbstractItemDrawable *itemDrawable = itemDrawableFromItem(item);
 
-    if(itemDrawable != NULL)
+    if(itemDrawable != nullptr)
     {
         if(role == Qt::CheckStateRole)
         {
@@ -438,7 +438,7 @@ void GTreeView::slotAddSelectedToDocument()
         {
             QList<CT_AbstractItemDrawable *> items = itemDrawableFromRowSelected();
 
-            GUI_MANAGER->asyncAddAllItemDrawableOfListOnView(items, doc, NULL);
+            GUI_MANAGER->asyncAddAllItemDrawableOfListOnView(items, doc, nullptr);
 
             return;
         }
@@ -461,7 +461,7 @@ void GTreeView::slotRemoveSelectedFromDocument()
         {
             QList<CT_AbstractItemDrawable *> items = itemDrawableFromRowSelected();
 
-            GUI_MANAGER->asyncRemoveAllItemDrawableOfListFromView(items, doc, NULL);
+            GUI_MANAGER->asyncRemoveAllItemDrawableOfListFromView(items, doc, nullptr);
 
             return;
         }
@@ -608,7 +608,7 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
         l << ii;
     }
 
-    if(dynamic_cast<const CT_AbstractSingularItemDrawable*>(&item) != NULL)
+    if(dynamic_cast<const CT_AbstractSingularItemDrawable*>(&item) != nullptr)
     {
         QList<CT_AbstractItemAttribute*> lIA = ((const CT_AbstractSingularItemDrawable&)item).itemAttributes();
         QListIterator<CT_AbstractItemAttribute*> itIA(lIA);
@@ -621,7 +621,7 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
             if(index != -1)
             {
                 CG_CustomTreeItem *ii = l.at(index + GTreeView::COLUMN_FIRST_DATA_VALUE);
-                ii->setText(att->toString((const CT_AbstractSingularItemDrawable*)&item, NULL));
+                ii->setText(att->toString((const CT_AbstractSingularItemDrawable*)&item, nullptr));
             }
         }
     }
@@ -631,14 +631,14 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
 
         const CT_StandardItemGroup *group = dynamic_cast<const CT_StandardItemGroup*>(&item);
 
-        if(group != NULL)
+        if(group != nullptr)
         {
             const DataReferenceCollection& ref = m_dataReferencesToUse;
 
             group->visitChildrensForTreeView([&ref, &l](const CT_AbstractItem* child) -> bool {
                 const CT_ItemAttributeList* sI = dynamic_cast<const CT_ItemAttributeList*>(child);
 
-                if(sI != NULL)
+                if(sI != nullptr)
                 {
                     const QList<CT_AbstractItemAttribute*> lIA = sI->itemAttributes();
                     QListIterator<CT_AbstractItemAttribute*> itIA(lIA);
@@ -655,7 +655,7 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
                             if(!ii->text().isEmpty())
                                 ii->setText(ii->text() + " / ");
 
-                            ii->setText(ii->text() + att->toString(sI, NULL));
+                            ii->setText(ii->text() + att->toString(sI, nullptr));
                         }
                     }
                 }
@@ -736,7 +736,7 @@ void GTreeView::refreshExpanded()
 
         bool ex = false;
 
-        if(item != NULL && m_expandedItems.contains(item))
+        if(item != nullptr && m_expandedItems.contains(item))
         {
             ex = true;
             m_treeView->setExpanded(child, true);
@@ -762,7 +762,7 @@ QList<CT_AbstractItemDrawable *> GTreeView::itemDrawableFromRowSelected() const
     {
         CT_AbstractItemDrawable *id = itemDrawableFromItem(itemFromIndex(it.next()));
 
-        if(id != NULL)
+        if(id != nullptr)
             listItem.append(id);
     }
 
@@ -828,12 +828,12 @@ bool GTreeView::canAddItemDrawable(const DM_Document *document, const CT_Abstrac
     if(!isSyncedWithAnotherDocument())
         return true;
 
-    return (item == NULL) || item->isSelected();
+    return (item == nullptr) || item->isSelected();
 }
 
 bool GTreeView::isSyncedWithAnotherDocument() const
 {
-    return (syncGroup() != NULL)
+    return (syncGroup() != nullptr)
             && !syncGroup()->documentViews().isEmpty();
 }
 
@@ -936,11 +936,11 @@ CG_CustomTreeItem *GTreeView::recursiveItemFromItemDrawable(CG_CustomTreeItem *p
 
         it = recursiveItemFromItemDrawable(it, item);
 
-        if(it != NULL)
+        if(it != nullptr)
             return it;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void GTreeView::initContextMenu()
@@ -997,7 +997,7 @@ void GTreeView::recursiveAddToReferencesToUseForModel(DataReferenceCollection& u
                                                       const CT_OutAbstractModel* model)
 {
     model->recursiveVisitOutChildrens([&uniqueReferences](const CT_OutAbstractModel* child) -> bool {
-        if(dynamic_cast<const CT_OutAbstractSingularItemModel*>(child) != NULL)
+        if(dynamic_cast<const CT_OutAbstractSingularItemModel*>(child) != nullptr)
         {
             const CT_OutAbstractSingularItemModel* sModel = static_cast<const CT_OutAbstractSingularItemModel*>(child);
 
@@ -1036,7 +1036,7 @@ void GTreeView::reconstructCompleter()
     }
 
     QCompleter *lastCompleter = m_lineFilter->completer();
-    QCompleter *completer = NULL;
+    QCompleter *completer = nullptr;
 
     if(!comp.isEmpty())
     {
@@ -1066,7 +1066,7 @@ void GTreeView::recursiveRefreshExpanded(const QModelIndex &index, CG_CustomTree
 
         bool ex = false;
 
-        if(itemDrawable != NULL && m_expandedItems.contains(itemDrawable))
+        if(itemDrawable != nullptr && m_expandedItems.contains(itemDrawable))
         {
             ex = true;
             m_treeView->setExpanded(child, true);

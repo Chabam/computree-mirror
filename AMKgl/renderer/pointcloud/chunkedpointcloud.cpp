@@ -31,10 +31,10 @@ ChunkedPointCloud::ChunkedPointCloud(const uint& uniqueKey,
 {
     m_mutex = new QMutex(QMutex::Recursive);
 
-    m_objectColorCloud = NULL;
-    m_objectNormalCloud = NULL;
-    m_objectInfoCloud = NULL;
-    m_globalInfoCloud = NULL;
+    m_objectColorCloud = nullptr;
+    m_objectNormalCloud = nullptr;
+    m_objectInfoCloud = nullptr;
+    m_globalInfoCloud = nullptr;
 
     m_vertexArraySize = vertexArraySize;
     m_beginGlobalIndex = beginGlobalIndex;
@@ -45,7 +45,7 @@ ChunkedPointCloud::ChunkedPointCloud(const uint& uniqueKey,
     setMaxNumberOfPointsToDrawInFastDraw(vertexArraySize);
 
     m_nPoints = 0;
-    m_pointCloudProvider = NULL;
+    m_pointCloudProvider = nullptr;
 }
 
 ChunkedPointCloud::~ChunkedPointCloud()
@@ -58,9 +58,9 @@ void ChunkedPointCloud::setAttributesAccessor(const IAttributesAccessor *accesso
 {
     Chunk<PointRendererContext>::setAttributesAccessor(accessor);
 
-    m_pointCloudProvider = NULL;
+    m_pointCloudProvider = nullptr;
 
-    if(accessor != NULL)
+    if(accessor != nullptr)
         m_pointCloudProvider = accessor->getPermanentScene()->getPointCloudAttributesProvider();
 }
 
@@ -73,7 +73,7 @@ void ChunkedPointCloud::addPoint(const size_t &localIndex)
     else
         m_indexes[m_nPoints] = GLuint(localIndex);
 
-    if(m_globalInfoCloud != NULL)
+    if(m_globalInfoCloud != nullptr)
         (*m_globalInfoCloud)[m_beginGlobalIndex+localIndex] = 0; // reset the visibility/selection/etc... state
 
     ++m_nPoints;
@@ -93,7 +93,7 @@ void ChunkedPointCloud::setPointsVisible(const size_t &from, const size_t &count
 
     ElementInfo* fi = createOrGetFirstInfo();
 
-    if(fi == NULL)
+    if(fi == nullptr)
         return;
 
     if(visible) {
@@ -118,7 +118,7 @@ bool ChunkedPointCloud::isAtLeastOneObjectVisible(const size_t &from, const size
 
     ElementInfo* fi = createOrGetFirstInfo();
 
-    if(fi == NULL)
+    if(fi == nullptr)
         return false;
 
     do {
@@ -138,7 +138,7 @@ void ChunkedPointCloud::hidePointsSelected()
 
     ElementInfo* fi = createOrGetFirstInfo();
 
-    if(fi == NULL)
+    if(fi == nullptr)
         return;
 
     do {
@@ -210,7 +210,7 @@ void ChunkedPointCloud::draw(DrawInfo &info)
 
     if(type != DM_NONE) {
 
-        bool showNormals = (getCurrentDocument() != NULL) && getCurrentDocument()->mustShowNormals();
+        bool showNormals = (getCurrentDocument() != nullptr) && getCurrentDocument()->mustShowNormals();
         PointRendererShaders& shaders = getCurrentContext()->getShaders();
 
         pushCoordinateSystemMatrix(info);
@@ -281,7 +281,7 @@ void ChunkedPointCloud::fastDraw(DrawInfo &info)
 
     if(type != DM_NONE) {
 
-        bool showNormals = (getCurrentDocument() != NULL) && getCurrentDocument()->mustShowNormals();
+        bool showNormals = (getCurrentDocument() != nullptr) && getCurrentDocument()->mustShowNormals();
 
         pushCoordinateSystemMatrix(info);
 
@@ -355,7 +355,7 @@ void ChunkedPointCloud::postDraw(DrawInfo &info)
     info.drawText(QString("%1 points (Draw mode for Points is %2 / Normals is %3)")
             .arg(m_nPoints)
             .arg(drawMode)
-            .arg(((getCurrentContext() == NULL) || (getCurrentContext()->getShaders().getNormalsShaderProgram() == NULL)) ? "Manual" : drawMode));
+            .arg(((getCurrentContext() == nullptr) || (getCurrentContext()->getShaders().getNormalsShaderProgram() == nullptr)) ? "Manual" : drawMode));
 
     /*Eigen::Vector4d camTranslation = info.getCameraTranslation();
 
@@ -387,7 +387,7 @@ bool ChunkedPointCloud::internalUpdate()
 {
     PointRendererContext* context = getCurrentContext();
 
-    if(context == NULL)
+    if(context == nullptr)
         return false;
 
     if(isUpdated())
@@ -418,7 +418,7 @@ bool ChunkedPointCloud::internalUpdate()
         m_fastStride = 1;
     }
 
-    if(shaders.getPointsShaderProgram() == NULL) {
+    if(shaders.getPointsShaderProgram() == nullptr) {
         setNormalDrawModeUsed(getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
         setFastDrawModeUsed(getNormalDrawModeUsed());
         setUpdated(true);
@@ -432,7 +432,7 @@ bool ChunkedPointCloud::internalUpdate()
     QOpenGLFunctions_2_0* func = context->getOpenglContext()->versionFunctions<QOpenGLFunctions_2_0>();
 
     // if the graphics card don't have this feature we must use the draw mode BASIC or display list
-    if(func == NULL)
+    if(func == nullptr)
         setNormalDrawModeUsed(getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
     else
         func->initializeOpenGLFunctions();
@@ -444,7 +444,7 @@ bool ChunkedPointCloud::internalUpdate()
 
     setFastDrawModeUsed(getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
 
-    if(mustUseVBO() && (func != NULL)) {
+    if(mustUseVBO() && (func != nullptr)) {
 
         BufferObjectManager& bufferObjects = context->getBufferObjectManager();
 
@@ -509,7 +509,7 @@ void ChunkedPointCloud::fastDrawBasic(DrawInfo &info)
                                              getFirstVertex(),
                                              createOrGetFirstInfo(),
                                              getFirstColor(),
-                                             (GlobalNormal*)NULL,
+                                             (GlobalNormal*)nullptr,
                                              *getFlagsPropertyManager(),
                                              m_indexes,
                                              m_nPoints,
@@ -532,7 +532,7 @@ void ChunkedPointCloud::drawBasic(DrawInfo &info)
                                          getFirstVertex(),
                                          createOrGetFirstInfo(),
                                          getFirstColor(),
-                                         (GlobalNormal*)NULL,
+                                         (GlobalNormal*)nullptr,
                                          *getFlagsPropertyManager(),
                                          m_indexes,
                                          m_nPoints,
@@ -554,7 +554,7 @@ void ChunkedPointCloud::drawRaw(DrawInfo &info)
 
     context->getShaders().setVertexAttributeToPointsShader(fv);
 
-    if(fc != NULL)
+    if(fc != nullptr)
         context->getShaders().setColorAttributeToPointsShader(fc);
     else
         context->getShaders().setUseColorAttribute(false);
@@ -690,7 +690,7 @@ void ChunkedPointCloud::drawRawNormals(DrawInfo &info)
 
     GlobalNormal* fn = getFirstNormal();
 
-    if(fn != NULL) {
+    if(fn != nullptr) {
         size_t size = m_nPoints;
 
         FloatPoint* fv = getFirstVertex();
@@ -826,7 +826,7 @@ bool ChunkedPointCloud::isUpdated() const
 
     PointRendererContext* context = getCurrentContext();
 
-    if(context == NULL)
+    if(context == nullptr)
         return true;
 
     ChunkCustomUpdateValues* cuv = context->createOrGetChunkCustomUpdateValues(this);
@@ -846,15 +846,15 @@ void ChunkedPointCloud::updateOnlyVAO()
 
         PointRendererContext* context = getCurrentContext();
 
-        if(context == NULL)
+        if(context == nullptr)
             return;
 
         BufferObjectManager& bufferObjects = context->getBufferObjectManager();
 
-        if(getGlobalColorCloud() != NULL && !bufferObjects.getColorsBO(this, POINTCLOUD_COLOR_BO_UI).isCreated())
+        if(getGlobalColorCloud() != nullptr && !bufferObjects.getColorsBO(this, POINTCLOUD_COLOR_BO_UI).isCreated())
             setUpdated(false);
 
-        if(getGlobalNormalCloud() != NULL && !bufferObjects.getNormalsBO(this, POINTCLOUD_NORMAL_BO_UI).isCreated())
+        if(getGlobalNormalCloud() != nullptr && !bufferObjects.getNormalsBO(this, POINTCLOUD_NORMAL_BO_UI).isCreated())
             setUpdated(false);
 
         if(isUpdated()) {
@@ -880,7 +880,7 @@ void ChunkedPointCloud::updateOnlyVAO()
 
         PointRendererContext* context = getCurrentContext();
 
-        if(context == NULL)
+        if(context == nullptr)
             return;
 
         context->destroyAllDisplayList(this);
@@ -889,22 +889,22 @@ void ChunkedPointCloud::updateOnlyVAO()
 
 GlobalColorCloud* ChunkedPointCloud::getGlobalColorCloud() const
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     return m_pointCloudProvider->getColorCloud();
 }
 
 GlobalNormalCloud* ChunkedPointCloud::getGlobalNormalCloud() const
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     return m_pointCloudProvider->getNormalCloud();
 }
 
 GlobalInfoCloud* ChunkedPointCloud::getGlobalInfoCloud() const
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     GlobalInfoCloud* gic = m_pointCloudProvider->getInfoCloud();
 
-    if(m_globalInfoCloud == NULL)
+    if(m_globalInfoCloud == nullptr)
         const_cast<ChunkedPointCloud*>(this)->m_globalInfoCloud = gic;
 
     return gic;
@@ -914,7 +914,7 @@ GlobalColorCloud* ChunkedPointCloud::createOrGetColorCloud()
 {
     QMutexLocker locker(m_mutex);
 
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     GlobalColorCloud* gcc = m_pointCloudProvider->createOrGetColorCloud();
     createObjectColorCloudMemberIfNot();
     return gcc;
@@ -924,7 +924,7 @@ GlobalNormalCloud* ChunkedPointCloud::createOrGetNormalCloud()
 {
     QMutexLocker locker(m_mutex);
 
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     GlobalNormalCloud* gnc = m_pointCloudProvider->createOrGetNormalCloud();
     createObjectNormalCloudMemberIfNot();
     return gnc;
@@ -934,7 +934,7 @@ GlobalInfoCloud* ChunkedPointCloud::createOrGetInfoCloud()
 {
     QMutexLocker locker(m_mutex);
 
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     GlobalInfoCloud* gic = m_pointCloudProvider->createOrGetInfoCloud();
     createObjectInfoCloudMemberIfNot();
     return gic;
@@ -966,7 +966,7 @@ FloatPoint* ChunkedPointCloud::getFirstVertex() const
     IGlobalPointCloudManager* gpcm = AMKglEA->getGlobalPointCloudManager();
 
     if(m_beginGlobalIndex >= gpcm->size())
-        return NULL;
+        return nullptr;
 
     return &gpcm->getFloatPointAtGlobalIndex(m_beginGlobalIndex);
 }
@@ -974,7 +974,7 @@ FloatPoint* ChunkedPointCloud::getFirstVertex() const
 GLuint* ChunkedPointCloud::getFirstLocalIndex() const
 {
     if(m_indexes.empty())
-        return NULL;
+        return nullptr;
 
     return (GLuint*)&m_indexes[0];
 }
@@ -983,8 +983,8 @@ GlobalColor* ChunkedPointCloud::getFirstColor() const
 {
     GlobalColorCloud* cc = getGlobalColorCloud();
 
-    if((cc == NULL) || (m_beginGlobalIndex >= cc->size()))
-        return NULL;
+    if((cc == nullptr) || (m_beginGlobalIndex >= cc->size()))
+        return nullptr;
 
     return &(*cc)[m_beginGlobalIndex];
 }
@@ -993,8 +993,8 @@ GlobalNormal* ChunkedPointCloud::getFirstNormal() const
 {
     GlobalNormalCloud* nc = getGlobalNormalCloud();
 
-    if((nc == NULL) || (m_beginGlobalIndex >= nc->size()))
-        return NULL;
+    if((nc == nullptr) || (m_beginGlobalIndex >= nc->size()))
+        return nullptr;
 
     return &(*nc)[m_beginGlobalIndex];
 }
@@ -1003,8 +1003,8 @@ ElementInfo *ChunkedPointCloud::createOrGetFirstInfo() const
 {
     GlobalInfoCloud* ic = const_cast<ChunkedPointCloud*>(this)->createOrGetInfoCloud();
 
-    if((ic == NULL) || (m_beginGlobalIndex >= ic->size()))
-        return NULL;
+    if((ic == nullptr) || (m_beginGlobalIndex >= ic->size()))
+        return nullptr;
 
     return &(*ic)[m_beginGlobalIndex];
 }
@@ -1013,8 +1013,8 @@ ElementInfo* ChunkedPointCloud::getFirstInfo() const
 {
     GlobalInfoCloud* ic = getGlobalInfoCloud();
 
-    if((ic == NULL) || (m_beginGlobalIndex >= ic->size()))
-        return NULL;
+    if((ic == nullptr) || (m_beginGlobalIndex >= ic->size()))
+        return nullptr;
 
     return &(*ic)[m_beginGlobalIndex];
 }
@@ -1032,10 +1032,10 @@ void ChunkedPointCloud::createObjectColorCloudMemberIfNot()
 {
     QMutexLocker locker(m_mutex);
 
-    if(m_objectColorCloud == NULL) {
-        Q_ASSERT(m_pointCloudProvider != NULL);
+    if(m_objectColorCloud == nullptr) {
+        Q_ASSERT(m_pointCloudProvider != nullptr);
         GlobalColorCloud *gcc = m_pointCloudProvider->createOrGetColorCloud();
-        Q_ASSERT(gcc != NULL);
+        Q_ASSERT(gcc != nullptr);
         Q_UNUSED(gcc)
         m_objectColorCloud = new ObjectFuncPointerCloudIndexed<GlobalColor, IndicesCollection>([](void* object) -> GlobalColor* { return ((ChunkedPointCloud*)object)->getFirstColor(); },
                                                                                            this,
@@ -1048,10 +1048,10 @@ void ChunkedPointCloud::createObjectNormalCloudMemberIfNot()
 {
     QMutexLocker locker(m_mutex);
 
-    if(m_objectNormalCloud == NULL) {
-        Q_ASSERT(m_pointCloudProvider != NULL);
+    if(m_objectNormalCloud == nullptr) {
+        Q_ASSERT(m_pointCloudProvider != nullptr);
         GlobalNormalCloud* gnc = m_pointCloudProvider->createOrGetNormalCloud();
-        Q_ASSERT(gnc != NULL);
+        Q_ASSERT(gnc != nullptr);
         Q_UNUSED(gnc)
         m_objectNormalCloud = new ObjectFuncPointerCloudIndexed<GlobalNormal, IndicesCollection>([](void* object) -> GlobalNormal* { return ((ChunkedPointCloud*)object)->getFirstNormal(); },
                                                                                              this,
@@ -1064,16 +1064,16 @@ void ChunkedPointCloud::createObjectInfoCloudMemberIfNot()
 {
     QMutexLocker locker(m_mutex);
 
-    if(m_objectInfoCloud == NULL) {
-        Q_ASSERT(m_pointCloudProvider != NULL);
+    if(m_objectInfoCloud == nullptr) {
+        Q_ASSERT(m_pointCloudProvider != nullptr);
         GlobalInfoCloud *gic = m_pointCloudProvider->createOrGetInfoCloud();
-        Q_ASSERT(gic != NULL);
+        Q_ASSERT(gic != nullptr);
         m_objectInfoCloud = new ObjectFuncPointerCloudIndexed<ElementInfo, IndicesCollection>([](void* object) -> ElementInfo* { return ((ChunkedPointCloud*)object)->createOrGetFirstInfo(); },
                                                                                           this,
                                                                                           getNumberOfElementPerObject(),
                                                                                           m_indexes);
 
-        if(m_globalInfoCloud == NULL)
+        if(m_globalInfoCloud == nullptr)
             m_globalInfoCloud = gic;
     }
 }
@@ -1083,11 +1083,11 @@ void ChunkedPointCloud::deleteAllObjectXXXCloud()
     QMutexLocker locker(m_mutex);
 
     delete m_objectColorCloud;
-    m_objectColorCloud = NULL;
+    m_objectColorCloud = nullptr;
 
     delete m_objectNormalCloud;
-    m_objectNormalCloud = NULL;
+    m_objectNormalCloud = nullptr;
 
     delete m_objectInfoCloud;
-    m_objectInfoCloud = NULL;
+    m_objectInfoCloud = nullptr;
 }

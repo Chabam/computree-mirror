@@ -1,8 +1,6 @@
 #ifndef CT_ATTRIBUTESTOCLOUDWORKERT_H
 #define CT_ATTRIBUTESTOCLOUDWORKERT_H
 
-#include <QObject>
-#include "interfaces.h"
 #include "ct_tools/attributes/ct_abstractattributestocloudworker.h"
 
 #include "ct_colorcloud/registered/ct_standardcolorcloudregistered.h"
@@ -19,7 +17,7 @@ class CT_AttributesToCloudWorkerT : public CT_AbstractAttributesToCloudWorker
 public:
     CT_AttributesToCloudWorkerT() : CT_AbstractAttributesToCloudWorker() {}
 
-    void setAttributes(const QList<TypeAttribute*> &attr)
+    void setAttributes(const QList<const TypeAttribute*> &attr)
     {
         m_attributes = attr;
     }
@@ -59,7 +57,7 @@ public:
 private:
     int                                                 m_progress;
     bool                                                m_cancel;
-    QList<TypeAttribute*>                               m_attributes;
+    QList<const  TypeAttribute*>                        m_attributes;
     QSharedPointer<CT_StandardColorCloudRegistered>     m_colors;
     QSharedPointer<CT_StandardNormalCloudRegistered>    m_normals;
 

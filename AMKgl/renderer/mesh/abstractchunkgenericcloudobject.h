@@ -119,35 +119,35 @@ public:
     void unlock() {}
 
     /**
-     * @brief Returns the color cloud, or NULL if it was not created.
+     * @brief Returns the color cloud, or nullptr if it was not created.
      */
     Basic::AbstractColorCloud* getObjectColorCloud() const;
 
     /**
-     * @brief Returns the normal cloud, or NULL if it was not created.
+     * @brief Returns the normal cloud, or nullptr if it was not created.
      */
     Basic::AbstractNormalCloud* getObjectNormalCloud() const;
 
     /**
-     * @brief Returns the normal cloud, or NULL if it was not created.
+     * @brief Returns the normal cloud, or nullptr if it was not created.
      */
     Basic::AbstractInfoCloud* getObjectInfoCloud() const;
 
     /**
      * @brief Returns the color cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractColorCloud* createOrGetObjectColorCloud();
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractNormalCloud* createOrGetObjectNormalCloud();
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
-     * @warning If it can't be created the method returns NULL !
+     * @warning If it can't be created the method returns nullptr !
      */
     Basic::AbstractInfoCloud* createOrGetObjectInfoCloud();
 
@@ -159,17 +159,17 @@ public:
     ///////////// VERTEX //////////////
 
     /**
-     * @brief Returns the global color cloud of vertex, or NULL if it was not created yet
+     * @brief Returns the global color cloud of vertex, or nullptr if it was not created yet
      */
     GlobalColorCloud* getVertexGlobalColorCloud() const;
 
     /**
-     * @brief Returns the global normal cloud of vertex, or NULL if it was not created yet
+     * @brief Returns the global normal cloud of vertex, or nullptr if it was not created yet
      */
     GlobalNormalCloud* getVertexGlobalNormalCloud() const;
 
     /**
-     * @brief Returns the global info cloud of vertex, or NULL if it was not created yet
+     * @brief Returns the global info cloud of vertex, or nullptr if it was not created yet
      */
     GlobalInfoCloud* getVertexGlobalInfoCloud() const;
 
@@ -194,34 +194,34 @@ public:
     FloatPoint* getFirstVertex() const;
 
     /**
-     * @brief Returns the first color for vertex, NULL if the cloud was not created yet !
+     * @brief Returns the first color for vertex, nullptr if the cloud was not created yet !
      */
     Color* getFirstVertexColor() const;
 
     /**
-     * @brief Returns the first normal for vertex, NULL if the cloud was not created yet !
+     * @brief Returns the first normal for vertex, nullptr if the cloud was not created yet !
      */
     Normal* getFirstVertexNormal() const;
 
     /**
-     * @brief Returns the first info for vertex, NULL if the cloud was not created yet !
+     * @brief Returns the first info for vertex, nullptr if the cloud was not created yet !
      */
     Info* getFirstVertexInfo() const;
 
     ///////////////// OBJECT ///////////////
 
     /**
-     * @brief Returns the global color cloud of object, or NULL if it was not created yet
+     * @brief Returns the global color cloud of object, or nullptr if it was not created yet
      */
     GlobalColorCloud* getObjectGlobalColorCloud() const;
 
     /**
-     * @brief Returns the global normal cloud of object, or NULL if it was not created yet
+     * @brief Returns the global normal cloud of object, or nullptr if it was not created yet
      */
     GlobalNormalCloud* getObjectGlobalNormalCloud() const;
 
     /**
-     * @brief Returns the global info cloud of object, or NULL if it was not created yet
+     * @brief Returns the global info cloud of object, or nullptr if it was not created yet
      */
     GlobalInfoCloud* getObjectGlobalInfoCloud() const;
 
@@ -241,17 +241,17 @@ public:
     GlobalInfoCloud* createOrGetObjectGlobalInfoCloud();
 
     /**
-     * @brief Returns the first color for object, NULL if the cloud was not created yet !
+     * @brief Returns the first color for object, nullptr if the cloud was not created yet !
      */
     Color* getFirstObjectColor() const;
 
     /**
-     * @brief Returns the first normal for object, NULL if the cloud was not created yet !
+     * @brief Returns the first normal for object, nullptr if the cloud was not created yet !
      */
     Normal* getFirstObjectNormal() const;
 
     /**
-     * @brief Returns the first byte info (selection, visibility, etc...) for objects, NULL if the cloud was not created yet !
+     * @brief Returns the first byte info (selection, visibility, etc...) for objects, nullptr if the cloud was not created yet !
      */
     Info* getFirstObjectInfo() const;
     Info* createOrGetFirstObjectInfo() const;
@@ -334,17 +334,17 @@ protected:
     virtual void internalSetNumberOfObjects(const size_t& n, const bool& shrinkToFit) = 0;
 
     /**
-     * @brief If the member m_objectColorCloud is NULL it will be created
+     * @brief If the member m_objectColorCloud is nullptr it will be created
      */
     virtual void createObjectColorCloudMemberIfNot() = 0;
 
     /**
-     * @brief If the member m_objectNormalCloud is NULL it will be created
+     * @brief If the member m_objectNormalCloud is nullptr it will be created
      */
     virtual void createObjectNormalCloudMemberIfNot() = 0;
 
     /**
-     * @brief If the member m_objectInfoCloud is NULL it will be created
+     * @brief If the member m_objectInfoCloud is nullptr it will be created
      */
     virtual void createObjectInfoCloudMemberIfNot() = 0;
 };

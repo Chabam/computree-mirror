@@ -18,9 +18,9 @@ DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* 
 
     Q_ASSERT((objectType == Scene::LineGlobalCloud) || (objectType == Scene::TriangleGlobalCloud));
 
-    m_cloudIndex = NULL;
+    m_cloudIndex = nullptr;
 
-    PermanentItemScene* itemScene = scene->getPermanentItemSceneForModel(NULL);
+    PermanentItemScene* itemScene = scene->getPermanentItemSceneForModel(nullptr);
 
     if(objectType == Scene::LineGlobalCloud) {
         EdgeCloudAttributesProvider* provider = itemScene->getEdgeCloudAttributesProvider();
@@ -37,11 +37,11 @@ DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* 
 
         const CT_IAccessEdgeCloud* edgeAccess = dynamic_cast<const CT_IAccessEdgeCloud*>(mesh);
 
-        Q_ASSERT((mesh == NULL) || (edgeAccess != NULL));
+        Q_ASSERT((mesh == nullptr) || (edgeAccess != nullptr));
 
-        if(edgeAccess != NULL) {
+        if(edgeAccess != nullptr) {
             m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractEdgeCloudIndex*)edgeAccess->edgeCloudIndex());
-            Q_ASSERT(m_cloudIndex != NULL);
+            Q_ASSERT(m_cloudIndex != nullptr);
         }
 
     } else if(objectType == Scene::TriangleGlobalCloud) {
@@ -59,18 +59,18 @@ DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* 
 
         const CT_IAccessFaceCloud* faceAccess = dynamic_cast<const CT_IAccessFaceCloud*>(mesh);
 
-        Q_ASSERT((mesh == NULL) || (faceAccess != NULL));
+        Q_ASSERT((mesh == nullptr) || (faceAccess != nullptr));
 
-        if(faceAccess != NULL) {
+        if(faceAccess != nullptr) {
             m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractEdgeCloudIndex*)faceAccess->faceCloudIndex());
-            Q_ASSERT(m_cloudIndex != NULL);
+            Q_ASSERT(m_cloudIndex != nullptr);
         }
     }
 }
 
 size_t DM_MeshObjectsModifier::getNumberOfObjects() const
 {
-    if(m_cloudIndex != NULL)
+    if(m_cloudIndex != nullptr)
         m_cloudIndex->size();
 
     return m_colorcloud->size();
@@ -83,7 +83,7 @@ size_t DM_MeshObjectsModifier::getNumberOfVertexPerObject() const
 
 bool DM_MeshObjectsModifier::isColorsAvailable() const
 {
-    return m_colorcloud != NULL;
+    return m_colorcloud != nullptr;
 }
 
 const CT_Color& DM_MeshObjectsModifier::getColor(const size_t &objectIndex,
@@ -91,7 +91,7 @@ const CT_Color& DM_MeshObjectsModifier::getColor(const size_t &objectIndex,
 {
     Q_UNUSED(vertexIndex)
 
-    if(m_cloudIndex == NULL)
+    if(m_cloudIndex == nullptr)
         return (*m_colorcloud)[objectIndex];
 
     return (*m_colorcloud)[(*m_cloudIndex)[objectIndex]];
@@ -99,7 +99,7 @@ const CT_Color& DM_MeshObjectsModifier::getColor(const size_t &objectIndex,
 
 void DM_MeshObjectsModifier::setColor(const CT_Color &newColor)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         size_t size = m_colorcloud->size();
 
         if(size > 0) {
@@ -120,7 +120,7 @@ void DM_MeshObjectsModifier::setColor(const CT_Color &newColor)
 
 void DM_MeshObjectsModifier::setColor(const size_t &objectIndex, const CT_Color &newColor)
 {
-    if(m_cloudIndex == NULL)
+    if(m_cloudIndex == nullptr)
         (*m_colorcloud)[objectIndex] = newColor;
     else
         (*m_colorcloud)[(*m_cloudIndex)[objectIndex]] = newColor;
@@ -135,14 +135,14 @@ void DM_MeshObjectsModifier::setColor(const size_t &objectIndex, const size_t &v
 
 bool DM_MeshObjectsModifier::isNormalsAvailable() const
 {
-    return m_normalcloud != NULL;
+    return m_normalcloud != nullptr;
 }
 
 const CT_Normal& DM_MeshObjectsModifier::getNormal(const size_t &objectIndex, const size_t &vertexIndex) const
 {
     Q_UNUSED(vertexIndex)
 
-    if(m_cloudIndex == NULL)
+    if(m_cloudIndex == nullptr)
         return (*m_normalcloud)[objectIndex];
 
     return (*m_normalcloud)[(*m_cloudIndex)[objectIndex]];
@@ -150,7 +150,7 @@ const CT_Normal& DM_MeshObjectsModifier::getNormal(const size_t &objectIndex, co
 
 void DM_MeshObjectsModifier::setNormal(const CT_Normal &newNormal)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         size_t size = m_normalcloud->size();
 
         if(size > 0) {
@@ -171,7 +171,7 @@ void DM_MeshObjectsModifier::setNormal(const CT_Normal &newNormal)
 
 void DM_MeshObjectsModifier::setNormal(const size_t &objectIndex, const CT_Normal &newNormal)
 {
-    if(m_cloudIndex == NULL)
+    if(m_cloudIndex == nullptr)
         (*m_normalcloud)[objectIndex] = newNormal;
     else
         (*m_normalcloud)[(*m_cloudIndex)[objectIndex]] = newNormal;
@@ -186,12 +186,12 @@ void DM_MeshObjectsModifier::setNormal(const size_t &objectIndex, const size_t &
 
 bool DM_MeshObjectsModifier::isInfosAvailable() const
 {
-    return m_infocloud != NULL;
+    return m_infocloud != nullptr;
 }
 
 bool DM_MeshObjectsModifier::isVisible(const size_t &objectIndex) const
 {
-    if(m_cloudIndex == NULL)
+    if(m_cloudIndex == nullptr)
         return ObjectsFlagsTool::staticIsObjectVisible((*m_infocloud)[objectIndex]);
 
     return ObjectsFlagsTool::staticIsObjectVisible((*m_infocloud)[(*m_cloudIndex)[objectIndex]]);
@@ -199,7 +199,7 @@ bool DM_MeshObjectsModifier::isVisible(const size_t &objectIndex) const
 
 void DM_MeshObjectsModifier::setVisible(bool visible)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         size_t size = m_infocloud->size();
 
         if(size > 0) {
@@ -232,7 +232,7 @@ void DM_MeshObjectsModifier::setVisible(bool visible)
 
 void DM_MeshObjectsModifier::setVisible(const size_t &objectIndex, bool visible)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         if(visible)
             ObjectsFlagsTool::staticShowObject((*m_infocloud)[objectIndex]);
         else
@@ -247,7 +247,7 @@ void DM_MeshObjectsModifier::setVisible(const size_t &objectIndex, bool visible)
 
 bool DM_MeshObjectsModifier::isSelected(const size_t &objectIndex) const
 {
-    if(m_cloudIndex == NULL)
+    if(m_cloudIndex == nullptr)
         return ObjectsFlagsTool::staticIsObjectSelected((*m_infocloud)[objectIndex]);
 
     return ObjectsFlagsTool::staticIsObjectSelected((*m_infocloud)[(*m_cloudIndex)[objectIndex]]);
@@ -255,7 +255,7 @@ bool DM_MeshObjectsModifier::isSelected(const size_t &objectIndex) const
 
 void DM_MeshObjectsModifier::setSelected(bool selected)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         size_t size = m_infocloud->size();
 
         if(size > 0) {
@@ -288,7 +288,7 @@ void DM_MeshObjectsModifier::setSelected(bool selected)
 
 void DM_MeshObjectsModifier::setSelected(const size_t &objectIndex, bool selected)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         if(selected)
             ObjectsFlagsTool::staticSelectObject((*m_infocloud)[objectIndex]);
         else
@@ -304,7 +304,7 @@ void DM_MeshObjectsModifier::setSelected(const size_t &objectIndex, bool selecte
 bool DM_MeshObjectsModifier::isFlagOn(const size_t &objectIndex,
                                        const GraphicsObjectFlag &flag) const
 {
-    if(m_cloudIndex == NULL)
+    if(m_cloudIndex == nullptr)
         return ObjectsFlagsTool::staticIsFlagSet((*m_infocloud)[objectIndex], ObjectsFlagsTool::Flag(flag));
 
     return ObjectsFlagsTool::staticIsFlagSet((*m_infocloud)[(*m_cloudIndex)[objectIndex]], ObjectsFlagsTool::Flag(flag));
@@ -312,7 +312,7 @@ bool DM_MeshObjectsModifier::isFlagOn(const size_t &objectIndex,
 
 GraphicsObjectFlags DM_MeshObjectsModifier::getFlagsValue(const size_t &objectIndex) const
 {
-    if(m_cloudIndex == NULL)
+    if(m_cloudIndex == nullptr)
         return GraphicsObjectFlags((*m_infocloud)[objectIndex]);
 
     return GraphicsObjectFlags((*m_infocloud)[(*m_cloudIndex)[objectIndex]]);
@@ -321,7 +321,7 @@ GraphicsObjectFlags DM_MeshObjectsModifier::getFlagsValue(const size_t &objectIn
 void DM_MeshObjectsModifier::setFlags(const GraphicsObjectFlags &flags,
                                        bool on)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         size_t size = m_infocloud->size();
 
         if(size > 0) {
@@ -356,7 +356,7 @@ void DM_MeshObjectsModifier::setFlags(const size_t &objectIndex,
                                        const GraphicsObjectFlags &flags,
                                        bool on)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         if(on)
             ObjectsFlagsTool::staticSetFlags((*m_infocloud)[objectIndex], quint8(flags));
         else
@@ -371,7 +371,7 @@ void DM_MeshObjectsModifier::setFlags(const size_t &objectIndex,
 
 void DM_MeshObjectsModifier::toggleFlags(const GraphicsObjectFlags &flags)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         size_t size = m_infocloud->size();
 
         if(size > 0) {
@@ -393,7 +393,7 @@ void DM_MeshObjectsModifier::toggleFlags(const GraphicsObjectFlags &flags)
 void DM_MeshObjectsModifier::toggleFlags(const size_t &objectIndex,
                                           const GraphicsObjectFlags &flags)
 {
-    if(m_cloudIndex == NULL) {
+    if(m_cloudIndex == nullptr) {
         ObjectsFlagsTool::staticToggleFlags((*m_infocloud)[objectIndex], quint8(flags));
     } else {
         ObjectsFlagsTool::staticToggleFlags((*m_infocloud)[(*m_cloudIndex)[objectIndex]], quint8(flags));

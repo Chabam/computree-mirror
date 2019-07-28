@@ -113,7 +113,7 @@ protected:
 signals:
     /**
      * @brief Called to change the current possibility displayed
-     * @param possibility : NULL if we want that nothing was displayed otherwise the possibility to display
+     * @param possibility : nullptr if we want that nothing was displayed otherwise the possibility to display
      */
     void showInResultModelPossibility(const CT_InStdResultModelPossibility* possibility);
 

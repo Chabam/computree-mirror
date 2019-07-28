@@ -4,7 +4,7 @@
 #include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
 
 CT_InStdResultModelPossibility::CT_InStdResultModelPossibility() : SuperClass(),
-    m_inModel(NULL),
+    m_inModel(nullptr),
     m_autoDeleteInResultModel(true)
 {
 }

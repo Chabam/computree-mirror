@@ -14,7 +14,7 @@ public:
     using SingleModelIt = SingleModelIteratorStdStyleT;
     using self_type = CT_MultiModelIteratorStdStyle<SingleModelIteratorStdStyleT, ValueT>;
 
-    CT_MultiModelIteratorStdStyle() : m_currentValue(NULL), m_currentOutModelIndex(-1) {}
+    CT_MultiModelIteratorStdStyle() : m_currentValue(nullptr), m_currentOutModelIndex(-1) {}
 
     template<class OutModelCollectionIt>
     static CT_MultiModelIteratorStdStyle create(OutModelCollectionIt first, OutModelCollectionIt last) {
@@ -33,7 +33,7 @@ public:
             it.m_currentSingleModelIt = SingleModelIt(it.m_outModels[it.m_currentOutModelIndex]);
             it.m_currentValue = (*it.m_currentSingleModelIt);
 
-            while(it.m_currentValue == NULL) {
+            while(it.m_currentValue == nullptr) {
 
                 ++it.m_currentOutModelIndex;
 
@@ -51,12 +51,12 @@ public:
     }
 
     self_type& operator++() {
-        if(m_currentValue == NULL)
+        if(m_currentValue == nullptr)
             return *this;
 
         m_currentValue = (*m_currentSingleModelIt);
 
-        while(m_currentValue == NULL) {
+        while(m_currentValue == nullptr) {
 
             ++m_currentOutModelIndex;
 

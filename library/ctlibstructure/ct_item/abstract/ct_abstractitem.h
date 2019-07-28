@@ -96,9 +96,9 @@ public:
     public:
         using self_type = ChildrensIteratorStdStyleT<ItemT>;
 
-        ChildrensIteratorStdStyleT() : m_iterator(NULL), m_currentValue(NULL) {}
+        ChildrensIteratorStdStyleT() : m_iterator(nullptr), m_currentValue(nullptr) {}
         ChildrensIteratorStdStyleT(const self_type& other) :
-            m_iterator(other.m_iterator != NULL ? other.m_iterator->copy() : NULL),
+            m_iterator(other.m_iterator != nullptr ? other.m_iterator->copy() : nullptr),
             m_currentValue(other.m_currentValue)
         {
         }
@@ -108,13 +108,13 @@ public:
         }
 
         self_type& operator++() {
-            if(m_currentValue == NULL)
+            if(m_currentValue == nullptr)
                 return *this;
 
             if(m_iterator->hasNext())
                 m_currentValue = static_cast<ItemT*>(m_iterator->next());
             else
-                m_currentValue = NULL;
+                m_currentValue = nullptr;
 
             return *this;
         }
@@ -125,7 +125,7 @@ public:
         bool operator!=(const self_type& rhs) { return m_currentValue != rhs.m_currentValue; }
         self_type& operator=(const self_type& other) {
             delete this->m_iterator;
-            this->m_iterator = other.m_iterator != NULL ? other.m_iterator->copy() : NULL;
+            this->m_iterator = other.m_iterator != nullptr ? other.m_iterator->copy() : nullptr;
             this->m_currentValue = other.m_currentValue;
             return *this;
         }
@@ -138,8 +138,8 @@ public:
         template<typename ItemT>
         friend class ChildrensCollectionT;
 
-        ChildrensIteratorStdStyleT(IChildrensIteratorQtStylePtr it) : m_iterator(it), m_currentValue(NULL) {
-            if((m_iterator != NULL) && m_iterator->hasNext())
+        ChildrensIteratorStdStyleT(IChildrensIteratorQtStylePtr it) : m_iterator(it), m_currentValue(nullptr) {
+            if((m_iterator != nullptr) && m_iterator->hasNext())
                 m_currentValue = m_iterator->next();
         }
     };
@@ -153,10 +153,10 @@ public:
         using const_iterator = ChildrensIteratorStdStyleT<ItemT>;
         using self_type = ChildrensCollectionT<ItemT>;
 
-        ChildrensCollectionT() : m_iterator(NULL) {}
+        ChildrensCollectionT() : m_iterator(nullptr) {}
         ChildrensCollectionT(IChildrensIteratorQtStylePtr it) : m_iterator(it){}
         ChildrensCollectionT(const self_type& other) :
-            m_iterator(other.m_iterator != NULL ? other.m_iterator->copy() : NULL)
+            m_iterator(other.m_iterator != nullptr ? other.m_iterator->copy() : nullptr)
         {
         }
 
@@ -167,7 +167,7 @@ public:
         /**
          * @brief Returns a const STL-style iterator pointing to the first child in the collection of childrens that must be keeped.
          */
-        const_iterator begin() const { return const_iterator(m_iterator != NULL ? m_iterator->copy() : NULL); }
+        const_iterator begin() const { return const_iterator(m_iterator != nullptr ? m_iterator->copy() : nullptr); }
 
         /**
          * @brief Returns a const STL-style iterator pointing to the imaginary child after the element item in the collection of childrens that must be keeped.
@@ -176,7 +176,7 @@ public:
 
         self_type& operator=(const self_type& other) {
             delete this->m_iterator;
-            this->m_iterator = other.m_iterator != NULL ? other.m_iterator->copy() : NULL;
+            this->m_iterator = other.m_iterator != nullptr ? other.m_iterator->copy() : nullptr;
             return *this;
         }
 
@@ -294,7 +294,7 @@ public:
 
     /**
      * @brief Change the result that contains this element. The method "willBeRemovedFromResult" is not called.
-     * @param newRes : The result to use now. Can be NULL.
+     * @param newRes : The result to use now. Can be nullptr.
      * @warning Not intended for direct use by plugin developper
      */
     void setResult(const CT_AbstractResult* newRes);
@@ -306,7 +306,7 @@ public:
 
     /**
      * @brief Change the model of this element.
-     * @param newRes : The model to use now. Can be NULL.
+     * @param newRes : The model to use now. Can be nullptr.
      * @warning Not intended for direct use by plugin developper
      */
     void setModel(const CT_OutAbstractModel* model);

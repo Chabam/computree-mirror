@@ -5,7 +5,7 @@ contains ( QT_VERSION, "^5.*" ) {
 }
 
 CHECK_CAN_USE_GDAL = 1
-CHECK_CAN_USE_OPENCV = 1
+MUST_USE_OPENCV = 1
 
 include(../library_shared.pri)
 include(../../include_all.pri)
@@ -76,7 +76,25 @@ HEADERS +=  \
 #    readers/tools/ply/internal/setter/plydirectscalarvaluessetter.h \
 #    readers/tools/ply/iplyreaderlistener.h \
 #    readers/ct_reader_trajectory.h \
-#    readers/ct_reader_trajectory_def_model.h
+#    readers/ct_reader_trajectory_def_model.h \
+#    exporters/ascid/pb_ascidexporter.h \
+#    exporters/ascrgb/pb_ascrgbexporter.h \
+#    exporters/csv/pb_csvexporter.h \
+#    exporters/csv/pb_csvexportercolumn.h \
+#    exporters/csv/pb_csvexporterconfiguration.h \
+#    exporters/gdal/pb_gdalexporter.h \
+#    exporters/grid2d/pb_grid2dexporter.h \
+#    exporters/grid3d/pb_grid3dastableexporter.h \
+#    exporters/grid3d/pb_grid3dexporter.h \
+#    exporters/groupdata/pb_groupdataexporter.h \
+#    exporters/mesh/pb_meshobjexporter.h \
+#    exporters/pbm/pb_pbmexporter.h \
+#    exporters/pgm/pb_pgmexporter.h \
+#    exporters/polygon2d/pb_polygon2dexporter.h \
+#    exporters/profile/pb_profileexporter.h \
+#    exporters/topology/pb_opfexporter.h \
+#    exporters/xyb/pb_multixybexporter.h \
+    exporters/xyb/pb_xybexporter.h \
     readers/tools/gdal/ct_gdaltools.h
 
 SOURCES += \ 
@@ -92,7 +110,7 @@ SOURCES += \
 #    readers/ct_reader_pbm.cpp \
 #    readers/ct_reader_points_ascii.cpp \
     readers/ct_reader_idxyz.cpp \
-    readers/headers/ct_xybheader.cpp
+    readers/headers/ct_xybheader.cpp \
 #    readers/ct_reader_ptx.cpp \
 #    readers/tools/ply/plyheader.cpp \
 #    readers/tools/ply/internal/plyelement.cpp \
@@ -107,7 +125,25 @@ SOURCES += \
 #    readers/tools/ply/views/sub/gplyscalarconfiguration.cpp \
 #    readers/tools/ply/views/sub/gplynormalconfiguration.cpp \
 #    readers/tools/ply/views/sub/gplyvertexconfiguration.cpp \
-#    readers/ct_reader_trajectory.cpp
+#    readers/ct_reader_trajectory.cpp \
+#    exporters/ascid/pb_ascidexporter.cpp \
+#    exporters/ascrgb/pb_ascrgbexporter.cpp \
+#    exporters/csv/pb_csvexporter.cpp \
+#    exporters/csv/pb_csvexportercolumn.cpp \
+#    exporters/csv/pb_csvexporterconfiguration.cpp \
+#    exporters/gdal/pb_gdalexporter.cpp \
+#    exporters/grid2d/pb_grid2dexporter.cpp \
+#    exporters/grid3d/pb_grid3dastableexporter.cpp \
+#    exporters/grid3d/pb_grid3dexporter.cpp \
+#    exporters/groupdata/pb_groupdataexporter.cpp \
+#    exporters/mesh/pb_meshobjexporter.cpp \
+#    exporters/pbm/pb_pbmexporter.cpp \
+#    exporters/pgm/pb_pgmexporter.cpp \
+#    exporters/polygon2d/pb_polygon2dexporter.cpp \
+#    exporters/profile/pb_profileexporter.cpp \
+#    exporters/topology/pb_opfexporter.cpp \
+#    exporters/xyb/pb_multixybexporter.cpp \
+    exporters/xyb/pb_xybexporter.cpp
 
 #FORMS += \
 #    readers/tools/ply/views/gplyreadconfiguration.ui \

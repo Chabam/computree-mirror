@@ -58,7 +58,7 @@ public:
      * @param detailledDescription : detailled description of the group you search
      * @param minPossibility : the minimum number of possibility that you want that the user select (0 if optionnal)
      * @param maxPossibility : the maximum number of possibility that the user can select (-1 if unlimited)
-     * @return Returns the group model created. NULL if it was a problem.
+     * @return Returns the group model created. nullptr if it was a problem.
      */
     CT_InStdGroupModel* setStdRootGroup(const QString& groupType,
                                         const QString& groupNameFromType,
@@ -72,7 +72,7 @@ public:
      * @brief Define a CT_InZeroOrMoreGroupModel to be the root group model (delete the last root group model from memory if exist).
      * @param groupType : The type of the group returned by the static method "staticType" of the class. MUST NOT BE EMPTY !
      * @param groupNameFromType : the name from type of the group (CT_GroupXXX::nameFromType(CT_GroupXXX::staticType())).
-     * @return Returns the group model created. NULL if it was a problem.
+     * @return Returns the group model created. nullptr if it was a problem.
      */
     CT_InZeroOrMoreGroupModel* setZeroOrMoreRootGroup(const QString& groupType,
                                                       const QString& groupNameFromType);
@@ -88,7 +88,7 @@ public:
      * @param detailledDescription : detailled description of the group you search
      * @param minPossibility : the minimum number of possibility that you want that the user select (0 if optionnal)
      * @param maxPossibility : the maximum number of possibility that the user can select (-1 if unlimited)
-     * @return Returns the group model created. NULL if it was a problem.
+     * @return Returns the group model created. nullptr if it was a problem.
      */
     CT_InStdGroupModel* addStdGroupModel(DEF_CT_AbstractGroupModelIn* parentGroup,
                                          const QString& groupType,
@@ -110,7 +110,7 @@ public:
      * @param detailledDescription : a detailled description (displayed in gui for user information). Empty by default.
      * @param minPossibility : the minimum number of possibility that must be selected
      * @param maxPossibility : the maximum number of possibility that can be selected. -1 if you want no limit.
-     * @return Returns the item model created. NULL if it was a problem.
+     * @return Returns the item model created. nullptr if it was a problem.
      */
     CT_InStdSingularItemModel* addStdItemModel(DEF_CT_AbstractGroupModelIn* parentGroup,
                                                const QString& itemType,

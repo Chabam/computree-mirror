@@ -47,10 +47,10 @@ public:
     /**
      * @brief Construct the string to use in a QFileDialog to choose or save a file
      * @param reader : the reader to use to construct the string
-     * @return Returns the string with all formats returned by the reader or an empty string if the reader is NULL or no formats is available.
+     * @return Returns the string with all formats returned by the reader or an empty string if the reader is nullptr or no formats is available.
      */
     static QString constructStringForFileDialog(const CT_AbstractReader* reader) {
-        if(reader != NULL) {
+        if(reader != nullptr) {
 
             QString formatText;
 
@@ -88,13 +88,13 @@ public:
     /**
      * @brief Construct the string list to use in a QDirIterator per example to filter files that was compatible with the reader
      * @param reader : the reader to use to construct the string list
-     * @return Returns the string list with all formats returned by the reader or an empty list if the reader is NULL or no formats is available.
+     * @return Returns the string list with all formats returned by the reader or an empty list if the reader is nullptr or no formats is available.
      */
     static QStringList constructStringListToFilterFiles(const CT_AbstractReader* reader) {
 
         QStringList formats;
 
-        if(reader != NULL) {
+        if(reader != nullptr) {
             for(const FileFormat& fileFormat : reader->readableFormats()) {
                 const QList<QString> &suffixes = fileFormat.suffixes();
                 const int nSuffixes = suffixes.size();

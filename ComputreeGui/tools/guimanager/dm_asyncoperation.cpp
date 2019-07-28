@@ -2,17 +2,17 @@
 
 DM_AsyncOperation::DM_AsyncOperation()
 {
-    m_progressDialog = NULL;
+    m_progressDialog = nullptr;
 }
 
 void DM_AsyncOperation::setProgressDialog(const IMainProgressDialog *dialog)
 {
-    if(m_progressDialog != NULL)
-        disconnect(m_progressDialog, NULL, this, NULL);
+    if(m_progressDialog != nullptr)
+        disconnect(m_progressDialog, nullptr, this, nullptr);
 
     m_progressDialog = (IMainProgressDialog*)dialog;
 
-    if(m_progressDialog != NULL)
+    if(m_progressDialog != nullptr)
         connect(m_progressDialog, SIGNAL(cancel()), this, SIGNAL(cancel()), Qt::QueuedConnection);
 }
 

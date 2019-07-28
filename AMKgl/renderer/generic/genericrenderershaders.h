@@ -36,7 +36,7 @@ public:
     bool init(const QOpenGLContext *context);
 
     /**
-     * @brief Returns the shader to use. NULL if it was not created.
+     * @brief Returns the shader to use. nullptr if it was not created.
      */
     QOpenGLShaderProgram* getShaderProgram() const;
 

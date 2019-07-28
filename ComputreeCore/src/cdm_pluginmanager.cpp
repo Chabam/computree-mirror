@@ -14,7 +14,7 @@
 CDM_PluginManager::CDM_PluginManager()
 {
     _defaultPluginDirPath = "./plugins";
-    m_guiManager = NULL;
+    m_guiManager = nullptr;
     m_stepsMenuManager.setPluginManager(this);
 
     loadConfiguration();
@@ -255,7 +255,7 @@ CT_AbstractStepPlugin* CDM_PluginManager::getPlugin(int i) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CT_AbstractStepPlugin* CDM_PluginManager::getPlugin(QString pluginName) const
@@ -275,7 +275,7 @@ CT_AbstractStepPlugin* CDM_PluginManager::getPlugin(QString pluginName) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 int CDM_PluginManager::getPluginIndex(CT_AbstractStepPlugin *p) const

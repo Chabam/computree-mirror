@@ -41,7 +41,7 @@ QMenu* CDM_Tools::createMenuForAllExporters(const QObject *receiver, const char 
                 {
                     int nAdded = 0;
 
-                    QMenu *sepMenu = NULL;
+                    QMenu *sepMenu = nullptr;
 
                     if(eSize > 1)
                         sepMenu = new QMenu(sep->title(), plugMenu);
@@ -60,7 +60,7 @@ QMenu* CDM_Tools::createMenuForAllExporters(const QObject *receiver, const char 
 
                             QObject::connect(expAction, SIGNAL(triggered()), receiver, slot);
 
-                            if(sepMenu != NULL)
+                            if(sepMenu != nullptr)
                                 sepMenu->addAction(expAction);
                             else
                                 plugMenu->addAction(expAction);
@@ -69,7 +69,7 @@ QMenu* CDM_Tools::createMenuForAllExporters(const QObject *receiver, const char 
                         }
                     }
 
-                    if(sepMenu != NULL)
+                    if(sepMenu != nullptr)
                     {
                         if(nAdded == 1)
                         {
@@ -78,15 +78,15 @@ QMenu* CDM_Tools::createMenuForAllExporters(const QObject *receiver, const char 
                             plugMenu->addAction(act);
 
                             delete sepMenu;
-                            sepMenu = NULL;
+                            sepMenu = nullptr;
                         }
                         else if(sepMenu->isEmpty())
                         {
                             delete sepMenu;
-                            sepMenu = NULL;
+                            sepMenu = nullptr;
                         }
 
-                        if(sepMenu != NULL)
+                        if(sepMenu != nullptr)
                             plugMenu->addMenu(sepMenu);
                     }
                 }
@@ -102,7 +102,7 @@ QMenu* CDM_Tools::createMenuForAllExporters(const QObject *receiver, const char 
     if(menu->isEmpty())
     {
         delete menu;
-        menu = NULL;
+        menu = nullptr;
     }
 
     return menu;
@@ -171,5 +171,5 @@ QString CDM_Tools::createNameForExporter(CT_AbstractExporter *exporter) const
 //        ++n;
 //    }
 
-    return exporter->getExporterCustomName();
+    return exporter->displayableName();
 }

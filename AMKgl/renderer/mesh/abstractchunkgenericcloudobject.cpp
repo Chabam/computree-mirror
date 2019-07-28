@@ -23,12 +23,12 @@ AbstractChunkGenericCloudObject::AbstractChunkGenericCloudObject(const uint &uni
     m_nPoints = 0;
     m_nObjects = 0;
 
-    m_objectColorCloud = NULL;
-    m_objectNormalCloud = NULL;
-    m_objectInfoCloud = NULL;
+    m_objectColorCloud = nullptr;
+    m_objectNormalCloud = nullptr;
+    m_objectInfoCloud = nullptr;
 
-    m_pointCloudProvider = NULL;
-    m_objectCloudProvider = NULL;
+    m_pointCloudProvider = nullptr;
+    m_objectCloudProvider = nullptr;
 }
 
 AbstractChunkGenericCloudObject::~AbstractChunkGenericCloudObject()
@@ -42,10 +42,10 @@ void AbstractChunkGenericCloudObject::setAttributesAccessor(const IAttributesAcc
 {
     SuperClass::setAttributesAccessor(accessor);
 
-    m_pointCloudProvider = NULL;
-    m_objectCloudProvider = NULL;
+    m_pointCloudProvider = nullptr;
+    m_objectCloudProvider = nullptr;
 
-    if(accessor != NULL) {
+    if(accessor != nullptr) {
         m_pointCloudProvider = accessor->getPermanentScene()->getCloudAttributesProvider(Scene::PointGlobalCloud);
         m_objectCloudProvider = accessor->getPermanentScene()->getCloudAttributesProvider(getTypeOfObjectDrawn());
     }
@@ -97,7 +97,7 @@ bool AbstractChunkGenericCloudObject::isAtLeastOneObjectVisible(const size_t &fr
 
     Info* fi = getFirstObjectInfo();
 
-    if(fi == NULL)
+    if(fi == nullptr)
         return false;
 
     do {
@@ -139,7 +139,7 @@ void AbstractChunkGenericCloudObject::draw(DrawInfo &info)
 
     if(type != DM_NONE) {
 
-        const bool showNormals = (getCurrentDocument() != NULL) && getCurrentDocument()->mustShowNormals();
+        const bool showNormals = (getCurrentDocument() != nullptr) && getCurrentDocument()->mustShowNormals();
 
         pushCoordinateSystemMatrix(info);
 
@@ -253,7 +253,7 @@ void AbstractChunkGenericCloudObject::updateOnlyVAO()
 
         GenericCloudRendererContext* context = getCurrentContext();
 
-        if(context == NULL)
+        if(context == nullptr)
             return;
 
         context->destroyAllDisplayList(this);
@@ -267,37 +267,37 @@ void AbstractChunkGenericCloudObject::setNumberOfObjects(const size_t &n)
 
 AbstractChunkGenericCloudObject::GlobalColorCloud* AbstractChunkGenericCloudObject::getVertexGlobalColorCloud() const
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     return m_pointCloudProvider->getColorCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalNormalCloud* AbstractChunkGenericCloudObject::getVertexGlobalNormalCloud() const
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     return m_pointCloudProvider->getNormalCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalInfoCloud* AbstractChunkGenericCloudObject::getVertexGlobalInfoCloud() const
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     return m_pointCloudProvider->getInfoCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalColorCloud *AbstractChunkGenericCloudObject::createOrGetVertexGlobalColorCloud()
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     return m_pointCloudProvider->createOrGetColorCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalNormalCloud *AbstractChunkGenericCloudObject::createOrGetVertexGlobalNormalCloud()
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     return m_pointCloudProvider->createOrGetNormalCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalInfoCloud *AbstractChunkGenericCloudObject::createOrGetVertexGlobalInfoCloud()
 {
-    Q_ASSERT(m_pointCloudProvider != NULL);
+    Q_ASSERT(m_pointCloudProvider != nullptr);
     return m_pointCloudProvider->createOrGetInfoCloud();
 }
 
@@ -310,8 +310,8 @@ AbstractChunkGenericCloudObject::Color* AbstractChunkGenericCloudObject::getFirs
 {
     GlobalColorCloud* cc = getVertexGlobalColorCloud();
 
-    if(cc == NULL)
-        return NULL;
+    if(cc == nullptr)
+        return nullptr;
 
     return &(*cc)[getBeginningOfVertexCloud()];
 }
@@ -320,8 +320,8 @@ AbstractChunkGenericCloudObject::Normal* AbstractChunkGenericCloudObject::getFir
 {
     GlobalNormalCloud* nc = getVertexGlobalNormalCloud();
 
-    if(nc == NULL)
-        return NULL;
+    if(nc == nullptr)
+        return nullptr;
 
     return &(*nc)[getBeginningOfVertexCloud()];
 }
@@ -330,33 +330,33 @@ AbstractChunkGenericCloudObject::Info* AbstractChunkGenericCloudObject::getFirst
 {
     GlobalInfoCloud* ic = getVertexGlobalInfoCloud();
 
-    if(ic == NULL)
-        return NULL;
+    if(ic == nullptr)
+        return nullptr;
 
     return &(*ic)[getBeginningOfVertexCloud()];
 }
 
 AbstractChunkGenericCloudObject::GlobalColorCloud* AbstractChunkGenericCloudObject::getObjectGlobalColorCloud() const
 {
-    Q_ASSERT(m_objectCloudProvider != NULL);
+    Q_ASSERT(m_objectCloudProvider != nullptr);
     return m_objectCloudProvider->getColorCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalNormalCloud* AbstractChunkGenericCloudObject::getObjectGlobalNormalCloud() const
 {
-    Q_ASSERT(m_objectCloudProvider != NULL);
+    Q_ASSERT(m_objectCloudProvider != nullptr);
     return m_objectCloudProvider->getNormalCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalInfoCloud* AbstractChunkGenericCloudObject::getObjectGlobalInfoCloud() const
 {
-    Q_ASSERT(m_objectCloudProvider != NULL);
+    Q_ASSERT(m_objectCloudProvider != nullptr);
     return m_objectCloudProvider->getInfoCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalColorCloud* AbstractChunkGenericCloudObject::createOrGetObjectGlobalColorCloud()
 {
-    Q_ASSERT(m_objectCloudProvider != NULL);
+    Q_ASSERT(m_objectCloudProvider != nullptr);
     GlobalColorCloud* gcc = m_objectCloudProvider->createOrGetColorCloud();
     createObjectColorCloudMemberIfNot();
     return gcc;
@@ -364,7 +364,7 @@ AbstractChunkGenericCloudObject::GlobalColorCloud* AbstractChunkGenericCloudObje
 
 AbstractChunkGenericCloudObject::GlobalNormalCloud* AbstractChunkGenericCloudObject::createOrGetObjectGlobalNormalCloud()
 {
-    Q_ASSERT(m_objectCloudProvider != NULL);
+    Q_ASSERT(m_objectCloudProvider != nullptr);
     GlobalNormalCloud* gnc = m_objectCloudProvider->createOrGetNormalCloud();
     createObjectNormalCloudMemberIfNot();
     return gnc;
@@ -372,7 +372,7 @@ AbstractChunkGenericCloudObject::GlobalNormalCloud* AbstractChunkGenericCloudObj
 
 AbstractChunkGenericCloudObject::GlobalInfoCloud* AbstractChunkGenericCloudObject::createOrGetObjectGlobalInfoCloud()
 {
-    Q_ASSERT(m_objectCloudProvider != NULL);
+    Q_ASSERT(m_objectCloudProvider != nullptr);
     GlobalInfoCloud* gic = m_objectCloudProvider->createOrGetInfoCloud();
     createObjectInfoCloudMemberIfNot();
     return gic;
@@ -382,8 +382,8 @@ AbstractChunkGenericCloudObject::Color* AbstractChunkGenericCloudObject::getFirs
 {
     GlobalColorCloud* gcc = getObjectGlobalColorCloud();
 
-    if(gcc == NULL)
-        return NULL;
+    if(gcc == nullptr)
+        return nullptr;
 
     return &(*gcc)[getBeginningOfObjectCloud()];
 }
@@ -392,8 +392,8 @@ AbstractChunkGenericCloudObject::Normal* AbstractChunkGenericCloudObject::getFir
 {
     GlobalNormalCloud* gnc = getObjectGlobalNormalCloud();
 
-    if(gnc == NULL)
-        return NULL;
+    if(gnc == nullptr)
+        return nullptr;
 
     return &(*gnc)[getBeginningOfObjectCloud()];
 }
@@ -500,8 +500,8 @@ AbstractChunkGenericCloudObject::Info* AbstractChunkGenericCloudObject::getFirst
 {
     GlobalInfoCloud* gic = getObjectGlobalInfoCloud();
 
-    if(gic == NULL)
-        return NULL;
+    if(gic == nullptr)
+        return nullptr;
 
     return &(*gic)[getBeginningOfObjectCloud()];
 }

@@ -20,14 +20,14 @@ public:
      * @param v0 : first point of the triangle
      * @param v1 : second point of the triangle
      * @param v2 : third point of the triangle
-     * @param intersectionPoint : if != NULL contains the intersection point if founded
+     * @param intersectionPoint : if != nullptr contains the intersection point if founded
      * @param segmentAsARay : true if you want that the segment is infinite, otherwise false
      * @return true if it was an instersection, false otherwise.
      */
     template<typename VecType>
     static bool staticDoesASegmentIntersectWithATriangle(const VecType& segmentP1, const VecType& segmentP2,
                                                          const VecType& v0, const VecType& v1, const VecType& v2,
-                                                         VecType* intersectionPoint = NULL,
+                                                         VecType* intersectionPoint = nullptr,
                                                          bool segmentAsARay = false)
     {
         VecType    u, v, n;              // triangle vectors
@@ -61,7 +61,7 @@ public:
                 && /*(Math::distancePoints(segmentP1, I) > Math::distancePoints(segmentP1,segmentP2))*/r > 1.0)
             return false;
 
-        if(intersectionPoint != NULL)
+        if(intersectionPoint != nullptr)
             *intersectionPoint = I;
 
         // is I inside T?
@@ -94,7 +94,7 @@ public:
      * @param v1 : second point of the plane
      * @param v2 : third point of the plane
      * @param v3 : fourth point of the plane
-     * @param intersectionPoint : if != NULL contains the intersection point if founded
+     * @param intersectionPoint : if != nullptr contains the intersection point if founded
      * @param segmentAsARay : true if the segment is a infinite line, false if we must consider it at a segment
      * @param infinitePlane : true if the plane is infinite, false if we must consider the plane as two filled triangles (v0/v1/v2, v0/v2/v3)
      * @return true if it was an instersection, false otherwise.
@@ -102,7 +102,7 @@ public:
     template<typename VecType>
     static bool staticDoesASegmentIntersectWithAPlane(const VecType& segmentP1, const VecType& segmentP2,
                                                       const VecType& v0, const VecType& v1, const VecType& v2, const VecType& v3,
-                                                      VecType* intersectionPoint = NULL,
+                                                      VecType* intersectionPoint = nullptr,
                                                       bool segmentAsARay = false,
                                                       bool infinitePlane = false)
     {
@@ -120,7 +120,7 @@ public:
             if (fabs(D) < 1e-6) {           // segment is parallel to plane
                 if (N == 0)  {                    // segment lies in plane
 
-                    if(intersectionPoint != NULL)
+                    if(intersectionPoint != nullptr)
                         *intersectionPoint = v0;
 
                     return true;
@@ -133,7 +133,7 @@ public:
             if (!segmentAsARay && (sI < 0 || sI > 1))
                 return false;                        // no intersection
 
-            if(intersectionPoint != NULL) {
+            if(intersectionPoint != nullptr) {
                 VecType I = segmentP1 + sI * u;                  // compute segment intersect point
                 *intersectionPoint = I;
             }
@@ -150,12 +150,12 @@ public:
      * @brief Returns true if a plane intersect another plane (planes are infinite !)
      * @param plane1 : equation of the first plane
      * @param plane2 : equation of the second plane
-     * @param intersectionLine : if != NULL contains the intersection line if founded (first point is the start point, second point is the direction)
+     * @param intersectionLine : if != nullptr contains the intersection line if founded (first point is the start point, second point is the direction)
      * @return true if it was an instersection, false otherwise.
      */
     static bool staticDoesAPlaneIntersectWithAPlane(const Eigen::Vector4d& plane1,
                                                     const Eigen::Vector4d& plane2,
-                                                    Eigen::Vector3d intersectionLine[2] = NULL);
+                                                    Eigen::Vector3d intersectionLine[2] = nullptr);
 
 
     /**
@@ -167,17 +167,17 @@ public:
      * @param v1 : second point of the plane
      * @param v2 : third point of the plane
      * @param v3 : fourth point of the plane
-     * @param intersectionPoint : if != NULL contains the intersection point if founded
+     * @param intersectionPoint : if != nullptr contains the intersection point if founded
      * @param infinitePlane : true if the plane is infinite, false if we must consider the plane as two filled triangles (v0/v1/v2, v0/v2/v3)
      * @return true if it was an instersection, false otherwise.
      */
     template<typename VecType>
     static bool staticDoesATriangleIntersectWithAPlane(const VecType& p1, const VecType& p2, const VecType& p3,
                                                        const VecType& v0, const VecType& v1, const VecType& v2, const VecType& v3,
-                                                       VecType* intersectionPoint = NULL,
+                                                       VecType* intersectionPoint = nullptr,
                                                        bool infinitePlane = false)
     {
-        /*if(infinitePlane && (intersectionPoint == NULL)) {
+        /*if(infinitePlane && (intersectionPoint == nullptr)) {
             const Eigen::Vector3d normal = planeEquation.block(0,0,3,1);
             double a = normal.dot(p1) - planeEquation(3);
             double b = normal.dot(p2) - planeEquation(3);
@@ -204,20 +204,20 @@ public:
      * @param v1 : second point of the plane
      * @param v2 : third point of the plane
      * @param v3 : fourth point of the plane
-     * @param intersectionLine : if != NULL contains the intersection line if founded (first point is the start point, second point is the direction)
+     * @param intersectionLine : if != nullptr contains the intersection line if founded (first point is the start point, second point is the direction)
      * @param infinitePlane : true if the plane is infinite, false if we must consider the plane as two filled triangles (v0/v1/v2, v0/v2/v3)
      * @return true if it was an instersection, false otherwise.
      */
     static bool staticDoesAFilledTriangleIntersectWithAPlane(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2, const Eigen::Vector3d& p3,
                                                              const Eigen::Vector3d& v0, const Eigen::Vector3d& v1, const Eigen::Vector3d& v2, const Eigen::Vector3d& v3,
-                                                             Eigen::Vector3d intersectionLine[2] = NULL,
+                                                             Eigen::Vector3d intersectionLine[2] = nullptr,
                                                              bool infinitePlane = false);
 
     static bool staticDoesALineIntersectWithACylinder(const Eigen::Vector3d &p1,
                                                       const Eigen::Vector3d &p2,
-                                                      Eigen::Vector3d intersectionPoint[2] = NULL);
+                                                      Eigen::Vector3d intersectionPoint[2] = nullptr);
 
-    static bool staticDoestASegmentIntersectAUnitCircle(bool filled, const Eigen::Vector3d &p1, const Eigen::Vector3d &p2, Eigen::Vector3d *closestP = NULL);
+    static bool staticDoestASegmentIntersectAUnitCircle(bool filled, const Eigen::Vector3d &p1, const Eigen::Vector3d &p2, Eigen::Vector3d *closestP = nullptr);
 
     /**
      * @brief Just check if the point is inside the 3d polygon (triangulated polygon)

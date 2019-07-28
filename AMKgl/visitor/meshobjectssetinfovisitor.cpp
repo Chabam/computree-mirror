@@ -35,10 +35,10 @@ void MeshObjectsSetInfoVisitor::visitChunk(const IChunk* chunk)
 
     ElementInfo* foin = objectChunk->getFirstObjectInfo();
 
-    if(m_createInfoCloud && (foin == NULL))
+    if(m_createInfoCloud && (foin == nullptr))
         foin = objectChunk->createOrGetFirstObjectInfo();
 
-    if(foin != NULL) {
+    if(foin != nullptr) {
         const size_t nObjects = objectChunk->countObjects();
 
         GLuint* foi = objectChunk->getFirstObjectIndex();

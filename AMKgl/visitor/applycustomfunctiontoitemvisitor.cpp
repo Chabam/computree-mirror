@@ -2,8 +2,8 @@
 
 ApplyCustomFunctionToItemVisitor::ApplyCustomFunctionToItemVisitor()
 {
-    m_model = NULL;
-    m_scene = NULL;
+    m_model = nullptr;
+    m_scene = nullptr;
     m_setFunction = nullptr;
     m_continueVisitFunction = nullptr;
 }

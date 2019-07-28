@@ -69,9 +69,9 @@ void PermanentItemInformation::reset()
 
 DispatchInformation& PermanentItemInformation::createOrGetObjectForChunk(const IChunk* chunk)
 {
-    DispatchInformation *info = m_objects.value((IChunk*)chunk, NULL);
+    DispatchInformation *info = m_objects.value((IChunk*)chunk, nullptr);
 
-    if(info != NULL)
+    if(info != nullptr)
         return *info;
 
     if(chunk->getTypeOfObjectDrawn() == Scene::PointGlobalCloud)
@@ -86,7 +86,7 @@ DispatchInformation& PermanentItemInformation::createOrGetObjectForChunk(const I
 
 DispatchInformation* PermanentItemInformation::getObjectInformationForChunk(const IChunk *chunk) const
 {
-    return m_objects.value((IChunk*)chunk, NULL);
+    return m_objects.value((IChunk*)chunk, nullptr);
 }
 
 void PermanentItemInformation::removeFromScene()

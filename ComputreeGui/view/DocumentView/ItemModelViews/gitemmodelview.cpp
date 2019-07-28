@@ -7,8 +7,8 @@
 
 GItemModelView::GItemModelView()
 {
-    m_doc = NULL;
-    m_syncGroup = NULL;
+    m_doc = nullptr;
+    m_syncGroup = nullptr;
 }
 
 GItemModelView::~GItemModelView()
@@ -22,7 +22,7 @@ void GItemModelView::setDocument(const GDocumentView *doc)
 
 void GItemModelView::setCurrentAction(CT_AbstractActionForTreeView *action)
 {
-    if(action != NULL)
+    if(action != nullptr)
     {
         action->setDocument(documentView());
         action->setTreeView(this);
@@ -33,7 +33,7 @@ void GItemModelView::setCurrentAction(CT_AbstractActionForTreeView *action)
 
 void GItemModelView::setDefaultAction(CT_AbstractActionForTreeView *action)
 {
-    if(action != NULL)
+    if(action != nullptr)
     {
         action->setDocument(documentView());
         action->setTreeView(this);

@@ -180,10 +180,10 @@ public:
     /**
      * @brief Render with call to basic opengl function
      * @param glMode : the opengl mode to use (GL_POINTS, GL_LINES, etc...)
-     * @param fv : the first vertex in the array, can not be NULL !
-     * @param fi : the first info in the array, can not be NULL !
-     * @param fc : the first color in the array, can be NULL
-     * @param fn : the first normal in the array, can be NULL
+     * @param fv : the first vertex in the array, can not be nullptr !
+     * @param fi : the first info in the array, can not be nullptr !
+     * @param fc : the first color in the array, can be nullptr
+     * @param fn : the first normal in the array, can be nullptr
      * @param fpM : the flags property manager
      * @param indices : array of indices to render
      * @param size : number of indices in the array to render
@@ -202,13 +202,13 @@ public:
                                   float selectionColor[4],
                                   float currentColor[4]) {
 
-        Q_ASSERT(fv != NULL);
-        Q_ASSERT(fi != NULL);
+        Q_ASSERT(fv != nullptr);
+        Q_ASSERT(fi != nullptr);
 
         glColor4fv(currentColor);
 
-        if(fn != NULL) {
-            if(fc != NULL) {
+        if(fn != nullptr) {
+            if(fc != nullptr) {
                 // vertex + color + normal
                 glBegin(glMode);
                 for(size_t i=0; i<size; ++i) {
@@ -231,7 +231,7 @@ public:
             return;
         }
 
-        if(fc != NULL) {
+        if(fc != nullptr) {
             // vertex + color
             glBegin(glMode);
             for(size_t i=0; i<size; ++i) {
@@ -257,10 +257,10 @@ public:
     /**
      * @brief Fast render with call to basic opengl function (don't render all indices)
      * @param glMode : the opengl mode to use (GL_POINTS, GL_LINES, etc...)
-     * @param fv : the first vertex in the array, can not be NULL !
-     * @param fi : the first info in the array, can not be NULL !
-     * @param fc : the first color in the array, can be NULL
-     * @param fn : the first normal in the array, can be NULL
+     * @param fv : the first vertex in the array, can not be nullptr !
+     * @param fi : the first info in the array, can not be nullptr !
+     * @param fc : the first color in the array, can be nullptr
+     * @param fn : the first normal in the array, can be nullptr
      * @param indices : array of indices to render
      * @param size : number of indices in the array to render
      * @param stride : jump to next index
@@ -280,13 +280,13 @@ public:
                                       float selectionColor[4],
                                       float currentColor[4]) {
 
-        Q_ASSERT(fv != NULL);
-        Q_ASSERT(fi != NULL);
+        Q_ASSERT(fv != nullptr);
+        Q_ASSERT(fi != nullptr);
 
         glColor4fv(currentColor);
 
-        if(fn != NULL) {
-            if(fc != NULL) {
+        if(fn != nullptr) {
+            if(fc != nullptr) {
                 // vertex + color + normal
                 glBegin(glMode);
                 for(size_t i=0; i<size; i += stride) {
@@ -309,7 +309,7 @@ public:
             return;
         }
 
-        if(fc != NULL) {
+        if(fc != nullptr) {
             // vertex + color
             glBegin(glMode);
             for(size_t i=0; i<size; i += stride) {
@@ -334,10 +334,10 @@ public:
     /**
      * @brief Render objects (triangles, lines, etc...) with call to basic opengl function
      * @param glMode : the opengl mode to use (GL_POINTS, GL_LINES, etc...)
-     * @param fv : the first vertex in the array, can not be NULL !
-     * @param ofi : the first info of objects in the array, can not be NULL !
-     * @param ofc : the first color of objects in the array, can be NULL
-     * @param ofn : the first normal of objects in the array, can be NULL
+     * @param fv : the first vertex in the array, can not be nullptr !
+     * @param ofi : the first info of objects in the array, can not be nullptr !
+     * @param ofc : the first color of objects in the array, can be nullptr
+     * @param ofn : the first normal of objects in the array, can be nullptr
      * @param vertexIndices : array of indices of vertex to render
      * @param objectIndices : array of indices of object to use to get color, normal, info from array
      * @param nObjects : number of objects to render
@@ -357,8 +357,8 @@ public:
                                         float selectionColor[4],
                                         float currentColor[4]) {
 
-        Q_ASSERT(fv != NULL);
-        Q_ASSERT(ofi != NULL);
+        Q_ASSERT(fv != nullptr);
+        Q_ASSERT(ofi != nullptr);
 
         quint8 nVertexPerObject = 0;
 
@@ -378,8 +378,8 @@ public:
 
         glColor4fv(currentColor);
 
-        if(ofn != NULL) {
-            if(ofc != NULL) {
+        if(ofn != nullptr) {
+            if(ofc != nullptr) {
 
                 // vertex + color + normal + info
                 glBegin(glMode);
@@ -433,7 +433,7 @@ public:
             return;
         }
 
-        if(ofc != NULL) {
+        if(ofc != nullptr) {
             // vertex + color + info
             glBegin(glMode);
             for(size_t i=0; i<nObjects; ++i) {
@@ -484,10 +484,10 @@ public:
     /**
      * @brief Render objects (triangles, lines, etc...) with call to basic opengl function but use the vertex colors/normals attributes
      * @param glMode : the opengl mode to use (GL_POINTS, GL_LINES, etc...)
-     * @param fv : the first vertex in the array, can not be NULL !
-     * @param ofi : the first info of objects in the array, can not be NULL !
-     * @param fc : the first color of vertexes in the array, can be NULL
-     * @param fn : the first normal of vertexes in the array, can be NULL
+     * @param fv : the first vertex in the array, can not be nullptr !
+     * @param ofi : the first info of objects in the array, can not be nullptr !
+     * @param fc : the first color of vertexes in the array, can be nullptr
+     * @param fn : the first normal of vertexes in the array, can be nullptr
      * @param vertexIndices : array of indices of vertex to render
      * @param objectIndices : array of indices of object to use to get color, normal, info from array
      * @param nObjects : number of objects to render
@@ -507,8 +507,8 @@ public:
                                               float selectionColor[4],
                                               float currentColor[4]) {
 
-        Q_ASSERT(fv != NULL);
-        Q_ASSERT(ofi != NULL);
+        Q_ASSERT(fv != nullptr);
+        Q_ASSERT(ofi != nullptr);
 
         quint8 nVertexPerObject = 0;
 
@@ -527,8 +527,8 @@ public:
 
         glColor4fv(currentColor);
 
-        if(fn != NULL) {
-            if(fc != NULL) {
+        if(fn != nullptr) {
+            if(fc != nullptr) {
 
                 // vertex + color + normal + info
                 glBegin(glMode);
@@ -587,7 +587,7 @@ public:
             return;
         }
 
-        if(fc != NULL) {
+        if(fc != nullptr) {
             // vertex + color + info
             glBegin(glMode);
             for(size_t i=0; i<nObjects; ++i) {
@@ -643,9 +643,9 @@ public:
 
     /**
      * @brief Render normals with call to basic opengl function
-     * @param fv : the first vertex in the array, can not be NULL !
-     * @param fi : the first info in the array, can not be NULL !
-     * @param fn : the first normal in the array, can be NULL => if so no normals will be render
+     * @param fv : the first vertex in the array, can not be nullptr !
+     * @param fi : the first info in the array, can not be nullptr !
+     * @param fn : the first normal in the array, can be nullptr => if so no normals will be render
      * @param indices : array of indices to render
      * @param size : number of indices in the array to render
      * @param length : length of normal
@@ -665,10 +665,10 @@ public:
                                         float selectionColor[4],
                                         float currentColor[4]) {
 
-        Q_ASSERT(fv != NULL);
-        Q_ASSERT(fi != NULL);
+        Q_ASSERT(fv != nullptr);
+        Q_ASSERT(fi != nullptr);
 
-        if(fn != NULL) {
+        if(fn != nullptr) {
             bool modified = false;
 
             glBegin(GL_LINES);
@@ -696,9 +696,9 @@ public:
 
     /**
      * @brief Fast render normals with call to basic opengl function
-     * @param fv : the first vertex in the array, can not be NULL !
-     * @param fi : the first info in the array, can not be NULL !
-     * @param fn : the first normal in the array, can be NULL => if so no normals will be render
+     * @param fv : the first vertex in the array, can not be nullptr !
+     * @param fi : the first info in the array, can not be nullptr !
+     * @param fn : the first normal in the array, can be nullptr => if so no normals will be render
      * @param indices : array of indices to render
      * @param size : number of indices in the array to render
      * @param stride : jump to next index
@@ -720,10 +720,10 @@ public:
                                             float selectionColor[4],
                                             float currentColor[4]) {
 
-        Q_ASSERT(fv != NULL);
-        Q_ASSERT(fi != NULL);
+        Q_ASSERT(fv != nullptr);
+        Q_ASSERT(fi != nullptr);
 
-        if(fn != NULL) {
+        if(fn != nullptr) {
             bool modified = false;
 
             glBegin(GL_LINES);
@@ -751,9 +751,9 @@ public:
 
     /**
      * @brief Render normals of objects (triangles, lines, etc...) with call to basic opengl function but use the vertex normals attributes
-     * @param fv : the first vertex in the array, can not be NULL !
-     * @param foi : the first object info in the array, can not be NULL !
-     * @param fn : the first vertex normal in the array, can be NULL => if so no normals will be render
+     * @param fv : the first vertex in the array, can not be nullptr !
+     * @param foi : the first object info in the array, can not be nullptr !
+     * @param fn : the first vertex normal in the array, can be nullptr => if so no normals will be render
      * @param vertexIndices : array of vertex indices to render
      * @param objectIndices : array of object indices to render
      * @param nObjects : number of objects in the array to render
@@ -777,10 +777,10 @@ public:
                                                     float selectionColor[4],
                                                     float currentColor[4]) {
 
-        Q_ASSERT(fv != NULL);
-        Q_ASSERT(foi != NULL);
+        Q_ASSERT(fv != nullptr);
+        Q_ASSERT(foi != nullptr);
 
-        if(fn != NULL) {
+        if(fn != nullptr) {
             quint8 j;
             size_t currentIndex = 0;
             bool modified = false;
@@ -818,9 +818,9 @@ public:
 
     /**
      * @brief Render normals of objects (triangles, lines, etc...) with call to basic opengl function but use the object normals attributes
-     * @param fv : the first vertex in the array, can not be NULL !
-     * @param ofi : the first object info in the array, can not be NULL !
-     * @param ofn : the first object normal in the array, can be NULL => if so no normals will be render
+     * @param fv : the first vertex in the array, can not be nullptr !
+     * @param ofi : the first object info in the array, can not be nullptr !
+     * @param ofn : the first object normal in the array, can be nullptr => if so no normals will be render
      * @param vertexIndices : array of vertex indices to render
      * @param objectIndices : array of object indices to render
      * @param nObjects : number of objects in the array to render
@@ -844,10 +844,10 @@ public:
                                               float selectionColor[4],
                                               float currentColor[4]) {
 
-        Q_ASSERT(fv != NULL);
-        Q_ASSERT(ofi != NULL);
+        Q_ASSERT(fv != nullptr);
+        Q_ASSERT(ofi != nullptr);
 
-        if(ofn != NULL) {
+        if(ofn != nullptr) {
             quint8 j;
             size_t currentIndex = 0;
             bool modified = false;
@@ -903,9 +903,9 @@ public:
      * @brief Render "outliers" objects (triangles, lines, etc...) with call to basic opengl function but use the vertex colors/normals attributes
      * @param glMode : the opengl mode to use (GL_POINTS, GL_LINES, etc...)
      * @param vertexes : collection of structure that contains vertexes with associated offset
-     * @param ofi : the first info of objects in the array, can not be NULL !
-     * @param fc : the first color of vertexes in the array, can be NULL
-     * @param fn : the first normal of vertexes in the array, can be NULL
+     * @param ofi : the first info of objects in the array, can not be nullptr !
+     * @param fc : the first color of vertexes in the array, can be nullptr
+     * @param fn : the first normal of vertexes in the array, can be nullptr
      * @param vertexIndices : array of indices of vertex to render
      * @param objectIndices : array of indices of object to use to get color, normal, info from array
      * @param nObjects : number of objects to render
@@ -925,7 +925,7 @@ public:
                                                       float selectionColor[4],
                                                       float currentColor[4]) {
 
-        Q_ASSERT(ofi != NULL);
+        Q_ASSERT(ofi != nullptr);
 
         quint8 nVertexPerObject = 0;
 
@@ -944,8 +944,8 @@ public:
 
         glColor4fv(currentColor);
 
-        if(fn != NULL) {
-            if(fc != NULL) {
+        if(fn != nullptr) {
+            if(fc != nullptr) {
 
                 // vertex + color + normal + info
                 for(size_t i=0; i<nObjects; ++i) {
@@ -1018,7 +1018,7 @@ public:
             return;
         }
 
-        if(fc != NULL) {
+        if(fc != nullptr) {
             // vertex + color + info
             for(size_t i=0; i<nObjects; ++i) {
 
@@ -1088,9 +1088,9 @@ public:
      * @brief Render "outliers" objects (triangles, lines, etc...) with call to basic opengl function
      * @param glMode : the opengl mode to use (GL_POINTS, GL_LINES, etc...)
      * @param vertexes : collection of structure that contains vertexes with associated offset
-     * @param ofi : the first info of objects in the array, can not be NULL !
-     * @param ofc : the first color of objects in the array, can be NULL
-     * @param ofn : the first normal of objects in the array, can be NULL
+     * @param ofi : the first info of objects in the array, can not be nullptr !
+     * @param ofc : the first color of objects in the array, can be nullptr
+     * @param ofn : the first normal of objects in the array, can be nullptr
      * @param objectIndices : array of indices of object to use to get color, normal, info from array
      * @param nObjects : number of objects to render
      * @param selectionColor : selection color to use
@@ -1108,7 +1108,7 @@ public:
                                                 float selectionColor[4],
                                                 float currentColor[4]) {
 
-        Q_ASSERT(ofi != NULL);
+        Q_ASSERT(ofi != nullptr);
 
         quint8 nVertexPerObject = 0;
 
@@ -1128,8 +1128,8 @@ public:
 
         glColor4fv(currentColor);
 
-        if(ofn != NULL) {
-            if(ofc != NULL) {
+        if(ofn != nullptr) {
+            if(ofc != nullptr) {
 
                 // vertex + color + normal + info
                 for(size_t i=0; i<nObjects; ++i) {
@@ -1195,7 +1195,7 @@ public:
             return;
         }
 
-        if(ofc != NULL) {
+        if(ofc != nullptr) {
             // vertex + color + info
             for(size_t i=0; i<nObjects; ++i) {
 

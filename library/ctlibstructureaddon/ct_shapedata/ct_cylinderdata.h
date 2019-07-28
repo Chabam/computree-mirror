@@ -56,7 +56,7 @@ public:
     /**
       * \brief Retourne les donnes d'un cylindre 3D  partir du nuage de points pass en paramtre.
       *
-      * \return NULL si le nombre de points est infrieur  3.
+      * \return nullptr si le nombre de points est infrieur  3.
       */
     static CT_CylinderData* staticCreate3DCylinderDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                      const Eigen::Vector3d& pointCloudBarycenter);
@@ -64,7 +64,7 @@ public:
     static CT_CylinderData* staticCreate3DCylinderDataFromPointCloudAndDirection(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                                  const Eigen::Vector3d& pointCloudBarycenter,
                                                                                  const CT_LineData& direction,
-                                                                                 CT_CircleData* outCircleData = NULL);
+                                                                                 CT_CircleData* outCircleData = nullptr);
 
 private:
 

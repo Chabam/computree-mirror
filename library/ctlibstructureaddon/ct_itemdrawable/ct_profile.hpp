@@ -441,19 +441,19 @@ double CT_Profile<DataT>::getOtsuThreshold(CT_Profile<DataT> *outProfileLow, CT_
     double threshold = ( threshold1 + threshold2 ) / 2.0;
 
     // create filtered profiles
-    if (outProfileLow != NULL || outProfileHigh != NULL)
+    if (outProfileLow != nullptr || outProfileHigh != nullptr)
     {
         for (int i = 0; i < nCells(); ++i)
         {
             double length = lengthForIndex(i);
-            if (outProfileLow  != NULL && length >= threshold)
+            if (outProfileLow  != nullptr && length >= threshold)
             {
                 outProfileLow->setValueAtIndex(i, 0);
             } else {
                 outProfileLow->setValueAtIndex(i, valueAtIndex(i));
             }
 
-            if (outProfileHigh != NULL && length < threshold)
+            if (outProfileHigh != nullptr && length < threshold)
             {
                 outProfileHigh->setValueAtIndex(i, 0);
             } else {
@@ -461,8 +461,8 @@ double CT_Profile<DataT>::getOtsuThreshold(CT_Profile<DataT> *outProfileLow, CT_
             }
         }
 
-        if (outProfileLow  != NULL)  {outProfileLow->computeMinMax();}
-        if (outProfileHigh  != NULL) {outProfileHigh->computeMinMax();}
+        if (outProfileLow  != nullptr)  {outProfileLow->computeMinMax();}
+        if (outProfileHigh  != nullptr) {outProfileHigh->computeMinMax();}
     }
 
     return threshold;

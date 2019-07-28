@@ -40,5 +40,5 @@ CT_InAbstractModel* CT_InStdSingularItemModel::copy(bool withPossibilities) cons
 bool CT_InStdSingularItemModel::canBeComparedWith(const CT_OutAbstractModel& model) const
 {
     // ok if the out model represent a singular item
-    return (dynamic_cast<const CT_OutAbstractSingularItemModel*>(&model) != NULL);
+    return (dynamic_cast<const CT_OutAbstractSingularItemModel*>(&model) != nullptr);
 }

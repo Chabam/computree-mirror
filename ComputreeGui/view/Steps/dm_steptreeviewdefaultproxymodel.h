@@ -103,7 +103,7 @@ public slots:
     void setFilterConfiguration(FilterConfigs configs);
 
     /**
-     * @brief Set the parent step to use to check if a step can be added after this step or not. Can be NULL if you don't want to check
+     * @brief Set the parent step to use to check if a step can be added after this step or not. Can be nullptr if you don't want to check
      *        and shows all steps.
      * @param parent : the step that will used to check if another step can be added after it
      */

@@ -31,7 +31,7 @@ QString DEBUG_STR_FOR_MODELS;
 #endif
 
 CT_InAbstractModel::CT_InAbstractModel(const QString& displayableName) : SuperClass(displayableName),
-    m_originalModel(NULL)
+    m_originalModel(nullptr)
 {
     m_possibilitiesGroup = new CT_InStdModelPossibilitySelectionGroup();
     m_possibilitiesGroup->setEnable(true);
@@ -42,7 +42,7 @@ CT_InAbstractModel::CT_InAbstractModel(const QString& displayableName) : SuperCl
 }
 
 CT_InAbstractModel::CT_InAbstractModel(const CT_InAbstractModel& other) : SuperClass(other),
-    m_originalModel(NULL)
+    m_originalModel(nullptr)
 {
     // possibilities was not copied because the copy constructor of CT_InStdModelPossibilityGroup doesn't copy possibilities
     m_possibilitiesGroup = new CT_InStdModelPossibilitySelectionGroup(*other.m_possibilitiesGroup);
@@ -197,7 +197,7 @@ bool CT_InAbstractModel::hasTheMinimumNumberOfPossibilityRequired(QStringList* e
     const int nSaved = nPossibilitySaved();
 
     if(nSaved < int(minimumNumberOfPossibilityToSelect())) {
-        if(errors != NULL)
+        if(errors != nullptr)
             errors->append(tr("Le modèle %1 a %2 possibilité(s) disponibles(s) sur %3 minimum").arg(displayableName()).arg(nSaved).arg(minimumNumberOfPossibilityToSelect()));
 
         return false;
@@ -227,7 +227,7 @@ bool CT_InAbstractModel::hasTheMinimumNumberOfSelectedPossibilityRequired(QStrin
     const int nSelected = nPossibilitySelected();
 
     if(nSelected < int(minimumNumberOfPossibilityToSelect())) {
-        if(errors != NULL)
+        if(errors != nullptr)
             errors->append(tr("Le modèle %1 a %2 possibilité(s) sélectionnée(s) sur %3 minimum (%4 disponibles)").arg(displayableName()).arg(nSelected).arg(minimumNumberOfPossibilityToSelect()).arg(nPossibilitySaved()));
 
         return false;
@@ -373,18 +373,18 @@ bool CT_InAbstractModel::restoreSettings(SettingsReaderInterface& reader)
 
 void CT_InAbstractModel::setOriginalModel(const CT_InAbstractModel* om)
 {
-    if(m_originalModel != NULL)
-        disconnect(m_originalModel, NULL, this, NULL);
+    if(m_originalModel != nullptr)
+        disconnect(m_originalModel, nullptr, this, nullptr);
 
     m_originalModel = const_cast<CT_InAbstractModel*>(om);
 
-    if(m_originalModel != NULL)
+    if(m_originalModel != nullptr)
         connect(m_originalModel, SIGNAL(destroyed()), this, SLOT(originalModelDestroyed()), Qt::DirectConnection);
 }
 
 CT_InAbstractModel* CT_InAbstractModel::originalModel() const
 {
-    if(m_originalModel == NULL)
+    if(m_originalModel == nullptr)
         return const_cast<CT_InAbstractModel*>(this);
 
     return m_originalModel;
@@ -392,7 +392,7 @@ CT_InAbstractModel* CT_InAbstractModel::originalModel() const
 
 CT_InAbstractModel* CT_InAbstractModel::recursiveOriginalModel() const
 {
-    if(m_originalModel == NULL)
+    if(m_originalModel == nullptr)
         return const_cast<CT_InAbstractModel*>(this);
 
     return m_originalModel->recursiveOriginalModel();
@@ -766,5 +766,5 @@ int CT_InAbstractModel::recursiveFindPossibilitiesInModel(const CT_OutAbstractMo
 
 void CT_InAbstractModel::originalModelDestroyed()
 {
-    m_originalModel = NULL;
+    m_originalModel = nullptr;
 }

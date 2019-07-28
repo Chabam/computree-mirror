@@ -8,7 +8,7 @@
 template<typename T>
 CT_AbstractNotModifiableCloudIndexRegisteredT<T>::~CT_AbstractNotModifiableCloudIndexRegisteredT()
 {
-    if(this->cloudIndexRegistrationManager() != NULL)
+    if(this->cloudIndexRegistrationManager() != nullptr)
         this->cloudIndexRegistrationManager()->unregisterIndex(this);
 }
 

@@ -4,12 +4,12 @@
 
 CT_AbstractCloudRegistered::CT_AbstractCloudRegistered()
 {
-    m_syncManager = NULL;
+    m_syncManager = nullptr;
 }
 
 CT_AbstractCloudRegistered::~CT_AbstractCloudRegistered()
 {
-    if(m_syncManager != NULL)
+    if(m_syncManager != nullptr)
         m_syncManager->internalUnregisterCloud(this);
 }
 

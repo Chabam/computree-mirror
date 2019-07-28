@@ -35,14 +35,14 @@ int CT_InAbstractItemAttributeModel::valueType() const
 
 bool CT_InAbstractItemAttributeModel::canBeComparedWith(const CT_OutAbstractModel& model) const
 {
-    return (dynamic_cast<const CT_OutAbstractItemAttributeModel*>(&model) != NULL);
+    return (dynamic_cast<const CT_OutAbstractItemAttributeModel*>(&model) != nullptr);
 }
 
 bool CT_InAbstractItemAttributeModel::canBeAPossibility(const CT_OutAbstractModel& model) const
 {
     const CT_OutAbstractItemAttributeModel* iaModel = dynamic_cast<const CT_OutAbstractItemAttributeModel*>(&model);
 
-    if(iaModel == NULL)
+    if(iaModel == nullptr)
         return false;
 
     const IItemAttributeForModel* ia = iaModel->itemAttribute();

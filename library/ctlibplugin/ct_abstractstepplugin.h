@@ -159,8 +159,8 @@ public:
     /**
      * @brief Create a copy of the step (model) passed in parameter
      * @param step : the step to copy
-     * @param parent : the future parent of the step (can be NULL if the step must be root)
-     * @return NULL if the copy is impossible
+     * @param parent : the future parent of the step (can be nullptr if the step must be root)
+     * @return nullptr if the copy is impossible
      * @warning If you overload this method remember to call the method of the superclass !
      */
     virtual CT_VirtualAbstractStep* createNewInstanceOfStep(const CT_VirtualAbstractStep &step, CT_VirtualAbstractStep *parent) const;
@@ -318,19 +318,19 @@ protected:
      *        save some settings of your steps (like the last filepath opened, etc...). Settings will be automatically saved when the
      *        QSettings object is destroyed. This class manage the life in memory of the QSettings object.
      *
-     * @return NULL by default. A new QSettings if you want to save settings.
+     * @return nullptr by default. A new QSettings if you want to save settings.
      */
-    virtual QSettings* initQSettings() { return NULL; }
+    virtual QSettings* initQSettings() { return nullptr; }
 
     /**
      * @brief Search the steps (of this plugin) with key passed in parameter in level and sub level of the menu recursively and return it
-     *        if he found it otherwise return NULL
+     *        if he found it otherwise return nullptr
      */
     CT_VirtualAbstractStep* searchStepFromKeyOfThisPluginInMenuRecursively(CT_StepsMenu *menu, const QString &key) const;
 
     /**
      * @brief Search the steps (of this plugin) with key passed in parameter in level and sub level recursively and return it
-     *        if he found it otherwise return NULL
+     *        if he found it otherwise return nullptr
      */
     CT_VirtualAbstractStep* searchStepFromKeyOfThisPluginInLevelsRecursively(CT_MenuLevel *level, const QString &key) const;
 

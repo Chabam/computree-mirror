@@ -25,10 +25,10 @@ void DM_GraphicsViewSynchronizedGroup::addGraphicsView(DM_GraphicsView *gw)
 
 void DM_GraphicsViewSynchronizedGroup::removeGraphicsView(DM_GraphicsView *gw)
 {
-    if(gw != NULL)
+    if(gw != nullptr)
     {
-        disconnect(gw->getCamera(), NULL, this, NULL);
-        disconnect((DM_GraphicsViewOptions*)&(gw->constGetOptionsInternal()), NULL, this, NULL);
+        disconnect(gw->getCamera(), nullptr, this, nullptr);
+        disconnect((DM_GraphicsViewOptions*)&(gw->constGetOptionsInternal()), nullptr, this, nullptr);
 
         _gwList.removeOne(gw);
     }
@@ -37,7 +37,7 @@ void DM_GraphicsViewSynchronizedGroup::removeGraphicsView(DM_GraphicsView *gw)
 void DM_GraphicsViewSynchronizedGroup::setCameraPointOfViewForAll(const DM_GraphicsViewCamera *cam)
 {
     if(_options.mustSyncGraphicsViewCamera()
-            && (cam != NULL))
+            && (cam != nullptr))
     {
         QListIterator<DM_GraphicsView*> it(_gwList);
 
@@ -56,7 +56,7 @@ void DM_GraphicsViewSynchronizedGroup::setCameraPointOfViewForAll(const DM_Graph
 void DM_GraphicsViewSynchronizedGroup::setGraphicsViewOptionsForAll(DM_GraphicsViewOptions *newOptions)
 {
     if(_options.mustSyncGraphicsViewOptions()
-            && (newOptions != NULL))
+            && (newOptions != nullptr))
     {
         QListIterator<DM_GraphicsView*> it(_gwList);
 

@@ -57,15 +57,12 @@ CT_Grid3D<DataT>::CT_Grid3D(double xmin,
                             size_t dimz,
                             double resolution,
                             DataT na,
-                            DataT initValue) : SuperClass(dimx, dimy, dimz, resolution)
+                            DataT initValue) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
 {
-    setBoundingBox(xmin, ymin, zmin,
-                   xmin + resolution * dimx, ymin + resolution * dimy, zmin + resolution * dimz);
-    _NAdata = na;
 
-    setCenterX (minX() + (maxX() - minX())/2.0);
-    setCenterY (minY() + (maxY() - minY())/2.0);
-    setCenterZ (minZ() + (maxZ() - minZ())/2.0);
+    _NAdata = na;
+    _dataMax = -1;
+    _dataMin = -1;
 
     _data.resize(nCells());
     initGridWithValue(initValue);
@@ -82,42 +79,12 @@ CT_Grid3D<DataT>::CT_Grid3D(double xmin,
                             double zmax,
                             double resolution,
                             DataT na,
-                            DataT initValue) : SuperClass(ceil((xmax - xmin)/resolution),
-                                                          ceil((ymax - ymin)/resolution),
-                                                          ceil((zmax - zmin)/resolution),
-                                                          resolution)
+                            DataT initValue) : SuperClass(xmin, ymin, zmin, xmax, ymax, zmax, resolution)
 {
-    Eigen::Vector3d maxCoordinates(xmin + resolution * _dimx,
-                                   ymin + resolution * _dimy,
-                                   zmin + resolution * _dimz);
 
     _NAdata = na;
-
-    // to ensure a point exactly on a maximum limit of the grid will be included in the grid
-    while (xmax >= maxCoordinates(0))
-    {
-        _dimx++;
-        maxCoordinates(0) = (maxCoordinates(0) + resolution);
-    }
-
-    while (ymax >= maxCoordinates(1))
-    {
-        _dimy++;
-        maxCoordinates(1) = (maxCoordinates(1) + resolution);
-    }
-
-    while (zmax >= maxCoordinates(2))
-    {
-        _dimz++;
-        maxCoordinates(2) = (maxCoordinates(2) + resolution);
-    }
-
-    setBoundingBox(xmin, ymin, zmin,
-                   maxCoordinates(0), maxCoordinates(1), maxCoordinates(2));
-
-    setCenterX (minX() + (maxX() - minX())/2.0);
-    setCenterY (minY() + (maxY() - minY())/2.0);
-    setCenterZ (minZ() + (maxZ() - minZ())/2.0);
+    _dataMax = -1;
+    _dataMin = -1;
 
     _data.resize(nCells());
     initGridWithValue(initValue);

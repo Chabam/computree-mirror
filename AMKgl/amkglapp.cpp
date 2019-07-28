@@ -1,7 +1,7 @@
 #include "amkglapp.h"
 #include "tools/opengl/openglinfo.h"
 
-AMKglApp* AMKglApp::UNIQUE_INSTANCE = NULL;
+AMKglApp* AMKglApp::UNIQUE_INSTANCE = nullptr;
 
 AMKglApp::~AMKglApp()
 {
@@ -20,7 +20,7 @@ IEasyAccess* AMKglApp::getEasyAccess() const
 
 AMKglApp::AMKglApp()
 {
-    m_easyAccess = NULL;
+    m_easyAccess = nullptr;
 
     Q_INIT_RESOURCE(resource);
 }

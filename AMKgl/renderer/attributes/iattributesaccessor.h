@@ -19,8 +19,8 @@ public:
      * @param type : type of element that you want
      */
     ObjectAttributesProvider* getObjectsAttributeProvider(Scene::ObjectType type) const {
-        if(getAnyElementsAttributesProvider() == NULL)
-            return NULL;
+        if(getAnyElementsAttributesProvider() == nullptr)
+            return nullptr;
 
         return getAnyElementsAttributesProvider()->getObjectsAttributeProvider(type);
     }

@@ -43,16 +43,16 @@ public:
      *          - Removed later flags
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
-     *          - Parent container is set to NULL
+     *          - Parent container is set to nullptr
      *          - Childrens (root node or items) was not copied
      */
     CT_TTreeGroup(const CT_TTreeGroup& other) = default;
 
     /**
-     * @brief Visit the root node if not NULL
+     * @brief Visit the root node if not nullptr
      * @return Returns true if no childrens has been visited otherwise returns the result of the visitor.
      */
     bool visitChildrensForTreeView(const ChildrensVisitor& visitor) const override;
@@ -67,7 +67,7 @@ public:
     bool setRootNode(const OutHandleType& outGroupHandle, CT_TNodeGroup* root) {
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group

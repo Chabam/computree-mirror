@@ -8,8 +8,8 @@
 class PermanentItemScene;
 
 #define DECLARE_UNUSED_FUNC_IVISITORBYMODEL void setCurrentInformation(const AMKgl::ItemModel* model, const PermanentItemScene* scene) { Q_UNUSED(model) Q_UNUSED(scene) } \
-                                            AMKgl::ItemModel* getCurrentModel() const { return NULL; } \
-                                            PermanentItemScene* getCurrentScene() const { return NULL; }
+                                            AMKgl::ItemModel* getCurrentModel() const { return nullptr; } \
+                                            PermanentItemScene* getCurrentScene() const { return nullptr; }
 
 
 /**

@@ -5,7 +5,7 @@
 
 MeshEdgePermanentRenderer::MeshEdgePermanentRenderer() : SuperClass(GL_LINES, 2, 0, 0)
 {
-    m_chunkForOutliers = NULL;
+    m_chunkForOutliers = nullptr;
     m_attributesCloudProvider = new EdgeCloudAttributesProvider();
 
     setChunkForOutliersCreator(this);
@@ -42,7 +42,7 @@ MeshEdgePermanentRenderer::SuperClass::OtherChunkCollection MeshEdgePermanentRen
 {
     OtherChunkCollection c = SuperClass::getOthersChunk();
 
-    if(m_chunkForOutliers != NULL)
+    if(m_chunkForOutliers != nullptr)
         c.push_back(m_chunkForOutliers);
 
     return c;
@@ -50,7 +50,7 @@ MeshEdgePermanentRenderer::SuperClass::OtherChunkCollection MeshEdgePermanentRen
 
 MeshObjectNM::OutlierChunkType& MeshEdgePermanentRenderer::createOrGetChunkForOutliers()
 {
-    if(m_chunkForOutliers == NULL) {
+    if(m_chunkForOutliers == nullptr) {
         m_chunkForOutliers = new MeshObjectNM::OutlierChunkType(Scene::LineGlobalCloud,
                                                                 GL_LINES,
                                                                 2,

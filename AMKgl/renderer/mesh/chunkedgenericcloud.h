@@ -128,11 +128,11 @@ public:
      * @brief Add an object.
      * @param globalObjectIndex : the global index of the object. Per example for a face it will be the global face index
      * @param vertexGlobalIndexes : array of indexes of vertex of the object. This array must have a size of getNumberOfElementPerObject() !
-     * @param chunk : will point to this chunk if it was not NULL
+     * @param chunk : will point to this chunk if it was not nullptr
      */
     void addObjectVertexes(const size_t& globalObjectIndex,
                            const size_t* vertexGlobalIndexes,
-                           IChunk** chunk = NULL);
+                           IChunk** chunk = nullptr);
 
     /**
      * @brief Returns the first object index in the array
@@ -234,17 +234,17 @@ private:
     void internalSetNumberOfObjects(const size_t& n, const bool& shrinkToFit);
 
     /**
-     * @brief If the member m_objectColorCloud is NULL it will be created
+     * @brief If the member m_objectColorCloud is nullptr it will be created
      */
     void createObjectColorCloudMemberIfNot();
 
     /**
-     * @brief If the member m_objectNormalCloud is NULL it will be created
+     * @brief If the member m_objectNormalCloud is nullptr it will be created
      */
     void createObjectNormalCloudMemberIfNot();
 
     /**
-     * @brief If the member m_objectInfoCloud is NULL it will be created
+     * @brief If the member m_objectInfoCloud is nullptr it will be created
      */
     void createObjectInfoCloudMemberIfNot();
 

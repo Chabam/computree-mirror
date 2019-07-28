@@ -34,7 +34,7 @@ CT_CheckBox::CT_CheckBox(QString text, bool &value, QString description)
     _data._text = text;
     _description = description;
 
-    _checkBoxCreated = NULL;
+    _checkBoxCreated = nullptr;
 }
 
 void CT_CheckBox::saveSettings(SettingsWriterInterface &writer) const
@@ -55,10 +55,10 @@ bool CT_CheckBox::restoreSettings(SettingsReaderInterface &reader)
 
 QWidget* CT_CheckBox::createWidget(QWidget &parent)
 {
-    if(_checkBoxCreated == NULL)
+    if(_checkBoxCreated == nullptr)
     {
         _checkBoxCreated = new QCheckBox(_data._text, &parent);
-        _checkBoxCreated->setChecked(*(_data._value));
+        setWidgetValue(*(_data._value));
     }
 
     return _checkBoxCreated;
@@ -82,6 +82,17 @@ QVariant CT_CheckBox::getValue() const
 bool CT_CheckBox::setWidgetValue(QVariant val)
 {
     _checkBoxCreated->setChecked(val.toBool());
+    emit valueChanged(_checkBoxCreated->isChecked());
 
     return true;
+}
+
+void CT_CheckBox::setEnabled(bool enabled)
+{
+    _checkBoxCreated->setEnabled(enabled);
+}
+
+void CT_CheckBox::setChecked(bool checked)
+{
+    setWidgetValue(checked);
 }

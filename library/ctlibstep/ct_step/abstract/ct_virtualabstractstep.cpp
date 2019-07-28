@@ -36,11 +36,11 @@ int CT_VirtualAbstractStep::CURRENT_ID = 1;
 
 CT_VirtualAbstractStep::CT_VirtualAbstractStep() :
     m_uniqueId(CURRENT_ID++),
-    m_parentStep(NULL),
-    m_plugin(NULL),
+    m_parentStep(nullptr),
+    m_plugin(nullptr),
     m_uniqueIndexGenerator(new CT_UniqueIndexGenerator()),
-    m_preInputConfigDialog(NULL),
-    m_postInputConfigDialog(NULL),
+    m_preInputConfigDialog(nullptr),
+    m_postInputConfigDialog(nullptr),
     m_isRunning(false),
     m_mustStop(false),
     m_currentErrorCode(0),
@@ -58,7 +58,7 @@ CT_VirtualAbstractStep::CT_VirtualAbstractStep() :
     m_isManual(false),
     m_isTheFirstCallToAckManualMode(true),
     m_mustQuitManualMode(false),
-    m_currentGuiContext(NULL),
+    m_currentGuiContext(nullptr),
     m_isAPrototype(false)
 
 {
@@ -234,7 +234,7 @@ bool CT_VirtualAbstractStep::isSettingsModified() const
 
 bool CT_VirtualAbstractStep::acceptAddAfterThisStep(const CT_VirtualAbstractStep* step)
 {
-    return m_inputManager.haveAllInputBeenFoundInOutputOfThisStepOrRecursively(step);
+    return m_inputManager.wereAllInputsFoundInOutputsOfThisStepOrRecursively(step);
 }
 
 bool CT_VirtualAbstractStep::appendStep(CT_VirtualAbstractStep* step)
@@ -296,7 +296,7 @@ CT_VirtualAbstractStep* CT_VirtualAbstractStep::rootStep() const
 {
     CT_VirtualAbstractStep* parentStep = const_cast<CT_VirtualAbstractStep*>(this);
 
-    while(parentStep->parentStep() != NULL)
+    while(parentStep->parentStep() != nullptr)
         parentStep = parentStep->parentStep();
 
     return parentStep;
@@ -437,7 +437,7 @@ bool CT_VirtualAbstractStep::mustRecheckTree() const
 
 void CT_VirtualAbstractStep::savePreSettings(SettingsWriterInterface &writer) const
 {
-    if(m_preInputConfigDialog != NULL)
+    if(m_preInputConfigDialog != nullptr)
         m_preInputConfigDialog->saveSettings(writer);
 }
 
@@ -448,7 +448,7 @@ void CT_VirtualAbstractStep::saveInputSettings(SettingsWriterInterface &writer) 
 
 void CT_VirtualAbstractStep::savePostSettings(SettingsWriterInterface &writer) const
 {
-    if(m_postInputConfigDialog != NULL)
+    if(m_postInputConfigDialog != nullptr)
         m_postInputConfigDialog->saveSettings(writer);
 }
 
@@ -462,7 +462,7 @@ bool CT_VirtualAbstractStep::restorePreSettings(SettingsReaderInterface &reader)
 {
     createPreInputConfigurationDialog();
 
-    if(m_preInputConfigDialog != NULL)
+    if(m_preInputConfigDialog != nullptr)
         m_preInputConfigDialog->restoreSettings(reader);
 
     finalizePreSettings();
@@ -491,7 +491,7 @@ bool CT_VirtualAbstractStep::restorePostSettings(SettingsReaderInterface &reader
     createPostInputConfigurationDialog();
 
     // pre-configuration
-    if(m_postInputConfigDialog != NULL)
+    if(m_postInputConfigDialog != nullptr)
         return m_postInputConfigDialog->restoreSettings(reader);
 
     finalizePostSettings();
@@ -512,10 +512,10 @@ bool CT_VirtualAbstractStep::restoreOthersSettings(SettingsReaderInterface &read
 void CT_VirtualAbstractStep::aboutToBeDeleted()
 {
     delete m_preInputConfigDialog;
-    m_preInputConfigDialog = NULL;
+    m_preInputConfigDialog = nullptr;
 
     delete m_postInputConfigDialog;
-    m_postInputConfigDialog = NULL;
+    m_postInputConfigDialog = nullptr;
 
     m_inputManager.aboutToBeDeleted();
 }
@@ -579,13 +579,13 @@ void CT_VirtualAbstractStep::ackManualMode()
         STEP_LOG->addInfoMessage(displayableCustomName() + tr(" enter manual mode"));
 
     if(m_isTheFirstCallToAckManualMode
-            && guiContext() != NULL)
+            && guiContext() != nullptr)
     {
         initManualMode();
         m_isTheFirstCallToAckManualMode = false;
     }
 
-    if(guiContext() != NULL)
+    if(guiContext() != nullptr)
         useManualMode(false);
 }
 
@@ -593,7 +593,7 @@ void CT_VirtualAbstractStep::quitManualMode()
 {
     STEP_LOG->addInfoMessage(displayableCustomName() + tr(" quit manual mode"));
 
-    if(guiContext() != NULL)
+    if(guiContext() != nullptr)
         useManualMode(true);
 
     m_mustQuitManualMode = true;
@@ -621,7 +621,7 @@ void CT_VirtualAbstractStep::setSettingsModified(bool modified)
 
 CT_StepConfigurableDialog* CT_VirtualAbstractStep::createOrGetStandardPreInputConfigurationDialog()
 {
-    if(m_preInputConfigDialog != NULL)
+    if(m_preInputConfigDialog != nullptr)
         return m_preInputConfigDialog;
 
     m_preInputConfigDialog = new CT_StepConfigurableDialog();
@@ -631,7 +631,7 @@ CT_StepConfigurableDialog* CT_VirtualAbstractStep::createOrGetStandardPreInputCo
 
 bool CT_VirtualAbstractStep::preInputConfigure()
 {
-    if(m_preInputConfigDialog != NULL)
+    if(m_preInputConfigDialog != nullptr)
     {
         if(CT_ConfigurableWidgetToDialog::exec(m_preInputConfigDialog) != QDialog::Accepted)
             return false;
@@ -661,7 +661,7 @@ bool CT_VirtualAbstractStep::configureInputs(bool forceReadOnly)
 
 bool CT_VirtualAbstractStep::postInputConfigure()
 {
-    if(m_postInputConfigDialog != NULL)
+    if(m_postInputConfigDialog != nullptr)
     {
         if(CT_ConfigurableWidgetToDialog::exec(m_postInputConfigDialog) != QDialog::Accepted)
             return false;
@@ -791,7 +791,7 @@ void CT_VirtualAbstractStep::useManualMode(bool)
 
 void CT_VirtualAbstractStep::createPreInputConfigurationDialog()
 {
-    if(m_preInputConfigDialog == NULL) {
+    if(m_preInputConfigDialog == nullptr) {
         m_preInputConfigDialog = new CT_StepConfigurableDialog();
         m_preInputConfigDialog->setWindowTitle(m_preInputConfigDialog->windowTitle() + QString(" (%1)").arg(displayableCustomName()));
 
@@ -799,14 +799,14 @@ void CT_VirtualAbstractStep::createPreInputConfigurationDialog()
 
         if(m_preInputConfigDialog->isEmpty()) {
             delete m_preInputConfigDialog;
-            m_preInputConfigDialog = NULL;
+            m_preInputConfigDialog = nullptr;
         }
     }
 }
 
 void CT_VirtualAbstractStep::createPostInputConfigurationDialog()
 {
-    if(m_postInputConfigDialog == NULL) {
+    if(m_postInputConfigDialog == nullptr) {
         m_postInputConfigDialog = new CT_StepConfigurableDialog();
         m_postInputConfigDialog->setWindowTitle(m_postInputConfigDialog->windowTitle() + QString(" (%1)").arg(displayableCustomName()));
 
@@ -814,7 +814,7 @@ void CT_VirtualAbstractStep::createPostInputConfigurationDialog()
 
         if(m_postInputConfigDialog->isEmpty()) {
             delete m_postInputConfigDialog;
-            m_postInputConfigDialog = NULL;
+            m_postInputConfigDialog = nullptr;
         }
     }
 }
@@ -859,12 +859,12 @@ bool CT_VirtualAbstractStep::internalDeclareInputModels()
     {
         m_inputManager.createInputModels(*this);
 
-        if(parentStep() == NULL)
+        if(parentStep() == nullptr)
             return (isAPrototype() || !needInputResults()); // we return true if we are a prototype otherwise false because the GUI don't set the parent step
 
-        // this method must always returns true and only returns false if the parent step is NULL(happen when it was the prototype) or
+        // this method must always returns true and only returns false if the parent step is nullptr(happen when it was the prototype) or
         // if the collection of input result model is not empty
-        return m_inputManager.findInputsInOutputOfThisStepOrRecursively(parentStep());
+        return m_inputManager.findInputsInOutputsOfThisStepOrRecursively(parentStep());
     }
 
     return false;

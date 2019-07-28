@@ -12,14 +12,14 @@ class CT_GroupBox : public CT_GenericConfigurableWidget, public CT_WidgetWithVal
     typedef CT_GenericConfigurableWidget SuperClass;
 
 public:
-    CT_GroupBox(const QString& title, QWidget *parent = NULL);
+    CT_GroupBox(const QString& title, QWidget *parent = nullptr);
 
     QString type() const { return metaObject()->className(); }
 
     /**
      * @brief Redefined because in a group box you cannot add a new group box !
      */
-    CT_GroupBox* addNewGroupBox(const QString& title) { Q_UNUSED(title) return NULL; }
+    CT_GroupBox* addNewGroupBox(const QString& title) { Q_UNUSED(title) return nullptr; }
 
     /**
      * @brief Create the QGroupBox and return it

@@ -16,13 +16,13 @@ public:
     GenericCloudAttributesProvider() {
         m_globalCloudManager = AMKglEA->getGlobalCloudManager<ICloudManager>();
 
-        m_colorCloudRegistered = GlobalColorCloudRegistered(NULL);
-        m_normalCloudRegistered = GlobalNormalCloudRegistered(NULL);
-        m_infoCloudRegistered = GlobalInfoCloudRegistered(NULL);
+        m_colorCloudRegistered = GlobalColorCloudRegistered(nullptr);
+        m_normalCloudRegistered = GlobalNormalCloudRegistered(nullptr);
+        m_infoCloudRegistered = GlobalInfoCloudRegistered(nullptr);
 
-        m_colorCloud = NULL;
-        m_normalCloud = NULL;
-        m_infoCloud = NULL;
+        m_colorCloud = nullptr;
+        m_normalCloud = nullptr;
+        m_infoCloud = nullptr;
     }
 
     virtual ~GenericCloudAttributesProvider() {}

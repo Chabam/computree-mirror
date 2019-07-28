@@ -1,181 +1,160 @@
 #include "ct_abstractexporter.h"
 
-#include "private/ct_abstractexporter_p.h"
+#include <QFileInfo>
 
-CT_AbstractExporter::CT_AbstractExporter() :
-    d_ptr(new CT_AbstractExporterPrivate)
+CT_AbstractExporter::CT_AbstractExporter(int subMenuLevel)
 {
+    m_stop = false;
+    _filepath = ".";
+    _progress = 0;
+    _ePoints = false;
+    _eFaces = false;
+    _eEdges = false;
+    m_subMenuLevel = subMenuLevel;
+
+    m_inModelsStructureManager = nullptr;
+    mNameOfTheFileContainsTurnNameFromACounter = false;
+    mExportEachItemInSeparateFile = false;
+    mFileNameUsedFromAttributeOfAnotherItem = false;
 }
 
-CT_AbstractExporter::CT_AbstractExporter(const CT_AbstractExporter &other) : QObject(),
-    d_ptr(new CT_AbstractExporterPrivate(*other.d_ptr.data()))
+CT_AbstractExporter::CT_AbstractExporter(const CT_AbstractExporter &other) : QObject()
 {
+    _formats = other._formats;
+    _errMsg = other._errMsg;
+    _points = other._points;
+    _faces = other._faces;
+    _edges = other._edges;
+    _filepath = other._filepath;
+    _progress = other._progress;
+    _ePoints = other._ePoints;
+    _eFaces = other._eFaces;
+    _eEdges = other._eEdges;
+    m_stop = other.m_stop;
+    m_tooltip = other.m_tooltip;
+    m_subMenuLevel = other.m_subMenuLevel;
+
+    m_inModelsStructureManager = nullptr;
+    mNameOfTheFileContainsTurnNameFromACounter = false;
+    mExportEachItemInSeparateFile = false;
+    mFileNameUsedFromAttributeOfAnotherItem = false;
 }
 
-CT_AbstractExporter::~CT_AbstractExporter()
+QString CT_AbstractExporter::displayableName() const
 {
+    return uniqueName();
 }
 
-QString CT_AbstractExporter::getExporterName() const
+QString CT_AbstractExporter::uniqueName() const
 {
     return metaObject()->className();
 }
 
-QString CT_AbstractExporter::getExporterCustomName() const
+void CT_AbstractExporter::setSubMenuLevel(int level)
 {
-    return getExporterName();
+    m_subMenuLevel = level;
+}
+
+int CT_AbstractExporter::subMenuLevel() const
+{
+    return m_subMenuLevel;
 }
 
 const QList<FileFormat>& CT_AbstractExporter::exportFormats() const
 {
-    Q_D(const CT_AbstractExporter);
+    return _formats;
+}
 
-    return d->_formats;
-}
-/*
-CT_StepsMenu::LevelPredefined CT_AbstractExporter::getExporterSubMenuName() const
+bool CT_AbstractExporter::isExtensionPresentInReadableFormat(const QString& extension) const
 {
-    return CT_StepsMenu::LP_Others;
+    for(const FileFormat& ff : _formats) {
+        if(ff.suffixes().contains(extension))
+            return true;
+    }
+
+    return false;
 }
-*/
+
+bool CT_AbstractExporter::isExportError() const
+{
+    return !_errMsg.isEmpty();
+}
+
 QString CT_AbstractExporter::toolTip() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->m_tooltip;
+    return m_tooltip;
 }
 
 void CT_AbstractExporter::setToolTip(const QString &t)
 {
-    Q_D(CT_AbstractExporter);
-
-    d->m_tooltip = t;
-}
-
-bool CT_AbstractExporter::setItemDrawableToExport(const QList<CT_AbstractItemDrawable *> &list)
-{
-    Q_D(CT_AbstractExporter);
-
-    if(canExportItems())
-        d->_items = list;
-
-    return true;
+    m_tooltip = t;
 }
 
 bool CT_AbstractExporter::setPointsToExport(const QList<CT_AbstractCloudIndex *> &list)
 {
-    Q_D(CT_AbstractExporter);
-
-    if(canExportPoints())
-        d->_points = list;
+    if(canExportPoints()) {
+        _points = list;
+        setMustUseModels(false);
+    }
 
     return true;
 }
 
 bool CT_AbstractExporter::setFacesToExport(const QList<CT_AbstractCloudIndex *> &list)
 {
-    Q_D(CT_AbstractExporter);
-
-    if(canExportFaces())
-        d->_faces = list;
+    if(canExportFaces()) {
+        _faces = list;
+        setMustUseModels(false);
+    }
 
     return true;
 }
 
 bool CT_AbstractExporter::setEdgesToExport(const QList<CT_AbstractCloudIndex *> &list)
 {
-    Q_D(CT_AbstractExporter);
-
-    if(canExportEdges())
-        d->_edges = list;
+    if(canExportEdges()) {
+        _edges = list;
+        setMustUseModels(false);
+    }
 
     return true;
-}
-
-bool CT_AbstractExporter::exportOnlyGroup() const
-{
-    Q_D(const CT_AbstractExporter);
-
-    return d->_eOnlyGroup;
 }
 
 bool CT_AbstractExporter::canExportPoints() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->_ePoints;
+    return _ePoints;
 }
 
 bool CT_AbstractExporter::canExportEdges() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->_eEdges;
+    return _eEdges;
 }
 
 bool CT_AbstractExporter::canExportFaces() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->_eFaces;
-}
-
-bool CT_AbstractExporter::canExportItems() const
-{
-    Q_D(const CT_AbstractExporter);
-
-    return d->_eItems;
+    return _eFaces;
 }
 
 bool CT_AbstractExporter::hasSomethingToExport() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return !d->_items.isEmpty() || !d->_points.isEmpty() || !d->_faces.isEmpty() || !d->_edges.isEmpty();
+    return !_points.isEmpty() || !_faces.isEmpty() || !_edges.isEmpty();
 }
 
-void CT_AbstractExporter::setDocumentManager(const DocumentManagerInterface *dm)
+bool CT_AbstractExporter::setFilePath(const QString &filepath)
 {
-    Q_D(CT_AbstractExporter);
-
-    d->m_dm = const_cast<DocumentManagerInterface*>(dm);
-}
-
-void CT_AbstractExporter::setMyDocument(const DocumentInterface *di)
-{
-    Q_D(CT_AbstractExporter);
-
-    d->m_myd = const_cast<DocumentInterface*>(di);
-}
-
-void CT_AbstractExporter::setMyStep(const CT_VirtualAbstractStep *step)
-{
-    Q_D(CT_AbstractExporter);
-
-    d->m_myStep = const_cast<CT_VirtualAbstractStep*>(step);
-}
-
-bool CT_AbstractExporter::setExportFilePath(const QString &filepath)
-{
-    Q_D(CT_AbstractExporter);
-
-    d->_filepath = filepath;
+    _filepath = filepath;
 
     return true;
 }
 
-QString CT_AbstractExporter::exportFilePath() const
+QString CT_AbstractExporter::filePath() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->_filepath;
+    return _filepath;
 }
 
 void CT_AbstractExporter::saveSettings(SettingsWriterInterface &writer) const
 {
-    Q_D(const CT_AbstractExporter);
-
-    writer.addParameterPath(this, "File", d->_filepath);
+    writer.addParameterPath(this, "File", _filepath);
 }
 
 bool CT_AbstractExporter::restoreSettings(SettingsReaderInterface &reader)
@@ -184,94 +163,227 @@ bool CT_AbstractExporter::restoreSettings(SettingsReaderInterface &reader)
     if(!reader.parameterPath(this, "File", path))
         return false;
 
-    return setExportFilePath(path);
+    return setFilePath(path);
+}
+
+void CT_AbstractExporter::declareInputModels(CT_InModelStructureManager& manager,
+                                             bool nameOfTheFileContainsTurnNameFromACounter,
+                                             bool exportEachItemInSeperateFile,
+                                             bool fileNameUsedFromAttributeOfAnotherItem)
+{
+    setMustUseModels(true);
+
+    mNameOfTheFileContainsTurnNameFromACounter = nameOfTheFileContainsTurnNameFromACounter;
+    mExportEachItemInSeparateFile = exportEachItemInSeperateFile;
+    mFileNameUsedFromAttributeOfAnotherItem = fileNameUsedFromAttributeOfAnotherItem;
+
+    manager.addResult(m_handleResultExport, tr("Résultat"), QString(), true);
+    manager.setZeroOrMoreRootGroup(m_handleResultExport, m_handleZeroOrMoreGroupExport);
+
+    CT_ExporterInModelStructureManager exporterManager(manager,
+                                                       m_handleZeroOrMoreGroupExport);
+
+    internalDeclareInputModels(exporterManager);
+
+    if(mExportEachItemInSeparateFile)
+    {
+        if(mFileNameUsedFromAttributeOfAnotherItem || (exporterManager.m_hAbstractInItem == nullptr))
+        {
+            if(exporterManager.m_hAbstractInGroup != nullptr)
+            {
+                manager.addItem(*exporterManager.m_hAbstractInGroup, m_handleItemWithNameExport, tr("ItemWithName"));
+                manager.addItemAttribute(m_handleItemWithNameExport, m_handleItemAttributeExport, CT_AbstractCategory::DATA_VALUE, tr("Name"));
+            }
+        }
+        else if(exporterManager.m_hAbstractInItem != nullptr)
+        {
+            manager.addItemAttribute(*exporterManager.m_hAbstractInItem, m_handleItemAttributeExport, CT_AbstractCategory::DATA_VALUE, tr("Name"));
+        }
+    }
+
+    if(mNameOfTheFileContainsTurnNameFromACounter)
+    {
+        manager.addResult(m_handleResultCounter, tr("Résultat compteur"), QString(), true);
+        manager.setRootGroup(m_handleResultCounter, m_handleGroupCounter);
+        manager.addItem(m_handleGroupCounter, m_handleLoopCounter);
+    }
+}
+
+void CT_AbstractExporter::declareInputModels()
+{
+    setMustUseModels(true);
+
+    mNameOfTheFileContainsTurnNameFromACounter = false;
+    mExportEachItemInSeparateFile = false;
+    mFileNameUsedFromAttributeOfAnotherItem = false;
+
+    mInModelSManager.clearResults();
+    mInModelSManager.addResult(m_handleResultExport);
+    mInModelSManager.setZeroOrMoreRootGroup(m_handleResultExport, m_handleZeroOrMoreGroupExport);
+
+    delete m_inModelsStructureManager;
+    m_inModelsStructureManager = new CT_ExporterInModelStructureManager(mInModelSManager, m_handleZeroOrMoreGroupExport);
+
+    internalDeclareInputModels(*m_inModelsStructureManager);
+}
+
+bool CT_AbstractExporter::needInputs() const
+{
+    return m_inModelsStructureManager->needInputs();
+}
+
+bool CT_AbstractExporter::wereAllInputsFoundInOutputsOfThisManager(const CT_OutModelStructureManager& manager) const
+{
+    QVector<CT_InAbstractResultModel*> resModels(m_inModelsStructureManager->nResults());
+    int currentIndex = 0;
+
+    m_inModelsStructureManager->visitResults([&resModels, &currentIndex](const CT_InAbstractResultModel* inResultModel) -> bool {
+        resModels[currentIndex++] = static_cast<CT_InAbstractResultModel*>(inResultModel->copy(false));
+        return true;
+    });
+
+    const bool result = findInputsInOutputsOfThisManagerWithSpecifiedResultModels(manager, resModels.begin(), resModels.end());
+
+    qDeleteAll(resModels);
+
+    return result;
+}
+
+bool CT_AbstractExporter::findInputsInOutputsOfThisManager(const CT_OutModelStructureManager& manager)
+{
+    QVector<CT_InAbstractResultModel*> resModels(m_inModelsStructureManager->nResults());
+    int currentIndex = 0;
+
+    m_inModelsStructureManager->visitResults([&resModels, &currentIndex](const CT_InAbstractResultModel* inResultModel) -> bool {
+        resModels[currentIndex++] = const_cast<CT_InAbstractResultModel*>(inResultModel);
+        return true;
+    });
+
+    return findInputsInOutputsOfThisManagerWithSpecifiedResultModels(manager, resModels.begin(), resModels.end());
 }
 
 bool CT_AbstractExporter::exportToFile()
 {
     clearErrorMessage();
+    clearIterators();
 
-    Q_D(CT_AbstractExporter);
+    _progress = 0;
+    m_stop = false;
 
-    d->_progress = 0;
-    d->m_stop = false;
+    QString baseName;
 
-    if(!protectedExportToFile())
-        return false;
+    if(mustUseModels())
+    {
+        for(const CT_LoopCounter* counter : m_handleLoopCounter.iterateInputs(m_handleResultCounter)) {
+            baseName = counter->turnName();
+            baseName = QFileInfo(baseName).baseName();
+        }
+    }
 
-    d->_progress = 100;
+    if(mustUseModels() && mExportEachItemInSeparateFile)
+    {
+        QStringList pathByItem;
+
+        auto iterator = m_handleItemAttributeExport.iterateInputs(m_handleResultExport);
+        auto begin = iterator.begin();
+        auto end = iterator.end();
+
+        while(begin != end)
+        {
+            const CT_AbstractItemAttributeT<QString>* itemAttribute = *begin;
+
+            CT_AbstractItem* itemWithName = begin.currentParent();
+            const QString fileName = QFileInfo(itemAttribute->toString(itemWithName, nullptr)).baseName();
+
+            QString path = QFileInfo(filePath()).path();
+            path.append("/");
+
+            if(mNameOfTheFileContainsTurnNameFromACounter)
+            {
+                path.append(baseName);
+                path.append("_");
+            }
+
+            path.append(fileName);
+
+            pathByItem.append(path);
+
+            ++begin;
+        }
+
+        mMaximumItemToExportCalled = false;
+        const QString backupFilepath = filePath();
+
+        for(const QString& path : pathByItem)
+        {
+            setFilePath(path);
+
+            if(!internalExportToFile()) {
+                setFilePath(backupFilepath);
+                return false;
+            }
+
+            #define QT_FORCE_ASSERTS
+            Q_ASSERT_X(mMaximumItemToExportCalled, "CT_AbstractExporter::exportToFile", "Developper of exporter doesn't call the method \"maximumItemToExportInFile\" !");
+            #undef QT_FORCE_ASSERTS
+        }
+
+        setFilePath(backupFilepath);
+    }
+    else
+    {
+        QString finalFilepath;
+
+        if (mNameOfTheFileContainsTurnNameFromACounter && !baseName.isEmpty())
+            finalFilepath = QFileInfo(filePath()).path() + "/" + baseName;
+        else
+            finalFilepath = filePath();
+
+        const QString backupFilepath = filePath();
+
+        setFilePath(finalFilepath);
+
+        if(!internalExportToFile()) {
+            setFilePath(backupFilepath);
+            return false;
+        }
+
+        setFilePath(backupFilepath);
+    }
+
+    setExportProgress(100);
 
     return true;
 }
 
 QString CT_AbstractExporter::errorMessage() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->_errMsg;
+    return _errMsg;
 }
 
 void CT_AbstractExporter::clearErrorMessage()
 {
-    Q_D(CT_AbstractExporter);
-
-    d->_errMsg.clear();
+    _errMsg.clear();
 }
 
 bool CT_AbstractExporter::isStopped() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->m_stop;
-}
-
-const QList<CT_AbstractItemDrawable*>& CT_AbstractExporter::itemDrawableToExport() const
-{
-    Q_D(const CT_AbstractExporter);
-
-    return d->_items;
+    return m_stop;
 }
 
 const QList<CT_AbstractCloudIndex *> &CT_AbstractExporter::pointsToExport() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->_points;
+    return _points;
 }
 
 const QList<CT_AbstractCloudIndex *> &CT_AbstractExporter::facesToExport() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->_faces;
+    return _faces;
 }
 
 const QList<CT_AbstractCloudIndex *> &CT_AbstractExporter::edgesToExport() const
 {
-    Q_D(const CT_AbstractExporter);
-
-    return d->_edges;
-}
-
-DocumentManagerInterface* CT_AbstractExporter::documentManager() const
-{
-    Q_D(const CT_AbstractExporter);
-
-    return d->m_dm;
-}
-
-DocumentInterface* CT_AbstractExporter::myDocument() const
-{
-    Q_D(const CT_AbstractExporter);
-
-    return d->m_myd;
-}
-
-CT_VirtualAbstractStep* CT_AbstractExporter::myStep() const
-{
-    Q_D(const CT_AbstractExporter);
-
-    return d->m_myStep;
+    return _edges;
 }
 
 bool CT_AbstractExporter::canExportPieceByPiece() const
@@ -296,18 +408,14 @@ bool CT_AbstractExporter::finalizePieceByPieceExport()
 
 void CT_AbstractExporter::addNewExportFormat(const FileFormat &format)
 {
-    Q_D(CT_AbstractExporter);
-
-    d->_formats.append(format);
+    _formats.append(format);
 }
 
 void CT_AbstractExporter::setExportProgress(int progress)
 {
-    Q_D(CT_AbstractExporter);
-
-    if(d->_progress != progress)
+    if(_progress != progress)
     {
-        d->_progress = progress;
+        _progress = progress;
 
         emit exportInProgress(progress);
     }
@@ -315,50 +423,76 @@ void CT_AbstractExporter::setExportProgress(int progress)
 
 void CT_AbstractExporter::setErrorMessage(const QString &err)
 {
-    Q_D(CT_AbstractExporter);
-
-    d->_errMsg = err;
+    _errMsg = err;
 }
 
 void CT_AbstractExporter::setCanExportPoints(bool e)
 {
-    Q_D(CT_AbstractExporter);
-
-    d->_ePoints = e;
+    _ePoints = e;
 }
 
 void CT_AbstractExporter::setCanExportEdges(bool e)
 {
-    Q_D(CT_AbstractExporter);
-
-    d->_eEdges = e;
+    _eEdges = e;
 }
 
 void CT_AbstractExporter::setCanExportFaces(bool e)
 {
-    Q_D(CT_AbstractExporter);
-
-    d->_eFaces = e;
+    _eFaces = e;
 }
 
-void CT_AbstractExporter::setExportOnlyGroup(bool e)
+void CT_AbstractExporter::setMustUseModels(bool useModels)
 {
-    Q_D(CT_AbstractExporter);
+    mMustUseModels = useModels;
+}
 
-    d->_eOnlyGroup = e;
+bool CT_AbstractExporter::mustUseModels() const
+{
+    return mMustUseModels;
+}
+
+int CT_AbstractExporter::maximumItemToExportInFile(const int nToExport) const
+{
+    const_cast<CT_AbstractExporter*>(this)->mMaximumItemToExportCalled = true;
+
+    return mExportEachItemInSeparateFile ? 1 : nToExport;
+}
+
+bool CT_AbstractExporter::findInputsInOutputsOfThisManagerWithSpecifiedResultModels(const CT_OutModelStructureManager& manager,
+                                                                                    QVector<CT_InAbstractResultModel*>::iterator begin,
+                                                                                    QVector<CT_InAbstractResultModel*>::iterator end) const
+{
+    if(!needInputs())
+        return true;
+
+    const int nResults = std::distance(begin, end);
+
+    QSet<CT_InAbstractResultModel*> modelsThatHaveFound;
+
+    QVector<CT_InAbstractResultModel*>::iterator it = begin;
+
+    while(it != end) {
+        CT_InAbstractResultModel* inResultModel = *it;
+
+        inResultModel->recursiveClearPossibilitiesSaved();
+
+        manager.visitResults([&modelsThatHaveFound, &inResultModel](const CT_OutAbstractResultModel* outResultModel) -> bool {
+            inResultModel->recursiveFindAllPossibilitiesInModel(*outResultModel, false);
+
+            if(inResultModel->hasTheMinimumNumberOfPossibilityRequired())
+                modelsThatHaveFound.insert(inResultModel);
+
+            return true;
+        });
+
+        ++it;
+    }
+
+    return (modelsThatHaveFound.size() == nResults);
 }
 
 void CT_AbstractExporter::cancel()
 {
-    Q_D(CT_AbstractExporter);
-
-    d->m_stop = true;
-}
-
-void CT_AbstractExporter::setCanExportItems(bool e)
-{
-    Q_D(CT_AbstractExporter);
-
-    d->_eItems = e;
+    m_stop = true;
 }
 

@@ -6,20 +6,20 @@ CT_MutableIndexIterator::CT_MutableIndexIterator(const CT_AbstractModifiableClou
 {
     m_index = (CT_AbstractModifiableCloudIndex*)mci;
     m_startPos = 0;
-    m_endPos = (m_index == NULL) ? 0 : m_index->size();
+    m_endPos = (m_index == nullptr) ? 0 : m_index->size();
 
     toFront();
 }
 
 CT_MutableIndexIterator::CT_MutableIndexIterator(const CT_MCIR mcir)
 {
-    if(mcir.data() == NULL)
-        m_index = NULL;
+    if(mcir.data() == nullptr)
+        m_index = nullptr;
     else
         m_index = mcir->abstractModifiableCloudIndex();
 
     m_startPos = 0;
-    m_endPos = (m_index == NULL) ? 0 : m_index->size();
+    m_endPos = (m_index == nullptr) ? 0 : m_index->size();
 
     toFront();
 }

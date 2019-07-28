@@ -93,7 +93,7 @@ namespace mu
 #endif
 
     // demo code for packing / unpacking pointers into bytecode
-//    void *ptr(NULL);
+//    void *ptr(nullptr);
 //    double **pVal;
 //    double fVal;
 //    map_type dbg[2]; 

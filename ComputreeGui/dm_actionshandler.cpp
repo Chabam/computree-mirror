@@ -7,8 +7,8 @@
 DM_ActionsHandler::DM_ActionsHandler(const CDM_ActionsManager &actionManager)
 {
     m_maxActions = 100;
-    m_activeAction = NULL;
-    m_defaultAction = NULL;
+    m_activeAction = nullptr;
+    m_defaultAction = nullptr;
     m_actionManager = (CDM_ActionsManager*)&actionManager;
 }
 
@@ -38,26 +38,26 @@ void DM_ActionsHandler::setMaxActions(const int &maxActions)
 
 void DM_ActionsHandler::setCurrentAction(CT_AbstractAction *action)
 {
-    if(action != NULL)
+    if(action != nullptr)
         actionManager()->addAction(action);
 
     CT_AbstractAction *backup = m_activeAction;
-    CT_AbstractAction *actionFound = (action != NULL ? findAction(action->uniqueName()) : NULL);
+    CT_AbstractAction *actionFound = (action != nullptr ? findAction(action->uniqueName()) : nullptr);
 
-    if((m_activeAction != NULL) && (m_activeAction != actionFound))
+    if((m_activeAction != nullptr) && (m_activeAction != actionFound))
     {
         if(!m_activeAction->isSuspended())
             m_activeAction->suspend();
 
         m_activeAction->hideOptions();
-        m_activeAction = NULL;
+        m_activeAction = nullptr;
     }
 
-    if(m_activeAction == NULL)
+    if(m_activeAction == nullptr)
     {
         m_activeAction = actionFound;
 
-        if(m_activeAction != NULL)
+        if(m_activeAction != nullptr)
         {
             if(!actionManager()->existActionCompareAddress(action))
                 delete action;
@@ -70,7 +70,7 @@ void DM_ActionsHandler::setCurrentAction(CT_AbstractAction *action)
 
             m_activeAction->showOptions();
         }
-        else if(action != NULL)
+        else if(action != nullptr)
         {
             m_activeAction = action;
 
@@ -82,7 +82,7 @@ void DM_ActionsHandler::setCurrentAction(CT_AbstractAction *action)
                 if(!actionManager()->existActionCompareAddress(m_activeAction))
                     delete m_activeAction;
 
-                m_activeAction = NULL;
+                m_activeAction = nullptr;
 
                 if(!m_actions.isEmpty())
                 {
@@ -114,7 +114,7 @@ void DM_ActionsHandler::setCurrentAction(CT_AbstractAction *action)
 
 void DM_ActionsHandler::setCurrentInternalAction(CT_AbstractAction *action)
 {
-    if(action != NULL)
+    if(action != nullptr)
         actionManager()->addInternalAction(action);
 
     setCurrentAction(action);
@@ -156,18 +156,18 @@ void DM_ActionsHandler::removeActions(const QString &uniqueName)
     if(currentActionDeleted)
     {
         CT_AbstractAction *ac = m_activeAction;
-        m_activeAction = NULL;
+        m_activeAction = nullptr;
 
         ac->finish();
 
         if(!actionManager()->existActionCompareAddress(ac))
             delete ac;
 
-        setCurrentAction(NULL);
-        emit currentActionChanged(NULL);
+        setCurrentAction(nullptr);
+        emit currentActionChanged(nullptr);
     }
 
-    if((m_defaultAction != NULL)
+    if((m_defaultAction != nullptr)
             && (m_defaultAction->uniqueName() == uniqueName))
     {
         m_defaultAction->finish();
@@ -175,15 +175,15 @@ void DM_ActionsHandler::removeActions(const QString &uniqueName)
         if(!actionManager()->existActionCompareAddress(m_defaultAction))
             delete m_defaultAction;
 
-        m_defaultAction = NULL;
+        m_defaultAction = nullptr;
 
-        emit defaultActionChanged(NULL);
+        emit defaultActionChanged(nullptr);
     }
 }
 
 void DM_ActionsHandler::setDefaultAction(CT_AbstractAction *action)
 {
-    if(m_defaultAction != NULL)
+    if(m_defaultAction != nullptr)
     {
         m_defaultAction->finish();
 
@@ -193,7 +193,7 @@ void DM_ActionsHandler::setDefaultAction(CT_AbstractAction *action)
 
     m_defaultAction = action;
 
-    if(m_defaultAction != NULL)
+    if(m_defaultAction != nullptr)
     {
         m_defaultAction->init();
         m_defaultAction->trigger();
@@ -203,7 +203,7 @@ void DM_ActionsHandler::setDefaultAction(CT_AbstractAction *action)
             if(!actionManager()->existActionCompareAddress(m_defaultAction))
                 delete m_defaultAction;
 
-            m_defaultAction = NULL;
+            m_defaultAction = nullptr;
         }
     }
 
@@ -225,7 +225,7 @@ bool DM_ActionsHandler::eventToAction(QEvent *e)
     bool val = false;
     bool resume = e->type() == QEvent::WindowActivate;
 
-    if(m_activeAction != NULL)
+    if(m_activeAction != nullptr)
     {
         if(resume && m_activeAction->isSuspended())
             m_activeAction->resume();
@@ -233,12 +233,12 @@ bool DM_ActionsHandler::eventToAction(QEvent *e)
         val = m_activeAction->event(e);
     }
 
-    if((m_defaultAction != NULL)
+    if((m_defaultAction != nullptr)
             && resume && m_defaultAction->isSuspended())
          m_defaultAction->resume();
 
 
-    if(!val && (m_defaultAction != NULL))
+    if(!val && (m_defaultAction != nullptr))
         val = m_defaultAction->event(e);
 
     return val;
@@ -248,10 +248,10 @@ bool DM_ActionsHandler::enterEvent(QEvent *e)
 {
     Q_UNUSED(e)
 
-    if((m_activeAction != NULL) && m_activeAction->isSuspended())
+    if((m_activeAction != nullptr) && m_activeAction->isSuspended())
         m_activeAction->resume();
 
-    if((m_defaultAction != NULL) && m_defaultAction->isSuspended())
+    if((m_defaultAction != nullptr) && m_defaultAction->isSuspended())
         m_defaultAction->resume();
 
     return false;
@@ -261,10 +261,10 @@ bool DM_ActionsHandler::leaveEvent(QEvent *e)
 {
     Q_UNUSED(e)
 
-    if(m_activeAction != NULL)
+    if(m_activeAction != nullptr)
         m_activeAction->suspend();
 
-    if(m_defaultAction != NULL)
+    if(m_defaultAction != nullptr)
         m_defaultAction->suspend();
 
     return false;
@@ -317,5 +317,5 @@ CT_AbstractAction* DM_ActionsHandler::findAction(const QString &uniqueName) cons
             return action;
     }
 
-    return NULL;
+    return nullptr;
 }

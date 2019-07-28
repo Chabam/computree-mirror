@@ -43,8 +43,8 @@ DM_MainWindow::DM_MainWindow()
     _ioListener = new CDM_StdIOListener();
     _ioListener->setParser(_ioParser);
 
-    _ioParser = NULL;
-    _ioListener = NULL;
+    _ioParser = nullptr;
+    _ioListener = nullptr;
 
     m_actionsManager.setPluginManager(_pluginManager);
     m_actionsManager.setStepManager(_stepManager);

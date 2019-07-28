@@ -18,7 +18,7 @@ void CT_InModelStructureManager::setNotNeedInputResult()
 bool CT_InModelStructureManager::needInputs() const
 {
     return !m_results.isEmpty()
-            && (dynamic_cast<CT_InResultModelNotNeedInputResult*>(m_results.first()) == NULL);
+            && (dynamic_cast<CT_InResultModelNotNeedInputResult*>(m_results.first()) == nullptr);
 }
 
 int CT_InModelStructureManager::nResults() const
@@ -37,6 +37,6 @@ void CT_InModelStructureManager::clearResults(bool deleteFromMemory)
 void CT_InModelStructureManager::checkNotNeedInputResultIsNotPresent() const
 {
     Q_ASSERT_X(m_results.isEmpty()
-               || (dynamic_cast<CT_InResultModelNotNeedInputResult*>(m_results.first()) == NULL),
+               || (dynamic_cast<CT_InResultModelNotNeedInputResult*>(m_results.first()) == nullptr),
                "CT_InModelStructureManager", "You have already define that you do not want input results so you can not add new elements !");
 }

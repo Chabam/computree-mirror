@@ -11,6 +11,7 @@ public:
     using ModelType = ModelT;
 
     CT_HandleWithModelT() : m_model(nullptr) {}
+    CT_HandleWithModelT(const CT_HandleWithModelT& other) = delete;
     virtual ~CT_HandleWithModelT() {}
 
     void setModel(const ModelType* model) { disconnectModel(); m_model = const_cast<ModelType*>(model); connectModel(); }
@@ -23,9 +24,9 @@ private:
     QMetaObject::Connection  m_connection;
 
     void connectModel() {
-        if(m_model != NULL)
+        if(m_model != nullptr)
             m_connection = QObject::connect(m_model, &ModelType::destroyed, [this](QObject*) {
-                m_model = NULL;
+                m_model = nullptr;
             });
     }
 

@@ -75,7 +75,7 @@ public:
     /**
      * @brief Recursively search in this result model the child that was a copy of the specified original model
      * @param originalModel : the original model to compare with the "originalModel" returned by child in this result model
-     * @return The copied model if founded or the original model if it was in this result model. NULL if not founded.
+     * @return The copied model if founded or the original model if it was in this result model. nullptr if not founded.
      */
     CT_InAbstractModel* recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(const CT_InAbstractModel* originalModel) const;
 

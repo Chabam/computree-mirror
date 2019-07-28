@@ -6,7 +6,7 @@ CT_AttributesColor::CT_AttributesColor(CT_AbstractColorCloud* cloud)
 }
 
 CT_AttributesColor::CT_AttributesColor(const CT_AttributesColor& other) :
-    m_colorCloud((other.m_colorCloud != NULL) ? dynamic_cast<CT_AbstractColorCloud*>(other.m_colorCloud->copy()) : NULL)
+    m_colorCloud((other.m_colorCloud != nullptr) ? dynamic_cast<CT_AbstractColorCloud*>(other.m_colorCloud->copy()) : nullptr)
 {
 }
 

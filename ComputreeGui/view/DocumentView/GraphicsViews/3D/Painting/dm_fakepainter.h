@@ -107,7 +107,7 @@ public:
     void save() {}
     void restore() {}
 
-    void startRestoreIdentityMatrix(GLdouble *matrix = NULL) { Q_UNUSED(matrix) }
+    void startRestoreIdentityMatrix(GLdouble *matrix = nullptr) { Q_UNUSED(matrix) }
     void stopRestoreIdentityMatrix() {}
 
     void enableMultMatrix(bool e) { Q_UNUSED(e) }

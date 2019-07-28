@@ -28,7 +28,7 @@ public:
     ~PermanentItemSceneByModel();
 
     /**
-     * @brief Returns, if exist, the scene for the specified model otherwise return NULL
+     * @brief Returns, if exist, the scene for the specified model otherwise return nullptr
      */
     PermanentItemScene* getPermanentItemSceneForModel(const ItemModel* model) const;
     Q_DECL_DEPRECATED PermanentItemScene* findPermanentItemSceneForItem(const Item* item) const;

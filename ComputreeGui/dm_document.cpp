@@ -43,7 +43,7 @@ DM_Document::DM_Document(DM_DocumentManager &manager, QString title)
 {
     _manager = &manager;
     _title = title;
-    m_closeFilter = NULL;
+    m_closeFilter = nullptr;
 
     m_number = NUMBER;
 
@@ -142,11 +142,11 @@ void DM_Document::removeAllItemDrawableOfResult(const CT_AbstractResult &res)
     /*CT_AbstractResult *oResult = (CT_AbstractResult*)&res;
     CT_AbstractResult *result = (CT_AbstractResult*)&res;
 
-    if(res.model() != NULL)
+    if(res.model() != nullptr)
     {
         CT_OutAbstractResultModel *om = (CT_OutAbstractResultModel*)res.model()->recursiveOriginalModel();
 
-        if((om != NULL)
+        if((om != nullptr)
             && !om->childrens().isEmpty())
             oResult = ((CT_OutAbstractModel*)om->childrens().first())->result();
     }
@@ -374,7 +374,7 @@ CT_AbstractItemDrawable* DM_Document::getItemDrawable(int i) const
         return _listItemDrawable.at(i);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void DM_Document::setSelectAllItemDrawable(bool select)
@@ -450,13 +450,13 @@ CT_AbstractItemDrawable* DM_Document::findFirstItemDrawable(const CT_OutAbstract
             return item;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*>* DM_Document::createItemInformationsForResult(CT_AbstractResult *result)
 {
-    if(result == NULL)
-        return NULL;
+    if(result == nullptr)
+        return nullptr;
 
     QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = new QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*>();
     m_itemsInformation.insert(result, hash);
@@ -470,19 +470,19 @@ DM_AbstractInfo* DM_Document::createNewItemInformation(const CT_AbstractItemDraw
 {
     Q_UNUSED(item)
 
-    return NULL;
+    return nullptr;
 }
 
 void DM_Document::slotItemDrawableAdded(CT_AbstractItemDrawable &item)
 {
     connect(&item, SIGNAL(selectChange(bool)), this, SLOT(slotItemDrawableSelectionChanged(bool)), Qt::QueuedConnection);
 
-    if(item.result() == NULL)
+    if(item.result() == nullptr)
         return;
 
-    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*>* hash = m_itemsInformation.value(item.result(), NULL);
+    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*>* hash = m_itemsInformation.value(item.result(), nullptr);
 
-    if(hash == NULL)
+    if(hash == nullptr)
     {
         hash = new QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*>();
         m_itemsInformation.insert(item.result(), hash);
@@ -491,7 +491,7 @@ void DM_Document::slotItemDrawableAdded(CT_AbstractItemDrawable &item)
 
         DM_AbstractInfo* info = createNewItemInformation(&item);
 
-        if(info == NULL)
+        if(info == nullptr)
             return;
 
         hash->insert(&item, info);
@@ -499,14 +499,14 @@ void DM_Document::slotItemDrawableAdded(CT_AbstractItemDrawable &item)
 
     CT_StandardItemGroup* group = dynamic_cast<CT_StandardItemGroup*>(&item);
 
-    if(group != NULL) {
+    if(group != nullptr) {
         group->recursiveVisitChildrensOfTypeItem([this, &hash](const CT_AbstractItemDrawable* child) -> bool {
 
             if(!hash->contains(const_cast<CT_AbstractItemDrawable*>(child)))
             {
                 DM_AbstractInfo* childInfo = this->createNewItemInformation(child);
 
-                if(childInfo != NULL)
+                if(childInfo != nullptr)
                     hash->insert(const_cast<CT_AbstractItemDrawable*>(child), childInfo);
             }
 
@@ -533,7 +533,7 @@ void DM_Document::slotResultDestroyed(QObject *result)
 {
     QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = m_itemsInformation.take((CT_AbstractResult*)result);
 
-    if(hash != NULL)
+    if(hash != nullptr)
         qDeleteAll(hash->begin(), hash->end());
 
     delete hash;

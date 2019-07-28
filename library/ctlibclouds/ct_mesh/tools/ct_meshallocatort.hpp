@@ -20,13 +20,13 @@
 template<typename Mesh>
 CT_MutablePointIndexIterator CT_MeshAllocatorT<Mesh>::AddVerticeIndexes(Mesh *mesh, const size_t &n)
 {
-    if(mesh == NULL)
-        return CT_MutablePointIndexIterator(NULL);
+    if(mesh == nullptr)
+        return CT_MutablePointIndexIterator(nullptr);
 
     CT_PointCloudIndexVector *v = (CT_PointCloudIndexVector*)mesh->m_pVert;
     size_t lastSize = 0;
 
-    if(v == NULL)
+    if(v == nullptr)
     {
         v = new CT_PointCloudIndexVector(n);
         mesh->m_vert = PS_REPOSITORY->registerCloudIndex(v);
@@ -47,13 +47,13 @@ CT_MutablePointIndexIterator CT_MeshAllocatorT<Mesh>::AddVerticeIndexes(Mesh *me
 template<typename Mesh>
 CT_MutableFaceIndexIterator CT_MeshAllocatorT<Mesh>::AddFaceIndexes(Mesh *mesh, const size_t &n)
 {
-    if(mesh == NULL)
-        return CT_MutableFaceIndexIterator(NULL);
+    if(mesh == nullptr)
+        return CT_MutableFaceIndexIterator(nullptr);
 
     CT_FaceCloudIndexVector *f = (CT_FaceCloudIndexVector*)mesh->m_pFace;
     size_t lastSize = 0;
 
-    if(f == NULL)
+    if(f == nullptr)
     {
         f = new CT_FaceCloudIndexVector(n);
         mesh->m_face = PS_REPOSITORY->registerCloudIndex(f);
@@ -73,13 +73,13 @@ CT_MutableFaceIndexIterator CT_MeshAllocatorT<Mesh>::AddFaceIndexes(Mesh *mesh, 
 template<typename Mesh>
 CT_MutableEdgeIndexIterator CT_MeshAllocatorT<Mesh>::AddHEdgeIndexes(Mesh *mesh, const size_t &n)
 {
-    if(mesh == NULL)
-        return CT_MutableEdgeIndexIterator(NULL);
+    if(mesh == nullptr)
+        return CT_MutableEdgeIndexIterator(nullptr);
 
     CT_EdgeCloudIndexVector *e = (CT_EdgeCloudIndexVector*)mesh->m_pHedge;
     size_t lastSize = 0;
 
-    if(e == NULL)
+    if(e == nullptr)
     {
         e = new CT_EdgeCloudIndexVector(n);
         mesh->m_hedge = PS_REPOSITORY->registerCloudIndex(e);
@@ -99,8 +99,8 @@ CT_MutableEdgeIndexIterator CT_MeshAllocatorT<Mesh>::AddHEdgeIndexes(Mesh *mesh,
 template<typename Mesh>
 CT_MutablePointIterator CT_MeshAllocatorT<Mesh>::AddVertices(Mesh *mesh, const size_t &n)
 {
-    if(mesh == NULL)
-        return CT_MutablePointIterator(NULL);
+    if(mesh == nullptr)
+        return CT_MutablePointIterator(nullptr);
 
     CT_PointCloudIndexVector *v = ((CT_PointCloudIndexVector*)mesh->m_pVert);
 
@@ -116,8 +116,8 @@ CT_MutablePointIterator CT_MeshAllocatorT<Mesh>::AddVertices(Mesh *mesh, const s
 template<typename Mesh>
 CT_MutableFaceIterator CT_MeshAllocatorT<Mesh>::AddFaces(Mesh *mesh, const size_t &n)
 {
-    if(mesh == NULL)
-        return CT_MutableFaceIterator(NULL);
+    if(mesh == nullptr)
+        return CT_MutableFaceIterator(nullptr);
 
     CT_FaceCloudIndexVector *f = ((CT_FaceCloudIndexVector*)mesh->m_pFace);
 
@@ -133,8 +133,8 @@ CT_MutableFaceIterator CT_MeshAllocatorT<Mesh>::AddFaces(Mesh *mesh, const size_
 template<typename Mesh>
 CT_MutableEdgeIterator CT_MeshAllocatorT<Mesh>::AddHEdges(Mesh *mesh, const size_t &n)
 {
-    if(mesh == NULL)
-        return CT_MutableEdgeIterator(NULL);
+    if(mesh == nullptr)
+        return CT_MutableEdgeIterator(nullptr);
 
     CT_EdgeCloudIndexVector *e = ((CT_EdgeCloudIndexVector*)mesh->m_pHedge);
 
@@ -172,7 +172,7 @@ Iterator CT_MeshAllocatorT<Mesh>::addT(const size_t &n,
     }
 
     // if the mesh don't have a points cloud or if the last created can't be resized
-    if(cir.data() == NULL)
+    if(cir.data() == nullptr)
     {
         // create a new points cloud
         cir = PS_REPOSITORY->createNewCloud<T>(n);
@@ -184,7 +184,7 @@ Iterator CT_MeshAllocatorT<Mesh>::addT(const size_t &n,
     }
 
     // if the mesh don't have a cloud index we create one
-    if(meshCir.data() == NULL)
+    if(meshCir.data() == nullptr)
     {
         *meshCI = new CloudIndex();
         meshCir = PS_REPOSITORY->registerCloudIndex<T>((CloudIndex*)(*meshCI));

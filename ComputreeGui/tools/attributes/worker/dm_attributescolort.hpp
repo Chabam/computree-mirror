@@ -6,7 +6,7 @@
 template<typename Type>
 DM_AttributesColorT<Type>::DM_AttributesColorT() : DM_AbstractAttributesColor()
 {
-    m_ac = NULL;
+    m_ac = nullptr;
 }
 
 template<typename Type>
@@ -24,7 +24,7 @@ bool DM_AttributesColorT<Type>::setTypeAttributes(const Type *ta, const CT_Attri
 template<typename Type>
 void DM_AttributesColorT<Type>::attributesDeleted()
 {
-    m_ac = NULL;
+    m_ac = nullptr;
 }
 
 template<typename Type>

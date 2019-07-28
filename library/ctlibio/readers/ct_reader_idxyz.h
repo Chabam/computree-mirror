@@ -14,8 +14,8 @@ class CTLIBIO_EXPORT CT_Reader_IDXYZ : public CT_AbstractReader, public CT_Reade
     typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_IDXYZ();
-    CT_Reader_IDXYZ(const CT_Reader_IDXYZ& other) = default;
+    CT_Reader_IDXYZ(int subMenuLevel = 0);
+    CT_Reader_IDXYZ(const CT_Reader_IDXYZ& other);
 
     QString displayableName() const override;
 

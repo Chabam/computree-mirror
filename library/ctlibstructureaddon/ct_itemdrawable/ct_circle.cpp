@@ -58,8 +58,8 @@ CT_Circle* CT_Circle::staticCreateZAxisAlignedCircleFromPointCloud(const CT_Abst
 {
     CT_CircleData* data = CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloud(pointCloudIndex, z);
 
-    if(data == NULL)
-        return NULL;
+    if(data == nullptr)
+        return nullptr;
 
     return new CT_Circle(data);
 }

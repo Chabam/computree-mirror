@@ -52,9 +52,9 @@ int CT_AbstractSingularItemDrawable::nChildrens() const
 
 void CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel(const CT_OutAbstractItemAttributeModel* outModel, CT_AbstractItemAttribute* itemAttribute)
 {
-    Q_ASSERT(itemAttribute != NULL);
-    Q_ASSERT(outModel != NULL);
-    Q_ASSERT(outModel->parentModel() != NULL);
+    Q_ASSERT(itemAttribute != nullptr);
+    Q_ASSERT(outModel != nullptr);
+    Q_ASSERT(outModel->parentModel() != nullptr);
     Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->recursiveOriginalModel() == model()->recursiveOriginalModel());
     Q_ASSERT(outModel->itemAttribute()->itemAttributeToolForModel()->category() == itemAttribute->category());
 
@@ -66,7 +66,7 @@ void CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel(const CT_OutA
 
 CT_AbstractItemAttribute* CT_AbstractSingularItemDrawable::itemAttributeWithOutModel(const CT_OutAbstractItemAttributeModel* outModel) const
 {
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
 
     if(outModel->isADefaultItemAttributeModel())
         return PS_DIAM->itemAttributeFromOutModel(outModel, type());
@@ -96,7 +96,7 @@ bool CT_AbstractSingularItemDrawable::visitItemAttributesAdded(const CT_ItemAttr
 
 bool CT_AbstractSingularItemDrawable::visitItemAttributesInSelectedPossibilitiesOfInModel(const CT_InAbstractItemAttributeModel* inModel, const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const
 {
-    Q_ASSERT(inModel != NULL);
+    Q_ASSERT(inModel != nullptr);
 
     if(!PS_DIAM->visitItemAttributesForTypeInSelectedPossibilitiesOfInModel(type(), inModel, visitor))
         return false;
@@ -121,7 +121,7 @@ int CT_AbstractSingularItemDrawable::nItemAttributesAdded() const
 
 QList<CT_AbstractItemAttribute*> CT_AbstractSingularItemDrawable::itemAttributes(const CT_InAbstractItemAttributeModel *inModel) const
 {
-    Q_ASSERT(inModel != NULL);
+    Q_ASSERT(inModel != nullptr);
 
     QList<CT_AbstractItemAttribute*> l = m_itemAttributes.itemAttributesFromInModel(inModel);
     l.append(PS_DIAM->itemAttributesFromInModel(inModel, type()));
@@ -139,7 +139,7 @@ QList<CT_AbstractItemAttribute *> CT_AbstractSingularItemDrawable::itemAttribute
 
         CT_AbstractItemAttribute* att = outModel->isADefaultItemAttributeModel() ? PS_DIAM->itemAttributeFromOutModel(outModel, myType) : m_itemAttributes.itemAttributeFromOutModel(outModel);
 
-        if(att != NULL)
+        if(att != nullptr)
             l.append(att);
     }
 
@@ -158,12 +158,12 @@ QList<CT_AbstractItemAttribute *> CT_AbstractSingularItemDrawable::itemAttribute
 
 CT_AbstractItemAttribute* CT_AbstractSingularItemDrawable::firstItemAttribute(const CT_InAbstractItemAttributeModel* inModel) const
 {
-    Q_ASSERT(inModel != NULL);
+    Q_ASSERT(inModel != nullptr);
 
     if(!inModel->isAtLeastOnePossibilitySelected())
-        return NULL;
+        return nullptr;
 
-    CT_InStdModelPossibility* p = NULL;
+    CT_InStdModelPossibility* p = nullptr;
 
     const auto visitor = [&p](const CT_InStdModelPossibility* possibility) -> bool {
         p = const_cast<CT_InStdModelPossibility*>(possibility);
@@ -214,12 +214,12 @@ CT_AbstractItem::IChildrensIteratorQtStylePtr CT_AbstractSingularItemDrawable::c
 {
     const CT_OutAbstractItemAttributeModel* iaModel = dynamic_cast<const CT_OutAbstractItemAttributeModel*>(outModel);
 
-    if(iaModel != NULL) {
+    if(iaModel != nullptr) {
         const CT_AbstractItemAttribute* attribute = iaModel->isADefaultItemAttributeModel() ? PS_DIAM->itemAttributeFromOutModel(iaModel, type()) : m_itemAttributes.itemAttributeFromOutModel(iaModel);
 
-        if(attribute != NULL)
+        if(attribute != nullptr)
             return IChildrensIteratorQtStylePtr(new ItemAttributeIterator(attribute));
     }
 
-    return IChildrensIteratorQtStylePtr(NULL);
+    return IChildrensIteratorQtStylePtr(nullptr);
 }

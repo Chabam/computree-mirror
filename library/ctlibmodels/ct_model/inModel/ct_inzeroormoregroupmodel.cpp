@@ -50,7 +50,7 @@ void CT_InZeroOrMoreGroupModel::itemAdded(const CT_InAbstractSingularItemModel* 
 {
     Q_UNUSED(item)
 
-    groupAdded(NULL);
+    groupAdded(nullptr);
 }
 
 void CT_InZeroOrMoreGroupModel::groupRemoved(const DEF_CT_AbstractGroupModelIn* group)
@@ -65,5 +65,5 @@ void CT_InZeroOrMoreGroupModel::itemRemoved(const CT_InAbstractSingularItemModel
 {
     Q_UNUSED(item)
 
-    groupRemoved(NULL);
+    groupRemoved(nullptr);
 }

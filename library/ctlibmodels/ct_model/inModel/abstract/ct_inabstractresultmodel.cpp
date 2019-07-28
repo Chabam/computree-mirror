@@ -8,13 +8,13 @@ bool CT_InAbstractResultModel::FORCE_RECURSIVITY = false;
 
 CT_InAbstractResultModel::CT_InAbstractResultModel(const QString &displayableName) : SuperClass(displayableName),
     m_recursive(FORCE_RECURSIVITY),
-    m_currentInResultModelCopy(NULL)
+    m_currentInResultModelCopy(nullptr)
 {
 }
 
 CT_InAbstractResultModel::CT_InAbstractResultModel(const CT_InAbstractResultModel& other) : SuperClass(other),
     m_recursive(other.m_recursive),
-    m_currentInResultModelCopy(NULL)
+    m_currentInResultModelCopy(nullptr)
 {
 }
 
@@ -26,7 +26,7 @@ void CT_InAbstractResultModel::setRecursive(bool r)
 bool CT_InAbstractResultModel::isRecursive() const
 {
     // if step of this model is a prototype (not used in a tree)
-    if((step() != NULL)
+    if((step() != nullptr)
             && step()->stepToolForModel()->isStepAPrototype())
         return m_recursive | FORCE_RECURSIVITY;
 
@@ -60,15 +60,15 @@ bool CT_InAbstractResultModel::recursiveFindAllPossibilitiesInModel(const CT_Out
         createAndAddAPossibility(rootModel);
 
         // delete this variable because may be a problem has happened in createAndAddAPossibility(...). If there was
-        // no problem this variable is NULL so this will do nothing.
+        // no problem this variable is nullptr so this will do nothing.
         delete m_currentInResultModelCopy;
-        m_currentInResultModelCopy = NULL;
+        m_currentInResultModelCopy = nullptr;
 
         return true;
     }
 
     delete m_currentInResultModelCopy;
-    m_currentInResultModelCopy = NULL;
+    m_currentInResultModelCopy = nullptr;
 
     return false;
 }
@@ -97,7 +97,7 @@ bool CT_InAbstractResultModel::visitRealResultsThatMatchWithThisPossibility(cons
 
 CT_InAbstractModel* CT_InAbstractResultModel::recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(const CT_InAbstractModel* originalModel) const
 {
-    Q_ASSERT(originalModel != NULL);
+    Q_ASSERT(originalModel != nullptr);
 
     const CT_InAbstractModel* firstOriginalOutModel = originalModel->recursiveOriginalModel();
 
@@ -106,7 +106,7 @@ CT_InAbstractModel* CT_InAbstractResultModel::recursiveSearchTheModelThatWasACop
     if((rootModel == firstOriginalOutModel) && (rootModel->recursiveOriginalModel() == this->recursiveOriginalModel()))
         return const_cast<CT_InAbstractResultModel*>(this);
 
-    CT_InAbstractModel* copiedModel = NULL;
+    CT_InAbstractModel* copiedModel = nullptr;
 
     const auto visitor = [&copiedModel, &firstOriginalOutModel](const CT_InAbstractModel* child) -> bool {
         if(child->recursiveOriginalModel() == firstOriginalOutModel) {
@@ -165,7 +165,7 @@ CT_InStdModelPossibility* CT_InAbstractResultModel::createNewPossibility() const
     if(m_currentInResultModelCopy == this)
         p->setAutoDeleteInResultModel(false);
 
-    m_currentInResultModelCopy = NULL;
+    m_currentInResultModelCopy = nullptr;
 
     return p;
 }
@@ -176,7 +176,7 @@ bool CT_InAbstractResultModel::visitRealResultForModel(const CT_OutAbstractResul
     // get the step which has created this model (it was the step that create the real result)
     IStepForModel* step = model->step();
 
-    MODELS_ASSERT(step != NULL);
+    MODELS_ASSERT(step != nullptr);
 
     return step->stepToolForModel()->visitStepHisOutResults([&model, &visitor](const IResultForModel* result) -> bool {
 

@@ -5,7 +5,7 @@
 
 GlobalPointsSetInfoVisitor::GlobalPointsSetInfoVisitor()
 {
-    m_infoCloud = NULL;
+    m_infoCloud = nullptr;
     m_setFunction = nullptr;
 }
 
@@ -25,7 +25,7 @@ void GlobalPointsSetInfoVisitor::addPointsToCompute(const Eigen::Vector3d &offse
 {
     Q_UNUSED(offset)
 
-    if((m_infoCloud != NULL)
+    if((m_infoCloud != nullptr)
             && (m_setFunction != nullptr)) {
 
         std::vector<GLuint>::const_iterator it = indices.begin();

@@ -32,7 +32,7 @@ CTG_InResultModelPossibilities::CTG_InResultModelPossibilities(QWidget *parent) 
                                 "}"));
     m_readOnly = false;
 
-    m_inputResultModelManager = NULL;
+    m_inputResultModelManager = nullptr;
 
     constructHeader();
 }
@@ -69,7 +69,7 @@ void CTG_InResultModelPossibilities::constructModel()
 {
     clearModel();
 
-    if(m_inputResultModelManager != NULL)
+    if(m_inputResultModelManager != nullptr)
     {
         m_inputResultModelManager->visitResults([this](const CT_InAbstractResultModel* inputResultModel) -> bool {
             const QList<QStandardItem*> items = this->createItemsForResultModel(inputResultModel);
@@ -122,24 +122,24 @@ void CTG_InResultModelPossibilities::showFirstSelectedOrFirstResultPossibility()
 {
     QStandardItem* root = m_treeViewModel.invisibleRootItem();
 
-    if(root != NULL) {
+    if(root != nullptr) {
 
-        QStandardItem* firstItem = NULL;
-        QStandardItem* firstItemSelected = NULL;
+        QStandardItem* firstItem = nullptr;
+        QStandardItem* firstItemSelected = nullptr;
 
         const int nResult = root->rowCount();
 
-        for(int r=0; (r<nResult) && (firstItemSelected == NULL); ++r) {
+        for(int r=0; (r<nResult) && (firstItemSelected == nullptr); ++r) {
             QStandardItem* result = root->child(r, 0);
 
             const int nChild = result->rowCount();
 
-            for(int i=0; (i<nChild) && (firstItemSelected == NULL); ++i) {
+            for(int i=0; (i<nChild) && (firstItemSelected == nullptr); ++i) {
                 QStandardItem* item = result->child(i, 0);
 
                 CT_InStdResultModelPossibility* possibility = static_cast<CT_InStdResultModelPossibility*>(item->data().value<void*>());
 
-                if(firstItem == NULL)
+                if(firstItem == nullptr)
                     firstItem = item;
 
                 if(possibility->isSelected())
@@ -147,10 +147,10 @@ void CTG_InResultModelPossibilities::showFirstSelectedOrFirstResultPossibility()
             }
         }
 
-        if(firstItemSelected != NULL)
+        if(firstItemSelected != nullptr)
             firstItem = firstItemSelected;
 
-        if(firstItem != NULL) {
+        if(firstItem != nullptr) {
             CT_InStdResultModelPossibility* p = static_cast<CT_InStdResultModelPossibility*>(firstItem->data().value<void*>());
 
             if(!m_readOnly)
@@ -251,7 +251,7 @@ void CTG_InResultModelPossibilities::disableResultPossibility(CT_InStdResultMode
     if(possibility->isSelected()) {
         possibility->setSelected(false);
 
-        showResultPossibility(NULL);
+        showResultPossibility(nullptr);
     }
 }
 
@@ -272,7 +272,7 @@ void CTG_InResultModelPossibilities::showEvent(QShowEvent *event)
 void CTG_InResultModelPossibilities::on_treeView_clicked(const QModelIndex &index)
 {
     if(!index.isValid()) {
-        showResultPossibility(NULL);
+        showResultPossibility(nullptr);
         return;
     }
 
@@ -311,7 +311,7 @@ void CTG_InResultModelPossibilities::on_treeView_clicked(const QModelIndex &inde
 void CTG_InResultModelPossibilities::on_treeView_doubleClicked(const QModelIndex &index)
 {
     if(!index.isValid()) {
-        showResultPossibility(NULL);
+        showResultPossibility(nullptr);
         return;
     }
 

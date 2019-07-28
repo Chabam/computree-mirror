@@ -4,6 +4,9 @@
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
 #include "ct_itemattributes/tools/ct_defaultitemattributemanager.h"
 #include "ct_itemattributes/tools/ct_itemattributecontainer.h"
+#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
+#include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
+#include "tools/sfinae.h"
 
 #include <QColor>
 
@@ -34,7 +37,7 @@ public:
      *          - Default Color
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */
@@ -80,7 +83,7 @@ public:
      */
     template<typename OutHandleType>
     void addItemAttribute(const OutHandleType& outItemAttributeHandle, CT_AbstractItemAttribute* itemAttribute) {
-        Q_ASSERT(model() != NULL);
+        Q_ASSERT(model() != nullptr);
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this item
@@ -101,7 +104,7 @@ public:
     /**
      * @brief Returns the item attribute that use the specified output model
      * @param outModel : the model of the item attribute to find. The model of the item attribute will be used to find it in the collection.
-     * @return NULL if no item attribute that use this model has been found
+     * @return nullptr if no item attribute that use this model has been found
      */
     CT_AbstractItemAttribute* itemAttributeWithOutModel(const CT_OutAbstractItemAttributeModel* outModel) const;
 
@@ -165,6 +168,17 @@ public:
     QList<CT_AbstractItemAttribute*> itemAttributes() const;
 
     /**
+     * @brief Returns the first item attribute that use the model in the specified handle.
+     * @param itemAttHandle : the handle of the item attribute (input or output)
+     */
+    template<typename HandleType>
+    const typename HandleType::ItemAttributeType* itemAttribute(const HandleType& itemAttHandle) const {
+        Q_ASSERT(model() != nullptr);
+
+        return internalItemAttribute(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+    }
+
+    /**
      * @brief Returns the first item attribute that match with a possibility of the IN model.
      *
      *        An IN model can have a number of possibilities > 1 if you set Choose_MultipleIfMultiple. A
@@ -172,7 +186,7 @@ public:
      *        return a list of ItemDrawable. This method test the first possibility, if a ItemDrawable is found,
      *        it will be returned otherwise the method continue to search with the next possibility, etc...
      *
-     * @return NULL if no item will be found
+     * @return nullptr if no item will be found
      */
     CT_AbstractItemAttribute* firstItemAttribute(const CT_InAbstractItemAttributeModel *inModel) const;
 
@@ -209,7 +223,7 @@ public:
 
     /**
      * @brief Returns the parentGroup of this group
-     * @return NULL if the group is a root group (the parent group is the result)
+     * @return nullptr if the group is a root group (the parent group is the result)
      */
     CT_StandardItemGroup* parentGroup() const;
 
@@ -226,11 +240,11 @@ private:
     public:
         ItemAttributeIterator(const CT_AbstractItemAttribute* item) : m_current(const_cast<CT_AbstractItemAttribute*>(item)) {}
 
-        bool hasNext() const override { return m_current != NULL; }
+        bool hasNext() const override { return m_current != nullptr; }
 
         CT_AbstractItem* next() override {
             CT_AbstractItem* c = m_current;
-            m_current = NULL;
+            m_current = nullptr;
             return c;
         }
 
@@ -259,6 +273,77 @@ private:
      * @brief Writted to create a default Item Attribute
      */
     QString pDisplayableName() const { return displayableName(); }
+
+    template<typename InHandleType, typename Visitor>
+    bool visitInModelWithPossibilitiesFromInHandle(const InHandleType& inHandle, const Visitor& visitor) const {
+        const CT_InAbstractModel* inOriginalModel = inHandle.model();
+        const CT_InAbstractResultModel* inOriginalResultModel = dynamic_cast<CT_InAbstractResultModel*>(inOriginalModel->rootModel());
+
+        Q_ASSERT(inOriginalResultModel != nullptr);
+
+        const int nResultPossibility = inOriginalResultModel->nPossibilitySaved();
+
+        for(int i=0; i<nResultPossibility; ++i) {
+            if(inOriginalResultModel->possibilitySavedAt(i)->isSelected()) {
+                CT_InAbstractModel* inModelWithPossibilities = static_cast<CT_InStdResultModelPossibility*>(inOriginalResultModel->possibilitySavedAt(i))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(inOriginalModel);
+
+                if(!visitor(inModelWithPossibilities))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @brief Returns the first item attribute that use the model in the specified handle.
+     * @param outItemHandle : the handle of the item (output)
+     */
+    template<typename OutHandleType>
+    const typename OutHandleType::ItemAttributeType* internalItemAttribute(const OutHandleType& outItemHandle,
+                                                                 std::true_type) const {
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const DEF_CT_OutAbstractIAModel* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
+
+        Q_ASSERT(outModelToUse != nullptr);
+
+        return static_cast<typename OutHandleType::ItemAttributeType*>(itemAttributeWithOutModel(outModelToUse));
+    }
+
+    /**
+     * @brief Returns the first item attribute that use the model in the specified handle.
+     * @param inItemHandle : the handle of the item (input)
+     */
+    template<typename InHandleType>
+    const typename InHandleType::ItemAttributeType* internalItemAttribute(const InHandleType& inHandle,
+                                                                std::false_type) const {
+        const typename InHandleType::ItemAttributeType* found = nullptr;
+
+        const CT_OutAbstractModel::UniqueIndexType myModelUI = model()->uniqueIndex();
+
+        visitInModelWithPossibilitiesFromInHandle(inHandle, [&found, &myModelUI, this](CT_InAbstractModel* inModelWithPossibilities) -> bool {
+
+            const CT_InStdModelPossibilitySelectionGroup* selectionGroup = inModelWithPossibilities->possibilitiesGroup();
+
+            for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
+                const CT_OutAbstractModel* outModel = possibility->outModel();
+
+                if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == myModelUI) {
+                    const DEF_CT_OutAbstractIAModel* outModelToUse = dynamic_cast<const DEF_CT_OutAbstractIAModel*>(outModel);
+
+                    if(outModelToUse != nullptr) {
+                        found = static_cast<typename InHandleType::ItemAttributeType*>(itemAttributeWithOutModel(outModelToUse));
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        });
+
+        return found;
+    }
 
     // declare that we will add default item attributes in this class
     //  => We must add CT_DEFAULT_IA_INIT(CT_AbstractSingularItemDrawable) in top of cpp file

@@ -7,11 +7,12 @@
 template< typename DataT>
 class CT_StandardGrid3D_SparseDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
     CT_StandardGrid3D_SparseDrawManager(QString drawConfigurationName = "");
-    virtual ~CT_StandardGrid3D_SparseDrawManager();
 
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
 
 protected:
 
@@ -47,16 +48,15 @@ protected:
     static QString staticInitConfigZsup();
     static QString staticInitConfigShowTrueOnly();
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 
 };
 
 template<>
-PLUGINSHAREDSHARED_EXPORT void CT_StandardGrid3D_SparseDrawManager<bool>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+CTLIBSTRUCTUREADDON_EXPORT void CT_StandardGrid3D_SparseDrawManager<bool>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT CT_ItemDrawableConfiguration CT_StandardGrid3D_SparseDrawManager<bool>::createDrawConfiguration(QString drawConfigurationName) const;
-
+CTLIBSTRUCTUREADDON_EXPORT CT_ItemDrawableConfiguration CT_StandardGrid3D_SparseDrawManager<bool>::createDrawConfiguration(QString drawConfigurationName) const;
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp"
 

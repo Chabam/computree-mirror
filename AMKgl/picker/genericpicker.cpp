@@ -2,14 +2,14 @@
 
 GenericPicker::GenericPicker()
 {
-    m_provider = NULL;
+    m_provider = nullptr;
     m_camPositionSet = false;
     m_camModelViewMatrixSet = false;
 }
 
 bool GenericPicker::isValid() const
 {
-    return ((getAnyElementsAttributesProvider() != NULL)
+    return ((getAnyElementsAttributesProvider() != nullptr)
                 && isCameraPositionSet()
                 && isCameraModelViewMatrixSet());
 }

@@ -36,7 +36,7 @@ CT_SpinBox::CT_SpinBox(int min, int max, int &value, QString description)
     _data._value = &value;
     _description = description;
 
-    _spinBoxCreated = NULL;
+    _spinBoxCreated = nullptr;
 }
 
 void CT_SpinBox::saveSettings(SettingsWriterInterface &writer) const
@@ -59,7 +59,7 @@ bool CT_SpinBox::restoreSettings(SettingsReaderInterface &reader)
 
 QWidget* CT_SpinBox::createWidget(QWidget &parent)
 {
-    if(_spinBoxCreated == NULL)
+    if(_spinBoxCreated == nullptr)
     {
         _spinBoxCreated = new QSpinBox(&parent);
 

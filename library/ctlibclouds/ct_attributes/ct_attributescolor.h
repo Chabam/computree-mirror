@@ -9,13 +9,13 @@
 class CTLIBCLOUDS_EXPORT CT_AttributesColor
 {
 public:
-    CT_AttributesColor(CT_AbstractColorCloud* cloud = NULL);
+    CT_AttributesColor(CT_AbstractColorCloud* cloud = nullptr);
 
     /**
      * @brief Copy constructor
      *
      *        What is copied :
-     *          - Color cloud is copied (call method "copy()") if not NULL
+     *          - Color cloud is copied (call method "copy()") if not nullptr
      *
      *        What is initialized differently :
      */

@@ -8,7 +8,7 @@ CT_OutAbstractItemModel::CT_OutAbstractItemModel(const CT_OutAbstractItemModel& 
 {
     IItemDrawableForModel* itemD = other.itemDrawable();
 
-    if(itemD != NULL)
+    if(itemD != nullptr)
         setPrototype(itemD->itemToolForModel()->copyItem());
 }
 

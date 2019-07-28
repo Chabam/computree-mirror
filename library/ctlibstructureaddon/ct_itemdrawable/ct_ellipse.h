@@ -84,7 +84,7 @@ public:
     /**
       * \brief Retourne une ellipse 2D  partir du nuage de points pass en paramtre.
       *
-      * \return NULL si le nombre de points est infrieur  6.
+      * \return nullptr si le nombre de points est infrieur  6.
       */
     static CT_Ellipse* staticCreateZAxisAlignedEllipseFromPointCloud(const CT_AbstractPointCloudIndex *pointCloudIndex);
 

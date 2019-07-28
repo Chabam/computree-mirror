@@ -39,13 +39,13 @@ CT_DEFAULT_IA_INIT(CT_AbstractItemDrawableWithPointCloud)
 
 CT_AbstractItemDrawableWithPointCloud::CT_AbstractItemDrawableWithPointCloud() : SuperClass()
 {
-    m_shortcutToPointCloudIndexFromRegistered = NULL;
+    m_shortcutToPointCloudIndexFromRegistered = nullptr;
     setBaseDrawManager(&IDWITHPC_DRAW_MANAGER);
 }
 
 CT_AbstractItemDrawableWithPointCloud::CT_AbstractItemDrawableWithPointCloud(CT_PCIR pcir) : SuperClass()
 {
-    m_shortcutToPointCloudIndexFromRegistered = NULL;
+    m_shortcutToPointCloudIndexFromRegistered = nullptr;
     setPointCloudIndexRegistered(pcir);
     setBaseDrawManager(&IDWITHPC_DRAW_MANAGER);
 }
@@ -94,10 +94,10 @@ void CT_AbstractItemDrawableWithPointCloud::setPointCloudIndexRegistered(CT_PCIR
 
     m_pointCloudIndexRegistered = pcir;
 
-    if(m_pointCloudIndexRegistered.data() != NULL)
+    if(m_pointCloudIndexRegistered.data() != nullptr)
         m_shortcutToPointCloudIndexFromRegistered = dynamic_cast<CT_AbstractPointCloudIndex*>(m_pointCloudIndexRegistered->abstractCloudIndexT());
     else
-        m_shortcutToPointCloudIndexFromRegistered = NULL;
+        m_shortcutToPointCloudIndexFromRegistered = nullptr;
 
     if(mustUpdateBoundingBox)
         updateBoundingBox();
@@ -115,7 +115,7 @@ CT_PCIR CT_AbstractItemDrawableWithPointCloud::pointCloudIndexRegistered() const
 
 size_t CT_AbstractItemDrawableWithPointCloud::pointCloudIndexSize() const
 {
-    if(pointCloudIndex() == NULL)
+    if(pointCloudIndex() == nullptr)
         return 0;
 
     return pointCloudIndex()->size();
@@ -124,5 +124,5 @@ size_t CT_AbstractItemDrawableWithPointCloud::pointCloudIndexSize() const
 void CT_AbstractItemDrawableWithPointCloud::deletePointCloudIndexRegistered()
 {
     m_pointCloudIndexRegistered = CT_PCIR();
-    m_shortcutToPointCloudIndexFromRegistered = NULL;
+    m_shortcutToPointCloudIndexFromRegistered = nullptr;
 }

@@ -20,18 +20,18 @@ CDM_ScriptProblem::CDM_ScriptProblem(CDM_PluginManager &pluginManager,
 
     m_keepSteps = true;
     m_pluginIndex = currentPluginIndexUsed;
-    m_useStep = NULL;
+    m_useStep = nullptr;
 
     m_pluginName = pluginName;
     m_stepName = stepName;
 
     if(m_pluginName.isEmpty()) {
-        if(m_configureStep != NULL)
+        if(m_configureStep != nullptr)
             m_pluginName = pluginManager.getPluginName(static_cast<CT_AbstractStepPlugin*>(m_configureStep->plugin()));
     }
 
     if(m_stepName.isEmpty()) {
-        if(m_configureStep != NULL)
+        if(m_configureStep != nullptr)
             m_stepName = m_configureStep->name();
     }
 }
@@ -115,7 +115,7 @@ bool CDM_ScriptProblem::solutionConfigureStep()
 
 bool CDM_ScriptProblem::solutionConfigureStepPreParams()
 {
-    if(m_configureStep != NULL)
+    if(m_configureStep != nullptr)
     {
         if(m_configureStep->showPreInputConfigurationDialog())
         {
@@ -132,7 +132,7 @@ bool CDM_ScriptProblem::solutionConfigureStepPreParams()
 
 bool CDM_ScriptProblem::solutionConfigureStepInputParams()
 {
-    if(m_configureStep != NULL)
+    if(m_configureStep != nullptr)
     {
         if(m_configureStep->showInputResultConfigurationDialog())
         {
@@ -146,7 +146,7 @@ bool CDM_ScriptProblem::solutionConfigureStepInputParams()
 
 bool CDM_ScriptProblem::solutionConfigureStepPostParams()
 {
-    if(m_configureStep != NULL)
+    if(m_configureStep != nullptr)
     {
         if(m_configureStep->showPostConfigurationDialog())
             m_configureStepWellConfigured = true;

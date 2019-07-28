@@ -4,7 +4,7 @@
 
 ObjectAttributesProvider::ObjectAttributesProvider()
 {
-    m_accessor = NULL;
+    m_accessor = nullptr;
     m_mutex = new QMutex(QMutex::Recursive);
 }
 

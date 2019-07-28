@@ -19,7 +19,7 @@
 CDM_StepsMenuManager::CDM_StepsMenuManager()
 {
     m_menuOfSteps = new CT_StepsMenu();
-    m_pluginManager = NULL;
+    m_pluginManager = nullptr;
 }
 
 CDM_StepsMenuManager::~CDM_StepsMenuManager()
@@ -47,7 +47,7 @@ void CDM_StepsMenuManager::saveFavoritesTo(const QString &filepath)
 {
     CT_MenuLevel *favorites = m_menuOfSteps->levelFromOperation(CT_StepsMenu::LO_Favorites);
 
-    if(favorites != NULL) {
+    if(favorites != nullptr) {
         QFile xmlDoc(filepath);
 
         if(xmlDoc.open(QIODevice::WriteOnly)) {
@@ -149,8 +149,8 @@ void CDM_StepsMenuManager::loadFavoritesFrom(const QString &filepath)
 
 void CDM_StepsMenuManager::readLevelAndAddItToFavoritesRecursively(CT_MenuLevel *parentLevel, QXmlStreamReader &xmlReader)
 {
-    if(parentLevel != NULL) {
-        CT_MenuLevel *thisLevel = NULL;
+    if(parentLevel != nullptr) {
+        CT_MenuLevel *thisLevel = nullptr;
 
         while(!xmlReader.atEnd()) {
 
@@ -173,7 +173,7 @@ void CDM_StepsMenuManager::readLevelAndAddItToFavoritesRecursively(CT_MenuLevel 
 
 void CDM_StepsMenuManager::readStepAndAddItToLevel(CT_MenuLevel *parentLevel, QXmlStreamReader &xmlReader)
 {
-    if(parentLevel != NULL) {
+    if(parentLevel != nullptr) {
         QString pluginName;
         QString stepKey;
 
@@ -196,11 +196,11 @@ void CDM_StepsMenuManager::readStepAndAddItToLevel(CT_MenuLevel *parentLevel, QX
 
                 CT_AbstractStepPlugin *plugin = m_pluginManager->getPlugin(pluginName);
 
-                if(plugin != NULL) {
+                if(plugin != nullptr) {
                     CT_VirtualAbstractStep *step = plugin->getStepFromKey(stepKey);
 
-                    if(step != NULL) {
-                        parentLevel->addStep(plugin->createNewInstanceOfStep(*step, NULL));
+                    if(step != nullptr) {
+                        parentLevel->addStep(plugin->createNewInstanceOfStep(*step, nullptr));
                         added = true;
                     }
                 }

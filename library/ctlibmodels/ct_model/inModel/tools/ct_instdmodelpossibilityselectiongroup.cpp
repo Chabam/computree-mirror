@@ -36,7 +36,7 @@ bool CT_InStdModelPossibilitySelectionGroup::removePossibility(const CT_InStdMod
     CT_InStdModelPossibility* pp = const_cast<CT_InStdModelPossibility*>(p);
 
     if(m_possibilitiesSaved.removeOne(pp)) {
-        pp->setSelectionGroup(NULL);
+        pp->setSelectionGroup(nullptr);
         return true;
     }
 

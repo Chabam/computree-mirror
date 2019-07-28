@@ -69,7 +69,7 @@ QWidget* CT_ButtonGroup::createWidget(QWidget &parent)
 {
     Q_UNUSED(parent)
 
-    return NULL;
+    return nullptr;
 }
 
 void CT_ButtonGroup::updateValue()
@@ -96,9 +96,9 @@ bool CT_ButtonGroup::setWidgetValue(QVariant val)
     {
         ok = false;
 
-        CT_RadioButton *button = _data._rbList.value(id, NULL);
+        CT_RadioButton *button = _data._rbList.value(id, nullptr);
 
-        if(button != NULL)
+        if(button != nullptr)
         {
             ok = true;
             button->setWidgetValue(val);
@@ -110,7 +110,7 @@ bool CT_ButtonGroup::setWidgetValue(QVariant val)
 
 bool CT_ButtonGroup::addRadioButton(CT_RadioButton *button)
 {
-    if((button != NULL)
+    if((button != nullptr)
             && (!_data._rbList.contains(button->getId())))
     {
         _bGCreated->addButton((QRadioButton*)button->createWidget(*_data._parent), button->getId());

@@ -16,7 +16,7 @@ AMKglViewer::AMKglViewer(const IGraphicsDocument* doc, QWidget *parent) :
 {
     setAttribute(Qt::WA_NoSystemBackground);
 
-    m_document = NULL;
+    m_document = nullptr;
     m_debugModeEnabled = false;
 
     m_pickingAction = new ActionPickAnyElements();
@@ -30,8 +30,8 @@ AMKglViewer::AMKglViewer(const IGraphicsDocument* doc, QWidget *parent) :
     //camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
 
     m_inFastDraw = false;
-    m_permanentItemScene = NULL;
-    m_newOpenglContext = NULL;
+    m_permanentItemScene = nullptr;
+    m_newOpenglContext = nullptr;
 
     m_painter = new QPainter();
     m_drawInfo = new DrawInfo(*m_painter, this);
@@ -50,7 +50,7 @@ AMKglViewer::AMKglViewer(const IGraphicsDocument* doc, QWidget *parent) :
 
 AMKglViewer::~AMKglViewer()
 {
-    setPermanentSceneToRender(NULL);
+    setPermanentSceneToRender(nullptr);
 
 	delete m_pickingAction;
     delete m_drawInfo;
@@ -72,14 +72,14 @@ void AMKglViewer::setPermanentSceneToRender(const PermanentSceneToRender *scene)
     if(scene == m_permanentItemScene)
         return;
 
-    if(m_permanentItemScene != NULL) {
-        disconnect(m_permanentItemScene, NULL, this, NULL);
+    if(m_permanentItemScene != nullptr) {
+        disconnect(m_permanentItemScene, nullptr, this, nullptr);
         m_permanentItemScene->removedFrom(getDocument(), getNewOpenGlContext());
     }
 
     m_permanentItemScene = (PermanentSceneToRender*)scene;
 
-    if(m_permanentItemScene != NULL) {
+    if(m_permanentItemScene != nullptr) {
 
         m_permanentItemScene->addedTo(getDocument(), getNewOpenGlContext());
 
@@ -166,7 +166,7 @@ void AMKglViewer::init()
 
     m_newOpenglContext = context();
 
-    Q_ASSERT(m_newOpenglContext != NULL);
+    Q_ASSERT(m_newOpenglContext != nullptr);
 
     connect(m_newOpenglContext, SIGNAL(aboutToBeDestroyed()), this, SLOT(teardownGL()), Qt::DirectConnection);
 
@@ -180,7 +180,7 @@ void AMKglViewer::init()
     AMKglLOG->addDebugMessage(QString("gl version : %1 [%2.%3]").arg(QString((const char*)glV)).arg(getNewOpenGlContext()->format().majorVersion()).arg(getNewOpenGlContext()->format().minorVersion()));
     AMKglLOG->addDebugMessage(QString("gl shader version : %1").arg(QString((const char*)glShV)));
 
-    if((m_document != NULL) && (m_permanentItemScene == NULL))
+    if((m_document != nullptr) && (m_permanentItemScene == nullptr))
         setPermanentSceneToRender(m_document->getPermanentSceneToRender());
 }
 
@@ -232,7 +232,7 @@ void AMKglViewer::preDraw()
     m_camera->m_useNormalCamera = false;
     m_camera->loadModelViewMatrix(true);
 
-    if(getPermanentSceneToRender() != NULL)
+    if(getPermanentSceneToRender() != nullptr)
         getPermanentSceneToRender()->preDraw(*m_drawInfo);
 }
 
@@ -245,7 +245,7 @@ void AMKglViewer::draw()
         return;
     }
 
-    if(getPermanentSceneToRender() != NULL) {
+    if(getPermanentSceneToRender() != nullptr) {
         if(getPermanentSceneToRender()->mustReduceNumberOfPointsInNormalDraw()) {
             m_inFastDraw = true;
             getPermanentSceneToRender()->fastDraw(*m_drawInfo);
@@ -259,7 +259,7 @@ void AMKglViewer::fastDraw()
 {
     m_inFastDraw = false;
 
-    if(getPermanentSceneToRender() != NULL) {
+    if(getPermanentSceneToRender() != nullptr) {
 
         if(!getPermanentSceneToRender()->mustReduceNumberOfPointsInNormalDraw()
                 && !getPermanentSceneToRender()->mustReduceNumberOfPointsInFastDraw()) {
@@ -319,7 +319,7 @@ void AMKglViewer::postDraw()
         m_drawInfo->drawText(s);
     }*/
 
-    /*if(m_permanentScene != NULL)
+    /*if(m_permanentScene != nullptr)
         m_permanentScene->postDraw(*m_drawInfo);*/
 
     m_painter->end();
@@ -436,7 +436,7 @@ bool AMKglViewer::isDebugModeEnabled() const
 
 void AMKglViewer::teardownGL()
 {
-    if(getPermanentSceneToRender() != NULL)
+    if(getPermanentSceneToRender() != nullptr)
         getPermanentSceneToRender()->destroyGL(getNewOpenGlContext());
 }
 

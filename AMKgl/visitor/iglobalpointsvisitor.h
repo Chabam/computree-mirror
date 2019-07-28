@@ -12,7 +12,7 @@
  */
 class IGlobalPointsVisitor {
 public:
-    IGlobalPointsVisitor() : m_currentChunk(NULL) {}
+    IGlobalPointsVisitor() : m_currentChunk(nullptr) {}
     virtual ~IGlobalPointsVisitor() {}
 
     /**

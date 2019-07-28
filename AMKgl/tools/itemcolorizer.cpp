@@ -7,9 +7,9 @@
 
 ItemColorizer::ItemColorizer()
 {
-    m_sceneToVisit = NULL;
-    m_scene = NULL;
-    m_item = NULL;
+    m_sceneToVisit = nullptr;
+    m_scene = nullptr;
+    m_item = nullptr;
 }
 
 void ItemColorizer::setSceneToVisit(const PermanentItemSceneByModel *scene)
@@ -19,10 +19,10 @@ void ItemColorizer::setSceneToVisit(const PermanentItemSceneByModel *scene)
 
 void ItemColorizer::setScene(const PermanentItemScene *scene)
 {
-    m_itemInfo = NULL;
+    m_itemInfo = nullptr;
     m_scene = (PermanentItemScene*)scene;
 
-    if((m_scene != NULL) && (m_item != NULL))
+    if((m_scene != nullptr) && (m_item != nullptr))
         m_itemInfo = m_scene->getPermanentItemInformation(m_item);
 }
 
@@ -38,8 +38,8 @@ void ItemColorizer::setColor(const QColor &color)
 
 void ItemColorizer::apply()
 {
-    if((m_sceneToVisit != NULL)
-            && (m_item != NULL))
+    if((m_sceneToVisit != nullptr)
+            && (m_item != nullptr))
         m_sceneToVisit->visitObjectsOfOneItem(m_item, *this);
 }
 
@@ -54,17 +54,17 @@ void ItemColorizer::staticSetColorToItem(const AMKgl::Item *item, const QColor &
 
 void ItemColorizer::visitChunk(const IChunk* chunk)
 {
-    if(m_itemInfo != NULL) {
+    if(m_itemInfo != nullptr) {
         DispatchInformation* objInfos = m_itemInfo->getObjectInformationForChunk(chunk);
 
-        Q_ASSERT(objInfos != NULL);
+        Q_ASSERT(objInfos != nullptr);
 
         const size_t count = objInfos->count();
 
         if(count > 0) {
             Basic::AbstractColorCloud* colorCloud = ((IChunk*)chunk)->createOrGetObjectColorCloud();
 
-            Q_ASSERT(colorCloud != NULL);
+            Q_ASSERT(colorCloud != nullptr);
 
             const size_t begin = objInfos->begin();
             size_t index = objInfos->begin() + count;

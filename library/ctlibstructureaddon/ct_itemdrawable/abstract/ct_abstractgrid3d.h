@@ -59,6 +59,22 @@ public:
                       size_t dimy,
                       size_t dimz,
                       double resolution);
+
+    CT_AbstractGrid3D(double xmin,
+                      double ymin,
+                      double zmin,
+                      size_t dimx,
+                      size_t dimy,
+                      size_t dimz,
+                      double resolution);
+
+    CT_AbstractGrid3D(double xmin,
+                      double ymin,
+                      double zmin,
+                      double xmax,
+                      double ymax,
+                      double zmax,
+                      double resolution);
     CT_AbstractGrid3D(const CT_AbstractGrid3D& other) = default;
 
     /*!
@@ -375,12 +391,62 @@ public:
                                        bottom);
     }
 
+    /*!
+     * \brief Factory with min and max (X,Y,Z) coordinates
+     *
+     * \param model Item model for creation
+     * \param result Result containing the item
+     * \param xmin Minimum X coordinate (bottom left corner)
+     * \param ymin Minimum Y coordinate (bottom left corner)
+     * \param zmin Minimum Z coordinate (bottom left corner)
+     * \param xmax Maximum X coordinate (upper right corner)
+     * \param ymax Maximum Y coordinate (upper right corner)
+     * \param zmax Maximum Z coordinate (upper right corner)
+     * \param resolution Size of a cell
+     * \param coordConstructor Not used, only to ensure constructor different signatures
+     */
+    template<class GridType, typename... OtherArgs>
+    static GridType* CreateGrid3DTFromXYZCoords(double xmin,
+                                                double ymin,
+                                                double zmin,
+                                                double xmax,
+                                                double ymax,
+                                                double zmax,
+                                                double resolution,
+                                                bool extends,
+                                                OtherArgs... args)
+    {
+        size_t dimx = ceil((xmax - xmin)/resolution);
+        size_t dimy = ceil((ymax - ymin)/resolution);
+        size_t dimz = ceil((zmax - zmin)/resolution);
+
+        if (extends)
+        {
+            // to ensure a point exactly on a maximum limit of the grid will be included in the grid
+            while (xmax >= (xmin + dimx * resolution))
+            {
+                dimx++;
+            }
+
+            while (ymax >= (ymin + dimy * resolution))
+            {
+                dimy++;
+            }
+
+            while (zmax >= (zmin + dimz * resolution))
+            {
+                dimz++;
+            }
+        }
+
+        return new GridType(xmin, ymin, zmin, dimx, dimy, dimz, resolution, args...);
+    }
+
 protected:
     size_t         _dimx;      /*!< Nombre de cases selon x du grid*/
     size_t         _dimy;      /*!< Nombre de cases selon y du grid*/
     size_t         _dimz;      /*!< Nombre de cases selon z du grid*/
     double          _res;       /*!< Resolution de la grille (taille d'une case*/
-
 };
 
 #endif // CT_ABSTRACTGRID3D_H

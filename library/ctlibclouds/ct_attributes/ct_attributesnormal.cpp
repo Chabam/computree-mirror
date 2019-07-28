@@ -6,7 +6,7 @@ CT_AttributesNormal::CT_AttributesNormal(CT_AbstractNormalCloud* cloud)
 }
 
 CT_AttributesNormal::CT_AttributesNormal(const CT_AttributesNormal& other) :
-    m_normalCloud((other.m_normalCloud != NULL) ? dynamic_cast<CT_AbstractNormalCloud*>(other.m_normalCloud->copy()) : NULL)
+    m_normalCloud((other.m_normalCloud != nullptr) ? dynamic_cast<CT_AbstractNormalCloud*>(other.m_normalCloud->copy()) : nullptr)
 {
 }
 

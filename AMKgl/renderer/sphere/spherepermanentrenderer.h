@@ -40,7 +40,7 @@ public:
                    const double &initPhi, const double &endPhi,
                    bool phiThetaInRadians = true,
                    const ElementInfo &info = 0,
-                   IChunk** chunk = NULL);
+                   IChunk** chunk = nullptr);
 
 
     /**

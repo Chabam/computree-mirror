@@ -3,17 +3,17 @@
 CT_OutAbstractModel::CT_OutAbstractModel(const QString& displayableName) :
     SuperClass(displayableName),
     m_uniqueIndex(-1),
-    m_originalModel(NULL),
-    m_realResult(NULL),
-    m_item(NULL)
+    m_originalModel(nullptr),
+    m_realResult(nullptr),
+    m_item(nullptr)
 {
 }
 
 CT_OutAbstractModel::CT_OutAbstractModel(const CT_OutAbstractModel& other) : SuperClass(other),
     m_uniqueIndex(other.m_uniqueIndex),
-    m_originalModel(NULL), // original model not set here because we will connect to signal of the original model in method "setOriginalModel"
+    m_originalModel(nullptr), // original model not set here because we will connect to signal of the original model in method "setOriginalModel"
     m_realResult(other.m_realResult),
-    m_item(NULL) // item not copied !
+    m_item(nullptr) // item not copied !
 {
     setOriginalModel(const_cast<CT_OutAbstractModel*>(&other));
 }
@@ -35,7 +35,7 @@ CT_OutAbstractModel::UniqueIndexType CT_OutAbstractModel::uniqueIndex() const
 
 CT_OutAbstractModel* CT_OutAbstractModel::recursiveOriginalModel() const
 {
-    if(m_originalModel != NULL)
+    if(m_originalModel != nullptr)
         return m_originalModel->recursiveOriginalModel();
 
     return const_cast<CT_OutAbstractModel*>(this);
@@ -43,7 +43,7 @@ CT_OutAbstractModel* CT_OutAbstractModel::recursiveOriginalModel() const
 
 CT_OutAbstractModel* CT_OutAbstractModel::originalModel() const
 {
-    if(m_originalModel != NULL)
+    if(m_originalModel != nullptr)
         return m_originalModel;
 
     return const_cast<CT_OutAbstractModel*>(this);
@@ -51,32 +51,32 @@ CT_OutAbstractModel* CT_OutAbstractModel::originalModel() const
 
 CT_OutAbstractModel* CT_OutAbstractModel::recursiveOriginalModelWithAResult() const
 {
-    CT_OutAbstractModel* lastModel = NULL;
+    CT_OutAbstractModel* lastModel = nullptr;
     CT_OutAbstractModel* oModel = const_cast<CT_OutAbstractModel*>(this);
 
     do
     {
-        if(oModel->m_realResult != NULL)
+        if(oModel->m_realResult != nullptr)
             lastModel = oModel;
 
         oModel = oModel->m_originalModel;
-    }while(oModel != NULL);
+    }while(oModel != nullptr);
 
     return lastModel;
 }
 
 CT_OutAbstractModel* CT_OutAbstractModel::recursiveOriginalModelWithAStep() const
 {
-    CT_OutAbstractModel* lastModel = NULL;
+    CT_OutAbstractModel* lastModel = nullptr;
     CT_OutAbstractModel* oModel = const_cast<CT_OutAbstractModel*>(this);
 
     do
     {
-        if(oModel->step() != NULL)
+        if(oModel->step() != nullptr)
             lastModel = oModel;
 
         oModel = oModel->m_originalModel;
-    }while(oModel != NULL);
+    }while(oModel != nullptr);
 
     return lastModel;
 }
@@ -86,7 +86,7 @@ bool CT_OutAbstractModel::isVisible() const
     return !m_visibleInDocuments.isEmpty() || [this]() -> bool {
         const CT_OutAbstractModel* oModel = this->recursiveOriginalModelWithAResult();
 
-        if((oModel != NULL) && (oModel != this))
+        if((oModel != nullptr) && (oModel != this))
             return oModel->isVisible();
 
         return false;
@@ -98,7 +98,7 @@ bool CT_OutAbstractModel::isVisibleInDocument(const IDocumentForModel* doc) cons
     return (m_visibleInDocuments.value(const_cast<IDocumentForModel*>(doc), 0) > 0) || [this, &doc]() -> bool {
         const CT_OutAbstractModel* oModel = this->recursiveOriginalModelWithAResult();
 
-        if((oModel != NULL) && (oModel != this))
+        if((oModel != nullptr) && (oModel != this))
             return oModel->isVisibleInDocument(doc);
 
         return false;
@@ -147,12 +147,12 @@ void CT_OutAbstractModel::setResult(const IResultForModel* res)
 
 void CT_OutAbstractModel::setOriginalModel(const CT_OutAbstractModel* model)
 {
-    if(m_originalModel != NULL)
-        disconnect(m_originalModel, NULL, this, NULL);
+    if(m_originalModel != nullptr)
+        disconnect(m_originalModel, nullptr, this, nullptr);
 
     m_originalModel = const_cast<CT_OutAbstractModel*>(model);
 
-    if(m_originalModel != NULL)
+    if(m_originalModel != nullptr)
     {
         connect(m_originalModel, SIGNAL(visibilityChanged(bool)), this, SIGNAL(visibilityChanged(bool)), Qt::DirectConnection);
         connect(m_originalModel, SIGNAL(destroyed()), this, SLOT(originalModelDestroyed()), Qt::DirectConnection);
@@ -164,14 +164,14 @@ void CT_OutAbstractModel::setPrototype(IPrototypeForModel* item)
     deleteAndClearItem();
     m_item = item;
 
-    if(m_item != NULL)
+    if(m_item != nullptr)
         m_item->prototypeToolForModel()->setModel(this);
 }
 
 void CT_OutAbstractModel::deleteAndClearItem()
 {
     delete m_item;
-    m_item = NULL;
+    m_item = nullptr;
 }
 
 void CT_OutAbstractModel::incrementVisibilityInDocument(const IDocumentForModel* doc)
@@ -235,5 +235,5 @@ bool CT_OutAbstractModel::finalize()
 
 void CT_OutAbstractModel::originalModelDestroyed()
 {
-    m_originalModel = NULL;
+    m_originalModel = nullptr;
 }

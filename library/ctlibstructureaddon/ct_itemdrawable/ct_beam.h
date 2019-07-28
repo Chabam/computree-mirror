@@ -55,9 +55,9 @@ public:
     *  \brief Default constructor
     *
     *  Default constructor of the class
-    *  Each attribute will be set to 0 or NULL
+    *  Each attribute will be set to 0 or nullptr
     *  Each vector will be empty
-    *  \warning All will be set to 0 or NULL exept the direction which is (1,0,0) by default (a ray can not have a direction equals to (0,0,0) ).
+    *  \warning All will be set to 0 or nullptr exept the direction which is (1,0,0) by default (a ray can not have a direction equals to (0,0,0) ).
     *
     */
     CT_Beam();
@@ -86,7 +86,7 @@ public:
      *          - Origin and direction (shot)
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */

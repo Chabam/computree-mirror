@@ -14,8 +14,8 @@ CT_NodeT::CT_NodeT(Eigen::Vector3d *point, QObject *associate_object, bool toBeD
 CT_NodeT::~CT_NodeT()
 {
     if (_deletePoint) {delete[] _point;}
-    _point = NULL;
-    _associate_object = NULL;
+    _point = nullptr;
+    _associate_object = nullptr;
 }
 
 void CT_NodeT::clear()

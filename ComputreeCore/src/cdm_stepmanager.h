@@ -50,11 +50,11 @@ public:
      *  \brief Ajout d'une etape
      *
      *  \param step : L'etape a ajouter.
-     *  \param parent : L'etape parente a laquelle ajouter cette etape, ou NULL si l'ajout de l'etape doit se faire a la racine
+     *  \param parent : L'etape parente a laquelle ajouter cette etape, ou nullptr si l'ajout de l'etape doit se faire a la racine
      *
      *  \return true si l'ajout est effectif, false sinon.
      */
-    bool addStep(CT_VirtualAbstractStep *step, CT_VirtualAbstractStep *parent = NULL);
+    bool addStep(CT_VirtualAbstractStep *step, CT_VirtualAbstractStep *parent = nullptr);
 
     /*!
      *  \brief Suppression d'une etape
@@ -97,7 +97,7 @@ public:
 
     /*!
      *  \brief Retourne vrai si au moins une etape fille de l'etape passe en paramtre est en mode debug (recursif). L'etape en parametre
-     *         peut etre NULL, alors le test s'effectura a partir des etapes du tronc de l'arbre.
+     *         peut etre nullptr, alors le test s'effectura a partir des etapes du tronc de l'arbre.
      */
     bool checkOneStepIsInDebugModeFromStep(CT_VirtualAbstractStep *step) const;
 
@@ -126,17 +126,17 @@ public slots:
     /*!
      *  \brief Lancement des traitements
      *
-     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. NULL si on desire lancer les traitements
+     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. nullptr si on desire lancer les traitements
      *                     a partir de la premiere etape qui a subit des modifications.
      *
      *  \return false si des traitements sont deja en cours, true si le lancement c'est bien passe.
      */
-    bool executeStep(CT_VirtualAbstractStep *beginStep = NULL);
+    bool executeStep(CT_VirtualAbstractStep *beginStep = nullptr);
 
     /*!
      *  \brief Lancement des traitements manuels
      *
-     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. Ne peut être NULL.
+     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. Ne peut être nullptr.
      *
      *  \return false si des traitements sont deja en cours, true si le lancement c'est bien passe.
      */
@@ -145,35 +145,35 @@ public slots:
     /*!
      *  \brief Lancement des traitements en mode debug OU avancer de 1 pas
      *
-     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. NULL si on desire lancer les traitements
+     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. nullptr si on desire lancer les traitements
      *                     a partir de la premiere etape qui a subit des modifications. EVIDEMMENT : Si une etape attend un ack de debug ce parametre
      *                     n'est pas pris en compte.
      *
      *  \return false si aucun traitements n'attend de ack ou si un lancement en mode non debug a deja ete effectue, true si le lancement c'est bien passe.
      */
-    bool executeOrForwardStepInDebugMode(CT_VirtualAbstractStep *beginStep = NULL);
+    bool executeOrForwardStepInDebugMode(CT_VirtualAbstractStep *beginStep = nullptr);
 
     /*!
      *  \brief Lancement des traitements en mode debug ou avancer de N pas
      *
-     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. NULL si on desire lancer les traitements
+     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. nullptr si on desire lancer les traitements
      *                     a partir de la premiere tape qui a subit des modifications. EVIDEMMENT : Si une etape attend un ack de debug ce parametre
      *                     n'est pas pris en compte.
      *
      *  \return false si aucun traitements n'attend de ack ou si un lancement en mode non debug a deja ete effectue, true si le lancement c'est bien passe.
      */
-    bool executeOrForwardStepFastInDebugMode(CT_VirtualAbstractStep *beginStep = NULL);
+    bool executeOrForwardStepFastInDebugMode(CT_VirtualAbstractStep *beginStep = nullptr);
 
     /*!
      *  \brief Lancement des traitements en mode debug OU avancer de 1 pas en mode avance automatique
      *
-     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. NULL si on desire lancer les traitements
+     *  \param beginStep : L'etape a partir de laquelle lancer les traitements. nullptr si on desire lancer les traitements
      *                     a partir de la premiere etape qui a subit des modifications. EVIDEMMENT : Si une etape attend un ack de debug ce parametre
      *                     n'est pas pris en compte.
      *
      *  \return false si aucun traitements n'attend de ack ou si un lancement en mode non debug a deja ete effectue, true si le lancement c'est bien passe.
      */
-    bool executeOrForwardStepAutoInDebugMode(CT_VirtualAbstractStep *beginStep = NULL);
+    bool executeOrForwardStepAutoInDebugMode(CT_VirtualAbstractStep *beginStep = nullptr);
 
     /**
      * @brief Quit the manual mode of the current step

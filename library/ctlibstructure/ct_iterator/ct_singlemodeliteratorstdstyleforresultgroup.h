@@ -18,18 +18,18 @@ public:
         return CT_HandleIteratorT<self_type>(self_type(outModel), self_type());
     }
 
-    CT_SingleModelIteratorStdStyleForResultGroup() : m_result(NULL), m_currentValue(NULL), m_currentParent(NULL), m_currentIndexInHierarchy(-1) {}
+    CT_SingleModelIteratorStdStyleForResultGroup() : m_result(nullptr), m_currentValue(nullptr), m_currentParent(nullptr), m_currentIndexInHierarchy(-1) {}
 
-    CT_SingleModelIteratorStdStyleForResultGroup(const OutModelType* outModel) : m_result(NULL), m_currentValue(NULL), m_currentParent(NULL), m_currentIndexInHierarchy(-1) {
-        Q_ASSERT(outModel != NULL);
+    CT_SingleModelIteratorStdStyleForResultGroup(const OutModelType* outModel) : m_result(nullptr), m_currentValue(nullptr), m_currentParent(nullptr), m_currentIndexInHierarchy(-1) {
+        Q_ASSERT(outModel != nullptr);
 
         m_result = static_cast<CT_ResultGroup*>(outModel->result());
 
-        Q_ASSERT(m_result != NULL);
+        Q_ASSERT(m_result != nullptr);
 
         OutModelType* m = const_cast<OutModelType*>(outModel);
 
-        while(m != NULL) {
+        while(m != nullptr) {
             m_modelsHierarchy.prepend(m);
             m = static_cast<OutModelType*>(m->parentModel());
         }
@@ -72,11 +72,11 @@ public:
     }
 
     self_type& operator++() {
-        if(m_currentValue == NULL)
+        if(m_currentValue == nullptr)
             return *this;
 
         if(m_currentIndexInHierarchy == -1) {
-            m_currentValue = NULL;
+            m_currentValue = nullptr;
             return *this;
         }
 
@@ -98,7 +98,7 @@ public:
                 m_currentValue = static_cast<ValueT*>(*m_iteratorHierarchy[m_currentIndexInHierarchy].first); // got it !
             }
             else
-                m_currentValue = NULL;
+                m_currentValue = nullptr;
         } else {
             m_currentValue = static_cast<ValueT*>(*its.first); // got it !
         }

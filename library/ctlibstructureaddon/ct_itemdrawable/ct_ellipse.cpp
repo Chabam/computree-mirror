@@ -144,8 +144,8 @@ CT_Ellipse* CT_Ellipse::staticCreateZAxisAlignedEllipseFromPointCloud(const CT_A
 {
     CT_EllipseData* data = CT_EllipseData::staticCreateZAxisAlignedEllipseDataFromPointCloud(pointCloudIndex);
 
-    if(data == NULL)
-        return NULL;
+    if(data == nullptr)
+        return nullptr;
 
     return new CT_Ellipse(data);
 }

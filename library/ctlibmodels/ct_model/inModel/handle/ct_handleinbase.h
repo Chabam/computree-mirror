@@ -1,11 +1,11 @@
 #ifndef CT_HANDLEINBASE_H
 #define CT_HANDLEINBASE_H
 
-#include "ct_model/handle/ct_handleminmaxwithmodelt.h"
+#include "ct_model/inModel/handle/ct_inhandleminmaxwithmodelt.h"
 #include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
 
 template<class ModelType, int min = 1, int max = 1>
-class CT_HandleInBase : public CT_HandleMinMaxWithModelT<ModelType, min, max> {
+class CT_HandleInBase : public CT_InHandleMinMaxWithModelT<ModelType, min, max> {
 public:
 
     /**
@@ -19,10 +19,10 @@ public:
      */
     template<class HandleInResult>
     ModelType* modelForPossibilities(const HandleInResult& inResult, const int& inResultPossibilityIndex = 0) const {
-        MODELS_ASSERT(model() != NULL);
-        MODELS_ASSERT(inResult.model() != NULL);
+        MODELS_ASSERT(model() != nullptr);
+        MODELS_ASSERT(inResult.model() != nullptr);
         MODELS_ASSERT(inResult.model()->nPossibilitySaved() > inResultPossibilityIndex);
-        MODELS_ASSERT(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel() != NULL);
+        MODELS_ASSERT(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel() != nullptr);
 
         return static_cast<ModelType*>(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(model()));
     }

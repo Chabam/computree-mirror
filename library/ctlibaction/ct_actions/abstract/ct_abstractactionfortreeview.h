@@ -13,7 +13,7 @@
  *        To convert a QStandardItem to a ItemDrawable use the method "itemDrawableFromItem" on
  *        a TreeViewInterface
  *
- * @warning Test if the ItemDrawable returned is not NULL !
+ * @warning Test if the ItemDrawable returned is not nullptr !
  *
  *        If you want to make drag&drop see the drag&drop example http://qt-project.org/doc/qt-4.8/dnd.html
  *

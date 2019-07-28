@@ -67,7 +67,7 @@ CT_GroupBox* CT_GenericConfigurableWidget::addNewGroupBox(const QString &title)
         return gpw;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool CT_GenericConfigurableWidget::addText(const QString &firstColumnLabelText,
@@ -96,7 +96,7 @@ bool CT_GenericConfigurableWidget::addTitle(const QString &text,
     return addText(text, "", "", description);
 }
 
-bool CT_GenericConfigurableWidget::addInt(const QString &beforeLabelText,
+CT_SpinBox* CT_GenericConfigurableWidget::addInt(const QString &beforeLabelText,
                                           const QString &afterLabelText,
                                           const int &minValue,
                                           const int &maxValue,
@@ -115,13 +115,13 @@ bool CT_GenericConfigurableWidget::addInt(const QString &beforeLabelText,
 
         addRow();
 
-        return true;
+        return spinBox;
     }
 
-    return false;
+    return nullptr;
 }
 
-bool CT_GenericConfigurableWidget::addDouble(const QString &beforeLabelText,
+CT_DoubleSpinBox* CT_GenericConfigurableWidget::addDouble(const QString &beforeLabelText,
                                              const QString &afterLabelText,
                                              const double &minValue,
                                              const double &maxValue,
@@ -142,13 +142,13 @@ bool CT_GenericConfigurableWidget::addDouble(const QString &beforeLabelText,
 
         addRow();
 
-        return true;
+        return spinBox;
     }
 
-    return false;
+    return nullptr;
 }
 
-bool CT_GenericConfigurableWidget::addBool(const QString &beforeLabelText,
+CT_CheckBox* CT_GenericConfigurableWidget::addBool(const QString &beforeLabelText,
                                            const QString &afterLabelText,
                                            const QString &checkBoxText,
                                            bool &valueToUpdate,
@@ -166,13 +166,13 @@ bool CT_GenericConfigurableWidget::addBool(const QString &beforeLabelText,
 
         addRow();
 
-        return true;
+        return checkBox;
     }
 
-    return false;
+    return nullptr;
 }
 
-bool CT_GenericConfigurableWidget::addString(const QString &beforeLabelText,
+CT_LineEdit* CT_GenericConfigurableWidget::addString(const QString &beforeLabelText,
                                              const QString &afterLabelText,
                                              QString &valueToUpdate,
                                              const QString &description)
@@ -189,13 +189,13 @@ bool CT_GenericConfigurableWidget::addString(const QString &beforeLabelText,
 
         addRow();
 
-        return true;
+        return lineEdit;
     }
 
-    return false;
+    return nullptr;
 }
 
-bool CT_GenericConfigurableWidget::addMultiString(const QString &beforeLabelText,
+CT_MultiLineEdit* CT_GenericConfigurableWidget::addMultiString(const QString &beforeLabelText,
                                                   const QString &afterLabelText,
                                                   QString &valueToUpdate,
                                                   const QString &description)
@@ -212,10 +212,10 @@ bool CT_GenericConfigurableWidget::addMultiString(const QString &beforeLabelText
 
         addRow();
 
-        return true;
+        return lineEdit;
     }
 
-    return false;
+    return nullptr;
 }
 
 CT_ComboBox* CT_GenericConfigurableWidget::addStringChoice(const QString &beforeLabelText,
@@ -224,7 +224,7 @@ CT_ComboBox* CT_GenericConfigurableWidget::addStringChoice(const QString &before
                                                            QString &valueToUpdate,
                                                            const QString &description)
 {
-    CT_ComboBox *comboBox = NULL;
+    CT_ComboBox *comboBox = nullptr;
 
     if(canEdit())
     {
@@ -302,7 +302,7 @@ CT_FileChoiceButton* CT_GenericConfigurableWidget::addFileChoice(const QString &
                                                                  const QString &beforeLabelText,
                                                                  const QString &afterLabelText)
 {
-    CT_FileChoiceButton *fileChoiceButton = NULL;
+    CT_FileChoiceButton *fileChoiceButton = nullptr;
 
     if(canEdit())
     {
@@ -335,7 +335,7 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
                                                                            QMap<QString, int> &columns,
                                                                            QString description)
 {
-    CT_AsciiFileChoiceButton *fileChoiceButton = NULL;
+    CT_AsciiFileChoiceButton *fileChoiceButton = nullptr;
 
     if(canEdit())
     {
@@ -377,7 +377,7 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
                                                                            QMap<QString, int> &columns,
                                                                            QString description)
 {
-    CT_AsciiFileChoiceButton *fileChoiceButton = NULL;
+    CT_AsciiFileChoiceButton *fileChoiceButton = nullptr;
 
     if(canEdit())
     {

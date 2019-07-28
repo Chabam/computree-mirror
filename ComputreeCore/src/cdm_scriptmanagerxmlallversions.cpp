@@ -35,7 +35,7 @@ QString CDM_ScriptManagerXMLAllVersions::verifyScript(const QString &filePath)
 QString CDM_ScriptManagerXMLAllVersions::verifyScriptText(const QString &text)
 {
     for(SuperClass* manager : m_xmlManagers) {
-        if(dynamic_cast<CDM_HRScriptManagerXML*>(manager) != NULL)
+        if(dynamic_cast<CDM_HRScriptManagerXML*>(manager) != nullptr)
             return manager->verifyScriptText(text);
     }
 
@@ -55,7 +55,7 @@ QString CDM_ScriptManagerXMLAllVersions::loadScript(const QString &filePath, CDM
 QString CDM_ScriptManagerXMLAllVersions::loadScriptText(const QString &text, CDM_StepManager &stepManager)
 {
     for(SuperClass* manager : m_xmlManagers) {
-        if(dynamic_cast<CDM_HRScriptManagerXML*>(manager) != NULL)
+        if(dynamic_cast<CDM_HRScriptManagerXML*>(manager) != nullptr)
             return manager->loadScriptText(text, stepManager);
     }
 

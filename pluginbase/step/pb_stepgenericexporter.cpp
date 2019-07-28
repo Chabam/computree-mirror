@@ -1,61 +1,18 @@
 #include "pb_stepgenericexporter.h"
 
-#include "ct_exporter/abstract/ct_abstractexporterattributesselection.h"
-
-#include "ct_model/inModel/tools/ct_instdmodelpossibility.h"
-
-#include "ct_itemdrawable/model/inModel/ct_instdsingularitemmodel.h"
-
-#include "ct_itemdrawable/model/outModel/ct_outstdsingularitemmodel.h"
-#include "ct_itemdrawable/model/outModel/ct_outstdgroupmodel.h"
-#include "ct_itemdrawable/ct_loopcounter.h"
-
-#include "ct_result/model/inModel/ct_inresultmodelgrouptocopy.h"
-#include "ct_result/model/outModel/ct_outresultmodelgroupcopy.h"
-
-#include "ct_result/ct_resultgroup.h"
-#include "ct_view/ct_stepconfigurabledialog.h"
-
-
-#include "ct_step/ct_stepinitializedata.h"
-#include "ct_step/abstract/ct_abstractsteploadfile.h"
-
-#include "ct_model/tools/ct_modelsearchhelper.h"
-
 #include "tools/pb_exportertools.h"
+#include "ct_view/ct_checkbox.h"
+#include "loginterface.h"
 
 #include <QFileDialog>
 
-#include <QDebug>
-
-#define DEF_SearchInGroup           "g"
-#define DEF_SearchInItemDrawable    "i"
-#define DEF_SearchInItemDrawableAtt    "att"
-#define DEF_SearchInItemWithName    "iname"
-#define DEF_SearchInResultToExport  "r"
-
-#define DEFin_resCounter "resCounter"
-#define DEF_inGroupCounter "GroupCounter"
-#define DEF_inCounter "counter"
-
-
-PB_StepGenericExporter::PB_StepGenericExporter(CT_StepInitializeData &dataInit,
-                                               CT_AbstractExporter *exporter) : CT_AbstractStep(dataInit)
+PB_StepGenericExporter::PB_StepGenericExporter(CT_AbstractExporter *exporter) : SuperClass()
 {
     _adaptative = false;
     _multipleExport = false;
     _otherItem = false;
     _exporter = exporter;
-    _exporter->setMyStep(this);
-
-    CT_AbstractExporterAttributesSelection *ex = dynamic_cast<CT_AbstractExporterAttributesSelection*>(_exporter);
-
-    if(ex != NULL)
-        ex->setSearchOnlyModels(true);
-
     _exportPath = ".";
-
-    setStepCustomName(_exporter->getExporterCustomName());
 
     connect(_exporter, SIGNAL(exportInProgress(int)), this, SLOT(exportProgressChanged(int)));
     connect(this, SIGNAL(stopped()), _exporter, SLOT(cancel()), Qt::DirectConnection);
@@ -71,13 +28,36 @@ const CT_AbstractExporter *PB_StepGenericExporter::exporter() const
     return _exporter;
 }
 
-void PB_StepGenericExporter::init()
+QString PB_StepGenericExporter::name() const
 {
-    _exporter->init();
+    return _exporter->uniqueName();
+}
 
+QString PB_StepGenericExporter::displayableName() const
+{
+    return _exporter->displayableName();
+}
+
+QString PB_StepGenericExporter::description() const
+{
+    return tr("%1 : %2").arg(displayableName()).arg(createExportExtensionString());
+}
+
+QString PB_StepGenericExporter::detailledDescription() const
+{
+    QString t = _exporter->toolTip();
+
+    if(!t.isEmpty())
+        return t;
+
+    return tr("Exporte un(des) fichier(s) de type :") + createExportExtensionString();
+}
+
+/*void PB_StepGenericExporter::init()
+{
     QSettings *settings = _data->getSettingsFile();
 
-    if(settings != NULL)
+    if(settings != nullptr)
     {
         settings->beginGroup(getStepName());
 
@@ -86,60 +66,8 @@ void PB_StepGenericExporter::init()
         settings->endGroup();
     }
 
-    CT_AbstractStep::init();
-}
-
-QString PB_StepGenericExporter::getStepName() const
-{
-    return replaceBadCharacters(_exporter->getExporterName());
-}
-
-QString PB_StepGenericExporter::getStepDisplayableName() const
-{
-    return _exporter->getExporterName();
-}
-
-QString PB_StepGenericExporter::getStepDetailledDescription() const
-{
-    if(_exporter != NULL)
-    {
-        QString t = _exporter->toolTip();
-
-        if(!t.isEmpty())
-            return t;
-    }
-
-    QString tmp;
-
-    const QList<FileFormat> &ext = _exporter->exportFormats();
-    QListIterator<FileFormat> it(ext);
-
-    while(it.hasNext())
-    {
-        FileFormat ff = it.next();
-        QListIterator<QString> itS(ff.suffixes());
-        while(itS.hasNext())
-        {
-            tmp += "*." + itS.next();
-            if (itS.hasNext()) {tmp += " ";}
-        }
-    }
-
-    return tr("Exporte un(des) fichier(s) de type :") + tmp;
-}
-
-QString PB_StepGenericExporter::getStepDescription() const
-{
-    return ((CT_AbstractExporter*)_exporter)->getExporterCustomName();
-}
-
-CT_VirtualAbstractStep* PB_StepGenericExporter::createNewInstance(CT_StepInitializeData &dataInit)
-{
-    // cree une copie de cette etape
-    CT_VirtualAbstractStep* stepCopy = new PB_StepGenericExporter(dataInit, exporter()->copy());
-    stepCopy->setStepCustomName(getStepCustomName());
-    return stepCopy;
-}
+    SuperClass::init();
+}*/
 
 void PB_StepGenericExporter::saveInputSettings(SettingsWriterInterface &writer) const
 {
@@ -152,8 +80,6 @@ bool PB_StepGenericExporter::restoreInputSettings(SettingsReaderInterface &reade
 {
     if(!SuperClass::restoreInputSettings(reader))
         return false;
-
-    setItemsToExportFromModelsToExporter();
 
     return _exporter->restoreSettings(reader);
 }
@@ -176,90 +102,85 @@ bool PB_StepGenericExporter::restorePostSettings(SettingsReaderInterface &reader
     return true;
 }
 
-void PB_StepGenericExporter::createPreConfigurationDialog()
+CT_VirtualAbstractStep* PB_StepGenericExporter::createNewInstance() const
 {
-    CT_StepConfigurableDialog *configDialog = newStandardPreConfigurationDialog();
-
-    configDialog->addBool(tr("Nom adaptatif (dans une boucle)"), "", "", _adaptative);
-    configDialog->addBool(tr("Export Multiple"), "", "", _multipleExport);
-    configDialog->addBool(tr("Nom de fichier dans un autre item (si export multiple)"), "", "", _otherItem);
+    return new PB_StepGenericExporter(_exporter->copy());
 }
 
-//////////////////// PROTECTED //////////////////
-
-void PB_StepGenericExporter::createInResultModelListProtected()
+QString PB_StepGenericExporter::createExportExtensionString() const
 {
-    CT_InResultModelGroup *resultModel = createNewInResultModel(DEF_SearchInResultToExport, tr("Résultat"), "", true);
+    QString tmp;
 
-    resultModel->setZeroOrMoreRootGroup();
-    resultModel->addStdGroupModel("", DEF_SearchInGroup);
+    const QList<FileFormat> &ext = _exporter->exportFormats();
+    QListIterator<FileFormat> it(ext);
 
-    if(!_exporter->exportOnlyGroup())
-        resultModel->addStdItemModel(DEF_SearchInGroup, DEF_SearchInItemDrawable, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"));
-
-    if (_multipleExport)
+    while(it.hasNext())
     {
-        if (_otherItem)
+        FileFormat ff = it.next();
+        QListIterator<QString> itS(ff.suffixes());
+        while(itS.hasNext())
         {
-            resultModel->addStdItemModel(DEF_SearchInGroup, DEF_SearchInItemWithName, CT_AbstractSingularItemDrawable::staticGetType(), tr("ItemWithName"));
-            resultModel->addStdItemAttributeModel(DEF_SearchInItemWithName, DEF_SearchInItemDrawableAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::STRING, tr("Name"));
-        } else {
-            resultModel->addStdItemAttributeModel(DEF_SearchInItemDrawable, DEF_SearchInItemDrawableAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::STRING, tr("Name"));
+            tmp += "*." + itS.next();
+            if (itS.hasNext()) {tmp += " ";}
         }
     }
 
-    if (_adaptative)
-    {
-        CT_InResultModelGroup* resCounter = createNewInResultModel(DEFin_resCounter, tr("Résultat compteur"), "", true);
-        resCounter->setStdRootGroup(DEF_inGroupCounter);
-        resCounter->addStdItemModel(DEF_inGroupCounter, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
-    }
+    return tmp;
 }
 
-bool PB_StepGenericExporter::configureInputResult(bool forceReadOnly)
+void PB_StepGenericExporter::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    if(forceReadOnly)
-        return CT_VirtualAbstractStep::configureInputResult(forceReadOnly);
+    preInputConfigDialog->addBool(tr("Nom du fichier = nom du compteur de boucle"), "", "", _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
+    CT_CheckBox* cbEM = preInputConfigDialog->addBool(tr("Un item par fichier"), "", "", _multipleExport, tr("Si coché : \r- vous devrez choisir un attribut d'item contenant une chaine de caractère\r- chaque item sera exporté dans un fichier différent\r - le nom du fichier utilisera la chaine de caractère contenue dans l'attribut."));
+    CT_CheckBox* cbOI = preInputConfigDialog->addBool(tr("Nom du fichier contenu dans un attribut d'un autre item"), "", "", _otherItem, tr("Si coché : \r- L'attribut correspondra à l'item que vous devrez coché et non pas à l'item exporté"));
 
-    if(CT_VirtualAbstractStep::configureInputResult(forceReadOnly))
-        return configureExporter();
-
-    return false;
+    connect(cbEM, &CT_CheckBox::valueChanged, cbOI, &CT_CheckBox::setEnabled);
 }
 
-bool PB_StepGenericExporter::postConfigure()
+void PB_StepGenericExporter::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    // méthode appelée après avoir configuré les modèles d'entrées
+    _exporter->declareInputModels(manager, _adaptative, _multipleExport, _otherItem);
+}
 
+bool PB_StepGenericExporter::postInputConfigure()
+{
     QString exportFileName;
+
     if (_adaptative || _multipleExport)
-    {
-        exportFileName = QFileDialog::getExistingDirectory(NULL, tr("Exporter dans..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename);
-    } else {
-        const QString extensions = PB_ExporterTools::constructStringForFileDialog(_exporter);
-        exportFileName = QFileDialog::getSaveFileName(NULL, tr("Exporter sous..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename, extensions);
-    }
+        exportFileName = QFileDialog::getExistingDirectory(nullptr, tr("Exporter dans..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename);
+    else
+        exportFileName = QFileDialog::getSaveFileName(nullptr, tr("Exporter sous..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename, PB_ExporterTools::constructStringForFileDialog(_exporter));
 
     if(exportFileName.isEmpty())
         return false;
 
-    _exportFilename = exportFileName;
+    if(!_exporter->configure())
+        return false;
 
     QFileInfo info(exportFileName);
-    setDefaultExportPath(info.absoluteDir().absolutePath());
+    //setDefaultExportPath(info.absoluteDir().absolutePath());
+    _exportFilename = exportFileName;
+    _exporter->setFilePath(_exportFilename);
 
-    _exporter->setExportFilePath(_exportFilename);
+    setSettingsModified(true);
 
     return true;
 }
 
-void PB_StepGenericExporter::createOutResultModelListProtected()
+void PB_StepGenericExporter::declareOutputModels(CT_StepOutModelStructureManager&)
 {
+    // no output !
 }
 
 void PB_StepGenericExporter::compute()
 {
-    CT_ResultGroup* resIn_Counter = NULL;
+    if(!_exporter->exportToFile())
+    {
+        PS_LOG->addErrorMessage(LogInterface::step, _exporter->errorMessage());
+        setErrorMessage(1, _exporter->errorMessage());
+        setErrorCode(1);
+    }
+    /*CT_ResultGroup* resIn_Counter = nullptr;
     QString baseName = "";
 
     if (_adaptative)
@@ -285,7 +206,7 @@ void PB_StepGenericExporter::compute()
     {
         CT_StandardItemGroup *group = (CT_StandardItemGroup*) it.next();
 
-        if (group != NULL)
+        if (group != nullptr)
         {
             if (_exporter->exportOnlyGroup())
             {
@@ -294,13 +215,13 @@ void PB_StepGenericExporter::compute()
             {
                 CT_AbstractItemDrawable *item = (CT_AbstractItemDrawable*) group->firstItemByINModelName(this, DEF_SearchInItemDrawable);
 
-                CT_AbstractSingularItemDrawable *itemWithName = NULL;
+                CT_AbstractSingularItemDrawable *itemWithName = nullptr;
                 if (_multipleExport && _otherItem)
                 {
                     itemWithName = (CT_AbstractSingularItemDrawable*) group->firstItemByINModelName(this, DEF_SearchInItemWithName);
                 }
 
-                if (item != NULL)
+                if (item != nullptr)
                 {
                     itemsToExport.append(item);
 
@@ -330,17 +251,17 @@ void PB_StepGenericExporter::compute()
             {
                 CT_AbstractItemDrawable* item = (CT_AbstractItemDrawable*) itemsToExport.at(i);
                 CT_AbstractSingularItemDrawable* itemWithName = (CT_AbstractSingularItemDrawable*) itemsWithNames.at(i);
-                CT_AbstractItemAttribute* att = NULL;
-                if (itemWithName != NULL)
+                CT_AbstractItemAttribute* att = nullptr;
+                if (itemWithName != nullptr)
                 {
                     att = itemWithName->firstItemAttributeByINModelName(inResult, this, DEF_SearchInItemDrawableAtt);
                 }
 
                 QString fileName = item->displayableName();
 
-                if (att != NULL)
+                if (att != nullptr)
                 {
-                    fileName = att->toString(itemWithName, NULL);
+                    fileName = att->toString(itemWithName, nullptr);
                     fileName = QFileInfo(fileName).baseName();
                 }
 
@@ -367,7 +288,7 @@ void PB_StepGenericExporter::compute()
                     setErrorCode(1);
                 } else
                 {
-                    //if(_exporterConfiguration != NULL)
+                    //if(_exporterConfiguration != nullptr)
                     //_exporter->loadExportConfiguration(_exporterConfiguration);
 
                     // et on exporte....
@@ -401,7 +322,7 @@ void PB_StepGenericExporter::compute()
                 setErrorCode(1);
             } else
             {
-                //if(_exporterConfiguration != NULL)
+                //if(_exporterConfiguration != nullptr)
                 //_exporter->loadExportConfiguration(_exporterConfiguration);
 
                 // et on exporte....
@@ -414,24 +335,10 @@ void PB_StepGenericExporter::compute()
         }
 
 
-    }
+    }*/
 }
 
-
-bool PB_StepGenericExporter::configureExporter()
-{
-    setItemsToExportFromModelsToExporter();
-
-    if(_exporter->configureExport())
-    {
-        setSettingsModified(true);
-        return true;
-    }
-
-    return false;
-}
-
-void PB_StepGenericExporter::setItemsToExportFromModelsToExporter()
+/*void PB_StepGenericExporter::setItemsToExportFromModelsToExporter()
 {
     // on récupère le modèle d'entrée qu'on avait défini
     CT_InResultModelGroup *resModel = (CT_InResultModelGroup*)getInResultModel(DEF_SearchInResultToExport);
@@ -446,7 +353,7 @@ void PB_StepGenericExporter::setItemsToExportFromModelsToExporter()
     while(it.hasNext())
     {
         // on récupère le modèle d'entrée qu'on avait défini (celui à exporter)
-        CT_InAbstractItemModel *inItemModelToExport = NULL;
+        CT_InAbstractItemModel *inItemModelToExport = nullptr;
 
         if(_exporter->exportOnlyGroup())
             inItemModelToExport = (CT_InAbstractItemModel*)PS_MODELS->searchModel(DEF_SearchInGroup, (CT_OutAbstractResultModel*)it.next()->outModel(), this);
@@ -472,7 +379,7 @@ void PB_StepGenericExporter::setDefaultExportPath(const QString &path)
 
     QSettings *settings = _data->getSettingsFile();
 
-    if(settings != NULL)
+    if(settings != nullptr)
     {
         settings->beginGroup(getStepName());
 
@@ -480,7 +387,7 @@ void PB_StepGenericExporter::setDefaultExportPath(const QString &path)
 
         settings->endGroup();
     }
-}
+}*/
 
 void PB_StepGenericExporter::exportProgressChanged(int progress)
 {

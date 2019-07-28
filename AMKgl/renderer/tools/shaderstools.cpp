@@ -17,7 +17,7 @@ bool ShadersTools::staticMergeShadersFromSourceFile(const QStringList &sourceFil
 
             f.close();
         } else {
-            if(error != NULL)
+            if(error != nullptr)
                 *error = QObject::tr("Unable to open shaders file %1").arg(filepath);
 
             return false;

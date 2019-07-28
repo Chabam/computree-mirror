@@ -62,7 +62,7 @@ public:
     /**
       * \brief Retourne les donnes d'un cercle 2D  partir du nuage de points pass en paramtre.
       *
-      * \return NULL si le nombre de points est infrieur  3.
+      * \return nullptr si le nombre de points est infrieur  3.
       */
     static CT_CircleData* staticCreateZAxisAlignedCircleDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                            double z = 0);
@@ -70,9 +70,9 @@ public:
     /**
       * \brief Retourne les donnes d'un cercle 2D  partir du nuage de points pass en paramtre.
       *
-      * \param preProcessingAction : l'interface pass en paramtre peut permettre de modifier un point avant de procder au fitting (par exemple faire une rotation). Peut tre NULL.
+      * \param preProcessingAction : l'interface pass en paramtre peut permettre de modifier un point avant de procder au fitting (par exemple faire une rotation). Peut tre nullptr.
       *
-      * \return NULL si le nombre de points est infrieur  3.
+      * \return nullptr si le nombre de points est infrieur  3.
       */
     static CT_CircleData* staticCreateZAxisAlignedCircleDataFromPointCloudWithPreProcessing(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                                             CT_CircleDataPreProcessingAction* preProcessingAction,

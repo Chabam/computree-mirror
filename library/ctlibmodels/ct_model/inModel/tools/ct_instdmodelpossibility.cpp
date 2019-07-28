@@ -5,8 +5,8 @@
 
 CT_InStdModelPossibility::CT_InStdModelPossibility()
 {
-    m_outModel = NULL;
-    m_selectionGroup = NULL;
+    m_outModel = nullptr;
+    m_selectionGroup = nullptr;
     m_autoDeleteOutModel = false;
 }
 
@@ -22,7 +22,7 @@ CT_InStdModelPossibility::~CT_InStdModelPossibility()
 {
     clearOutModel();
 
-    if(m_selectionGroup != NULL)
+    if(m_selectionGroup != nullptr)
         m_selectionGroup->removePossibility(this);
 }
 
@@ -50,14 +50,14 @@ CT_OutAbstractModel* CT_InStdModelPossibility::outModel() const
 
 bool CT_InStdModelPossibility::isSelected() const
 {
-    MODELS_ASSERT(m_selectionGroup != NULL);
+    MODELS_ASSERT(m_selectionGroup != nullptr);
 
     return m_selectionGroup->isSelected(const_cast<CT_InStdModelPossibility*>(this));
 }
 
 bool CT_InStdModelPossibility::setSelected(bool check)
 {
-    MODELS_ASSERT(m_selectionGroup != NULL);
+    MODELS_ASSERT(m_selectionGroup != nullptr);
 
     const bool lastValue = isSelected();
 
@@ -79,7 +79,7 @@ void CT_InStdModelPossibility::clearOutModel()
     if(m_autoDeleteOutModel)
         delete m_outModel;
 
-    m_outModel = NULL;
+    m_outModel = nullptr;
 }
 
 void CT_InStdModelPossibility::setSelectionGroup(const CT_InStdModelPossibilitySelectionGroup *group)

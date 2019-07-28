@@ -32,7 +32,7 @@
 CT_DEFAULT_IA_INIT(CT_PlotListInGrid)
 
 CT_PlotListInGrid::CT_PlotListInGrid() : SuperClass(),
-    _areaXY(NULL),
+    _areaXY(nullptr),
     _spacing(1),
     _size(0),
     _firstIndex( 0),
@@ -44,7 +44,7 @@ CT_PlotListInGrid::CT_PlotListInGrid(const CT_AreaShape2DData* areaShape2D,
                                      const Eigen::Vector2d& refCoords,
                                      double spacing,
                                      double size) : SuperClass(),
-    _areaXY(areaShape2D == NULL ? NULL : static_cast<CT_AreaShape2DData*>(areaShape2D->copy())),
+    _areaXY(areaShape2D == nullptr ? nullptr : static_cast<CT_AreaShape2DData*>(areaShape2D->copy())),
     _spacing(spacing),
     _size(size),
     _firstIndex( 0),
@@ -54,7 +54,7 @@ CT_PlotListInGrid::CT_PlotListInGrid(const CT_AreaShape2DData* areaShape2D,
 }
 
 CT_PlotListInGrid::CT_PlotListInGrid(const CT_PlotListInGrid& other) : SuperClass(other),
-    _areaXY(other._areaXY == NULL ? NULL : static_cast<CT_AreaShape2DData*>(other._areaXY->copy())),
+    _areaXY(other._areaXY == nullptr ? nullptr : static_cast<CT_AreaShape2DData*>(other._areaXY->copy())),
     _min(other._min),
     _max(other._max),
     _spacing(other._spacing),
@@ -71,7 +71,7 @@ CT_PlotListInGrid::~CT_PlotListInGrid()
 
 void CT_PlotListInGrid::computeMinMax(const Eigen::Vector2d &refCoords)
 {
-    if (_areaXY != NULL)
+    if (_areaXY != nullptr)
     {
         Eigen::Vector3d minShape, maxShape;
         _areaXY->getBoundingBox(minShape, maxShape);
@@ -125,7 +125,7 @@ QMap<CT_AreaShape2DData*, size_t> CT_PlotListInGrid::createPlots(CT_PlotListInGr
     {
         for (double x = _min(0) ; x <= _max(0) ; x += _spacing)
         {
-            CT_AreaShape2DData* shape = NULL;
+            CT_AreaShape2DData* shape = nullptr;
 
             if (type == CT_PlotListInGrid::T_Circle)
             {

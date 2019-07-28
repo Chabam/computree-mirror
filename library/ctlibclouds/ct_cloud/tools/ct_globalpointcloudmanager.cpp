@@ -7,7 +7,7 @@
 
 CT_GlobalPointCloudManager::CT_GlobalPointCloudManager() : QObject(), CT_GlobalCloudManagerT<CT_PointData, CT_InternalPointCloud>()
 {
-    m_uspc.first = NULL;
+    m_uspc.first = nullptr;
 }
 
 CT_GlobalPointCloudManager::~CT_GlobalPointCloudManager()
@@ -17,7 +17,7 @@ CT_GlobalPointCloudManager::~CT_GlobalPointCloudManager()
 
 CT_AbstractUndefinedSizePointCloud* CT_GlobalPointCloudManager::createNewUndefinedSizePointCloud()
 {
-    if(m_uspc.first == NULL)
+    if(m_uspc.first == nullptr)
     {
         m_uspc.first = new CT_StandardUndefinedSizePointCloud(m_cloud.size(), &m_cloud);
         m_uspc.second = m_uspc.first->beginIndex();
@@ -27,7 +27,7 @@ CT_AbstractUndefinedSizePointCloud* CT_GlobalPointCloudManager::createNewUndefin
         return m_uspc.first;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CT_NMPCIR CT_GlobalPointCloudManager::registerUndefinedSizePointCloud(CT_AbstractUndefinedSizePointCloud *uspc, IndexOptimization optim)
@@ -36,7 +36,7 @@ CT_NMPCIR CT_GlobalPointCloudManager::registerUndefinedSizePointCloud(CT_Abstrac
 
     if(uspc == m_uspc.first)
     {
-        disconnect(m_uspc.first, NULL, this, NULL);
+        disconnect(m_uspc.first, nullptr, this, nullptr);
 
         size_t size = m_uspc.first->size();
 
@@ -54,7 +54,7 @@ CT_NMPCIR CT_GlobalPointCloudManager::registerUndefinedSizePointCloud(CT_Abstrac
         }
 
         delete m_uspc.first;
-        m_uspc.first = NULL;
+        m_uspc.first = nullptr;
     }
 
     return cir;

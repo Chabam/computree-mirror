@@ -48,7 +48,7 @@ bool PB_StepCreateReaderList::postInputConfigure()
     const QString fileFilter = PB_ReadersTools::constructStringForFileDialog(reader);
 
     if(fileFilter.isEmpty()) {
-        QMessageBox::critical(NULL, tr("Erreur"), tr("Aucun reader sélectionné"));
+        QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun reader sélectionné"));
         return false;
     }
 
@@ -88,7 +88,7 @@ void PB_StepCreateReaderList::declareOutputModels(CT_StepOutModelStructureManage
     CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
 
     // if one reader was selected and at least one file is defined
-    if((reader != NULL)
+    if((reader != nullptr)
             && (m_filepathCollection.size() > 0))
     {
         manager.addGroup(m_hOutRootGroup, m_hOutFileGroup, tr("Fichier"));
@@ -97,7 +97,7 @@ void PB_StepCreateReaderList::declareOutputModels(CT_StepOutModelStructureManage
         // get the header
         CT_FileHeader* rHeader = reader->createHeaderPrototype();
 
-        if(rHeader != NULL)
+        if(rHeader != nullptr)
             manager.addItem(m_hOutRootGroup, m_hOutFileHeader, tr("Entête"), "", "", rHeader);
     }
 }
@@ -111,7 +111,7 @@ void PB_StepCreateReaderList::compute()
 
         CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
 
-        if(reader != NULL) {
+        if(reader != nullptr) {
 
             // for each file in the list
             for(const QString& filePath : m_filepathCollection)
@@ -129,7 +129,7 @@ void PB_StepCreateReaderList::compute()
                     // add the header
                     if(m_hOutFileHeader.isValid()) {
                         CT_FileHeader* header = readerCpy->readHeader();
-                        Q_ASSERT(header != NULL);
+                        Q_ASSERT(header != nullptr);
                         grpHeader->addSingularItem(m_hOutFileHeader, header);
                     }
 
@@ -165,7 +165,7 @@ bool PB_StepCreateReaderList::restorePreSettings(SettingsReaderInterface &reader
 
     m_readerSelectedUniqueName = value.toString();
 
-    return (pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName) != NULL);
+    return (pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName) != nullptr);
 }
 
 void PB_StepCreateReaderList::savePostSettings(SettingsWriterInterface &writer) const

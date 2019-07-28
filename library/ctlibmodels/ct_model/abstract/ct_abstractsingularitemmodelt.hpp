@@ -17,7 +17,7 @@ CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::~CT_Abst
 template <class GroupModelT, class AttributModelT, class InheritedT>
 void CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::addItemAttribute(AttributModelT* attribute)
 {
-    MODELS_ASSERT(attribute != NULL);
+    MODELS_ASSERT(attribute != nullptr);
 
     attribute->setParentModel(this);
     m_attributes.append(attribute);
@@ -27,7 +27,7 @@ void CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::add
 template <class GroupModelT, class AttributModelT, class InheritedT>
 bool CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::removeItemAttribute(AttributModelT *attribute)
 {
-    MODELS_ASSERT(attribute != NULL);
+    MODELS_ASSERT(attribute != nullptr);
 
     if(m_attributes.removeOne(attribute))
     {
@@ -90,8 +90,8 @@ GroupModelT* CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, Inherite
 {
     GroupModelT* pGroup = parentGroup();
 
-    if(pGroup == NULL)
-        return NULL;
+    if(pGroup == nullptr)
+        return nullptr;
 
     return static_cast<GroupModelT*>(pGroup->rootGroup());
 }

@@ -40,7 +40,7 @@ void GMultipleItemDrawableModelManager::addResult(const CT_AbstractResult *res)
 
     if(indexOf == -1)
     {
-        if(ui->comboBoxResult->itemData(0).value<void*>() == NULL)
+        if(ui->comboBoxResult->itemData(0).value<void*>() == nullptr)
         {
             ui->comboBoxResult->clear();
             ui->comboBoxResult->setEditable(false);
@@ -65,7 +65,7 @@ bool GMultipleItemDrawableModelManager::removeResult(const CT_AbstractResult *re
 
     if(index != -1)
     {
-        disconnect((CT_AbstractResult*)res, NULL, this, NULL);
+        disconnect((CT_AbstractResult*)res, nullptr, this, nullptr);
 
         _results.removeOne((CT_AbstractResult*)res);
         ui->comboBoxResult->removeItem(index);
@@ -111,7 +111,7 @@ void GMultipleItemDrawableModelManager::setEmptyComboBoxText()
 
 void GMultipleItemDrawableModelManager::on_comboBoxResult_currentIndexChanged(int index)
 {
-    ui->widgetModelManager->setResult(NULL);
+    ui->widgetModelManager->setResult(nullptr);
     int indexOf = _results.indexOf((CT_AbstractResult*)ui->comboBoxResult->itemData(index).value<void*>());
 
     if((index >= 0)

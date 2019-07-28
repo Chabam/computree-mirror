@@ -46,10 +46,10 @@ GDocumentManagerView::GDocumentManagerView(QWidget *parent) : QMdiArea(parent), 
     m_mutex = new QMutex(QMutex::Recursive);
     m_windowCount = 0;
     m_timer.setInterval(100);
-    m_syncMan = NULL;
-    m_lastDocumentActivated = NULL;
+    m_syncMan = nullptr;
+    m_lastDocumentActivated = nullptr;
     m_manualModeEnabled = false;
-    m_manualModeEnabledByStep = NULL;
+    m_manualModeEnabledByStep = nullptr;
 
     connect(this, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowHasBeenActivated(QMdiSubWindow*)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(verifyNumberWindow()));
@@ -80,7 +80,7 @@ void GDocumentManagerView::addDocumentView(GDocumentView &view, bool fromGui, bo
         }
         else
         {
-            if((activeSubWindow() != NULL)
+            if((activeSubWindow() != nullptr)
                 && activeSubWindow()->isMaximized())
                 activeSubWindow()->showNormal();
 
@@ -123,7 +123,7 @@ bool GDocumentManagerView::addAllItemDrawableOfResultToActiveDocument(CT_Abstrac
 
 bool GDocumentManagerView::addAllItemDrawableOfModelToDocument(CT_AbstractResult &res, CT_OutAbstractItemModel &model, DM_DocumentView *doc, DM_AsynchroneProgress &progress)
 {
-    if((doc != NULL)
+    if((doc != nullptr)
             && !res.isBusy())
     {
         progress.setProgress(0);
@@ -144,7 +144,7 @@ bool GDocumentManagerView::addAllItemDrawableOfModelToDocument(CT_AbstractResult
 
             for(CT_AbstractItemDrawable* item : iterator) {
 
-                if(item != NULL)
+                if(item != nullptr)
                     doc->addItemDrawable(*item);
 
                 ++i;
@@ -170,7 +170,7 @@ bool GDocumentManagerView::addAllItemDrawableOfModelToDocument(CT_AbstractResult
 
 bool GDocumentManagerView::addAllItemDrawableOfResultToDocument(CT_AbstractResult &res, DM_DocumentView *doc, DM_AsynchroneProgress &progress)
 {
-    if((doc != NULL)
+    if((doc != nullptr)
             && !res.isBusy())
     {
         progress.setProgress(0);
@@ -189,7 +189,7 @@ bool GDocumentManagerView::addAllItemDrawableOfResultToDocument(CT_AbstractResul
             res.visitChildrens([&doc, &i, &progress, &n](const CT_AbstractItem* child) -> bool {
                 CT_AbstractItemDrawable* item = dynamic_cast<CT_AbstractItemDrawable*>(const_cast<CT_AbstractItem*>(child));
 
-                if(item != NULL)
+                if(item != nullptr)
                     doc->addItemDrawable(*item);
 
                 ++i;
@@ -223,7 +223,7 @@ bool GDocumentManagerView::addAllItemDrawableOfListToActiveDocument(QList<CT_Abs
 
 bool GDocumentManagerView::addAllItemDrawableOfListToDocument(QList<CT_AbstractItemDrawable*> &itemList, DM_DocumentView *doc, DM_AsynchroneProgress &progress)
 {
-    if(doc != NULL)
+    if(doc != nullptr)
     {
         progress.setProgress(0);
 
@@ -311,7 +311,7 @@ bool GDocumentManagerView::removeAllItemDrawableOfModelFromDocument(CT_OutAbstra
 {
     progress.setProgress(0);
 
-    if(doc != NULL)
+    if(doc != nullptr)
         doc->removeAllItemDrawableOfModel(model);
 
     progress.setProgress(100);
@@ -389,11 +389,11 @@ bool GDocumentManagerView::removeAllItemDrawableOfListFromDocument(QList<CT_Abst
 
 DM_DocumentView* GDocumentManagerView::getActiveDocumentView()
 {
-    if(activeSubWindow() == NULL)
+    if(activeSubWindow() == nullptr)
     {
         QList<QMdiSubWindow *> list = subWindowList();
 
-        if((m_lastDocumentActivated != NULL)
+        if((m_lastDocumentActivated != nullptr)
                 && list.contains(m_lastDocumentActivated))
         {
             setActiveSubWindow(m_lastDocumentActivated);
@@ -405,7 +405,7 @@ DM_DocumentView* GDocumentManagerView::getActiveDocumentView()
         }
     }
 
-    if(activeSubWindow() != NULL)
+    if(activeSubWindow() != nullptr)
     {
         m_lastDocumentActivated = activeSubWindow();
 
@@ -413,10 +413,10 @@ DM_DocumentView* GDocumentManagerView::getActiveDocumentView()
     }
     else
     {
-        m_lastDocumentActivated = NULL;
+        m_lastDocumentActivated = nullptr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 DM_DocumentView* GDocumentManagerView::getDocumentView(int index) const
@@ -426,7 +426,7 @@ DM_DocumentView* GDocumentManagerView::getDocumentView(int index) const
     if((index >=0) && (index < list.size()))
         return ((MyQMdiSubWindow*)list.at(index))->getDocumentView();
 
-    return NULL;
+    return nullptr;
 }
 
 int GDocumentManagerView::nbDocumentView() const
@@ -473,7 +473,7 @@ DocumentInterface *GDocumentManagerView::new3DDocument(bool fromGui, bool inLoad
         DM_GraphicsViewOptions opt = doc->getOptions();
         opt.setPointSize(pointSize);
 
-        if (color != NULL)
+        if (color != nullptr)
             opt.setBackgroudColor(*color);
 
         if (orthographic)
@@ -573,7 +573,7 @@ void GDocumentManagerView::activateDocument(DocumentInterface *doc)
 {
     QMdiSubWindow *subW = subWindowFromDocument(doc);
 
-    if(subW != NULL)
+    if(subW != nullptr)
         setActiveSubWindow(subW);
 }
 
@@ -581,7 +581,7 @@ bool GDocumentManagerView::closeDocument(DocumentInterface *doc)
 {
     QMdiSubWindow *subW = subWindowFromDocument(doc);
 
-    if(subW != NULL)
+    if(subW != nullptr)
         return subW->close();
 
     return true;
@@ -628,18 +628,18 @@ QMdiSubWindow* GDocumentManagerView::subWindowFromDocument(DocumentInterface *do
             return w;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void GDocumentManagerView::stepRequiredManualMode(CT_VirtualAbstractStep *step)
 {
-    if((m_manualModeEnabledByStep != NULL)
+    if((m_manualModeEnabledByStep != nullptr)
             && (m_manualModeEnabledByStep != step))
     {
         stepFinished(m_manualModeEnabledByStep);
     }
 
-    if(m_manualModeEnabledByStep == NULL)
+    if(m_manualModeEnabledByStep == nullptr)
     {
         m_manualModeEnabled = true;
         m_manualModeEnabledByStep = step;
@@ -660,7 +660,7 @@ void GDocumentManagerView::stepRequiredManualMode(CT_VirtualAbstractStep *step)
 
 void GDocumentManagerView::stepFinished(CT_VirtualAbstractStep *step)
 {
-    if((m_manualModeEnabledByStep != NULL)
+    if((m_manualModeEnabledByStep != nullptr)
             && (m_manualModeEnabledByStep == step))
     {
         // close all documents added in manual mode
@@ -680,7 +680,7 @@ void GDocumentManagerView::stepFinished(CT_VirtualAbstractStep *step)
             emit documentShowned(dView);
         }
 
-        m_manualModeEnabledByStep = NULL;
+        m_manualModeEnabledByStep = nullptr;
         m_manualModeEnabled = false;
     }
 }

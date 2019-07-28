@@ -47,7 +47,7 @@ class CT_AbstractResult;
  * An output model know the result that contains the item that use this model. If a step use a copy of a result from
  * an another step this means that all output models is copied but it will not know the result because only the original
  * model will know it. So when you wan to know which result contains this model with the method "result()" it will
- * go up recursively in the hierarchy of original model to get the original model with the result that was not NULL.
+ * go up recursively in the hierarchy of original model to get the original model with the result that was not nullptr.
  */
 class CTLIBMODELS_EXPORT CT_OutAbstractModel : public CT_AbstractModel
 {
@@ -95,16 +95,16 @@ public:
     CT_OutAbstractModel* originalModel() const;
 
     /**
-     * @brief Returns the original model (recursively) with a not NULL result. If this model
+     * @brief Returns the original model (recursively) with a not nullptr result. If this model
      *        is not a copy and has a result the method return 'this'. If this model
-     *        is not a copy and doesn't have a result the method return NULL.
+     *        is not a copy and doesn't have a result the method return nullptr.
      */
     CT_OutAbstractModel* recursiveOriginalModelWithAResult() const;
 
     /**
      * @brief Returns the original model (recursively) with a step not null. If this model
      *        is not a copy and has a step the method return 'this'. If this model
-     *        is not a copy and doesn't have a step the method return NULL.
+     *        is not a copy and doesn't have a step the method return nullptr.
      */
     CT_OutAbstractModel* recursiveOriginalModelWithAStep() const;
 
@@ -209,7 +209,7 @@ private:
     UniqueIndexType                     m_uniqueIndex;
 
     /**
-     * @brief The original model is NULL if this model was not a copied model otherwise it was the model that was used to produce the copy.
+     * @brief The original model is nullptr if this model was not a copied model otherwise it was the model that was used to produce the copy.
      */
     CT_OutAbstractModel*                m_originalModel;
 
@@ -221,13 +221,13 @@ private:
     QHash<IDocumentForModel*, int>      m_visibleInDocuments;
 
     /**
-     * @brief The result that contains the item that use this model. NULL if no item that use this model was added
-     *        to a result. Can be NULL or not if it was a copy of an original model
+     * @brief The result that contains the item that use this model. nullptr if no item that use this model was added
+     *        to a result. Can be nullptr or not if it was a copy of an original model
      */
     IResultForModel*                    m_realResult;
 
     /**
-     * @brief A prototype of the item that will be produced by the step. Can be NULL or not if it was a copy
+     * @brief A prototype of the item that will be produced by the step. Can be nullptr or not if it was a copy
      *        of an original model
      */
     IPrototypeForModel*                 m_item;
@@ -239,7 +239,7 @@ private:
 
 private slots:
     /**
-     * @brief Called when the original model is destroyed from memory, so the attribute m_originalModel is set to NULL
+     * @brief Called when the original model is destroyed from memory, so the attribute m_originalModel is set to nullptr
      */
     void originalModelDestroyed();
 

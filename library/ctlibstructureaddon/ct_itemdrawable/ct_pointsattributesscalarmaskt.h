@@ -79,7 +79,7 @@ public:
      *          - Min and max value
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      *          - Auto delete collection is set to false

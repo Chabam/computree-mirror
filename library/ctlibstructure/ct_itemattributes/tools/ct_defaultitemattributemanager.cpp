@@ -26,9 +26,9 @@ bool CT_DefaultItemAttributeManager::visitItemAttributesForType(const QString& t
         {
             ok = true;
 
-            DefaultItemAttributesCollection* container = m_collection.value(type, NULL);
+            DefaultItemAttributesCollection* container = m_collection.value(type, nullptr);
 
-            if(container != NULL)
+            if(container != nullptr)
             {
                 for(const CT_OutAbstractItemAttributeModel* model : *container) {
                     if(!visitor(static_cast<CT_AbstractItemAttribute*>(model->itemAttribute())))
@@ -54,9 +54,9 @@ bool CT_DefaultItemAttributeManager::visitItemAttributeModelsForType(const QStri
         {
             ok = true;
 
-            DefaultItemAttributesCollection* container = m_collection.value(type, NULL);
+            DefaultItemAttributesCollection* container = m_collection.value(type, nullptr);
 
-            if(container != NULL)
+            if(container != nullptr)
             {
                 for(const CT_OutAbstractItemAttributeModel* model : *container) {
                     if(!visitor(model))
@@ -116,9 +116,9 @@ int CT_DefaultItemAttributeManager::nItemAttributesForType(const QString& itemTy
         {
             ok = true;
 
-            DefaultItemAttributesCollection* container = m_collection.value(type, NULL);
+            DefaultItemAttributesCollection* container = m_collection.value(type, nullptr);
 
-            if(container != NULL)
+            if(container != nullptr)
                 n += container->size();
         }
     }
@@ -145,9 +145,9 @@ CT_AbstractItemAttribute* CT_DefaultItemAttributeManager::itemAttributeFromOutMo
     CT_OutAbstractItemAttributeModel* orModel = static_cast<CT_OutAbstractItemAttributeModel*>(outModel->recursiveOriginalModel());
 
     if(!orModel->isADefaultItemAttributeModel())
-        return NULL;
+        return nullptr;
 
-    CT_AbstractItemAttribute* att = NULL;
+    CT_AbstractItemAttribute* att = nullptr;
 
     const auto visitor = [&att, &orModel](const CT_OutAbstractItemAttributeModel* model) -> bool {
         if(model == orModel) {
@@ -179,7 +179,7 @@ QList<CT_AbstractItemAttribute*> CT_DefaultItemAttributeManager::itemAttributesF
 
 CT_AbstractItemAttribute* CT_DefaultItemAttributeManager::firstItemAttributeFromInModel(const CT_InAbstractItemAttributeModel *inModel, const QString &itemType) const
 {
-    CT_AbstractItemAttribute* found = NULL;
+    CT_AbstractItemAttribute* found = nullptr;
 
     const auto visitor = [&found](const CT_AbstractItemAttribute* attribute) -> bool {
         found = const_cast<CT_AbstractItemAttribute*>(attribute);

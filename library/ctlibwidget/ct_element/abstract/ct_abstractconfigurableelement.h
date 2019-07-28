@@ -15,7 +15,7 @@
  *        A configurable element is just an object that :
  *
  *        - Have a unique name (class name), a displayable name and a description.
- *        - Can be configured or not (returns a configurable widget if yes otherwise NULL)
+ *        - Can be configured or not (returns a configurable widget if yes otherwise nullptr)
  *        - Can save and restore his settings
  *        - Can be copied
  */
@@ -86,10 +86,10 @@ public:
     virtual CT_AbstractConfigurableElement* copy() const = 0;
 
     /**
-     * @brief Create and return a widget that configure this object. By default return NULL.
-     * @return Can be NULL if nothing must be configured
+     * @brief Create and return a widget that configure this object. By default return nullptr.
+     * @return Can be nullptr if nothing must be configured
      */
-    virtual CT_AbstractConfigurableWidget* createConfigurationWidget() { return NULL; }
+    virtual CT_AbstractConfigurableWidget* createConfigurationWidget() { return nullptr; }
 
     /**
      * @brief Called after configuration

@@ -29,7 +29,7 @@ PermanentItemScene* PermanentItemSceneByModel::getPermanentItemSceneForModel(con
 {
     QMutexLocker locker(m_mutex);
 
-    return m_scenes.value((ItemModel*)model, NULL);
+    return m_scenes.value((ItemModel*)model, nullptr);
 }
 
 PermanentItemScene* PermanentItemSceneByModel::findPermanentItemSceneForItem(const Item* item) const
@@ -45,14 +45,14 @@ PermanentItemScene* PermanentItemSceneByModel::findPermanentItemSceneForItem(con
             return it.value();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void PermanentItemSceneByModel::addedTo(const IGraphicsDocument* doc, const QOpenGLContext* newContext)
 {
     QMutexLocker locker(m_mutex);
 
-    Q_ASSERT(newContext != NULL);
+    Q_ASSERT(newContext != nullptr);
 
     SceneCollectionIterator it(getPermanentItemScenes());
 
@@ -334,8 +334,8 @@ AnyElementAttributesProvider* PermanentItemSceneByModel::getAnyElementsAttribute
     //        "model()" method was the model used to add it !
     PermanentItemScene* scene = findPermanentItemSceneForItem(item);
 
-    if(scene == NULL)
-        return NULL;
+    if(scene == nullptr)
+        return nullptr;
 
     return scene->getAnyElementsAttributesProvider();
 }
@@ -346,8 +346,8 @@ AnyElementAttributesProvider *PermanentItemSceneByModel::getAnyElementsAttribute
 
     PermanentItemScene* scene = getPermanentItemSceneForModel(model);
 
-    if(scene == NULL)
-        return NULL;
+    if(scene == nullptr)
+        return nullptr;
 
     return scene->getAnyElementsAttributesProvider();
 }
@@ -360,8 +360,8 @@ ObjectAttributesProvider* PermanentItemSceneByModel::getObjectsAttributeProvider
     //        "model()" method was the model used to add it !
     PermanentItemScene* scene = findPermanentItemSceneForItem(item);
 
-    if(scene == NULL)
-        return NULL;
+    if(scene == nullptr)
+        return nullptr;
 
     return scene->getObjectsAttributeProvider(type);
 }
@@ -372,8 +372,8 @@ ObjectAttributesProvider* PermanentItemSceneByModel::getObjectsAttributeProvider
 
     PermanentItemScene* scene = getPermanentItemSceneForModel(model);
 
-    if(scene == NULL)
-        return NULL;
+    if(scene == nullptr)
+        return nullptr;
 
     return scene->getObjectsAttributeProvider(type);
 }
@@ -405,7 +405,7 @@ int PermanentItemSceneByModel::countItemsOfModel(const ItemModel *model) const
 
     PermanentItemScene* scene = getPermanentItemSceneForModel(model);
 
-    if(scene == NULL)
+    if(scene == nullptr)
         return 0;
 
     return scene->countItem();
@@ -416,7 +416,7 @@ void PermanentItemSceneByModel::setItemsOfModelVisible(const ItemModel *model, b
     QMutexLocker locker(m_mutex);
     PermanentItemScene* scene = getPermanentItemSceneForModel(model);
 
-    if(scene == NULL)
+    if(scene == nullptr)
         return;
 
     scene->setVisible(visible);
@@ -781,9 +781,9 @@ PermanentItemScene& PermanentItemSceneByModel::createOrGetPermanentItemSceneForM
 {
     QMutexLocker locker(m_mutex);
 
-    PermanentItemScene* scene = m_scenes.value((ItemModel*)model, NULL);
+    PermanentItemScene* scene = m_scenes.value((ItemModel*)model, nullptr);
 
-    if(scene == NULL)
+    if(scene == nullptr)
     {
         Q_ASSERT_X(QThread::currentThread() == qApp->thread(), "PermanentItemSceneByModel", "You cannot create a scene in a different thread that the main thread !");
 

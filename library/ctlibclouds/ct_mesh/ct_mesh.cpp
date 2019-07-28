@@ -12,9 +12,9 @@
 
 CT_Mesh::CT_Mesh()
 {
-    m_pVert = NULL;
-    m_pFace = NULL;
-    m_pHedge = NULL;
+    m_pVert = nullptr;
+    m_pFace = nullptr;
+    m_pHedge = nullptr;
 }
 
 CT_Mesh::~CT_Mesh()
@@ -39,24 +39,24 @@ CT_AbstractModifiableEdgeCloudIndex& CT_Mesh::hedge() const
 
 CT_AbstractModifiablePointCloudIndex* CT_Mesh::pVert() const
 {
-    if(m_vert == NULL)
-        return NULL;
+    if(m_vert == nullptr)
+        return nullptr;
 
     return m_vert->abstractModifiableCloudIndexT();
 }
 
 CT_AbstractModifiableFaceCloudIndex* CT_Mesh::pFace() const
 {
-    if(m_face == NULL)
-        return NULL;
+    if(m_face == nullptr)
+        return nullptr;
 
     return m_face->abstractModifiableCloudIndexT();
 }
 
 CT_AbstractModifiableEdgeCloudIndex* CT_Mesh::pHedge() const
 {
-    if(m_hedge == NULL)
-        return NULL;
+    if(m_hedge == nullptr)
+        return nullptr;
 
     return m_hedge->abstractModifiableCloudIndexT();
 }

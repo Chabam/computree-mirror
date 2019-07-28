@@ -8,20 +8,20 @@
 template<>
 bool DM_AttributesColorT<CT_AbstractPointsAttributes>::process(GDocumentViewForGraphics *doc)
 {
-    if(m_ac != NULL)
+    if(m_ac != nullptr)
     {
         const CT_AbstractCloudIndex *index = abstractTypeAttributes()->abstractCloudIndex();
 
-        AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetColorCloud();
+        AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloud();
 
-        if(colorArray != NULL)
+        if(colorArray != nullptr)
         {
             size_t size = index->size();
             size_t globalIndexOfPoint;
 
             CT_AbstractColorCloud *toApplyColorCloud = m_ac->colorCloud();
 
-            if(toApplyColorCloud != NULL) {
+            if(toApplyColorCloud != nullptr) {
 
                 for(size_t i=0; i<size && !isCanceled(); ++i)
                 {
@@ -47,20 +47,20 @@ bool DM_AttributesColorT<CT_AbstractPointsAttributes>::process(GDocumentViewForG
 template<>
 bool DM_AttributesColorT<CT_AbstractFaceAttributes>::process(GDocumentViewForGraphics *doc)
 {
-    if(m_ac != NULL)
+    if(m_ac != nullptr)
     {
         const CT_AbstractCloudIndex *index = abstractTypeAttributes()->abstractCloudIndex();
 
-        AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getFaceCloudAttributesProvider()->createOrGetColorCloud();
+        AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getFaceCloudAttributesProvider()->createOrGetColorCloud();
 
-        if(colorArray != NULL)
+        if(colorArray != nullptr)
         {
             size_t size = index->size();
             size_t globalIndexOfFace;
 
             CT_AbstractColorCloud *toApplyColorCloud = m_ac->colorCloud();
 
-            if(toApplyColorCloud != NULL) {
+            if(toApplyColorCloud != nullptr) {
 
                 for(size_t i=0; i<size && !isCanceled(); ++i)
                 {
@@ -86,20 +86,20 @@ bool DM_AttributesColorT<CT_AbstractFaceAttributes>::process(GDocumentViewForGra
 template<>
 bool DM_AttributesColorT<CT_AbstractEdgeAttributes>::process(GDocumentViewForGraphics *doc)
 {
-    if(m_ac != NULL)
+    if(m_ac != nullptr)
     {
         const CT_AbstractCloudIndex *index = abstractTypeAttributes()->abstractCloudIndex();
 
-        AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getEdgeCloudAttributesProvider()->createOrGetColorCloud();
+        AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getEdgeCloudAttributesProvider()->createOrGetColorCloud();
 
-        if(colorArray != NULL)
+        if(colorArray != nullptr)
         {
             size_t size = index->size();
             size_t globalIndexOfEdge;
 
             CT_AbstractColorCloud *toApplyColorCloud = m_ac->colorCloud();
 
-            if(toApplyColorCloud != NULL) {
+            if(toApplyColorCloud != nullptr) {
 
                 for(size_t i=0; i<size && !isCanceled(); ++i)
                 {

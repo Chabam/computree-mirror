@@ -268,7 +268,7 @@ public:
      * @brief Call this method to know if a step can be added after another step. Check if input result
      *        that this step need was found in the output of the specified step or recursively in other
      *        step if it does. (Use models, not real result !)
-     * @param step : the parent step or NULL if this step must be added as a root step.
+     * @param step : the parent step or nullptr if this step must be added as a root step.
      * @return True if this step can be added after the specified step
      */
     bool acceptAddAfterThisStep(const CT_VirtualAbstractStep* step);
@@ -320,7 +320,7 @@ public:
     bool hasChildrens() const;
 
     /**
-     * @brief Return the parent (NULL if this step has no parent)
+     * @brief Return the parent (nullptr if this step has no parent)
      */
     CT_VirtualAbstractStep* parentStep() const;
 
@@ -529,16 +529,16 @@ public:
      *  3 possibilities :
      *
      *  - If debug mode is active this method is called before the step compute. After it was
-     *    finished the method is called with context = NULL.
+     *    finished the method is called with context = nullptr.
      *
      *  - Every time the step requires the manual mode this method is called if the GuiContextInterface
      *    returned by the method "getGuiContext()" is different from the current context. After the step
-     *    quit the manual mode this method is called with context = NULL.
+     *    quit the manual mode this method is called with context = nullptr.
      *
      *  - If debug mode is active this method is called before the step compute. Every time the step
      *    requires the manual mode this method is called if the GuiContextInterface returned by the
      *    method "getGuiContext()" is different from the current context. After she finished
-     *    calculating, the method is called with context = NULL.
+     *    calculating, the method is called with context = nullptr.
      */
     void setGuiContext(const GuiContextInterface *context);
 
@@ -906,7 +906,7 @@ private:
     StepToolForModel                m_stepTool;
 
     /**
-     * @brief Parent step (must be NULL if it was the root step or a prototype)
+     * @brief Parent step (must be nullptr if it was the root step or a prototype)
      */
     CT_VirtualAbstractStep*         m_parentStep;
 
@@ -928,13 +928,13 @@ private:
 
     /**
      * @brief Dialog that let the user configure settings before the configuration dialog of input result was displayed. It can
-     *        be NULL if there is no dialog to display.
+     *        be nullptr if there is no dialog to display.
      */
     CT_StepConfigurableDialog*      m_preInputConfigDialog;
 
     /**
      * @brief Dialog that let the user configure settings after the configuration dialog of input result was displayed and before
-     *        output result model will be declared. It can be NULL if there is no dialog to display.
+     *        output result model will be declared. It can be nullptr if there is no dialog to display.
      */
     CT_StepConfigurableDialog*      m_postInputConfigDialog;
 

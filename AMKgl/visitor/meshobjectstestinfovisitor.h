@@ -57,8 +57,8 @@ public:
     void setModel(const AMKgl::ItemModel* model) { Q_UNUSED(model); }
     void setScene(const PermanentItemScene* scene) { Q_UNUSED(scene); }
     void setItem(const AMKgl::Item* item) { Q_UNUSED(item); }
-    AMKgl::ItemModel* getCurrentModel() const { return NULL; }
-    PermanentItemScene* getCurrentScene() const { return NULL; }
+    AMKgl::ItemModel* getCurrentModel() const { return nullptr; }
+    PermanentItemScene* getCurrentScene() const { return nullptr; }
 
     void visitChunk(const IChunk* chunk);
 

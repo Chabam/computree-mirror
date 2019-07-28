@@ -3,6 +3,8 @@
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.h"
 #include "ct_itemdrawable/ct_grid3d.h"
+#include "painterinterface.h"
+
 #include <typeinfo>
 #include <QObject>
 

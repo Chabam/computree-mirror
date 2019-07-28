@@ -6,8 +6,8 @@
 template<typename RendererContextT>
 Chunk<RendererContextT>::Chunk(const uint& uniqueKey, Scene::ObjectType objectType, const Eigen::Vector3d &offset) : IChunk(uniqueKey, objectType, offset)
 {
-    m_currentContext = NULL;
-    m_contextAccessor = NULL;
+    m_currentContext = nullptr;
+    m_contextAccessor = nullptr;
 }
 
 template<typename RendererContextT>
@@ -49,8 +49,8 @@ RendererContextT* Chunk<RendererContextT>::getCurrentContext() const
 template<typename RendererContextT>
 IGraphicsDocument* Chunk<RendererContextT>::getCurrentDocument() const
 {
-    if(m_currentContext == NULL)
-        return NULL;
+    if(m_currentContext == nullptr)
+        return nullptr;
 
     return m_currentContext->getDocument();
 }
@@ -70,7 +70,7 @@ void Chunk<RendererContextT>::destroyGL(const QOpenGLContext* context)
 {
     lock();
 
-    RendererContextT* rc = getContextAccessor()->getContexts().value(const_cast<QOpenGLContext*>(context), NULL);
+    RendererContextT* rc = getContextAccessor()->getContexts().value(const_cast<QOpenGLContext*>(context), nullptr);
 
     destroyGL(rc);
 
@@ -84,7 +84,7 @@ void Chunk<RendererContextT>::destroyGL(RendererContextT* context)
 
     IChunk::setUpdated(false);
 
-    if(context == NULL)
+    if(context == nullptr)
         return;
 
     setContextUpdated(context, false);
@@ -98,7 +98,7 @@ void Chunk<RendererContextT>::getSelectionColor(float sColor[])
 {
     QColor sCol = Qt::red;
 
-    if(getCurrentDocument() != NULL)
+    if(getCurrentDocument() != nullptr)
         sCol = getCurrentDocument()->getSelectionColor();
 
     sColor[0] = sCol.redF();
@@ -116,7 +116,7 @@ void Chunk<RendererContextT>::setUpdated(bool status)
 
         this->lock();
 
-        if(m_currentContext != NULL)
+        if(m_currentContext != nullptr)
             setContextUpdated(m_currentContext, status);
 
         if(status == false) {
@@ -147,7 +147,7 @@ bool Chunk<RendererContextT>::isUpdated() const
 
     RendererContextT* context = getCurrentContext();
 
-    if(context != NULL)
+    if(context != nullptr)
     {
         ChunkCustomUpdateValues* cuv = context->createOrGetChunkCustomUpdateValues(this);
 

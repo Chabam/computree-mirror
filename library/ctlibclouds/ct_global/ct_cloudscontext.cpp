@@ -3,12 +3,12 @@
 #include "ct_global/ct_repositorymanager.h"
 #include "ct_coordinates/tools/ct_coordinatesystemmanager.h"
 
-CT_CloudsContext* CT_CloudsContext::UNIQUE_INSTANCE = NULL;
+CT_CloudsContext* CT_CloudsContext::UNIQUE_INSTANCE = nullptr;
 
 CT_CloudsContext::CT_CloudsContext()
 {
-    m_repositoryManager = NULL;
-    m_csManager = NULL;
+    m_repositoryManager = nullptr;
+    m_csManager = nullptr;
 }
 
 CT_CloudsContext::~CT_CloudsContext()

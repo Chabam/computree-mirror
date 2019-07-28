@@ -38,11 +38,11 @@ CT_FileChoiceButton::CT_FileChoiceButton(QString btlab, CT_FileChoiceButton::Nee
     _data._value = &value;
     _description = description;
 
-    _widgetCreated = NULL;
-    _scrollArea = NULL;
-    _verticalLayout = NULL;
-    _pushButtonCreated = NULL;
-    _labelCreated = NULL;
+    _widgetCreated = nullptr;
+    _scrollArea = nullptr;
+    _verticalLayout = nullptr;
+    _pushButtonCreated = nullptr;
+    _labelCreated = nullptr;
 }
 
 void CT_FileChoiceButton::saveSettings(SettingsWriterInterface &writer) const
@@ -67,7 +67,7 @@ bool CT_FileChoiceButton::restoreSettings(SettingsReaderInterface &reader)
 
 QWidget* CT_FileChoiceButton::createWidget(QWidget &parent)
 {
-    if(_pushButtonCreated == NULL)
+    if(_pushButtonCreated == nullptr)
     {
         _widgetCreated = new QWidget(&parent);
         _pushButtonCreated = new QPushButton(_widgetCreated);

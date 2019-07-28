@@ -60,7 +60,7 @@ public:
      *          - Reader is full copied
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      *          - Auto delete reader is set to true

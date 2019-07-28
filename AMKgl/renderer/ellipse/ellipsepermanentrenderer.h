@@ -37,7 +37,7 @@ public:
                     const Eigen::Vector3f& majorAxisDirection = Eigen::Vector3f(1, 0, 0),
                     const Eigen::Vector3f& normal = Eigen::Vector3f(0, 1, 0),
                     const ElementInfo &info = 0,
-                    IChunk** chunk = NULL);
+                    IChunk** chunk = nullptr);
 
 private:
     static EllipseGLRenderer        m_basicDrawRenderer;

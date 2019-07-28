@@ -21,57 +21,26 @@ CT_Reader_GDAL::CT_Reader_GDAL(const CT_Reader_GDAL &other) : SuperClass(other)
 #ifdef USE_GDAL
     m_driver = other.m_driver;
     m_nameFromDriver = other.m_nameFromDriver;
-
-    /*const QList<CT_OutStdGroupModel*> &layersModel = outGroupsModel();
-    QListIterator<CT_OutStdGroupModel*> itL(layersModel);
-
-    QHashIterator<QString, CT_OutStdSingularItemModel*> it(other.m_models);
-
-    while(it.hasNext()) {
-        it.next();
-
-        CT_OutStdSingularItemModel *model = nullptr;
-
-        itL.toFront();
-
-        while(itL.hasNext() && (model == nullptr))
-            model = (CT_OutStdSingularItemModel*)itL.next()->findModelInTree(it.key());
-
-        Q_ASSERT(model != nullptr);
-
-        m_models.insert(it.key(), model);
-    }
-
-    QHashIterator<QString, CT_OutStdItemAttributeModel*> itAttr(other.m_attrModels);
-
-    while(itAttr.hasNext()) {
-        itAttr.next();
-
-        CT_OutStdItemAttributeModel *model = nullptr;
-
-        itL.toFront();
-
-        while(itL.hasNext() && (model == nullptr))
-            model = (CT_OutStdItemAttributeModel*)itL.next()->findModelInTree(it.key());
-
-        Q_ASSERT(model != nullptr);
-
-        m_attrModels.insert(it.key(), model);
-    }*/
 #endif
 }
 
 #ifdef USE_GDAL
-CT_Reader_GDAL::CT_Reader_GDAL(const GDALDriver* driver)
+CT_Reader_GDAL::CT_Reader_GDAL(const GDALDriver* driver, int defaultMenuLevel, int rasterMenuLevel, int vectorMenuLevel)
 {
     m_driver = const_cast<GDALDriver*>(driver);
+
+    const QString driverType = getTypeOfDriver();
+
+    if (driverType == "Raster")
+        setSubMenuLevel(rasterMenuLevel == -1 ? defaultMenuLevel : rasterMenuLevel);
+    else if (driverType == "Vector")
+        setSubMenuLevel(vectorMenuLevel == -1 ? defaultMenuLevel : vectorMenuLevel);
+    else
+        setSubMenuLevel(defaultMenuLevel);
+
     init();
 }
 
-CT_Reader_GDAL::~CT_Reader_GDAL()
-{
-    clearHandles();
-}
 #endif
 
 QString CT_Reader_GDAL::getTypeOfDriver() const
@@ -111,7 +80,7 @@ void CT_Reader_GDAL::internalDeclareOutputModels(CT_ReaderOutModelStructureManag
                 const QString name = GDALGetColorInterpretationName(data->GetRasterBand(i+1)->GetColorInterpretation());
 
                 RasterHandleType* handle = new RasterHandleType();
-                m_rasterHandles.append(handle);
+                registerHandlePtr(QString("r%1").arg(i), handle);
 
                 manager.addItem(*handle, (name.isEmpty() || (name == "Undefined")) ? QString("Raster %1").arg(i) : name);
             }
@@ -120,7 +89,7 @@ void CT_Reader_GDAL::internalDeclareOutputModels(CT_ReaderOutModelStructureManag
 
             for(int i=0; i<n; ++i) {
                 LayerHandleType* layerHandle = new LayerHandleType();
-                m_layerHandles.append(layerHandle);
+                registerHandlePtr(QString("l%1").arg(i), layerHandle);
                 manager.addGroup(*layerHandle, tr("Layer %1").arg(i));
 
                 OGRLayer *poLayer = data->GetLayer(i);
@@ -170,7 +139,7 @@ bool CT_Reader_GDAL::createGeometryModel(OGRFeatureDefn *poFDefn,
 
         if(point2DHandle == nullptr) {
             point2DHandle = new Point2DHandleType();
-            m_pointHandles.insert(&layerHandle, point2DHandle);
+            registerHandlePtr(QString("p%1").arg(size_t(&layerHandle)), point2DHandle);
 
             manager.addItem(layerHandle, *point2DHandle, tr("Points"));
             createAttributesModel(poFDefn, manager, layerHandle, *point2DHandle);
@@ -182,7 +151,7 @@ bool CT_Reader_GDAL::createGeometryModel(OGRFeatureDefn *poFDefn,
 
         if(polygon2DHandle == nullptr) {
             polygon2DHandle = new Polygon2DHandleType();
-            m_polygoneHandles.insert(&layerHandle, polygon2DHandle);
+            registerHandlePtr(QString("plg%1").arg(size_t(&layerHandle)), polygon2DHandle);
 
             manager.addItem(layerHandle, *polygon2DHandle, tr("Polygones"));
             createAttributesModel(poFDefn, manager, layerHandle, *polygon2DHandle);
@@ -194,7 +163,7 @@ bool CT_Reader_GDAL::createGeometryModel(OGRFeatureDefn *poFDefn,
 
         if(polyline2DHandle == nullptr) {
             polyline2DHandle = new Polyline2DHandleType();
-            m_polylineHandles.insert(&layerHandle, polyline2DHandle);
+            registerHandlePtr(QString("pll%1").arg(size_t(&layerHandle)), polyline2DHandle);
 
             manager.addItem(layerHandle, *polyline2DHandle, tr("Polylignes"));
             createAttributesModel(poFDefn, manager, layerHandle, *polyline2DHandle);
@@ -256,7 +225,7 @@ bool CT_Reader_GDAL::createPolyline(OGRFeature *poFeature,
         CT_StandardItemGroup* layer = layerHandle->createInstance();
         rootGroup->addGroup(*layerHandle, layer);
 
-        Polyline2DHandleType* itemHandle = m_polylineHandles.value(layerHandle, nullptr);
+        Polyline2DHandleType* itemHandle = registeredHandlePtr<Polyline2DHandleType>(QString("pll%1").arg(size_t(layerHandle)));
         CT_Polyline2D* item = itemHandle->createInstance(new CT_Polyline2DData(vertices));
         layer->addSingularItem(*itemHandle, item);
 
@@ -291,7 +260,7 @@ bool CT_Reader_GDAL::createPolygon(OGRFeature *poFeature,
         CT_StandardItemGroup* layer = layerHandle->createInstance();
         rootGroup->addGroup(*layerHandle, layer);
 
-        Polygon2DHandleType* itemHandle = m_polygoneHandles.value(layerHandle, nullptr);
+        Polygon2DHandleType* itemHandle = registeredHandlePtr<Polygon2DHandleType>(QString("plg%1").arg(size_t(layerHandle)));
         CT_Polygon2D* item = itemHandle->createInstance(new CT_Polygon2DData(vertices));
         layer->addSingularItem(*itemHandle, item);
 
@@ -313,7 +282,7 @@ bool CT_Reader_GDAL::createPoint(OGRFeature *poFeature,
     CT_StandardItemGroup* layer = layerHandle->createInstance();
     rootGroup->addGroup(*layerHandle, layer);
 
-    Point2DHandleType* itemHandle = m_pointHandles.value(layerHandle, nullptr);
+    Point2DHandleType* itemHandle = registeredHandlePtr<Point2DHandleType>(QString("p%1").arg(size_t(layerHandle)));
     CT_Point2D* item = itemHandle->createInstance(new CT_Point2DData(point->getX(), point->getY()));
     layer->addSingularItem(*itemHandle, item);
 
@@ -351,7 +320,7 @@ bool CT_Reader_GDAL::internalReadFile(CT_StandardItemGroup* group)
 
             const double na = poBand->GetNoDataValue();
 
-            RasterHandleType* rasterHandle = m_rasterHandles.at(i);
+            RasterHandleType* rasterHandle = registeredHandlePtr<RasterHandleType>(QString("r%1").arg(i));
             auto raster = rasterHandle->createInstance(xMin,
                                                        yMin,
                                                        nXSize,
@@ -384,7 +353,7 @@ bool CT_Reader_GDAL::internalReadFile(CT_StandardItemGroup* group)
 
             OGRLayer *poLayer = data->GetLayer(i);
 
-            LayerHandleType* layerHandle = m_layerHandles.at(i);
+            LayerHandleType* layerHandle = registeredHandlePtr<LayerHandleType>(QString("l%1").arg(i));
 
             OGRFeature *poFeature;
 
@@ -426,14 +395,6 @@ QString CT_Reader_GDAL::uniqueName() const
 {
     return displayableName();
 }
-
-/*CT_StepsMenu::LevelPredefined CT_Reader_GDAL::getReaderSubMenuName() const
-{
-    QString driverType = getTypeOfDriver();
-    if (driverType == "Raster") {return CT_StepsMenu::LP_Raster;}
-    if (driverType == "Vector") {return CT_StepsMenu::LP_Vector;}
-    return CT_StepsMenu::LP_Others;
-}*/
 
 void CT_Reader_GDAL::init()
 {
@@ -479,27 +440,6 @@ void CT_Reader_GDAL::init()
 }
 
 #ifdef USE_GDAL
-void CT_Reader_GDAL::clearHandles()
-{
-    qDeleteAll(m_rasterHandles);
-    m_rasterHandles.clear();
-
-    qDeleteAll(m_layerHandles);
-    m_layerHandles.clear();
-
-    qDeleteAll(m_pointHandles);
-    m_pointHandles.clear();
-
-    qDeleteAll(m_polygoneHandles);
-    m_polygoneHandles.clear();
-
-    qDeleteAll(m_polylineHandles);
-    m_polylineHandles.clear();
-
-    qDeleteAll(m_itemAttributeHandles);
-    m_itemAttributeHandles.clear();
-}
-
 CT_AbstractItemAttribute* CT_Reader_GDAL::createAttributeWithGoodType(OGRFeatureDefn *poFDefn,
                                                                       int iField,
                                                                       OGRFeature *poFeature)

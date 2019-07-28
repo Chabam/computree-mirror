@@ -7,7 +7,7 @@ template<typename StructType>
 CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT() :
     SuperClass1(),
     SuperClass2(),
-    m_collection(NULL),
+    m_collection(nullptr),
     m_autoDeleteCollection(false),
     m_mask(StructMASK(0)),
     m_shiftRight(0),

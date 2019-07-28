@@ -43,7 +43,7 @@
 
 CT_AbstractStepPlugin::CT_AbstractStepPlugin()
 {
-    _pluginSettings = NULL;
+    _pluginSettings = nullptr;
     m_tool.m_pointer = this;
 }
 
@@ -56,7 +56,7 @@ CT_AbstractStepPlugin::~CT_AbstractStepPlugin()
 
 bool CT_AbstractStepPlugin::init()
 {
-    if(_pluginSettings == NULL)
+    if(_pluginSettings == nullptr)
         _pluginSettings = initQSettings();
 
     clearMemory();
@@ -162,7 +162,7 @@ CT_VirtualAbstractStep* CT_AbstractStepPlugin::createNewInstanceOfStep(const CT_
 
     return newStep;
 
-    return NULL;
+    return nullptr;
 }
 
 IPluginToolForStep* CT_AbstractStepPlugin::pluginToolForStep() const
@@ -229,16 +229,16 @@ CT_VirtualAbstractStep* CT_AbstractStepPlugin::searchStepFromKeyOfThisPluginInMe
     while(it.hasNext()) {
         CT_VirtualAbstractStep *step = searchStepFromKeyOfThisPluginInLevelsRecursively(it.next(), key);
 
-        if(step != NULL)
+        if(step != nullptr)
             return step;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CT_VirtualAbstractStep* CT_AbstractStepPlugin::searchStepFromKeyOfThisPluginInLevelsRecursively(CT_MenuLevel *level, const QString &key) const
 {
-    CT_VirtualAbstractStep *step = NULL;
+    CT_VirtualAbstractStep *step = nullptr;
 
     QList<CT_MenuLevel*> subLevels = level->levels();
     QListIterator<CT_MenuLevel*> it(subLevels);
@@ -248,7 +248,7 @@ CT_VirtualAbstractStep* CT_AbstractStepPlugin::searchStepFromKeyOfThisPluginInLe
 
         step = searchStepFromKeyOfThisPluginInLevelsRecursively(subLevel, key);
 
-        if(step != NULL)
+        if(step != nullptr)
             return step;
     }
 
@@ -262,12 +262,12 @@ CT_VirtualAbstractStep* CT_AbstractStepPlugin::searchStepFromKeyOfThisPluginInLe
             return step;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CT_ActionsSeparator* CT_AbstractStepPlugin::addNewSeparator(CT_ActionsSeparator *sep)
 {
-    if(sep != NULL)
+    if(sep != nullptr)
         m_actions.append(sep);
 
     return sep;
@@ -275,7 +275,7 @@ CT_ActionsSeparator* CT_AbstractStepPlugin::addNewSeparator(CT_ActionsSeparator 
 
 CT_StandardExporterSeparator* CT_AbstractStepPlugin::addNewSeparator(CT_StandardExporterSeparator *sep)
 {
-    if(sep != NULL)
+    if(sep != nullptr)
         m_exporters.append(sep);
 
     return sep;
@@ -283,7 +283,7 @@ CT_StandardExporterSeparator* CT_AbstractStepPlugin::addNewSeparator(CT_Standard
 
 CT_StandardReaderSeparator *CT_AbstractStepPlugin::addNewSeparator(CT_StandardReaderSeparator *sep)
 {
-    if(sep != NULL)
+    if(sep != nullptr)
         m_readers.append(sep);
 
     return sep;
@@ -291,13 +291,13 @@ CT_StandardReaderSeparator *CT_AbstractStepPlugin::addNewSeparator(CT_StandardRe
 
 void CT_AbstractStepPlugin::addNewFilter(CT_AbstractFilter *filter)
 {
-    if(filter != NULL)
+    if(filter != nullptr)
         m_filters.append(filter);
 }
 
 void CT_AbstractStepPlugin::addNewMetric(CT_AbstractMetric *metric)
 {
-    if(metric != NULL)
+    if(metric != nullptr)
         m_metrics.append(metric);
 }
 
@@ -377,7 +377,7 @@ void CT_AbstractStepPlugin::searchOpenFileStepInLevelRecursively(CT_MenuLevel *l
         if(step->plugin() == this) {
             CT_AbstractStepLoadFile *stepLF = dynamic_cast<CT_AbstractStepLoadFile*>(step);
 
-            if(stepLF != NULL && stepLF->acceptFile(filepath, &acceptAllFiles)) {
+            if(stepLF != nullptr && stepLF->acceptFile(filepath, &acceptAllFiles)) {
                 if(acceptAllFiles)
                     listOfStepThatAcceptAllFiles.append(stepLF);
                 else

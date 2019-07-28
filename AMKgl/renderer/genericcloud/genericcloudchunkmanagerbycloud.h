@@ -62,7 +62,7 @@ public:
         m_globalCloudManager = AMKglEA->getGlobalCloudManager<CloudManager>();
         m_globalCloudManager->addCloudListener(this);
 
-        m_lastChunkUsed = NULL;
+        m_lastChunkUsed = nullptr;
         m_lastChunkIndexUsed = 0;
     }
 
@@ -182,7 +182,7 @@ protected:
      */
     size_t getChunkUniqueIndexForObjectAt(const size_t& globalObjectIndex) const
     {
-        if((m_lastChunkUsed != NULL)
+        if((m_lastChunkUsed != nullptr)
                 && (globalObjectIndex >= m_lastChunkUsed->getBeginningOfCloud())
                 && (globalObjectIndex <= m_lastChunkUsed->getEndOfCloud())) {
             return m_lastChunkIndexUsed;
@@ -193,7 +193,7 @@ protected:
 
         Q_ASSERT(it != end);
 
-        ChunkT* r = NULL;
+        ChunkT* r = nullptr;
 
         size_t i = 0;
 
@@ -228,11 +228,11 @@ protected:
      * @warning * If you want to use the method "createOrGetChunkFromUniqueIndex" just call it like this "createOrGetChunkFromUniqueIndex(*currentIndexInCollection)"
      */
     ChunkT* getChunkForObjectAt(const size_t &globalIndex,
-                                size_t* currentIndexInCollection = NULL) const
+                                size_t* currentIndexInCollection = nullptr) const
     {
         const size_t ui = getChunkUniqueIndexForObjectAt(globalIndex);
 
-        if(currentIndexInCollection != NULL)
+        if(currentIndexInCollection != nullptr)
             *currentIndexInCollection = ui;
 
         return &const_cast<GenericCloudChunkManagerByCloud<ICloudManagerT, ChunkT, InheritFromT>*>(this)->createOrGetChunkFromUniqueIndex(ui);
@@ -240,7 +240,7 @@ protected:
 
     void chunkAboutToBeDeleted(ChunkT* chunk)
     {
-        m_lastChunkUsed = NULL;
+        m_lastChunkUsed = nullptr;
 
         GenericCloudChunkManagerByCloudSuperClass::chunkAboutToBeDeleted(chunk);
     }

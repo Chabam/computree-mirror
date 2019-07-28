@@ -26,7 +26,7 @@ DM_ItemDrawableViewConfiguration DM_ItemDrawableViewConfigurationBuilder::getCon
             return DM_ItemDrawableViewConfiguration(it.key());
     }
 
-    return DM_ItemDrawableViewConfiguration(NULL);
+    return DM_ItemDrawableViewConfiguration(nullptr);
 }
 
 void DM_ItemDrawableViewConfigurationBuilder::addItemDrawable(CT_AbstractItemDrawable &item)
@@ -41,7 +41,7 @@ void DM_ItemDrawableViewConfigurationBuilder::addItemDrawable(CT_AbstractItemDra
 
     int value = 0;
 
-    if(t != NULL)
+    if(t != nullptr)
     {
         value = addItemDrawableConfigurationToCollection(t, item);
 
@@ -59,7 +59,7 @@ void DM_ItemDrawableViewConfigurationBuilder::addItemDrawable(CT_AbstractItemDra
         {
             t = dependantViewConfigurations.at(i);
 
-            if(t != NULL)
+            if(t != nullptr)
             {
                 value = addItemDrawableConfigurationToCollection(t, item);
 
@@ -94,7 +94,7 @@ void DM_ItemDrawableViewConfigurationBuilder::removeItemDrawable(CT_AbstractItem
 
     int value = 0;
 
-    if(t != NULL)
+    if(t != nullptr)
     {
         value = removeItemDrawableConfigurationFromCollection(t, item);
 
@@ -112,7 +112,7 @@ void DM_ItemDrawableViewConfigurationBuilder::removeItemDrawable(CT_AbstractItem
         {
             t = dependantViewConfigurations.at(i);
 
-            if(t != NULL)
+            if(t != nullptr)
             {
                 value = removeItemDrawableConfigurationFromCollection(t, item);
 
@@ -144,9 +144,9 @@ void DM_ItemDrawableViewConfigurationBuilder::clear()
 
 int DM_ItemDrawableViewConfigurationBuilder::addItemDrawableConfigurationToCollection(CT_ItemDrawableConfiguration *t, CT_AbstractItemDrawable &item)
 {
-    QList<CT_AbstractItemDrawable*> *list = m_config.value(t, NULL);
+    QList<CT_AbstractItemDrawable*> *list = m_config.value(t, nullptr);
 
-    if(list == NULL) {
+    if(list == nullptr) {
         list = new QList<CT_AbstractItemDrawable*>();
         m_config.insert(t, list);
     }
@@ -158,9 +158,9 @@ int DM_ItemDrawableViewConfigurationBuilder::addItemDrawableConfigurationToColle
 
 int DM_ItemDrawableViewConfigurationBuilder::removeItemDrawableConfigurationFromCollection(CT_ItemDrawableConfiguration *t, CT_AbstractItemDrawable &item)
 {
-    QList<CT_AbstractItemDrawable*> *list = m_config.value(t, NULL);
+    QList<CT_AbstractItemDrawable*> *list = m_config.value(t, nullptr);
 
-    if(list == NULL)
+    if(list == nullptr)
         return 0;
 
     list->removeOne(&item);
@@ -195,9 +195,9 @@ QList<DM_ItemDrawableViewConfiguration> DM_ItemDrawableViewConfigurationBuilder:
 
 QList<CT_AbstractItemDrawable *> DM_ItemDrawableViewConfigurationBuilder::itemDrawablesForConfiguration(CT_ItemDrawableConfiguration *config) const
 {
-    QList<CT_AbstractItemDrawable *> *l = m_config.value(config, NULL);
+    QList<CT_AbstractItemDrawable *> *l = m_config.value(config, nullptr);
 
-    if(l == NULL)
+    if(l == nullptr)
         return QList<CT_AbstractItemDrawable *>();
 
     return *l;

@@ -48,7 +48,7 @@ public:
      * @warning You can call once again this method only after you have registered the object returned
      *          by this method : use the method "registerUndefinedSizePointCloud"
      *
-     * @return Returns NULL if a previous CT_AbstractUndefinedSizePointCloud was created but not registered. Otherwise returns an object
+     * @return Returns nullptr if a previous CT_AbstractUndefinedSizePointCloud was created but not registered. Otherwise returns an object
      *         that can be used to add/remove new points to global points cloud.
      */
     CT_AbstractUndefinedSizePointCloud* createNewUndefinedSizePointCloud();
@@ -95,7 +95,7 @@ public:
         else if(syncWith == SyncWithEdgeCloud)
             return m_syncEdgeCloudManager->createNewCloud<CloudRegistered, Cloud >();
 
-        return QSharedPointer< CloudRegistered >(NULL);
+        return QSharedPointer< CloudRegistered >(nullptr);
     }
 
     /**
@@ -143,7 +143,7 @@ public:
         else if(syncWith == SyncWithEdgeCloud)
             return registerCloudIndex<CT_Edge>(new IndexCloudT<CT_Edge>());
 
-        return CT_MCIR(NULL);
+        return CT_MCIR(nullptr);
     }
 
     /**
@@ -247,7 +247,7 @@ public:
      * @brief Returns the global T cloud (contains all T (points/faces or edges) created)
      */
     template<typename T>
-    CT_AbstractCloudT<T>* globalCloud() const { return NULL; }
+    CT_AbstractCloudT<T>* globalCloud() const { return nullptr; }
 
 protected:
 
@@ -268,7 +268,7 @@ protected:
     CT_Repository();
 
     template<typename T>
-    CT_AbstractGlobalCloudManagerT<T>* globalCloudManager() const { return NULL; }
+    CT_AbstractGlobalCloudManagerT<T>* globalCloudManager() const { return nullptr; }
 
     /**
      * @brief IF the cloud index passed in parameter was created by the global cloud manager and IF it was at
@@ -278,7 +278,7 @@ protected:
      *        If all condition it's ok, the cloud in the QSharedPointer is resized to the 'newSize' and the global cloud is resized to
      *        (current size + (newSize - cloudIndex->size()) )
      *
-     * @return If all condition it's ok the QSharePointer passed in parameter is returned, otherwise a QSharedPointer with data() == NULL.
+     * @return If all condition it's ok the QSharePointer passed in parameter is returned, otherwise a QSharedPointer with data() == nullptr.
      */
     template<typename T>
     QSharedPointer< CT_AbstractNotModifiableCloudIndexRegisteredT<T> > resizeCloudIndexAndGlobalCloud(QSharedPointer< CT_AbstractNotModifiableCloudIndexRegisteredT<T> > cir, const size_t &newSize);

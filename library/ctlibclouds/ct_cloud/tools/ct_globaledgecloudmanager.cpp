@@ -5,8 +5,8 @@ CT_GlobalEdgeCloudManager::CT_GlobalEdgeCloudManager() : CT_GlobalCloudManagerT<
     // add a edge to begin index to 1 (invalid index of a face is 0)
     this->m_cloud.addT(CT_Edge());
 
-    m_gpcm = NULL;
-    m_gfcm = NULL;
+    m_gpcm = nullptr;
+    m_gfcm = nullptr;
 
     m_syncEdgeE.m_manager = this;
     m_syncEdgeF.m_manager = this;

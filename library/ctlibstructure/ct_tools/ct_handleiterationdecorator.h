@@ -27,7 +27,8 @@ public:
 
         const CT_InAbstractModel* inResultModel = inResult.model();
 
-        MODELS_ASSERT(inResultModel != NULL);
+        if(inResultModel == nullptr)
+            return final_const_iterator(const_iterator(), const_iterator());
 
         const int nResultPossibility = inResultModel->nPossibilitySaved();
 
@@ -77,11 +78,12 @@ private:
 
         const InResultModelType* inResultModel = inResultCopy.model();
 
-        MODELS_ASSERT(inResultModel != NULL);
+        if(inResultModel == nullptr)
+            return;
 
         InResultToolType* tool = inResultModel->toolToModifyResultModelCopies();
 
-        MODELS_ASSERT(tool != NULL);
+        MODELS_ASSERT(tool != nullptr);
 
         const int nResultPossibility = inResultModel->nPossibilitySaved();
 
@@ -98,7 +100,7 @@ private:
 
                         CT_OutAbstractModel* copiedOutModel = outResultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(originalOutModel);
 
-                        Q_ASSERT(copiedOutModel != NULL);
+                        Q_ASSERT(copiedOutModel != nullptr);
 
                         outModels[currentIndex++] = static_cast<DEF_CT_AbstractGroupModelOut*>(copiedOutModel);
                         return true;

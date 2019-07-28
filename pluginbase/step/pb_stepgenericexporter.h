@@ -16,55 +16,56 @@
 class PB_StepGenericExporter : public CT_AbstractStep
 {
     Q_OBJECT
-    typedef CT_AbstractStep SuperClass;
+    using SuperClass = CT_AbstractStep;
 
 public:
 
-    PB_StepGenericExporter(CT_StepInitializeData &dataInit,
-                           CT_AbstractExporter *exporter);
-    ~PB_StepGenericExporter();
+    PB_StepGenericExporter(CT_AbstractExporter *exporter);
+    ~PB_StepGenericExporter() final;
 
     const CT_AbstractExporter* exporter() const;
 
-    // CT_AbstractStep non obligatoire :
-    void init();
+    /**
+     * @brief Redefined to return the unique name of the exporter
+     */
+    QString name() const final;
 
-    // surcharger pour ajouter PB_StepGenericExporter__
-    QString getStepName() const;
+    /**
+     * @brief Redefined to return the displayable name of the exporter
+     */
+    QString displayableName() const final;
 
-    // surcharger pour afficher le nom de l'exporter
-    QString getStepDisplayableName() const;
+    /**
+     * @brief Redefined to return the tooltip of the exporter
+     */
+    QString description() const final;
 
-    QString getStepDetailledDescription() const;
+    /**
+     * @brief Redefined to return the tooltip of the exporter or, if empty, type of files
+     *        that can be loaded by the exporter
+     */
+    QString detailledDescription() const final;
 
-    // CT_AbstractStep non obligatoire :
-    QString getStepDescription() const;
+    void saveInputSettings(SettingsWriterInterface& writer) const final;
+    bool restoreInputSettings(SettingsReaderInterface &reader) final;
 
-    // CT_AbstractStep obligatoire :
-    CT_VirtualAbstractStep* createNewInstance(CT_StepInitializeData &dataInit);
+    void savePostSettings(SettingsWriterInterface& writer) const final;
+    bool restorePostSettings(SettingsReaderInterface &reader) final;
 
-    void saveInputSettings(SettingsWriterInterface& writer) const override;
-    bool restoreInputSettings(SettingsReaderInterface &reader) override;
+    CT_VirtualAbstractStep* createNewInstance() const final;
 
-    void savePostSettings(SettingsWriterInterface& writer) const override;
-    bool restorePostSettings(SettingsReaderInterface &reader) override;
 protected:
 
-    void createPreConfigurationDialog();
+    QString createExportExtensionString() const;
 
-    // CT_AbstractStep obligatoire :
-    void createInResultModelListProtected();
+    void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
 
-    // CT_AbstractStep non obligatoire :
-    bool configureInputResult(bool forceReadOnly = false);
+    void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
-    // CT_AbstractStep non obligatoire :
-    bool postConfigure();
+    bool postInputConfigure() final;
 
-    // CT_AbstractStep obligatoire :
-    void createOutResultModelListProtected();
+    void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
-    // CT_AbstractStep obligatoire :
     void compute();
 
 private:
@@ -76,12 +77,12 @@ private:
     bool                _multipleExport;
     bool                _otherItem;
 
-    bool configureExporter();
 
-    void setItemsToExportFromModelsToExporter();
-    void setDefaultExportPath(const QString &path);
+
+    //void setDefaultExportPath(const QString &path);
 
     QString replaceBadCharacters(const QString &name) const;
+
 private slots:
     void exportProgressChanged(int progress);
 };

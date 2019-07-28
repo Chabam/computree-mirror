@@ -71,11 +71,11 @@ CT_MenuLevel* GStepChooserDialog::existInFavorites(CT_VirtualAbstractStep *step)
 {
     CT_MenuLevel *favorite = GUI_MANAGER->getPluginManager()->stepsMenu()->levelFromOperation(CT_StepsMenu::LO_Favorites);
 
-    if(favorite != NULL) {
+    if(favorite != nullptr) {
         return existInLevelRecursively(favorite, step);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CT_MenuLevel *GStepChooserDialog::existInLevelRecursively(CT_MenuLevel *level, CT_VirtualAbstractStep *step)
@@ -87,7 +87,7 @@ CT_MenuLevel *GStepChooserDialog::existInLevelRecursively(CT_MenuLevel *level, C
         CT_MenuLevel* lev = itL.next();
 
         CT_MenuLevel* levelWithStep = existInLevelRecursively(lev, step);
-        if(levelWithStep != NULL)
+        if(levelWithStep != nullptr)
         {
             return levelWithStep;
         }
@@ -106,7 +106,7 @@ CT_MenuLevel *GStepChooserDialog::existInLevelRecursively(CT_MenuLevel *level, C
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool GStepChooserDialog::event(QEvent *e)
@@ -181,7 +181,7 @@ void GStepChooserDialog::raiseStepInFavoritesMenu()
 {
     CT_VirtualAbstractStep* step = ui->stepChooserWidget->currentStepSelected();
     CT_MenuLevel* level = existInFavorites(step);
-    if (level != NULL)
+    if (level != nullptr)
     {
         level->raiseStepInMenu(step);
         ui->stepChooserWidget->reconstruct();
@@ -193,7 +193,7 @@ void GStepChooserDialog::lowerStepInFavoritesMenu()
 {
     CT_VirtualAbstractStep* step = ui->stepChooserWidget->currentStepSelected();
     CT_MenuLevel* level = existInFavorites(step);
-    if (level != NULL)
+    if (level != nullptr)
     {
         level->lowerStepInMenu(step);
         ui->stepChooserWidget->reconstruct();
@@ -205,7 +205,7 @@ void GStepChooserDialog::showSelectedStepInformation()
 {
     CT_VirtualAbstractStep *step = ui->stepChooserWidget->currentStepSelected();
 
-    if(step != NULL) {
+    if(step != nullptr) {
         GAboutStepDialog dialog(step);
         dialog.exec();
     } else {
@@ -220,8 +220,8 @@ void GStepChooserDialog::refreshContextMenuOfStep(CT_VirtualAbstractStep *step)
     m_actionRaiseStep->setEnabled(false);
     m_actionLowerStep->setEnabled(false);
 
-    if(step != NULL) {
-        bool exist = (existInFavorites(step) != NULL);
+    if(step != nullptr) {
+        bool exist = (existInFavorites(step) != nullptr);
 
         m_actionAddStepToFavorites->setEnabled(!exist);
         m_actionRemoveStepFromFavorites->setEnabled(exist);

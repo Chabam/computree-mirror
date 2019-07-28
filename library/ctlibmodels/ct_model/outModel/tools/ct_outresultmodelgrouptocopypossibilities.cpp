@@ -22,7 +22,7 @@ int CT_OutResultModelGroupToCopyPossibilities::nResultModels() const
 void CT_OutResultModelGroupToCopyPossibilities::removeRootGroup()
 {
     for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
-        outResultModel->setRootGroup(NULL);
+        outResultModel->setRootGroup(nullptr);
     }
 }
 

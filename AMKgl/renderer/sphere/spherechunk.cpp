@@ -38,7 +38,7 @@ SphereChunk::SphereChunk(const uint& uniqueKey,
                                                                                             VBOFastDraw,
                                                                                             VAOFastDraw)
 {
-    m_renderer = NULL;
+    m_renderer = nullptr;
 }
 
 void SphereChunk::setPermanentRenderer(const SpherePermanentRenderer *renderer)
@@ -56,13 +56,13 @@ void SphereChunk::basicDrawShape(const ShaderParamsType& param,
 
     Eigen::Vector2f* tp = getFirstThetaPhiAttribute();
 
-    if(tp == NULL)
+    if(tp == nullptr)
         return;
 
     bool checkThetaTwoSide = param.startEndThetaInRadians(0) > param.startEndThetaInRadians(1);
     bool checkPhiTwoSide = param.startEndPhiInRadians(0) > param.startEndPhiInRadians(1);
 
-    if(indices != NULL) {
+    if(indices != nullptr) {
 
         for(size_t j=0; j<nVertex; ++j) {
             const GLuint& index = (*indices)[j];
@@ -87,10 +87,10 @@ void SphereChunk::basicDrawShape(const ShaderParamsType& param,
 
 Eigen::Vector2f* SphereChunk::getFirstThetaPhiAttribute() const
 {
-    if(m_renderer != NULL)
+    if(m_renderer != nullptr)
         return m_renderer->getFirstThetaPhiAttribute();
 
-    return NULL;
+    return nullptr;
 }
 
 bool SphereChunk::checkThetaPhi(const bool &checkThetaTwoSide, const bool &checkPhiTwoSide,

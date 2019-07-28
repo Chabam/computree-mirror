@@ -87,7 +87,7 @@ public:
      * @param item : item
      * @param info : item's information
      * @param provider : provider to get cloud to modify
-     * @param f : function to apply (can be NULL)
+     * @param f : function to apply (can be nullptr)
      */
     static inline void staticApplyOperationToObjectOfAnItem(Item* item,
                                                             PermanentItemInformation* info,
@@ -96,7 +96,7 @@ public:
 
         Q_UNUSED(item)
 
-        if(f != NULL) {
+        if(f != nullptr) {
             PermanentItemInformation::ObjectCollectionIterator it(info->getObjectsCollection());
 
             while(it.hasNext()) {
@@ -144,7 +144,7 @@ public:
         typename Collection::const_iterator it = begin;
         typename Collection::const_iterator end = providers.end();
 
-        if(f != NULL) {
+        if(f != nullptr) {
             PermanentItemInformation::ObjectCollectionIterator itO(info->getObjectsCollection());
 
             while(itO.hasNext()) {
@@ -184,7 +184,7 @@ public:
                                                             ItemsPickingTools::functionToApplyToInfo f) {
         Q_UNUSED(item)
 
-        if(f != NULL) {
+        if(f != nullptr) {
             PermanentItemInformation::ObjectCollectionIterator it(info->getObjectsCollection());
 
             while(it.hasNext()) {

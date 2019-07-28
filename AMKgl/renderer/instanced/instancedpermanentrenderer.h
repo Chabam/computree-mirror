@@ -135,7 +135,7 @@ public:
      * @return the chunk that can be used to add the shape with the bouding box passed in parameter
      */
     const Chunk& createOrGetChunkForShape(const Eigen::AlignedBox3d &bbox,
-                                          uint* chunkUniqueKey = NULL);
+                                          uint* chunkUniqueKey = nullptr);
 
     /**
      * @brief Add an shape

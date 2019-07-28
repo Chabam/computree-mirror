@@ -234,17 +234,17 @@ protected:
     static std::vector<quint8> staticInitBoxPlaneIndices();
 
     /**
-     * @brief Add an intersection point (pass it to the interceptor if is not NULL)
+     * @brief Add an intersection point (pass it to the interceptor if is not nullptr)
      */
     void addIntersectionPoint(const Eigen::Vector3d& p, const Eigen::Vector3f& color = Eigen::Vector3f(1,1,1)) const;
 
     /**
-     * @brief Add an intersection line (pass it to the interceptor if is not NULL)
+     * @brief Add an intersection line (pass it to the interceptor if is not nullptr)
      */
     void addIntersectionLine(const Eigen::Vector3d& origin, const Eigen::Vector3d& direction, const Eigen::Vector3f& color = Eigen::Vector3f(1,1,1)) const;
 
     /**
-     * @brief Add an intersection segment (pass it to the interceptor if is not NULL)
+     * @brief Add an intersection segment (pass it to the interceptor if is not nullptr)
      */
     void addIntersectionSegment(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2, const Eigen::Vector3f& color = Eigen::Vector3f(1,1,1)) const;
 

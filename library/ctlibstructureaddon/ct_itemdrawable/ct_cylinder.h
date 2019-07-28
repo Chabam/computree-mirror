@@ -60,7 +60,7 @@ public:
     /**
       * \brief Retourne un cercle 2D  partir du nuage de points pass en paramtre.
       *
-      * \return NULL si le nombre de points est infrieur  3.
+      * \return nullptr si le nombre de points est infrieur  3.
       */
     static CT_Cylinder* staticCreate3DCylinderFromPointCloud(const CT_AbstractPointCloudIndex &pointCloudIndex,
                                                              const Eigen::Vector3d &pointCloudBarycenter);

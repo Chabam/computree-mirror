@@ -34,10 +34,10 @@ public:
      *          - Removed later flags
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
-     *          - Parent container is set to NULL
+     *          - Parent container is set to nullptr
      *          - Childrens (items, sucessor, components, branches) was not copied (you must copy the CT_TTreeGroup that will set the structure)
      */
     CT_TOPFNodeGroup(const CT_TOPFNodeGroup& other) = default;

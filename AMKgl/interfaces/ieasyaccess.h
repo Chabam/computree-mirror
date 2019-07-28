@@ -22,7 +22,7 @@ public:
     template<typename ICloudManager>
     ICloudManager* getGlobalCloudManager() const {
         Q_ASSERT_X(false, "IEasyAccess::getGlobalCloudManager", "Developper forget to specialize this method with a special type of global cloud manager.");
-        return NULL;
+        return nullptr;
     }
 
     /**
@@ -56,9 +56,9 @@ public:
     BufferObjectManager& createOrGetBufferObjectManager(const QOpenGLContext* context)
     {
         QOpenGLContext* ncContext = const_cast<QOpenGLContext*>(context);
-        BufferObjectManager* manager = m_bufferObjectManagers.value(ncContext, NULL);
+        BufferObjectManager* manager = m_bufferObjectManagers.value(ncContext, nullptr);
 
-        if(manager == NULL) {
+        if(manager == nullptr) {
             manager = new BufferObjectManager();
             m_bufferObjectManagers.insert(ncContext, manager);
         }
@@ -72,9 +72,9 @@ public:
     void contextAboutToBeDeleted(const QOpenGLContext* context)
     {
         QOpenGLContext* ncContext = const_cast<QOpenGLContext*>(context);
-        BufferObjectManager* manager = m_bufferObjectManagers.value(ncContext, NULL);
+        BufferObjectManager* manager = m_bufferObjectManagers.value(ncContext, nullptr);
 
-        if(manager != NULL)
+        if(manager != nullptr)
             m_bufferObjectManagers.remove(ncContext);
 
         delete manager;

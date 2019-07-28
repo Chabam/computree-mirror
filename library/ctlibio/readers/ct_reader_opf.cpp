@@ -14,7 +14,7 @@
 
 const QVector<QString> CT_Reader_OPF::TOPOLOGY_NAMES = QVector<QString>() << "topology" << "decomp" << "follow" << "branch";
 
-CT_Reader_OPF::CT_Reader_OPF() : SuperClass()
+CT_Reader_OPF::CT_Reader_OPF(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     m_loadMeshes = false;
 
@@ -33,49 +33,18 @@ CT_Reader_OPF::CT_Reader_OPF(const CT_Reader_OPF &other) : SuperClass(other)
     m_types = other.m_types;
     m_attributes = other.m_attributes;
     m_totalNode = other.m_totalNode;
-
-    /*const QList<CT_OutStdGroupModel*> &topology = outGroupsModel();
-
-    CT_OutStdGroupModel *topologyModel = nullptr;
-
-    if(!topology.isEmpty())
-        topologyModel = topology.first();
-
-    if(topologyModel != nullptr) {
-        QHashIterator<QString, CT_OutAbstractModel*> it(other.m_models);
-
-        while(it.hasNext()) {
-            it.next();
-
-            if(it.key() == topologyModel->uniqueName())
-                m_models.insert(it.key(), topologyModel);
-            else {
-                CT_OutAbstractModel *model = (CT_OutAbstractModel*)topologyModel->findModelInTree(it.key());
-
-                Q_ASSERT(model != nullptr);
-
-                m_models.insert(it.key(), model);
-            }
-        }
-    }*/
 }
 
 CT_Reader_OPF::~CT_Reader_OPF()
 {
     clearMeshes();
     clearShapes();
-    clearHandles();
 }
 
 QString CT_Reader_OPF::displayableName() const
 {
     return tr("Fichier AmapStudio - OPF");
 }
-
-/*CT_StepsMenu::LevelPredefined CT_Reader_OPF::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Others;
-}*/
 
 void CT_Reader_OPF::recursiveReadTopologyForModel(rapidxml::xml_node<> *node,
                                                   int &totalNode,
@@ -133,7 +102,7 @@ void CT_Reader_OPF::recursiveReadTopology(rapidxml::xml_node<> *xmlNode,
     const QString typeName = xmlNode->first_attribute("class")->value();
 
     CT_ItemAttributeList *attList = new CT_ItemAttributeList();
-    node->addSingularItem(*m_attListHandles.value(typeName + "_a"), attList);
+    node->addSingularItem(*registeredHandlePtr<AttributeListHandleType>(typeName + "_a"), attList);
 
     rapidxml::xml_node<> *xmlChild = xmlNode->first_node();
 
@@ -151,21 +120,21 @@ void CT_Reader_OPF::recursiveReadTopology(rapidxml::xml_node<> *xmlNode,
             const QString typeName2 = xmlChild->first_attribute("class")->value();
 
             newNode = new CT_TOPFNodeGroup();
-            node->addComponent(*m_nodeHandles.value(typeName2), newNode);
+            node->addComponent(*registeredHandlePtr<NodeGroupHandleType>(typeName2), newNode);
         }
         else if(name == "branch")
         {
             const QString typeName2 = xmlChild->first_attribute("class")->value();
 
             newNode = new CT_TOPFNodeGroup();
-            node->addBranch(*m_nodeHandles.value(typeName2), newNode);
+            node->addBranch(*registeredHandlePtr<NodeGroupHandleType>(typeName2), newNode);
         }
         else if(m_attributes.contains(name))
         {
             CT_AbstractItemAttribute *att = staticCreateAttributeForType(m_attributes.value(name).m_type, xmlChild->value());
 
             if(att != nullptr)
-                attList->addItemAttribute(*m_attHandles.value(typeName + "_" + name), att);
+                attList->addItemAttribute(*registeredHandlePtr<AbstractAttributeHandle>(typeName + "_" + name), att);
         }
 
         if(newNode != nullptr)
@@ -245,8 +214,6 @@ bool CT_Reader_OPF::postVerifyFile(const QString& filepath)
 
 void CT_Reader_OPF::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    clearHandles();
-
     QHash<QString, CT_OutAbstractItemAttributeModel*>   attributesOriginalModels;
 
     // Tree Group
@@ -264,17 +231,17 @@ void CT_Reader_OPF::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
         NodeGroupHandleType* nodeHandle = new NodeGroupHandleType();
         manager.addGroup(m_topologyHandle, *nodeHandle, type.m_name);
         //nodeHandle->firstModel()->setOPFLevel(type.m_level);
-        m_nodeHandles.insert(type.m_name, nodeHandle);
+        registerHandlePtr(type.m_name, nodeHandle);
 
         // Mesh model
         MeshHandleType* meshHandle = new MeshHandleType();
         manager.addItem(*nodeHandle, *meshHandle, tr("Mesh"));
-        m_meshHandles.insert(type.m_name + "_m", meshHandle);
+        registerHandlePtr(type.m_name + "_m", meshHandle);
 
         // Attribute list
         AttributeListHandleType* attListHandle = new AttributeListHandleType();
         manager.addItem(*nodeHandle, *attListHandle, type.m_name);
-        m_attListHandles.insert(type.m_name + "_a", attListHandle);
+        registerHandlePtr(type.m_name + "_a", attListHandle);
 
         QHashIterator<QString, CT_OPF_Attribute> itA(type.m_attributes);
 
@@ -364,7 +331,7 @@ bool CT_Reader_OPF::internalReadFile(CT_StandardItemGroup* rootGroup)
                     const QString typeName = xmlNode->first_attribute("class")->value();
 
                     node = new CT_TOPFNodeGroup();
-                    tree->setRootNode(*m_nodeHandles.value(typeName), node);
+                    tree->setRootNode(*registeredHandlePtr<NodeGroupHandleType>(typeName), node);
                 }
 
                 if(node != nullptr)
@@ -454,21 +421,6 @@ void CT_Reader_OPF::finalizeSettings()
     m_types = m_typesNew;
     m_attributes = m_attributesNew;
     m_totalNode = m_totalNodeNew;
-}
-
-void CT_Reader_OPF::clearHandles()
-{
-    qDeleteAll(m_nodeHandles.begin(), m_nodeHandles.end());
-    m_nodeHandles.clear();
-
-    qDeleteAll(m_meshHandles.begin(), m_meshHandles.end());
-    m_meshHandles.clear();
-
-    qDeleteAll(m_attListHandles.begin(), m_attListHandles.end());
-    m_attListHandles.clear();
-
-    qDeleteAll(m_attHandles.begin(), m_attHandles.end());
-    m_attHandles.clear();
 }
 
 void CT_Reader_OPF::clearMeshes()
@@ -767,7 +719,7 @@ void CT_Reader_OPF::transformAndCreateMesh(CT_Mesh *mesh, Eigen::Vector3d &min, 
     meshModel->setDUp(dUp);
     meshModel->setDDown(dDwn);
 
-    node->addSingularItem(*m_meshHandles.value(typeName +  + "_m"), meshModel);
+    node->addSingularItem(*registeredHandlePtr<MeshHandleType>(typeName +  + "_m"), meshModel);
 }
 
 // CT_OPF_Mesh //

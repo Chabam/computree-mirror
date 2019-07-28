@@ -15,7 +15,7 @@ class CT_OutAbstractResultModel;
 class CTLIBSTRUCTUREWIDGET_EXPORT CT_ItemDrawableCollectionHierarchyResult
 {
 public:
-    CT_ItemDrawableCollectionHierarchyResult() { result = NULL; modelResult = NULL;}
+    CT_ItemDrawableCollectionHierarchyResult() { result = nullptr; modelResult = nullptr;}
 
     /**
      * @brief Contains real result if the element is created from step that have results

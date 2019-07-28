@@ -24,8 +24,8 @@
 
 PointRendererShaders::PointRendererShaders()
 {
-    m_pointsProgram = NULL;
-    m_normalsProgram = NULL;
+    m_pointsProgram = nullptr;
+    m_normalsProgram = nullptr;
     m_shaderPointsVertexLocation = -1;
     m_shaderPointsInfoLocation = -1;
     m_shaderPointsColorLocation = -1;
@@ -68,7 +68,7 @@ bool PointRendererShaders::init(const QOpenGLContext* context)
             if(!ok) {
                 AMKglLOG->addErrorMessage(error);
                 delete m_normalsProgram;
-                m_normalsProgram = NULL;
+                m_normalsProgram = nullptr;
                 return false;
             }
 
@@ -97,7 +97,7 @@ bool PointRendererShaders::init(const QOpenGLContext* context)
         if(!ok) {
             AMKglLOG->addErrorMessage(error);
             delete m_pointsProgram;
-            m_pointsProgram = NULL;
+            m_pointsProgram = nullptr;
             return false;
         }
 
@@ -134,7 +134,7 @@ bool PointRendererShaders::bindAndConfigureByDefaultPointsShader(const IGraphics
 
 bool PointRendererShaders::bindPointShader()
 {
-    if(getPointsShaderProgram() == NULL)
+    if(getPointsShaderProgram() == nullptr)
         return false;
 
     return getPointsShaderProgram()->bind();
@@ -148,7 +148,7 @@ void PointRendererShaders::releasePointsShader()
 bool PointRendererShaders::bindAndConfigureByDefaultNormalsShader(const IGraphicsDocument *document,
                                                                   const FlagsPropertyManager& fpM)
 {
-    if((document == NULL)
+    if((document == nullptr)
             || !document->mustShowNormals()
             || (document->getNormalsLength() <= 0)
             || !bindShader(getNormalsShaderProgram()))
@@ -172,7 +172,7 @@ bool PointRendererShaders::bindAndConfigureByDefaultNormalsShader(const IGraphic
 
 bool PointRendererShaders::bindNormalsShader()
 {
-    if(getNormalsShaderProgram() == NULL)
+    if(getNormalsShaderProgram() == nullptr)
         return false;
 
     return getNormalsShaderProgram()->bind();
@@ -185,13 +185,13 @@ void PointRendererShaders::releaseNormalsShader()
 
 bool PointRendererShaders::bindAndSetVertexAttributeToPointsShader(QOpenGLBuffer &vertex)
 {
-    if((getPointsShaderProgram() == NULL)
+    if((getPointsShaderProgram() == nullptr)
             || (getPointsShaderVertexAttributeLocation() == -1)
             || !vertex.isCreated()
             || !vertex.bind())
         return false;
 
-    bool ok = setVertexAttributeToPointsShader(NULL);
+    bool ok = setVertexAttributeToPointsShader(nullptr);
 
     vertex.release();
 
@@ -200,7 +200,7 @@ bool PointRendererShaders::bindAndSetVertexAttributeToPointsShader(QOpenGLBuffer
 
 bool PointRendererShaders::setVertexAttributeToPointsShader(const FloatPoint *point)
 {
-    if((getPointsShaderProgram() == NULL)
+    if((getPointsShaderProgram() == nullptr)
             || (getPointsShaderVertexAttributeLocation() == -1))
         return false;
 
@@ -212,13 +212,13 @@ bool PointRendererShaders::setVertexAttributeToPointsShader(const FloatPoint *po
 
 bool PointRendererShaders::bindAndSetInfoAttributeToPointsShader(QOpenGLBuffer &info, const QOpenGLContext* context)
 {
-    if((getPointsShaderProgram() == NULL)
+    if((getPointsShaderProgram() == nullptr)
             || (getPointsShaderInfoAttributeLocation() == -1)
             || !info.isCreated()
             || !info.bind())
         return false;
 
-    bool ok = setInfoAttributeToPointsShader(NULL, context);
+    bool ok = setInfoAttributeToPointsShader(nullptr, context);
 
     info.release();
 
@@ -227,14 +227,14 @@ bool PointRendererShaders::bindAndSetInfoAttributeToPointsShader(QOpenGLBuffer &
 
 bool PointRendererShaders::setInfoAttributeToPointsShader(const ElementInfo *pointer, const QOpenGLContext* context)
 {
-    if((getPointsShaderProgram() == NULL)
+    if((getPointsShaderProgram() == nullptr)
             || (getPointsShaderInfoAttributeLocation() == -1))
         return false;
 
     // we must use direct function to pass GL_FALSE to "normalized" parameter
     QOpenGLFunctions_2_0* func = context->versionFunctions<QOpenGLFunctions_2_0>();
 
-    if(func == NULL)
+    if(func == nullptr)
         return false;
 
     func->glEnableVertexAttribArray(getPointsShaderInfoAttributeLocation());
@@ -250,7 +250,7 @@ bool PointRendererShaders::setInfoAttributeToPointsShader(const ElementInfo *poi
 
 bool PointRendererShaders::bindAndSetColorAttributeToPointsShader(QOpenGLBuffer &color)
 {
-    if((getPointsShaderProgram() == NULL)
+    if((getPointsShaderProgram() == nullptr)
             || (getPointsShaderColorAttributeLocation() == -1)
             || !color.isCreated()
             || !color.bind()) {
@@ -258,7 +258,7 @@ bool PointRendererShaders::bindAndSetColorAttributeToPointsShader(QOpenGLBuffer 
         return false;
     }
 
-    bool ok = setColorAttributeToPointsShader(NULL);
+    bool ok = setColorAttributeToPointsShader(nullptr);
     setUseColorAttribute(ok);
 
     color.release();
@@ -268,7 +268,7 @@ bool PointRendererShaders::bindAndSetColorAttributeToPointsShader(QOpenGLBuffer 
 
 bool PointRendererShaders::setColorAttributeToPointsShader(const GlobalColor *pointer)
 {
-    if((getPointsShaderProgram() == NULL)
+    if((getPointsShaderProgram() == nullptr)
             || (getPointsShaderColorAttributeLocation() == -1))
         return false;
 
@@ -286,7 +286,7 @@ bool PointRendererShaders::setColorAttributeToPointsShader(const GlobalColor *po
 
 bool PointRendererShaders::setUseColorAttribute(bool enabled)
 {
-    if(getPointsShaderProgram() == NULL)
+    if(getPointsShaderProgram() == nullptr)
         return false;
 
     getPointsShaderProgram()->setUniformValue("useFrontColor", enabled);
@@ -296,7 +296,7 @@ bool PointRendererShaders::setUseColorAttribute(bool enabled)
 
 void PointRendererShaders::disableAttributeOfPointsShader()
 {
-    if(getPointsShaderProgram() == NULL)
+    if(getPointsShaderProgram() == nullptr)
         return;
 
     getPointsShaderProgram()->disableAttributeArray(getPointsShaderVertexAttributeLocation());
@@ -306,13 +306,13 @@ void PointRendererShaders::disableAttributeOfPointsShader()
 
 bool PointRendererShaders::bindAndSetVertexAttributeToNormalsShader(QOpenGLBuffer &vertex)
 {
-    if((getNormalsShaderProgram() == NULL)
+    if((getNormalsShaderProgram() == nullptr)
             || (getNormalsShaderVertexAttributeLocation() == -1)
             || !vertex.isCreated()
             || !vertex.bind())
         return false;
 
-    bool ok = setVertexAttributeToNormalsShader(NULL);
+    bool ok = setVertexAttributeToNormalsShader(nullptr);
 
     vertex.release();
 
@@ -321,7 +321,7 @@ bool PointRendererShaders::bindAndSetVertexAttributeToNormalsShader(QOpenGLBuffe
 
 bool PointRendererShaders::setVertexAttributeToNormalsShader(const FloatPoint *point)
 {
-    if((getNormalsShaderProgram() == NULL)
+    if((getNormalsShaderProgram() == nullptr)
             || (getNormalsShaderVertexAttributeLocation() == -1))
         return false;
 
@@ -333,7 +333,7 @@ bool PointRendererShaders::setVertexAttributeToNormalsShader(const FloatPoint *p
 
 void PointRendererShaders::disableAttributeOfNormalsShader()
 {
-    if(getNormalsShaderProgram() == NULL)
+    if(getNormalsShaderProgram() == nullptr)
         return;
 
     getNormalsShaderProgram()->disableAttributeArray(getNormalsShaderVertexAttributeLocation());
@@ -343,13 +343,13 @@ void PointRendererShaders::disableAttributeOfNormalsShader()
 
 bool PointRendererShaders::bindAndSetNormalAttributeToNormalsShader(QOpenGLBuffer &normal)
 {
-    if((getNormalsShaderProgram() == NULL)
+    if((getNormalsShaderProgram() == nullptr)
             || (getNormalsShaderNormalAttributeLocation() == -1)
             || !normal.isCreated()
             || !normal.bind())
         return false;
 
-    bool ok = setNormalAttributeToNormalsShader(NULL);
+    bool ok = setNormalAttributeToNormalsShader(nullptr);
 
     normal.release();
 
@@ -358,7 +358,7 @@ bool PointRendererShaders::bindAndSetNormalAttributeToNormalsShader(QOpenGLBuffe
 
 bool PointRendererShaders::setNormalAttributeToNormalsShader(const GlobalNormal *pointer)
 {
-    if((getNormalsShaderProgram() == NULL)
+    if((getNormalsShaderProgram() == nullptr)
             || (getNormalsShaderNormalAttributeLocation() == -1))
         return false;
 
@@ -370,13 +370,13 @@ bool PointRendererShaders::setNormalAttributeToNormalsShader(const GlobalNormal 
 
 bool PointRendererShaders::bindAndSetInfoAttributeToNormalsShader(QOpenGLBuffer &info, const QOpenGLContext* context)
 {
-    if((getNormalsShaderProgram() == NULL)
+    if((getNormalsShaderProgram() == nullptr)
             || (getNormalsShaderInfoAttributeLocation() == -1)
             || !info.isCreated()
             || !info.bind())
         return false;
 
-    bool ok = setInfoAttributeToNormalsShader(NULL, context);
+    bool ok = setInfoAttributeToNormalsShader(nullptr, context);
 
     info.release();
 
@@ -385,14 +385,14 @@ bool PointRendererShaders::bindAndSetInfoAttributeToNormalsShader(QOpenGLBuffer 
 
 bool PointRendererShaders::setInfoAttributeToNormalsShader(const ElementInfo *pointer, const QOpenGLContext* context)
 {
-    if((getNormalsShaderProgram() == NULL)
+    if((getNormalsShaderProgram() == nullptr)
             || (getNormalsShaderInfoAttributeLocation() == -1))
         return false;
 
     // we must use direct function to pass GL_FALSE to "normalized" parameter
     QOpenGLFunctions_2_0* func = context->versionFunctions<QOpenGLFunctions_2_0>();
 
-    if(func == NULL)
+    if(func == nullptr)
         return false;
 
     // enableAttributeArray(m_shaderInfoLocation)
@@ -442,10 +442,10 @@ int PointRendererShaders::getNormalsShaderInfoAttributeLocation() const
 void PointRendererShaders::destroyGL()
 {
     delete m_pointsProgram;
-    m_pointsProgram = NULL;
+    m_pointsProgram = nullptr;
 
     delete m_normalsProgram;
-    m_normalsProgram = NULL;
+    m_normalsProgram = nullptr;
 
     m_shaderPointsVertexLocation = -1;
     m_shaderPointsInfoLocation = -1;
@@ -459,7 +459,7 @@ void PointRendererShaders::destroyGL()
 
 bool PointRendererShaders::bindShader(QOpenGLShaderProgram *program)
 {
-    if(program == NULL)
+    if(program == nullptr)
         return false;
 
     return program->bind();
@@ -467,6 +467,6 @@ bool PointRendererShaders::bindShader(QOpenGLShaderProgram *program)
 
 void PointRendererShaders::releaseShader(QOpenGLShaderProgram *program)
 {
-    if(program != NULL)
+    if(program != nullptr)
         program->release();
 }

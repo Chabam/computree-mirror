@@ -37,24 +37,24 @@ public:
     /**
      * @brief Start from this step and go up recursively to find necessary input
      *        in output of this step or his parents. All possibility of input models
-     *        will not be mofidied when you call this method because a copy is made before
+     *        will not be modified when you call this method because a copy is made before
      *        do the process.
      * @param step : the step where to start the search
-     * @return false if the step is NULL and this step need inputs OR if all models doesn't find necessary
+     * @return false if the step is nullptr and this step need inputs OR if all models doesn't find necessary
      *         input. Otherwise if input has found what they want this method returns true.
      */
-    bool haveAllInputBeenFoundInOutputOfThisStepOrRecursively(const CT_VirtualAbstractStep* step) const;
+    bool wereAllInputsFoundInOutputsOfThisStepOrRecursively(const CT_VirtualAbstractStep* step) const;
 
     /**
      * @brief Start from this step and go up recursively to find necessary input
      *        in output of this step or his parents. All possibility of input models
-     *        will be mofidied when you call this method !
+     *        will be modified when you call this method !
      * @param step : the step where to start the search
-     * @return false if the step is NULL and this step need inputs OR if all models doesn't find necessary
+     * @return false if the step is nullptr and this step need inputs OR if all models doesn't find necessary
      *         input. Otherwise if input has found what they want this method returns true and
      *         possibilities can be used to see which out models has been saved.
      */
-    bool findInputsInOutputOfThisStepOrRecursively(const CT_VirtualAbstractStep* step);
+    bool findInputsInOutputsOfThisStepOrRecursively(const CT_VirtualAbstractStep* step);
 
     enum ConfigureReturn {
         NoModification,
@@ -133,11 +133,11 @@ private:
      * @param step : the step where to start the search
      * @param begin : the begin iterator of a collection that contains pointer to CT_InAbstractResultModel
      * @param end : the end iterator of a collection that contains pointer to CT_InAbstractResultModel
-     * @return false if the step is NULL and this step need inputs OR if all models doesn't find necessary
+     * @return false if the step is nullptr and this step need inputs OR if all models doesn't find necessary
      *         input. Otherwise if input has found what they want this method returns true and
      *         possibilities can be used to see which out models has been saved.
      */
-    bool findInputsInOutputOfThisStepOrRecursivelyWithSpecifiedResultModels(const CT_VirtualAbstractStep* step,
+    bool findInputsInOutputsOfThisStepOrRecursivelyWithSpecifiedResultModels(const CT_VirtualAbstractStep* step,
                                                                             QVector<CT_InAbstractResultModel*>::iterator begin,
                                                                             QVector<CT_InAbstractResultModel*>::iterator end) const;
 };

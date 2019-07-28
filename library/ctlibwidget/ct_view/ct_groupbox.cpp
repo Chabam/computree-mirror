@@ -9,7 +9,7 @@ CT_GroupBox::CT_GroupBox(const QString &title,
 {
     setWindowTitle(title);
 
-    m_gp = NULL;
+    m_gp = nullptr;
 }
 
 QWidget* CT_GroupBox::createWidget(QWidget &parent)
@@ -43,7 +43,7 @@ QWidget* CT_GroupBox::createWidget(QWidget &parent)
 
 void CT_GroupBox::updateValue()
 {
-    updateElement(NULL);
+    updateElement(nullptr);
 }
 
 bool CT_GroupBox::isValueAndWidgetValueDifferent() const
@@ -76,7 +76,7 @@ bool CT_GroupBox::restoreSettings(SettingsReaderInterface &reader)
 
 void CT_GroupBox::collapseOrExpandGroupBox(bool expand)
 {
-    if(m_gp != NULL) {
+    if(m_gp != nullptr) {
 
         m_gp->setMinimumHeight(0);
         m_gp->setMaximumHeight(16777215);

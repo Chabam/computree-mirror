@@ -11,7 +11,7 @@ CT_FaceAttributesScalarT<SCALAR>::CT_FaceAttributesScalarT() : SuperClass(),
 
 template<typename SCALAR>
 CT_FaceAttributesScalarT<SCALAR>::CT_FaceAttributesScalarT(CT_FCIR pcir) : SuperClass(pcir),
-    CT_AttributesScalarT<SCALAR>(pcir.data() != NULL ? pcir->size() : 0)
+    CT_AttributesScalarT<SCALAR>(pcir.data() != nullptr ? pcir->size() : 0)
 {
 }
 

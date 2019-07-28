@@ -5,6 +5,8 @@
 #include "ct_model/inModel/ct_instditemattributemodel.h"
 #include "ct_model/inModel/ct_inresultmodelgrouptocopy.h"
 
+using CT_AbstractHandleInItemAttribute = CT_AbstractInHandleWithModelT<CT_InStdItemAttributeModel>;
+
 template<class ItemAttributeT, int valueType, int min = 1, int max = 1>
 class CT_HandleInItemAttribute : public CT_HandleInBase<CT_InStdItemAttributeModel, min, max> {
 

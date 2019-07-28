@@ -140,12 +140,12 @@ GGradientManager::~GGradientManager()
 
 void GGradientManager::addGradient(const QLinearGradient &gradient)
 {
-    QWidget *pWid = new QWidget(NULL);
+    QWidget *pWid = new QWidget(nullptr);
 
     QVBoxLayout *layout = new QVBoxLayout(pWid);
     layout->setContentsMargins(0, 2, 0, 2);
 
-    GColorGradientView *widget = new GColorGradientView(NULL);
+    GColorGradientView *widget = new GColorGradientView(nullptr);
     widget->fromLinearGradient(gradient);
     widget->setArrowsVisible(false);
 
@@ -226,7 +226,7 @@ void GGradientManager::updateToolButtonIcon()
         const GradientWidgetInfo &info = it.next();
 
         if(info.isSelected()) {
-            GColorGradientView w(NULL);
+            GColorGradientView w(nullptr);
             w.setMinimumSize(50, 50);
             w.setMaximumSize(50, 50);
             w.setArrowsVisible(false);

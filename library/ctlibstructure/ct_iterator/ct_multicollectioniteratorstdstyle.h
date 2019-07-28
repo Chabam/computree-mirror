@@ -10,7 +10,7 @@ class CT_MultiCollectionIteratorStdStyle : public std::iterator<std::input_itera
 public:
     using self_type = CT_MultiCollectionIteratorStdStyle<IteratorT, ItemT>;
 
-    CT_MultiCollectionIteratorStdStyle() : m_currentValue(NULL), m_currentIndex(-1) {}
+    CT_MultiCollectionIteratorStdStyle() : m_currentValue(nullptr), m_currentIndex(-1) {}
 
     template<typename IteratorInfoCollection>
     static self_type create(const IteratorInfoCollection& c) {
@@ -31,11 +31,11 @@ public:
     }
 
     self_type& operator++() {
-        if(m_currentValue == NULL)
+        if(m_currentValue == nullptr)
             return *this;
 
         if(m_currentIndex == -1) {
-            m_currentValue = NULL;
+            m_currentValue = nullptr;
             return *this;
         }
 
@@ -50,7 +50,7 @@ public:
             if(m_currentIndex < m_collections.size())
                 m_currentValue = static_cast<ItemT*>(*m_collections[m_currentIndex].first); // got it !
             else
-                m_currentValue = NULL;
+                m_currentValue = nullptr;
         } else {
             m_currentValue = static_cast<ItemT*>(*its.first); // got it !
         }

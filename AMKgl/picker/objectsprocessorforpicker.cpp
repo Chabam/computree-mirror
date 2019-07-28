@@ -5,7 +5,7 @@ const std::vector<quint8> ObjectsProcessorForPicker::BOX_PLANE_INDICES = Objects
 
 ObjectsProcessorForPicker::ObjectsProcessorForPicker()
 {
-    m_interceptor = NULL;
+    m_interceptor = nullptr;
 }
 
 void ObjectsProcessorForPicker::setIntersectionInterceptor(const IIntersectionInterceptor *interceptor)
@@ -166,18 +166,18 @@ std::vector<quint8> ObjectsProcessorForPicker::staticInitBoxPlaneIndices()
 
 void ObjectsProcessorForPicker::addIntersectionPoint(const Eigen::Vector3d &p, const Eigen::Vector3f& color) const
 {
-    if(m_interceptor != NULL)
+    if(m_interceptor != nullptr)
         m_interceptor->addIntersectionPoint(p, color);
 }
 
 void ObjectsProcessorForPicker::addIntersectionLine(const Eigen::Vector3d& origin, const Eigen::Vector3d& direction, const Eigen::Vector3f& color) const
 {
-    if(m_interceptor != NULL)
+    if(m_interceptor != nullptr)
         m_interceptor->addIntersectionLine(origin, direction, color);
 }
 
 void ObjectsProcessorForPicker::addIntersectionSegment(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2, const Eigen::Vector3f& color) const
 {
-    if(m_interceptor != NULL)
+    if(m_interceptor != nullptr)
         m_interceptor->addIntersectionSegment(p1, p2, color);
 }

@@ -45,7 +45,7 @@ public:
     CT_AbstractShape();
 
     /**
-     * @brief Construct with a data. Cannot be NULL !
+     * @brief Construct with a data. Cannot be nullptr !
      */
     CT_AbstractShape(CT_ShapeData* data);
 
@@ -63,7 +63,7 @@ public:
      *          - Data
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */

@@ -33,7 +33,7 @@ public:
      *          - Min and Max coordinates (bounding box)
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */

@@ -42,6 +42,7 @@ public:
      * @brief Sub levels can use one of this predefined value
      */
     enum LevelPredefined {
+        LP_Others = 0,
         LP_Filter,
         LP_Create,
         LP_Extract,
@@ -64,8 +65,7 @@ public:
         LP_Vector,
         LP_Voxels,
         LP_Meshes,
-        LP_ItemAttributes,
-        LP_Others
+        LP_ItemAttributes
     };
     Q_ENUMS(LevelPredefined)
 
@@ -79,7 +79,7 @@ public:
     CT_MenuLevel* createOrGetRootLevel(LevelOperationType operation);
 
     /**
-     * @brief Returns the existing level that correspond to the specified operation. NULL
+     * @brief Returns the existing level that correspond to the specified operation. nullptr
      *        if it does not exist.
      */
     CT_MenuLevel* levelFromOperation(LevelOperationType operation) const;

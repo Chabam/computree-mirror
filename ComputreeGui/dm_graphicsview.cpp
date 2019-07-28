@@ -32,8 +32,8 @@ DM_GraphicsView::DM_GraphicsView()
 {
     _options = new DM_GraphicsViewOptions();
     _options->load();
-    _document = NULL;
-    m_attributesManager = NULL;
+    _document = nullptr;
+    m_attributesManager = nullptr;
 }
 
 DM_GraphicsView::~DM_GraphicsView()

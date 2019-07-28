@@ -14,7 +14,7 @@ public:
 
     inline size_t indexOf(const T *pointer) const
     {
-        if((pointer == NULL)
+        if((pointer == nullptr)
                 || (size() == 0))
             return 0;
 

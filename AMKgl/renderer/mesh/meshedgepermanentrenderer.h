@@ -63,7 +63,7 @@ public:
     void addEdge(const size_t& edgeIndex,
                  const size_t& globalV1Index,
                  const size_t& globalV2Index,
-                 IChunk** chunk = NULL);
+                 IChunk** chunk = nullptr);
 
     /**
      * @brief Returns the edge cloud attributes provider

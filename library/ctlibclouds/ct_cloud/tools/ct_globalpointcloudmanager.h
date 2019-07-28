@@ -28,7 +28,7 @@ public:
      *        ATTENTION vous ne pouvez créé qu'un nuage dont la taille est indéfini à la fois. Il faut d'abord l'enregistrer
      *        avant de pouvoir en créer un autre. Une fois enregistré le nuage de points ne peux plus être modifié.
      *
-     * @return Retourne NULL si un nuage de points dont la taille est indéfini a déjà été créé et n'a pas encore été enregistré. Sinon
+     * @return Retourne nullptr si un nuage de points dont la taille est indéfini a déjà été créé et n'a pas encore été enregistré. Sinon
      *         retourne un objet permettant d'ajouter/supprimer des points au nuage de points global.
      */
     CT_AbstractUndefinedSizePointCloud* createNewUndefinedSizePointCloud();

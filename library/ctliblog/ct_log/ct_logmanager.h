@@ -14,7 +14,7 @@ class CTLIBLOG_EXPORT CT_LogManager
 public:
     static CT_LogManager* staticInstance()
     {
-        if(UNIQUE_INSTANCE == NULL)
+        if(UNIQUE_INSTANCE == nullptr)
             UNIQUE_INSTANCE = new CT_LogManager();
 
         return UNIQUE_INSTANCE;

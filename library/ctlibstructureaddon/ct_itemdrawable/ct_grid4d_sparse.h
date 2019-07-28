@@ -1,8 +1,6 @@
 #ifndef CT_GRID4D_SPARSE_H
 #define CT_GRID4D_SPARSE_H
 
-#ifdef USE_OPENCV
-
 #include "ct_itemdrawable/ct_grid4d.h"
 #include <typeinfo>
 
@@ -18,7 +16,8 @@
 template< typename DataT>
 class   CT_Grid4D_Sparse  : public CT_Grid4D<DataT>
 {
-
+    CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Grid4D_Sparse, DataT, CT_Grid4D<DataT>, 4D sparse grid)
+    using SuperClass = CT_Grid4D<DataT>;
 
 public:
     //**********************************************//
@@ -26,9 +25,10 @@ public:
     //**********************************************//
     /**
       * \brief Default constructor
-      *  Each attribute will be set to 0, NULL or will be cleared
+      *  Each attribute will be set to 0, nullptr or will be cleared
       */
     CT_Grid4D_Sparse();
+    CT_Grid4D_Sparse(const CT_Grid4D_Sparse& other);
 
     /*!
      * \brief Initialisation constructor
@@ -52,26 +52,7 @@ public:
      * \param na Value used to code NA
      * \param initValue Initialisation value for grid cells
      */
-    CT_Grid4D_Sparse(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              double wmin,
-              double xmin,
-              double ymin,
-              double zmin,
-              size_t dimw,
-              size_t dimx,
-              size_t dimy,
-              size_t dimz,
-              double resw,
-              double resx,
-              double resy,
-              double resz,
-              DataT na,
-              DataT initValue);
-
-    CT_Grid4D_Sparse(const QString &modelName,
-              const CT_AbstractResult *result,
-              double wmin,
+    CT_Grid4D_Sparse(double wmin,
               double xmin,
               double ymin,
               double zmin,
@@ -109,9 +90,7 @@ public:
      * \param initValue Initialisation value for grid cells
      * \param coordConstructor Not used, only to ensure constructor different signatures
      */
-    CT_Grid4D_Sparse(const CT_OutAbstractSingularItemModel *model,
-                     const CT_AbstractResult *result,
-                     double wmin,
+    CT_Grid4D_Sparse(double wmin,
                      double xmin,
                      double ymin,
                      double zmin,
@@ -125,47 +104,6 @@ public:
                      double resz,
                      DataT na,
                      DataT initValue);
-
-    /*!
-     * \brief Initialisation constructor
-     *
-     * Grid is created thanks to the bounding box (4D) of the grid
-     *
-     * \param modelName model name for creation
-     * \param result Result containing the item
-     * \param wmin Minimum W coordinate (bottom left corner)
-     * \param xmin Minimum X coordinate (bottom left corner)
-     * \param ymin Minimum Y coordinate (bottom left corner)
-     * \param zmin Minimum Z coordinate (bottom left corner)
-     * \param wmax Maximum W coordinate (top right corner)
-     * \param xmax Maximum X coordinate (top right corner)
-     * \param ymax Maximum Y coordinate (top right corner)
-     * \param zmax Maximum Z coordinate (top right corner)
-     * \param resw Length of a cell on w
-     * \param resx Length of a cell on x
-     * \param resy Length of a cell on y
-     * \param resz Length of a cell on z
-     * \param na Value used to code NA
-     * \param initValue Initialisation value for grid cells
-     * \param coordConstructor Not used, only to ensure constructor different signatures
-     */
-    CT_Grid4D_Sparse(const QString& modelName,
-              const CT_AbstractResult *result,
-              double wmin,
-              double xmin,
-              double ymin,
-              double zmin,
-              double wmax,
-              double xmax,
-              double ymax,
-              double zmax,
-              double resw,
-              double resx,
-              double resy,
-              double resz,
-              DataT na,
-              DataT initValue);
-
 
     /*!
      * \brief Factory
@@ -190,26 +128,7 @@ public:
      * \param initValue Initialisation value for grid cells
      * \param coordConstructor Not used, only to ensure constructor different signatures
      */
-    static CT_Grid4D_Sparse<DataT>* createGrid4DFromWXYZCoords(const CT_OutAbstractSingularItemModel *model,
-                                                        const CT_AbstractResult *result,
-                                                        double wmin,
-                                                        double xmin,
-                                                        double ymin,
-                                                        double zmin,
-                                                        double wmax,
-                                                        double xmax,
-                                                        double ymax,
-                                                        double zmax,
-                                                        double resw,
-                                                        double resx,
-                                                        double resy,
-                                                        double resz,
-                                                        DataT na,
-                                                        DataT initValue);
-
-    static CT_Grid4D_Sparse<DataT>* createGrid4DFromWXYZCoords(const QString &modelName,
-                                                        const CT_AbstractResult *result,
-                                                        double wmin,
+    static CT_Grid4D_Sparse<DataT>* createGrid4DFromWXYZCoords(double wmin,
                                                         double xmin,
                                                         double ymin,
                                                         double zmin,
@@ -227,7 +146,7 @@ public:
     /*!
      * \brief Destructor
      */
-    virtual ~CT_Grid4D_Sparse();
+    ~CT_Grid4D_Sparse() override;
 
 
     //**********************************************//
@@ -276,43 +195,14 @@ public:
     //**********************************************//
     //          CompuTree Core and GUI tools        //
     //**********************************************//
-    /*!
-     * \brief getType
-     * \return A string describing the hierarchy of computree types and the type of grid (4dgrid and type of data in it)
-     */
-    inline virtual QString getType() const { return staticGetType(); }
-
-    /*!
-     * \brief staticGetType
-     *
-     * Same as getType but static
-     *
-     * \return A string describing the hierarchy of computree types and the type of the grid (4dgrid and type of data in it)
-     */
-    inline static QString staticGetType() { return CT_Grid4D<DataT>::staticGetType() + "/CT_Grid4D_Sparse<" + CT_TypeInfo::name<DataT>() + QString(">"); }
-
-    /*!
-     * \brief name
-     * \return The name of the object (4dgrid and type of data in it)
-     */
-    inline virtual QString name() const { return QString("CT_Grid4D_Sparse<") + CT_TypeInfo::name<DataT>() + QString(">"); }
-
-    /*!
-     * \brief Copy method
-     *
-     * \param model Item model for the copy
-     * \param result Result containing the copy
-     * \param copyModeList Copy mode
-     * \return Item copy
-     */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
-    virtual CT_AbstractItemDrawable* copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
 
     virtual void computeMinMax();
 
     inline cv::SparseMatConstIterator_<DataT> beginIterator() const { return _data.begin(); }
     inline cv::SparseMatConstIterator_<DataT> endIterator()  const { return _data.end(); }
     inline int countNonZeroCells() { return _data.nzcount(); }
+
+    CT_ITEM_COPY_IMP(CT_Grid4D_Sparse<DataT>)
 
 protected:
 
@@ -342,7 +232,5 @@ protected:
 
 // Includes the template implementations
 #include "ct_itemdrawable/ct_grid4d_sparse.hpp"
-
-#endif
 
 #endif // CT_GRID4D_SPARSE_H

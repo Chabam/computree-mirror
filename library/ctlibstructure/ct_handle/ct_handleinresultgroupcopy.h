@@ -31,7 +31,7 @@ public:
 
         const ModelType* inResultModel = model();
 
-        MODELS_ASSERT(inResultModel != NULL);
+        MODELS_ASSERT(inResultModel != nullptr);
 
         outModels.resize(inResultModel->nPossibilitySelected());
 
@@ -55,11 +55,11 @@ public:
 
         const ModelType* inResultModel = model();
 
-        MODELS_ASSERT(inResultModel != NULL);
+        MODELS_ASSERT(inResultModel != nullptr);
 
         InResultToolType* tool = inResultModel->toolToModifyResultModelCopies();
 
-        MODELS_ASSERT(tool != NULL);
+        MODELS_ASSERT(tool != nullptr);
 
         outModels.resize(tool->nResultModels());
 

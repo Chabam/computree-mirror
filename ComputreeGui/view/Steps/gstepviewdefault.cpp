@@ -14,8 +14,8 @@ GStepViewDefault::GStepViewDefault(QWidget *parent) :
     ui->setupUi(this);
 
 
-    m_constructor = NULL;
-    m_proxy = NULL;
+    m_constructor = nullptr;
+    m_proxy = nullptr;
     m_nameConfig = DNC_StepShortDescription;
 
     // To show custom context menu
@@ -42,7 +42,7 @@ GStepViewDefault::~GStepViewDefault()
 
 void GStepViewDefault::init(const CDM_PluginManager &pManager)
 {
-    if(m_constructor == NULL) {
+    if(m_constructor == nullptr) {
         m_pluginManager = (CDM_PluginManager*)&pManager;
         m_constructor = new DM_StepsFromPluginsModelConstructor(pManager);
         m_proxy = new DM_StepTreeViewDefaultProxyModel(this);
@@ -117,7 +117,7 @@ CT_VirtualAbstractStep *GStepViewDefault::currentStepSelected() const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 CT_MenuLevel *GStepViewDefault::currentLevelSelected() const
@@ -133,7 +133,7 @@ CT_MenuLevel *GStepViewDefault::currentLevelSelected() const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 GStepViewDefault::DisplayNameConfigs GStepViewDefault::stepNameConfiguration() const
@@ -177,7 +177,7 @@ QString GStepViewDefault::staticGetStepNameFromConfiguration(CT_VirtualAbstractS
 
 void GStepViewDefault::reconstruct()
 {
-    if(m_constructor != NULL && m_proxy != NULL) {
+    if(m_constructor != nullptr && m_proxy != nullptr) {
         m_constructor->construct();
         m_proxy->setSourceModel(m_constructor->model());
 
@@ -192,7 +192,7 @@ bool GStepViewDefault::searchStepByNameAndExpandParent(const QString &anyName,
                                                        const QString& pluginName,
                                                        bool changeDisplayConfigIfNameFoundedIsNotDisplayed)
 {
-    if(m_proxy != NULL && !anyName.trimmed().isEmpty()) {
+    if(m_proxy != nullptr && !anyName.trimmed().isEmpty()) {
 
         int n = m_proxy->rowCount();
 
@@ -210,7 +210,7 @@ bool GStepViewDefault::searchStepByNameAndExpandParent(const QString &anyName,
 
 bool GStepViewDefault::searchOriginalStepAndExpandParent(CT_VirtualAbstractStep *step)
 {
-    if(step != NULL)
+    if(step != nullptr)
         return searchStepByNameAndExpandParent(step->pluginStaticCastT<>()->getKeyForStep(*step),
                                                GUI_MANAGER->getPluginManager()->getPluginName(step->pluginStaticCastT<>()),
                                                false);
@@ -223,7 +223,7 @@ bool GStepViewDefault::recursiveSearchStepByNameAndExpandParent(const QModelInde
                                                                 const QString& pluginName,
                                                                 bool changeDisplayConfigIfNameFoundedIsNotDisplayed)
 {
-    if(m_proxy != NULL && index.isValid()) {
+    if(m_proxy != nullptr && index.isValid()) {
         int n = m_proxy->rowCount(index);
 
         for(int i=0; i<n; ++i)
@@ -235,12 +235,12 @@ bool GStepViewDefault::recursiveSearchStepByNameAndExpandParent(const QModelInde
         if(n == 0) {
             QStandardItem *item = ((QStandardItemModel*)m_proxy->sourceModel())->itemFromIndex(m_proxy->mapToSource(index));
 
-            if(item != NULL) {
+            if(item != nullptr) {
                 if(item->data(DM_StepsFromPluginsModelConstructor::DR_Type).toInt() & DM_StepsFromPluginsModelConstructor::IT_Step) {
 
                     CT_VirtualAbstractStep *step = ((CT_VirtualAbstractStep*)item->data(DM_StepsFromPluginsModelConstructor::DR_Pointer).value<void*>());
 
-                    if(step != NULL) {
+                    if(step != nullptr) {
                         bool ok = true;
 
                         if(!pluginName.isEmpty()) {
@@ -293,7 +293,7 @@ bool GStepViewDefault::recursiveSearchStepByNameAndExpandParent(const QModelInde
 
 void GStepViewDefault::resizeColumnsOfTreeView()
 {
-    if(m_constructor != NULL) {
+    if(m_constructor != nullptr) {
         int n = m_constructor->model()->columnCount();
 
         if(n > 0) {
@@ -329,9 +329,9 @@ void GStepViewDefault::getMaxSizeOfColumnsRecursively(QStandardItem *item, const
 
 QMenu *GStepViewDefault::contextMenuForType(DM_StepsFromPluginsModelConstructor::ItemType type)
 {
-    QMenu *menu = m_contextMenus.value(type, NULL);
+    QMenu *menu = m_contextMenus.value(type, nullptr);
 
-    if(menu != NULL)
+    if(menu != nullptr)
         return menu;
 
     QMapIterator<DM_StepsFromPluginsModelConstructor::ItemType, QMenu*> it(m_contextMenus);
@@ -344,7 +344,7 @@ QMenu *GStepViewDefault::contextMenuForType(DM_StepsFromPluginsModelConstructor:
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void GStepViewDefault::resizeEvent(QResizeEvent *e)
@@ -356,7 +356,7 @@ void GStepViewDefault::resizeEvent(QResizeEvent *e)
 
 void GStepViewDefault::on_pushButtonConfigStepName_clicked()
 {
-    if(m_proxy != NULL) {
+    if(m_proxy != nullptr) {
         QMenu menu(this);
 
         QAction *act = new QAction(tr("Clé de l'étape au sein du plugin ou d'un script"), &menu);
@@ -389,7 +389,7 @@ void GStepViewDefault::on_pushButtonConfigStepName_clicked()
 
 void GStepViewDefault::on_pushButtonConfigSearch_clicked()
 {
-    if(m_proxy != NULL) {
+    if(m_proxy != nullptr) {
         QMenu menu(this);
 
         QAction *act = new QAction(tr("Clé de l'étape au sein du plugin ou d'un script"), &menu);
@@ -437,7 +437,7 @@ void GStepViewDefault::on_lineEditSearch_textChanged(const QString &text)
 
 void GStepViewDefault::setStepName(bool enable)
 {
-    if(m_proxy != NULL) {
+    if(m_proxy != nullptr) {
         QAction *act = (QAction*)sender();
         DisplayNameConfig c = (DisplayNameConfig)act->data().toInt();
 
@@ -456,7 +456,7 @@ void GStepViewDefault::setStepName(bool enable)
 
 void GStepViewDefault::setSearchConfiguration(bool enable)
 {
-    if(m_proxy != NULL) {
+    if(m_proxy != nullptr) {
         QAction *act = (QAction*)sender();
         DM_StepTreeViewDefaultProxyModel::FilterConfig c = (DM_StepTreeViewDefaultProxyModel::FilterConfig)act->data().toInt();
         DM_StepTreeViewDefaultProxyModel::FilterConfigs cs = m_proxy->filterConfiguration();
@@ -479,7 +479,7 @@ bool GStepViewDefault::staticStepsName(QString &name, const QModelIndex &index, 
 
     CT_VirtualAbstractStep *step = thisPtr->constructor()->stepFromIndex(thisPtr->proxy()->mapToSource(index));
 
-    if(step == NULL)
+    if(step == nullptr)
         return false;
 
     name = staticGetStepNameFromConfiguration(step, thisPtr->m_nameConfig);
@@ -506,7 +506,7 @@ void GStepViewDefault::showTreeViewContextMenu(const QPoint &point)
     if(!l.isEmpty()) {
         QMenu *menu = contextMenuForType((DM_StepsFromPluginsModelConstructor::ItemType)l.first().data(DM_StepsFromPluginsModelConstructor::DR_Type).toInt());
 
-        if(menu != NULL)
+        if(menu != nullptr)
             menu->exec(ui->treeView->viewport()->mapToGlobal(point));
     }
 }
@@ -534,7 +534,7 @@ void GStepViewDefault::selectionChanged(const QItemSelection &newSelection, cons
         }
     }
 
-    emit stepSelected((CT_VirtualAbstractStep*)NULL);
+    emit stepSelected((CT_VirtualAbstractStep*)nullptr);
 }
 
 void GStepViewDefault::filterStep()

@@ -30,7 +30,7 @@ void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface& view,
     const CT_Image2D<quint8>* blue = item.getBlueBand();
     const CT_Image2D<float>*  zvalue = item.getZValueRaster();
 
-    if (red != NULL && green != NULL && blue != NULL)
+    if (red != nullptr && green != nullptr && blue != nullptr)
     {
         const bool mode3D = drawConfiguration()->variableValue(INDEX_CONFIG_3D_MODE_ENABLED).toBool();
         const bool modeMap = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ENABLED).toBool();
@@ -44,7 +44,7 @@ void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface& view,
 
         const double demiRes = red->resolution()/2.0;
 
-        if (mode3D && zvalue != NULL)
+        if (mode3D && zvalue != nullptr)
         {
             // sinon dessiner seulement les points
             double x, y, value;

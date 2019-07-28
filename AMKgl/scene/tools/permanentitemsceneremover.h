@@ -53,7 +53,7 @@ private:
     class MergedItemInformation {
 
     public:
-        MergedItemInformation() { m_lastChunkUsed = NULL; m_lastVectorUsed = NULL; }
+        MergedItemInformation() { m_lastChunkUsed = nullptr; m_lastVectorUsed = nullptr; }
         ~MergedItemInformation() { clear(); }
 
         struct MergedObjectInformation {

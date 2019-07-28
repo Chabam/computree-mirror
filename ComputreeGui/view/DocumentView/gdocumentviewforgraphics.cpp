@@ -40,8 +40,8 @@ GDocumentViewForGraphics::GDocumentViewForGraphics(GDocumentManagerView &manager
 {
     m_scene = new PermanentSceneToRender();
 
-    m_graphics = NULL;
-    _graphicsOptionsView = NULL;
+    m_graphics = nullptr;
+    _graphicsOptionsView = nullptr;
     _type = type;
     _pofManager.loadDefault();
 
@@ -82,8 +82,8 @@ IGraphicsDocument::PermanentSceneToRender *GDocumentViewForGraphics::getPermanen
 
 QOpenGLWidget* GDocumentViewForGraphics::getOpengWidgetWithContext(const QOpenGLContext *context) const
 {
-    if((m_graphics == NULL) || (m_graphics->getOpenGLWidget()->context() != context))
-        return NULL;
+    if((m_graphics == nullptr) || (m_graphics->getOpenGLWidget()->context() != context))
+        return nullptr;
 
     return m_graphics->getOpenGLWidget();
 }
@@ -139,7 +139,7 @@ void GDocumentViewForGraphics::init()
 
 void GDocumentViewForGraphics::addGraphics(GGraphicsView *graphics)
 {
-    if(m_graphics != NULL) {
+    if(m_graphics != nullptr) {
         delete graphics;
         return;
     }
@@ -158,7 +158,7 @@ QList<GGraphicsView *> GDocumentViewForGraphics::getGraphicsList() const
 {
     QList<GGraphicsView *> l;
 
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         l << m_graphics;
 
     return l;
@@ -168,18 +168,18 @@ void GDocumentViewForGraphics::addItemDrawable(CT_AbstractItemDrawable &item)
 {
     GDocumentView::addItemDrawable(item);
     // TODO : model !
-    m_scene->addItem(&item, NULL, *m_graphics);
+    m_scene->addItem(&item, nullptr, *m_graphics);
 }
 
 void GDocumentViewForGraphics::removeItemDrawable(CT_AbstractItemDrawable &item)
 {
     GDocumentView::removeItemDrawable(item);
-    m_scene->removeItem(&item, NULL);
+    m_scene->removeItem(&item, nullptr);
 }
 
 void GDocumentViewForGraphics::updateDrawing3DOfItemDrawablesInGraphicsView(const QList<CT_AbstractItemDrawable *> &items)
 {
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         m_graphics->updateDrawing3DOfItemDrawables(items);
 }
 
@@ -187,7 +187,7 @@ QList<InDocumentViewInterface *> GDocumentViewForGraphics::views() const
 {
     QList<InDocumentViewInterface *> l;
 
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         l.append(m_graphics);
 
     return l;
@@ -197,7 +197,7 @@ void GDocumentViewForGraphics::redrawGraphics()
 {
     getPermanentSceneToRender()->checkAndUpdateIfItNeedsToBe();
 
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         m_graphics->redraw();
 }
 
@@ -229,7 +229,7 @@ GDocumentViewForGraphics::NormalsConfiguration GDocumentViewForGraphics::getNorm
 {
     GDocumentViewForGraphics::NormalsConfiguration c;
 
-    if(m_graphics != NULL) {
+    if(m_graphics != nullptr) {
         const DM_GraphicsViewOptions &opt = m_graphics->constGetOptionsInternal();
         c.normalColor = opt.normalColor();
         c.normalLength = opt.normalLength();
@@ -240,7 +240,7 @@ GDocumentViewForGraphics::NormalsConfiguration GDocumentViewForGraphics::getNorm
 
 bool GDocumentViewForGraphics::acceptAction(const CT_AbstractAction *action) const
 {
-    return (action == NULL) || (dynamic_cast<const CT_AbstractActionForGraphicsView*>(action) != NULL);
+    return (action == nullptr) || (dynamic_cast<const CT_AbstractActionForGraphicsView*>(action) != nullptr);
 }
 
 bool GDocumentViewForGraphics::setCurrentAction(CT_AbstractAction *action, bool deleteAction)
@@ -250,7 +250,7 @@ bool GDocumentViewForGraphics::setCurrentAction(CT_AbstractAction *action, bool 
 
 bool GDocumentViewForGraphics::setDefaultAction(CT_AbstractAction *action, bool deleteAction)
 {
-    if(m_graphics == NULL) {
+    if(m_graphics == nullptr) {
 
         if(deleteAction && !GUI_MANAGER->getActionsManager()->existActionCompareAddress(action))
             delete action;
@@ -266,8 +266,8 @@ bool GDocumentViewForGraphics::setDefaultAction(CT_AbstractAction *action, bool 
         return false;
     }
 
-    if(action == NULL)
-        m_graphics->setDefaultAction(NULL);
+    if(action == nullptr)
+        m_graphics->setDefaultAction(nullptr);
     else
         m_graphics->setDefaultAction((CT_AbstractActionForGraphicsView*)action->copy());
 
@@ -288,23 +288,23 @@ bool GDocumentViewForGraphics::setCurrentInternalAction(CT_AbstractAction *actio
 
 CT_AbstractAction* GDocumentViewForGraphics::currentAction() const
 {
-    if(m_graphics == NULL)
-        return NULL;
+    if(m_graphics == nullptr)
+        return nullptr;
 
     return m_graphics->actionsHandler()->currentAction();
 }
 
 CT_AbstractAction *GDocumentViewForGraphics::defaultAction() const
 {
-    if(m_graphics == NULL)
-        return NULL;
+    if(m_graphics == nullptr)
+        return nullptr;
 
     return m_graphics->actionsHandler()->defaultAction();
 }
 
 void GDocumentViewForGraphics::removeActions(const QString &uniqueName) const
 {
-    if(m_graphics == NULL)
+    if(m_graphics == nullptr)
         return;
 
     m_graphics->actionsHandler()->removeActions(uniqueName);
@@ -322,20 +322,20 @@ bool GDocumentViewForGraphics::useItemColor() const
 
 void GDocumentViewForGraphics::setColor(const CT_AbstractItemDrawable *item, const QColor &color)
 {
-    if(item->result() == NULL) {
-        GUI_LOG->addErrorMessage(LogInterface::gui, tr("Impossible d'affecter une couleur à un item dont le résultat est NULL"));
+    if(item->result() == nullptr) {
+        GUI_LOG->addErrorMessage(LogInterface::gui, tr("Impossible d'affecter une couleur à un item dont le résultat est nullptr"));
         return;
     }
 
     const QHash<CT_AbstractResult*, QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*>* > &ii = getItemsInformations();
-    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = ii.value(item->result(), NULL);
+    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = ii.value(item->result(), nullptr);
 
-    if(hash == NULL)
+    if(hash == nullptr)
         hash = createItemInformationsForResult(item->result());
 
-    DM_ItemInfoForGraphics *info = static_cast<DM_ItemInfoForGraphics*>(hash->value((CT_AbstractItemDrawable*)item, NULL));
+    DM_ItemInfoForGraphics *info = static_cast<DM_ItemInfoForGraphics*>(hash->value((CT_AbstractItemDrawable*)item, nullptr));
 
-    if(info == NULL)
+    if(info == nullptr)
     {
         info = static_cast<DM_ItemInfoForGraphics*>(createNewItemInformation(item));
         hash->insert((CT_AbstractItemDrawable*)item, info);
@@ -349,13 +349,13 @@ void GDocumentViewForGraphics::setColor(const CT_AbstractItemDrawable *item, con
 
 bool GDocumentViewForGraphics::isColorModified(const CT_AbstractItemDrawable *item)
 {
-    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = getItemsInformations().value(item->result(), NULL);
+    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = getItemsInformations().value(item->result(), nullptr);
 
-    if(hash != NULL)
+    if(hash != nullptr)
     {
-        DM_ItemInfoForGraphics *info = static_cast<DM_ItemInfoForGraphics*>(hash->value((CT_AbstractItemDrawable*)item, NULL));
+        DM_ItemInfoForGraphics *info = static_cast<DM_ItemInfoForGraphics*>(hash->value((CT_AbstractItemDrawable*)item, nullptr));
 
-        if(info != NULL)
+        if(info != nullptr)
             return info->isColorModified();
     }
 
@@ -364,18 +364,18 @@ bool GDocumentViewForGraphics::isColorModified(const CT_AbstractItemDrawable *it
 
 QColor GDocumentViewForGraphics::getColor(const CT_AbstractItemDrawable *item)
 {
-    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = getItemsInformations().value(item->result(), NULL);
+    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = getItemsInformations().value(item->result(), nullptr);
 
-    if(hash != NULL)
+    if(hash != nullptr)
     {
-        DM_ItemInfoForGraphics *info = static_cast<DM_ItemInfoForGraphics*>(hash->value((CT_AbstractItemDrawable*)item, NULL));
+        DM_ItemInfoForGraphics *info = static_cast<DM_ItemInfoForGraphics*>(hash->value((CT_AbstractItemDrawable*)item, nullptr));
 
-        if(info != NULL)
+        if(info != nullptr)
             return info->color();
     }
     else
     {
-        GUI_LOG->addErrorMessage(LogInterface::gui, tr("Impossible de récupérer une couleur d'un item dont le résultat est NULL"));
+        GUI_LOG->addErrorMessage(LogInterface::gui, tr("Impossible de récupérer une couleur d'un item dont le résultat est nullptr"));
     }
 
     return QColor();
@@ -385,8 +385,8 @@ void GDocumentViewForGraphics::visitItemsThatColorWasModified(GDocumentViewForGr
 {
     QHash<CT_AbstractResult *, QHash<CT_AbstractItemDrawable *, DM_AbstractInfo *> *> infos = getItemsInformations();
 
-    CT_AbstractResult* lastResult = NULL;
-    QHash<CT_AbstractItemDrawable *, DM_AbstractInfo *>* lastInfoByItem = NULL;
+    CT_AbstractResult* lastResult = nullptr;
+    QHash<CT_AbstractItemDrawable *, DM_AbstractInfo *>* lastInfoByItem = nullptr;
 
     QListIterator<CT_AbstractItemDrawable*> itI = getItemDrawable();
 
@@ -395,10 +395,10 @@ void GDocumentViewForGraphics::visitItemsThatColorWasModified(GDocumentViewForGr
 
         if(item->result() != lastResult) {
             lastResult = item->result();
-            lastInfoByItem = infos.value(lastResult, NULL);
+            lastInfoByItem = infos.value(lastResult, nullptr);
         }
 
-        DM_ItemInfoForGraphics* infoOfItem = static_cast<DM_ItemInfoForGraphics*>(lastInfoByItem->value((CT_AbstractItemDrawable*)item, NULL));
+        DM_ItemInfoForGraphics* infoOfItem = static_cast<DM_ItemInfoForGraphics*>(lastInfoByItem->value((CT_AbstractItemDrawable*)item, nullptr));
 
         if(infoOfItem->isColorModified())
             f(item, infoOfItem->color());
@@ -412,7 +412,7 @@ bool GDocumentViewForGraphics::canChangeVisibility() const
 
 void GDocumentViewForGraphics::setVisible(const CT_AbstractItemDrawable *item, bool visible)
 {
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         m_graphics->setVisible(item, visible);
 }
 
@@ -420,7 +420,7 @@ bool GDocumentViewForGraphics::isVisible(const CT_AbstractItemDrawable *item) co
 {
     bool isVisible = false;
 
-    if(m_graphics != NULL) {
+    if(m_graphics != nullptr) {
         if(m_graphics->isVisible(item))
             isVisible = true;
     }
@@ -432,7 +432,7 @@ void GDocumentViewForGraphics::applyAttributes(DM_AbstractAttributes *dpa)
 {
     QProgressDialog dialog(tr("Veuillez patienter pendant le traitement..."), "", 0, 100);
     dialog.setWindowModality(Qt::ApplicationModal);
-    dialog.setCancelButton(NULL);
+    dialog.setCancelButton(nullptr);
     dialog.show();
 
     dpa->setDocument(this);
@@ -453,13 +453,13 @@ void GDocumentViewForGraphics::applyAttributes(DM_AbstractAttributes *dpa)
 
     dialog.close();
 
-    disconnect(thread, NULL, dpa, NULL);
-    disconnect(dpa, NULL, thread, NULL);
+    disconnect(thread, nullptr, dpa, nullptr);
+    disconnect(dpa, nullptr, thread, nullptr);
 }
 
 void GDocumentViewForGraphics::setOptions(const DM_GraphicsViewOptions &options)
 {
-    if(_graphicsOptionsView != NULL) {
+    if(_graphicsOptionsView != nullptr) {
         if(getOptions() != options) {
             _graphicsOptionsView->setOptions(options);
             validateOptions();
@@ -469,7 +469,7 @@ void GDocumentViewForGraphics::setOptions(const DM_GraphicsViewOptions &options)
 
 DM_GraphicsViewOptions GDocumentViewForGraphics::getOptions() const
 {
-    if(_graphicsOptionsView != NULL)
+    if(_graphicsOptionsView != nullptr)
         return _graphicsOptionsView->getOptions();
 
     return DM_GraphicsViewOptions();
@@ -477,7 +477,7 @@ DM_GraphicsViewOptions GDocumentViewForGraphics::getOptions() const
 
 void GDocumentViewForGraphics::showOptions()
 {
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
     {
         DM_GraphicsViewOptions opt;
         opt.updateFromOtherOptions(m_graphics->constGetOptionsInternal());
@@ -498,7 +498,7 @@ void GDocumentViewForGraphics::validateOptions()
 {
     const DM_GraphicsViewOptions &options = _graphicsOptionsView->getOptions();
 
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         m_graphics->setOptions(options);
 
     updateButtonFastDrawMode();
@@ -507,7 +507,7 @@ void GDocumentViewForGraphics::validateOptions()
 
 void GDocumentViewForGraphics::takeAndSaveScreenshot()
 {
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         m_graphics->takeAndSaveScreenshot();
 }
 
@@ -546,7 +546,7 @@ void GDocumentViewForGraphics::addActualPointOfView()
 
 void GDocumentViewForGraphics::setPointOfView(DM_PointOfView *pof)
 {
-    if(pof != NULL)
+    if(pof != nullptr)
     {
         DM_GraphicsViewCamera *cam = _cameraOptionsView->getCamera();
 
@@ -668,12 +668,12 @@ void GDocumentViewForGraphics::pluginExporterManagerReloaded()
 {
     CDM_Tools tools(GUI_MANAGER->getPluginManager());
 
-    _buttonExport->setMenu(NULL);
+    _buttonExport->setMenu(nullptr);
     _buttonExport->setEnabled(false);
 
     QMenu *exportersMenu = tools.createMenuForAllExporters(this, SLOT(exporterActionTriggered()));
 
-    if(exportersMenu != NULL)
+    if(exportersMenu != nullptr)
     {
         _buttonExport->setMenu(exportersMenu);
         _buttonExport->setEnabled(true);
@@ -682,7 +682,8 @@ void GDocumentViewForGraphics::pluginExporterManagerReloaded()
 
 void GDocumentViewForGraphics::exporterActionTriggered()
 {
-    if(m_graphics == NULL)
+    // TODO : export with gui
+    /*if(m_graphics == nullptr)
         return;
 
     CDM_Tools tools(GUI_MANAGER->getPluginManager());
@@ -690,7 +691,6 @@ void GDocumentViewForGraphics::exporterActionTriggered()
     CT_AbstractExporter *exporter = dynamic_cast<CT_AbstractExporter*>(sender()->parent());
 
     CT_AbstractExporter *exCopy = exporter->copy();
-    exCopy->init();
 
     QList<CT_AbstractItemDrawable*> selectedItems = getSelectedItemDrawable();
 
@@ -719,7 +719,7 @@ void GDocumentViewForGraphics::exporterActionTriggered()
         CT_SPCIR selec = m_graphics->getSelectedPoints();
 
         if(!selec.isNull()
-                && (selec->abstractCloudIndex() != NULL))
+                && (selec->abstractCloudIndex() != nullptr))
             points.append(selec->abstractCloudIndex());
 
         exCopy->setPointsToExport(points);
@@ -732,7 +732,7 @@ void GDocumentViewForGraphics::exporterActionTriggered()
         CT_SFCIR selec = m_graphics->getSelectedFaces();
 
         if(!selec.isNull()
-                && (selec->abstractCloudIndex() != NULL))
+                && (selec->abstractCloudIndex() != nullptr))
             faces.append(selec->abstractCloudIndex());
 
         exCopy->setFacesToExport(faces);
@@ -745,7 +745,7 @@ void GDocumentViewForGraphics::exporterActionTriggered()
         CT_SECIR selec = m_graphics->getSelectedEdges();
 
         if(!selec.isNull()
-                && (selec->abstractCloudIndex() != NULL))
+                && (selec->abstractCloudIndex() != nullptr))
             edges.append(selec->abstractCloudIndex());
 
         exCopy->setEdgesToExport(edges);
@@ -753,30 +753,28 @@ void GDocumentViewForGraphics::exporterActionTriggered()
 
     if(exCopy->hasSomethingToExport())
     {
-        QString filepath = QFileDialog::getSaveFileName(NULL, tr("Exporter sous..."), exporter->exportFilePath(), tools.createFileExtensionForExporter(exCopy));
+        QString filepath = QFileDialog::getSaveFileName(nullptr, tr("Exporter sous..."), exporter->filePath(), tools.createFileExtensionForExporter(exCopy));
 
         if(!filepath.isEmpty()
-                && exCopy->setExportFilePath(filepath))
+                && exCopy->setFilePath(filepath))
         {
-            exporter->setExportFilePath(filepath);
-            exCopy->setDocumentManager(getManager());
-            exCopy->setMyDocument(this);
+            exporter->setFilePath(filepath);
 
-            GUI_MANAGER->asyncExport(exCopy, NULL);
+            GUI_MANAGER->asyncExport(exCopy, nullptr);
             return;
         }
     }
     else if(!exCopy->errorMessage().isEmpty())
     {
-        QMessageBox::critical(NULL, tr("Erreur"), exCopy->errorMessage(), QMessageBox::Ok);
+        QMessageBox::critical(nullptr, tr("Erreur"), exCopy->errorMessage(), QMessageBox::Ok);
     }
 
-    delete exCopy;
+    delete exCopy;*/
 }
 
 void GDocumentViewForGraphics::mustUpdateItemDrawablesThatColorWasModified()
 {
-    if(m_graphics == NULL)
+    if(m_graphics == nullptr)
         return;
 
     m_graphics->updateItemDrawablesThatColorWasModified();
@@ -797,20 +795,20 @@ void GDocumentViewForGraphics::mustUpdateItemDrawablesThatColorWasModified()
 
 void GDocumentViewForGraphics::mustDirtyColorsOfItemDrawablesWithPoints()
 {
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         m_graphics->dirtyColorsOfItemDrawablesWithPoints();
 }
 
 void GDocumentViewForGraphics::mustDirtyNormalsOfItemDrawablesWithPoints()
 {
-    if(m_graphics != NULL)
+    if(m_graphics != nullptr)
         m_graphics->dirtyNormalsOfItemDrawablesWithPoints();
 }
 
 void GDocumentViewForGraphics::removeItemDrawableFromScene(CT_AbstractItemDrawable &item)
 {
     // TODO : model !
-    m_scene->removeItem(&item, NULL);
+    m_scene->removeItem(&item, nullptr);
 }
 
 void GDocumentViewForGraphics::closeEvent(QCloseEvent *closeEvent)
@@ -818,7 +816,7 @@ void GDocumentViewForGraphics::closeEvent(QCloseEvent *closeEvent)
     if(canClose())
     {
         delete m_graphics;
-        m_graphics = NULL;
+        m_graphics = nullptr;
     }
 
     GDocumentView::closeEvent(closeEvent);
@@ -971,8 +969,8 @@ void GDocumentViewForGraphics::detachView()
         getSubWindow()->showMaximized();
         _previousParent = (QWidget*) parent();
         _flags = getSubWindow()->windowFlags();
-        getSubWindow()->setParent(NULL, Qt::Window);
-        setCurrentAction(NULL, false);
+        getSubWindow()->setParent(nullptr, Qt::Window);
+        setCurrentAction(nullptr, false);
         _viewDetached = true;
     }
 }
@@ -998,7 +996,7 @@ QString GDocumentViewForGraphics::getKeyForPointOfViewManager()
 
 bool GDocumentViewForGraphics::setCurrentAction(bool internal, CT_AbstractAction *action, bool deleteAction)
 {
-    if(m_graphics == NULL) {
+    if(m_graphics == nullptr) {
 
         if(deleteAction && !GUI_MANAGER->getActionsManager()->existActionCompareAddress(action))
             delete action;
@@ -1014,8 +1012,8 @@ bool GDocumentViewForGraphics::setCurrentAction(bool internal, CT_AbstractAction
         return false;
     }
 
-    if(action == NULL)
-        m_graphics->setCurrentAction(NULL);
+    if(action == nullptr)
+        m_graphics->setCurrentAction(nullptr);
     else {
         CT_AbstractActionForGraphicsView* newAction = (CT_AbstractActionForGraphicsView*)action->copy();
 
@@ -1081,7 +1079,7 @@ void GDocumentViewForGraphics::updateMenuOfTransferButton()
 
     if(menu->isEmpty()) {
         delete menu;
-        menu = NULL;
+        menu = nullptr;
     } else {
         QMenu* top = new QMenu();
         top->addMenu(menu);
@@ -1089,7 +1087,7 @@ void GDocumentViewForGraphics::updateMenuOfTransferButton()
     }
 
     m_buttonTransferToDocument->setMenu(menu);
-    m_buttonTransferToDocument->setEnabled(menu != NULL);
+    m_buttonTransferToDocument->setEnabled(menu != nullptr);
 }
 
 void GDocumentViewForGraphics::addSelectedItemsToDocument()
@@ -1108,7 +1106,7 @@ void GDocumentViewForGraphics::addSelectedItemsToDocument()
         {
             QList<CT_AbstractItemDrawable *> items = getSelectedItemDrawable();
 
-            GUI_MANAGER->asyncAddAllItemDrawableOfListOnView(items, doc, NULL);
+            GUI_MANAGER->asyncAddAllItemDrawableOfListOnView(items, doc, nullptr);
 
             return;
         }
@@ -1121,7 +1119,7 @@ DM_AbstractInfo* GDocumentViewForGraphics::createNewItemInformation(const CT_Abs
 
     const CT_AbstractSingularItemDrawable *si = dynamic_cast<const CT_AbstractSingularItemDrawable*>(item);
 
-    if(si != NULL)
+    if(si != nullptr)
         info->setColor(si->defaultColor());
 
     return info;
@@ -1130,11 +1128,11 @@ DM_AbstractInfo* GDocumentViewForGraphics::createNewItemInformation(const CT_Abs
 void GDocumentViewForGraphics::recursiveSetColor(CT_StandardItemGroup *group,
                                                  const QColor &color)
 {
-    if(group == NULL)
+    if(group == nullptr)
         return;
 
-    CT_AbstractResult *lastResult = NULL;
-    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = NULL;
+    CT_AbstractResult *lastResult = nullptr;
+    QHash<CT_AbstractItemDrawable*, DM_AbstractInfo*> *hash = nullptr;
 
     for(const CT_StandardItemGroup* cChild : group->groups())
     {
@@ -1144,16 +1142,16 @@ void GDocumentViewForGraphics::recursiveSetColor(CT_StandardItemGroup *group,
         {
             lastResult = child->result();
 
-            hash = getItemsInformations().value(lastResult, NULL);
+            hash = getItemsInformations().value(lastResult, nullptr);
 
-            if(hash == NULL)
+            if(hash == nullptr)
                 hash = createItemInformationsForResult(lastResult);
         }
 
-        if(hash != NULL) {
-            DM_ItemInfoForGraphics *childInfo = static_cast<DM_ItemInfoForGraphics*>(hash->value(child, NULL));
+        if(hash != nullptr) {
+            DM_ItemInfoForGraphics *childInfo = static_cast<DM_ItemInfoForGraphics*>(hash->value(child, nullptr));
 
-            if(childInfo == NULL)
+            if(childInfo == nullptr)
             {
                 childInfo = static_cast<DM_ItemInfoForGraphics*>(createNewItemInformation(child));
                 hash->insert(child, childInfo);
@@ -1174,17 +1172,17 @@ void GDocumentViewForGraphics::recursiveSetColor(CT_StandardItemGroup *group,
         {
             lastResult = child->result();
 
-            hash = getItemsInformations().value(lastResult, NULL);
+            hash = getItemsInformations().value(lastResult, nullptr);
 
-            if(hash == NULL)
+            if(hash == nullptr)
                 hash = createItemInformationsForResult(lastResult);
 
         }
 
-        if(hash != NULL) {
-            DM_ItemInfoForGraphics *childInfo = static_cast<DM_ItemInfoForGraphics*>(hash->value(child, NULL));
+        if(hash != nullptr) {
+            DM_ItemInfoForGraphics *childInfo = static_cast<DM_ItemInfoForGraphics*>(hash->value(child, nullptr));
 
-            if(childInfo == NULL)
+            if(childInfo == nullptr)
             {
                 childInfo = static_cast<DM_ItemInfoForGraphics*>(createNewItemInformation(child));
                 hash->insert(child, childInfo);

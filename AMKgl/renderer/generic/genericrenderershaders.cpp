@@ -24,7 +24,7 @@
 
 GenericRendererShaders::GenericRendererShaders()
 {
-    m_program = NULL;
+    m_program = nullptr;
     m_initialized = false;
     m_shaderVertexLocation = -1;
     m_shaderInfoLocation = -1;
@@ -61,7 +61,7 @@ bool GenericRendererShaders::init(const QOpenGLContext* context)
             if(!ok) {
                 AMKglLOG->addErrorMessage(error);
                 delete m_program;
-                m_program = NULL;
+                m_program = nullptr;
                 return false;
             }
 
@@ -99,7 +99,7 @@ bool GenericRendererShaders::bindAndConfigureByDefaultShader(const IGraphicsDocu
 
 bool GenericRendererShaders::bindShader()
 {
-    if(getShaderProgram() == NULL)
+    if(getShaderProgram() == nullptr)
         return false;
 
     return getShaderProgram()->bind();
@@ -112,14 +112,14 @@ void GenericRendererShaders::releaseShader()
 
 bool GenericRendererShaders::bindAndSetVertexAttributeToShader(QOpenGLBuffer &vertex)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderVertexAttributeLocation() == -1)
             || !vertex.isCreated()
             || !vertex.bind())
         return false;
 
 
-    bool ok = setVertexAttributeToShader(NULL);
+    bool ok = setVertexAttributeToShader(nullptr);
 
     vertex.release();
 
@@ -128,7 +128,7 @@ bool GenericRendererShaders::bindAndSetVertexAttributeToShader(QOpenGLBuffer &ve
 
 bool GenericRendererShaders::setVertexAttributeToShader(const Vertex* pointer)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderVertexAttributeLocation() == -1))
         return false;
 
@@ -140,13 +140,13 @@ bool GenericRendererShaders::setVertexAttributeToShader(const Vertex* pointer)
 
 bool GenericRendererShaders::bindAndSetInfoAttributeToShader(QOpenGLBuffer &info, const QOpenGLContext *context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderInfoAttributeLocation() == -1)
             || !info.isCreated()
             || !info.bind())
         return false;
 
-    bool ok = setInfoAttributeToShader(NULL, context);
+    bool ok = setInfoAttributeToShader(nullptr, context);
 
     info.release();
 
@@ -155,14 +155,14 @@ bool GenericRendererShaders::bindAndSetInfoAttributeToShader(QOpenGLBuffer &info
 
 bool GenericRendererShaders::setInfoAttributeToShader(const Info* pointer, const QOpenGLContext* context)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderInfoAttributeLocation() == -1))
         return false;
 
     // we must use direct function to pass GL_FALSE to "normalized" parameter
     QOpenGLFunctions_2_0* func = context->versionFunctions<QOpenGLFunctions_2_0>();
 
-    if(func == NULL)
+    if(func == nullptr)
         return false;
 
     // enableAttributeArray(m_shaderInfoLocation)
@@ -181,7 +181,7 @@ bool GenericRendererShaders::setInfoAttributeToShader(const Info* pointer, const
 
 bool GenericRendererShaders::bindAndSetColorAttributeToShader(QOpenGLBuffer &color)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderColorAttributeLocation() == -1)
             || !color.isCreated()
             || !color.bind()) {
@@ -189,7 +189,7 @@ bool GenericRendererShaders::bindAndSetColorAttributeToShader(QOpenGLBuffer &col
         return false;
     }
 
-    bool ok = setColorAttributeToShader(NULL);
+    bool ok = setColorAttributeToShader(nullptr);
     setUseColorAttribute(ok);
 
     color.release();
@@ -199,7 +199,7 @@ bool GenericRendererShaders::bindAndSetColorAttributeToShader(QOpenGLBuffer &col
 
 bool GenericRendererShaders::setColorAttributeToShader(const Color* pointer)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderColorAttributeLocation() == -1))
         return false;
 
@@ -216,7 +216,7 @@ bool GenericRendererShaders::setColorAttributeToShader(const Color* pointer)
 
 bool GenericRendererShaders::setUseColorAttribute(bool enabled)
 {
-    if(getShaderProgram() == NULL)
+    if(getShaderProgram() == nullptr)
         return false;
 
     getShaderProgram()->setUniformValue("useFrontColor", enabled);
@@ -226,7 +226,7 @@ bool GenericRendererShaders::setUseColorAttribute(bool enabled)
 
 bool GenericRendererShaders::bindAndSetNormalAttributeToShader(QOpenGLBuffer &normal)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderNormalAttributeLocation() == -1)
             || !normal.isCreated()
             || !normal.bind()) {
@@ -234,7 +234,7 @@ bool GenericRendererShaders::bindAndSetNormalAttributeToShader(QOpenGLBuffer &no
         return false;
     }
 
-    bool ok = setNormalAttributeToShader(NULL);
+    bool ok = setNormalAttributeToShader(nullptr);
     setUseNormalAttribute(ok);
 
     normal.release();
@@ -244,7 +244,7 @@ bool GenericRendererShaders::bindAndSetNormalAttributeToShader(QOpenGLBuffer &no
 
 bool GenericRendererShaders::setNormalAttributeToShader(const Normal *pointer)
 {
-    if((getShaderProgram() == NULL)
+    if((getShaderProgram() == nullptr)
             || (getShaderNormalAttributeLocation() == -1))
         return false;
 
@@ -262,7 +262,7 @@ bool GenericRendererShaders::setNormalAttributeToShader(const Normal *pointer)
 
 bool GenericRendererShaders::setUseNormalAttribute(bool enabled)
 {
-    if(getShaderProgram() == NULL)
+    if(getShaderProgram() == nullptr)
         return false;
 
     getShaderProgram()->setUniformValue("useNormal", enabled);
@@ -272,7 +272,7 @@ bool GenericRendererShaders::setUseNormalAttribute(bool enabled)
 
 void GenericRendererShaders::disableAttributeOfShader()
 {
-    if(getShaderProgram() == NULL)
+    if(getShaderProgram() == nullptr)
         return;
 
     getShaderProgram()->disableAttributeArray(getShaderVertexAttributeLocation());
@@ -304,7 +304,7 @@ int GenericRendererShaders::getShaderNormalAttributeLocation() const
 void GenericRendererShaders::destroyGL()
 {
     delete m_program;
-    m_program = NULL;
+    m_program = nullptr;
 
 
     m_shaderVertexLocation = -1;
@@ -317,7 +317,7 @@ void GenericRendererShaders::destroyGL()
 
 bool GenericRendererShaders::bindShader(QOpenGLShaderProgram *program)
 {
-    if(program == NULL)
+    if(program == nullptr)
         return false;
 
     return program->bind();
@@ -325,6 +325,6 @@ bool GenericRendererShaders::bindShader(QOpenGLShaderProgram *program)
 
 void GenericRendererShaders::releaseShader(QOpenGLShaderProgram *program)
 {
-    if(program != NULL)
+    if(program != nullptr)
         program->release();
 }

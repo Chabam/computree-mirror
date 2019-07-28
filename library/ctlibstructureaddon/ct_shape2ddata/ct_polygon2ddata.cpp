@@ -107,8 +107,8 @@ void CT_Polygon2DData::computeCentroid()
         if (pt(1) > _max(1)) {_max(1) = pt(1);}
     }
 
-    const Eigen::Vector2d* pt1 = NULL;
-    const Eigen::Vector2d* pt2 = NULL;
+    const Eigen::Vector2d* pt1 = nullptr;
+    const Eigen::Vector2d* pt2 = nullptr;
 
     pt1 = &_vertices.at(size-1);
 
@@ -163,8 +163,8 @@ double CT_Polygon2DData::getAreaIfNotSelfIntersecting()
 double CT_Polygon2DData::getSignedArea()
 {
     double area = 0;
-    const Eigen::Vector2d* pt1 = NULL;
-    const Eigen::Vector2d* pt2 = NULL;
+    const Eigen::Vector2d* pt1 = nullptr;
+    const Eigen::Vector2d* pt2 = nullptr;
 
     const int size = _vertices.size();
     pt1 = &_vertices.at(size-1);
@@ -188,8 +188,8 @@ double CT_Polygon2DData::getSignedArea()
 double CT_Polygon2DData::getPerimeter() const
 {
     double perimeter = 0;
-    const Eigen::Vector2d* pt1 = NULL;
-    const Eigen::Vector2d* pt2 = NULL;
+    const Eigen::Vector2d* pt1 = nullptr;
+    const Eigen::Vector2d* pt2 = nullptr;
 
     const int size = getVerticesNumber();
     pt1 = &_vertices.at(size-1);
@@ -216,8 +216,8 @@ bool CT_Polygon2DData::contains(double x, double y) const
     if (y < _min(1)) {return false;}
     if (y > _max(1)) {return false;}
 
-    const Eigen::Vector2d* pt1 = NULL;
-    const Eigen::Vector2d* pt2 = NULL;
+    const Eigen::Vector2d* pt1 = nullptr;
+    const Eigen::Vector2d* pt2 = nullptr;
     bool result = false;
 
     const int size = getVerticesNumber();
@@ -273,7 +273,7 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_PointCloudIndexVec
         const CT_Point& point = it.next().currentPoint();
         Eigen::Vector3d* pt = new Eigen::Vector3d(point);
 
-        delaunay.insertNode(CT_NodeT::create(pt, NULL, true));
+        delaunay.insertNode(CT_NodeT::create(pt, nullptr, true));
     }
 
     return createConvexHull(delaunay);
@@ -289,7 +289,7 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_DelaunayT& triangu
     const int size = nodes.size();
 
     if (size < 3)
-        return NULL;
+        return nullptr;
 
     for (int i = 0 ; i < size ; i++)
     {
@@ -328,7 +328,7 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector2d>& ord
 
     const int n = orderedCandidates.size();
 
-    if (n < 3) {return NULL;}
+    if (n < 3) {return nullptr;}
 
     int k = 0;
 
@@ -378,7 +378,7 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector3d>& ord
 
     const int n = orderedCandidates.size();
 
-    if (n < 3) {return NULL;}
+    if (n < 3) {return nullptr;}
 
     int k = 0;
 

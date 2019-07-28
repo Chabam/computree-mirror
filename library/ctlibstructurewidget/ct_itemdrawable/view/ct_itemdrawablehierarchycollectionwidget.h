@@ -68,12 +68,12 @@ public:
     bool selectChoiceByDefault();
 
     /**
-     * @brief Returns the color cloud selected (NULL if it was not selected)
+     * @brief Returns the color cloud selected (nullptr if it was not selected)
      */
     QSharedPointer<CT_StandardColorCloudRegistered> colorCloudOfDocumentSelected() const;
 
     /**
-     * @brief Returns the normal cloud selected (NULL if it was not selected)
+     * @brief Returns the normal cloud selected (nullptr if it was not selected)
      */
     QSharedPointer<CT_StandardNormalCloudRegistered> normalCloudOfDocumentSelected() const;
 
@@ -97,7 +97,7 @@ public:
             for(const QStandardItem* sItem : sItems) {
                 T* item = dynamic_cast<T*>(static_cast<CT_AbstractSingularItemDrawable*>(sItem->data(Qt::UserRole+2).value<void*>()));
 
-                if(item != NULL)
+                if(item != nullptr)
                     l.append(item);
             }
         }
@@ -125,7 +125,7 @@ public:
             for(const QStandardItem* sItem : sItems) {
                 CT_OutAbstractSingularItemModel* model = static_cast<CT_OutAbstractSingularItemModel*>(sItem->data(Qt::UserRole+4).value<void*>());
 
-                if((model != NULL) && (dynamic_cast<T*>(model->itemDrawable()) != NULL))
+                if((model != nullptr) && (dynamic_cast<T*>(model->itemDrawable()) != nullptr))
                     l.append(model);
             }
         }

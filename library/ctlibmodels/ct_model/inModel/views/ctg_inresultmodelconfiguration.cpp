@@ -10,7 +10,7 @@ CTG_InResultModelConfiguration::CTG_InResultModelConfiguration(QWidget *parent) 
 {
     ui->setupUi(this);
 
-    m_inputResultModelManager = NULL;
+    m_inputResultModelManager = nullptr;
 
     connect(ui->inResultModelPossibilities, SIGNAL(showInResultModelPossibility(const CT_InStdResultModelPossibility*)), ui->inModelPossibilities, SLOT(setInResultModelPossibility(const CT_InStdResultModelPossibility*)), Qt::DirectConnection);
 }
@@ -40,7 +40,7 @@ void CTG_InResultModelConfiguration::accept()
         return;
     }
 
-    if(m_inputResultModelManager != NULL) {
+    if(m_inputResultModelManager != nullptr) {
         QStringList errors;
 
         const bool ok = m_inputResultModelManager->visitResults([&errors](const CT_InAbstractResultModel* resultModel) -> bool {

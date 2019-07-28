@@ -93,7 +93,7 @@ private:
     {
     public:
 
-        CT_InModelGraphNode(const CT_InAbstractModel *model) : m_model((CT_InAbstractModel*)model), m_possibility(NULL) {}
+        CT_InModelGraphNode(const CT_InAbstractModel *model) : m_model((CT_InAbstractModel*)model), m_possibility(nullptr) {}
         ~CT_InModelGraphNode()
         {
             qDeleteAll(m_childrensNode.begin(), m_childrensNode.end());
@@ -154,7 +154,7 @@ private:
         /**
          * @brief Returns the possibility used for the model.
          * @param model : model to search
-         * @return possibility founded or NULL if it was not set or not founded.
+         * @return possibility founded or nullptr if it was not set or not founded.
          */
         //CT_InStdModelPossibility* possibilityForModel(const CT_InAbstractModel *model) const;
 
@@ -179,7 +179,7 @@ private:
         //CT_InModelGraph* clone() const;
 
         /**
-         * @brief Count and returns the number of possibilities that is not NULL in the structure
+         * @brief Count and returns the number of possibilities that is not nullptr in the structure
          */
         //int howManyPossibilitiesIsNotNullInStructure() const;
 
@@ -224,9 +224,9 @@ private:
         //static bool staticRecursiveIsOneModelOptional(CT_InModelGraphNode *node);
 
         /**
-         * @brief Recursively count possibilities that is not NULL
+         * @brief Recursively count possibilities that is not nullptr
          */
-        //static int staticRecursiveCountPossibilityNotNULL(CT_InModelGraphNode *node);
+        //static int staticRecursiveCountPossibilityNotnullptr(CT_InModelGraphNode *node);
 
 
         //static void staticRecursiveDebugPrintGraph(CT_InModelGraphNode *node, QString preString = "");
@@ -249,7 +249,7 @@ private:
     //void recursiveConstructGraphs(QList<CT_InModelGraph*> &graphsToModify, const CT_InAbstractModel *inModel);
 
     /**
-     * @brief In all graphs for the possibility passed in parameter, returns the graph that have the maximum number of possibility != NULL
+     * @brief In all graphs for the possibility passed in parameter, returns the graph that have the maximum number of possibility != nullptr
      */
     //CT_InModelGraph* getOneOfTheBestGraphForPossibilityOfRootModel(const CT_InStdModelPossibility *possibility) const;
 };

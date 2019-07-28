@@ -2,12 +2,12 @@
 
 CT_MultiLineEdit::CT_MultiLineEdit(QString &value, QString description) : CT_LineEdit(value, description)
 {
-    _multiLineEditCreated = NULL;
+    _multiLineEditCreated = nullptr;
 }
 
 QWidget* CT_MultiLineEdit::createWidget(QWidget &parent)
 {
-    if(_multiLineEditCreated == NULL)
+    if(_multiLineEditCreated == nullptr)
         _multiLineEditCreated = new QTextEdit(*(_data._value), &parent);
 
     return _multiLineEditCreated;

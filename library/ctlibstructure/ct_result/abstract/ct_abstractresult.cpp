@@ -28,7 +28,7 @@
 #include "ct_abstractresult.h"
 
 CT_AbstractResult::CT_AbstractResult() :
-    m_parentStep(NULL),
+    m_parentStep(nullptr),
     m_numberOfItemsVisible(0),
     m_clearFromMemoryProgressValue(100)
 {
@@ -37,7 +37,7 @@ CT_AbstractResult::CT_AbstractResult() :
 }
 
 CT_AbstractResult::CT_AbstractResult(const CT_AbstractResult& other) :
-    m_parentStep(NULL),
+    m_parentStep(nullptr),
     m_displayableName(other.m_displayableName),
     m_numberOfItemsVisible(0),
     m_clearFromMemoryProgressValue(100)

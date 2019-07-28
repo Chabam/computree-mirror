@@ -85,7 +85,7 @@
   * @brief Use this define in your class to add the copy method without write your own.
   * @warning You must define the copy contructor in your class !
   */
-#define CT_ITEM_COPY_IMP(argClass) CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* newModelToUse = NULL, const CT_AbstractResult* newResult = NULL) const override \
+#define CT_ITEM_COPY_IMP(argClass) CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* newModelToUse = nullptr, const CT_AbstractResult* newResult = nullptr) const override \
                                      { \
                                         argClass* cpy = new argClass(*this); \
                                         cpy->setModel(newModelToUse); \
@@ -114,7 +114,7 @@ public:
      *          - Displayable name
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */
@@ -296,7 +296,7 @@ public:
 
     /**
      * @brief If you want to set an alternative draw manager from your step (per example) you can do that with
-     *        this method. If the alternative draw manager is != NULL it will be called in method draw.
+     *        this method. If the alternative draw manager is != nullptr it will be called in method draw.
      */
     void setAlternativeDrawManager(const CT_AbstractItemDrawableDrawManager *drawManager);
 
@@ -314,7 +314,7 @@ public:
     virtual void draw(GraphicsViewInterface& view, PainterInterface& painter);
 
     /**
-     * @brief Returns the configuration of the base draw manager or the alternative if it was not NULL. NULL if no draw manager was set.
+     * @brief Returns the configuration of the base draw manager or the alternative if it was not nullptr. nullptr if no draw manager was set.
      */
     CT_ItemDrawableConfiguration* drawConfiguration();
 
@@ -353,10 +353,10 @@ public:
      * @param newResult : new result to use if it can be changed
      * @return The copy of this item (see the copy constructor to now what is copied and what is initialized differently)
      */
-    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* newModelToUse = NULL, const CT_AbstractResult* newResult = NULL) const = 0;
+    virtual CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel* newModelToUse = nullptr, const CT_AbstractResult* newResult = nullptr) const = 0;
 
     template<class T>
-    T* copyAs(const CT_OutAbstractItemModel* newModelToUse = NULL, const CT_AbstractResult* newResult = NULL) const {
+    T* copyAs(const CT_OutAbstractItemModel* newModelToUse = nullptr, const CT_AbstractResult* newResult = nullptr) const {
         return static_cast<T*>(this->copy(newModelToUse, newResult));
     }
 
@@ -368,12 +368,12 @@ signals:
     /**
      * @brief Emitted when the selection state change
      */
-    void selectChange(bool value, CT_AbstractItemDrawable* item = NULL);
+    void selectChange(bool value, CT_AbstractItemDrawable* item = nullptr);
 
     /**
      * @brief Emitted when the display state change
      */
-    void displayChange(bool value, CT_AbstractItemDrawable* item = NULL);
+    void displayChange(bool value, CT_AbstractItemDrawable* item = nullptr);
 
 private:
     class ItemToolForModel : public IItemDrawableToolForModel {
@@ -389,7 +389,7 @@ private:
         }
 
         IItemDrawableForModel* copyItem() const override {
-            return m_pointer->copy(NULL, NULL);
+            return m_pointer->copy(nullptr, nullptr);
         }
     };
 
@@ -429,12 +429,12 @@ private:
     CT_AbstractItemDrawable*            m_parentItem;
 
     /**
-     * @brief The default draw manager to use if the alternative is NULL
+     * @brief The default draw manager to use if the alternative is nullptr
      */
     CT_AbstractItemDrawableDrawManager* m_baseDrawManager;
 
     /**
-     * @brief The alternative draw manager to use if is not NULL
+     * @brief The alternative draw manager to use if is not nullptr
      */
     CT_AbstractItemDrawableDrawManager* m_alternativeDrawManager;
 

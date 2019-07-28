@@ -61,7 +61,7 @@ bool CT_InAbstractItemModel::canBeAPossibility(const CT_OutAbstractModel& model)
 {
     const CT_OutAbstractItemModel* outModel = dynamic_cast<const CT_OutAbstractItemModel*>(&model);
 
-    if(outModel == NULL)
+    if(outModel == nullptr)
         return false;
 
     const QString type = outModel->itemDrawable()->itemToolForModel()->itemInheritPath() + "/";

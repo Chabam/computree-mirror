@@ -5,9 +5,9 @@
 
 DM_SceneForAction::DM_SceneForAction()
 {
-    m_action = NULL;
-    m_graphicsView = NULL;
-    m_currentPainter = NULL;
+    m_action = nullptr;
+    m_graphicsView = nullptr;
+    m_currentPainter = nullptr;
 
     m_scene = new PermanentScene();
 
@@ -24,8 +24,8 @@ DM_SceneForAction::~DM_SceneForAction()
 
 void DM_SceneForAction::setAction(const CT_AbstractActionForGraphicsView *action, GraphicsViewInterface& graphicsView)
 {
-    if(m_action != NULL) {
-        disconnect(action, NULL, this, NULL);
+    if(m_action != nullptr) {
+        disconnect(action, nullptr, this, nullptr);
 
         qDeleteAll(m_elementsInformations.begin(), m_elementsInformations.end());
         m_elementsInformations.clear();
@@ -37,7 +37,7 @@ void DM_SceneForAction::setAction(const CT_AbstractActionForGraphicsView *action
     m_action = (CT_AbstractActionForGraphicsView*)action;
     m_graphicsView = (GraphicsViewInterface*)&graphicsView;
 
-    if(m_action != NULL) {
+    if(m_action != nullptr) {
         connect(m_action, SIGNAL(drawing3DChanged()), this, SLOT(updateActionObjects()));
         connect(m_action, SIGNAL(new3DElementDraw(quint32)), this, SLOT(createNewElementInformation(quint32)), Qt::DirectConnection);
     }
@@ -69,13 +69,13 @@ void DM_SceneForAction::drawOverlay(QPainter &painter, DrawInfo &info)
 {
     Q_UNUSED(info)
 
-    if(m_action != NULL)
+    if(m_action != nullptr)
         m_action->drawOverlay(*m_graphicsView, painter);
 }
 
 PermanentItemInformation* DM_SceneForAction::getElementInformation(const quint32 &uniqueIndex)
 {
-    return m_elementsInformations.value(uniqueIndex, NULL);
+    return m_elementsInformations.value(uniqueIndex, nullptr);
 }
 
 bool DM_SceneForAction::mustBeUpdated() const
@@ -91,7 +91,7 @@ void DM_SceneForAction::checkAndUpdateIfItNeedsToBe()
 
 void DM_SceneForAction::updateActionObjects()
 {
-    if(m_action != NULL) {
+    if(m_action != nullptr) {
         ActionElementsInfoCollectionIterator it(m_elementsInformations);
 
         while(it.hasNext())
@@ -108,7 +108,7 @@ void DM_SceneForAction::updateActionObjects()
 
         m_action->draw(*m_graphicsView, painter);
 
-        m_currentPainter = NULL;
+        m_currentPainter = nullptr;
 
         m_scene->updateInAllContext();
     }
@@ -116,11 +116,11 @@ void DM_SceneForAction::updateActionObjects()
 
 void DM_SceneForAction::createNewElementInformation(quint32 uniqueIndex)
 {
-    Q_ASSERT(m_currentPainter != NULL);
+    Q_ASSERT(m_currentPainter != nullptr);
 
-    PermanentItemInformation* info = m_elementsInformations.value(uniqueIndex, NULL);
+    PermanentItemInformation* info = m_elementsInformations.value(uniqueIndex, nullptr);
 
-    if(info == NULL) {
+    if(info == nullptr) {
         info = new PermanentItemInformation(uniqueIndex);
         m_elementsInformations.insert(uniqueIndex, info);
     }

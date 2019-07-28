@@ -31,7 +31,7 @@ bool BufferObjectManager::processBOThatMustBeUpdated()
                     qint8* fv = (qint8*)bo.map(QOpenGLBuffer::WriteOnly);
                     qint8* fvToMap = (qint8*)boPro->getFirstValue();
 
-                    if((fv != NULL) && (fvToMap != NULL))
+                    if((fv != nullptr) && (fvToMap != nullptr))
                         std::memcpy(fv, fvToMap, boPro->getArraySize() * boPro->getSizeOfOneValueInByte());
 
                     bo.unmap();
@@ -51,9 +51,9 @@ bool BufferObjectManager::createBO(void* objectThatCreateIt,
                                    const size_t& sizeOfValueInByte,
                                    const size_t& arraySize)
 {
-    Q_ASSERT(func != NULL);
+    Q_ASSERT(func != nullptr);
 
-    if(func(objectThatCreateIt) == NULL)
+    if(func(objectThatCreateIt) == nullptr)
         return false;
 
     BOAndProperty& boPro = createNewOrGetSharedBufferObjectFor(objectThatCreateIt,
@@ -113,7 +113,7 @@ bool BufferObjectManager::updateBO(const QOpenGLBuffer::Type& boType,
 {
     bool ok = false;
 
-    if(firstValue != NULL) {
+    if(firstValue != nullptr) {
 
         int boIndex = searchSharedBufferObject(boType, firstValue, arraySize);
 
@@ -199,7 +199,7 @@ int BufferObjectManager::searchSharedBufferObject(const QOpenGLBuffer::Type &boT
         const BOAndProperty* boPro = it.next();
         const void* otherFirstValue = boPro->getFirstValue();
 
-        if((otherFirstValue != NULL)
+        if((otherFirstValue != nullptr)
                 && (boPro->getFirstValue() == firstValue)
                 && (boPro->m_bo->type() == boType)) {
             return index;

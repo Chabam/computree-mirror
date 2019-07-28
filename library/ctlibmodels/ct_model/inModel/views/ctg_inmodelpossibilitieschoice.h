@@ -27,7 +27,7 @@ public:
     typedef QList<CT_InAbstractModel*> ModelContainer;
     typedef QListIterator<CT_InAbstractModel*> ModelContainerIterator;
 
-    CTG_InModelCheckBox(const QString & text) : QStandardItem(text) { _outModel = NULL; }
+    CTG_InModelCheckBox(const QString & text) : QStandardItem(text) { _outModel = nullptr; }
 
     /**
      * @brief Return true if this checkbox is checked or not
@@ -153,7 +153,7 @@ class CTG_InModelComboBox : public QStandardItem
 {
 public:
 
-    CTG_InModelComboBox(const CTG_InModelCheckBox &checkBoxItem, const QString & text) : QStandardItem(text), m_checkBoxItem(checkBoxItem) { _inModelSelected = NULL; m_possibility = NULL; }
+    CTG_InModelComboBox(const CTG_InModelCheckBox &checkBoxItem, const QString & text) : QStandardItem(text), m_checkBoxItem(checkBoxItem) { _inModelSelected = nullptr; m_possibility = nullptr; }
 
     /**
      * @brief Check/Uncheck the possibility (of the current model if it was set) that match with the out model of this item
@@ -339,7 +339,7 @@ private:
     static QStandardItem* staticToFirstColumn(QStandardItem *itemToConvert);
     static CTG_InModelCheckBox* staticToCheckBox(QStandardItem *itemToConvert);
     static CTG_InModelComboBox *staticToComboBox(QStandardItem *itemToConvert);
-    static bool staticIsRecursiveCurrentInModelNULL(CTG_InModelComboBox *parentToTest);
+    static bool staticIsRecursiveCurrentInModelnullptr(CTG_InModelComboBox *parentToTest);
     static bool staticIsRecursiveInModelAlreadyPresentOnCurrentInModel(CTG_InModelComboBox *parentToTest, const CT_InAbstractModel *inModelToSearch);
 
 private slots:

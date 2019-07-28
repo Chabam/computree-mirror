@@ -15,8 +15,8 @@ public:
 
     GenericChunkManagerDefaultSuperClass()
     {
-        m_attributesAccessor = NULL;
-        m_currentContext = NULL;
+        m_attributesAccessor = nullptr;
+        m_currentContext = nullptr;
     }
 
     virtual ~GenericChunkManagerDefaultSuperClass() {}

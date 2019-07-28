@@ -41,7 +41,7 @@ GCameraGraphicsOptions::GCameraGraphicsOptions(QWidget *parent) :
     ui->setupUi(this);
     ui->toolButtonCameraCoordinate->setPopupMode(QToolButton::InstantPopup);
 
-    _camera = NULL;
+    _camera = nullptr;
     _camCoordinateWidget = new GCameraCoordinatesOptions(this);
 
     QMenu *menu = new QMenu(ui->toolButtonCameraCoordinate);
@@ -110,7 +110,7 @@ void GCameraGraphicsOptions::on_pushButtonSync_toggled(bool toggle)
 
 void GCameraGraphicsOptions::on_pushButtonFitMagic_clicked()
 {
-    if(_camera != NULL)
+    if(_camera != nullptr)
     {
         _camera->fixCameraCenterToItemsBarycenter();
         _camera->fitCameraToVisibleItems();
@@ -119,7 +119,7 @@ void GCameraGraphicsOptions::on_pushButtonFitMagic_clicked()
 
 void GCameraGraphicsOptions::on_comboBoxPointOfView_activated(int index)
 {
-    if(_camera != NULL)
+    if(_camera != nullptr)
     {
         if      (index == 0) {_camera->alignCameraToZAxis();}
         else if (index == 1) {_camera->alignCameraToInvZAxis();}
@@ -132,7 +132,7 @@ void GCameraGraphicsOptions::on_comboBoxPointOfView_activated(int index)
 
 void GCameraGraphicsOptions::on_comboBoxPivotPoint_activated(int index)
 {
-    if(_camera != NULL)
+    if(_camera != nullptr)
     {
         if(index == 2) { _camera->fixCameraCenterToSelectedItemsBarycenter(); }
         else if(index == 1) { _camera->fixCameraCenterToItemsBarycenter(); }

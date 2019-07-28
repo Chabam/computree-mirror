@@ -58,7 +58,7 @@ private:
     template <typename T, typename Last>
     bool canBeDynamicCastTo(const T* item)
     {
-        return (dynamic_cast<const Last*>(item) != NULL);
+        return (dynamic_cast<const Last*>(item) != nullptr);
     }
 
     template <typename T, typename First, typename Second, typename... Rest>

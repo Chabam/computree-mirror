@@ -9,7 +9,7 @@ class OpenGlInfo
 {
 public:
     static OpenGlInfo* staticInstance() {
-        if(UNIQUE_INSTANCE == NULL)
+        if(UNIQUE_INSTANCE == nullptr)
             UNIQUE_INSTANCE = new OpenGlInfo();
 
         return UNIQUE_INSTANCE;

@@ -188,28 +188,28 @@ public:
      * @param errors : you can pass a pointer to a string list that will contains all errors if the method return false, otherwise the list will be empty
      * @return true is the test pass.
      */
-    bool hasTheMinimumNumberOfPossibilityRequired(QStringList* errors = NULL) const;
+    bool hasTheMinimumNumberOfPossibilityRequired(QStringList* errors = nullptr) const;
 
     /**
      * @brief Verify if the minimum number of possibility found in this model and in childrens is greather or equal than "minimumNumberOfPossibilityToSelect()".
      * @param errors : you can pass a pointer to a string list that will contains all errors if the method return false, otherwise the list will be empty
      * @return true is the test pass.
      */
-    bool recursiveHasTheMinimumNumberOfPossibilityRequired(QStringList* errors = NULL) const;
+    bool recursiveHasTheMinimumNumberOfPossibilityRequired(QStringList* errors = nullptr) const;
 
     /**
      * @brief Verify if the minimum number of possibility selected in this model is greather or equal than "minimumNumberOfPossibilityToSelect()".
      * @param errors : you can pass a pointer to a string list that will contains all errors if the method return false, otherwise the list will be empty
      * @return true is the test pass.
      */
-    bool hasTheMinimumNumberOfSelectedPossibilityRequired(QStringList* errors = NULL) const;
+    bool hasTheMinimumNumberOfSelectedPossibilityRequired(QStringList* errors = nullptr) const;
 
     /**
      * @brief Verify if the minimum number of possibility selected in this model and in childrens is greather or equal than "minimumNumberOfPossibilityToSelect()".
      * @param errors : you can pass a pointer to a string list that will contains all errors if the method return false, otherwise the list will be empty
      * @return true is the test pass.
      */
-    bool recursiveHasTheMinimumNumberOfSelectedPossibilityRequired(QStringList* errors = NULL) const;
+    bool recursiveHasTheMinimumNumberOfSelectedPossibilityRequired(QStringList* errors = nullptr) const;
 
     /**
      * @brief Returns the group that contains possibilities

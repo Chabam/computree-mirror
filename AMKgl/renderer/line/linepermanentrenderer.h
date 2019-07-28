@@ -35,7 +35,7 @@ public:
     void addLine(const Eigen::Vector3d &p1,
                  const Eigen::Vector3d &p2,
                  const ElementInfo &info = 0,
-                 IChunk** chunk = NULL,
+                 IChunk** chunk = nullptr,
                  const Color& c1 = Color(255,255,255,255),
                  const Color& c2 = Color(255,255,255,255));
 };

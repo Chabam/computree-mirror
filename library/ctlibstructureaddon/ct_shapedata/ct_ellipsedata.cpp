@@ -79,13 +79,13 @@ double CT_EllipseData::getError() const
 
 CT_EllipseData* CT_EllipseData::staticCreateZAxisAlignedEllipseDataFromPointCloud(const CT_AbstractPointCloudIndex *pointCloudIndex)
 {
-    if(pointCloudIndex == NULL)
-        return NULL;
+    if(pointCloudIndex == nullptr)
+        return nullptr;
 
     int np = int(pointCloudIndex->size())+1;
 
     if(np < 7)
-        return NULL;
+        return nullptr;
 
     double **D = new double*[np];
     double **S = new double*[7];

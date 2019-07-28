@@ -202,9 +202,9 @@ void PermanentScene::setDrawModeToUse(DrawMode mode)
 
 void PermanentScene::setDrawModeToUse(Scene::ObjectType type, DrawMode mode)
 {
-    AbstractPermanentRenderer* r = m_objectsRenderer.value(type, NULL);
+    AbstractPermanentRenderer* r = m_objectsRenderer.value(type, nullptr);
 
-    if(r != NULL)
+    if(r != nullptr)
         r->setDrawModeToUse(mode);
     else
         Q_ASSERT_X(false, "Contact developper !", QString("Object Type (%1) not implement in this method").arg(type).toUtf8());
@@ -262,9 +262,9 @@ void PermanentScene::visitObjects(IObjectsVisitor &visitor)
 void PermanentScene::visitObjectsOfTypes(const QList<Scene::ObjectType>& types, IObjectsVisitor &visitor)
 {
     foreach (const Scene::ObjectType& type, types) {
-        AbstractPermanentRenderer* r = m_objectsRenderer.value(type, NULL);
+        AbstractPermanentRenderer* r = m_objectsRenderer.value(type, nullptr);
 
-        if(r != NULL) {
+        if(r != nullptr) {
             r->visitObjects(visitor);
 
             if(!visitor.mustContinueVisit())
@@ -275,9 +275,9 @@ void PermanentScene::visitObjectsOfTypes(const QList<Scene::ObjectType>& types, 
 
 void PermanentScene::clearObjectsOfType(Scene::ObjectType el)
 {
-    AbstractPermanentRenderer* r = m_objectsRenderer.value(el, NULL);
+    AbstractPermanentRenderer* r = m_objectsRenderer.value(el, nullptr);
 
-    if(r != NULL)
+    if(r != nullptr)
         r->clearObjects();
     else
         Q_ASSERT_X(false, "Contact developper !", "Type not implement in this method");
@@ -297,9 +297,9 @@ void PermanentScene::clearAllObjects()
 
 size_t PermanentScene::countObject(Scene::ObjectType el) const
 {
-    AbstractPermanentRenderer* r = m_objectsRenderer.value(el, NULL);
+    AbstractPermanentRenderer* r = m_objectsRenderer.value(el, nullptr);
 
-    if(r != NULL)
+    if(r != nullptr)
         return r->countObjects();
     else
         Q_ASSERT_X(false, "Contact developper !", "Type not implement in this method");
@@ -525,7 +525,7 @@ void PermanentScene::postDraw(DrawInfo &info)
 
 AbstractPermanentRenderer* PermanentScene::getRendererForType(Scene::ObjectType type) const
 {
-    return m_objectsRenderer.value(type, NULL);
+    return m_objectsRenderer.value(type, nullptr);
 }
 
 PointCloudAttributesProvider* PermanentScene::getPointCloudAttributesProvider() const
@@ -554,7 +554,7 @@ ICloudAttributesProvider* PermanentScene::getCloudAttributesProvider(Scene::Obje
 
     Q_ASSERT_X(false, "PermanentScene::getCloudAttributesProvider", "Not implemented yet ! contact the developper or AMKgl");
 
-    return NULL;
+    return nullptr;
 }
 
 ObjectsFlagsPropertyManager* PermanentScene::getObjectsFlagsPropertyManager() const

@@ -8,8 +8,8 @@
 
 G3DCameraController::G3DCameraController() : DM_GraphicsViewCamera()
 {
-    m_camManipulator = NULL;
-    m_view = NULL;
+    m_camManipulator = nullptr;
+    m_view = nullptr;
 }
 
 void G3DCameraController::setRealCameraManipulator(const GGraphicsViewImp::CameraType *manipulator)
@@ -319,7 +319,7 @@ void G3DCameraController::syncWithCamera(const DM_GraphicsViewCamera *cam)
 {
     const G3DCameraController *controller = dynamic_cast<const G3DCameraController*>(cam);
 
-    if(controller != NULL) {
+    if(controller != nullptr) {
         (*m_camManipulator) = *controller->getRealCameraManipulator();
         m_camManipulator->setScreenWidthAndHeight(m_view->width(), m_view->height());
 
@@ -530,6 +530,6 @@ void G3DCameraController::viewDrawFinished()
 
 void G3DCameraController::redrawTheView()
 {
-    if(m_view != NULL)
+    if(m_view != nullptr)
         m_view->redraw();
 }

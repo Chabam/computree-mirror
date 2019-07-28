@@ -137,7 +137,7 @@ CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const CT_AbstractPo
 {
     CT_PointIterator it(&pointCloudIndex);
 
-    if(it.size() < 2) {return NULL;}
+    if(it.size() < 2) {return nullptr;}
 
     QList<Eigen::Vector3d> liste;
 
@@ -280,7 +280,7 @@ CT_LineData* CT_LineData::staticCreateLineDataFromPointCloud(const QList<Eigen::
         ++n;
     }
 
-    if (n < 1) {return NULL;}
+    if (n < 1) {return nullptr;}
     else if (n <  2) {return new CT_LineData(pt1, Eigen::Vector3d(pt1(0), pt1(1), pt1(2) + 1.0), 0, n);}
     else if (n == 2) {return new CT_LineData(pt1, pt2, 0, n);}
 

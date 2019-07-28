@@ -43,11 +43,11 @@ public:
      *          - Center coordinates
      *          - Default Color
      *          - Shared pointer to point cloud index registered
-     *          - Collection is copied if not NULL
+     *          - Collection is copied if not nullptr
      *          - Min and max value are copied
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */

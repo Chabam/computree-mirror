@@ -13,7 +13,7 @@ class AMKglApp
 {
 public:
     static AMKglApp* uniqueInstance() {
-        if(UNIQUE_INSTANCE == NULL) {
+        if(UNIQUE_INSTANCE == nullptr) {
             UNIQUE_INSTANCE = new AMKglApp();
         }
 

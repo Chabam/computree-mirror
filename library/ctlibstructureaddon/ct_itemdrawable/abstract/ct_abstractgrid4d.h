@@ -18,10 +18,12 @@
  * It's usefull to manage generically a grid, without knowing it template type
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_AbstractGrid4D : public CT_AbstractItemDrawableWithoutPointCloud
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractGrid4D : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractGrid4D, CT_AbstractItemDrawableWithoutPointCloud, 4D grid)
+
+    using SuperClass = CT_AbstractItemDrawableWithoutPointCloud;
 
 public:
 //**********************************************//
@@ -30,28 +32,38 @@ public:
     /*!
      * \brief CT_AbstractGrid4D
      *  Default constructor
-     *  Each attribute will be set to 0, NULL or will be cleared
+     *  Each attribute will be set to 0, nullptr or will be cleared
      */
     CT_AbstractGrid4D();
 
-    /*!
-     * \brief CT_AbstractGrid4D
-     *
-     * Initialisation constructor
-     *
-     * \param model Itemdrawable model attached to the grid
-     * \param result Result attached to the grid
-     */
-    CT_AbstractGrid4D(const CT_OutAbstractSingularItemModel *model, const CT_AbstractResult *result);
+    CT_AbstractGrid4D(double wmin,
+                      double xmin,
+                      double ymin,
+                      double zmin,
+                      size_t dimw,
+                      size_t dimx,
+                      size_t dimy,
+                      size_t dimz,
+                      double resw,
+                      double resx,
+                      double resy,
+                      double resz);
 
-    CT_AbstractGrid4D(const QString &modelName, const CT_AbstractResult *result);
+    CT_AbstractGrid4D(double wmin,
+                      double xmin,
+                      double ymin,
+                      double zmin,
+                      double wmax,
+                      double xmax,
+                      double ymax,
+                      double zmax,
+                      double resw,
+                      double resx,
+                      double resy,
+                      double resz);
 
+    CT_AbstractGrid4D(const CT_AbstractGrid4D& other) = default;
 
-    /*!
-     * \brief ~CT_AbstractGrid4D
-     * Destructor
-     */
-    virtual ~CT_AbstractGrid4D();
 
 //**********************************************//
 //                    Getters                   //

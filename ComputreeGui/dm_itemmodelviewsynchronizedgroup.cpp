@@ -4,7 +4,7 @@
 
 DM_ItemModelViewSynchronizedGroup::DM_ItemModelViewSynchronizedGroup() : DM_AbstractViewSynchronizedGroup()
 {
-    _imv = NULL;
+    _imv = nullptr;
 }
 
 void DM_ItemModelViewSynchronizedGroup::setOptions(const DM_ItemModelViewSynchronizedGroupOptions &newOptions)
@@ -30,7 +30,7 @@ void DM_ItemModelViewSynchronizedGroup::addDocumentView(const DM_DocumentView *d
 
 void DM_ItemModelViewSynchronizedGroup::removeDocumentView(const DM_DocumentView *dv)
 {
-    disconnect(dv, NULL, this, NULL);
+    disconnect(dv, nullptr, this, nullptr);
 
     _dvList.removeOne((DM_DocumentView*)dv);
 }
@@ -54,7 +54,7 @@ const QList<DM_DocumentView*>& DM_ItemModelViewSynchronizedGroup::documentViews(
 
 void DM_ItemModelViewSynchronizedGroup::slotItemDrawableSelectionChanged(CT_AbstractItemDrawable *item, bool selected)
 {
-    if(_imv != NULL)
+    if(_imv != nullptr)
     {
         if(selected)
             _imv->addItemDrawable(*item);
@@ -65,7 +65,7 @@ void DM_ItemModelViewSynchronizedGroup::slotItemDrawableSelectionChanged(CT_Abst
 
 void DM_ItemModelViewSynchronizedGroup::slotItemDrawableToBeRemoved(CT_AbstractItemDrawable &item)
 {
-    if(_imv != NULL
+    if(_imv != nullptr
             && item.isSelected())
     {
         QList<DocumentInterface*> ll;

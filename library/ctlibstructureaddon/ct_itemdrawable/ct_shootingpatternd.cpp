@@ -1,20 +1,20 @@
 #include "ct_shootingpatternd.h"
 
 CT_ShootingPatternD::CT_ShootingPatternD() : SuperClass(),
-    m_pattern(NULL)
+    m_pattern(nullptr)
 {
 }
 
 CT_ShootingPatternD::CT_ShootingPatternD(CT_ShootingPattern* pattern) : SuperClass(),
     m_pattern(pattern)
 {
-    if(m_pattern != NULL)
+    if(m_pattern != nullptr)
         setCenterCoordinate(m_pattern->centerCoordinate());
 }
 
 CT_ShootingPatternD::CT_ShootingPatternD(const CT_ShootingPatternD& other) : SuperClass(other)
 {
-    m_pattern = ((other.m_pattern == NULL) ? NULL : other.m_pattern->clone());
+    m_pattern = ((other.m_pattern == nullptr) ? nullptr : other.m_pattern->clone());
 }
 
 CT_ShootingPatternD::~CT_ShootingPatternD()

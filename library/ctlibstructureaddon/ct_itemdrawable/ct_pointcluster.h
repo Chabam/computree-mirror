@@ -150,7 +150,7 @@ public:
       * \param verifyDuplicated : a true si vous voulez que lors de la fusion il y est une vrification de doublon afin de ne
       *                           pas ajouter deux fois le mme point (si il existe dans le premier et le deuxime groupe).
       *
-      * ATTENTION les deux groupes doivent avoir le mme nuage de points en rfrence ! sinon la mthode renvoie NULL.
+      * ATTENTION les deux groupes doivent avoir le mme nuage de points en rfrence ! sinon la mthode renvoie nullptr.
       */
     static CT_PointCluster* merge(CT_PointCluster& pCLuster1, CT_PointCluster& pCLuster2, bool verifyDuplicated = false);
 

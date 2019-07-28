@@ -37,7 +37,7 @@ class DM_ContextMenuColouristAdder : public QObject
 
 public:
     struct ActionSetColorByAttribute {
-        ActionSetColorByAttribute(): m_model(NULL), m_docIndex(-1) {}
+        ActionSetColorByAttribute(): m_model(nullptr), m_docIndex(-1) {}
         ActionSetColorByAttribute(const CT_OutAbstractItemAttributeModel* m, int docI) : m_model(const_cast<CT_OutAbstractItemAttributeModel*>(m)), m_docIndex(docI) {}
 
         CT_OutAbstractItemAttributeModel*   m_model;
@@ -47,7 +47,7 @@ public:
     /**
      * @brief You must inherit from the class IColouristContextMenuAccess to give at the menu the possibility to access itemdrawable to colorize
      */
-    DM_ContextMenuColouristAdder(IColouristContextMenuAccess &access, QObject *parent = NULL);
+    DM_ContextMenuColouristAdder(IColouristContextMenuAccess &access, QObject *parent = nullptr);
     ~DM_ContextMenuColouristAdder();
 
     /**

@@ -61,7 +61,7 @@ class CT_OPF_Mesh
 public:
     CT_Mesh                 *m_mesh;
 
-    CT_OPF_Mesh() { m_mesh = NULL; m_bboxOK = false; }
+    CT_OPF_Mesh() { m_mesh = nullptr; m_bboxOK = false; }
     ~CT_OPF_Mesh() { delete m_mesh; }
 
     void getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
@@ -83,13 +83,12 @@ class CTLIBIO_EXPORT CT_Reader_OPF : public CT_AbstractReader
     using SuperClass = CT_AbstractReader;
 
 public:
-    CT_Reader_OPF();
+    CT_Reader_OPF(int subMenuLevel = 0);
     CT_Reader_OPF(const CT_Reader_OPF &other);
     ~CT_Reader_OPF() override;
 
     QString displayableName() const override;
 
-    //CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
     bool configure() override;
 
     void saveSettings(SettingsWriterInterface& writer) const override;
@@ -112,10 +111,6 @@ private:
     using AbstractAttributeHandle = CT_AbstractHandleOutItemAttribute;
 
     TopologyHandleType                                  m_topologyHandle;
-    QHash<QString, NodeGroupHandleType*>                m_nodeHandles;
-    QHash<QString, MeshHandleType*>                     m_meshHandles;
-    QHash<QString, AttributeListHandleType*>            m_attListHandles;
-    QHash<QString, AbstractAttributeHandle*>            m_attHandles;
 
     bool                                                m_loadMeshes;
     QHash<QString, CT_OPF_Type>                         m_types;
@@ -124,7 +119,6 @@ private:
     QHash<int, CT_OPF_Mesh*>                            m_shapes;
 
     int                                                 m_totalNode;
-
 
     QHash<QString, CT_OPF_Type>                         m_typesNew;
     QHash<QString, CT_OPF_Attribute>                    m_attributesNew;
@@ -140,10 +134,9 @@ private:
     void createAndAddItemAttributeHandle(CT_ReaderOutModelStructureManager& manager, AttributeListHandleType& parentHandle, const CT_OPF_Type &type, const CT_OPF_Attribute &attribute) {
         HandleType* attHandle = new HandleType();
         manager.addItemAttributeAndFindCategory(parentHandle, *attHandle, CT_AbstractCategory::DATA_VALUE, attribute.m_name);
-        m_attHandles.insert(type.m_name + "_" + attribute.m_name, attHandle);
+        registerHandlePtr(type.m_name + "_" + attribute.m_name, attHandle);
     }
 
-    void clearHandles();
     void clearMeshes();
     void clearShapes();
 

@@ -17,7 +17,7 @@ PolygonItemsPicker::PolygonItemsPicker(const QVector<Plane> &polygonPlanes,
 
 bool PolygonItemsPicker::isValid() const
 {
-    if(!m_hasEnoughTriangle || (m_scene == NULL))
+    if(!m_hasEnoughTriangle || (m_scene == nullptr))
         return false;
 
     return ItemsPicker::isValid();

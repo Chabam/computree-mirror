@@ -34,7 +34,7 @@ CT_ComboBox::CT_ComboBox(QStringList valuesList, QString &value, QString descrip
     _data._valuesList = valuesList;
     _description = description;
 
-    _comboBoxCreated = NULL;
+    _comboBoxCreated = nullptr;
 }
 
 void CT_ComboBox::saveSettings(SettingsWriterInterface &writer) const
@@ -59,7 +59,7 @@ bool CT_ComboBox::restoreSettings(SettingsReaderInterface &reader)
 
 QWidget* CT_ComboBox::createWidget(QWidget &parent)
 {
-    if(_comboBoxCreated == NULL)
+    if(_comboBoxCreated == nullptr)
     {
         _comboBoxCreated = new QComboBox(&parent);
         _comboBoxCreated->insertItems(0, _data._valuesList);
@@ -110,7 +110,7 @@ void CT_ComboBox::changeValues(QStringList valuesList, QString value)
 {
     _data._valuesList = valuesList;
 
-    if (_comboBoxCreated != NULL)
+    if (_comboBoxCreated != nullptr)
     {
         _comboBoxCreated->clear();
         _comboBoxCreated->insertItems(0, _data._valuesList);

@@ -17,18 +17,18 @@ void CT_AttributesToCloudWorkerT<TypeAttribute>::apply()
 
     if(!m_attributes.isEmpty())
     {
-        CT_AbstractColorCloud *cc = NULL;
-        CT_AbstractNormalCloud *nn = NULL;
+        CT_AbstractColorCloud *cc = nullptr;
+        CT_AbstractNormalCloud *nn = nullptr;
 
-        if(m_colors.data() != NULL)
+        if(m_colors.data() != nullptr)
             cc = m_colors->abstractColorCloud();
 
-        if(m_normals.data() != NULL)
+        if(m_normals.data() != nullptr)
             nn = m_normals->abstractNormalCloud();
 
         size_t totalSize = 0;
 
-        QListIterator<TypeAttribute*> it(m_attributes);
+        QListIterator<const TypeAttribute*> it(m_attributes);
 
         while(it.hasNext())
             totalSize += it.next()->attributesSize();
@@ -39,7 +39,7 @@ void CT_AttributesToCloudWorkerT<TypeAttribute>::apply()
         while(it.hasNext()
               && !m_cancel)
         {
-            TypeAttribute *pa = it.next();
+            const TypeAttribute *pa = it.next();
             const CT_AbstractCloudIndex *pci = pa->abstractCloudIndex();
             size_t s = pa->attributesSize();
             size_t indexP;
@@ -48,11 +48,11 @@ void CT_AttributesToCloudWorkerT<TypeAttribute>::apply()
             {
                 bool used = false;
 
-                if(cc != NULL)
+                if(cc != nullptr)
                 {
-                    CT_AbstractAttributesScalar *pas = dynamic_cast<CT_AbstractAttributesScalar*>(pa);
+                    const CT_AbstractAttributesScalar *pas = dynamic_cast<const CT_AbstractAttributesScalar*>(pa);
 
-                    if(pas != NULL)
+                    if(pas != nullptr)
                     {
                         used = true;
 
@@ -79,9 +79,9 @@ void CT_AttributesToCloudWorkerT<TypeAttribute>::apply()
                     }
                     else
                     {
-                        CT_AttributesColor *pac = dynamic_cast<CT_AttributesColor*>(pa);
+                        const CT_AttributesColor *pac = dynamic_cast<const CT_AttributesColor*>(pa);
 
-                        if(pac != NULL)
+                        if(pac != nullptr)
                         {
                             used = true;
 
@@ -100,11 +100,11 @@ void CT_AttributesToCloudWorkerT<TypeAttribute>::apply()
                     }
                 }
 
-                if(nn != NULL)
+                if(nn != nullptr)
                 {
-                    CT_AttributesNormal *pan = dynamic_cast<CT_AttributesNormal*>(pa);
+                    const CT_AttributesNormal *pan = dynamic_cast<const CT_AttributesNormal*>(pa);
 
-                    if(pan != NULL)
+                    if(pan != nullptr)
                     {
                         used = true;
 

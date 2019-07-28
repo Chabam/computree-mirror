@@ -13,14 +13,14 @@ class CTLIBWIDGET_EXPORT CT_AbstractConfigurableWidget : public QWidget
     Q_OBJECT
 
 public:
-    CT_AbstractConfigurableWidget(QWidget *parent = NULL) : QWidget(parent) {}
+    CT_AbstractConfigurableWidget(QWidget *parent = nullptr) : QWidget(parent) {}
     virtual ~CT_AbstractConfigurableWidget() {}
 
     /**
      * @brief Returns true if it was no error and "updateElement" method can be called
-     * @param err : (optionnal) will not be empty if an error can be displayed and if different of NULL
+     * @param err : (optionnal) will not be empty if an error can be displayed and if different of nullptr
      */
-    virtual bool canAcceptIt(QString *err = NULL) const { Q_UNUSED(err) return true; }
+    virtual bool canAcceptIt(QString *err = nullptr) const { Q_UNUSED(err) return true; }
 
     /**
      * @brief Returns true if user has modified something
@@ -30,10 +30,10 @@ public:
 public slots:
     /**
      * @brief Update the element to match the configuration defined by the user
-     * @param err : (optionnal) will not be empty if an error can be displayed and if different of NULL
-     * @return true if update was successfull, otherwise returns false and filled the "err" parameter if it was not NULL
+     * @param err : (optionnal) will not be empty if an error can be displayed and if different of nullptr
+     * @return true if update was successfull, otherwise returns false and filled the "err" parameter if it was not nullptr
      */
-    virtual bool updateElement(QString *err = NULL) = 0;
+    virtual bool updateElement(QString *err = nullptr) = 0;
 
     /**
      * @brief Update the ui to match the configuration of the element. Do nothing by default.

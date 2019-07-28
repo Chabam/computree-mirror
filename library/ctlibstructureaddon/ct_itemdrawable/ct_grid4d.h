@@ -20,6 +20,10 @@ template< typename DataT > class CT_StandardGrid4DDrawManager;
 template< typename DataT>
 class   CT_Grid4D  : public CT_AbstractGrid4D, public CT_ITemplatedData4DArray<DataT>
 {
+    CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Grid4D, DataT, CT_AbstractGrid4D, 4D grid)
+    using SuperClass = CT_AbstractGrid4D;
+
+public:
     /*!
      *  \brief How to manage central cell when using neighboursValues method
      *
@@ -32,16 +36,15 @@ class   CT_Grid4D  : public CT_AbstractGrid4D, public CT_ITemplatedData4DArray<D
     };
 
 
-
-public:
     //**********************************************//
     //           Constructors/Destructors           //
     //**********************************************//
     /**
       * \brief Default constructor
-      *  Each attribute will be set to 0, NULL or will be cleared
+      *  Each attribute will be set to 0, nullptr or will be cleared
       */
     CT_Grid4D();
+    CT_Grid4D(const CT_Grid4D& other) = default;
 
     /*!
      * \brief Initialisation constructor
@@ -64,25 +67,7 @@ public:
      * \param resz Length of a cell on z
      * \param na Value used to code NA
      */
-    CT_Grid4D(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              double wmin,
-              double xmin,
-              double ymin,
-              double zmin,
-              size_t dimw,
-              size_t dimx,
-              size_t dimy,
-              size_t dimz,
-              double resw,
-              double resx,
-              double resy,
-              double resz,
-              DataT na);
-
-    CT_Grid4D(const QString &modelName,
-              const CT_AbstractResult *result,
-              double wmin,
+    CT_Grid4D(double wmin,
               double xmin,
               double ymin,
               double zmin,
@@ -118,9 +103,7 @@ public:
      * \param na Value used to code NA
      * \param coordConstructor Not used, only to ensure constructor different signatures
      */
-    CT_Grid4D(const CT_OutAbstractSingularItemModel *model,
-              const CT_AbstractResult *result,
-              double wmin,
+    CT_Grid4D(double wmin,
               double xmin,
               double ymin,
               double zmin,
@@ -133,50 +116,6 @@ public:
               double resy,
               double resz,
               DataT na);
-
-    /*!
-     * \brief Initialisation constructor
-     *
-     * Grid is created thanks to the bounding box (4D) of the grid
-     *
-     * \param modelName model name for creation
-     * \param result Result containing the item
-     * \param wmin Minimum W coordinate (bottom left corner)
-     * \param xmin Minimum X coordinate (bottom left corner)
-     * \param ymin Minimum Y coordinate (bottom left corner)
-     * \param zmin Minimum Z coordinate (bottom left corner)
-     * \param wmax Maximum W coordinate (top right corner)
-     * \param xmax Maximum X coordinate (top right corner)
-     * \param ymax Maximum Y coordinate (top right corner)
-     * \param zmax Maximum Z coordinate (top right corner)
-     * \param resw Length of a cell on w
-     * \param resx Length of a cell on x
-     * \param resy Length of a cell on y
-     * \param resz Length of a cell on z
-     * \param na Value used to code NA
-     * \param coordConstructor Not used, only to ensure constructor different signatures
-     */
-    CT_Grid4D(const QString& modelName,
-              const CT_AbstractResult *result,
-              double wmin,
-              double xmin,
-              double ymin,
-              double zmin,
-              double wmax,
-              double xmax,
-              double ymax,
-              double zmax,
-              double resw,
-              double resx,
-              double resy,
-              double resz,
-              DataT na);
-
-
-    /*!
-     * \brief Destructor
-     */
-    virtual ~CT_Grid4D();
 
 
     //**********************************************//
@@ -216,7 +155,7 @@ public:
      * \param index index in the grid
      * \return A double value between 0 (min value) and 1 (max value), or -1 for NA : (valueAt(i)-dataMin) / (dataMax-dataMin)
      */
-    virtual double ratioValueAtIndex(const size_t index) const;
+   double ratioValueAtIndex(const size_t index) const override;
 
     /*!
      * \brief Gives the value at (levw, levx, levy, levz)
@@ -317,9 +256,9 @@ public:
                           const bool keepNAs = false,
                           const CenterMode centermode = CT_Grid4D::CM_DropCenter) const;
 
-    QString valueAtIndexAsString(const size_t index) const;
+    QString valueAtIndexAsString(const size_t index) const override;
 
-    QString NAAsString() const;
+    QString NAAsString() const override;
 
     //**********************************************//
     //                    Setters                   //
@@ -435,12 +374,6 @@ public:
     //**********************************************//
     //          CompuTree Core and GUI tools        //
     //**********************************************//
-    virtual QString getType() const;
-    static QString staticGetType();
-
-    virtual QString name() const;
-    static QString staticName();
-
     inline const CT_ITemplatedData4DArray<DataT>* iTemplatedData4DArray()
     const { return this; }
 
@@ -462,16 +395,16 @@ protected:
 
 private:
     CT_DEFAULT_IA_BEGIN(CT_Grid4D<DataT>)
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataDimension(), &CT_Grid4D<DataT>::wdim, QObject::tr("W dimension"), "wd")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Grid4D<DataT>::xdim, QObject::tr("X dimension"), "xd")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Grid4D<DataT>::ydim, QObject::tr("Y dimension"), "yd")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataZDimension(), &CT_Grid4D<DataT>::zdim, QObject::tr("Z dimension"), "zd")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataCoordinate(), &CT_Grid4D<DataT>::minW, QObject::tr("W min"), "wmin")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Grid4D<DataT>::wres, QObject::tr("Resolution W"), "resw")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataXResolution(), &CT_Grid4D<DataT>::xres, QObject::tr("Resolution X"), "resx")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataYResolution(), &CT_Grid4D<DataT>::yres, QObject::tr("Resolution Y"), "resy")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataZResolution(), &CT_Grid4D<DataT>::zres, QObject::tr("Resolution Z"), "resz")
-    CT_DEFAULT_IA_V3(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Grid4D<DataT>::NA, QObject::tr("NA"), "na")
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataDimension(), &CT_Grid4D<DataT>::wdim, QObject::tr("W dimension"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Grid4D<DataT>::xdim, QObject::tr("X dimension"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Grid4D<DataT>::ydim, QObject::tr("Y dimension"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataZDimension(), &CT_Grid4D<DataT>::zdim, QObject::tr("Z dimension"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataCoordinate(), &CT_Grid4D<DataT>::minW, QObject::tr("W min"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Grid4D<DataT>::wres, QObject::tr("Resolution W"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataXResolution(), &CT_Grid4D<DataT>::xres, QObject::tr("Resolution X"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataYResolution(), &CT_Grid4D<DataT>::yres, QObject::tr("Resolution Y"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataZResolution(), &CT_Grid4D<DataT>::zres, QObject::tr("Resolution Z"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Grid4D<DataT>::NA, QObject::tr("NA"))
     CT_DEFAULT_IA_END(CT_Grid4D<DataT>)
 };
 

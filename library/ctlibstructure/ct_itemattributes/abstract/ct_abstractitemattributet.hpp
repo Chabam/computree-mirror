@@ -13,7 +13,7 @@ bool CT_AbstractItemAttributeT<DataT>::toBool(const CT_AbstractItem* item, bool*
 {
     Q_UNUSED(item)
 
-    if(ok != NULL)
+    if(ok != nullptr)
         *ok = false;
 
     return false;
@@ -24,7 +24,7 @@ double CT_AbstractItemAttributeT<DataT>::toDouble(const CT_AbstractItem* item, b
 {
     Q_UNUSED(item)
 
-    if(ok != NULL)
+    if(ok != nullptr)
         *ok = false;
 
     return 0.0;
@@ -35,7 +35,7 @@ float CT_AbstractItemAttributeT<DataT>::toFloat(const CT_AbstractItem* item, boo
 {
     Q_UNUSED(item)
 
-    if(ok != NULL)
+    if(ok != nullptr)
         *ok = false;
 
     return 0.0f;
@@ -46,7 +46,7 @@ long double CT_AbstractItemAttributeT<DataT>::toLongDouble(const CT_AbstractItem
 {
     Q_UNUSED(item)
 
-    if(ok != NULL)
+    if(ok != nullptr)
         *ok = false;
 
     return 0.0;
@@ -57,7 +57,7 @@ int CT_AbstractItemAttributeT<DataT>::toInt(const CT_AbstractItem* item, bool* o
 {
     Q_UNUSED(item)
 
-    if(ok != NULL)
+    if(ok != nullptr)
         *ok = false;
 
     return 0;
@@ -68,7 +68,7 @@ quint64 CT_AbstractItemAttributeT<DataT>::toUInt64(const CT_AbstractItem* item, 
 {
     Q_UNUSED(item)
 
-    if(ok != NULL)
+    if(ok != nullptr)
         *ok = false;
 
     return 0;
@@ -79,7 +79,7 @@ size_t CT_AbstractItemAttributeT<DataT>::toSizeT(const CT_AbstractItem* item, bo
 {
     Q_UNUSED(item)
 
-    if(ok != NULL)
+    if(ok != nullptr)
         *ok = false;
 
     return 0;
@@ -88,7 +88,7 @@ size_t CT_AbstractItemAttributeT<DataT>::toSizeT(const CT_AbstractItem* item, bo
 template <typename DataT>
 QString CT_AbstractItemAttributeT<DataT>::toString(const CT_AbstractItem* item, bool* ok) const
 {
-    if(ok != NULL)
+    if(ok != nullptr)
         *ok = true;
 
     return CT_NumericToStringConversionT<DataT>::toString(data(item));

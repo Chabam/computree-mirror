@@ -44,14 +44,14 @@ GColorGradientView::GColorGradientView(QWidget *parent)
    arrowMoving(false),
    backgroundVerSpace(5),
    backgroundHorSpace(5),
-   background(NULL),
+   background(nullptr),
    arrowsVisible(true)
 {
    qRegisterMetaType<GradientArrow>("GradientArrow");
    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
    setFocusPolicy(Qt::StrongFocus);
    viewRect = QRect(QPoint(0,0), QPoint(0,0));
-   if(parent != NULL)
+   if(parent != nullptr)
        setMinimumSize(parent->width() - 10, 100);
    else {
        setMinimumSize(100, 30);
@@ -99,10 +99,10 @@ void GColorGradientView::createBackground(int vertLineSpace, int horLineSpace)
 {
    backgroundVerSpace = vertLineSpace;
    backgroundHorSpace = horLineSpace;
-   if(NULL != background)
+   if(nullptr != background)
    {
       delete background;
-      background = NULL;
+      background = nullptr;
    }
    background = new QPixmap(QSize(800,800));
    background->fill(Qt::white);
@@ -147,7 +147,7 @@ void GColorGradientView::createBackground(int vertLineSpace, int horLineSpace)
 //f-//////////////////////////////////////////////////////////////////////////
 QPixmap* GColorGradientView::getBackGround()
 {
-   if(NULL == background)
+   if(nullptr == background)
    {
       createBackground(backgroundVerSpace, backgroundHorSpace);
    }
@@ -305,7 +305,7 @@ void GColorGradientView::toggleBackground(bool onOrOff)
 {
    if(onOrOff == false)
    {
-      if(NULL == background)
+      if(nullptr == background)
       {
          background = new QPixmap(viewRect.size());
       }
@@ -454,7 +454,7 @@ void GColorGradientView::paintEvent(QPaintEvent *)
       createBackground();
    }
    QPainter painter(this);
-   if(NULL != background)
+   if(nullptr != background)
    {
       painter.drawPixmap(viewRect, *background, viewRect);
    }

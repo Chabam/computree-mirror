@@ -2,13 +2,13 @@
 
 CT_AbstractEdgeAttributes::CT_AbstractEdgeAttributes() : SuperClass()
 {
-    m_aci = NULL;
+    m_aci = nullptr;
 }
 
 CT_AbstractEdgeAttributes::CT_AbstractEdgeAttributes(CT_ECIR cir) : CT_AbstractEdgeAttributes()
 {
     m_cir = cir;
-    m_aci =(m_cir.data() == NULL ? NULL : cir->abstractCloudIndexT());
+    m_aci =(m_cir.data() == nullptr ? nullptr : cir->abstractCloudIndexT());
 }
 
 const CT_AbstractEdgeCloudIndex* CT_AbstractEdgeAttributes::edgeCloudIndex() const

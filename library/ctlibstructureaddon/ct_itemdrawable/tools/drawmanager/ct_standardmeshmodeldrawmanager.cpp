@@ -88,7 +88,7 @@ void CT_StandardMeshModelDrawManager::draw(GraphicsViewInterface &view, PainterI
 
 void CT_StandardMeshModelDrawManager::drawFaces(GraphicsViewInterface &view, PainterInterface &painter, const CT_Mesh *mesh)
 {
-    if((mesh == NULL) || (mesh->pFace() == NULL))
+    if((mesh == nullptr) || (mesh->pFace() == nullptr))
         return;
 
     size_t s = mesh->face().size();
@@ -112,7 +112,7 @@ void CT_StandardMeshModelDrawManager::drawFaceAt(const size_t &index, GraphicsVi
 {
     Q_UNUSED(view)
 
-    if((mesh == NULL) || (mesh->pFace() == NULL))
+    if((mesh == nullptr) || (mesh->pFace() == nullptr))
         return;
 
     const ct_index_type& fIndex = mesh->face().constIndexAt(index);
@@ -130,7 +130,7 @@ void CT_StandardMeshModelDrawManager::endDrawMultipleFace(GraphicsViewInterface 
 
 void CT_StandardMeshModelDrawManager::drawEdges(GraphicsViewInterface &view, PainterInterface &painter, const CT_Mesh *mesh)
 {
-    if((mesh == NULL) || (mesh->pHedge() == NULL))
+    if((mesh == nullptr) || (mesh->pHedge() == nullptr))
         return;
 
     size_t s = mesh->hedge().size();
@@ -154,7 +154,7 @@ void CT_StandardMeshModelDrawManager::drawEdgeAt(const size_t &index, GraphicsVi
 {
     Q_UNUSED(view)
 
-    if((mesh == NULL) || (mesh->pHedge() == NULL))
+    if((mesh == nullptr) || (mesh->pHedge() == nullptr))
         return;
 
     const ct_index_type& eIndex = mesh->hedge().constIndexAt(index);

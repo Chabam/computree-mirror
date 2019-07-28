@@ -65,7 +65,7 @@ public:
                  const size_t& globalV1Index,
                  const size_t& globalV2Index,
                  const size_t& globalV3Index,
-                 IChunk** chunk = NULL);
+                 IChunk** chunk = nullptr);
 
     /**
      * @brief Returns the face cloud attributes provider

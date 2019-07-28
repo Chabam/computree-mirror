@@ -16,7 +16,7 @@ public:
 
     /**
      * @brief Create a item attribute that can use a method of your class to get a data.
-     * @param category : the category for the attribute (must not be NULL)
+     * @param category : the category for the attribute (must not be nullptr)
      * @param gMethod : the method of the itemdrawable to call to get the data.
      *
      * @example CT_AbstractItemAttribute* attribute = CT_IACreator::create(category, &CT_Circle::getRadius);
@@ -32,9 +32,9 @@ public:
 
     /**
      * @brief Create a item attribute with a default data.
-     * @param model : the model of the attribute (can be NULL but must be set before finish the step computing by the method setModel(...) )
-     * @param category : the category for the attribute (must not be NULL)
-     * @param result : the result where the attribute will be stocked (can be NULL but must be set before finish the step computing by the method setResult(...) )
+     * @param model : the model of the attribute (can be nullptr but must be set before finish the step computing by the method setModel(...) )
+     * @param category : the category for the attribute (must not be nullptr)
+     * @param result : the result where the attribute will be stocked (can be nullptr but must be set before finish the step computing by the method setResult(...) )
      * @param data : the data that will never change
      *
      * @example CT_AbstractItemAttribute *attribute = CT_IACreator::create(category, 5.0f);

@@ -1,7 +1,7 @@
 #include "openglinfo.h"
 #include <qopenglext.h>
 
-OpenGlInfo* OpenGlInfo::UNIQUE_INSTANCE = NULL;
+OpenGlInfo* OpenGlInfo::UNIQUE_INSTANCE = nullptr;
 
 // NVIDIA
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
@@ -31,7 +31,7 @@ GLint OpenGlInfo::getMaxTextureSizeInByte() const
 
 bool OpenGlInfo::staticCheckOpenglVersionMinimumVersion(const QOpenGLContext *context, int majorV, int minorV)
 {
-    Q_ASSERT(context != NULL);
+    Q_ASSERT(context != nullptr);
 
     return (context->format().majorVersion() > majorV) || ((context->format().majorVersion() == majorV) && (context->format().minorVersion() >= minorV));
 }

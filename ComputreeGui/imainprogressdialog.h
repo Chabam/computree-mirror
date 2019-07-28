@@ -8,7 +8,7 @@ class IMainProgressDialog : public QDialog
     Q_OBJECT
 
 public:
-    IMainProgressDialog(QWidget *parent = NULL, Qt::WindowFlags flags = 0) : QDialog(parent, flags) {}
+    IMainProgressDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = 0) : QDialog(parent, flags) {}
     virtual ~IMainProgressDialog() {}
 
 public slots:

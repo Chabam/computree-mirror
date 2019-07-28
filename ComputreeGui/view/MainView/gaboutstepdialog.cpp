@@ -132,7 +132,7 @@ void GAboutStepDialog::recursiveCreateItemsForModel(QTreeWidgetItem *parent, con
 {
     const CT_OutAbstractResultModel *rModel = dynamic_cast<const CT_OutAbstractResultModel*>(model);
 
-    if(rModel != NULL)
+    if(rModel != nullptr)
     {
         recursiveCreateItemsForResultModel(parent, rModel);
     }
@@ -140,7 +140,7 @@ void GAboutStepDialog::recursiveCreateItemsForModel(QTreeWidgetItem *parent, con
     {
         const CT_OutAbstractItemModel *iModel = dynamic_cast<const CT_OutAbstractItemModel*>(model);
 
-        if(iModel != NULL)
+        if(iModel != nullptr)
         {
             recursiveCreateItemsForItemModel(parent, iModel);
         }
@@ -148,7 +148,7 @@ void GAboutStepDialog::recursiveCreateItemsForModel(QTreeWidgetItem *parent, con
         {
             const CT_OutAbstractItemAttributeModel *iaModel = dynamic_cast<const CT_OutAbstractItemAttributeModel*>(model);
 
-            if(iaModel != NULL)
+            if(iaModel != nullptr)
                 recursiveCreateItemsForItemAttributesModel(parent, iaModel);
             else
                 qFatal("In GAboutStepDialog::recursiveCreateItemsForModel : model is not known");
@@ -160,7 +160,7 @@ void GAboutStepDialog::recursiveCreateItemsForModel(QTreeWidgetItem *parent, con
 {
     const CT_InAbstractResultModel *rModel = dynamic_cast<const CT_InAbstractResultModel*>(model);
 
-    if(rModel != NULL)
+    if(rModel != nullptr)
     {
         recursiveCreateItemsForResultModel(parent, rModel);
     }
@@ -168,7 +168,7 @@ void GAboutStepDialog::recursiveCreateItemsForModel(QTreeWidgetItem *parent, con
     {
         const CT_InAbstractItemModel *iModel = dynamic_cast<const CT_InAbstractItemModel*>(model);
 
-        if(iModel != NULL)
+        if(iModel != nullptr)
         {
             recursiveCreateItemsForItemModel(parent, iModel);
         }
@@ -176,7 +176,7 @@ void GAboutStepDialog::recursiveCreateItemsForModel(QTreeWidgetItem *parent, con
         {
             const CT_InAbstractItemAttributeModel *iaModel = dynamic_cast<const CT_InAbstractItemAttributeModel*>(model);
 
-            if(iaModel != NULL)
+            if(iaModel != nullptr)
                 recursiveCreateItemsForItemAttributesModel(parent, iaModel);
             else
                 qFatal("In GAboutStepDialog::recursiveCreateItemsForModel : model is not known");
@@ -208,7 +208,7 @@ void GAboutStepDialog::recursiveCreateItemsForItemModel(QTreeWidgetItem *parent,
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     //item->setText(0, iModel->displayableName() + " [" + iModel->itemDrawableStaticCastT<>()->name() + "]");
 
-    QString stepName = (iModel->recursiveOriginalModelWithAStep() != NULL ? iModel->recursiveOriginalModelWithAStep()->stepStaticCastT<>()->displayableCustomName() : "???");
+    QString stepName = (iModel->recursiveOriginalModelWithAStep() != nullptr ? iModel->recursiveOriginalModelWithAStep()->stepStaticCastT<>()->displayableCustomName() : "???");
 
     if(stepName.isEmpty())
         stepName = "???";
@@ -231,7 +231,7 @@ void GAboutStepDialog::recursiveCreateItemsForItemAttributesModel(QTreeWidgetIte
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     item->setText(0, iaModel->itemAttributeStaticCastT<>()->displayableName() + " [" + iaModel->itemAttributeStaticCastT<>()->valueTypeToString() + "] / " + QString().setNum(iaModel->uniqueIndex()));
-    //item->setText(0, iaModel->itemAttribute()->displayableName() + " (" + iaModel->itemAttribute()->typeToString() + ")" + " / " + (iaModel->lastOriginalModelWithAStep() != NULL ? iaModel->lastOriginalModelWithAStep()->step()->getStepCustomName() : "???") + " / " + iaModel->uniqueName() + " / " + iaModel->modelTypeDisplayable());
+    //item->setText(0, iaModel->itemAttribute()->displayableName() + " (" + iaModel->itemAttribute()->typeToString() + ")" + " / " + (iaModel->lastOriginalModelWithAStep() != nullptr ? iaModel->lastOriginalModelWithAStep()->step()->getStepCustomName() : "???") + " / " + iaModel->uniqueName() + " / " + iaModel->modelTypeDisplayable());
 
     item->setExpanded(false);
     parent->setExpanded(false);

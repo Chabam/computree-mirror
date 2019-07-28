@@ -25,8 +25,9 @@ class CTLIBREADER_EXPORT CT_AbstractReader : public QObject
     Q_OBJECT
 
 public:
-    CT_AbstractReader();
+    CT_AbstractReader(int subMenuLevel = 0);
     CT_AbstractReader(const CT_AbstractReader& other);
+    ~CT_AbstractReader();
 
     /**
      * @brief Returns a displayable name of the reader. By default return the result of method "uniqueName()"
@@ -40,9 +41,14 @@ public:
     virtual QString uniqueName() const;
 
     /**
-     * @brief Returns the sub menu level where we can store this reader (by default "Others")
+     * @brief Set the sub menu level where we can store this reader
      */
-    //virtual CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    void setSubMenuLevel(int level);
+
+    /**
+     * @brief Returns the sub menu level where we can store this reader
+     */
+    int subMenuLevel() const;
 
     /**
       * @brief Set the filepath of the file to read. The signal "filePathModified()" will be emitted if the filepath is accepted.
@@ -179,7 +185,7 @@ public slots:
 
     /**
      * @brief Read the header of the file and return it
-     * @return NULL if it was no header or if it can not be readed. Check isReadError() to know if it was an error and get it with method errorMessage()
+     * @return nullptr if it was no header or if it can not be readed. Check isReadError() to know if it was an error and get it with method errorMessage()
      */
     CT_FileHeader* readHeader();
 
@@ -198,6 +204,38 @@ public:
     CT_HandleOutSingularItem<CT_FileHeader> m_hOutFileHeader;
 
 protected:
+
+    class AbstractHandleManager
+    {
+    public:
+        virtual ~AbstractHandleManager() {}
+
+        virtual void* handle() const = 0;
+    };
+
+    template<typename HandleType>
+    class HandleManager : public AbstractHandleManager
+    {
+    public:
+        HandleManager(HandleType* handle) : mHandle(handle) {}
+        ~HandleManager() final { delete mHandle; }
+
+        void* handle() const final { return mHandle; }
+
+        HandleType* mHandle;
+    };
+
+    template<typename HandleType>
+    void registerHandlePtr(const QString& uniqueKey, HandleType* handle) {
+        m_allHandles.insert(uniqueKey, new HandleManager<HandleType>(handle));
+    }
+
+    template<typename HandleType>
+    HandleType* registeredHandlePtr(const QString& uniqueKey) const {
+        return static_cast<HandleType*>(m_allHandles.value(uniqueKey)->handle());
+    }
+
+    void clearHandles();
 
     /**
      * @brief Add a new readable format
@@ -242,7 +280,7 @@ protected:
      * @brief Inherit this method to read and get header of the filepath passed in parameter
      * @param filepath : the path to the file
      * @param error : output error
-     * @return NULL if it was an error
+     * @return nullptr if it was an error
      */
     virtual CT_FileHeader* internalReadHeader(const QString& filepath, QString& error) const;
 
@@ -261,6 +299,8 @@ private:
     bool                                                    m_stop;
     QString                                                 m_filePath;
     bool                                                    m_filepathCanBeModified;
+    int                                                     m_subMenuLevel;
+    QHash<QString, AbstractHandleManager*>                  m_allHandles;
 
 signals:
     /**

@@ -60,7 +60,7 @@ bool GenericCloudRendererShaders::init(const QOpenGLContext* context)
             if(!ok) {
                 AMKglLOG->addErrorMessage(error);
                 delete m_byObjectInfos.m_program;
-                m_byObjectInfos.m_program = NULL;
+                m_byObjectInfos.m_program = nullptr;
             }
 
             ShadersTools_CHECK_PROGRAM_ERROR(m_byObjectInfos.m_program, m_byObjectInfos.m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, finalSourceCode));
@@ -85,7 +85,7 @@ bool GenericCloudRendererShaders::init(const QOpenGLContext* context)
             if(!ok) {
                 AMKglLOG->addErrorMessage(error);
                 delete m_byVertexInfos.m_program;
-                m_byVertexInfos.m_program = NULL;
+                m_byVertexInfos.m_program = nullptr;
             }
 
             ShadersTools_CHECK_PROGRAM_ERROR(m_byVertexInfos.m_program, m_byVertexInfos.m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, finalSourceCode));
@@ -97,7 +97,7 @@ bool GenericCloudRendererShaders::init(const QOpenGLContext* context)
                 m_byVertexInfos.m_program->release();
             } else {
                 delete m_byObjectInfos.m_program;
-                m_byObjectInfos.m_program = NULL;
+                m_byObjectInfos.m_program = nullptr;
             }
         }*/
 
@@ -282,11 +282,11 @@ int GenericCloudRendererShaders::getShaderNormalAttributeLocation() const
 void GenericCloudRendererShaders::destroyGL()
 {
     delete m_byVertexInfos.m_program;
-    m_byVertexInfos.m_program = NULL;
+    m_byVertexInfos.m_program = nullptr;
     m_byVertexInfos.resetLocation();
 
     delete m_byObjectInfos.m_program;
-    m_byObjectInfos.m_program = NULL;
+    m_byObjectInfos.m_program = nullptr;
     m_byObjectInfos.resetLocation();
 
     m_initialized = false;

@@ -40,7 +40,7 @@ public:
 
     /**
      * @brief Redefined to change the root group of the copy.
-     * @param rootGroup : the new root group or NULL if you want to remove the current root group.
+     * @param rootGroup : the new root group or nullptr if you want to remove the current root group.
      */
     void setRootGroup(DEF_CT_AbstractGroupModelOut* rootGroup) override;
 
@@ -159,7 +159,7 @@ public:
     /**
      * @brief Recursively search in the variable m_inResultModel the child that was a copy of the specified original model
      * @param originalModel : the original model to compare with the "originalModel" returned by child in this input result model
-     * @return The copied model if founded or the original model if it was in this result model. NULL if not founded.
+     * @return The copied model if founded or the original model if it was in this result model. nullptr if not founded.
      */
     CT_OutAbstractModel* recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(const CT_OutAbstractModel* originalModel) const;
 
@@ -180,7 +180,7 @@ private:
     /**
      * @brief Recursively search in the variable m_inResultModel the child that was a copy of the specified original model
      * @param originalModel : the original model to compare with the "originalModel" returned by child in this input result model
-     * @return The copied model if founded or the original model if it was in this result model. NULL if not founded.
+     * @return The copied model if founded or the original model if it was in this result model. nullptr if not founded.
      */
     CT_InAbstractModel* recursiveSearchTheInModelThatWasACopiedModelFromThisOriginalInModel(const CT_InAbstractModel* originalModel) const;
 
@@ -198,7 +198,7 @@ private:
         // the class CT_InAbstractResultModel for more information about the copy of models when search possibilities.
         const CT_InAbstractModel* inModelForSearch = recursiveSearchTheInModelThatWasACopiedModelFromThisOriginalInModel(inModel);
 
-        MODELS_ASSERT(inModelForSearch != NULL);
+        MODELS_ASSERT(inModelForSearch != nullptr);
 
         const CT_InStdModelPossibilitySelectionGroup* selectionGroup = inModelForSearch->possibilitiesGroup();
 

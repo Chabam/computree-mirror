@@ -1,18 +1,13 @@
 #ifndef CT_GRID4D_SPARSE_HPP
 #define CT_GRID4D_SPARSE_HPP
 
-#ifdef USE_OPENCV
-
-
 #include "ct_itemdrawable/ct_grid4d_sparse.h"
 
 #include <math.h>
 #include <typeinfo>
 
-#include "ct_math/ct_math.h"
-
 template< typename DataT>
-CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse() : CT_Grid4D<DataT>()
+CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse() : SuperClass()
 {
     const int nDims = 4;
     int ncells[nDims];
@@ -24,9 +19,13 @@ CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse() : CT_Grid4D<DataT>()
 }
 
 template< typename DataT>
-CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const CT_OutAbstractSingularItemModel *model,
-                                        const CT_AbstractResult *result,
-                                        double wmin,
+CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const CT_Grid4D_Sparse<DataT>& other) : SuperClass(other)
+{
+    _data = other._data.clone();
+}
+
+template< typename DataT>
+CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(double wmin,
                                         double xmin,
                                         double ymin,
                                         double zmin,
@@ -39,9 +38,7 @@ CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const CT_OutAbstractSingularItemModel 
                                         double resy,
                                         double resz,
                                         DataT na,
-                                        DataT initValue) : CT_Grid4D<DataT>(model,
-                                                                            result,
-                                                                            wmin,
+                                        DataT initValue) : SuperClass(wmin,
                                                                             xmin,
                                                                             ymin,
                                                                             zmin,
@@ -65,50 +62,7 @@ CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const CT_OutAbstractSingularItemModel 
 }
 
 template< typename DataT>
-CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const QString &modelName,
-                                        const CT_AbstractResult *result,
-                                        double wmin,
-                                        double xmin,
-                                        double ymin,
-                                        double zmin,
-                                        size_t dimw,
-                                        size_t dimx,
-                                        size_t dimy,
-                                        size_t dimz,
-                                        double resw,
-                                        double resx,
-                                        double resy,
-                                        double resz,
-                                        DataT na,
-                                        DataT initValue) : CT_Grid4D<DataT>(modelName,
-                                                                            result,
-                                                                            wmin,
-                                                                            xmin,
-                                                                            ymin,
-                                                                            zmin,
-                                                                            dimw,
-                                                                            dimx,
-                                                                            dimy,
-                                                                            dimz,
-                                                                            resw,
-                                                                            resx,
-                                                                            resy,
-                                                                            resz,
-                                                                            na)
-{
-    const int nDims = 4;
-    int ncells[nDims];
-    ncells[0] = _dimw;
-    ncells[1] = _dimx;
-    ncells[2] = _dimy;
-    ncells[3] = _dimz;
-    this->_data.create(nDims, ncells);
-}
-
-template< typename DataT>
-CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const CT_OutAbstractSingularItemModel *model,
-                                        const CT_AbstractResult *result,
-                                        double wmin,
+CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(double wmin,
                                         double xmin,
                                         double ymin,
                                         double zmin,
@@ -121,9 +75,7 @@ CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const CT_OutAbstractSingularItemModel 
                                         double resy,
                                         double resz,
                                         DataT na,
-                                        DataT initValue) : CT_Grid4D<DataT>(model,
-                                                                            result,
-                                                                            wmin,
+                                        DataT initValue) : SuperClass(wmin,
                                                                             xmin,
                                                                             ymin,
                                                                             zmin,
@@ -147,50 +99,7 @@ CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const CT_OutAbstractSingularItemModel 
 }
 
 template< typename DataT>
-CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(const QString& modelName,
-                                        const CT_AbstractResult *result,
-                                        double wmin,
-                                        double xmin,
-                                        double ymin,
-                                        double zmin,
-                                        double wmax,
-                                        double xmax,
-                                        double ymax,
-                                        double zmax,
-                                        double resw,
-                                        double resx,
-                                        double resy,
-                                        double resz,
-                                        DataT na,
-                                        DataT initValue) : CT_Grid4D<DataT>(modelName,
-                                                                            result,
-                                                                            wmin,
-                                                                            xmin,
-                                                                            ymin,
-                                                                            zmin,
-                                                                            wmax,
-                                                                            xmax,
-                                                                            ymax,
-                                                                            zmax,
-                                                                            resw,
-                                                                            resx,
-                                                                            resy,
-                                                                            resz,
-                                                                            na)
-{
-    const int nDims = 4;
-    int ncells[nDims];
-    ncells[0] = _dimw;
-    ncells[1] = _dimx;
-    ncells[2] = _dimy;
-    ncells[3] = _dimz;
-    this->_data.create(nDims, ncells);
-}
-
-template< typename DataT>
-CT_Grid4D_Sparse<DataT>* CT_Grid4D_Sparse<DataT>::createGrid4DFromWXYZCoords(const CT_OutAbstractSingularItemModel *model,
-                                                                           const CT_AbstractResult *result,
-                                                                           double wmin,
+CT_Grid4D_Sparse<DataT>* CT_Grid4D_Sparse<DataT>::createGrid4DFromWXYZCoords(double wmin,
                                                                            double xmin,
                                                                            double ymin,
                                                                            double zmin,
@@ -231,54 +140,7 @@ CT_Grid4D_Sparse<DataT>* CT_Grid4D_Sparse<DataT>::createGrid4DFromWXYZCoords(con
         dimz++;
     }
 
-    return new CT_Grid4D_Sparse<DataT>(model, result, wmin, xmin, ymin, zmin, dimw, dimx, dimy, dimz, resw, resx, resy, resz, na, initValue);
-}
-
-template< typename DataT>
-CT_Grid4D_Sparse<DataT>* CT_Grid4D_Sparse<DataT>::createGrid4DFromWXYZCoords(const QString &modelName,
-                                                                           const CT_AbstractResult *result,
-                                                                           double wmin,
-                                                                           double xmin,
-                                                                           double ymin,
-                                                                           double zmin,
-                                                                           double wmax,
-                                                                           double xmax,
-                                                                           double ymax,
-                                                                           double zmax,
-                                                                           double resw,
-                                                                           double resx,
-                                                                           double resy,
-                                                                           double resz,
-                                                                           DataT na,
-                                                                           DataT initValue)
-{
-    size_t dimw = ceil((wmax - wmin)/resw);
-    size_t dimx = ceil((xmax - xmin)/resx);
-    size_t dimy = ceil((ymax - ymin)/resy);
-    size_t dimz = ceil((zmax - zmin)/resz);
-
-    // to ensure a point exactly on a maximum limit of the grid will be included in the grid
-    while (wmax >= (wmin + dimw * resw))
-    {
-        dimw++;
-    }
-
-    while (xmax >= (xmin + dimx * resx))
-    {
-        dimx++;
-    }
-
-    while (ymax >= (ymin + dimy * resy))
-    {
-        dimy++;
-    }
-
-    while (zmax >= (zmin + dimz * resz))
-    {
-        dimz++;
-    }
-
-    return new CT_Grid4D_Sparse<DataT>(modelName, result, wmin, xmin, ymin, zmin, dimw, dimx, dimy, dimz, resw, resx, resy, resz, na, initValue);
+    return new CT_Grid4D_Sparse<DataT>(wmin, xmin, ymin, zmin, dimw, dimx, dimy, dimz, resw, resx, resy, resz, na, initValue);
 }
 
 template< typename DataT>
@@ -286,55 +148,6 @@ CT_Grid4D_Sparse<DataT>::~CT_Grid4D_Sparse()
 {
     _data.release();
 }
-
-template< typename DataT>
-CT_AbstractItemDrawable* CT_Grid4D_Sparse<DataT>::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_Grid4D_Sparse<DataT>* cpy = new CT_Grid4D_Sparse<DataT>((const CT_OutAbstractSingularItemModel *)model, result, _bot.w(), _bot.x(), _bot.y(), _bot.z(), _dimw, _dimx, _dimy, _dimz, _resw, _resx, _resy, _resz, _NAdata, _NAdata);
-    cpy->setId(id());
-
-    size_t ncells = nCells();
-    for (size_t i = 0 ; i < ncells ; i++)
-    {
-        cpy->setValueAtIndex(i, valueAtIndex(i));
-    }
-
-    if ( ncells > 0 )
-    {
-        cpy->computeMinMax();
-    }
-
-    cpy->setAlternativeDrawManager( getAlternativeDrawManager() );
-
-    return cpy;
-}
-
-template< typename DataT>
-CT_AbstractItemDrawable* CT_Grid4D_Sparse<DataT>::copy(const QString &modelName, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_Grid4D_Sparse<DataT>* cpy = new CT_Grid4D_Sparse<DataT>(modelName, result, _bot.w(), _bot.x(), _bot.y(), _bot.z(), _dimw, _dimx, _dimy, _dimz, _resw, _resx, _resy, _resz, _NAdata, _NAdata);
-    cpy->setId(id());
-
-    size_t ncells = nCells();
-    for (size_t i = 0 ; i < ncells ; i++)
-    {
-        cpy->setValueAtIndex(i, valueAtIndex(i));
-    }
-
-    if ( ncells > 0 )
-    {
-        cpy->computeMinMax();
-    }
-
-    cpy->setAlternativeDrawManager( getAlternativeDrawManager() );
-
-    return cpy;
-}
-
 
 template< typename DataT>
 void CT_Grid4D_Sparse<DataT>::computeMinMax()
@@ -358,7 +171,5 @@ void CT_Grid4D_Sparse<DataT>::computeMinMax()
         }
     }
 }
-
-#endif
 
 #endif // CT_GRID4D_SPARSE_HPP

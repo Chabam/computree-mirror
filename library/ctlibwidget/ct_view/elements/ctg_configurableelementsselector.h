@@ -101,7 +101,7 @@ private:
     bool updateSelectedElementContainerToModify();
 
     /**
-     * @brief Returns true if the member "m_selectedContainerToModify" is not NULL and contains element passed in parameter
+     * @brief Returns true if the member "m_selectedContainerToModify" is not nullptr and contains element passed in parameter
      */
     bool selectedContainerIsSetAndContains(CT_AbstractConfigurableElement *el) const;
 

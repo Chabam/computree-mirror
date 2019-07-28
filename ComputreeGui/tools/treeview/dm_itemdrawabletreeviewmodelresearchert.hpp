@@ -6,8 +6,8 @@
 template<class Item>
 DM_ItemDrawableTreeViewModelResearcherT<Item>::DM_ItemDrawableTreeViewModelResearcherT() : DM_AbstractWorker()
 {
-    m_collection = NULL;
-    m_treeViewManager = NULL;
+    m_collection = nullptr;
+    m_treeViewManager = nullptr;
 }
 
 template<class Item>
@@ -44,7 +44,7 @@ void DM_ItemDrawableTreeViewModelResearcherT<Item>::apply()
 
         Item* sItem = m_treeViewManager->itemFromItemDrawable(item);
 
-        if(sItem != NULL)
+        if(sItem != nullptr)
             (*m_collection)[i].append(sItem);
 
         ++i;

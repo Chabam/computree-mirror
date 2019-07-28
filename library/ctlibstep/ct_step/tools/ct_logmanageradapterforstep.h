@@ -12,7 +12,7 @@ class CTLIBSTEP_EXPORT CT_LogManagerAdapterForStep
 public:
     static CT_LogManagerAdapterForStep* staticInstance()
     {
-        if(UNIQUE_INSTANCE == NULL)
+        if(UNIQUE_INSTANCE == nullptr)
             UNIQUE_INSTANCE = new CT_LogManagerAdapterForStep();
 
         return UNIQUE_INSTANCE;

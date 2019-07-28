@@ -192,7 +192,7 @@ void GAboutPluginsDialog::createItemsForAction(QTreeWidgetItem *parent, CT_Abstr
 void GAboutPluginsDialog::createItemsForExporter(QTreeWidgetItem *parent, CT_AbstractExporter *ex)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
-    item->setText(0, ex->getExporterName() + tr(" [%1]").arg(ex->getExporterCustomName()));
+    item->setText(0, ex->uniqueName() + tr(" [%1]").arg(ex->displayableName()));
     /*item->setData(0, Qt::DisplayRole, _eManager->getPluginName(i));
     item->setData(0, Qt::UserRole, I_Export);
     item->setData(0, Qt::UserRole+1, i);*/
@@ -235,7 +235,7 @@ void GAboutPluginsDialog::on_treeWidget_currentItemChanged(QTreeWidgetItem *curr
 {
     Q_UNUSED(previous);
 
-    if(current != NULL)
+    if(current != nullptr)
     {
         bool ok;
         int from = current->data(0, Qt::UserRole).toInt(&ok);
@@ -245,7 +245,7 @@ void GAboutPluginsDialog::on_treeWidget_currentItemChanged(QTreeWidgetItem *curr
             if(from == I_Step)
             {
                 CT_AbstractStepPlugin *tinterface = _pManager->getPlugin(current->data(0, Qt::UserRole+1).toInt());
-                ui->pushButtonConfigurer->setEnabled((tinterface != NULL)
+                ui->pushButtonConfigurer->setEnabled((tinterface != nullptr)
                                                      && tinterface->canBeConfigured());
             }
         }
@@ -256,7 +256,7 @@ void GAboutPluginsDialog::on_pushButtonConfigurer_clicked()
 {
     QTreeWidgetItem *current = ui->treeWidget->currentItem();
 
-    if(current != NULL)
+    if(current != nullptr)
     {
         bool ok;
         int from = current->data(0, Qt::UserRole).toInt(&ok);
@@ -268,7 +268,7 @@ void GAboutPluginsDialog::on_pushButtonConfigurer_clicked()
                 int currentRow = current->data(0, Qt::UserRole+1).toInt();
                 CT_AbstractStepPlugin *tinterface = _pManager->getPlugin(currentRow);
 
-                if(tinterface != NULL)
+                if(tinterface != nullptr)
                     tinterface->configure();
             }
         }
@@ -329,9 +329,9 @@ void GAboutPluginsDialog::exportStepsForLevel(QTextStream &stream, const CT_Menu
         CT_VirtualAbstractStep *step = itS.next();
 
         QString type = "";
-        if(dynamic_cast<CT_AbstractStepLoadFile*>(step) != NULL) {
+        if(dynamic_cast<CT_AbstractStepLoadFile*>(step) != nullptr) {
             type = "LoadFile";
-        } else if(dynamic_cast<CT_AbstractStepCanBeAddedFirst*>(step) != NULL) {
+        } else if(dynamic_cast<CT_AbstractStepCanBeAddedFirst*>(step) != nullptr) {
             type = "CanBeAddedFirst";
         } else {
             type = "Generic";
@@ -353,12 +353,12 @@ void GAboutPluginsDialog::on_pb_stepInfo_clicked()
 {
     QTreeWidgetItem* currentItem = ui->treeWidget->currentItem();
 
-    if (currentItem != NULL)
+    if (currentItem != nullptr)
     {
         QString stepName = currentItem->text(0);
         QTreeWidgetItem* parentItem = currentItem->parent();
 
-        if (parentItem != NULL)
+        if (parentItem != nullptr)
         {
             QString keyName = parentItem->text(0)+ "_" + stepName;
 

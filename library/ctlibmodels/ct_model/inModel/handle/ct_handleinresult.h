@@ -1,13 +1,13 @@
 #ifndef CT_HANDLEINRESULT_H
 #define CT_HANDLEINRESULT_H
 
-#include "ct_model/handle/ct_handleminmaxwithmodelt.h"
+#include "ct_model/inModel/handle/ct_inhandleminmaxwithmodelt.h"
 #include "ct_model/inModel/ct_inresultmodelgroup.h"
 
 template<class ResultT, int min = 1, int max = 1>
-class CT_HandleInResult : public CT_HandleMinMaxWithModelT<CT_InResultModelGroup, min, max> {
+class CT_HandleInResult : public CT_InHandleMinMaxWithModelT<CT_InResultModelGroup, min, max> {
 
-    using SuperClass = CT_HandleMinMaxWithModelT<CT_InResultModelGroup, min, max>;
+    using SuperClass = CT_InHandleMinMaxWithModelT<CT_InResultModelGroup, min, max>;
 
 public:
     using ResultType = ResultT;

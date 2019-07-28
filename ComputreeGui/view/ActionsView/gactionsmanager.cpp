@@ -21,10 +21,10 @@ GActionsManager::GActionsManager(QWidget *parent) :
     ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->treeView->setFocusPolicy(Qt::NoFocus);
 
-    m_actionsManager = NULL;
-    m_docManager = NULL;
-    m_currentAction = NULL;
-    m_currentDoc = NULL;
+    m_actionsManager = nullptr;
+    m_docManager = nullptr;
+    m_currentAction = nullptr;
+    m_currentDoc = nullptr;
 
     QString style = QString("background-color: qlineargradient(spread:pad,"
                                                                "x1:0, y1:0, x2:0, y2:1, "
@@ -62,12 +62,12 @@ GActionsManager::~GActionsManager()
 
 void GActionsManager::setActionsManager(const DM_ActionsManager* actionsManager)
 {
-    if(m_actionsManager != NULL)
-        disconnect(m_actionsManager, NULL, this, NULL);
+    if(m_actionsManager != nullptr)
+        disconnect(m_actionsManager, nullptr, this, nullptr);
 
     m_actionsManager = (DM_ActionsManager*)actionsManager;
 
-    if(m_actionsManager != NULL)
+    if(m_actionsManager != nullptr)
     {
         connect(m_actionsManager, SIGNAL(actionsCollectionChanged()), this, SLOT(setDefaultActionToDocument()));
         connect(m_actionsManager, SIGNAL(actionsCollectionChanged()), this, SLOT(refreshView()));
@@ -76,12 +76,12 @@ void GActionsManager::setActionsManager(const DM_ActionsManager* actionsManager)
 
 void GActionsManager::setDocumentManagerView(const GDocumentManagerView* docManager)
 {
-    if(m_docManager != NULL)
-        disconnect(m_docManager, NULL, this, NULL);
+    if(m_docManager != nullptr)
+        disconnect(m_docManager, nullptr, this, nullptr);
 
     m_docManager = (GDocumentManagerView*)docManager;
 
-    if(m_docManager != NULL)
+    if(m_docManager != nullptr)
     {
         connect(m_docManager, SIGNAL(documentActivated(DM_DocumentView*)), this, SLOT(documentActivated(DM_DocumentView*)));
     }
@@ -94,7 +94,7 @@ void GActionsManager::refreshView()
 
     m_model.clear();
 
-    if(m_actionsManager != NULL)
+    if(m_actionsManager != nullptr)
     {
         QMap<QString, CT_AbstractAction*> byType;
 
@@ -130,7 +130,7 @@ void GActionsManager::refreshView()
             {
                 CT_AbstractAction *act = itA.next();
 
-                if((m_currentDoc != NULL) && m_currentDoc->acceptAction(act))
+                if((m_currentDoc != nullptr) && m_currentDoc->acceptAction(act))
                     menu->appendRow(createItemForAction(act));
             }
 
@@ -151,16 +151,16 @@ void GActionsManager::refreshView()
 
         if(!actions.isEmpty())
         {
-            QStandardItem *menu = NULL;
+            QStandardItem *menu = nullptr;
 
             QListIterator<CT_AbstractAction*> itS(actions);
 
             while(itS.hasNext()) {
                 CT_AbstractAction *act = itS.next();
 
-                if((m_currentDoc != NULL) && m_currentDoc->acceptAction(act)) {
+                if((m_currentDoc != nullptr) && m_currentDoc->acceptAction(act)) {
 
-                    if(menu == NULL) {
+                    if(menu == nullptr) {
                         menu = new QStandardItem(tr("Manual/Debug mode"));
                         menu->setEditable(false);
                         menu->setTextAlignment(Qt::AlignHCenter);
@@ -172,7 +172,7 @@ void GActionsManager::refreshView()
                 }
             }
 
-            if(menu != NULL) {
+            if(menu != nullptr) {
                 m_model.appendRow(menu);
                 ui->treeView->setExpanded(m_model.indexFromItem(menu), states.value(menu->data().toString(), true));
             }
@@ -183,16 +183,16 @@ void GActionsManager::refreshView()
 
         if(!actions.isEmpty())
         {
-            QStandardItem *menu = NULL;
+            QStandardItem *menu = nullptr;
 
             QListIterator<CT_AbstractAction*> itS(actions);
 
             while(itS.hasNext()) {
                 CT_AbstractAction *act = itS.next();
 
-                if((m_currentDoc != NULL) && m_currentDoc->acceptAction(act)) {
+                if((m_currentDoc != nullptr) && m_currentDoc->acceptAction(act)) {
 
-                    if(menu == NULL) {
+                    if(menu == nullptr) {
                         menu = new QStandardItem(tr("Interne"));
                         menu->setEditable(false);
                         menu->setTextAlignment(Qt::AlignHCenter);
@@ -204,7 +204,7 @@ void GActionsManager::refreshView()
                 }
             }
 
-            if(menu != NULL) {
+            if(menu != nullptr) {
                 m_model.appendRow(menu);
                 ui->treeView->setExpanded(m_model.indexFromItem(menu), states.value(menu->data().toString(), true));
             }
@@ -214,15 +214,15 @@ void GActionsManager::refreshView()
 
 void GActionsManager::setDefaultActionToDocument()
 {
-    if(m_currentDoc != NULL)
+    if(m_currentDoc != nullptr)
     {
         CT_AbstractAction *ac = m_currentDoc->currentAction();
 
-        if(ac == NULL)
+        if(ac == nullptr)
         {
             ac = m_actionsManager->action("CT_ActionSelectItemDrawableGV");
 
-            if(ac != NULL)
+            if(ac != nullptr)
                 m_currentDoc->setCurrentAction(ac);
         }
     }
@@ -254,7 +254,7 @@ QList<QStandardItem*> GActionsManager::createItemForAction(CT_AbstractAction *ac
     item->setWhatsThis(ac->description());
     item->setEditable(false);
     item->setCheckable(true);
-    item->setCheckState((m_currentAction != NULL) ? ((ac->uniqueName() == m_currentAction->uniqueName()) ? Qt::Checked : Qt::Unchecked) : Qt::Unchecked);
+    item->setCheckState((m_currentAction != nullptr) ? ((ac->uniqueName() == m_currentAction->uniqueName()) ? Qt::Checked : Qt::Unchecked) : Qt::Unchecked);
     item->setData(qVariantFromValue((void*)ac));
 
     list << item;
@@ -264,19 +264,19 @@ QList<QStandardItem*> GActionsManager::createItemForAction(CT_AbstractAction *ac
 
 void GActionsManager::documentActivated(DM_DocumentView *view)
 {
-    if((m_currentDoc != NULL)
+    if((m_currentDoc != nullptr)
             && m_docManager->containsDocument(m_currentDoc))
-        disconnect(m_currentDoc, NULL, this, NULL);
+        disconnect(m_currentDoc, nullptr, this, nullptr);
 
     m_currentDoc = view;
-    m_currentAction = NULL;
+    m_currentAction = nullptr;
 
-    if(m_currentDoc != NULL)
+    if(m_currentDoc != nullptr)
     {
         connect(m_currentDoc, SIGNAL(currentActionChanged(CT_AbstractAction*)), this, SLOT(documentCurrentActionChanged(CT_AbstractAction*)));
         m_currentAction = view->currentAction();
 
-        if(m_currentAction == NULL)
+        if(m_currentAction == nullptr)
             setDefaultActionToDocument();
     }
 
@@ -289,7 +289,7 @@ void GActionsManager::documentCurrentActionChanged(CT_AbstractAction *action)
 
     if(doc != m_currentDoc)
     {
-        disconnect(doc, NULL, this, NULL);
+        disconnect(doc, nullptr, this, nullptr);
     }
     else
     {
@@ -307,9 +307,9 @@ void GActionsManager::itemClicked(const QModelIndex &index)
     {
         CT_AbstractAction *ac = (CT_AbstractAction*)item->data().value<void*>();
 
-        if((m_currentDoc != NULL)
-                && (((m_currentAction != NULL) && (m_currentAction->uniqueName() != ac->uniqueName()))
-                    || (m_currentAction == NULL)))
+        if((m_currentDoc != nullptr)
+                && (((m_currentAction != nullptr) && (m_currentAction->uniqueName() != ac->uniqueName()))
+                    || (m_currentAction == nullptr)))
         {
             if(!m_currentDoc->setCurrentAction(ac))
                 item->setCheckState(Qt::Unchecked);

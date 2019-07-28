@@ -37,7 +37,7 @@ public:
                   const Eigen::Vector3f& widthAxisDirection = Eigen::Vector3f(1, 0, 0),
                   const Eigen::Vector3f& lengthAxisDirection = Eigen::Vector3f(0, 0, 1),
                   const ElementInfo &info = 0,
-                  IChunk** chunk = NULL);
+                  IChunk** chunk = nullptr);
 
 private:
     static QuadsGLRenderer            m_basicDrawRenderer;

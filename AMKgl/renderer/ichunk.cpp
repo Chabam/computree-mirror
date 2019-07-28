@@ -7,7 +7,7 @@
 
 IChunk::IChunk(const uint& uniqueKey, Scene::ObjectType objectType, const Eigen::Vector3d &offset)
 {
-    m_attributesAccessor = NULL;
+    m_attributesAccessor = nullptr;
 
     m_uniqueKey = uniqueKey;
 
@@ -37,17 +37,17 @@ IAttributesAccessor* IChunk::getAttributesAccessor() const
 
 AnyElementAttributesProvider* IChunk::getAnyElementsAttributesProvider() const
 {
-    return ((getAttributesAccessor() == NULL) ? NULL : getAttributesAccessor()->getAnyElementsAttributesProvider());
+    return ((getAttributesAccessor() == nullptr) ? nullptr : getAttributesAccessor()->getAnyElementsAttributesProvider());
 }
 
 ObjectAttributesProvider* IChunk::getObjectsAttributeProvider() const
 {
-    return ((getAttributesAccessor() == NULL) ? NULL : getAttributesAccessor()->getObjectsAttributeProvider(getTypeOfObjectDrawn()));
+    return ((getAttributesAccessor() == nullptr) ? nullptr : getAttributesAccessor()->getObjectsAttributeProvider(getTypeOfObjectDrawn()));
 }
 
 FlagsPropertyManager* IChunk::getFlagsPropertyManager() const
 {
-    return ((getAttributesAccessor() == NULL) ? NULL : getAttributesAccessor()->getPermanentScene()->getRendererForType(getTypeOfObjectDrawn())->getFlagsPropertyManager());
+    return ((getAttributesAccessor() == nullptr) ? nullptr : getAttributesAccessor()->getPermanentScene()->getRendererForType(getTypeOfObjectDrawn())->getFlagsPropertyManager());
 }
 
 Scene::ObjectType IChunk::getTypeOfObjectDrawn() const
@@ -92,10 +92,10 @@ DrawMode IChunk::getFastDrawModeUsed() const
 
 bool IChunk::mustDisableGraphicsCardTransfer() const
 {
-    const PermanentScene* scene = (getAttributesAccessor() == NULL) ? NULL : getAttributesAccessor()->getPermanentScene();
+    const PermanentScene* scene = (getAttributesAccessor() == nullptr) ? nullptr : getAttributesAccessor()->getPermanentScene();
 
     // disable VAO or VBO when the scene must reduce number of points in fast draw
-    return (scene == NULL) ? false : scene->mustReduceNumberOfPointsInFastDraw();
+    return (scene == nullptr) ? false : scene->mustReduceNumberOfPointsInFastDraw();
 }
 
 bool IChunk::update()

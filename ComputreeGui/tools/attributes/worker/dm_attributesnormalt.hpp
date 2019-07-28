@@ -8,7 +8,7 @@
 template<typename Type>
 DM_AttributesNormalT<Type>::DM_AttributesNormalT() : DM_AbstractAttributesNormal()
 {
-    m_an = NULL;
+    m_an = nullptr;
 }
 
 template<typename Type>
@@ -26,7 +26,7 @@ bool DM_AttributesNormalT<Type>::setTypeAttributes(const Type *ta, const CT_Attr
 template<typename Type>
 void DM_AttributesNormalT<Type>::attributesDeleted()
 {
-    m_an = NULL;
+    m_an = nullptr;
 }
 
 template<typename Type>

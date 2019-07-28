@@ -15,10 +15,10 @@ InstancedPermanentRenderer<Chunk>::InstancedPermanentRenderer(GLenum glMode) : P
     m_drawMode = DM_VAO;
 
     m_mutex = new QMutex(QMutex::Recursive);
-    m_vertexArray = NULL;
-    m_fastVertexArray = NULL;
-    m_normalIndicesArray = NULL;
-    m_fastIndicesArray = NULL;
+    m_vertexArray = nullptr;
+    m_fastVertexArray = nullptr;
+    m_normalIndicesArray = nullptr;
+    m_fastIndicesArray = nullptr;
 
     m_lastCsKeyUsed = std::numeric_limits<uint>::max();
 }
@@ -99,7 +99,7 @@ void InstancedPermanentRenderer<Chunk>::updateInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->update();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -125,7 +125,7 @@ void InstancedPermanentRenderer<Chunk>::updateInfoInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->updateInfoBO();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -151,7 +151,7 @@ void InstancedPermanentRenderer<Chunk>::updateColorInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->updateColorBO();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -183,7 +183,7 @@ void InstancedPermanentRenderer<Chunk>::updateOnlyVAOInAllContext()
             itC.next();
             itC.value()->setCurrentContext(c);
             itC.value()->updateOnlyVAO();
-            itC.value()->setCurrentContext(NULL);
+            itC.value()->setCurrentContext(nullptr);
         }
     }
 }
@@ -210,9 +210,9 @@ void InstancedPermanentRenderer<Chunk>::destroyGL(const QOpenGLContext *context)
 {
     QMutexLocker locker(m_mutex);
 
-    InstancedShapeRendererContext *c = this->getContexts().value(const_cast<QOpenGLContext*>(context), NULL);
+    InstancedShapeRendererContext *c = this->getContexts().value(const_cast<QOpenGLContext*>(context), nullptr);
 
-    if(c != NULL)
+    if(c != nullptr)
         c->destroyGL();
 }
 
@@ -233,7 +233,7 @@ const Chunk& InstancedPermanentRenderer<Chunk>::createOrGetChunkForShape(const E
             uniqueKey,
             offset);
 
-    if(chunkUniqueKey != NULL)
+    if(chunkUniqueKey != nullptr)
         *chunkUniqueKey = uniqueKey;
 
     if(uniqueKey == m_lastCsKeyUsed) {
@@ -243,10 +243,10 @@ const Chunk& InstancedPermanentRenderer<Chunk>::createOrGetChunkForShape(const E
         m_lastOffsetUsed = offset;
     }
 
-    Chunk *ch = m_chunks.value(uniqueKey, NULL);
+    Chunk *ch = m_chunks.value(uniqueKey, nullptr);
 
-    if(ch == NULL) {
-        Q_ASSERT(m_vertexArray != NULL);
+    if(ch == nullptr) {
+        Q_ASSERT(m_vertexArray != nullptr);
 
         ch = new Chunk(uniqueKey,
                        this->getTypeOfObjectDrawn(),
@@ -285,9 +285,9 @@ void InstancedPermanentRenderer<Chunk>::removeShapes(const uint& chunkUniqueKey,
 {
     QMutexLocker locker(m_mutex);
 
-    Chunk* c = m_chunks.value(chunkUniqueKey, NULL);
+    Chunk* c = m_chunks.value(chunkUniqueKey, nullptr);
 
-    if(c == NULL)
+    if(c == nullptr)
        return;
 
     c->removeShapes(index, count);
@@ -301,9 +301,9 @@ void InstancedPermanentRenderer<Chunk>::removeShapes(const uint& chunkUniqueKey,
     if(begin == end)
        return;
 
-    Chunk* c = m_chunks.value(chunkUniqueKey, NULL);
+    Chunk* c = m_chunks.value(chunkUniqueKey, nullptr);
 
-    if(c == NULL)
+    if(c == nullptr)
        return;
 
     c->removeShapes(begin, end);
@@ -314,9 +314,9 @@ void InstancedPermanentRenderer<Chunk>::setShapesVisible(const uint& chunkUnique
 {
     QMutexLocker locker(m_mutex);
 
-    Chunk* c = m_chunks.value(chunkUniqueKey, NULL);
+    Chunk* c = m_chunks.value(chunkUniqueKey, nullptr);
 
-    if(c == NULL)
+    if(c == nullptr)
         return;
 
     c->setShapesVisible(index, count, visible);
@@ -351,9 +351,9 @@ size_t InstancedPermanentRenderer<Chunk>::countShapesInChunk(const uint& chunkUn
 {
     QMutexLocker locker(m_mutex);
 
-    Chunk* c = m_chunks.value(chunkUniqueKey, NULL);
+    Chunk* c = m_chunks.value(chunkUniqueKey, nullptr);
 
-    if(c == NULL)
+    if(c == nullptr)
         return 0;
 
     return c->countShape();
@@ -383,7 +383,7 @@ void InstancedPermanentRenderer<Chunk>::draw(DrawInfo &info)
         itC.next();
         itC.value()->setCurrentContext(c);
         itC.value()->draw(info);
-        itC.value()->setCurrentContext(NULL);
+        itC.value()->setCurrentContext(nullptr);
     }
 }
 
@@ -416,7 +416,7 @@ void InstancedPermanentRenderer<Chunk>::postDraw(DrawInfo &info)
         itC.next();
         itC.value()->setCurrentContext(c);
         itC.value()->postDraw(info);
-        itC.value()->setCurrentContext(NULL);
+        itC.value()->setCurrentContext(nullptr);
     }
 }
 

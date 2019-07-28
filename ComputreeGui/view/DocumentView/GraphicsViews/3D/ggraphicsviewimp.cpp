@@ -56,9 +56,9 @@ GGraphicsViewImp::GGraphicsViewImp(const GDocumentViewForGraphics* parentDocumen
     m_camController->setRealCameraManipulator(amkglCamera());
     m_camController->setView(this);
 
-    m_backupPointsSelected = CT_SPCIR(NULL);
-    m_backupEdgesSelected = CT_SECIR(NULL);
-    m_backupFacesSelected = CT_SFCIR(NULL);
+    m_backupPointsSelected = CT_SPCIR(nullptr);
+    m_backupEdgesSelected = CT_SECIR(nullptr);
+    m_backupFacesSelected = CT_SFCIR(nullptr);
 
     m_uniqueIndex = NUMBER_OF_VIEWS++;
 
@@ -87,23 +87,23 @@ void GGraphicsViewImp::active2DView(bool e)
         m_camController->setType(CameraInterface::ORTHOGRAPHIC);
 
     } else {
-        amkglCamera()->frame()->setConstraint(NULL);
+        amkglCamera()->frame()->setConstraint(nullptr);
     }
 }
 
 void GGraphicsViewImp::disablePointsSelectionBackup()
 {
-    m_backupPointsSelected = CT_SPCIR(NULL);
+    m_backupPointsSelected = CT_SPCIR(nullptr);
 }
 
 void GGraphicsViewImp::disableEdgesSelectionBackup()
 {
-    m_backupEdgesSelected = CT_SECIR(NULL);
+    m_backupEdgesSelected = CT_SECIR(nullptr);
 }
 
 void GGraphicsViewImp::disableFacesSelectionBackup()
 {
-    m_backupFacesSelected = CT_SFCIR(NULL);
+    m_backupFacesSelected = CT_SFCIR(nullptr);
 }
 
 GraphicsViewInterface* GGraphicsViewImp::graphicsView() const
@@ -118,7 +118,7 @@ QOpenGLWidget* GGraphicsViewImp::getOpenGLWidget() const
 
 bool GGraphicsViewImp::is2DView() const
 {
-    return (amkglCamera()->frame()->constraint() != NULL);
+    return (amkglCamera()->frame()->constraint() != nullptr);
 }
 
 void GGraphicsViewImp::setOptions(const DM_GraphicsViewOptions &newOptions)
@@ -133,7 +133,7 @@ void GGraphicsViewImp::setOptions(const DM_GraphicsViewOptions &newOptions)
         setGridIsDrawn(newOptions.drawGrid());
         setFPSIsDisplayed(newOptions.getCameraInformationDisplayed().testFlag(DM_GraphicsViewOptions::FpsInformation));
 
-        if(getPermanentSceneToRender() != NULL) {
+        if(getPermanentSceneToRender() != nullptr) {
             bool update = false;
 
             // set all draw mode to use
@@ -197,7 +197,7 @@ void GGraphicsViewImp::updateDrawing3DOfItemDrawables(const QList<CT_AbstractIte
     // TODO : use the correct model
     DM_DocumentView* doc = getDocumentView();
 
-    PermanentItemScene* scene = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL);
+    PermanentItemScene* scene = getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
 
     foreach (CT_AbstractItemDrawable* item, list) {
         QColor color = doc->getColor(item);
@@ -312,13 +312,13 @@ void GGraphicsViewImp::getBoundingBoxOfAllPointsSelectedInView(Eigen::Vector3d &
     min.setConstant(std::numeric_limits<double>::max());
     max = -min;
 
-    PermanentItemScene* scene = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL);
+    PermanentItemScene* scene = getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
 
-    if(scene != NULL) {
+    if(scene != nullptr) {
 
         GlobalInfoCloud* infos = scene->getPointCloudAttributesProvider()->getInfoCloud();
 
-        if(infos != NULL) {
+        if(infos != nullptr) {
 
             ApplyCustomFunctionToGlobalPointsVisitor visitor;
             visitor.setFunction([&min, &max, &infos](IChunk* chunk,
@@ -422,7 +422,7 @@ QSharedPointer<CT_StandardColorCloudRegistered> GGraphicsViewImp::colorCloudOf(G
 {
     // TODO : problem here because we have multiple points attributes provider !
     if(type == GraphicsViewInterface::CPointCloud)
-        return getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetColorCloudRegistered();
+        return getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloudRegistered();
 
     return QSharedPointer<CT_StandardColorCloudRegistered>();
 }
@@ -431,7 +431,7 @@ QSharedPointer<CT_StandardNormalCloudRegistered> GGraphicsViewImp::normalCloudOf
 {
     // TODO : problem here because we have multiple points attributes provider !
     if(type == GraphicsViewInterface::NPointCloud)
-        return getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetNormalCloudRegistered();
+        return getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetNormalCloudRegistered();
 
     return QSharedPointer<CT_StandardNormalCloudRegistered>();
 }
@@ -439,37 +439,37 @@ QSharedPointer<CT_StandardNormalCloudRegistered> GGraphicsViewImp::normalCloudOf
 void GGraphicsViewImp::setColorOfPoint(const size_t &globalIndexOfPoint, const CT_Color &color)
 {
     // TODO : problem here because we have multiple points attributes provider !
-    (*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetColorCloud())[globalIndexOfPoint] = color;
+    (*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloud())[globalIndexOfPoint] = color;
 }
 
 CT_Color &GGraphicsViewImp::colorOfPoint(const size_t &globalIndexOfPoint)
 {
     // TODO : problem here because we have multiple points attributes provider !
-    return (*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetColorCloud())[globalIndexOfPoint];
+    return (*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloud())[globalIndexOfPoint];
 }
 
 const CT_Color &GGraphicsViewImp::constColorOfPoint(const size_t &globalIndexOfPoint) const
 {
     // TODO : problem here because we have multiple points attributes provider !
-    return (*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetColorCloud())[globalIndexOfPoint];
+    return (*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloud())[globalIndexOfPoint];
 }
 
 void GGraphicsViewImp::setNormalOfPoint(const size_t &globalIndexOfPoint, const CT_Normal &normal)
 {
     // TODO : problem here because we have multiple points attributes provider !
-    (*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetNormalCloud())[globalIndexOfPoint] = normal;
+    (*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetNormalCloud())[globalIndexOfPoint] = normal;
 }
 
 CT_Normal &GGraphicsViewImp::normalOfPoint(const size_t &globalIndexOfPoint)
 {
     // TODO : problem here because we have multiple points attributes provider !
-    return (*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetNormalCloud())[globalIndexOfPoint];
+    return (*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetNormalCloud())[globalIndexOfPoint];
 }
 
 const CT_Normal &GGraphicsViewImp::constNormalOfPoint(const size_t &globalIndexOfPoint) const
 {
     // TODO : problem here because we have multiple points attributes provider !
-    return (*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetNormalCloud())[globalIndexOfPoint];
+    return (*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetNormalCloud())[globalIndexOfPoint];
 }
 
 void GGraphicsViewImp::dirtyColorsOfItemDrawablesWithPoints()
@@ -495,22 +495,22 @@ GraphicsObjectFlagProperty toComputreeFlagProperty(const ObjectsFlagProperty& pr
 
 void GGraphicsViewImp::setFlagProperty(const GraphicsObjectFlag &flag, const GraphicsObjectFlagProperty &property)
 {
-    getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPermanentScene()->getObjectsFlagsPropertyManager()->setProperty(ObjectsFlagsTool::Flag(flag), toAmkglFlagProperty(property));
+    getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPermanentScene()->getObjectsFlagsPropertyManager()->setProperty(ObjectsFlagsTool::Flag(flag), toAmkglFlagProperty(property));
 }
 
 void GGraphicsViewImp::setFlagProperty(const GraphicsObjectFlag &flag, const GraphicsObjectType &typeOfObject, const GraphicsObjectFlagProperty &property)
 {
-    getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPermanentScene()->getObjectsFlagsPropertyManager()->setProperty(ObjectsFlagsTool::Flag(flag), Scene::ObjectType(typeOfObject), toAmkglFlagProperty(property));
+    getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPermanentScene()->getObjectsFlagsPropertyManager()->setProperty(ObjectsFlagsTool::Flag(flag), Scene::ObjectType(typeOfObject), toAmkglFlagProperty(property));
 }
 
 GraphicsObjectFlagProperty GGraphicsViewImp::getFlagProperty(const GraphicsObjectFlag &flag, const GraphicsObjectType &typeOfObject) const
 {
-    return toComputreeFlagProperty(getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPermanentScene()->getObjectsFlagsPropertyManager()->getProperty(ObjectsFlagsTool::Flag(flag), Scene::ObjectType(typeOfObject)));
+    return toComputreeFlagProperty(getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPermanentScene()->getObjectsFlagsPropertyManager()->getProperty(ObjectsFlagsTool::Flag(flag), Scene::ObjectType(typeOfObject)));
 }
 
 GraphicsObjectFlagProperty GGraphicsViewImp::getFlagProperty(const GraphicsObjectFlag &flag, bool &ok) const
 {
-    return toComputreeFlagProperty(getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPermanentScene()->getObjectsFlagsPropertyManager()->getProperty(ObjectsFlagsTool::Flag(flag), ok));
+    return toComputreeFlagProperty(getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPermanentScene()->getObjectsFlagsPropertyManager()->getProperty(ObjectsFlagsTool::Flag(flag), ok));
 }
 
 CameraInterface *GGraphicsViewImp::camera() const
@@ -661,14 +661,14 @@ void GGraphicsViewImp::addPointsIDToSelection(const size_t &id)
 {
     disablePointsSelectionBackup();
 
-    ObjectsFlagsTool::staticSelectObject((*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetInfoCloud())[id]);
+    ObjectsFlagsTool::staticSelectObject((*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetInfoCloud())[id]);
 }
 
 void GGraphicsViewImp::addMultiplePointsIDToSelection(const std::vector<size_t> &idList)
 {
     disablePointsSelectionBackup();
 
-    ElementInfo* firstInfo = &(*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetInfoCloud())[0];
+    ElementInfo* firstInfo = &(*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetInfoCloud())[0];
 
     std::vector<size_t>::const_iterator it = idList.begin();
     std::vector<size_t>::const_iterator end = idList.end();
@@ -683,14 +683,14 @@ void GGraphicsViewImp::addFacesIDToSelection(const size_t &id)
 {
     disableFacesSelectionBackup();
 
-    ObjectsFlagsTool::staticSelectObject((*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getFaceCloudAttributesProvider()->createOrGetInfoCloud())[id]);
+    ObjectsFlagsTool::staticSelectObject((*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getFaceCloudAttributesProvider()->createOrGetInfoCloud())[id]);
 }
 
 void GGraphicsViewImp::addMultipleFacesIDToSelection(const std::vector<size_t> &idList)
 {
     disableFacesSelectionBackup();
 
-    ElementInfo* firstInfo = &(*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getFaceCloudAttributesProvider()->createOrGetInfoCloud())[0];
+    ElementInfo* firstInfo = &(*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getFaceCloudAttributesProvider()->createOrGetInfoCloud())[0];
 
     std::vector<size_t>::const_iterator it = idList.begin();
     std::vector<size_t>::const_iterator end = idList.end();
@@ -705,14 +705,14 @@ void GGraphicsViewImp::addEdgesIDToSelection(const size_t &id)
 {
     disableEdgesSelectionBackup();
 
-    ObjectsFlagsTool::staticSelectObject((*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getEdgeCloudAttributesProvider()->createOrGetInfoCloud())[id]);
+    ObjectsFlagsTool::staticSelectObject((*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getEdgeCloudAttributesProvider()->createOrGetInfoCloud())[id]);
 }
 
 void GGraphicsViewImp::addMultipleEdgesIDToSelection(const std::vector<size_t> &idList)
 {
     disableEdgesSelectionBackup();
 
-    ElementInfo* firstInfo = &(*getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getEdgeCloudAttributesProvider()->createOrGetInfoCloud())[0];
+    ElementInfo* firstInfo = &(*getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getEdgeCloudAttributesProvider()->createOrGetInfoCloud())[0];
 
     std::vector<size_t>::const_iterator it = idList.begin();
     std::vector<size_t>::const_iterator end = idList.end();
@@ -727,9 +727,9 @@ void GGraphicsViewImp::removePointsIDFromSelection(const size_t &id)
 {
     disablePointsSelectionBackup();
 
-    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->getInfoCloud();
+    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->getInfoCloud();
 
-    if(infoCloud != NULL)
+    if(infoCloud != nullptr)
         ObjectsFlagsTool::staticUnselectObject((*infoCloud)[id]);
 }
 
@@ -737,9 +737,9 @@ void GGraphicsViewImp::removeMultiplePointsIDFromSelection(const std::vector<siz
 {
     disablePointsSelectionBackup();
 
-    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->getInfoCloud();
+    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->getInfoCloud();
 
-    if(infoCloud != NULL) {
+    if(infoCloud != nullptr) {
         ElementInfo* firstInfo = &((*infoCloud)[0]);
 
         std::vector<size_t>::const_iterator it = idList.begin();
@@ -756,9 +756,9 @@ void GGraphicsViewImp::removeFacesIDFromSelection(const size_t &id)
 {
     disableFacesSelectionBackup();
 
-    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getFaceCloudAttributesProvider()->getInfoCloud();
+    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getFaceCloudAttributesProvider()->getInfoCloud();
 
-    if(infoCloud != NULL)
+    if(infoCloud != nullptr)
         ObjectsFlagsTool::staticUnselectObject((*infoCloud)[id]);
 }
 
@@ -766,9 +766,9 @@ void GGraphicsViewImp::removeMultipleFacesIDFromSelection(const std::vector<size
 {
     disableFacesSelectionBackup();
 
-    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getFaceCloudAttributesProvider()->getInfoCloud();
+    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getFaceCloudAttributesProvider()->getInfoCloud();
 
-    if(infoCloud != NULL) {
+    if(infoCloud != nullptr) {
         ElementInfo* firstInfo = &((*infoCloud)[0]);
 
         std::vector<size_t>::const_iterator it = idList.begin();
@@ -785,9 +785,9 @@ void GGraphicsViewImp::removeEdgesIDFromSelection(const size_t &id)
 {
     disableEdgesSelectionBackup();
 
-    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getEdgeCloudAttributesProvider()->getInfoCloud();
+    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getEdgeCloudAttributesProvider()->getInfoCloud();
 
-    if(infoCloud != NULL)
+    if(infoCloud != nullptr)
         ObjectsFlagsTool::staticUnselectObject((*infoCloud)[id]);
 }
 
@@ -795,9 +795,9 @@ void GGraphicsViewImp::removeMultipleEdgesIDFromSelection(const std::vector<size
 {
     disableEdgesSelectionBackup();
 
-    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getEdgeCloudAttributesProvider()->getInfoCloud();
+    AMKgl::GlobalInfoCloud* infoCloud = getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getEdgeCloudAttributesProvider()->getInfoCloud();
 
-    if(infoCloud != NULL) {
+    if(infoCloud != nullptr) {
         ElementInfo* firstInfo = &((*infoCloud)[0]);
 
         std::vector<size_t>::const_iterator it = idList.begin();
@@ -937,7 +937,7 @@ size_t GGraphicsViewImp::countEdges()
         count += chunk->countObjects();
     });
 
-    getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->visitObjectsOfTypes(QList<Scene::ObjectType>() << Scene::LineGlobalCloud, visitor);
+    getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->visitObjectsOfTypes(QList<Scene::ObjectType>() << Scene::LineGlobalCloud, visitor);
 
     return count;
 }
@@ -952,7 +952,7 @@ size_t GGraphicsViewImp::countFaces()
         count += chunk->countObjects();
     });
 
-    getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->visitObjectsOfTypes(QList<Scene::ObjectType>() << Scene::TriangleGlobalCloud, visitor);
+    getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->visitObjectsOfTypes(QList<Scene::ObjectType>() << Scene::TriangleGlobalCloud, visitor);
 
     return count;
 }
@@ -992,29 +992,29 @@ QSharedPointer<ObjectsModifierInterface> GGraphicsViewImp::createObjectsModifier
 {
     if(type == GOT_PointGlobalCloud) {
         disablePointsSelectionBackup();
-        return QSharedPointer<ObjectsModifierInterface>(new DM_GlobalPointsModifier(getPermanentSceneToRender(), NULL));
+        return QSharedPointer<ObjectsModifierInterface>(new DM_GlobalPointsModifier(getPermanentSceneToRender(), nullptr));
     } else if(type == GOT_LineGlobalCloud) {
         disableEdgesSelectionBackup();
-        return QSharedPointer<ObjectsModifierInterface>(new DM_MeshObjectsModifier(getPermanentSceneToRender(), Scene::LineGlobalCloud, NULL));
+        return QSharedPointer<ObjectsModifierInterface>(new DM_MeshObjectsModifier(getPermanentSceneToRender(), Scene::LineGlobalCloud, nullptr));
     } else if(type == GOT_TriangleGlobalCloud) {
         disableFacesSelectionBackup();
-        return QSharedPointer<ObjectsModifierInterface>(new DM_MeshObjectsModifier(getPermanentSceneToRender(), Scene::TriangleGlobalCloud, NULL));
+        return QSharedPointer<ObjectsModifierInterface>(new DM_MeshObjectsModifier(getPermanentSceneToRender(), Scene::TriangleGlobalCloud, nullptr));
     }
 
-    return QSharedPointer<ObjectsModifierInterface>(new DM_MultipleObjectsModifier(getPermanentSceneToRender(), (Scene::ObjectType)type, NULL));
+    return QSharedPointer<ObjectsModifierInterface>(new DM_MultipleObjectsModifier(getPermanentSceneToRender(), (Scene::ObjectType)type, nullptr));
 }
 
 QSharedPointer<ObjectStatusQueryiorInterface> GGraphicsViewImp::createObjectsStatusQueryior(GraphicsObjectType type)
 {
     if(type == GOT_PointGlobalCloud) {
-        return QSharedPointer<ObjectStatusQueryiorInterface>(new DM_GlobalPointsModifier(getPermanentSceneToRender(), NULL, false));
+        return QSharedPointer<ObjectStatusQueryiorInterface>(new DM_GlobalPointsModifier(getPermanentSceneToRender(), nullptr, false));
     } else if(type == GOT_LineGlobalCloud) {
-        return QSharedPointer<ObjectStatusQueryiorInterface>(new DM_MeshObjectsModifier(getPermanentSceneToRender(), Scene::LineGlobalCloud, NULL, false));
+        return QSharedPointer<ObjectStatusQueryiorInterface>(new DM_MeshObjectsModifier(getPermanentSceneToRender(), Scene::LineGlobalCloud, nullptr, false));
     } else if(type == GOT_TriangleGlobalCloud) {
-        return QSharedPointer<ObjectStatusQueryiorInterface>(new DM_MeshObjectsModifier(getPermanentSceneToRender(), Scene::TriangleGlobalCloud, NULL, false));
+        return QSharedPointer<ObjectStatusQueryiorInterface>(new DM_MeshObjectsModifier(getPermanentSceneToRender(), Scene::TriangleGlobalCloud, nullptr, false));
     }
 
-    return QSharedPointer<ObjectStatusQueryiorInterface>(new DM_MultipleObjectsModifier(getPermanentSceneToRender(), (Scene::ObjectType)type, NULL, false));
+    return QSharedPointer<ObjectStatusQueryiorInterface>(new DM_MultipleObjectsModifier(getPermanentSceneToRender(), (Scene::ObjectType)type, nullptr, false));
 }
 
 void GGraphicsViewImp::visitObjectsOfItem(const CT_AbstractItemDrawable *item,
@@ -1181,22 +1181,22 @@ void GGraphicsViewImp::getBoundingBoxOfSelectedElementsOfMeshesInView(Scene::Obj
 
         const GLuint* fvIndex = chunk->getFirstVertexIndex();
 
-        if(fvIndex == NULL)
+        if(fvIndex == nullptr)
             return;
 
         const CT_PointData* fVertex = chunk->getFirstVertex();
 
-        if(fVertex == NULL)
+        if(fVertex == nullptr)
             return;
 
         const ElementInfo* foInfo = chunk->getFirstObjectInfo();
 
-        if(foInfo == NULL)
+        if(foInfo == nullptr)
             return;
 
         const GLuint* foIndex = chunk->getFirstObjectIndex();
 
-        if(foIndex == NULL)
+        if(foIndex == nullptr)
             return;
 
         const Eigen::Vector3d& offset = chunk->getOffset();
@@ -1231,7 +1231,7 @@ void GGraphicsViewImp::init()
 {
     AMKglViewer::init();
 
-    if(getDocument() != NULL)
+    if(getDocument() != nullptr)
         m_sceneForAction.addedTo(getDocument(), getNewOpenGlContext());
 
     restoreStateFromFile();
@@ -1398,7 +1398,7 @@ void GGraphicsViewImp::keyPressEvent(QKeyEvent *e)
     
     
     if(e->key() == Qt::Key_Delete) {
-        int ret = QMessageBox::question(NULL, tr("Suppression"), tr("Voulez-vous supprimer les items sélectionnés de la vue ?"), QMessageBox::Yes | QMessageBox::Cancel);
+        int ret = QMessageBox::question(nullptr, tr("Suppression"), tr("Voulez-vous supprimer les items sélectionnés de la vue ?"), QMessageBox::Yes | QMessageBox::Cancel);
 
         if(ret == QMessageBox::Yes)
             document()->removeAllSelectedItemDrawable();

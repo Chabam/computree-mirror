@@ -10,7 +10,7 @@ class CT_AbstractItemDrawable;
 class DM_ItemDrawableViewConfiguration
 {
 public:
-    DM_ItemDrawableViewConfiguration() { m_config = NULL; }
+    DM_ItemDrawableViewConfiguration() { m_config = nullptr; }
     DM_ItemDrawableViewConfiguration(const CT_ItemDrawableConfiguration *config);
 
     CT_ItemDrawableConfiguration* configuration() const;

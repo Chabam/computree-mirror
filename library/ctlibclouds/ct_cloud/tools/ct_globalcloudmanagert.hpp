@@ -41,7 +41,7 @@ typename CT_GlobalCloudManagerT<T, CLOUD>::CT_AbstractNotModifiableCIR CT_Global
     // si c'est un nuage non modifiable
     const CT_AbstractNotModifiableCloudIndexRegisteredT<T> *cirNotModifiable = dynamic_cast< const CT_AbstractNotModifiableCloudIndexRegisteredT<T>* >(cir.data());
 
-    if(cirNotModifiable != NULL)
+    if(cirNotModifiable != nullptr)
     {
         // celui-ci contient juste le début et la taille du nuage de points
 
@@ -103,7 +103,7 @@ typename CT_GlobalCloudManagerT<T, CLOUD>::CT_AbstractNotModifiableCIR CT_Global
 
     if(!this->m_cirArray.contains(cir.data())
             || (cir->last() != (m_cloud.size()-1)))
-        return CT_GlobalCloudManagerT<T, CLOUD>::CT_AbstractNotModifiableCIR(NULL);
+        return CT_GlobalCloudManagerT<T, CLOUD>::CT_AbstractNotModifiableCIR(nullptr);
 
     cir->abstractCloudIndexT()->resize(newSize);
 
@@ -161,7 +161,7 @@ typename CT_GlobalCloudManagerT<T, CLOUD>::CT_AbstractNotModifiableCIR CT_Global
     // informe les gestionnaire de synchronisation de nuage qu'un nouveau nuage a été ajouté
     this->informThatCloudAdded(size);
 
-    CT_AbstractNotModifiableCloudIndexRegisteredT<T> *cir = NULL;
+    CT_AbstractNotModifiableCloudIndexRegisteredT<T> *cir = nullptr;
 
     if(optim == CT_AbstractGlobalCloudManagerT<T>::MemoryOptimized)
     {

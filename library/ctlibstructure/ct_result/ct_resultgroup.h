@@ -29,8 +29,8 @@ public:
      *          - Displayable name
      *
      *        What is initialized differently :
-     *          - Parent step is set to NULL
-     *          - Result model is set to NULL
+     *          - Parent step is set to nullptr
+     *          - Result model is set to nullptr
      *          - Number of items visible is set to 0
      *          - Clear from memory progress value is set to represent a result cleared
      *          - Root groups was not copied

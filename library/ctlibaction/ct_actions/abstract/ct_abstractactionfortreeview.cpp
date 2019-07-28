@@ -2,7 +2,7 @@
 
 CT_AbstractActionForTreeView::CT_AbstractActionForTreeView() : CT_AbstractAction()
 {
-    m_treeView = NULL;
+    m_treeView = nullptr;
 }
 
 void CT_AbstractActionForTreeView::setTreeView(const TreeViewInterface *view)

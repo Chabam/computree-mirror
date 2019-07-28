@@ -5,9 +5,9 @@
 
 CDM_ActionsManager::CDM_ActionsManager()
 {
-    m_pluginManager = NULL;
+    m_pluginManager = nullptr;
     m_manualModeEnabled = false;
-    m_manualModeEnabledByStep = NULL;
+    m_manualModeEnabledByStep = nullptr;
 }
 
 CDM_ActionsManager::~CDM_ActionsManager()
@@ -18,12 +18,12 @@ CDM_ActionsManager::~CDM_ActionsManager()
 
 void CDM_ActionsManager::setPluginManager(const CDM_PluginManager *pluginManager)
 {
-    if(m_pluginManager != NULL)
-        disconnect(m_pluginManager, NULL ,this, NULL);
+    if(m_pluginManager != nullptr)
+        disconnect(m_pluginManager, nullptr ,this, nullptr);
 
     m_pluginManager = (CDM_PluginManager*)pluginManager;
 
-    if(m_pluginManager != NULL)
+    if(m_pluginManager != nullptr)
     {
         connect(m_pluginManager, SIGNAL(finishLoading()), this, SIGNAL(actionsCollectionChanged()));
     }
@@ -139,7 +139,7 @@ QList<CT_AbstractAction *> CDM_ActionsManager::actions() const
 
 bool CDM_ActionsManager::existAction(const CT_AbstractAction *action) const
 {
-    if(action == NULL)
+    if(action == nullptr)
         return false;
 
     return existAction(action->uniqueName());
@@ -161,7 +161,7 @@ bool CDM_ActionsManager::existAction(const QString &uniqueName) const
 
 bool CDM_ActionsManager::existActionCompareAddress(const CT_AbstractAction *action) const
 {
-    if(action == NULL)
+    if(action == nullptr)
         return false;
 
     QString uniqueName = action->uniqueName();
@@ -193,12 +193,12 @@ CT_AbstractAction* CDM_ActionsManager::action(const QString &uniqueName) const
             return ac;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 int CDM_ActionsManager::nPlugins() const
 {
-    if(m_pluginManager == NULL)
+    if(m_pluginManager == nullptr)
         return 0;
 
     return m_pluginManager->countPluginLoaded();
@@ -206,7 +206,7 @@ int CDM_ActionsManager::nPlugins() const
 
 QList<CT_ActionsSeparator *> CDM_ActionsManager::actionsFromPlugin(const int &index) const
 {
-    if(m_pluginManager != NULL)
+    if(m_pluginManager != nullptr)
         return m_pluginManager->getPlugin(index)->getActionsAvailable();
 
     return QList<CT_ActionsSeparator *>();
@@ -255,13 +255,13 @@ void CDM_ActionsManager::clearActions()
 
 void CDM_ActionsManager::stepRequiredManualMode(CT_VirtualAbstractStep *step)
 {
-    if((m_manualModeEnabledByStep != NULL)
+    if((m_manualModeEnabledByStep != nullptr)
             && (m_manualModeEnabledByStep != step))
     {
         stepFinished(m_manualModeEnabledByStep);
     }
 
-    if(m_manualModeEnabledByStep == NULL)
+    if(m_manualModeEnabledByStep == nullptr)
     {
         m_manualModeEnabled = true;
         m_manualModeEnabledByStep = step;
@@ -270,14 +270,14 @@ void CDM_ActionsManager::stepRequiredManualMode(CT_VirtualAbstractStep *step)
 
 void CDM_ActionsManager::stepFinished(CT_VirtualAbstractStep *step)
 {
-    if((m_manualModeEnabledByStep != NULL)
+    if((m_manualModeEnabledByStep != nullptr)
             && (m_manualModeEnabledByStep == step))
     {
         // remove all actions added in manual mode
         while(!m_actionsAddedInManualMode.isEmpty())
             removeAction(m_actionsAddedInManualMode.takeFirst());
 
-        m_manualModeEnabledByStep = NULL;
+        m_manualModeEnabledByStep = nullptr;
         m_manualModeEnabled = false;
     }
 }

@@ -30,13 +30,13 @@
 const CT_StandardColorCompositeDrawManager CT_ColorComposite::COLOR_COMPOSITE_DRAW_MANAGER;
 
 CT_ColorComposite::CT_ColorComposite() : SuperClass(),
-    _red(NULL),
-    _green(NULL),
-    _blue(NULL),
-    _zValue(NULL),
-    _redSource(NULL),
-    _greenSource(NULL),
-    _blueSource(NULL)
+    _red(nullptr),
+    _green(nullptr),
+    _blue(nullptr),
+    _zValue(nullptr),
+    _redSource(nullptr),
+    _greenSource(nullptr),
+    _blueSource(nullptr)
 {
     setBaseDrawManager(&COLOR_COMPOSITE_DRAW_MANAGER);
 }
@@ -45,10 +45,10 @@ CT_ColorComposite::CT_ColorComposite(CT_AbstractImage2D* red,
                                      CT_AbstractImage2D* green,
                                      CT_AbstractImage2D* blue,
                                      CT_Image2D<float>* zvalue) : SuperClass(),
-    _red(NULL),
-    _green(NULL),
-    _blue(NULL),
-    _zValue(NULL),
+    _red(nullptr),
+    _green(nullptr),
+    _blue(nullptr),
+    _zValue(nullptr),
     _redSource(red),
     _greenSource(green),
     _blueSource(blue)
@@ -64,9 +64,9 @@ CT_ColorComposite::CT_ColorComposite(CT_AbstractImage2D* red,
 
 CT_ColorComposite::CT_ColorComposite(const CT_ColorComposite& other) : SuperClass(other)
 {
-    _red = static_cast<CT_Image2D<quint8>*>((other._red == NULL) ? NULL : other._red->copy(other._red->modelStaticT<CT_OutAbstractItemModel>(), other._red->result()));
-    _green = static_cast<CT_Image2D<quint8>*>((other._green == NULL) ? NULL : other._green->copy(other._green->modelStaticT<CT_OutAbstractItemModel>(), other._green->result()));
-    _blue = static_cast<CT_Image2D<quint8>*>((other._blue == NULL) ? NULL : other._blue->copy(other._blue->modelStaticT<CT_OutAbstractItemModel>(), other._blue->result()));
+    _red = static_cast<CT_Image2D<quint8>*>((other._red == nullptr) ? nullptr : other._red->copy(other._red->modelStaticT<CT_OutAbstractItemModel>(), other._red->result()));
+    _green = static_cast<CT_Image2D<quint8>*>((other._green == nullptr) ? nullptr : other._green->copy(other._green->modelStaticT<CT_OutAbstractItemModel>(), other._green->result()));
+    _blue = static_cast<CT_Image2D<quint8>*>((other._blue == nullptr) ? nullptr : other._blue->copy(other._blue->modelStaticT<CT_OutAbstractItemModel>(), other._blue->result()));
 
     _zValue = other._zValue;
     _redSource = other._redSource;
@@ -103,7 +103,7 @@ const CT_Image2D<float>*CT_ColorComposite::getZValueRaster() const
 
 bool CT_ColorComposite::computeBands(CT_AbstractImage2D* red, CT_AbstractImage2D* green, CT_AbstractImage2D* blue, CT_Image2D<float>* zvalue)
 {
-    if (red != NULL && green != NULL && blue != NULL &&
+    if (red != nullptr && green != nullptr && blue != nullptr &&
             red->minX() == green->minX() && red->minX() == green->minX() &&
             red->minY() == green->minY() && red->minY() == green->minY() &&
             red->colDim() == green->colDim() && red->colDim() == green->colDim() &&

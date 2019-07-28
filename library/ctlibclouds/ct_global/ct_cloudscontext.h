@@ -18,7 +18,7 @@ public:
 
     static CT_CloudsContext* staticInstance()
     {
-        if(UNIQUE_INSTANCE == NULL) {
+        if(UNIQUE_INSTANCE == nullptr) {
             UNIQUE_INSTANCE = new CT_CloudsContext();
             UNIQUE_INSTANCE->init();
         }
@@ -29,7 +29,7 @@ public:
     static void deleteStaticInstance()
     {
         delete UNIQUE_INSTANCE;
-        UNIQUE_INSTANCE = NULL;
+        UNIQUE_INSTANCE = nullptr;
     }
 
     ~CT_CloudsContext();

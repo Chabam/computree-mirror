@@ -30,9 +30,9 @@ bool CTG_InModelCheckBox::isChecked() const
 
 bool CTG_InModelCheckBox::addInModel(const CT_InAbstractModel *model)
 {
-    Q_ASSERT(model != NULL);
+    Q_ASSERT(model != nullptr);
 
-    if(_outModel == NULL)
+    if(_outModel == nullptr)
         return false;
 
     bool ok = false;
@@ -41,7 +41,7 @@ bool CTG_InModelCheckBox::addInModel(const CT_InAbstractModel *model)
     {
         CT_InStdModelPossibility *p = staticSearchPossibilityForModel(model, _outModel);
 
-        if(p != NULL) {
+        if(p != nullptr) {
             //qDebug() << "add " << model->displayableName() << " to out " << _outModel->displayableName();
             connect(p, SIGNAL(selectStateChange(bool)), this, SLOT(setChecked(bool)), Qt::DirectConnection);
             insertModel(model, p);
@@ -53,7 +53,7 @@ bool CTG_InModelCheckBox::addInModel(const CT_InAbstractModel *model)
 
 bool CTG_InModelCheckBox::setModelActive(const CT_InAbstractModel *model, bool active)
 {
-    Q_ASSERT(model != NULL);
+    Q_ASSERT(model != nullptr);
 
     if(active) {
         int index = m_inModelsAndPossibilityNotActivated.indexOf((CT_InAbstractModel*)model);
@@ -120,7 +120,7 @@ bool CTG_InModelCheckBox::hasDontChooseInModels() const
 CT_InAbstractModel *CTG_InModelCheckBox::firstDontChooseInModel() const
 {
     if(m_dontChooseModelsAndPossibility.isEmpty())
-        return NULL;
+        return nullptr;
 
     //return m_dontChooseModelsAndPossibility.begin().key();
     return m_dontChooseModelsAndPossibility.first();
@@ -129,7 +129,7 @@ CT_InAbstractModel *CTG_InModelCheckBox::firstDontChooseInModel() const
 CT_InAbstractModel *CTG_InModelCheckBox::firstInModelActive() const
 {
     if(m_inModelsAndPossibilityActivated.isEmpty())
-        return NULL;
+        return nullptr;
 
     //return m_inModelsAndPossibility.begin().key();
     return m_inModelsAndPossibilityActivated.first();
@@ -137,8 +137,8 @@ CT_InAbstractModel *CTG_InModelCheckBox::firstInModelActive() const
 
 CT_InAbstractModel *CTG_InModelCheckBox::checkedOrFirstInModelActiveOrFirstDontChooseInModel() const
 {
-    if(_outModel == NULL)
-        return NULL;
+    if(_outModel == nullptr)
+        return nullptr;
 
     InternalModelContainerIterator it(m_inModelsAndPossibilityActivated);
 
@@ -158,7 +158,7 @@ CT_InAbstractModel *CTG_InModelCheckBox::checkedOrFirstInModelActiveOrFirstDontC
 
     CT_InAbstractModel *inModel = firstInModelActive();
 
-    if(inModel == NULL)
+    if(inModel == nullptr)
         return firstDontChooseInModel();
 
     return inModel;
@@ -222,10 +222,10 @@ CT_InStdModelPossibility *CTG_InModelCheckBox::getPossibilityForModel(const CT_I
 
 CT_InStdModelPossibility* CTG_InModelCheckBox::staticSearchPossibilityForModel(const CT_InAbstractModel *model, const CT_OutAbstractModel *outModel)
 {
-    Q_ASSERT(model != NULL);
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(model != nullptr);
+    Q_ASSERT(outModel != nullptr);
 
-    CT_InStdModelPossibility* possibilityFound = NULL;
+    CT_InStdModelPossibility* possibilityFound = nullptr;
 
     model->possibilitiesGroup()->visitPossibilities([&outModel, &possibilityFound](const CT_InStdModelPossibility* p) -> bool {
         if(p->outModel() != outModel)
@@ -260,7 +260,7 @@ bool CTG_InModelComboBox::setPossibilityOfCurrentInModelChecked(bool checked)
     // coche la sélectionnée
     CT_InStdModelPossibility *possibility = getPossibilityOfCurrentInModel();
 
-    if(possibility != NULL)
+    if(possibility != nullptr)
         return possibility->setSelected(checked);
 
     return atLeastOneDontChooseSelected;
@@ -275,22 +275,22 @@ void CTG_InModelComboBox::setCurrentInModel(CT_InAbstractModel *model)
 {
     if(_inModelSelected != model) {
         _inModelSelected = model;
-        if(_inModelSelected != NULL) {
+        if(_inModelSelected != nullptr) {
             m_possibility = findPossibilityOfCurrentInModel();
-            Q_ASSERT(m_possibility != NULL);
+            Q_ASSERT(m_possibility != nullptr);
         } else {
-            m_possibility = NULL;
+            m_possibility = nullptr;
         }
     }
 }
 
 void CTG_InModelComboBox::updateDisplayData()
 {
-    if(_inModelSelected != NULL)
+    if(_inModelSelected != nullptr)
     {
         QString typeName = "";
         CT_InAbstractItemModel* itemModel = dynamic_cast<CT_InAbstractItemModel*>(_inModelSelected);
-        if (itemModel != NULL)
+        if (itemModel != nullptr)
         {
             typeName = " [" + itemModel->itemNameFromType() + "]";
         }
@@ -330,7 +330,7 @@ void CTG_InModelPossibilitiesChoiceComboBoxDelegate::setEditorData(QWidget *edit
     CTG_InModelComboBox *comboBoxItem = dynamic_cast<CTG_InModelComboBox*>(model->itemFromIndex(index));
     CTG_InModelCheckBox *checkBoxItem = dynamic_cast<CTG_InModelCheckBox*>(model->itemFromIndex(model->sibling(index.row(), CTG_InModelPossibilitiesChoice::COLUMN_CHECK, index)));
 
-    if((comboBoxItem != NULL) && (checkBoxItem != NULL))
+    if((comboBoxItem != nullptr) && (checkBoxItem != nullptr))
     {
         QComboBox *comboBox = static_cast<QComboBox*>(editor);
         CTG_InModelCheckBox::ModelContainer inModelsActive = checkBoxItem->getInModelsActive();
@@ -341,7 +341,7 @@ void CTG_InModelPossibilitiesChoiceComboBoxDelegate::setEditorData(QWidget *edit
 
             QString typeName = "";
             CT_InAbstractItemModel* itemModel = dynamic_cast<CT_InAbstractItemModel*>(inModel);
-            if (itemModel != NULL)
+            if (itemModel != nullptr)
             {
                 typeName = " [" + itemModel->itemNameFromType() + "]";
             }
@@ -367,7 +367,7 @@ void CTG_InModelPossibilitiesChoiceComboBoxDelegate::setModelData(QWidget *edito
     CTG_InModelComboBox *comboBoxItem = dynamic_cast<CTG_InModelComboBox*>(stdModel->itemFromIndex(index));
     CTG_InModelCheckBox *checkBoxItem = dynamic_cast<CTG_InModelCheckBox*>(stdModel->itemFromIndex(model->sibling(index.row(), CTG_InModelPossibilitiesChoice::COLUMN_CHECK, index)));
 
-    if((comboBoxItem != NULL) && (checkBoxItem != NULL))
+    if((comboBoxItem != nullptr) && (checkBoxItem != nullptr))
     {
         QComboBox *comboBox = static_cast<QComboBox*>(editor);
 
@@ -399,7 +399,7 @@ void CTG_InModelPossibilitiesChoiceComboBoxDelegate::paint(QPainter *painter, co
 
     CTG_InModelComboBox *comboBoxItem = dynamic_cast<CTG_InModelComboBox*>(model->itemFromIndex(index));
 
-    if((comboBoxItem != NULL) && (comboBoxItem->isEditable())) {
+    if((comboBoxItem != nullptr) && (comboBoxItem->isEditable())) {
         QStyleOptionComboBox box;
         box.palette = option.palette;
         box.rect = option.rect;
@@ -435,17 +435,17 @@ CTG_InModelPossibilitiesChoice::CTG_InModelPossibilitiesChoice(QWidget *parent) 
     ui->treeView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     ui->treeView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    QAction* act = new QAction(tr("Sélectionner"), NULL);
+    QAction* act = new QAction(tr("Sélectionner"), nullptr);
     connect(act, SIGNAL(triggered(bool)), this, SLOT(checkAllItemSelected()));
     ui->treeView->addAction(act);
 
-    act = new QAction(tr("Désélectionner"), NULL);
+    act = new QAction(tr("Désélectionner"), nullptr);
     connect(act, SIGNAL(triggered(bool)), this, SLOT(uncheckAllItemSelected()));
     ui->treeView->addAction(act);
 
     connect(&_viewModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(itemChanged(QStandardItem*)), Qt::DirectConnection);
 
-    _possibility = NULL;
+    _possibility = nullptr;
     _itemChangedSlotIsEnabled = true;
     m_readOnly = false;
 
@@ -485,16 +485,16 @@ void CTG_InModelPossibilitiesChoice::constructModel()
     clearModel();
     constructHeader();
 
-    if(_possibility != NULL)
+    if(_possibility != nullptr)
     {
         // on récupère le résultat modèle de sortie de cette possibilité
         CT_OutAbstractResultModelGroup* outResModel = dynamic_cast<CT_OutAbstractResultModelGroup*>(_possibility->outModel());
         CT_InResultModelGroup* inResModel = dynamic_cast<CT_InResultModelGroup*>(_possibility->inResultModel());
 
 
-        if((outResModel != NULL)
-                && (inResModel != NULL)
-                && (inResModel->rootGroup() != NULL))
+        if((outResModel != nullptr)
+                && (inResModel != nullptr)
+                && (inResModel->rootGroup() != nullptr))
         {
             // on construit l'arbre de ses modèles
             QList<QStandardItem*> items = createItemsForOutResultModel(outResModel);
@@ -526,7 +526,7 @@ void CTG_InModelPossibilitiesChoice::constructHeader()
 {
 //    QString stepName;
 
-//    if(_possibility != NULL)
+//    if(_possibility != nullptr)
 //    {
 //        stepName = _possibility->outModel()->step()->getStepCustomName();
 //    }
@@ -580,7 +580,7 @@ QList<QStandardItem*> CTG_InModelPossibilitiesChoice::createItemsForOutResultMod
 void CTG_InModelPossibilitiesChoice::recursiveCreateItemsForGroupModel(QStandardItem* root,
                                                                        const DEF_CT_AbstractGroupModelOut* group)
 {
-    if(group == NULL)
+    if(group == nullptr)
         return;
 
     const bool readOnly = m_readOnly;
@@ -616,7 +616,7 @@ void CTG_InModelPossibilitiesChoice::recursiveCreateItemsForGroupModel(QStandard
         QList<QStandardItem*> list2;
 
         IItemDrawableForModel* itemDrawable = item->itemDrawable();
-        const QString itemType = (itemDrawable != NULL) ? " [" + itemDrawable->itemToolForModel()->displayableName() + "]" : QString();
+        const QString itemType = (itemDrawable != nullptr) ? " [" + itemDrawable->itemToolForModel()->displayableName() + "]" : QString();
 
         // le nom du modèle de sortie
         QStandardItem* itemItem = new QStandardItem(QString("%1%2").arg(item->displayableName()).arg(itemType));
@@ -695,8 +695,8 @@ void CTG_InModelPossibilitiesChoice::constructCheckBox()
             CTG_InModelCheckBox *checkableItem = staticToCheckBox(childJ);
             CTG_InModelComboBox *comboItem = staticToComboBox(childJ);
 
-            Q_ASSERT(checkableItem != NULL);
-            Q_ASSERT(comboItem != NULL);
+            Q_ASSERT(checkableItem != nullptr);
+            Q_ASSERT(comboItem != nullptr);
 
             CT_InAbstractModel *model = checkableItem->checkedOrFirstInModelActiveOrFirstDontChooseInModel();
 
@@ -739,7 +739,7 @@ void CTG_InModelPossibilitiesChoice::recursiveSearchModelThatMatchWithItemAndSet
     // get the checkable item if exist in this row
     CTG_InModelCheckBox *checkableItem = staticToCheckBox(itemToTest);
 
-    Q_ASSERT(checkableItem != NULL);
+    Q_ASSERT(checkableItem != nullptr);
 
     // if this checkable item match with a possibility of this in model, the model was added to "inModels" or
     // "dontChooseInModels" automatically
@@ -777,14 +777,14 @@ void CTG_InModelPossibilitiesChoice::recursiveUpdateCheckBoxAndComboBox(QStandar
         CTG_InModelCheckBox *checkableItem = staticToCheckBox(child);
         CTG_InModelComboBox *comboItem = staticToComboBox(child);
 
-        Q_ASSERT(checkableItem != NULL);
-        Q_ASSERT(comboItem != NULL);
+        Q_ASSERT(checkableItem != nullptr);
+        Q_ASSERT(comboItem != nullptr);
 
         // get the inModel of the parent combobox
-        CT_InAbstractModel *parentSelectedModel = NULL;
+        CT_InAbstractModel *parentSelectedModel = nullptr;
         CTG_InModelComboBox *parentComboBoxItem = staticToComboBox(parentOfItemsToTest);
 
-        if(parentComboBoxItem != NULL)
+        if(parentComboBoxItem != nullptr)
             parentSelectedModel = parentComboBoxItem->currentInModel();
 
         CTG_InModelCheckBox::ModelContainer inModels = checkableItem->getAllInModels();
@@ -796,7 +796,7 @@ void CTG_InModelPossibilitiesChoice::recursiveUpdateCheckBoxAndComboBox(QStandar
             bool active = (parentSelectedModel == model->parentModel());
 
             if(!active)
-                active = (dynamic_cast<CT_InAbstractGroupModel*>(model) != NULL) && (dynamic_cast<CT_InZeroOrMoreGroupModel*>(model->parentModel()) != NULL);
+                active = (dynamic_cast<CT_InAbstractGroupModel*>(model) != nullptr) && (dynamic_cast<CT_InZeroOrMoreGroupModel*>(model->parentModel()) != nullptr);
 
             // set the model "active" (displayed and selectable by the user) only if it has no selected parent model or if the parent model is its parent
             // otherwise we set it not active
@@ -808,12 +808,12 @@ void CTG_InModelPossibilitiesChoice::recursiveUpdateCheckBoxAndComboBox(QStandar
                 comboItem->setPossibilityOfCurrentInModelChecked(false);
 
                 // and remove the selected model of the combobox
-                comboItem->setCurrentInModel(NULL);
+                comboItem->setCurrentInModel(nullptr);
             }
         }
 
         // if the combobox has no selected model, we set it the selected "active" model or the first "active" model or the first "don't choose" model
-        if(comboItem->currentInModel() == NULL)
+        if(comboItem->currentInModel() == nullptr)
             comboItem->setCurrentInModel(checkableItem->checkedOrFirstInModelActiveOrFirstDontChooseInModel());
 
         // checkbox can be check if it has at least one model
@@ -832,7 +832,7 @@ void CTG_InModelPossibilitiesChoice::recursiveUpdateCheckBoxAndComboBox(QStandar
         CT_InStdModelPossibility *poss = comboItem->getPossibilityOfCurrentInModel();
 
         // set checkbox checked if a possibility is selected
-        if(poss != NULL)
+        if(poss != nullptr)
             checkableItem->setChecked(poss->isSelected());
         else
             checkableItem->setChecked(false);
@@ -875,7 +875,7 @@ QStandardItem* CTG_InModelPossibilitiesChoice::staticToFirstColumn(QStandardItem
 
     QStandardItem *parent = itemToConvert->parent();
 
-    if(parent == NULL)
+    if(parent == nullptr)
         parent = root;
 
     return parent->child(itemToConvert->row(), 0);
@@ -888,7 +888,7 @@ CTG_InModelCheckBox *CTG_InModelPossibilitiesChoice::staticToCheckBox(QStandardI
 
     QStandardItem *parent = itemToConvert->parent();
 
-    if(parent == NULL)
+    if(parent == nullptr)
         parent = root;
 
     return static_cast<CTG_InModelCheckBox*>(parent->child(itemToConvert->row(), COLUMN_CHECK));
@@ -901,26 +901,26 @@ CTG_InModelComboBox *CTG_InModelPossibilitiesChoice::staticToComboBox(QStandardI
 
     QStandardItem *parent = itemToConvert->parent();
 
-    if(parent == NULL)
+    if(parent == nullptr)
         parent = root;
 
     return static_cast<CTG_InModelComboBox*>(parent->child(itemToConvert->row(), COLUMN_COMBO));
 }
 
-bool CTG_InModelPossibilitiesChoice::staticIsRecursiveCurrentInModelNULL(CTG_InModelComboBox *parentToTest)
+bool CTG_InModelPossibilitiesChoice::staticIsRecursiveCurrentInModelnullptr(CTG_InModelComboBox *parentToTest)
 {
-    if(parentToTest == NULL)
+    if(parentToTest == nullptr)
         return true;
 
-    if(parentToTest != NULL) {
-        if(parentToTest->currentInModel() != NULL)
+    if(parentToTest != nullptr) {
+        if(parentToTest->currentInModel() != nullptr)
             return false;
     }
 
     QStandardItem *first = staticToFirstColumn(parentToTest);
 
-    if((first->parent() != NULL) && (first->parent() != parentToTest->model()->invisibleRootItem()))
-        return staticIsRecursiveCurrentInModelNULL(staticToComboBox(first->parent()));
+    if((first->parent() != nullptr) && (first->parent() != parentToTest->model()->invisibleRootItem()))
+        return staticIsRecursiveCurrentInModelnullptr(staticToComboBox(first->parent()));
 
     return true;
 }
@@ -945,11 +945,11 @@ void CTG_InModelPossibilitiesChoice::itemChanged(QStandardItem *item)
                 // if we check it
                 if(checked)
                 {
-                    if((comboItem->currentInModel() == NULL) || (dynamic_cast<CT_InZeroOrMoreGroupModel*>(comboItem->currentInModel()->parentModel()) == NULL)) {
+                    if((comboItem->currentInModel() == nullptr) || (dynamic_cast<CT_InZeroOrMoreGroupModel*>(comboItem->currentInModel()->parentModel()) == nullptr)) {
                         // we check as its parent
                         checkableItem = staticToCheckBox(item->parent());
 
-                        if(checkableItem != NULL)
+                        if(checkableItem != nullptr)
                             checkableItem->setChecked(true);
                     }
                 }
@@ -961,7 +961,7 @@ void CTG_InModelPossibilitiesChoice::itemChanged(QStandardItem *item)
                     int size = itemFirstColumn->rowCount();
 
                     for(int i=0; i<size; ++i) {
-                        if((comboItem->currentInModel() == NULL) || (dynamic_cast<CT_InZeroOrMoreGroupModel*>(comboItem->currentInModel()->parentModel()) == NULL))
+                        if((comboItem->currentInModel() == nullptr) || (dynamic_cast<CT_InZeroOrMoreGroupModel*>(comboItem->currentInModel()->parentModel()) == nullptr))
                             static_cast<CTG_InModelCheckBox*>(itemFirstColumn->child(i, COLUMN_CHECK))->setChecked(false);
                     }
                 }

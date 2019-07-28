@@ -7,18 +7,18 @@
 template< typename DataT>
 class CT_StandardGrid4DDrawManager : public CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager
 {
+    using SuperClass = CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager;
+
 public:
 //**********************************************//
 //           Constructors/Destructors           //
 //**********************************************//
     CT_StandardGrid4DDrawManager(QString drawConfigurationName = "");
 
-    virtual ~CT_StandardGrid4DDrawManager();
-
 //**********************************************//
 //             Drawing item drawables           //
 //**********************************************//
-    virtual void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
 //**********************************************//
 //          Drawing configuration tools         //
@@ -39,7 +39,8 @@ public:
     static QString staticInitConfigZinf();
     static QString staticInitConfigZsup();
     static QString staticInitConfigShowTrueOnly();
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+
+    CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 
 //**********************************************//
 //                  Attributes                  //
@@ -65,10 +66,10 @@ protected :
 };
 
 template<>
-PLUGINSHAREDSHARED_EXPORT void CT_StandardGrid4DDrawManager<bool>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+CTLIBSTRUCTUREADDON_EXPORT void CT_StandardGrid4DDrawManager<bool>::draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
 
 template<>
-PLUGINSHAREDSHARED_EXPORT CT_ItemDrawableConfiguration CT_StandardGrid4DDrawManager<bool>::createDrawConfiguration(QString drawConfigurationName) const;
+CTLIBSTRUCTUREADDON_EXPORT CT_ItemDrawableConfiguration CT_StandardGrid4DDrawManager<bool>::createDrawConfiguration(QString drawConfigurationName) const;
 
 // Including template implementations
 #include "ct_standardgrid4ddrawmanager.hpp"

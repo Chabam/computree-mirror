@@ -60,7 +60,7 @@ CT_Scanner::CT_Scanner(int scanID,
     SuperClass(),
     _scanID(scanID)
 {
-    Q_ASSERT(pattern != NULL);
+    Q_ASSERT(pattern != nullptr);
 
     const Eigen::Vector3d& center = pattern->centerCoordinate();
 
@@ -122,7 +122,7 @@ void CT_Scanner::beam(int i, CT_Beam& beam) const
 {
     CT_ShootingPattern* p = shootingPattern();
 
-    if(p == NULL)
+    if(p == nullptr)
         return;
 
     const CT_Shot& shot = p->shotAt(i);

@@ -71,7 +71,7 @@ public:
     /**
      * @brief Returns the object information for a specific chunk
      * @param chunk : the chunk
-     * @return The object information for the specified chunk if founded, otherwise returs NULL
+     * @return The object information for the specified chunk if founded, otherwise returs nullptr
      */
     DispatchInformation* getObjectInformationForChunk(const IChunk* chunk) const;
 

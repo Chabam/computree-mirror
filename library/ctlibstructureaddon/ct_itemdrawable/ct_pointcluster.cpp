@@ -36,7 +36,7 @@ const CT_StandardPointClusterDrawManager CT_PointCluster::POINTCLUSTER_DRAW_MANA
 
 CT_PointCluster::CT_PointCluster(bool prototype) : SuperClass()
 {
-    m_pIndex = NULL;
+    m_pIndex = nullptr;
     _barycenter.reset();
 
     if(!prototype) {

@@ -66,7 +66,7 @@ public:
      *          - Point cloud index registered (shared so just pointer is copied)
      *
      *        What is initialized differently :
-     *          - Parent is set to NULL
+     *          - Parent is set to nullptr
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */

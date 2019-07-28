@@ -18,10 +18,10 @@ template< class ItemT, class InheritedT >
 typename CT_AbstractGroupModelT<ItemT,InheritedT>::GroupType* CT_AbstractGroupModelT<ItemT,InheritedT>::rootGroup() const
 {
     GroupType* parent = const_cast<GroupType*>(this);
-    GroupType* p = NULL;
+    GroupType* p = nullptr;
 
     // on remonte tout en haut de l'arbre
-    while((p = parent->parentGroup()) != NULL)
+    while((p = parent->parentGroup()) != nullptr)
         parent = p;
 
     return parent;

@@ -27,7 +27,7 @@ Scene::ObjectType PointCloudRenderer::getTypeOfObjectDrawn() const
 void PointCloudRenderer::addPoints(const CloudIndex *indexes,
                                    PermanentItemInformation *dispatchInfos)
 {
-    if(indexes == NULL)
+    if(indexes == nullptr)
         return;
 
     QMutexLocker locker(m_mutex);

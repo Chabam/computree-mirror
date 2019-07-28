@@ -27,7 +27,7 @@ public:
 
         const ModelType* inResultModel = model();
 
-        MODELS_ASSERT(inResultModel != NULL);
+        MODELS_ASSERT(inResultModel != nullptr);
 
         outModels.resize(inResultModel->nPossibilitySelected());
 

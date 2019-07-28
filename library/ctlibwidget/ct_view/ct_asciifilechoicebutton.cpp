@@ -59,13 +59,13 @@ CT_AsciiFileChoiceButton::CT_AsciiFileChoiceButton(QString btlab,
 
     _description = description;
 
-    _widgetCreated = NULL;
-    _scrollArea = NULL;
-    _verticalLayout = NULL;
-    _pushButtonCreated = NULL;
-    _labelCreated = NULL;
+    _widgetCreated = nullptr;
+    _scrollArea = nullptr;
+    _verticalLayout = nullptr;
+    _pushButtonCreated = nullptr;
+    _labelCreated = nullptr;
 
-    _dialog = new CT_TextFileConfigurationDialog(neededFields, NULL, *_fileName, _autoDetect);
+    _dialog = new CT_TextFileConfigurationDialog(neededFields, nullptr, *_fileName, _autoDetect);
     _dialog->setFileExtensionAccepted(QList<FileFormat>() << FileFormat(fileFilter, ""));
 }
 
@@ -97,13 +97,13 @@ CT_AsciiFileChoiceButton::CT_AsciiFileChoiceButton(QString btlab,
 
     _description = description;
 
-    _widgetCreated = NULL;
-    _scrollArea = NULL;
-    _verticalLayout = NULL;
-    _pushButtonCreated = NULL;
-    _labelCreated = NULL;
+    _widgetCreated = nullptr;
+    _scrollArea = nullptr;
+    _verticalLayout = nullptr;
+    _pushButtonCreated = nullptr;
+    _labelCreated = nullptr;
 
-    _dialog = new CT_TextFileConfigurationDialog(neededFields, NULL, *_fileName, _autoDetect);
+    _dialog = new CT_TextFileConfigurationDialog(neededFields, nullptr, *_fileName, _autoDetect);
     _dialog->setFileExtensionAccepted(QList<FileFormat>() << FileFormat(fileFilter, ""));
 }
 
@@ -178,7 +178,7 @@ bool CT_AsciiFileChoiceButton::restoreSettings(SettingsReaderInterface &reader)
 
 QWidget* CT_AsciiFileChoiceButton::createWidget(QWidget &parent)
 {
-    if(_pushButtonCreated == NULL)
+    if(_pushButtonCreated == nullptr)
     {
         _widgetCreated = new QWidget(&parent);
         _pushButtonCreated = new QPushButton(_widgetCreated);

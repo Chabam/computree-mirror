@@ -22,7 +22,7 @@ public:
                                                                                          beginGlobalIndex,
                                                                                          cloudSize)
     {
-        m_chunkForOutliersCreator = NULL;
+        m_chunkForOutliersCreator = nullptr;
     }
 
     virtual ~MeshObjectChunkManagerAddObjectVertexesTraits() {}
@@ -39,11 +39,11 @@ public:
      * @brief Add an object to the founded chunk or if the chunk for each vertex is not the same we use the chunk for outliers
      * @param objectIndex : object global index
      * @param vertexGlobalIndexes : global indices of vertex (the size of the array must be equal to getNVertexPerObject())
-     * @param chunk : the chunk where the object was added (can be NULL if you don't want to know)
+     * @param chunk : the chunk where the object was added (can be nullptr if you don't want to know)
      */
     virtual void addObjectVertexes(const size_t& objectIndex,
                            const size_t* vertexGlobalIndexes,
-                           IChunk** chunk = NULL)
+                           IChunk** chunk = nullptr)
     {
         size_t chunkV1I = this->getChunkUniqueIndexForObjectAt(vertexGlobalIndexes[0]);
 
@@ -67,7 +67,7 @@ public:
         MeshObjectNM::OutlierChunkType& ch = m_chunkForOutliersCreator->createOrGetChunkForOutliers();
         ch.addObjectVertexes(objectIndex, vertexGlobalIndexes);
 
-        if(chunk != NULL)
+        if(chunk != nullptr)
             *chunk = &ch;
     }
 

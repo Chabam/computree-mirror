@@ -47,12 +47,12 @@ int CT_ConfigurableWidgetToDialog::exec(CT_AbstractConfigurableWidget *widget)
 
             pre += QObject::tr("Veuillez corriger les erreurs.");
 
-            QMessageBox::critical(NULL, QObject::tr("Erreur"), pre);
+            QMessageBox::critical(nullptr, QObject::tr("Erreur"), pre);
         }
     }
 
     layout->removeWidget(widget);
-    widget->setParent(NULL);
+    widget->setParent(nullptr);
     widget->setVisible(false);
 
     return ret;

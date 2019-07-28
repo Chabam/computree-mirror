@@ -73,7 +73,7 @@ public:
      * @return the chunk that can be used to add the object (use the method "addVertex")
      */
     const Chunk& createOrGetChunkForObject(const Eigen::Vector3d &p,
-                                           uint* chunkUniqueKey = NULL);
+                                           uint* chunkUniqueKey = nullptr);
 
     /**
      * @brief Add a vertex for an object. You must add n vertex for one object ! n == getNumberOfJumpForOneObject()

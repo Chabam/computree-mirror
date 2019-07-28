@@ -31,7 +31,7 @@
 GGuiManager::GGuiManager(CDM_Internationalization *languageManager)
 {
     _uniqueInstance = this;
-    _mainWindow = NULL;
+    _mainWindow = nullptr;
     m_languageManager = languageManager;
 }
 

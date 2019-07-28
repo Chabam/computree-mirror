@@ -28,7 +28,7 @@ void EllipsePermanentRenderer::addEllipse(const double& cx, const double& cy, co
 
     const Chunk &ch = createOrGetChunkForShape(Eigen::AlignedBox3d(minD, maxD));
 
-    if(chunk != NULL)
+    if(chunk != nullptr)
         *chunk = (Chunk*)&ch;
 
     Chunk::ShaderParamsType params = Chunk::ShaderParamsType::staticConstructFromValues(cx, cy, cz,

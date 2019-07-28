@@ -19,7 +19,7 @@ void CT_StandardAbstractItemDrawableWithPointCloudDrawManager::draw(GraphicsView
 
     const CT_AbstractItemDrawableWithPointCloud &item = dynamic_cast<const CT_AbstractItemDrawableWithPointCloud&>(itemDrawable);
 
-    if(item.pointCloudIndex() == NULL)
+    if(item.pointCloudIndex() == nullptr)
         return;
 
     if(drawConfiguration()->variableValue(INDEX_CONFIG_POINTS_VISIBLE).toBool())

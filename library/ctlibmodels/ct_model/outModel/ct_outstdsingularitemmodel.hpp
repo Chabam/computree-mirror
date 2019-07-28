@@ -6,7 +6,7 @@ CT_OutStdSingularItemModel<SingularItem>::CT_OutStdSingularItemModel(const QStri
                                                                      const QString& detailledDescription,
                                                                      SingularItem* prototype) : SuperClass(displayableName)
 {
-    setPrototype((prototype == NULL) ? new SingularItem() : prototype);
+    setPrototype((prototype == nullptr) ? new SingularItem() : prototype);
     setShortDescription(shortDescription);
     setDetailledDescription(detailledDescription);
 }
@@ -34,7 +34,7 @@ bool CT_OutStdSingularItemModel<SingularItem>::finalize()
 {
     const IItemDrawableForModel* itemD = itemDrawable();
 
-    if(itemD != NULL)
+    if(itemD != nullptr)
     {
         QList<IItemAttributeForModel*> l;
 

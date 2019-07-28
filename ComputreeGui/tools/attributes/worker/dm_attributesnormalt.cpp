@@ -13,20 +13,20 @@
 template<>
 bool DM_AttributesNormalT<CT_AbstractPointsAttributes>::process(GDocumentViewForGraphics *doc)
 {
-    if(m_an == NULL)
+    if(m_an == nullptr)
         return false;
 
     CT_PointIterator it(abstractTypeAttributes()->abstractCloudIndex());
 
     size_t size = it.size();
 
-    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getPointCloudAttributesProvider()->createOrGetNormalCloud();
+    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetNormalCloud();
 
-    if(normalArray != NULL)
+    if(normalArray != nullptr)
     {
         CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
 
-        if(toApplyNormalCloud != NULL) {
+        if(toApplyNormalCloud != nullptr) {
 
             size_t i = 0;
             while(it.hasNext() && !isCanceled())
@@ -54,20 +54,20 @@ bool DM_AttributesNormalT<CT_AbstractPointsAttributes>::process(GDocumentViewFor
 template<>
 bool DM_AttributesNormalT<CT_AbstractFaceAttributes>::process(GDocumentViewForGraphics *doc)
 {
-    if(m_an == NULL)
+    if(m_an == nullptr)
         return false;
 
     CT_FaceIterator it(abstractTypeAttributes()->abstractCloudIndex());
 
     size_t size = it.size();
 
-    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getFaceCloudAttributesProvider()->createOrGetNormalCloud();
+    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getFaceCloudAttributesProvider()->createOrGetNormalCloud();
 
-    if(normalArray != NULL)
+    if(normalArray != nullptr)
     {
         CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
 
-        if(toApplyNormalCloud != NULL) {
+        if(toApplyNormalCloud != nullptr) {
 
             size_t i = 0;
             while(it.hasNext() && !isCanceled())
@@ -95,20 +95,20 @@ bool DM_AttributesNormalT<CT_AbstractFaceAttributes>::process(GDocumentViewForGr
 template<>
 bool DM_AttributesNormalT<CT_AbstractEdgeAttributes>::process(GDocumentViewForGraphics *doc)
 {
-    if(m_an == NULL)
+    if(m_an == nullptr)
         return false;
 
     CT_EdgeIterator it(abstractTypeAttributes()->abstractCloudIndex());
 
     size_t size = it.size();
 
-    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(NULL)->getEdgeCloudAttributesProvider()->createOrGetNormalCloud();
+    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getEdgeCloudAttributesProvider()->createOrGetNormalCloud();
 
-    if(normalArray != NULL)
+    if(normalArray != nullptr)
     {
         CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
 
-        if(toApplyNormalCloud != NULL) {
+        if(toApplyNormalCloud != nullptr) {
 
             size_t i = 0;
             while(it.hasNext() && !isCanceled())

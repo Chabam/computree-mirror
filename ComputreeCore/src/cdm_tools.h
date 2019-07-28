@@ -19,7 +19,7 @@ public:
      *  \param receiver : l'objet à qui appartient le SLOT "slot"
      *  \param slot : un SLOT que vous voulez connecter au SIGNAL "triggered" d'une QAction d'un exportateur
      *
-     *  \return NULL si aucun exportateur n'existe.
+     *  \return nullptr si aucun exportateur n'existe.
      */
     QMenu* createMenuForAllExporters(const QObject *receiver, const char *slot) const;
 

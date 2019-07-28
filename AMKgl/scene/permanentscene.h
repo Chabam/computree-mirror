@@ -253,16 +253,16 @@ public:
     /**
      * @brief Add points
      * @param indexes : collection of index of points to add
-     * @param dispatchInfos : a pointer to an object that will contains informations on where is dispatched points (NULL if you don't want this information)
+     * @param dispatchInfos : a pointer to an object that will contains informations on where is dispatched points (nullptr if you don't want this information)
      */
-    void addPoints(const CloudIndex *indexes, PermanentItemInformation* dispatchInfos = NULL);
+    void addPoints(const CloudIndex *indexes, PermanentItemInformation* dispatchInfos = nullptr);
 
     /**
      * @brief Add one point
      * @param globalIndex : global index of the point
-     * @param dispatchInfos : a pointer to an object that will contains informations on where is dispatched points (NULL if you don't want this information)
+     * @param dispatchInfos : a pointer to an object that will contains informations on where is dispatched points (nullptr if you don't want this information)
      */
-    void addPoint(const size_t& globalIndex, PermanentItemInformation* dispatchInfos = NULL);
+    void addPoint(const size_t& globalIndex, PermanentItemInformation* dispatchInfos = nullptr);
 
     /**
      * @brief Returns the total number of points that was added to this renderer
@@ -290,7 +290,7 @@ public:
      * @param chunk : pointer of a pointer of a chunk that will contains the chunk used to store this object
      */
     void addLocalPoint(const Eigen::Vector3d& p,
-                       IChunk** chunk = NULL,
+                       IChunk** chunk = nullptr,
                        const Basic::LocalColor &color = Basic::LocalColor(255,255,255,255));
 
     /**********
@@ -312,7 +312,7 @@ public:
                     const float& majorAxisRadius, const float& minorAxisRadius,
                     const Eigen::Vector3f& majorAxisDirection = Eigen::Vector3f(1, 0, 0),
                     const Eigen::Vector3f& normal = Eigen::Vector3f(0, 1, 0),
-                    IChunk** chunk = NULL);
+                    IChunk** chunk = nullptr);
 
     /**********
      * BOX
@@ -334,7 +334,7 @@ public:
                 const float& width, const float& height, const float& length,
                 const Eigen::Vector3f& widthAxisDirection = Eigen::Vector3f(1, 0, 0),
                 const Eigen::Vector3f& heightAxisDirection = Eigen::Vector3f(0, 1, 0),
-                IChunk** chunk = NULL);
+                IChunk** chunk = nullptr);
 
     /**********
      * QUADS
@@ -355,7 +355,7 @@ public:
                   const float& width, const float& length,
                   const Eigen::Vector3f& widthAxisDirection = Eigen::Vector3f(1, 0, 0),
                   const Eigen::Vector3f& lengthAxisDirection = Eigen::Vector3f(0, 0, 1),
-                  IChunk** chunk = NULL);
+                  IChunk** chunk = nullptr);
 
     /**********
      * LINES
@@ -369,7 +369,7 @@ public:
      */
     void addLine(const Eigen::Vector3d& p1,
                  const Eigen::Vector3d& p2,
-                 IChunk** chunk = NULL,
+                 IChunk** chunk = nullptr,
                  const Basic::LocalColor& c1 = Basic::LocalColor(255,255,255,255),
                  const Basic::LocalColor& c2 = Basic::LocalColor(255,255,255,255));
 
@@ -387,7 +387,7 @@ public:
     void addTriangle(const Eigen::Vector3d& p1,
                      const Eigen::Vector3d& p2,
                      const Eigen::Vector3d& p3,
-                     IChunk** chunk = NULL,
+                     IChunk** chunk = nullptr,
                      const Basic::LocalColor &c1 = Basic::LocalColor(255,255,255,255),
                      const Basic::LocalColor &c2 = Basic::LocalColor(255,255,255,255),
                      const Basic::LocalColor &c3 = Basic::LocalColor(255,255,255,255));
@@ -412,7 +412,7 @@ public:
                      const float& width, const float& height, const float& length,
                      const Eigen::Vector3f& widthAxisDirection = Eigen::Vector3f(1, 0, 0),
                      const Eigen::Vector3f& heightAxisDirection = Eigen::Vector3f(0, 1, 0),
-                     IChunk** chunk = NULL);
+                     IChunk** chunk = nullptr);
 
     /**********
      * Pyramid
@@ -434,7 +434,7 @@ public:
                      const float& width, const float& height, const float& length,
                      const Eigen::Vector3f& widthAxisDirection = Eigen::Vector3f(1, 0, 0),
                      const Eigen::Vector3f& heightAxisDirection = Eigen::Vector3f(0, 1, 0),
-                     IChunk** chunk = NULL);
+                     IChunk** chunk = nullptr);
 
     /**********
      * Sphere
@@ -458,7 +458,7 @@ public:
                    const double &initTheta, const double &endTheta,
                    const double &initPhi, const double &endPhi,
                    bool phiThetaInRadians = true,
-                   IChunk** chunk = NULL);
+                   IChunk** chunk = nullptr);
 
     /**********
      * Mesh
@@ -476,7 +476,7 @@ public:
                      const size_t& i1,
                      const size_t& i2,
                      const size_t& i3,
-                     IChunk** chunk = NULL);
+                     IChunk** chunk = nullptr);
 
     /**
      * @brief Add a edge of a mesh
@@ -488,7 +488,7 @@ public:
     void addMeshEdge(const size_t& fi,
                      const size_t& i1,
                      const size_t& i2,
-                     IChunk** chunk = NULL);
+                     IChunk** chunk = nullptr);
 
     /**********
      * DRAW

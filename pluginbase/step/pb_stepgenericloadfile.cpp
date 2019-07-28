@@ -29,7 +29,7 @@ QString PB_StepGenericLoadFile::displayableName() const
 
 QString PB_StepGenericLoadFile::description() const
 {
-    return tr("Charge un fichier du type") + createAcceptedExtensionString(" ");
+    return tr("%1 : %2").arg(displayableName()).arg(createAcceptedExtensionString(" "));
 }
 
 QString PB_StepGenericLoadFile::detailledDescription() const

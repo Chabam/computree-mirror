@@ -63,7 +63,7 @@ bool CT_AbstractStepLoadFile::acceptFile(const QString& filePath, bool* allAccep
 
     bool allAcceptedTmp = false;
 
-    if (allAccepted != NULL)
+    if (allAccepted != nullptr)
         *allAccepted = false;
 
     for(const FileFormat& ff : extList)
@@ -78,7 +78,7 @@ bool CT_AbstractStepLoadFile::acceptFile(const QString& filePath, bool* allAccep
         }
     }
 
-    if (allAccepted != NULL)
+    if (allAccepted != nullptr)
         *allAccepted = allAcceptedTmp;
 
     return allAcceptedTmp;
@@ -115,7 +115,7 @@ bool CT_AbstractStepLoadFile::postInputConfigure()
 
     const QString currentPath = m_filePath.isEmpty() ? m_defaultDirPath : m_filePath;
 
-    const QString finalFilePath = QFileDialog::getOpenFileName(NULL, description(), currentPath, tr("%1 compatible file (%2);;All Files (*.*)").arg(displayableName()).arg(createAcceptedExtensionString(" *")));
+    const QString finalFilePath = QFileDialog::getOpenFileName(nullptr, description(), currentPath, tr("%1 compatible file (%2);;All Files (*.*)").arg(displayableName()).arg(createAcceptedExtensionString(" *")));
 
     if(finalFilePath.isEmpty())
         return false;

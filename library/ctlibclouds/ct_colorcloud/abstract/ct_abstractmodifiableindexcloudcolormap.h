@@ -24,13 +24,13 @@ public:
      * @brief Returns the color for the key "index" ---> point, face or edge index ( indexAt(cI, index); )
      * @return If index was not found the default value is returned.
      */
-    virtual CT_Color* colorAtGlobalIndex(const size_t &index, const CT_Color *defaultValue = NULL) const = 0;
+    virtual CT_Color* colorAtGlobalIndex(const size_t &index, const CT_Color *defaultValue = nullptr) const = 0;
 
     /**
      * @brief Returns the color for the key "index" ---> index >= 0 && index <= indexSize()
      * @return If index was not found the default value is returned.
      */
-    virtual CT_Color* colorAt(const size_t &index, const CT_Color *defaultValue = NULL) const = 0;
+    virtual CT_Color* colorAt(const size_t &index, const CT_Color *defaultValue = nullptr) const = 0;
 
     /**
      * @brief Copy colors from this map to the ColorCloud passed in parameter

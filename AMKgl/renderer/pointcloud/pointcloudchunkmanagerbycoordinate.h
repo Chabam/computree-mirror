@@ -31,14 +31,14 @@ public:
      * @brief Add point by index. (too be faster use method "addPoint" with local and global index if you have already computed the local index)
      * @param globalIndex : global index that must be between ==> [beginGlobalIndex; (beginGlobalIndex+size-1)]
      */
-    void addPoint(const size_t &globalIndex, PermanentItemInformation* dispatchInfos = NULL);
+    void addPoint(const size_t &globalIndex, PermanentItemInformation* dispatchInfos = nullptr);
 
     /**
      * @brief Add point by index (faster than previous method if you have already computed the local index)
      * @param localIndex : local index that must be between ==> [0; (size-1)] (just do the operation : (globalIndex - beginGlobalIndex))
      * @param globalIndex : global index that must be between ==> [beginGlobalIndex; (beginGlobalIndex+size-1)]
      */
-    void addPoint(const size_t &localIndex, const size_t &globalIndex, PermanentItemInformation* dispatchInfos = NULL);
+    void addPoint(const size_t &localIndex, const size_t &globalIndex, PermanentItemInformation* dispatchInfos = nullptr);
 
 protected:
     /**

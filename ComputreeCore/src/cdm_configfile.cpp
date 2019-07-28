@@ -2,11 +2,11 @@
 
 #include <QCoreApplication>
 
-CDM_ConfigFile* CDM_ConfigFile::_uniqueInstance = NULL;
+CDM_ConfigFile* CDM_ConfigFile::_uniqueInstance = nullptr;
 
 CDM_ConfigFile* CDM_ConfigFile::createInstance()
 {
-    if(_uniqueInstance == NULL)
+    if(_uniqueInstance == nullptr)
     {
         QString path = QCoreApplication::applicationDirPath();
         int n;

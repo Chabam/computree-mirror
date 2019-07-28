@@ -44,8 +44,8 @@ int CT_ResultGroup::nRootGroupsToBeRemovedLater() const
 
 void CT_ResultGroup::addRootGroupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_StandardItemGroup* rootGroup)
 {
-    Q_ASSERT(rootGroup != NULL);
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(rootGroup != nullptr);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(outModel->parentModel() == model());
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
@@ -62,7 +62,7 @@ void CT_ResultGroup::addRootGroupsWithOutModel(const DEF_CT_AbstractGroupModelOu
     if(rootGroups.isEmpty())
         return;
 
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(outModel->parentModel() == model());
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
@@ -110,8 +110,8 @@ int CT_ResultGroup::nChildrens() const
 
 CT_AbstractItem::ChildrensCollection CT_ResultGroup::childrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
 {
-    Q_ASSERT(model() != NULL);
-    Q_ASSERT(outModel != NULL);
+    Q_ASSERT(model() != nullptr);
+    Q_ASSERT(outModel != nullptr);
     Q_ASSERT(outModel == static_cast<CT_OutAbstractResultModelGroup*>(model())->rootGroup());
 
     return CT_AbstractItem::ChildrensCollection(CT_AbstractItem::IChildrensIteratorQtStylePtr(new GroupIterator(m_rootGroups->begin(), m_rootGroups->end())));
@@ -119,14 +119,14 @@ CT_AbstractItem::ChildrensCollection CT_ResultGroup::childrensThatUseOutModel(co
 
 CT_AbstractResult* CT_ResultGroup::copy(const CT_OutAbstractResultModel* newModelToUse) const
 {
-    Q_ASSERT(dynamic_cast<const CT_OutAbstractResultModelGroup*>(newModelToUse) != NULL);
+    Q_ASSERT(dynamic_cast<const CT_OutAbstractResultModelGroup*>(newModelToUse) != nullptr);
 
     CT_ResultGroup* c = new CT_ResultGroup(*this);
     c->setModel(newModelToUse);
 
     const DEF_CT_AbstractGroupModelOut* rootGroupModel = static_cast<const CT_OutAbstractResultModelGroup*>(newModelToUse)->rootGroup();
 
-    if(rootGroupModel != NULL) {
+    if(rootGroupModel != nullptr) {
 
         const auto visitor = [&c, &rootGroupModel](const CT_StandardItemGroup* rootGroup) -> bool {
             c->m_rootGroups->append(static_cast<CT_StandardItemGroup*>(rootGroup->copy(rootGroupModel, c)));
@@ -183,7 +183,7 @@ void CT_ResultGroup::clearRootGroups()
 
     const int size = m_rootGroups->nInTotal();
 
-    QVector<CT_StandardItemGroup*> groups(size, NULL);
+    QVector<CT_StandardItemGroup*> groups(size, nullptr);
     int i = 0;
 
     const auto visitor = [this, &groups, &i](const CT_StandardItemGroup* group) -> bool {

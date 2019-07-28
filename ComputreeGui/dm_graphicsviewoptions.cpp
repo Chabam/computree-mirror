@@ -51,7 +51,7 @@
                                 return true; \
                              }
 
-DM_GraphicsViewOptions::DM_GraphicsViewOptions() : QObject(NULL)
+DM_GraphicsViewOptions::DM_GraphicsViewOptions() : QObject(nullptr)
 {
     _backgroundColor = QColor(48, 48, 48);
     _selectedColor = Qt::red;

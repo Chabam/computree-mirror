@@ -47,7 +47,7 @@ public:
     AMKgl::GenericCloudMode getCurrentMode() const;
 
     /**
-     * @brief Returns the shader to use. NULL if it was not created.
+     * @brief Returns the shader to use. nullptr if it was not created.
      */
     QOpenGLShaderProgram* getShaderProgram() const;
 
@@ -173,7 +173,7 @@ public:
 private:
     struct ByVertexShader {
         ByVertexShader() {
-            m_program = NULL;
+            m_program = nullptr;
             resetLocation();
         }
 
@@ -191,7 +191,7 @@ private:
 
     struct ByObjectShader {
         ByObjectShader() {
-            m_program = NULL;
+            m_program = nullptr;
         }
 
         ~ByObjectShader() { delete m_program; }

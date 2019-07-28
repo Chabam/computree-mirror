@@ -17,7 +17,7 @@ public:
     template<class Collection>
     static void initAvailableExporters(Collection& cToAdd,
                                        std::function<bool(const CT_AbstractExporter*)> canBeAdded) {
-        const PluginManagerInterface* pm = PS_CONTEXT->pluginManager();
+        const PluginManagerInterface* pm = CT_Context::staticInstance()->pluginManager();
         const int nPlugins = pm->countPluginLoaded();
 
         for(int pluginIndex=0; pluginIndex<nPlugins; ++pluginIndex)
@@ -32,7 +32,6 @@ public:
                 for(const CT_AbstractExporter* exporter : exporters) {
                     if((canBeAdded == nullptr) || canBeAdded(exporter)) {
                         CT_AbstractExporter* exporterCpy = exporter->copy();
-                        exporterCpy->init();
 
                         const QList<FileFormat>& formats = exporterCpy->exportFormats();
                         const int nFormats = formats.size();
@@ -41,7 +40,7 @@ public:
                         {
                             const FileFormat& format = formats.at(n);
 
-                            QString key = QString("%2 - %1").arg(exporter->getExporterName()).arg(format.description());
+                            QString key = QString("%2 - %1").arg(exporter->uniqueName()).arg(format.description());
                             cToAdd.insert(key, exporterCpy);
                         }
                     }
@@ -53,10 +52,10 @@ public:
     /**
      * @brief Construct the string to use in a QFileDialog to choose or save a file
      * @param reader : the reader to use to construct the string
-     * @return Returns the string with all formats returned by the reader or an empty string if the reader is NULL or no formats is available.
+     * @return Returns the string with all formats returned by the reader or an empty string if the reader is nullptr or no formats is available.
      */
     static QString constructStringForFileDialog(const CT_AbstractExporter* exporter) {
-        if(exporter != NULL) {
+        if(exporter != nullptr) {
 
             QString formatText;
 

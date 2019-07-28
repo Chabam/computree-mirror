@@ -58,7 +58,7 @@ private:
     void setLevelToItem(CT_MenuLevel *level, QTreeWidgetItem *item);
 
     /**
-     * @brief Convert a QTreeWidgetItem to a CT_MenuLevel (can return NULL)
+     * @brief Convert a QTreeWidgetItem to a CT_MenuLevel (can return nullptr)
      */
     CT_MenuLevel* levelFromItem(QTreeWidgetItem *item);
 

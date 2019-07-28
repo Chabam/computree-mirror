@@ -110,14 +110,14 @@ void ChunkedGenericCloud::addObjectVertexes(const size_t& globalObjectIndex,
 
     ++m_nObjects;
 
-    if(chunk != NULL)
+    if(chunk != nullptr)
         *chunk = this;
 }
 
 GLuint* ChunkedGenericCloud::getFirstObjectIndex() const
 {
     if(m_objectIndexes.empty())
-        return NULL;
+        return nullptr;
 
     return &const_cast<ChunkedGenericCloud*>(this)->m_objectIndexes[0];
 }
@@ -125,7 +125,7 @@ GLuint* ChunkedGenericCloud::getFirstObjectIndex() const
 GLuint* ChunkedGenericCloud::getFirstVertexIndex() const
 {
     if(m_vertexIndexes.empty())
-        return NULL;
+        return nullptr;
 
     return &const_cast<ChunkedGenericCloud*>(this)->m_vertexIndexes[0];
 }
@@ -195,7 +195,7 @@ bool ChunkedGenericCloud::internalUpdate()
     // TODO
     Context* context = getCurrentContext();
 
-    if(context == NULL)
+    if(context == nullptr)
         return false;
 
     if(isUpdated())
@@ -225,7 +225,7 @@ bool ChunkedGenericCloud::internalUpdate()
     Shaders& shaders = context->getShaders();
     shaders.setCurrentMode(getWhichCloudToUseForObjects());
 
-    //if(shaders.getShaderProgram() == NULL) {
+    //if(shaders.getShaderProgram() == nullptr) {
         setNormalDrawModeUsed(getDrawModeToUse() == DM_BASIC ? DM_BASIC : DM_DISPLAY_LIST);
         setFastDrawModeUsed(getNormalDrawModeUsed());
         setUpdated(true);
@@ -241,7 +241,7 @@ bool ChunkedGenericCloud::internalUpdate()
     QOpenGLFunctions_2_0* func = context->getOpenglContext()->versionFunctions<QOpenGLFunctions_2_0>();
 
     // if the graphics card don't have this feature we must use the draw mode BASIC
-    if(func == NULL)
+    if(func == nullptr)
         setNormalDrawModeUsed(DM_DISPLAY_LIST);
     else
         func->initializeOpenGLFunctions();
@@ -249,7 +249,7 @@ bool ChunkedGenericCloud::internalUpdate()
     // FAST DRAW : same as normal draw mode because we don't have a fast draw mode here
     setFastDrawModeUsed(getNormalDrawModeUsed());
 
-    if(mustUseVBO() && (func != NULL)) {
+    if(mustUseVBO() && (func != nullptr)) {
 
         BufferObjectManager& bufferObjects = context->getBufferObjectManager();
 
@@ -275,7 +275,7 @@ bool ChunkedGenericCloud::internalUpdate()
                         if(getWhichCloudToUseForObjects() == AMKgl::GCM_Vertex)
                             bufferObjects.createColorsBO<Color>(this, GENERIC_CLOUD_COLORS_UI, [](void* object) -> void* { return ((ChunkedGenericCloud*)object)->getFirstVertexColor(); }, m_nPoints);
                         else
-                            ok = (getFirstObjectColor() == NULL) || textureManager.createNew1DTextureOrUseExisting(QString("CloudObjectColor%1").arg(getNumberOfElementPerObject()),
+                            ok = (getFirstObjectColor() == nullptr) || textureManager.createNew1DTextureOrUseExisting(QString("CloudObjectColor%1").arg(getNumberOfElementPerObject()),
                                                                                                                    m_objectArraySize,
                                                                                                                    QOpenGLTexture::RGBAFormat);
 
@@ -283,7 +283,7 @@ bool ChunkedGenericCloud::internalUpdate()
                             if(getWhichCloudToUseForObjects() == AMKgl::GCM_Vertex)
                                 bufferObjects.createNormalsBO<Normal>(this, GENERIC_CLOUD_NORMALS_UI, [](void* object) -> void* { return ((ChunkedGenericCloud*)object)->getFirstVertexNormal(); }, m_nPoints);
                             else
-                                ok = (getFirstObjectNormal() == NULL) || textureManager.createNew1DTextureOrUseExisting(QString("CloudObjectNormal%1").arg(getNumberOfElementPerObject()),
+                                ok = (getFirstObjectNormal() == nullptr) || textureManager.createNew1DTextureOrUseExisting(QString("CloudObjectNormal%1").arg(getNumberOfElementPerObject()),
                                                                                                                         m_objectArraySize,
                                                                                                                         QOpenGLTexture::RGBAFormat);
                         }
@@ -350,10 +350,10 @@ void ChunkedGenericCloud::internalSetNumberOfObjects(const size_t &n, const bool
 
 void ChunkedGenericCloud::createObjectColorCloudMemberIfNot()
 {
-    if(m_objectColorCloud == NULL) {
-        Q_ASSERT(m_objectCloudProvider != NULL);
+    if(m_objectColorCloud == nullptr) {
+        Q_ASSERT(m_objectCloudProvider != nullptr);
         GlobalColorCloud *gcc = m_objectCloudProvider->createOrGetColorCloud();
-        Q_ASSERT(gcc != NULL);
+        Q_ASSERT(gcc != nullptr);
         Q_UNUSED(gcc)
         m_objectColorCloud = new ObjectFuncPointerCloudIndexed<Color, IndicesCollection>([](void* object) -> Color* { return ((ChunkedGenericCloud*)object)->getFirstObjectColor(); },
                                                                                          this,
@@ -364,10 +364,10 @@ void ChunkedGenericCloud::createObjectColorCloudMemberIfNot()
 
 void ChunkedGenericCloud::createObjectNormalCloudMemberIfNot()
 {
-    if(m_objectNormalCloud == NULL) {
-        Q_ASSERT(m_objectCloudProvider != NULL);
+    if(m_objectNormalCloud == nullptr) {
+        Q_ASSERT(m_objectCloudProvider != nullptr);
         GlobalNormalCloud* gnc = m_objectCloudProvider->createOrGetNormalCloud();
-        Q_ASSERT(gnc != NULL);
+        Q_ASSERT(gnc != nullptr);
         Q_UNUSED(gnc)
         m_objectNormalCloud = new ObjectFuncPointerCloudIndexed<Normal, IndicesCollection>([](void* object) -> Normal* { return ((ChunkedGenericCloud*)object)->getFirstObjectNormal(); },
                                                                                            this,
@@ -378,10 +378,10 @@ void ChunkedGenericCloud::createObjectNormalCloudMemberIfNot()
 
 void ChunkedGenericCloud::createObjectInfoCloudMemberIfNot()
 {
-    if(m_objectInfoCloud == NULL) {
-        Q_ASSERT(m_objectCloudProvider != NULL);
+    if(m_objectInfoCloud == nullptr) {
+        Q_ASSERT(m_objectCloudProvider != nullptr);
         GlobalInfoCloud *gic = m_objectCloudProvider->createOrGetInfoCloud();
-        Q_ASSERT(gic != NULL);
+        Q_ASSERT(gic != nullptr);
         Q_UNUSED(gic)
         m_objectInfoCloud = new ObjectFuncPointerCloudIndexed<Info, IndicesCollection>([](void* object) -> Info* { return ((ChunkedGenericCloud*)object)->createOrGetFirstObjectInfo(); },
                                                                                         this,
@@ -393,11 +393,11 @@ void ChunkedGenericCloud::createObjectInfoCloudMemberIfNot()
 void ChunkedGenericCloud::deleteAllObjectXXXCloud()
 {
     delete m_objectColorCloud;
-    m_objectColorCloud = NULL;
+    m_objectColorCloud = nullptr;
 
     delete m_objectNormalCloud;
-    m_objectNormalCloud = NULL;
+    m_objectNormalCloud = nullptr;
 
     delete m_objectInfoCloud;
-    m_objectInfoCloud = NULL;
+    m_objectInfoCloud = nullptr;
 }

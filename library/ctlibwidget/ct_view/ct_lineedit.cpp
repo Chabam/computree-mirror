@@ -34,7 +34,7 @@ CT_LineEdit::CT_LineEdit(QString &value, QString description)
     _data._value = &value;
     _description = description;
 
-    _lineEditCreated = NULL;
+    _lineEditCreated = nullptr;
 }
 
 void CT_LineEdit::saveSettings(SettingsWriterInterface &writer) const
@@ -53,7 +53,7 @@ bool CT_LineEdit::restoreSettings(SettingsReaderInterface &reader)
 
 QWidget* CT_LineEdit::createWidget(QWidget &parent)
 {
-    if(_lineEditCreated == NULL)
+    if(_lineEditCreated == nullptr)
     {
         _lineEditCreated = new QLineEdit(*(_data._value), &parent);
     }
