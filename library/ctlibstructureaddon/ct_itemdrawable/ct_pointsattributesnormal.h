@@ -4,6 +4,7 @@
 #include "ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointsattributes.h"
 #include "ct_attributes/ct_attributesnormal.h"
+#include "ct_normalcloud/ct_normalcloudstdvector.h"
 
 class CTLIBSTRUCTUREADDON_EXPORT CT_PointsAttributesNormal : public CT_AbstractPointsAttributes, public CT_AttributesNormal
 {

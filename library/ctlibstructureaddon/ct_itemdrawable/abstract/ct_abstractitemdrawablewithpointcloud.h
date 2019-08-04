@@ -34,6 +34,12 @@
 #include "ct_accessibility/ct_iaccesspointcloud.h"
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.h"
 
+#include "ct_cloud/tools/ct_globalpointcloudmanager.h"
+#include "ct_iterator/ct_pointiterator.h"
+#include "ct_iterator/ct_mutablepointiterator.h"
+
+#include <Eigen/Core>
+
 /**
  * @brief Represent an item that is a leaf of a group in the tree structure. Only singular
  *        item can have item attributes.

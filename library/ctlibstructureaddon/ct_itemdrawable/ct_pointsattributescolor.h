@@ -4,6 +4,7 @@
 #include "ct_itemdrawable/abstract/ct_abstractpointsattributes.h"
 #include "ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.h"
 #include "ct_attributes/ct_attributescolor.h"
+#include "ct_colorcloud/ct_colorcloudstdvector.h"
 
 class CTLIBSTRUCTUREADDON_EXPORT CT_PointsAttributesColor : public CT_AbstractPointsAttributes, public CT_AttributesColor
 {

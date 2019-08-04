@@ -3,6 +3,8 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractfaceattributes.h"
 #include "ct_attributes/ct_attributesnormal.h"
+#include "ct_normalcloud/ct_normalcloudstdvector.h"
+
 
 class CTLIBSTRUCTUREADDON_EXPORT CT_FaceAttributesNormal : public CT_AbstractFaceAttributes, public CT_AttributesNormal
 {

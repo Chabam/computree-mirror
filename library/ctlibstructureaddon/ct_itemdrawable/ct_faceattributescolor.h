@@ -3,6 +3,8 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractfaceattributes.h"
 #include "ct_attributes/ct_attributescolor.h"
+#include "ct_colorcloud/ct_colorcloudstdvector.h"
+
 
 class CTLIBSTRUCTUREADDON_EXPORT CT_FaceAttributesColor : public CT_AbstractFaceAttributes, public CT_AttributesColor
 {
