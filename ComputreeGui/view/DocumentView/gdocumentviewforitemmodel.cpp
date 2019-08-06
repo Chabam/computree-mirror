@@ -113,7 +113,7 @@ bool GDocumentViewForItemModel::setCurrentAction(CT_AbstractAction *action, bool
         if(action == nullptr)
             it.next()->setCurrentAction(nullptr);
         else
-            it.next()->setCurrentAction(dynamic_cast<CT_AbstractActionForTreeView*>(action->copy()));
+            it.next()->setCurrentAction(dynamic_cast<CT_AbstractActionForTreeView*>(action->createInstance()));
     }
 
     if(deleteAction && !GUI_MANAGER->getActionsManager()->existActionCompareAddress(action))
@@ -141,7 +141,7 @@ bool GDocumentViewForItemModel::setDefaultAction(CT_AbstractAction *action, bool
         if(action == nullptr)
             it.next()->setDefaultAction(nullptr);
         else
-            it.next()->setDefaultAction(dynamic_cast<CT_AbstractActionForTreeView*>(action->copy()));
+            it.next()->setDefaultAction(dynamic_cast<CT_AbstractActionForTreeView*>(action->createInstance()));
     }
 
     if(deleteAction && !GUI_MANAGER->getActionsManager()->existActionCompareAddress(action))
