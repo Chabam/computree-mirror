@@ -2,7 +2,7 @@
 #define CT_ACTIONSELECTITEMDRAWABLEGVOPTIONS_H
 
 
-#include "ct_view/actions/abstract/ct_gabstractactionoptions.h"
+#include "ct_actions/view/abstract/ct_gabstractactionoptions.h"
 
 #include "ctlibstdactions/ctlibstdactions_global.h"
 #include "ctlibstdactions/action/ct_actionselectitemdrawablegv.h"

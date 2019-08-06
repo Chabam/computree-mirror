@@ -3,7 +3,7 @@
 
 #include <QRect>
 
-#include "interfaces.h"
+#include "graphicsviewinterface.h"
 
 #include "ctlibstdactions/ctlibstdactions_global.h"
 #include "ctlibstdactions/action/tools/polygonforpicking.h"

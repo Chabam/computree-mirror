@@ -1,7 +1,6 @@
 #include "ct_actionselectitemdrawablegvoptions.h"
 #include "ui_ct_actionselectitemdrawablegvoptions.h"
-#include "ct_global/ct_context.h"
-
+#include "documentinterface.h"
 
 CT_ActionSelectItemDrawableGVOptions::CT_ActionSelectItemDrawableGVOptions(const CT_AbstractAction *action, CT_ActionSelectTool *selectTool) :
     CT_GAbstractActionOptions(action),
@@ -109,7 +108,7 @@ GraphicsViewInterface::SelectionMode CT_ActionSelectItemDrawableGVOptions::selec
         mode += GraphicsViewInterface::SELECT_EDGES;
     }
 
-    return (GraphicsViewInterface::SelectionMode)mode;
+    return static_cast<GraphicsViewInterface::SelectionMode>(mode);
 }
 
 CT_ActionSelectTool::SelectionTool CT_ActionSelectItemDrawableGVOptions::selectionTool() const
@@ -168,9 +167,9 @@ void CT_ActionSelectItemDrawableGVOptions::setSelectionMode(GraphicsViewInterfac
 
 void CT_ActionSelectItemDrawableGVOptions::setSelectionTool(CT_ActionSelectItemDrawableGV::SelectionTool tool)
 {
-    if(tool == CT_ActionSelectTool::Rectangle)
+    if(tool == CT_ActionSelectItemDrawableGV::Rectangle)
         ui->toolButtonSelectMulti->setChecked(true);
-    else if(tool == CT_ActionSelectTool::Polygon)
+    else if(tool == CT_ActionSelectItemDrawableGV::Polygon)
         ui->toolButtonSelectMultiByPolygon->setChecked(true);
     else
         ui->toolButtonSelectOne->setChecked(true);

@@ -1,29 +1,18 @@
 #include "ct_actionselectitemdrawablegv.h"
 
-#include <QMouseEvent>
-#include <QKeyEvent>
 #include <QIcon>
-#include <QPainter>
-#include <math.h>
 
 #include "views/actions/ct_actionselectitemdrawablegvoptions.h"
+#include "documentinterface.h"
 
 CT_ActionSelectItemDrawableGV::CT_ActionSelectItemDrawableGV() : CT_AbstractActionForGraphicsView()
 {    
-    m_selectTool = NULL;
+    m_selectTool = nullptr;
 }
 
 CT_ActionSelectItemDrawableGV::~CT_ActionSelectItemDrawableGV()
 {
-    if (m_selectTool != NULL)
-    {
-        delete m_selectTool;
-    }
-}
-
-QString CT_ActionSelectItemDrawableGV::uniqueName() const
-{
-    return "CT_ActionSelectItemDrawableGV";
+    delete m_selectTool;
 }
 
 QString CT_ActionSelectItemDrawableGV::title() const
@@ -103,11 +92,6 @@ bool CT_ActionSelectItemDrawableGV::keyReleaseEvent(QKeyEvent *e)
 void CT_ActionSelectItemDrawableGV::drawOverlay(GraphicsViewInterface &view, QPainter &painter)
 {   
     m_selectTool->drawOverlay(view, painter);
-}
-
-CT_AbstractAction* CT_ActionSelectItemDrawableGV::copy() const
-{
-    return new CT_ActionSelectItemDrawableGV();
 }
 
 void CT_ActionSelectItemDrawableGV::redrawOverlay()
