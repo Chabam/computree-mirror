@@ -17,6 +17,11 @@ CT_AbstractAction::CT_AbstractAction()
     m_suspended = false;
 }
 
+QString CT_AbstractAction::uniqueName() const
+{
+    return metaObject()->className();
+}
+
 void CT_AbstractAction::setDocument(const DocumentInterface *doc)
 {
     if(m_doc != doc)

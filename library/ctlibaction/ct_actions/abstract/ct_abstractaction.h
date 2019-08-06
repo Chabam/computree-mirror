@@ -7,6 +7,9 @@
 class DocumentInterface;
 class CT_GAbstractActionOptions;
 
+#define CT_ACTION_DECL_COPY(CLASSNAME) \
+CT_AbstractAction* createInstance() const override { return new CLASSNAME(); }
+
 /**
  * @brief Represent an action for the GUI
  */
@@ -24,7 +27,7 @@ public:
      *        A unique name is defined for each class. In this case copies
      *        of a action can be compared to know if it the same.
      */
-    virtual QString uniqueName() const = 0;
+    virtual QString uniqueName() const;
 
     /**
      * @brief Return the title of the action (added to the view at the side of the icon)
@@ -184,9 +187,9 @@ public:
     static QString  TYPE_OTHER;
 
     /**
-     * @brief Return a copy of the action
+     * @brief Return a new empty action
      */
-    virtual CT_AbstractAction* copy() const = 0;
+    virtual CT_AbstractAction* createInstance() const = 0;
 
 protected:
 
