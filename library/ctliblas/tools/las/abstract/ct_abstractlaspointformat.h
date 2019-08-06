@@ -1,9 +1,8 @@
 #ifndef CT_ABSTRACTLASPOINTFORMAT_H
 #define CT_ABSTRACTLASPOINTFORMAT_H
 
-#include "ctliblas/readers/ct_reader_las.h"
 #include "ctliblas/tools/las/ct_laspointinfo.h"
-
+#include "ctliblas/readers/headers/ct_lasheader.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
 
 #define CT_WRITE_LAS_SCALAR(information, type) if(information.first == NULL) { stream << (type)0; } else { stream << (type)information.first->dValueAt(information.second); }

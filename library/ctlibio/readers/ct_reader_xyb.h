@@ -12,6 +12,9 @@
 #include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
 #include "ct_itemdrawable/ct_scanner.h"
 
+
+
+
 /**
  * @brief Reader that can load a xyb file (*.xyb) that represent a PointCloud
  */

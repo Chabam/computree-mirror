@@ -5,20 +5,6 @@ CT_StdLASPointsAttributesContainer::CT_StdLASPointsAttributesContainer() : CT_Ab
 {
 }
 
-CT_StdLASPointsAttributesContainer::CT_StdLASPointsAttributesContainer(const CT_OutAbstractSingularItemModel *model,
-                                                                       const CT_AbstractResult *result) : CT_AbstractPointsAttributesContainer(model,
-                                                                                                                                               result)
-{
-
-}
-
-CT_StdLASPointsAttributesContainer::CT_StdLASPointsAttributesContainer(const QString &modelName,
-                                                                       const CT_AbstractResult *result) : CT_AbstractPointsAttributesContainer(modelName,
-                                                                                                                                               result)
-{
-
-}
-
 void CT_StdLASPointsAttributesContainer::insertPointsAttributesAt(CT_LasDefine::LASPointAttributesType key, const CT_AbstractPointAttributesScalar *att)
 {
     if(att != NULL)
@@ -76,9 +62,4 @@ QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> 
     }
 
     return h;
-}
-
-CT_AbstractItemDrawable *CT_StdLASPointsAttributesContainer::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    return new CT_StdLASPointsAttributesContainer((CT_OutAbstractSingularItemModel*)model, result);
 }

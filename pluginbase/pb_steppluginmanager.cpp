@@ -82,10 +82,9 @@
 #include "ctlibio/readers/ct_reader_larchitect_grid.h"
 */
 #include "ctlibio/readers/ct_reader_opf.h"
-/*
-#include "ctliblas/readers/ct_reader_las.h"
+
 #include "ctliblas/readers/ct_reader_lasv2.h"
-*/
+
 #include "ctlibio/readers/ct_reader_gdal.h"
 #include "ctlibio/readers/ct_reader_idxyz.h"
 /*#include "ctlibio/readers/ct_reader_terrascanprj.h"
@@ -328,11 +327,10 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_IDXYZ(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_LASV2(CT_StepsMenu::LP_Points));
     /*sep->addReader(new CT_Reader_PTX());
     sep->addReader(new CT_Reader_OBJ());
     sep->addReader(new CT_Reader_LArchitect_Grid());
-    sep->addReader(new CT_Reader_LAS());
-    sep->addReader(new CT_Reader_LASV2());
     sep->addReader(new CT_Reader_TerraScanPrj());
     sep->addReader(new CT_Reader_AsciiGrid3D());
     sep->addReader(new CT_Reader_PGM());

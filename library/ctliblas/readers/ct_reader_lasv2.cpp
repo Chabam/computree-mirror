@@ -1,33 +1,32 @@
 #include "ct_reader_lasv2.h"
 
-#include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
-#include "ct_itemdrawable/ct_pointsattributesscalarmaskt.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
 #include "ct_colorcloud/ct_colorcloudstdvector.h"
 #include "ct_iterator/ct_mutablepointiterator.h"
 
-#include "ctliblas/itemdrawable/las/ct_stdlaspointsattributescontainer.h"
+#include "ct_log/ct_logmanager.h"
 
 #include <QMessageBox>
-
 #include <QFile>
 #include <QDataStream>
 #include <QDate>
 
 #include <QDebug>
 
-CT_Reader_LASV2::CT_Reader_LASV2() : CT_AbstractReader()
+CT_Reader_LASV2::CT_Reader_LASV2(int subMenuLevel) : SuperClass(subMenuLevel)
 {    
     m_headerFromConfiguration = NULL;
+
+    addNewReadableFormat(FileFormat("las", tr("Fichiers LAS .las")));
+
+    setToolTip(tr("Charge des points depuis un fichier au format LAS (ASPRS)<br>http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html"));
 }
 
-CT_Reader_LASV2::CT_Reader_LASV2(const CT_Reader_LASV2 &other) : CT_AbstractReader(other)
+CT_Reader_LASV2::CT_Reader_LASV2(const CT_Reader_LASV2 &other) : SuperClass(other)
 {
     m_headerFromConfiguration = NULL;
 
     if(other.m_headerFromConfiguration != NULL)
-        m_headerFromConfiguration = (CT_LASHeader*)other.m_headerFromConfiguration->copy(NULL, NULL, CT_ResultCopyModeList());
+        m_headerFromConfiguration = (CT_LASHeader*)other.m_headerFromConfiguration->copy(NULL, NULL);
 }
 
 CT_Reader_LASV2::~CT_Reader_LASV2()
@@ -35,20 +34,15 @@ CT_Reader_LASV2::~CT_Reader_LASV2()
     delete m_headerFromConfiguration;
 }
 
-QString CT_Reader_LASV2::GetReaderName() const
+QString CT_Reader_LASV2::displayableName() const
 {
     return tr("Points, format LAS (V2)");
 }
 
-CT_StepsMenu::LevelPredefined CT_Reader_LASV2::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
-}
-
-bool CT_Reader_LASV2::setFilePath(const QString &filepath)
+bool CT_Reader_LASV2::setFilePath(const QString& filepath)
 {
     QString err;
-    CT_LASHeader *header = (CT_LASHeader*)protectedReadHeader(filepath, err);
+    CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath, err);
 
     if(header != NULL) {
         if(CT_AbstractReader::setFilePath(filepath)) {
@@ -67,7 +61,7 @@ bool CT_Reader_LASV2::setFilePath(const QString &filepath)
 bool CT_Reader_LASV2::configure()
 {
     QString err;
-    CT_LASHeader *header = (CT_LASHeader*)protectedReadHeader(filepath(), err);
+    CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath(), err);
 
     if(header != NULL) {
         delete m_headerFromConfiguration;
@@ -81,7 +75,7 @@ bool CT_Reader_LASV2::configure()
 
 CT_FileHeader* CT_Reader_LASV2::createHeaderPrototype() const
 {
-    return new CT_LASHeader(NULL, NULL);
+    return new CT_LASHeader();
 }
 
 bool CT_Reader_LASV2::restoreSettings(SettingsReaderInterface &reader)
@@ -91,70 +85,80 @@ bool CT_Reader_LASV2::restoreSettings(SettingsReaderInterface &reader)
 
     if(SuperClass::restoreSettings(reader)) {
         QString error;
-        m_headerFromConfiguration = (CT_LASHeader*)protectedReadHeader(filepath(), error);
+        m_headerFromConfiguration = (CT_LASHeader*)internalReadHeader(filepath(), error);
     }
 
     return (m_headerFromConfiguration != NULL);
 }
 
-CT_AbstractReader* CT_Reader_LASV2::copy() const
+void CT_Reader_LASV2::internalDeclareOutputModels(CT_ReaderOutModelStructureManager &manager)
 {
-    return new CT_Reader_LASV2();
+    manager.addItem(m_hOutScene, tr("Scène"));
+    manager.addItem(m_hOutAllAtt, tr("All Attributs"));
+
+    manager.addItem(m_hOutReturnNumber, tr("Return Number"));
+    manager.addItem(m_hOutNumberOfReturn, tr("Number of Returns"));
+    manager.addItem(m_hOutClassificationFlag, tr("Classification Flags"));
+    manager.addItem(m_hOutScannerChannel, tr("Scanner Channel"));
+    manager.addItem(m_hOutScanDirectionFlag, tr("Scan Direction Flag"));
+    manager.addItem(m_hOutEdgeOfFlightLine, tr("Edge of Flight Line"));
+
+    manager.addItem(m_hOutIntensity, tr("Intensité"));
+    manager.addItem(m_hOutClassification, tr("Classification"));
+    manager.addItem(m_hOutUserData, tr("User Data"));
+    manager.addItem(m_hOutPointSourceID, tr("Point Source "));
+
+    manager.addItem(m_hOutScanAngle, tr("Scan Angle"));
+
+    manager.addItem(m_hOutGPSTime, tr("GPS Time"));
+
+    manager.addItem(m_hOutColor, tr("Color"));
+    manager.addItem(m_hOutRed, tr("Red"));
+    manager.addItem(m_hOutGreen, tr("Green"));
+    manager.addItem(m_hOutBlue, tr("Blue"));
+
+    manager.addItem(m_hOutWavePacketDescriptorIndex, tr("Wave Packet Descriptor Index"));
+    manager.addItem(m_hOutByteOffsetToWaveformData, tr("Byte Offset To Waveform Data"));
+    manager.addItem(m_hOutWaveformPacketSizeInBytes, tr("Waveform Packet Size In Bytes"));
+    manager.addItem(m_hOutReturnPointWaveformLocation, tr("Return Point Waveform Location"));
+
+    manager.addItem(m_hOutNIR, tr("NIR"));
 }
 
-void CT_Reader_LASV2::protectedInit()
+CT_FileHeader *CT_Reader_LASV2::internalReadHeader(const QString &filepath, QString &error) const
 {
-    addNewReadableFormat(FileFormat("las", tr("Fichiers LAS .las")));
+    CT_LASHeader *header = NULL;
 
-    setToolTip(tr("Charge des points depuis un fichier au format LAS (ASPRS)<br>http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html"));
+    // Test File validity
+    if(QFile::exists(filepath))
+    {
+        QFile f(filepath);
+
+        if(f.open(QIODevice::ReadOnly))
+        {
+            QDataStream stream(&f);
+
+            header = new CT_LASHeader();
+            header->setFilePath(filepath);
+
+            if(!header->read(stream, error)) {
+                delete header;
+                header = NULL;
+            }
+        }
+
+        f.close();
+    }
+
+    return header;
 }
 
-void CT_Reader_LASV2::protectedCreateOutItemDrawableModelList()
-{
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_sceneOut, new CT_Scene(), tr("Scène"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_attributesOut, new CT_StdLASPointsAttributesContainer(), tr("All Attributs"));
-
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_returnNumberOut, new CT_PointsAttributesScalarMaskT<PointCore6_10>(), tr("Return Number"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_numberOfReturnsOut, new CT_PointsAttributesScalarMaskT<PointCore6_10>(), tr("Number of Returns"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_classificationFlagsOut, new CT_PointsAttributesScalarMaskT<PointCore6_10>(), tr("Classification Flags"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_scannerChannelOut, new CT_PointsAttributesScalarMaskT<PointCore6_10>(), tr("Scanner Channel"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_scanDirectionFlagsOut, new CT_PointsAttributesScalarMaskT<PointCore6_10>(), tr("Scan Direction Flag"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_edgeOfFlightLineOut, new CT_PointsAttributesScalarMaskT<PointCore6_10>(), tr("Edge of Flight Line"));
-
-    // CORE of all files
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_intensityOut, new CT_PointsAttributesScalarTemplated<quint16>(), tr("Intensité"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_classificationOut, new CT_PointsAttributesScalarTemplated<quint8>(), tr("Classification"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_userDataOut, new CT_PointsAttributesScalarTemplated<quint8>(), tr("User Data"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_pointSourceIDOut, new CT_PointsAttributesScalarTemplated<quint16>(), tr("Point Source ID"));
-
-    // Other options (depend on file format)
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_scanAngleRankOut, new CT_PointsAttributesScalarTemplated<qint16>(), tr("Scan Angle"));
-
-    // GPS Time
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_gpsTimeOut, new CT_PointsAttributesScalarTemplated<double>(), tr("GPS Time"));
-
-    // Color
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_colorOut, new CT_PointsAttributesColor(), tr("Color"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_colorROut, new CT_PointsAttributesScalarTemplated<quint16>(), tr("Red"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_colorGOut, new CT_PointsAttributesScalarTemplated<quint16>(), tr("Green"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_colorBOut, new CT_PointsAttributesScalarTemplated<quint16>(), tr("Blue"));
-
-    // Wave Packets
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_wavePacketOut, new CT_PointsAttributesScalarTemplated<quint8>(), tr("Wave Packet Descriptor Index"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_byteOffsetWaveformOut, new CT_PointsAttributesScalarTemplated<quint64>(), tr("Byte offset to waveform data"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_waveformPacketSizeOut, new CT_PointsAttributesScalarTemplated<quint32>(), tr("Waveform packet size in bytes"));
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_returnPointWaveformOut, new CT_PointsAttributesScalarTemplated<float>(), tr("Return Point Waveform Location"));
-
-    // NIR
-    addOutItemDrawableModel(DEF_CT_Reader_LAS_nirOut, new CT_PointsAttributesScalarTemplated<quint16>(), tr("NIR"));
-}
-
-bool CT_Reader_LASV2::protectedReadFile()
+bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
 {
     bool ok = false;
     QString error;
 
-    CT_LASHeader *header = (CT_LASHeader*)protectedReadHeader(filepath(), error);
+    CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath(), error);
 
     if(header == NULL) {
         PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier %1").arg(filepath()));
@@ -346,55 +350,54 @@ bool CT_Reader_LASV2::protectedReadFile()
             setProgress((100.0*i)/nPoints);
         }
 
-        CT_Scene *scene = new CT_Scene(NULL, NULL, pcir);
+        CT_Scene *scene = new CT_Scene(pcir);
         scene->updateBoundingBox();
 
         // add the scene
-        addOutItemDrawable(DEF_CT_Reader_LAS_sceneOut, scene);
+        group->addSingularItem(m_hOutScene, scene);
 
         // add attributes
-        CT_StdLASPointsAttributesContainer *container = new CT_StdLASPointsAttributesContainer(NULL,
-                                                                                               NULL);
+        CT_StdLASPointsAttributesContainer *container = new CT_StdLASPointsAttributesContainer();
 
         if (header->m_pointDataRecordFormat < 6)
         {
 
             // 0b00000111
-            rn6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,7,0,mask6_10V,pcir,true);
+            rn6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(7,0,mask6_10V,pcir,true);
 
             // 0b00111000
-            nor6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,56,3,mask6_10V,pcir,false);
+            nor6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(56,3,mask6_10V,pcir,false);
 
             // 0b01000000
-            sdf6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,64,6,mask6_10V,pcir,false);
+            sdf6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(64,6,mask6_10V,pcir,false);
 
             // 0b10000000
-            efl6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,128,7,mask6_10V,pcir,false);
+            efl6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(128,7,mask6_10V,pcir,false);
 
-            scanAngleRank6_10 = new CT_PointsAttributesScalarTemplated<qint16>(NULL, NULL, pcir, scanAngleRankV6_10);
+            scanAngleRank6_10 = new CT_PointsAttributesScalarTemplated<qint16>(pcir, scanAngleRankV6_10);
 
         }
         else
         {
             // 0b0000 0000 0000 1111
-            rn6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,15,0,mask6_10V,pcir,true);
+            rn6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(15,0,mask6_10V,pcir,true);
 
             // 0b0000 0000 1111 0000
-            nor6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,240, 4,mask6_10V,pcir,false);
+            nor6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(240, 4,mask6_10V,pcir,false);
 
             // 0b0000 0111 0000 0000
-            cf = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,1792, 8,mask6_10V,pcir,false);
+            cf = new CT_PointsAttributesScalarMaskT<PointCore6_10>(1792, 8,mask6_10V,pcir,false);
 
             // 0b0001 1000 0000 0000
-            sc = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,6144, 11,mask6_10V,pcir,false);
+            sc = new CT_PointsAttributesScalarMaskT<PointCore6_10>(6144, 11,mask6_10V,pcir,false);
 
             // 0b0100 0000 0000 0000
-            sdf6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,16384, 14,mask6_10V,pcir,false);
+            sdf6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(16384, 14,mask6_10V,pcir,false);
 
             // 0b1000 0000 0000 0000
-            efl6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(NULL,NULL,32768, 15,mask6_10V,pcir,false);
+            efl6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(32768, 15,mask6_10V,pcir,false);
 
-            scanAngleRank6_10 = new CT_PointsAttributesScalarTemplated<qint16>(NULL, NULL, pcir, scanAngleRankV6_10);
+            scanAngleRank6_10 = new CT_PointsAttributesScalarTemplated<qint16>(pcir, scanAngleRankV6_10);
 
             /*for(int iii=0;iii<10; ++iii)
             {
@@ -406,56 +409,72 @@ bool CT_Reader_LASV2::protectedReadFile()
             }*/
         }
 
-        addOutItemDrawable(DEF_CT_Reader_LAS_attributesOut, container);
 
-        addOutItemDrawable(DEF_CT_Reader_LAS_intensityOut, new CT_PointsAttributesScalarTemplated<quint16>(NULL, NULL, pcir, intensitiesV));
 
-        addOutItemDrawable(DEF_CT_Reader_LAS_returnNumberOut, rn6_10);
-        addOutItemDrawable(DEF_CT_Reader_LAS_numberOfReturnsOut, nor6_10);
+        CT_AbstractPointAttributesScalar* attReturnNumber = rn6_10;
+        CT_AbstractPointAttributesScalar* attNumberOfReturn = nor6_10;
+        CT_AbstractPointAttributesScalar* attClassificationFlag = cf;
+        CT_AbstractPointAttributesScalar* attScannerChannel = sc;
+        CT_AbstractPointAttributesScalar* attScanDirectionFlag = sdf6_10;
+        CT_AbstractPointAttributesScalar* attEdgeOfFlightLine = efl6_10;
+        CT_AbstractPointAttributesScalar* attIntensity = new CT_PointsAttributesScalarTemplated<quint16>(pcir, intensitiesV);
+        CT_AbstractPointAttributesScalar* attClassification = new CT_PointsAttributesScalarTemplated<quint8>(pcir, classificationsV);
+        CT_AbstractPointAttributesScalar* attUserData = new CT_PointsAttributesScalarTemplated<quint8>(pcir, userDataV);
+        CT_AbstractPointAttributesScalar* attPointSourceID = new CT_PointsAttributesScalarTemplated<quint16>(pcir, pointSourceIDV);
+        CT_AbstractPointAttributesScalar* attScanAngle = scanAngleRank6_10;
+        CT_AbstractPointAttributesScalar* attGPSTime = (gpsTimeV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<double>(pcir, gpsTimeV));
+        CT_AbstractPointAttributesScalar* attRed = (colorsRV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsRV));
+        CT_AbstractPointAttributesScalar* attGreen = (colorsGV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsGV));
+        CT_AbstractPointAttributesScalar* attBlue = (colorsBV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsBV));
+        CT_AbstractPointAttributesScalar* attWavePacketDescriptorIndex = (wpdiV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint8>(pcir, wpdiV));
+        CT_AbstractPointAttributesScalar* attByteOffsetToWaveformData = (botwdV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint64>(pcir, botwdV));
+        CT_AbstractPointAttributesScalar* attWaveformPacketSizeInBytes = (wpsibV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint32>(pcir, wpsibV));
+        CT_AbstractPointAttributesScalar* attReturnPointWaveformLocation = (rpwlV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<float>(pcir, rpwlV));
+        CT_AbstractPointAttributesScalar* attNIR = (nirV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(pcir, nirV));
 
-        addOutItemDrawable(DEF_CT_Reader_LAS_classificationFlagsOut, cf);
-        addOutItemDrawable(DEF_CT_Reader_LAS_scannerChannelOut, sc);
+        if (container != NULL) {group->addSingularItem(m_hOutAllAtt, container);}
+        if (attIntensity != NULL) {group->addSingularItem(m_hOutIntensity, attIntensity);}
+        if (attReturnNumber != NULL) {group->addSingularItem(m_hOutReturnNumber, attReturnNumber);}
+        if (attNumberOfReturn != NULL) {group->addSingularItem(m_hOutNumberOfReturn, attNumberOfReturn);}
+        if (attClassificationFlag != NULL) {group->addSingularItem(m_hOutClassificationFlag, attClassificationFlag);}
+        if (attScannerChannel != NULL) {group->addSingularItem(m_hOutScannerChannel, attScannerChannel);}
+        if (attScanDirectionFlag != NULL) {group->addSingularItem(m_hOutScanDirectionFlag, attScanDirectionFlag);}
+        if (attEdgeOfFlightLine != NULL) {group->addSingularItem(m_hOutEdgeOfFlightLine, attEdgeOfFlightLine);}
+        if (attClassification != NULL) {group->addSingularItem(m_hOutClassification, attClassification);}
+        if (attScanAngle != NULL) {group->addSingularItem(m_hOutScanAngle, attScanAngle);}
+        if (attUserData != NULL) {group->addSingularItem(m_hOutUserData, attUserData);}
+        if (attPointSourceID != NULL) {group->addSingularItem(m_hOutPointSourceID, attPointSourceID);}
+        if (attGPSTime != NULL) {group->addSingularItem(m_hOutGPSTime, attGPSTime);}
+        if (colorsV != NULL) {group->addSingularItem(m_hOutColor, new CT_PointsAttributesColor(pcir, colorsV));}
+        if (attRed != NULL) {group->addSingularItem(m_hOutRed, attRed);}
+        if (attGreen != NULL) {group->addSingularItem(m_hOutGreen, attGreen);}
+        if (attBlue != NULL) {group->addSingularItem(m_hOutBlue, attBlue);}
+        if (attWavePacketDescriptorIndex != NULL) {group->addSingularItem(m_hOutWavePacketDescriptorIndex, attWavePacketDescriptorIndex);}
+        if (attByteOffsetToWaveformData != NULL) {group->addSingularItem(m_hOutByteOffsetToWaveformData, attByteOffsetToWaveformData);}
+        if (attWaveformPacketSizeInBytes != NULL) {group->addSingularItem(m_hOutWaveformPacketSizeInBytes, attWaveformPacketSizeInBytes);}
+        if (attReturnPointWaveformLocation != NULL) {group->addSingularItem(m_hOutReturnPointWaveformLocation, attReturnPointWaveformLocation);}
+        if (attNIR != NULL) {group->addSingularItem(m_hOutNIR, attNIR);}
 
-        addOutItemDrawable(DEF_CT_Reader_LAS_scanDirectionFlagsOut, sdf6_10);
-        addOutItemDrawable(DEF_CT_Reader_LAS_edgeOfFlightLineOut, efl6_10);
-
-        addOutItemDrawable(DEF_CT_Reader_LAS_classificationOut, new CT_PointsAttributesScalarTemplated<quint8>(NULL, NULL, pcir, classificationsV));
-
-        addOutItemDrawable(DEF_CT_Reader_LAS_scanAngleRankOut, scanAngleRank6_10);
-
-        addOutItemDrawable(DEF_CT_Reader_LAS_userDataOut, new CT_PointsAttributesScalarTemplated<quint8>(NULL, NULL, pcir, userDataV));
-        addOutItemDrawable(DEF_CT_Reader_LAS_pointSourceIDOut, new CT_PointsAttributesScalarTemplated<quint16>(NULL, NULL, pcir, pointSourceIDV));
-        addOutItemDrawable(DEF_CT_Reader_LAS_gpsTimeOut, (gpsTimeV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<double>(NULL, NULL, pcir, gpsTimeV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_colorOut, (colorsV == NULL ? NULL : new CT_PointsAttributesColor(NULL, NULL, pcir, colorsV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_colorROut, (colorsRV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(NULL, NULL, pcir, colorsRV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_colorGOut, (colorsGV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(NULL, NULL, pcir, colorsGV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_colorBOut, (colorsBV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(NULL, NULL, pcir, colorsBV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_wavePacketOut, (wpdiV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint8>(NULL, NULL, pcir, wpdiV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_byteOffsetWaveformOut, (botwdV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint64>(NULL, NULL, pcir, botwdV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_waveformPacketSizeOut, (wpsibV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint32>(NULL, NULL, pcir, wpsibV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_returnPointWaveformOut, (rpwlV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<float>(NULL, NULL, pcir, rpwlV)));
-        addOutItemDrawable(DEF_CT_Reader_LAS_nirOut, (nirV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(NULL, NULL, pcir, nirV)));
-
-        container->insertPointsAttributesAt(CT_LasDefine::Intensity, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_intensityOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Return_Number, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_returnNumberOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Number_of_Returns, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_numberOfReturnsOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Classification_Flags, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_classificationFlagsOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Scanner_Channel, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_scannerChannelOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Scan_Direction_Flag, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_scanDirectionFlagsOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Edge_of_Flight_Line, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_edgeOfFlightLineOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Classification, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_classificationOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Scan_Angle_Rank, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_scanAngleRankOut));
-        container->insertPointsAttributesAt(CT_LasDefine::User_Data, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_userDataOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Point_Source_ID, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_pointSourceIDOut));
-        container->insertPointsAttributesAt(CT_LasDefine::GPS_Time, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_gpsTimeOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Red, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_colorROut));
-        container->insertPointsAttributesAt(CT_LasDefine::Green, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_colorGOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Blue, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_colorBOut));
-        container->insertPointsAttributesAt(CT_LasDefine::NIR, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_nirOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Wave_Packet_Descriptor_Index, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_wavePacketOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Byte_offset_to_waveform_data, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_byteOffsetWaveformOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Waveform_packet_size_in_bytes, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_waveformPacketSizeOut));
-        container->insertPointsAttributesAt(CT_LasDefine::Return_Point_Waveform_Location, (CT_AbstractPointAttributesScalar*)firstItemDrawableOfModel(DEF_CT_Reader_LAS_returnPointWaveformOut));
+        container->insertPointsAttributesAt(CT_LasDefine::Intensity, attIntensity);
+        container->insertPointsAttributesAt(CT_LasDefine::Return_Number, attReturnNumber);
+        container->insertPointsAttributesAt(CT_LasDefine::Number_of_Returns, attNumberOfReturn);
+        container->insertPointsAttributesAt(CT_LasDefine::Classification_Flags, attClassificationFlag);
+        container->insertPointsAttributesAt(CT_LasDefine::Scanner_Channel, attScannerChannel);
+        container->insertPointsAttributesAt(CT_LasDefine::Scan_Direction_Flag, attScanDirectionFlag);
+        container->insertPointsAttributesAt(CT_LasDefine::Edge_of_Flight_Line, attEdgeOfFlightLine);
+        container->insertPointsAttributesAt(CT_LasDefine::Classification, attClassification);
+        container->insertPointsAttributesAt(CT_LasDefine::Scan_Angle_Rank, attScanAngle);
+        container->insertPointsAttributesAt(CT_LasDefine::User_Data, attUserData);
+        container->insertPointsAttributesAt(CT_LasDefine::Point_Source_ID, attPointSourceID);
+        container->insertPointsAttributesAt(CT_LasDefine::GPS_Time, attGPSTime);
+        container->insertPointsAttributesAt(CT_LasDefine::Red, attRed);
+        container->insertPointsAttributesAt(CT_LasDefine::Green, attGreen);
+        container->insertPointsAttributesAt(CT_LasDefine::Blue, attBlue);
+        container->insertPointsAttributesAt(CT_LasDefine::NIR, attNIR);
+        container->insertPointsAttributesAt(CT_LasDefine::Wave_Packet_Descriptor_Index, attWavePacketDescriptorIndex);
+        container->insertPointsAttributesAt(CT_LasDefine::Byte_offset_to_waveform_data, attByteOffsetToWaveformData);
+        container->insertPointsAttributesAt(CT_LasDefine::Waveform_packet_size_in_bytes, attWaveformPacketSizeInBytes);
+        container->insertPointsAttributesAt(CT_LasDefine::Return_Point_Waveform_Location, attReturnPointWaveformLocation);
 
         ok = true;
     } else {
@@ -467,32 +486,6 @@ bool CT_Reader_LASV2::protectedReadFile()
     delete header;
 
     return ok;
+
 }
 
-CT_FileHeader *CT_Reader_LASV2::protectedReadHeader(const QString &filepath, QString &error) const
-{
-    CT_LASHeader *header = NULL;
-
-    // Test File validity
-    if(QFile::exists(filepath))
-    {
-        QFile f(filepath);
-
-        if(f.open(QIODevice::ReadOnly))
-        {
-            QDataStream stream(&f);
-
-            header = new CT_LASHeader();
-            header->setFile(filepath);
-
-            if(!header->read(stream, error)) {
-                delete header;
-                header = NULL;
-            }
-        }
-
-        f.close();
-    }
-
-    return header;
-}

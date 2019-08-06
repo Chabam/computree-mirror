@@ -1,6 +1,5 @@
 #include "ct_laspointformat0.h"
 
-#include "ct_global/ct_context.h"
 #include "ct_point.h"
 
 CT_LASPointFormat0::CT_LASPointFormat0() : CT_AbstractLASPointFormat()

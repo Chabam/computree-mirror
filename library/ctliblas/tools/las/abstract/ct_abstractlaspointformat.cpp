@@ -52,7 +52,7 @@ bool CT_AbstractLASPointFormat::initWrite(bool fastButConsumeMoreMemory)
             if(scalar != NULL)
             {
                 // get the point cloud index
-                const CT_AbstractPointCloudIndex *indexes = scalar->getPointCloudIndex();
+                const CT_AbstractPointCloudIndex *indexes = scalar->pointCloudIndex();
 
                 if(indexes != NULL)
                 {

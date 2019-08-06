@@ -1,27 +1,25 @@
-CT_PREFIX = ../..
-CT_PREFIX_INSTALL = ../../..
+QT = core gui
 
-DONT_CHECK_CT_LIBRARY = 1
+contains ( QT_VERSION, "^5.*" ) {
+    QT *= widgets
+}
 
-# need filters and metrics
-COMPUTREE += ctlibfilters ctlibmetrics
+include(../library_shared.pri)
+include(../../include_all.pri)
 
-include($${CT_PREFIX}/shared.pri)
-include($${PLUGIN_SHARED_DIR}/include.pri)
-include($${CT_PREFIX}/include_ct_library.pri)
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
-
+QT += concurrent
 QT += xml
 
-DESTDIR = $${PLUGINSHARED_DESTDIR}
 TARGET = ctliblas
 
 DEFINES += CTLIBLAS_LIBRARY
 
-HEADERS += $${PLUGIN_SHARED_INTERFACE_DIR}/interfaces.h \ 
-    readers/ct_reader_las.h \
-    readers/ct_reader_las_def_models.h \
+HEADERS += \
+    ctliblas_global.h \
+    readers/ct_reader_lasv2.h \
+    readers/headers/ct_lasheader.h \
+    itemdrawable/las/ct_stdlaspointsattributescontainer.h \
+#    itemdrawable/las/ct_stdlaspointsattributescontainershortcut.h \
     tools/las/abstract/ct_abstractlaspointformat.h \
     tools/las/ct_lascolorpacket.h \
     tools/las/ct_lasdata.h \
@@ -40,20 +38,18 @@ HEADERS += $${PLUGIN_SHARED_INTERFACE_DIR}/interfaces.h \
     tools/las/ct_laspointformat9.h \
     tools/las/ct_laspointformat10.h \
     tools/las/ct_laspointinfo.h \
-    tools/las/ct_laswavepacket.h \
-    ctliblas_global.h \
-    readers/headers/ct_lasheader.h \
-    itemdrawable/las/ct_stdlaspointsattributescontainer.h \
-    exporters/ct_exporter_las.h \
-    filters/abstract/ct_abstractfilter_las.h \
-    metrics/abstract/ct_abstractmetric_las.h \
-    itemdrawable/las/ct_stdlaspointsattributescontainershortcut.h \
-    readers/ct_reader_lasv2.h \
-    mergers/ct_sameheadermerger_las.h \
-    mergers/ct_sameheaderformatmerger_las.h
+    tools/las/ct_laswavepacket.h
+#    exporters/ct_exporter_las.h \
+#    filters/abstract/ct_abstractfilter_las.h \
+#    metrics/abstract/ct_abstractmetric_las.h \
+#    mergers/ct_sameheadermerger_las.h \
+#    mergers/ct_sameheaderformatmerger_las.h
 
-SOURCES += \ 
-    readers/ct_reader_las.cpp \
+SOURCES += \
+    readers/ct_reader_lasv2.cpp \
+    readers/headers/ct_lasheader.cpp \
+    itemdrawable/las/ct_stdlaspointsattributescontainer.cpp \
+#    itemdrawable/las/ct_stdlaspointsattributescontainershortcut.cpp \
     tools/las/abstract/ct_abstractlaspointformat.cpp \
     tools/las/ct_lascolorpacket.cpp \
     tools/las/ct_lasdata.cpp \
@@ -71,14 +67,10 @@ SOURCES += \
     tools/las/ct_laspointformat9.cpp \
     tools/las/ct_laspointformat10.cpp \
     tools/las/ct_laspointinfo.cpp \
-    tools/las/ct_laswavepacket.cpp \
-    readers/headers/ct_lasheader.cpp \
-    itemdrawable/las/ct_stdlaspointsattributescontainer.cpp \
-    exporters/ct_exporter_las.cpp \
-    filters/abstract/ct_abstractfilter_las.cpp \
-    metrics/abstract/ct_abstractmetric_las.cpp \
-    itemdrawable/las/ct_stdlaspointsattributescontainershortcut.cpp \
-    readers/ct_reader_lasv2.cpp \
-    mergers/ct_sameheadermerger_las.cpp \
-    mergers/ct_sameheaderformatmerger_las.cpp
+    tools/las/ct_laswavepacket.cpp
+#    exporters/ct_exporter_las.cpp \
+#    filters/abstract/ct_abstractfilter_las.cpp \
+#    metrics/abstract/ct_abstractmetric_las.cpp \
+#    mergers/ct_sameheadermerger_las.cpp \
+#    mergers/ct_sameheaderformatmerger_las.cpp
 

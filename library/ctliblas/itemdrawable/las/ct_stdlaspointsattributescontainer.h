@@ -20,13 +20,7 @@ public:
 
     CT_StdLASPointsAttributesContainer();
 
-    CT_StdLASPointsAttributesContainer(const CT_OutAbstractSingularItemModel *model,
-                                       const CT_AbstractResult *result);
-
-    CT_StdLASPointsAttributesContainer(const QString &modelName,
-                                       const CT_AbstractResult *result);
-
-
+    CT_StdLASPointsAttributesContainer(const CT_StdLASPointsAttributesContainer& other) = default;
 
     /**
      * @brief Insert the CT_AbstractPointsAttributes at key 'key'. If an attribute already exist it will be replaced.
@@ -46,7 +40,7 @@ public:
      */
     virtual QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar*> lasPointsAttributes() const;
 
-    CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_StdLASPointsAttributesContainer)
 };
 
 #endif // CT_STDLASPOINTSATTRIBUTESCONTAINER_H
