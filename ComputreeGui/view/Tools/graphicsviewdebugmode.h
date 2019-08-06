@@ -21,15 +21,6 @@ public:
     virtual ~GraphicsViewDebugMode();
 
     /**
-     * @brief Return the unique name of the action (for comparison). By
-     *        default the name of the class.
-     *
-     *        A unique name is defined for each class. In this case copies
-     *        of a action can be compared to know if it the same.
-     */
-    QString uniqueName() const;
-
-    /**
      * @brief Return the title of the action (added to the view at the side of the icon)
      */
     QString title() const;
@@ -86,10 +77,7 @@ public:
      */
     void drawOverlay(GraphicsViewInterface &view, QPainter &painter);
 
-    /**
-     * @brief Return a copy of the action
-     */
-    CT_AbstractAction* copy() const;
+    CT_ACTION_DECL_COPY(GraphicsViewDebugMode)
 
 private:
     bool    m_mustShowContextMenu;

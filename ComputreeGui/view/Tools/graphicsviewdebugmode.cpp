@@ -30,11 +30,6 @@ GraphicsViewDebugMode::~GraphicsViewDebugMode()
 {
 }
 
-QString GraphicsViewDebugMode::uniqueName() const
-{
-    return metaObject()->className();
-}
-
 QString GraphicsViewDebugMode::title() const
 {
     return tr("Debug mode");
@@ -121,11 +116,6 @@ void GraphicsViewDebugMode::drawOverlay(GraphicsViewInterface &view, QPainter &p
 
     if(m_mustShowChunksInformations)
         drawChunksInformations(view, painter);
-}
-
-CT_AbstractAction *GraphicsViewDebugMode::copy() const
-{
-    return new GraphicsViewDebugMode();
 }
 
 void GraphicsViewDebugMode::showContextMenu(const QPoint& pos)
