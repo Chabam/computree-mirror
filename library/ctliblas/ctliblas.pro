@@ -19,7 +19,7 @@ HEADERS += \
     readers/ct_reader_lasv2.h \
     readers/headers/ct_lasheader.h \
     itemdrawable/las/ct_stdlaspointsattributescontainer.h \
-#    itemdrawable/las/ct_stdlaspointsattributescontainershortcut.h \
+    itemdrawable/las/ct_stdlaspointsattributescontainershortcut.h \
     tools/las/abstract/ct_abstractlaspointformat.h \
     tools/las/ct_lascolorpacket.h \
     tools/las/ct_lasdata.h \
@@ -49,7 +49,7 @@ SOURCES += \
     readers/ct_reader_lasv2.cpp \
     readers/headers/ct_lasheader.cpp \
     itemdrawable/las/ct_stdlaspointsattributescontainer.cpp \
-#    itemdrawable/las/ct_stdlaspointsattributescontainershortcut.cpp \
+    itemdrawable/las/ct_stdlaspointsattributescontainershortcut.cpp \
     tools/las/abstract/ct_abstractlaspointformat.cpp \
     tools/las/ct_lascolorpacket.cpp \
     tools/las/ct_lasdata.cpp \

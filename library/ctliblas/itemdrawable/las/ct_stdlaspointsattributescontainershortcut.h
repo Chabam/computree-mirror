@@ -15,13 +15,7 @@ public:
 
     CT_StdLASPointsAttributesContainerShortcut();
 
-    CT_StdLASPointsAttributesContainerShortcut(const CT_OutAbstractSingularItemModel *model,
-                                               const CT_AbstractResult *result,
-                                               CT_StdLASPointsAttributesContainer *container);
-
-    CT_StdLASPointsAttributesContainerShortcut(const QString &modelName,
-                                               const CT_AbstractResult *result,
-                                               CT_StdLASPointsAttributesContainer *container);
+    CT_StdLASPointsAttributesContainerShortcut(const CT_StdLASPointsAttributesContainerShortcut& other) = default;
 
     void insertPointsAttributesAt(CT_LasDefine::LASPointAttributesType key, const CT_AbstractPointAttributesScalar *att);
 
@@ -33,7 +27,7 @@ public:
 
     QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar*> lasPointsAttributes() const;
 
-    CT_AbstractItemDrawable* copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList);
+    CT_ITEM_COPY_IMP(CT_StdLASPointsAttributesContainerShortcut)
 
 private:
 

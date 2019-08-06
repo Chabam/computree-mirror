@@ -6,21 +6,6 @@ CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerSh
     _container = NULL;
 }
 
-CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut(const CT_OutAbstractSingularItemModel *model,
-                                                                                       const CT_AbstractResult *result,
-                                                                                       CT_StdLASPointsAttributesContainer* container) : CT_StdLASPointsAttributesContainer(model,
-                                                                                                                                                                                result)
-{
-    _container = container;
-}
-
-CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut(const QString &modelName,
-                                                                                       const CT_AbstractResult *result,
-                                                                                       CT_StdLASPointsAttributesContainer* container) : CT_StdLASPointsAttributesContainer(modelName,
-                                                                                                                                                                                result)
-{
-    _container = container;
-}
 
 void CT_StdLASPointsAttributesContainerShortcut::insertPointsAttributesAt(CT_LasDefine::LASPointAttributesType key, const CT_AbstractPointAttributesScalar *att)
 {
@@ -72,9 +57,4 @@ QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> 
 
     qFatal("CT_StdLASPointsAttributesContainerShortcut class not correctly initialized");
     return QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *>();
-}
-
-CT_AbstractItemDrawable *CT_StdLASPointsAttributesContainerShortcut::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    return new CT_StdLASPointsAttributesContainerShortcut((CT_OutAbstractSingularItemModel*)model, result, _container);
 }
