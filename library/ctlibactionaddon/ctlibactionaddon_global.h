@@ -1,12 +1,12 @@
 /****************************************************************************
 
  Copyright (C) 2010-2012 the Office National des Forêts (ONF), France
-                     and the Association de Recherche Technologie et Sciences (ARTS), Ecole Nationale Suprieure d'Arts et Métiers (ENSAM), Cluny, France.
+                     and the Association de Recherche Technologie et Sciences (ARTS), Ecole Nationale Supérieure d'Arts et Métiers (ENSAM), Cluny, France.
                      All rights reserved.
 
  Contact : alexandre.piboule@onf.fr
 
- Developers : Michal KREBS (ARTS/ENSAM)
+ Developers : Michaël KREBS (ARTS/ENSAM)
 
  This file is part of PluginShared library 2.0.
 
@@ -25,29 +25,15 @@
 
 *****************************************************************************/
 
+#ifndef CTLIBACTIONADDON_GLOBAL_H
+#define CTLIBACTIONADDON_GLOBAL_H
 
+#include <QtCore/qglobal.h>
 
-#ifndef CT_RESULTINITIALIZEDATA_H
-#define CT_RESULTINITIALIZEDATA_H
+#if defined(CTLIBACTIONADDON_LIBRARY)
+#  define CTLIBACTIONADDON_EXPORT Q_DECL_EXPORT
+#else
+#  define CTLIBACTIONADDON_EXPORT Q_DECL_IMPORT
+#endif
 
-#include "pluginShared_global.h"
-
-#include <QString>
-
-class PLUGINSHAREDSHARED_EXPORT CT_ResultInitializeData
-{
-public:
-    CT_ResultInitializeData();
-    CT_ResultInitializeData(int id);
-    CT_ResultInitializeData(const CT_ResultInitializeData &data);
-    virtual ~CT_ResultInitializeData();
-
-    inline int getId() const { return _id; }
-
-    void setId(int id);
-
-private:
-    int                 _id;
-};
-
-#endif // CT_RESULTINITIALIZEDATA_H
+#endif // CTLIBACTIONADDON_GLOBAL_H

@@ -1,4 +1,4 @@
-COMPUTREE += ctlibplugin ctlibio ctliblas #ctlibmetrics ctlibfilters ctlibstdactions
+COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas #ctlibmetrics ctlibfilters ctlibstdactions
 
 CHECK_CAN_USE_GDAL = 1
 MUST_USE_OPENCV = 1

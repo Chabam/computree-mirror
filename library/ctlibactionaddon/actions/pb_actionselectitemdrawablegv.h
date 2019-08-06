@@ -33,25 +33,24 @@ public:
 
     PB_ActionSelectItemDrawableGV();
 
-    QString uniqueName() const;
-    QString title() const;
-    QString description() const;
-    QIcon icon() const;
-    QString type() const;
+    QString title() const override;
+    QString description() const override;
+    QIcon icon() const override;
+    QString type() const override;
 
-    void init();
+    void init() override;
 
-    bool mousePressEvent(QMouseEvent *e);
-    bool mouseMoveEvent(QMouseEvent *e);
-    bool mouseReleaseEvent(QMouseEvent *e);
-    bool wheelEvent(QWheelEvent *e);
+    bool mousePressEvent(QMouseEvent *e) override;
+    bool mouseMoveEvent(QMouseEvent *e) override;
+    bool mouseReleaseEvent(QMouseEvent *e) override;
+    bool wheelEvent(QWheelEvent *e) override;
 
-    bool keyPressEvent(QKeyEvent *e);
-    bool keyReleaseEvent(QKeyEvent *e);
+    bool keyPressEvent(QKeyEvent *e) override;
+    bool keyReleaseEvent(QKeyEvent *e) override;
 
-    void drawOverlay(GraphicsViewInterface &view, QPainter &painter);
+    void drawOverlay(GraphicsViewInterface &view, QPainter &painter) override;
 
-    CT_AbstractAction* copy() const;
+    CT_ACTION_DECL_COPY(PB_ActionSelectItemDrawableGV)
 
     /**
      * @brief change the selection mode for this action. The mode will be set to view

@@ -1,7 +1,7 @@
 #ifndef PB_ACTIONSELECTITEMDRAWABLEGVOPTIONS_H
 #define PB_ACTIONSELECTITEMDRAWABLEGVOPTIONS_H
 
-#include "ct_view/actions/abstract/ct_gabstractactionoptions.h"
+#include "ct_actions/view/abstract/ct_gabstractactionoptions.h"
 #include "actions/pb_actionselectitemdrawablegv.h"
 
 namespace Ui {

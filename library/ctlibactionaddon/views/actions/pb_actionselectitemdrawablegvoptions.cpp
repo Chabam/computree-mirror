@@ -1,6 +1,5 @@
 #include "pb_actionselectitemdrawablegvoptions.h"
 #include "ui_pb_actionselectitemdrawablegvoptions.h"
-#include "ct_global/ct_context.h"
 
 PB_ActionSelectItemDrawableGVOptions::PB_ActionSelectItemDrawableGVOptions(const PB_ActionSelectItemDrawableGV *action) :
     CT_GAbstractActionOptions(action),

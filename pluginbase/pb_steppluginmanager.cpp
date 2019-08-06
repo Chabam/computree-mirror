@@ -53,7 +53,9 @@
 #include "step/pb_stepexportattributesinloop.h"
 #include "actions/pb_actionselectitemdrawablegv.h"
 #include "actions/pb_actionshowitemdatagv.h"
+*/
 #include "ctlibstdactions/action/ct_actionselectitemdrawablegv.h"
+/*
 #include "exporters/csv/pb_csvexporter.h"
 #include "exporters/profile/pb_profileexporter.h"
 #include "exporters/grid2d/pb_grid2dexporter.h"
@@ -237,10 +239,10 @@ bool PB_StepPluginManager::loadActions()
 {
     clearActions();
 
-    /*CT_ActionsSeparator *sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_SELECTION));
+    CT_ActionsSeparator *sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_SELECTION));
     sep->addAction(new CT_ActionSelectItemDrawableGV());
 
-    sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_INFORMATION));
+    /*sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_INFORMATION));
     sep->addAction(new PB_ActionShowItemDataGV());*/
     return true;
 }

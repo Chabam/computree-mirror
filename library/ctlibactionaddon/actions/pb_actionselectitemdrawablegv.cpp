@@ -7,6 +7,7 @@
 #include <math.h>
 
 #include "views/actions/pb_actionselectitemdrawablegvoptions.h"
+#include "documentinterface.h"
 
 PB_ActionSelectItemDrawableGV::PB_ActionSelectItemDrawableGV() : CT_AbstractActionForGraphicsView()
 {
@@ -17,11 +18,6 @@ PB_ActionSelectItemDrawableGV::PB_ActionSelectItemDrawableGV() : CT_AbstractActi
 
     connect(&m_rectangleTools, SIGNAL(mustBeRedraw()), this, SLOT(redrawOverlay()), Qt::DirectConnection);
     connect(&m_polygonTools, SIGNAL(mustBeRedraw()), this, SLOT(redrawOverlay()), Qt::DirectConnection);
-}
-
-QString PB_ActionSelectItemDrawableGV::uniqueName() const
-{
-    return "PB_ActionSelectItemDrawableGV";
 }
 
 QString PB_ActionSelectItemDrawableGV::title() const
@@ -92,12 +88,8 @@ bool PB_ActionSelectItemDrawableGV::mouseMoveEvent(QMouseEvent *e)
             return m_polygonTools.mouseMoveEvent(e);
         else if(selectionTool() == Rectangle)
             return m_rectangleTools.mouseMoveEvent(e);
-        else {
-            m_status = 0;
-            return false;
-        }
 
-        return true;
+        m_status = 0;
     }
 
     return false;
@@ -111,11 +103,8 @@ bool PB_ActionSelectItemDrawableGV::mouseReleaseEvent(QMouseEvent *e)
             return m_polygonTools.mouseReleaseEvent(e);
         else if(selectionTool() == Rectangle)
             return m_rectangleTools.mouseReleaseEvent(e);
-        else {
-            pick();
-            return false;
-        }
-        return true;
+
+        pick();
     }
 
     return false;
@@ -129,8 +118,6 @@ bool PB_ActionSelectItemDrawableGV::wheelEvent(QWheelEvent *e)
             return m_polygonTools.wheelEvent(e);
         else if(selectionTool() == Rectangle)
             return m_rectangleTools.wheelEvent(e);
-
-        return false;
     }
 
     return false;
@@ -156,21 +143,22 @@ bool PB_ActionSelectItemDrawableGV::keyReleaseEvent(QKeyEvent *e)
 
     if(m_status > 0) {
 
-        if(selectionTool() == Polygon) {
-
-            if(e->key() == Qt::Key_Delete) {
-
+        if(selectionTool() == Polygon)
+        {
+            if(e->key() == Qt::Key_Delete)
+            {
                 m_polygonTools.removeLastPoint();
                 return true;
 
-            } else if((e->key() == Qt::Key_Enter)
-                      || (e->key() == Qt::Key_Return)) {
+            }
 
+            if((e->key() == Qt::Key_Enter)
+                      || (e->key() == Qt::Key_Return))
+            {
                 if(!m_polygonTools.isPolygonClosed()) {
                     m_polygonTools.closePolygon();
                     return true;
                 }
-
             }
         }
 
@@ -182,9 +170,10 @@ bool PB_ActionSelectItemDrawableGV::keyReleaseEvent(QKeyEvent *e)
                 m_rectangleTools.clear();
                 m_status = 0;
                 return true;
-            } else if((e->key() == Qt::Key_Enter)
-                    || (e->key() == Qt::Key_Return)) {
+            }
 
+            if((e->key() == Qt::Key_Enter)
+                    || (e->key() == Qt::Key_Return)) {
                 pick();
                 return true;
             }
@@ -204,13 +193,7 @@ void PB_ActionSelectItemDrawableGV::drawOverlay(GraphicsViewInterface &view, QPa
             return m_polygonTools.drawOverlay(painter);
         else if(selectionTool() == Rectangle)
             return m_rectangleTools.drawOverlay(painter);
-
     }
-}
-
-CT_AbstractAction* PB_ActionSelectItemDrawableGV::copy() const
-{
-    return new PB_ActionSelectItemDrawableGV();
 }
 
 bool PB_ActionSelectItemDrawableGV::setSelectionMode(GraphicsViewInterface::SelectionMode mode)
@@ -280,7 +263,7 @@ GraphicsViewInterface::SelectionMode PB_ActionSelectItemDrawableGV::selectionMod
     while(m > GraphicsViewInterface::REMOVE_ONE)
         m -= GraphicsViewInterface::REMOVE_ONE;
 
-    return (GraphicsViewInterface::SelectionMode)m;
+    return static_cast<GraphicsViewInterface::SelectionMode>(m);
 }
 
 void PB_ActionSelectItemDrawableGV::setKeyModifiers(Qt::KeyboardModifiers m)
