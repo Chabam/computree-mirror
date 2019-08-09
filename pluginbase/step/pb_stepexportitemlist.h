@@ -17,72 +17,34 @@
 class PB_StepExportItemList: public CT_AbstractStep
 {
     Q_OBJECT
+    using SuperClass = CT_AbstractStep;
 
 public:
 
-    /*! \brief Step constructor
-     * 
-     * Create a new instance of the step
-     * 
-     * \param dataInit Step parameters object
-     */
-    PB_StepExportItemList(CT_StepInitializeData &dataInit);
+    PB_StepExportItemList();
 
-    /*! \brief Step description
-     * 
-     * Return a description of the step function
-     */
-    QString getStepDescription() const;
+    QString description() const;
 
-    /*! \brief Step detailled description
-     * 
-     * Return a detailled description of the step function
-     */
-    QString getStepDetailledDescription() const;
+    QString detailledDescription() const;
 
-    /*! \brief Step URL
-     * 
-     * Return a URL of a wiki for this step
-     */
     QString getStepURL() const;
 
-    /*! \brief Step copy
-     * 
-     * Step copy, used when a step is added by step contextual menu
-     */
-    CT_VirtualAbstractStep* createNewInstance(CT_StepInitializeData &dataInit);
+    CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
 
-    /*! \brief Input results specification
-     * 
-     * Specification of input results models needed by the step (IN)
-     */
-    void createInResultModelListProtected();
+    void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
     // CT_AbstractStep non obligatoire :
 //    bool configureInputResult();
 //    bool configureExporter();
 //    void configureExporterFromModel();
 
+    void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog) final;
 
-    /*! \brief Parameters DialogBox
-     * 
-     * DialogBox asking for step parameters
-     */
-    void createPostConfigurationDialog();
+    void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
-    /*! \brief Output results specification
-     * 
-     * Specification of output results models created by the step (OUT)
-     */
-    void createOutResultModelListProtected();
-
-    /*! \brief Algorithm of the step
-     * 
-     * Step computation, using input results, and creating output results
-     */
-    void compute();
+    void compute() final;
 
 private:
 

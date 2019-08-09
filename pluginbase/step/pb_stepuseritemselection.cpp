@@ -4,13 +4,9 @@
 #include "ct_itemdrawable/model/inModel/ct_inzeroormoregroupmodel.h"
 #include "ct_itemdrawable/model/inModel/ct_instdgroupmodel.h"
 #include "ct_itemdrawable/model/inModel/ct_instdsingularitemmodel.h"
-#include "ct_result/model/inModel/ct_inresultmodelgrouptocopy.h"
 
 // Inclusion of out models
 #include "ct_itemdrawable/model/outModel/ct_outstdgroupmodel.h"
-
-// Inclusion of standard result class
-#include "ct_result/ct_resultgroup.h"
 
 // Inclusion of used ItemDrawable classes
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
@@ -19,21 +15,15 @@
 #include "actions/pb_actionselectitemdrawablegv.h"
 #include "actions/pb_actionpickitemsinlist.h"
 
-#include "ct_view/ct_stepconfigurabledialog.h"
-
 #include "ct_model/tools/ct_modelsearchhelper.h"
 
 #include <QMessageBox>
 
 // Alias for indexing in models
-#define DEF_resultIn_R "R"
-#define DEF_groupIn_G "G"
-#define DEF_itemIn_I "I"
 
-// Constructor : initialization of parameters
-PB_StepUserItemSelection::PB_StepUserItemSelection(CT_StepInitializeData &dataInit) : CT_AbstractStep(dataInit)
+PB_StepUserItemSelection::PB_StepUserItemSelection() : SuperClass()
 {
-    m_doc = NULL;
+    m_doc = nullptr;
     m_removeGroupsWithoutItemResearched = false;
     m_removeParents = false;
 
@@ -42,22 +32,19 @@ PB_StepUserItemSelection::PB_StepUserItemSelection(CT_StepInitializeData &dataIn
     setManual(true);
 }
 
-// Step description (tooltip of contextual menu)
-QString PB_StepUserItemSelection::getStepDescription() const
+QString PB_StepUserItemSelection::description() const
 {
     return tr("Séléction d'items");
 }
 
-// Step copy method
-CT_VirtualAbstractStep* PB_StepUserItemSelection::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepUserItemSelection::createNewInstance()
 {
-    return new PB_StepUserItemSelection(dataInit);
+    return new PB_StepUserItemSelection();
 }
 
 //////////////////// PROTECTED METHODS //////////////////
 
-// Creation and affiliation of IN models
-void PB_StepUserItemSelection::createInResultModelListProtected()
+void PB_StepUserItemSelection::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_InResultModelGroupToCopy *resultInModel_R = createNewInResultModelForCopy(DEF_resultIn_R,
                                                                                  tr("Result"),
@@ -71,14 +58,12 @@ void PB_StepUserItemSelection::createInResultModelListProtected()
                                   tr("Item"));
 }
 
-// Creation and affiliation of OUT models
-void PB_StepUserItemSelection::createOutResultModelListProtected()
+void PB_StepUserItemSelection::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
     createNewOutResultModelToCopy(DEF_resultIn_R);
 }
 
-// Semi-automatic creation of step parameters DialogBox
-void PB_StepUserItemSelection::createPostConfigurationDialog()
+void PB_StepUserItemSelection::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
     // No parameter dialog for this step
     CT_StepConfigurableDialog *dialog = newStandardPostConfigurationDialog();
@@ -96,7 +81,7 @@ void PB_StepUserItemSelection::createPostConfigurationDialog()
 
 void PB_StepUserItemSelection::compute()
 {
-    m_doc = NULL;
+    m_doc = nullptr;
     m_status = 0;
 
     // ----------------------------------------------------------------------------
@@ -104,7 +89,6 @@ void PB_StepUserItemSelection::compute()
     QList<CT_ResultGroup*> outResultList = getOutResultList();
     CT_ResultGroup *resultOut_R = outResultList.first();
     CT_InAbstractGroupModel* groupInModel_G = (CT_InAbstractGroupModel*)PS_MODELS->searchModel(DEF_groupIn_G, resultOut_R, this);
-
 
     // ---------------------------
     // Gets OUT results and models
@@ -120,7 +104,7 @@ void PB_StepUserItemSelection::compute()
         const CT_StandardItemGroup *groupOut_G = itG.next();
         CT_AbstractSingularItemDrawable *itemOut_I = groupOut_G->firstItemByINModelName(this, DEF_itemIn_I);
 
-        if (itemOut_I != NULL)
+        if (itemOut_I != nullptr)
             m_itemDrawableToAdd.insert(itemOut_I, (CT_StandardItemGroup*)groupOut_G);
         else if(m_removeGroupsWithoutItemResearched || m_removeParents)
             groupsToRemove.append((CT_StandardItemGroup*)groupOut_G);
@@ -155,7 +139,7 @@ void PB_StepUserItemSelection::compute()
 
 void PB_StepUserItemSelection::recursiveRemoveGroup(CT_StandardItemGroup *parent, CT_StandardItemGroup *group) const
 {
-    if(parent != NULL)
+    if(parent != nullptr)
     {
         parent->removeGroup(group);
 
@@ -171,7 +155,7 @@ void PB_StepUserItemSelection::recursiveRemoveGroup(CT_StandardItemGroup *parent
 void PB_StepUserItemSelection::initManualMode()
 {
     // create a new 3D document
-    if(m_doc == NULL)
+    if(m_doc == nullptr)
         m_doc = getGuiContext()->documentManager()->new3DDocument();
 
     m_itemDrawableSelected.clear();
@@ -194,8 +178,7 @@ void PB_StepUserItemSelection::initManualMode()
 
     }
 
-
-    QMessageBox::information(NULL, tr("Mode manuel"), tr("Bienvenue dans le mode manuel de cette "
+    QMessageBox::information(nullptr, tr("Mode manuel"), tr("Bienvenue dans le mode manuel de cette "
                                                          "étape de filtrage. Veuillez sélectionner les "
                                                          "éléments dans la vue graphique puis valider en cliquant "
                                                          "sur le pouce en haut de la fenêtre principale. Les éléments "
@@ -218,7 +201,7 @@ void PB_StepUserItemSelection::useManualMode(bool quit)
     {
         if(!quit)
         {
-            m_doc = NULL;
+            m_doc = nullptr;
 
             quitManualMode();
         }

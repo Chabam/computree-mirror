@@ -3,73 +3,45 @@
 #include "pb_steppluginmanager.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
-#include "ct_itemdrawable/tools/iterator/ct_groupiterator.h"
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/inModel/ct_inresultmodelgroup.h"
-#include "ct_result/model/outModel/ct_outresultmodelgroup.h"
 
 #include "ct_abstractstepplugin.h"
 #include "ct_exporter/ct_standardexporterseparator.h"
 
 #include "ct_itemdrawable/ct_profile.h"
 #include "exporters/profile/pb_profileexporter.h"
-#include "ct_view/ct_stepconfigurabledialog.h"
+
 #include "ct_itemdrawable/ct_loopcounter.h"
 
-// Alias for indexing models
-#define DEFin_res "res"
-#define DEFin_grp "grp"
-#define DEFin_item "item"
-
-#define DEFin_resCounter "resCounter"
-#define DEF_inGroupCounter "GroupCounter"
-#define DEF_inCounter "counter"
-
-#define DEF_inresName "resName"
-#define DEF_inGroupName "GroupName"
-#define DEF_inName "Name"
-#define DEF_inNameAtt "NameAtt"
-
-
-#define DEFout_res "res"
-#define DEFout_grp "grp"
-
-// Constructor : initialization of parameters
-PB_StepExportItemList::PB_StepExportItemList(CT_StepInitializeData &dataInit) : CT_AbstractStep(dataInit)
+PB_StepExportItemList::PB_StepExportItemList() : SuperClass()
 {
 }
 
-// Step description (tooltip of contextual menu)
-QString PB_StepExportItemList::getStepDescription() const
+QString PB_StepExportItemList::description() const
 {
     return tr("Export avec nom de fichier adaptatif (DEPRECATED)");
 }
 
-// Step detailled description
-QString PB_StepExportItemList::getStepDetailledDescription() const
+QString PB_StepExportItemList::detailledDescription() const
 {
     return tr("Permet un export avec nom de fichier adaptatif.<br>"
               "Cette étape peut utiliser n'importe quel exporter.<br>"
               "Le nom du fichier de sorti, est déterminé à partir du compteur de boucle spécifié.");
 }
 
-// Step URL
 QString PB_StepExportItemList::getStepURL() const
 {
     //return tr("STEP URL HERE");
     return CT_AbstractStep::getStepURL(); //by default URL of the plugin
 }
 
-// Step copy method
-CT_VirtualAbstractStep* PB_StepExportItemList::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepExportItemList::createNewInstance()
 {
-    return new PB_StepExportItemList(dataInit);
+    return new PB_StepExportItemList();
 }
 
 //////////////////// PROTECTED METHODS //////////////////
 
-// Creation and affiliation of IN models
-void PB_StepExportItemList::createInResultModelListProtected()
+void PB_StepExportItemList::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_InResultModelGroup *resIn = createNewInResultModel(DEFin_res, tr("Résultat"));
     resIn->setZeroOrMoreRootGroup();
@@ -100,7 +72,7 @@ void PB_StepExportItemList::createInResultModelListProtected()
 //{
 //    configureExporterFromModel();
 
-//    if(_exporterConfiguration != NULL)
+//    if(_exporterConfiguration != nullptr)
 //        _exporter->loadExportConfiguration(_exporterConfiguration);
 
 //    if(_exporter->configureExport())
@@ -137,7 +109,7 @@ void PB_StepExportItemList::createInResultModelListProtected()
 //    while(it.hasNext())
 //    {
 //        // on récupère le modèle d'entrée qu'on avait défini (celui à exporter)
-//        CT_InAbstractItemModel *inItemModelToExport = NULL;
+//        CT_InAbstractItemModel *inItemModelToExport = nullptr;
 
 //        if(_exporter->exportOnlyGroup())
 //            inItemModelToExport = (CT_InAbstractItemModel*)PS_MODELS->searchModel(DEFin_grp, (CT_OutAbstractResultModel*)it.next()->outModel(), this);
@@ -157,27 +129,24 @@ void PB_StepExportItemList::createInResultModelListProtected()
 //    _exporter->setItemDrawableToExport(eItems);
 //}
 
-
-// Creation and affiliation of OUT models
-void PB_StepExportItemList::createOutResultModelListProtected()
+void PB_StepExportItemList::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
     CT_OutResultModelGroup *res_res = createNewOutResultModel(DEFout_res, tr("Résultat"));
     res_res->setRootGroup(DEFout_grp, new CT_StandardItemGroup(), tr("Groupe"));
 }
 
-// Semi-automatic creation of step parameters DialogBox
-void PB_StepExportItemList::createPostConfigurationDialog()
+void PB_StepExportItemList::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
-    CT_StepConfigurableDialog *configDialog = newStandardPostConfigurationDialog();
-    configDialog->addFileChoice(tr("Répertoire d'export"), CT_FileChoiceButton::OneExistingFolder, "", _dir);
-    configDialog->addString(tr("Préfixe de nom de fichier"), "", _prefixFileName);
+
+    postInputConfigDialog->addFileChoice(tr("Répertoire d'export"), CT_FileChoiceButton::OneExistingFolder, "", _dir);
+    postInputConfigDialog->addString(tr("Préfixe de nom de fichier"), "", _prefixFileName);
 
     QStringList list_exportersList = getPluginAs<PB_StepPluginManager>()->exportersAvailable().keys();
 
     if(list_exportersList.isEmpty())
         list_exportersList.append(tr("ERREUR : aucun exporter disponible"));
 
-    configDialog->addStringChoice(tr("Choix du type de fichier"), "", list_exportersList, m_exporterSelectedKey);
+    postInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_exportersList, m_exporterSelectedKey);
 }
 
 void PB_StepExportItemList::compute()
@@ -186,7 +155,7 @@ void PB_StepExportItemList::compute()
     QList<CT_ResultGroup*> inResultList = getInputResults();
     CT_ResultGroup* resIn_Item = inResultList.at(0);
     CT_ResultGroup* resIn_Counter = inResultList.at(1);
-    CT_ResultGroup* resIn_BaseName = NULL;
+    CT_ResultGroup* resIn_BaseName = nullptr;
 
     QString rootBaseName = "";
     if (inResultList.size() > 2)
@@ -198,11 +167,10 @@ void PB_StepExportItemList::compute()
         {
             const CT_AbstractSingularItemDrawable* item = it0.next();
             CT_AbstractItemAttribute* att = item->firstItemAttributeByINModelName(resIn_BaseName, this, DEF_inNameAtt);
-            QString tmp = att->toString(item, NULL);
+            QString tmp = att->toString(item, nullptr);
             rootBaseName = QFileInfo(tmp).baseName();
         }
     }
-
 
     QList<CT_ResultGroup*> outResultList = getOutResultList();
     CT_ResultGroup* res_res = outResultList.at(0);
@@ -223,7 +191,7 @@ void PB_StepExportItemList::compute()
         const CT_StandardItemGroup* grpIn = (CT_StandardItemGroup*) itIn_grp.next();
         CT_AbstractItemDrawable* item = (CT_AbstractItemDrawable*)grpIn->firstItemByINModelName(this, DEFin_item);
 
-        if (item != NULL)
+        if (item != nullptr)
         {
             QList<CT_AbstractItemDrawable*> list;
             list.append(item);
@@ -248,7 +216,7 @@ void PB_StepExportItemList::compute()
         }
 
     }
-    
+
 
     // OUT results creation
     CT_StandardItemGroup* grpOut= new CT_StandardItemGroup(DEFout_grp, res_res);

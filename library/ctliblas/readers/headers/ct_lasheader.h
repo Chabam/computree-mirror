@@ -26,8 +26,6 @@ public:
 
     CT_LASHeader(const CT_LASHeader& other) = default;
 
-    virtual bool hasBoundingBox() const {return true;}
-
     CT_ITEM_COPY_IMP(CT_LASHeader)
 
 

@@ -1,20 +1,12 @@
 #include "pb_stepbeginloopthroughgroups02.h"
-#include "ct_result/model/inModel/ct_inresultmodelgrouptocopy.h"
+
 #include "ct_result/model/inModel/tools/ct_instdresultmodelpossibility.h"
-#include "ct_result/model/outModel/ct_outresultmodelgroupcopy.h"
-#include "ct_view/ct_stepconfigurabledialog.h"
-#include "ct_global/ct_context.h"
 
 #include "ct_model/tools/ct_modelsearchhelper.h"
 
 #include <QDebug>
 
-#define DEF_inResult_g "inResult"
-#define DEF_inGroup  "inGroup"
-#define DEF_inItem   "inItem"
-#define DEF_inAttName   "inAtt"
-
-PB_StepBeginLoopThroughGroups02::PB_StepBeginLoopThroughGroups02(CT_StepInitializeData &dataInit) : CT_StepBeginLoop(dataInit)
+PB_StepBeginLoopThroughGroups02::PB_StepBeginLoopThroughGroups02() : CT_StepBeginLoop()
 {
 }
 
@@ -22,25 +14,25 @@ PB_StepBeginLoopThroughGroups02::~PB_StepBeginLoopThroughGroups02()
 {
 }
 
-QString PB_StepBeginLoopThroughGroups02::getStepDescription() const
+QString PB_StepBeginLoopThroughGroups02::description() const
 {
     return tr("1- Boucle sur les groupes");
 }
 
-QString PB_StepBeginLoopThroughGroups02::getStepDetailledDescription() const
+QString PB_StepBeginLoopThroughGroups02::detailledDescription() const
 {
     return tr("Nécessite une CT_StepEndLoop pour terminer la boucle");
 }
 
-CT_VirtualAbstractStep* PB_StepBeginLoopThroughGroups02::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepBeginLoopThroughGroups02::createNewInstance()
 {
     // cree une copie de cette etape
-    return new PB_StepBeginLoopThroughGroups02(dataInit);
+    return new PB_StepBeginLoopThroughGroups02();
 }
 
 //////////////////// PROTECTED //////////////////
 
-void PB_StepBeginLoopThroughGroups02::createInResultModelListProtected()
+void PB_StepBeginLoopThroughGroups02::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_InResultModelGroupToCopy *resultModel = createNewInResultModelForCopy(DEF_inResult_g, tr("Résultat"));
     resultModel->setZeroOrMoreRootGroup();
@@ -80,10 +72,10 @@ void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_Standar
         {
             CT_StandardItemGroup *group = (CT_StandardItemGroup*) it.next();
 
-            if (group != NULL)
+            if (group != nullptr)
             {
                 CT_AbstractSingularItemDrawable* item = (CT_AbstractSingularItemDrawable*) group->firstItemByINModelName(this, DEF_inItem);
-                if (item != NULL)
+                if (item != nullptr)
                 {
                     _ids.append(item);
                 }
@@ -99,7 +91,7 @@ void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_Standar
         CT_StandardItemGroup *group = (CT_StandardItemGroup*) it2.next();
 
         CT_AbstractSingularItemDrawable* item = (CT_AbstractSingularItemDrawable*) group->firstItemByINModelName(this, DEF_inItem);
-        if (item != NULL)
+        if (item != nullptr)
         {
 
             CT_AbstractSingularItemDrawable* currentItem = _ids.at(currentTurn - 1);
@@ -107,9 +99,9 @@ void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_Standar
             {
                 QString turnName = QString("Turn%1").arg(currentTurn);
                 CT_AbstractItemAttribute* att = item->firstItemAttributeByINModelName(outResult, this, DEF_inAttName);
-                if (att !=  NULL)
+                if (att !=  nullptr)
                 {
-                    turnName = att->toString(item, NULL);
+                    turnName = att->toString(item, nullptr);
                 }
                 _counter->setTurnName(turnName);
             } else {
@@ -119,7 +111,6 @@ void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_Standar
     }
 
     NTurnsSelected();
-
 
     while (!groupsToBeRemoved.isEmpty())
     {
@@ -132,7 +123,7 @@ void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_Standar
 
 void PB_StepBeginLoopThroughGroups02::recursiveRemoveGroupIfEmpty(CT_StandardItemGroup *parent, CT_StandardItemGroup *group) const
 {
-    if(parent != NULL)
+    if(parent != nullptr)
     {
         parent->removeGroup(group);
 

@@ -2,14 +2,12 @@
 
 #include "pb_steppluginmanager.h"
 
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/outModel/ct_outresultmodelgroup.h"
 #include "ct_view/ct_genericconfigurablewidget.h"
 #include "ct_abstractstepplugin.h"
 #include "ct_reader/ct_standardreaderseparator.h"
 
 #include "ct_view/ct_combobox.h"
-#include "ct_global/ct_context.h"
+
 #include "ct_model/tools/ct_modelsearchhelper.h"
 #include "ct_itemdrawable/ct_readeritem.h"
 #include "ct_itemdrawable/ct_itemattributelist.h"
@@ -22,43 +20,29 @@
 #include <QDebug>
 #include <QMessageBox>
 
-// Alias for indexing models
-#define DEFout_res "res"
-#define DEFout_grp "grp"
-#define DEFout_plotname "plotname"
-#define DEFout_plotnameAtt "plotnameAtt"
-#define DEFout_grpHeader "grpHeader"
-#define DEFout_header "header"
-#define DEFout_reader "reader"
-
-// Constructor : initialization of parameters
-PB_StepLoopOnFileSets::PB_StepLoopOnFileSets(CT_StepInitializeData &dataInit) : CT_StepBeginLoop(dataInit)
+PB_StepLoopOnFileSets::PB_StepLoopOnFileSets() : CT_StepBeginLoop()
 {
 }
 
-// Step description (tooltip of contextual menu)
-QString PB_StepLoopOnFileSets::getStepDescription() const
+QString PB_StepLoopOnFileSets::description() const
 {
     return tr("4- Loops on files sets defined in a text file");
 }
 
-// Step detailled description
-QString PB_StepLoopOnFileSets::getStepDetailledDescription() const
+QString PB_StepLoopOnFileSets::detailledDescription() const
 {
     return tr("");
 }
 
-// Step URL
 QString PB_StepLoopOnFileSets::getStepURL() const
 {
     //return tr("STEP URL HERE");
     return CT_AbstractStepCanBeAddedFirst::getStepURL(); //by default URL of the plugin
 }
 
-// Step copy method
-CT_VirtualAbstractStep* PB_StepLoopOnFileSets::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepLoopOnFileSets::createNewInstance()
 {
-    return new PB_StepLoopOnFileSets(dataInit);
+    return new PB_StepLoopOnFileSets();
 }
 
 void PB_StepLoopOnFileSets::savePostSettings(SettingsWriterInterface &writer) const
@@ -70,7 +54,7 @@ void PB_StepLoopOnFileSets::savePostSettings(SettingsWriterInterface &writer) co
 
     const CT_AbstractReader* reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
 
-    if(reader != NULL)
+    if(reader != nullptr)
         reader->saveSettings(writer);
 }
 
@@ -93,7 +77,7 @@ bool PB_StepLoopOnFileSets::restorePostSettings(SettingsReaderInterface &reader)
 
     CT_AbstractReader* aReader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
 
-    if((aReader == NULL) || !aReader->restoreSettings(reader))
+    if((aReader == nullptr) || !aReader->restoreSettings(reader))
         return false;
 
     return true;
@@ -101,13 +85,13 @@ bool PB_StepLoopOnFileSets::restorePostSettings(SettingsReaderInterface &reader)
 
 //////////////////// PROTECTED METHODS //////////////////
 
-void PB_StepLoopOnFileSets::createPreConfigurationDialog()
+void PB_StepLoopOnFileSets::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
     CT_StepConfigurableDialog *configDialog = newStandardPreConfigurationDialog();
 
     const QStringList list_readersList = PB_ReadersTools::constructReadersClassNameList(getPluginAs<PB_StepPluginManager>()->readersAvailable());
 
-    configDialog->addStringChoice(tr("Choose file type"), "", list_readersList, m_readerSelectedClassName);
+    postInputConfigDialog->addStringChoice(tr("Choose file type"), "", list_readersList, m_readerSelectedClassName);
 }
 
 bool PB_StepLoopOnFileSets::postConfigure()
@@ -116,7 +100,7 @@ bool PB_StepLoopOnFileSets::postConfigure()
     const QString fileFilter = PB_ReadersTools::constructStringForFileDialog(reader);
 
     if(fileFilter.isEmpty()) {
-        QMessageBox::critical(NULL, tr("Erreur"), tr("Aucun reader sélectionné"));
+        QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun reader sélectionné"));
         return false;
     }
 
@@ -161,7 +145,6 @@ bool PB_StepLoopOnFileSets::postConfigure()
     return false;
 }
 
-// Creation and affiliation of OUT models
 void PB_StepLoopOnFileSets::createOutResultModelListProtected(CT_OutResultModelGroup *firstResultModel)
 {
     Q_UNUSED(firstResultModel);
@@ -178,17 +161,17 @@ void PB_StepLoopOnFileSets::createOutResultModelListProtected(CT_OutResultModelG
     CT_AbstractReader *reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
 
     // if one reader was selected and at least one file is defined
-    if (reader != NULL && !m_setsFilePath.isEmpty())
+    if (reader != nullptr && !m_setsFilePath.isEmpty())
     {
         // get the header
         CT_FileHeader *rHeader = reader->createHeaderPrototype();
 
-        if(rHeader != NULL) {
+        if(rHeader != nullptr) {
             // copy the reader (copyFull = with configuration and models)
             CT_AbstractReader* readerCpy = reader->copyFull();
 
             outRes->addGroupModel(DEFout_grp, DEFout_grpHeader, new CT_StandardItemGroup(), tr("File"));
-            outRes->addItemModel(DEFout_grpHeader, DEFout_reader, new CT_ReaderItem(NULL, NULL, readerCpy), tr("Reader"));
+            outRes->addItemModel(DEFout_grpHeader, DEFout_reader, new CT_ReaderItem(nullptr, nullptr, readerCpy), tr("Reader"));
             outRes->addItemModel(DEFout_grpHeader, DEFout_header, rHeader, tr("Header"));
         }
     }
@@ -208,7 +191,7 @@ void PB_StepLoopOnFileSets::compute(CT_ResultGroup *outRes, CT_StandardItemGroup
 
     const CT_AbstractReader* reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
 
-    if(reader == NULL)
+    if(reader == nullptr)
         return;
 
     if (currentTurn == 1)
@@ -268,7 +251,6 @@ void PB_StepLoopOnFileSets::compute(CT_ResultGroup *outRes, CT_StandardItemGroup
                                                                     resultOut,
                                                                     grpKey));
         grp->addItemDrawable(attList);
-
 
         for (int f = 0 ; f < filesToRead.size() ; f++)
         {

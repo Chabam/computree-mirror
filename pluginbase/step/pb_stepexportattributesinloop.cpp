@@ -1,19 +1,13 @@
 #include "pb_stepexportattributesinloop.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
-#include "ct_itemdrawable/tools/iterator/ct_groupiterator.h"
+
 #include "ct_itemdrawable/tools/iterator/ct_itemiterator.h"
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/inModel/ct_inresultmodelgroup.h"
-#include "ct_result/model/outModel/ct_outresultmodelgroup.h"
-#include "ct_iterator/ct_groupiterator.h"
 
 #include "ct_abstractstepplugin.h"
 #include "ct_exporter/ct_standardexporterseparator.h"
 #include "ct_itemdrawable/ct_plotlistingrid.h"
 #include "ct_itemdrawable/ct_loopcounter.h"
-
-#include "ct_view/ct_stepconfigurabledialog.h"
 
 #include "ct_model/tools/ct_modelsearchhelper.h"
 
@@ -28,36 +22,9 @@
 #include <math.h>
 #include <QDir>
 
-#define DEF_ESRI_ASCII_Grid "ESRI ASCII Grid"
-#define DEF_ESRI_SHP "GDAL ESRI Shapefile"
-#define DEF_NA -9999999
-
-// Alias for indexing models
-#define DEFin_res "res"
-#define DEFin_grpMain "grpMain"
-#define DEFin_plotListInGrid "plotListInGrid"
-#define DEFin_grp "grp"
-
-#define DEFin_itemWithAttribute "itemWithAttribute"
-#define DEFin_attribute "attribute"
-
-#define DEFin_itemWithXY "itemWithXY"
-#define DEFin_Xattribute "Xattribute"
-#define DEFin_Yattribute "Yattribute"
-#define DEFin_attributeInItemXY "attributeInItemXY"
-
-#define DEF_inResultCounter "resCounter"
-#define DEF_inGroupCounter "counterGrp"
-#define DEF_inCounter "counter"
-
-#define DEFout_res "res"
-#define DEFout_grp "grp"
-
 #define EPSILON_LIMITS 0.0000001
 
-
-// Constructor : initialization of parameters
-PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop(CT_StepInitializeData &dataInit) : CT_AbstractStep(dataInit)
+PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop() : SuperClass()
 {
     _asciiExport = true;
     _vectorExport = false;
@@ -72,7 +39,6 @@ PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop(CT_StepInitializeDa
     _rasterDriverName = DEF_ESRI_ASCII_Grid;
     _vectorDriverName = DEF_ESRI_SHP;
 
-
 #ifdef USE_GDAL
     //GDALAllRegister();
     GDALDriverManager *driverManager = GetGDALDriverManager();
@@ -86,11 +52,11 @@ PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop(CT_StepInitializeDa
         GDALDriver *driver = driverManager->GetDriver(i);
         QString name = CT_GdalTools::staticGdalDriverName(driver);
 
-        if(!name.isEmpty() && driver->GetMetadataItem(GDAL_DCAP_RASTER) != NULL && driver->GetMetadataItem(GDAL_DCAP_CREATE) != NULL) {
+        if(!name.isEmpty() && driver->GetMetadataItem(GDAL_DCAP_RASTER) != nullptr && driver->GetMetadataItem(GDAL_DCAP_CREATE) != nullptr) {
             _gdalRasterDrivers.insert(name, driver);
         }
 
-        if(!name.isEmpty() && driver->GetMetadataItem(GDAL_DCAP_VECTOR) != NULL && driver->GetMetadataItem(GDAL_DCAP_CREATE) != NULL) {
+        if(!name.isEmpty() && driver->GetMetadataItem(GDAL_DCAP_VECTOR) != nullptr && driver->GetMetadataItem(GDAL_DCAP_CREATE) != nullptr) {
             _gdalVectorDrivers.insert(name, driver);
         }
     }
@@ -101,36 +67,30 @@ PB_StepExportAttributesInLoop::~PB_StepExportAttributesInLoop()
 {
 }
 
-
-// Step description (tooltip of contextual menu)
-QString PB_StepExportAttributesInLoop::getStepDescription() const
+QString PB_StepExportAttributesInLoop::description() const
 {
     return tr("Export d'attributs dans une boucle");
 }
 
-// Step detailled description
-QString PB_StepExportAttributesInLoop::getStepDetailledDescription() const
+QString PB_StepExportAttributesInLoop::detailledDescription() const
 {
     return tr("");
 }
 
-// Step URL
 QString PB_StepExportAttributesInLoop::getStepURL() const
 {
     //return tr("STEP URL HERE");
     return CT_AbstractStep::getStepURL(); //by default URL of the plugin
 }
 
-// Step copy method
-CT_VirtualAbstractStep* PB_StepExportAttributesInLoop::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepExportAttributesInLoop::createNewInstance()
 {
-    return new PB_StepExportAttributesInLoop(dataInit);
+    return new PB_StepExportAttributesInLoop();
 }
 
 //////////////////// PROTECTED METHODS //////////////////
 
-// Creation and affiliation of IN models
-void PB_StepExportAttributesInLoop::createInResultModelListProtected()
+void PB_StepExportAttributesInLoop::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_InResultModelGroup *resIn = createNewInResultModel(DEFin_res, tr("Résultat"));
     resIn->setZeroOrMoreRootGroup();
@@ -161,44 +121,40 @@ void PB_StepExportAttributesInLoop::createInResultModelListProtected()
     }
 }
 
-
-// Creation and affiliation of OUT models
-void PB_StepExportAttributesInLoop::createOutResultModelListProtected()
+void PB_StepExportAttributesInLoop::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
     //createNewOutResultModel(DEFout_res, tr("Resultat vide"));
 }
 
-void PB_StepExportAttributesInLoop::createPreConfigurationDialog()
+void PB_StepExportAttributesInLoop::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
     CT_StepConfigurableDialog* configDialog = newStandardPreConfigurationDialog();
-    configDialog->addBool(tr("Activer export ASCII tabulaire (1 fichier en tout)"), "", tr("Activer"), _asciiExport);
+    postInputConfigDialog->addBool(tr("Activer export ASCII tabulaire (1 fichier en tout)"), "", tr("Activer"), _asciiExport);
 
 #ifdef USE_OPENCV
-    configDialog->addEmpty();
-    configDialog->addBool(tr("Activer export raster (1 fichier / tour / métrique)"), "", tr("Activer"), _rasterExport);
-    configDialog->addTitle(tr("L'export raster nécessite une grille de placettes (désactiver si pas de résultat valide)"));
+    postInputConfigDialog->addEmpty();
+    postInputConfigDialog->addBool(tr("Activer export raster (1 fichier / tour / métrique)"), "", tr("Activer"), _rasterExport);
+    postInputConfigDialog->addTitle(tr("L'export raster nécessite une grille de placettes (désactiver si pas de résultat valide)"));
 #endif
 
 #ifdef USE_GDAL
-    configDialog->addEmpty();
-    configDialog->addBool(tr("Activer export vectoriel (1 fichier / tour)"), "", tr("Activer"), _vectorExport);
+    postInputConfigDialog->addEmpty();
+    postInputConfigDialog->addBool(tr("Activer export vectoriel (1 fichier / tour)"), "", tr("Activer"), _vectorExport);
 #endif
 
-    configDialog->addEmpty();
-    configDialog->addBool(tr("Export dans une boucle (cas normal)"), "", tr("Activer"), _exportInLoop);
-
+    postInputConfigDialog->addEmpty();
+    postInputConfigDialog->addBool(tr("Export dans une boucle (cas normal)"), "", tr("Activer"), _exportInLoop);
 
 }
 
-// Semi-automatic creation of step parameters DialogBox
-void PB_StepExportAttributesInLoop::createPostConfigurationDialog()
+void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
     CT_StepConfigurableDialog* configDialog = newStandardPostConfigurationDialog();
 
     if (_asciiExport)
     {
-        configDialog->addTitle(tr("Export ASCII tabulaire (1 fichier en tout)"));
-        configDialog->addFileChoice(tr("Choix du fichier"), CT_FileChoiceButton::OneNewFile, tr("Fichier texte (*.txt)"), _outASCIIFileName);
+        postInputConfigDialog->addTitle(tr("Export ASCII tabulaire (1 fichier en tout)"));
+        postInputConfigDialog->addFileChoice(tr("Choix du fichier"), CT_FileChoiceButton::OneNewFile, tr("Fichier texte (*.txt)"), _outASCIIFileName);
     }
 
 #ifdef USE_OPENCV
@@ -211,12 +167,12 @@ void PB_StepExportAttributesInLoop::createPostConfigurationDialog()
         driversR.append(_gdalRasterDrivers.keys());
 #endif
 
-        configDialog->addEmpty();
-        configDialog->addTitle(tr("Export raster (1 fichier / tour / métrique)"));
-        configDialog->addString(tr("Prefixe pour les fichiers exportés"), "", _rasterPrefix);
-        configDialog->addStringChoice(tr("Choix du format d'export"), "", driversR, _rasterDriverName);
-        configDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outRasterFolder);
-        configDialog->addBool(tr("Créer un sous-dossier par métrique"), "", "", _subFolders);
+        postInputConfigDialog->addEmpty();
+        postInputConfigDialog->addTitle(tr("Export raster (1 fichier / tour / métrique)"));
+        postInputConfigDialog->addString(tr("Prefixe pour les fichiers exportés"), "", _rasterPrefix);
+        postInputConfigDialog->addStringChoice(tr("Choix du format d'export"), "", driversR, _rasterDriverName);
+        postInputConfigDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outRasterFolder);
+        postInputConfigDialog->addBool(tr("Créer un sous-dossier par métrique"), "", "", _subFolders);
     }
 #endif
 
@@ -226,11 +182,11 @@ void PB_StepExportAttributesInLoop::createPostConfigurationDialog()
         QStringList driversV;
         driversV.append(_gdalVectorDrivers.keys());
 
-        configDialog->addEmpty();
-        configDialog->addTitle(tr("Export vectoriel (1 fichier / tour)"));
-        configDialog->addString(tr("Prefixe pour les fichiers exportés"), "", _vectorPrefix);
-        configDialog->addStringChoice(tr("Choix du format d'export"), "", driversV, _vectorDriverName);
-        configDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outVectorFolder);
+        postInputConfigDialog->addEmpty();
+        postInputConfigDialog->addTitle(tr("Export vectoriel (1 fichier / tour)"));
+        postInputConfigDialog->addString(tr("Prefixe pour les fichiers exportés"), "", _vectorPrefix);
+        postInputConfigDialog->addStringChoice(tr("Choix du format d'export"), "", driversV, _vectorDriverName);
+        postInputConfigDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outVectorFolder);
     }
 #endif
 }
@@ -241,8 +197,8 @@ void PB_StepExportAttributesInLoop::compute()
     _modelsKeys.clear();
     _names.clear();
 
-    QFile* fileASCII = NULL;
-    QTextStream* streamASCII = NULL;
+    QFile* fileASCII = nullptr;
+    QTextStream* streamASCII = nullptr;
     bool first = true;
 
     QList<CT_ResultGroup*> inResultList = getInputResults();
@@ -257,7 +213,7 @@ void PB_StepExportAttributesInLoop::compute()
         {
             const CT_LoopCounter* counter = (const CT_LoopCounter*) itCounter.next();
 
-            if (counter != NULL)
+            if (counter != nullptr)
             {
                 QFileInfo fileinfo(counter->getTurnName());
                 if (fileinfo.exists())
@@ -287,7 +243,6 @@ void PB_StepExportAttributesInLoop::compute()
         hash.insert((CT_OutAbstractSingularItemModel*) (ith1.key()->rootOriginalModel()), ith1.value());
     }
 
-
     CT_ModelSearchHelper::SplitHash hash2 = PS_MODELS->splitSelectedAttributesModelBySelectedSingularItemModel(DEFin_attributeInItemXY, DEFin_itemWithXY, resIn->model(), this);
     QHashIterator<CT_OutAbstractSingularItemModel *, CT_OutAbstractItemAttributeModel *> ith2(hash2);
     while (ith2.hasNext())
@@ -305,7 +260,7 @@ void PB_StepExportAttributesInLoop::compute()
 
         CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) (ithX.key()->rootOriginalModel());
         CT_OutAbstractItemAttributeModel *attrModel = ithX.value();
-        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->rootOriginalModel());}
+        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != nullptr) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->rootOriginalModel());}
         xKey = QString("ITEM_%1_ATTR_%2").arg(itemModel->uniqueName()).arg(attrModel->uniqueName());
     }
 
@@ -318,7 +273,7 @@ void PB_StepExportAttributesInLoop::compute()
 
         CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) (ithY.key()->rootOriginalModel());
         CT_OutAbstractItemAttributeModel *attrModel = ithY.value();
-        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->rootOriginalModel());}
+        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != nullptr) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->rootOriginalModel());}
         yKey = QString("ITEM_%1_ATTR_%2").arg(itemModel->uniqueName()).arg(attrModel->uniqueName());
     }
 
@@ -338,7 +293,7 @@ void PB_StepExportAttributesInLoop::compute()
             QString attrDN = attrModel->displayableName();
             QString attrUN = attrModel->uniqueName();
 
-            if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
+            if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != nullptr) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
 
             QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
             _modelsKeys.append(key);
@@ -409,8 +364,8 @@ void PB_StepExportAttributesInLoop::compute()
                     }
 
                 } else {
-                    delete streamASCII; streamASCII = NULL;
-                    delete fileASCII; fileASCII = NULL;
+                    delete streamASCII; streamASCII = nullptr;
+                    delete fileASCII; fileASCII = nullptr;
                     PS_LOG->addMessage(LogInterface::error, LogInterface::step, getStepCustomName() + tr("Impossible de créer le fichier d'export ASCII. Arrêt des traitements."));
                     stop();
                     return;
@@ -418,8 +373,8 @@ void PB_StepExportAttributesInLoop::compute()
             } else {
                 if (!fileASCII->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
                 {
-                    delete streamASCII; streamASCII = NULL;
-                    delete fileASCII; fileASCII = NULL;
+                    delete streamASCII; streamASCII = nullptr;
+                    delete fileASCII; fileASCII = nullptr;
                     PS_LOG->addMessage(LogInterface::error, LogInterface::step, getStepCustomName() + tr("Impossible d'ouvrir le fichier d'export ASCII. Arrêt des traitements."));
                     stop();
                     return;
@@ -429,12 +384,12 @@ void PB_StepExportAttributesInLoop::compute()
     }
 
 #ifdef USE_GDAL
-        GDALDataset *vectorDataSet = NULL;
-        OGRLayer *vectorLayer = NULL;
+        GDALDataset *vectorDataSet = nullptr;
+        OGRLayer *vectorLayer = nullptr;
 
-        GDALDriver* driverVector = _gdalVectorDrivers.value(_vectorDriverName, NULL);
+        GDALDriver* driverVector = _gdalVectorDrivers.value(_vectorDriverName, nullptr);
 
-        if (_vectorExport && driverVector != NULL && _outVectorFolder.size() > 0)
+        if (_vectorExport && driverVector != nullptr && _outVectorFolder.size() > 0)
         {
             QString outFileName = (QString("%1/%2").arg(_outVectorFolder.first()).arg(exportBaseName));
             QStringList ext = CT_GdalTools::staticGdalDriverExtension(driverVector);
@@ -444,16 +399,16 @@ void PB_StepExportAttributesInLoop::compute()
                 outFileName.append(ext.first());
             }
 
-            vectorDataSet = driverVector->Create(outFileName.toLatin1(), 0, 0, 0, GDT_Unknown, NULL );
+            vectorDataSet = driverVector->Create(outFileName.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr );
 
-            if (vectorDataSet != NULL)
+            if (vectorDataSet != nullptr)
             {
-                vectorLayer = vectorDataSet->CreateLayer( "point", NULL, wkbPoint, NULL );
+                vectorLayer = vectorDataSet->CreateLayer( "point", nullptr, wkbPoint, nullptr );
             } else {
                 PS_LOG->addMessage(LogInterface::error, LogInterface::step, getStepCustomName() + tr("Impossible d'utiliser le format d'export Vectoriel choisi."));
             }
 
-            for (int i = 0 ; vectorLayer != NULL && i < _modelsKeys.size() ; i++)
+            for (int i = 0 ; vectorLayer != nullptr && i < _modelsKeys.size() ; i++)
             {
                 QString key = _modelsKeys.at(i);
                 if (_ogrTypes.contains(key))
@@ -487,10 +442,10 @@ void PB_StepExportAttributesInLoop::compute()
             CT_PlotListInGrid* plotListInGrid = (CT_PlotListInGrid*) grpMain->firstItemByINModelName(this, DEFin_plotListInGrid);
 
             Eigen::Vector2d min, max;
-            plotListInGrid->getBoundingBox2D(min, max);
+            plotListInGrid->boundingBox2D(min, max);
             double resolution = plotListInGrid->getSpacing();
 
-            if (plotListInGrid != NULL)
+            if (plotListInGrid != nullptr)
             {
                 for (int i = 0 ; i < _modelsKeys.size() ; i++)
                 {
@@ -498,7 +453,7 @@ void PB_StepExportAttributesInLoop::compute()
 
                     if (key != xKey && key != yKey)
                     {
-                        rasters.insert(key, CT_Image2D<double>::createImage2DFromXYCoords(NULL, NULL, min(0), min(1), max(0) - EPSILON_LIMITS, max(1) - EPSILON_LIMITS, resolution, 0, DEF_NA, DEF_NA));
+                        rasters.insert(key, CT_Image2D<double>::createImage2DFromXYCoords(nullptr, nullptr, min(0), min(1), max(0) - EPSILON_LIMITS, max(1) - EPSILON_LIMITS, resolution, 0, DEF_NA, DEF_NA));
                     }
                 }
             }
@@ -516,16 +471,15 @@ void PB_StepExportAttributesInLoop::compute()
             double y = std::numeric_limits<double>::max();
 
             CT_AbstractSingularItemDrawable* itemXY = (CT_AbstractSingularItemDrawable*) grp->firstItemByINModelName(this, DEFin_itemWithXY);
-            if (itemXY != NULL)
+            if (itemXY != nullptr)
             {
                 CT_AbstractItemAttribute* attX = itemXY->firstItemAttributeByINModelName(resIn, this, DEFin_Xattribute);
                 CT_AbstractItemAttribute* attY = itemXY->firstItemAttributeByINModelName(resIn, this, DEFin_Yattribute);
 
-                if (attX != NULL) {x = attX->toDouble(itemXY, NULL);}
-                if (attY != NULL) {y = attY->toDouble(itemXY, NULL);}
+                if (attX != nullptr) {x = attX->toDouble(itemXY, nullptr);}
+                if (attY != nullptr) {y = attY->toDouble(itemXY, nullptr);}
 
                 CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*)itemXY->model();
-
 
                 QList<CT_OutAbstractItemAttributeModel *> attributesModel = hash.values(itemModel);
                 QList<CT_AbstractItemAttribute *> attributes = itemXY->itemAttributes(attributesModel);
@@ -533,7 +487,7 @@ void PB_StepExportAttributesInLoop::compute()
                 for (int i = 0 ; i < attributes.size() ; i++)
                 {
                     CT_AbstractItemAttribute* attribute = attributes.at(i);
-                    if (attribute != NULL)
+                    if (attribute != nullptr)
                     {
                         CT_OutAbstractItemAttributeModel* attrModel = (CT_OutAbstractItemAttributeModel*) attribute->model();
 
@@ -549,7 +503,7 @@ void PB_StepExportAttributesInLoop::compute()
             {
                 CT_AbstractSingularItemDrawable* item = (CT_AbstractSingularItemDrawable*) itItem.next();
 
-                if (item != NULL)
+                if (item != nullptr)
                 {
                     CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*)item->model();
                     QList<CT_OutAbstractItemAttributeModel *> attributesModel = hash.values(itemModel);
@@ -558,7 +512,7 @@ void PB_StepExportAttributesInLoop::compute()
                     for (int i = 0 ; i < attributes.size() ; i++)
                     {
                         CT_AbstractItemAttribute* attribute = attributes.at(i);
-                        if (attribute != NULL)
+                        if (attribute != nullptr)
                         {
                             CT_OutAbstractItemAttributeModel* attrModel = (CT_OutAbstractItemAttributeModel*) attribute->model();
 
@@ -573,8 +527,8 @@ void PB_StepExportAttributesInLoop::compute()
             bool hasMetricsToExport = !(indexedAttributes.isEmpty());
 
 #ifdef USE_GDAL
-            OGRFeature *vectorFeature = NULL;
-            if (_vectorExport && hasMetricsToExport && vectorLayer != NULL)
+            OGRFeature *vectorFeature = nullptr;
+            if (_vectorExport && hasMetricsToExport && vectorLayer != nullptr)
             {
                 vectorFeature = OGRFeature::CreateFeature(vectorLayer->GetLayerDefn());
                 OGRPoint pt;
@@ -583,7 +537,7 @@ void PB_StepExportAttributesInLoop::compute()
                 vectorFeature->SetGeometry(&pt);
             }
 #endif
-            if (_asciiExport && streamASCII != NULL)
+            if (_asciiExport && streamASCII != nullptr)
             {
                 (*streamASCII) << exportBaseName << "\t";
             }
@@ -595,17 +549,17 @@ void PB_StepExportAttributesInLoop::compute()
                 const QPair<CT_AbstractSingularItemDrawable*, CT_AbstractItemAttribute*> &pair = indexedAttributes.value(key);
 
 #ifdef USE_OPENCV
-                CT_Image2D<double>* raster = rasters.value(key, NULL);
+                CT_Image2D<double>* raster = rasters.value(key, nullptr);
 #endif
 
-                if (pair.first != NULL && pair.second != NULL)
+                if (pair.first != nullptr && pair.second != nullptr)
                 {
-                    if (hasMetricsToExport && _asciiExport && streamASCII != NULL)
+                    if (hasMetricsToExport && _asciiExport && streamASCII != nullptr)
                     {
-                        (*streamASCII) << pair.second->toString(pair.first, NULL);
+                        (*streamASCII) << pair.second->toString(pair.first, nullptr);
                     }
 #ifdef USE_GDAL
-                    if (_vectorExport && vectorLayer != NULL)
+                    if (_vectorExport && vectorLayer != nullptr)
                     {
 
                         QByteArray fieldNameBA = _shortNames.value(key).toLatin1();
@@ -613,40 +567,39 @@ void PB_StepExportAttributesInLoop::compute()
 
                         if      (_ogrTypes.value(key) == OFTBinary)
                         {
-                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, NULL));
+                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, nullptr));
                         } else if (_ogrTypes.value(key) == OFTString)
                         {
-                            //QString text = replaceAccentCharacters(pair.second->toString(pair.first, NULL));
-                            QString text = pair.second->toString(pair.first, NULL);
+                            //QString text = replaceAccentCharacters(pair.second->toString(pair.first, nullptr));
+                            QString text = pair.second->toString(pair.first, nullptr);
                             QByteArray textBA = text.toLatin1();
                             const char* textChar = textBA;
                             vectorFeature->SetField(fieldName, textChar);
                         } else if (_ogrTypes.value(key) == OFTInteger)
                         {
-                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, NULL));
+                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, nullptr));
 //                        } else if (_ogrTypes.value(key) == OFTInteger64)
 //                        {
-//                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, NULL));
+//                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, nullptr));
                         } else
                         {
-                            vectorFeature->SetField(fieldName, pair.second->toDouble(pair.first, NULL));
+                            vectorFeature->SetField(fieldName, pair.second->toDouble(pair.first, nullptr));
                         }
 
                     }
 #endif
 
-
 #ifdef USE_OPENCV
-                    if (_rasterExport && raster != NULL)
+                    if (_rasterExport && raster != nullptr)
                     {
-                        double val = pair.second->toDouble(pair.first, NULL);
+                        double val = pair.second->toDouble(pair.first, nullptr);
                         if (std::isnan(val)) {val = DEF_NA;}
                         raster->setValueAtCoords(x, y, val);
                     }
 #endif
                 }
 
-                if (hasMetricsToExport && _asciiExport && streamASCII != NULL)
+                if (hasMetricsToExport && _asciiExport && streamASCII != nullptr)
                 {
                     if(i < _modelsKeys.size() - 1) {(*streamASCII) << "\t";} else {(*streamASCII) << "\n";}
                 }
@@ -654,7 +607,7 @@ void PB_StepExportAttributesInLoop::compute()
             }
 
 #ifdef USE_GDAL
-            if (_vectorExport && vectorLayer != NULL)
+            if (_vectorExport && vectorLayer != nullptr)
             {
                 if (vectorLayer->CreateFeature(vectorFeature) != OGRERR_NONE)
                 {
@@ -667,7 +620,7 @@ void PB_StepExportAttributesInLoop::compute()
 
 #ifdef USE_OPENCV
         if (_rasterExport)
-        {           
+        {
             QMapIterator<QString, CT_Image2D<double>*> itRaster(rasters);
             while (itRaster.hasNext())
             {
@@ -699,9 +652,9 @@ void PB_StepExportAttributesInLoop::compute()
 
                 } else {
 #ifdef USE_GDAL
-                    GDALDriver* driver = _gdalRasterDrivers.value(_rasterDriverName, NULL);
+                    GDALDriver* driver = _gdalRasterDrivers.value(_rasterDriverName, nullptr);
 
-                    if (driver != NULL)
+                    if (driver != nullptr)
                     {
                         PB_GDALExporter exporter(driver);
                         exporter.init();
@@ -720,11 +673,10 @@ void PB_StepExportAttributesInLoop::compute()
 
     }
 
-
-    if (fileASCII != NULL) {fileASCII->close(); delete fileASCII;}
-    if (streamASCII != NULL) {delete streamASCII;}
+    if (fileASCII != nullptr) {fileASCII->close(); delete fileASCII;}
+    if (streamASCII != nullptr) {delete streamASCII;}
 #ifdef USE_GDAL
-    if (_vectorExport && vectorDataSet != NULL)
+    if (_vectorExport && vectorDataSet != nullptr)
     {
         GDALClose(vectorDataSet);
     }
@@ -782,7 +734,6 @@ QString PB_StepExportAttributesInLoop::replaceAccentCharacters(const QString &na
         value.replace(QRegExp("[Ç]"), "C");
         return value;
 }
-
 
 QMap<QString, QString> PB_StepExportAttributesInLoop::computeShortNames(const QMap<QString, QString> &names) const
 {

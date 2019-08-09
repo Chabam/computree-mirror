@@ -4,12 +4,6 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
 #include "ct_itemdrawable/ct_scene.h"
-#include "ct_pointcloudindex/ct_pointcloudindexvector.h"
-#include "ct_itemdrawable/tools/iterator/ct_groupiterator.h"
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/inModel/ct_inresultmodelgrouptocopy.h"
-#include "ct_result/model/outModel/tools/ct_outresultmodelgrouptocopypossibilities.h"
-#include "ct_view/ct_stepconfigurabledialog.h"
 
 #include "ct_abstractstepplugin.h"
 #include "ctlibfilters/filters/abstract/ct_abstractfilter_xyz.h"
@@ -21,14 +15,7 @@
 
 #include <QDebug>
 
-// Alias for indexing models
-#define DEFin_res "res"
-#define DEFin_grp "grp"
-#define DEFin_points "points"
-#define DEFin_lasAtt "lasAtt"
-
-// Constructor : initialization of parameters
-PB_StepApplyPointFilters::PB_StepApplyPointFilters(CT_StepInitializeData &dataInit) : CT_AbstractStep(dataInit)
+PB_StepApplyPointFilters::PB_StepApplyPointFilters() : SuperClass()
 {
 }
 
@@ -41,29 +28,25 @@ PB_StepApplyPointFilters::~PB_StepApplyPointFilters()
     m_selectedXYZFilters.clear();
 }
 
-// Step description (tooltip of contextual menu)
-QString PB_StepApplyPointFilters::getStepDescription() const
+QString PB_StepApplyPointFilters::description() const
 {
     return tr("1- Filtres de points");
 }
 
-// Step detailled description
-QString PB_StepApplyPointFilters::getStepDetailledDescription() const
+QString PB_StepApplyPointFilters::detailledDescription() const
 {
     return PB_ConfigurableElementTools::formatHtmlStepDetailledDescription(getPluginAs<PB_StepPluginManager>()->xyzFiltersAvailable());
 }
 
-// Step URL
 QString PB_StepApplyPointFilters::getStepURL() const
 {
     //return tr("STEP URL HERE");
     return CT_AbstractStep::getStepURL(); //by default URL of the plugin
 }
 
-// Step copy method
-CT_VirtualAbstractStep* PB_StepApplyPointFilters::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepApplyPointFilters::createNewInstance()
 {
-    return new PB_StepApplyPointFilters(dataInit);
+    return new PB_StepApplyPointFilters();
 }
 
 void PB_StepApplyPointFilters::savePostSettings(SettingsWriterInterface &writer) const
@@ -90,8 +73,7 @@ bool PB_StepApplyPointFilters::restorePostSettings(SettingsReaderInterface &read
 
 //////////////////// PROTECTED METHODS //////////////////
 
-// Creation and affiliation of IN models
-void PB_StepApplyPointFilters::createInResultModelListProtected()
+void PB_StepApplyPointFilters::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_InResultModelGroupToCopy *resIn_res = createNewInResultModelForCopy(DEFin_res, tr("Points"));
     resIn_res->setZeroOrMoreRootGroup();
@@ -102,7 +84,7 @@ void PB_StepApplyPointFilters::createInResultModelListProtected()
 
 bool PB_StepApplyPointFilters::postConfigure()
 {
-    CTG_ConfigurableElementsSelector cd(NULL, !getStepChildList().isEmpty());
+    CTG_ConfigurableElementsSelector cd(nullptr, !getStepChildList().isEmpty());
     cd.setWindowTitle("Filtres séléctionnées");
     cd.setElementsAvailable(getPluginAs<PB_StepPluginManager>()->xyzFiltersAvailable());
     cd.setElementsSelected(&m_selectedXYZFilters);
@@ -129,19 +111,17 @@ bool PB_StepApplyPointFilters::finalizePostConfiguration()
     return true;
 }
 
-// Creation and affiliation of OUT models
-void PB_StepApplyPointFilters::createOutResultModelListProtected()
-{       
+void PB_StepApplyPointFilters::declareOutputModels(CT_StepOutModelStructureManager& manager)
+{
     CT_OutResultModelGroupToCopyPossibilities *resCpy_res = createNewOutResultModelToCopy(DEFin_res);
 
-    if(resCpy_res != NULL) {
+    if(resCpy_res != nullptr) {
         QListIterator<CT_AbstractConfigurableElement *> it(m_selectedXYZFilters);
         while (it.hasNext())
         {
             CT_AbstractFilter_XYZ* filter = (CT_AbstractFilter_XYZ*) it.next();
 
-            CT_AutoRenameModels* modelName = new CT_AutoRenameModels();
-            _modelNames.insert(filter, modelName);
+                        _modelNames.insert(filter, modelName);
 
             resCpy_res->addItemModel(DEFin_grp, *modelName, new CT_Scene(), filter->getDetailledDisplayableName());
         }
@@ -158,25 +138,24 @@ void PB_StepApplyPointFilters::compute()
     while (itCpy_grp.hasNext() && !isStopped())
     {
         CT_StandardItemGroup* grp = (CT_StandardItemGroup*) itCpy_grp.next();
-        
+
         const CT_AbstractItemDrawableWithPointCloud* points = (CT_AbstractItemDrawableWithPointCloud*)grp->firstItemByINModelName(this, DEFin_points);
         const CT_StdLASPointsAttributesContainer* lasAtt = (CT_StdLASPointsAttributesContainer*)grp->firstItemByINModelName(this, DEFin_lasAtt);
 
-        if (points != NULL)
+        if (points != nullptr)
         {
             QListIterator<CT_AbstractConfigurableElement *> it(m_selectedXYZFilters);
             while (it.hasNext())
             {
                 CT_AbstractConfigurableElement* element = it.next();
-                CT_AutoRenameModels* modelName = _modelNames.value(element);
-                CT_AbstractFilter_XYZ* filter = (CT_AbstractFilter_XYZ*) element->copy();
+                                CT_AbstractFilter_XYZ* filter = (CT_AbstractFilter_XYZ*) element->copy();
                 CT_AbstractFilter_LAS* filterLAS = dynamic_cast<CT_AbstractFilter_LAS*>(filter);
 
-                if (filter != NULL && modelName != NULL && points->getPointCloudIndex() != NULL)
+                if (filter != nullptr && modelName != nullptr && points->pointCloudIndex() != nullptr)
                 {
                     filter->setPointCloud(points);
 
-                    if (filterLAS != NULL)
+                    if (filterLAS != nullptr)
                         ((CT_AbstractFilter_LAS*) filter)->setLASAttributesContainer(lasAtt);
 
                     if(filter->filterPointCloudIndex()) {

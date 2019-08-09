@@ -4,27 +4,25 @@
 #include "ct_step/ct_stepbeginloop.h"
 #include "ct_itemdrawable/ct_loopcounter.h"
 #include "ct_itemdrawable/ct_standarditemgroup.h"
-#include "ct_result/ct_resultgroup.h"
-
 
 class PB_StepBeginLoopThroughGroups02 : public CT_StepBeginLoop
 {
     Q_OBJECT
+    using SuperClass = CT_AbstractStep;
 public:
-    PB_StepBeginLoopThroughGroups02(CT_StepInitializeData &dataInit);
+    PB_StepBeginLoopThroughGroups02();
 
     ~PB_StepBeginLoopThroughGroups02();
 
-    QString getStepDescription() const;
+    QString description() const;
 
-    QString getStepDetailledDescription() const;
+    QString detailledDescription() const;
 
-    virtual CT_VirtualAbstractStep* createNewInstance(CT_StepInitializeData &dataInit);
-
+    virtual CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
 
-    virtual void createInResultModelListProtected();
+    virtual void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
     virtual void createOutResultModelListProtected(CT_OutResultModelGroup *firstResultModel);
 

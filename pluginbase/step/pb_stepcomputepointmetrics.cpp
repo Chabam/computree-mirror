@@ -6,16 +6,9 @@
 #include "ct_itemdrawable/ct_scene.h"
 #include "ct_itemdrawable/abstract/ct_abstractareashape2d.h"
 #include "ct_itemdrawable/ct_attributeslist.h"
-#include "ct_pointcloudindex/ct_pointcloudindexvector.h"
-#include "ct_itemdrawable/tools/iterator/ct_groupiterator.h"
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/inModel/ct_inresultmodelgrouptocopy.h"
-#include "ct_result/model/outModel/tools/ct_outresultmodelgrouptocopypossibilities.h"
+
 #include "ct_model/inModel/tools/ct_instdmodelpossibility.h"
 #include "ct_model/tools/ct_modelsearchhelper.h"
-#include "ct_global/ct_context.h"
-
-#include "ct_view/ct_stepconfigurabledialog.h"
 
 #include "ct_abstractstepplugin.h"
 #include "ctlibmetrics/ct_metric/abstract/ct_abstractmetric_xyz.h"
@@ -27,15 +20,7 @@
 
 #include <QDebug>
 
-// Alias for indexing models
-#define DEFin_res "res"
-#define DEFin_grp "grp"
-#define DEFin_points "points"
-#define DEFin_areaShape "shapeArea"
-#define DEFin_lasAtt "lasAtt"
-
-// Constructor : initialization of parameters
-PB_StepComputePointMetrics::PB_StepComputePointMetrics(CT_StepInitializeData &dataInit) : CT_AbstractStep(dataInit)
+PB_StepComputePointMetrics::PB_StepComputePointMetrics() : SuperClass()
 {
     _inSceneDisplayableName = "";
 }
@@ -46,19 +31,16 @@ PB_StepComputePointMetrics::~PB_StepComputePointMetrics()
     m_selectedXYZMetrics.clear();
 }
 
-// Step description (tooltip of contextual menu)
-QString PB_StepComputePointMetrics::getStepDescription() const
+QString PB_StepComputePointMetrics::description() const
 {
     return tr("1- Métriques de points (XYZ)");
 }
 
-// Step detailled description
-QString PB_StepComputePointMetrics::getStepDetailledDescription() const
+QString PB_StepComputePointMetrics::detailledDescription() const
 {
     return PB_ConfigurableElementTools::formatHtmlStepDetailledDescription(getPluginAs<PB_StepPluginManager>()->xyzMetricsAvailable());
 }
 
-// Step URL
 QString PB_StepComputePointMetrics::getStepURL() const
 {
     //return tr("STEP URL HERE");
@@ -87,16 +69,14 @@ bool PB_StepComputePointMetrics::restorePostSettings(SettingsReaderInterface &re
                                                                                                    reader);
 }
 
-// Step copy method
-CT_VirtualAbstractStep* PB_StepComputePointMetrics::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepComputePointMetrics::createNewInstance()
 {
-    return new PB_StepComputePointMetrics(dataInit);
+    return new PB_StepComputePointMetrics();
 }
 
 //////////////////// PROTECTED METHODS //////////////////
 
-// Creation and affiliation of IN models
-void PB_StepComputePointMetrics::createInResultModelListProtected()
+void PB_StepComputePointMetrics::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_InResultModelGroupToCopy *resIn_res = createNewInResultModelForCopy(DEFin_res, tr("Points"));
     resIn_res->setZeroOrMoreRootGroup();
@@ -106,26 +86,25 @@ void PB_StepComputePointMetrics::createInResultModelListProtected()
     resIn_res->addStdItemModel(DEFin_grp, DEFin_lasAtt, CT_StdLASPointsAttributesContainer::staticGetType(), tr("Attributs LAS"), "", CT_InAbstractItemModel::C_ChooseOneIfMultiple, CT_InAbstractItemModel::F_IsOptional);
 }
 
-// Semi-automatic creation of step parameters DialogBox
-void PB_StepComputePointMetrics::createPostConfigurationDialog()
+void PB_StepComputePointMetrics::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
     // Récupération du nom du modèle de la scène d'entrée
     CT_InAbstractResultModel *resultInModel = getInResultModel(DEFin_res);
 
-    CT_OutAbstractResultModel* resultInModelOut = NULL;
-    CT_InAbstractSingularItemModel* baseModel = NULL;
+    CT_OutAbstractResultModel* resultInModelOut = nullptr;
+    CT_InAbstractSingularItemModel* baseModel = nullptr;
 
     if(!resultInModel->getPossibilitiesSelected().isEmpty())
     {
         resultInModelOut = (CT_OutAbstractResultModel*)resultInModel->getPossibilitiesSelected().first()->outModel();
     }
 
-    if(resultInModelOut != NULL)
+    if(resultInModelOut != nullptr)
     {
         baseModel = (CT_InAbstractSingularItemModel*)PS_MODELS->searchModel(DEFin_points, resultInModelOut, this);
     }
 
-    if(baseModel != NULL && !baseModel->getPossibilitiesSelected().isEmpty())
+    if(baseModel != nullptr && !baseModel->getPossibilitiesSelected().isEmpty())
     {
         _inSceneDisplayableName =  baseModel->getPossibilitiesSelected().first()->outModel()->displayableName();
     }
@@ -133,7 +112,7 @@ void PB_StepComputePointMetrics::createPostConfigurationDialog()
 
 bool PB_StepComputePointMetrics::postConfigure()
 {
-    CTG_ConfigurableElementsSelector cd(NULL, !getStepChildList().isEmpty());
+    CTG_ConfigurableElementsSelector cd(nullptr, !getStepChildList().isEmpty());
     cd.setWindowTitle("Métriques séléctionnées");
     cd.setElementsAvailable(getPluginAs<PB_StepPluginManager>()->xyzMetricsAvailable());
     cd.setElementsSelected(&m_selectedXYZMetrics);
@@ -159,13 +138,11 @@ bool PB_StepComputePointMetrics::finalizePostConfiguration()
     return true;
 }
 
-
-// Creation and affiliation of OUT models
-void PB_StepComputePointMetrics::createOutResultModelListProtected()
+void PB_StepComputePointMetrics::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
     CT_OutResultModelGroupToCopyPossibilities *resCpy = createNewOutResultModelToCopy(DEFin_res);
 
-    if(resCpy != NULL) {
+    if(resCpy != nullptr) {
         resCpy->addItemModel(DEFin_grp, _outMetrics_ModelName, new CT_AttributesList(), tr("Métriques") + (_inSceneDisplayableName.isEmpty() ? "" : tr(" (%1)").arg(_inSceneDisplayableName)));
 
         QListIterator<CT_AbstractConfigurableElement *> it(m_selectedXYZMetrics);
@@ -187,16 +164,16 @@ void PB_StepComputePointMetrics::compute()
     while (itCpy_grp.hasNext() && !isStopped())
     {
         CT_StandardItemGroup* grp = (CT_StandardItemGroup*) itCpy_grp.next();
-        
+
         const CT_AbstractItemDrawableWithPointCloud* points = (CT_AbstractItemDrawableWithPointCloud*)grp->firstItemByINModelName(this, DEFin_points);
         const CT_AbstractAreaShape2D* plotArea = (CT_AbstractAreaShape2D*)grp->firstItemByINModelName(this, DEFin_areaShape);
         const CT_StdLASPointsAttributesContainer* lasAtt = (CT_StdLASPointsAttributesContainer*)grp->firstItemByINModelName(this, DEFin_lasAtt);
 
-        if (points != NULL)
+        if (points != nullptr)
         {
-            const CT_AreaShape2DData *area = NULL;
+            const CT_AreaShape2DData *area = nullptr;
 
-            if(plotArea != NULL)
+            if(plotArea != nullptr)
             {
                 area = &plotArea->getAreaData();
             }
@@ -211,12 +188,12 @@ void PB_StepComputePointMetrics::compute()
                 CT_AbstractMetric_LAS* lasMetric = dynamic_cast<CT_AbstractMetric_LAS*>(metric);
 
                 bool ok = false;
-                if(lasMetric != NULL)
+                if(lasMetric != nullptr)
                 {
-                    ok = lasMetric->initLasDatas(points->getPointCloudIndex(), area, lasAtt);
+                    ok = lasMetric->initLasDatas(points->pointCloudIndex(), area, lasAtt);
                 } else
                 {
-                    ok = metric->initDatas(points->getPointCloudIndex(), area);
+                    ok = metric->initDatas(points->pointCloudIndex(), area);
                 }
 
                 if (ok) {metric->computeMetric(outAttributes);}

@@ -2,19 +2,16 @@
 
 #include "ct_step/tools/ct_logmanageradapterforstep.h"
 
-// Constructor : initialization of parameters
 PB_StepUseReaderToLoadFiles::PB_StepUseReaderToLoadFiles() : SuperClass()
 {
     _conditionnal = false;
 }
 
-// Step description (tooltip of contextual menu)
 QString PB_StepUseReaderToLoadFiles::description() const
 {
     return tr("2- Charger des fichiers à l'aide de readers");
 }
 
-// Step copy method
 CT_VirtualAbstractStep* PB_StepUseReaderToLoadFiles::createNewInstance() const
 {
     return new PB_StepUseReaderToLoadFiles();
@@ -22,7 +19,7 @@ CT_VirtualAbstractStep* PB_StepUseReaderToLoadFiles::createNewInstance() const
 
 void PB_StepUseReaderToLoadFiles::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    preInputConfigDialog->addBool(tr("Conditionner le chargement à un attribut booléen"), "", "", _conditionnal);
+    preInputpostInputConfigDialog->addBool(tr("Conditionner le chargement à un attribut booléen"), "", "", _conditionnal);
 }
 
 void PB_StepUseReaderToLoadFiles::declareInputModels(CT_StepInModelStructureManager& manager)
@@ -49,8 +46,7 @@ void PB_StepUseReaderToLoadFiles::declareOutputModels(CT_StepOutModelStructureMa
     //m_reader->declareOutputModels(rManager);
 }
 
-// Creation and affiliation of OUT models
-/*void PB_StepUseReaderToLoadFiles::createOutResultModelListProtected()
+/*void PB_StepUseReaderToLoadFiles::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
     m_readerAddingTools.clear();
 
@@ -94,7 +90,7 @@ void PB_StepUseReaderToLoadFiles::compute()
                         if(!attributeIterator.isEmpty())
                         {
                             auto attribute = *attributeIterator.begin();
-                            load = attribute->toBool(conditionnalItem, NULL);
+                            load = attribute->toBool(conditionnalItem, nullptr);
                         }
                     }
                 }
@@ -103,7 +99,7 @@ void PB_StepUseReaderToLoadFiles::compute()
                 {
                     CT_AbstractReader* reader = readerItem->getReader();
 
-                    if(reader != NULL) {
+                    if(reader != nullptr) {
                         connect(this, SIGNAL(stopped()), reader, SLOT(cancel()), Qt::DirectConnection);
                         connect(reader, SIGNAL(progressChanged(int)), this, SLOT(readerProgressChanged(int)), Qt::DirectConnection);
 

@@ -3,47 +3,22 @@
 #include "pb_steppluginmanager.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
-#include "ct_itemdrawable/tools/iterator/ct_groupiterator.h"
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/inModel/ct_inresultmodelgroup.h"
-#include "ct_result/model/outModel/ct_outresultmodelgroup.h"
 
 #include "ct_abstractstepplugin.h"
 #include "ct_exporter/ct_standardexporterseparator.h"
-#include "ct_iterator/ct_pointiterator.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
 #include "ct_itemdrawable/ct_loopcounter.h"
 
 #include "exporters/profile/pb_profileexporter.h"
-#include "ct_view/ct_stepconfigurabledialog.h"
+
 #include "ct_exporter/abstract/ct_abstractexporterattributesselection.h"
 
 #include <QDebug>
 
-// Alias for indexing models
-#define DEFin_resCount "resCount"
-#define DEF_inGroupCount "grpCount"
-#define DEF_inCounter "counter"
-
-#define DEFin_resScene "resScene"
-#define DEFin_grpScene "grpScene"
-#define DEFin_itemScene "scene"
-
-
-#define DEFin_resAreas "resArea"
-#define DEFin_grpAreas "grpArea"
-#define DEFin_itemAreas "area"
-#define DEFin_itemAreasAtt "Attarea"
-
-#define DEFout_res "res"
-#define DEFout_grp "grp"
-
-
-// Constructor : initialization of parameters
-PB_StepExportPointsByXYArea::PB_StepExportPointsByXYArea(CT_StepInitializeData &dataInit) : SuperClass(dataInit)
+PB_StepExportPointsByXYArea::PB_StepExportPointsByXYArea() : SuperClass()
 {
-    m_exporter = NULL;
+    m_exporter = nullptr;
     _nameByCoordinates = false;
     _nameByCoordinatesOffset = 0;
 }
@@ -54,20 +29,17 @@ PB_StepExportPointsByXYArea::~PB_StepExportPointsByXYArea()
     delete m_exporter;
 }
 
-// Step description (tooltip of contextual menu)
-QString PB_StepExportPointsByXYArea::getStepDescription() const
+QString PB_StepExportPointsByXYArea::description() const
 {
     return tr("Redallage+Export de points dans une boucle");
 }
 
-// Step detailled description
-QString PB_StepExportPointsByXYArea::getStepDetailledDescription() const
+QString PB_StepExportPointsByXYArea::detailledDescription() const
 {
     return tr("Parmi les points de la scène d'entrée, séléctionne pour chaque emprise la liste des points à exporter."
               "Cet étape fonctionne dans une boucle, gardant le même fichier de sortie pour chaque emprise, pour toutes les scènes d'entrée (une par tour de boucle).");
 }
 
-// Step URL
 QString PB_StepExportPointsByXYArea::getStepURL() const
 {
     //return tr("STEP URL HERE");
@@ -78,7 +50,7 @@ void PB_StepExportPointsByXYArea::savePostSettings(SettingsWriterInterface &writ
 {
     SuperClass::savePostSettings(writer);
 
-    if(m_exporter != NULL)
+    if(m_exporter != nullptr)
         m_exporter->saveSettings(writer);
 }
 
@@ -89,19 +61,17 @@ bool PB_StepExportPointsByXYArea::restorePostSettings(SettingsReaderInterface &r
 
     refreshExporterToUse();
 
-    return (m_exporter != NULL) ? m_exporter->restoreSettings(reader) : true;
+    return (m_exporter != nullptr) ? m_exporter->restoreSettings(reader) : true;
 }
 
-// Step copy method
-CT_VirtualAbstractStep* PB_StepExportPointsByXYArea::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepExportPointsByXYArea::createNewInstance()
 {
-    return new PB_StepExportPointsByXYArea(dataInit);
+    return new PB_StepExportPointsByXYArea();
 }
 
 //////////////////// PROTECTED METHODS //////////////////
 
-// Creation and affiliation of IN models
-void PB_StepExportPointsByXYArea::createInResultModelListProtected()
+void PB_StepExportPointsByXYArea::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_InResultModelGroup* resCount = createNewInResultModel(DEFin_resCount, tr("Résultat compteur"), "", true);
     resCount->setStdRootGroup(DEF_inGroupCount);
@@ -119,30 +89,28 @@ void PB_StepExportPointsByXYArea::createInResultModelListProtected()
     resXYAreas->addStdItemAttributeModel(DEFin_itemAreas, DEFin_itemAreasAtt, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Nom"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsOptional);
 }
 
-// Creation and affiliation of OUT models
-void PB_StepExportPointsByXYArea::createOutResultModelListProtected()
+void PB_StepExportPointsByXYArea::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
     CT_OutResultModelGroup *res = createNewOutResultModel(DEFout_res, tr("Résultat"));
     res->setRootGroup(DEFout_grp, new CT_StandardItemGroup(), tr("Groupe"));
 }
 
-// Semi-automatic creation of step parameters DialogBox
-void PB_StepExportPointsByXYArea::createPostConfigurationDialog()
+void PB_StepExportPointsByXYArea::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
-    CT_StepConfigurableDialog *configDialog = newStandardPostConfigurationDialog();
-    configDialog->addFileChoice(tr("Répertoire d'export"), CT_FileChoiceButton::OneExistingFolder, "", _dir);
-    configDialog->addString(tr("Suffixe de nom de fichier"), "", _suffixFileName);
+
+    postInputConfigDialog->addFileChoice(tr("Répertoire d'export"), CT_FileChoiceButton::OneExistingFolder, "", _dir);
+    postInputConfigDialog->addString(tr("Suffixe de nom de fichier"), "", _suffixFileName);
 
     QStringList list_exportersList = getPluginAs<PB_StepPluginManager>()->exportersForPointsWithPieceByPieceAvailable().keys();
 
     if (list_exportersList.isEmpty())
         list_exportersList.append(tr("ERREUR : aucun exporter disponible"));
 
-    configDialog->addStringChoice(tr("Choix du type de fichier"), "", list_exportersList, m_exporterSelectedClassName);
+    postInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_exportersList, m_exporterSelectedClassName);
 
-    configDialog->addEmpty();
-    configDialog->addBool(tr("Nommage selon coordonnées : Xmin_Ymin"), "", "", _nameByCoordinates);
-    configDialog->addDouble(tr("Offset sur les coodonnées Xmin et Ymin"), "m", -99999, 99999, 2, _nameByCoordinatesOffset);
+    postInputConfigDialog->addEmpty();
+    postInputConfigDialog->addBool(tr("Nommage selon coordonnées : Xmin_Ymin"), "", "", _nameByCoordinates);
+    postInputConfigDialog->addDouble(tr("Offset sur les coodonnées Xmin et Ymin"), "m", -99999, 99999, 2, _nameByCoordinatesOffset);
 }
 
 bool PB_StepExportPointsByXYArea::postConfigure()
@@ -161,12 +129,12 @@ void PB_StepExportPointsByXYArea::refreshExporterToUse()
 
         m_lastExporterSelectedClassName = m_exporterSelectedClassName;
 
-        if(m_exporter != NULL) {
+        if(m_exporter != nullptr) {
             m_exporter = m_exporter->copy();
             m_exporter->setMyStep(this);
 
             CT_AbstractExporterAttributesSelection* exp = dynamic_cast<CT_AbstractExporterAttributesSelection*>(m_exporter);
-            if (exp != NULL)
+            if (exp != nullptr)
                 exp->setSearchOnlyModels(true);
         }
     }
@@ -176,7 +144,7 @@ bool PB_StepExportPointsByXYArea::configureExporter()
 {
     refreshExporterToUse();
 
-    if((m_exporter != NULL) && m_exporter->configureExport())
+    if((m_exporter != nullptr) && m_exporter->configureExport())
     {
         setSettingsModified(true);
         return true;
@@ -195,19 +163,19 @@ void PB_StepExportPointsByXYArea::compute()
     setProgress(5);
 
     // First turn: create export files
-    CT_LoopCounter* counter = NULL;
+    CT_LoopCounter* counter = nullptr;
 
     CT_ResultItemIterator it_Counter(resInCounter, this, DEF_inCounter);
     if (it_Counter.hasNext())
     {
         counter = (CT_LoopCounter*) it_Counter.next();
 
-        if (counter != NULL && counter->getCurrentTurn() == 1)
+        if (counter != nullptr && counter->getCurrentTurn() == 1)
         {
             qDeleteAll(_areas);
             _areas.clear();
 
-            if (m_exporter != NULL)
+            if (m_exporter != nullptr)
             {
                 CT_ResultGroupIterator itIn_grpAreas(resInAreas, this, DEFin_grpAreas);
                 while (itIn_grpAreas.hasNext() && !isStopped())
@@ -216,7 +184,7 @@ void PB_StepExportPointsByXYArea::compute()
 
                     CT_AbstractAreaShape2D* area = (CT_AbstractAreaShape2D*)group->firstItemByINModelName(this, DEFin_itemAreas);
 
-                    if (area != NULL)
+                    if (area != nullptr)
                     {
                         CT_AbstractItemAttribute* areaName = area->firstItemAttributeByINModelName(resInAreas, this, DEFin_itemAreasAtt);
 
@@ -233,14 +201,14 @@ void PB_StepExportPointsByXYArea::compute()
                         if (_nameByCoordinates)
                         {
                             Eigen::Vector3d min, max;
-                            area->getBoundingBox(min, max);
+                            area->boundingBox(min, max);
 
                             name = QString("%1_%2").arg(QString::number(min(0) + _nameByCoordinatesOffset, 'f', 0)).arg(QString::number(min(1) + _nameByCoordinatesOffset, 'f', 0));
 
                         } else {
-                            if (areaName != NULL)
+                            if (areaName != nullptr)
                             {
-                                name = areaName->toString(area, NULL);
+                                name = areaName->toString(area, nullptr);
                             } else {
                                 name = area->displayableName();
                             }
@@ -276,13 +244,13 @@ void PB_StepExportPointsByXYArea::compute()
     while (itIn_grpScene.hasNext() && !isStopped())
     {
         const CT_StandardItemGroup* group = (CT_StandardItemGroup*) itIn_grpScene.next();
-        
+
         CT_AbstractItemDrawableWithPointCloud* scene = (CT_AbstractItemDrawableWithPointCloud*)group->firstItemByINModelName(this, DEFin_itemScene);
 
-        if (scene != NULL)
+        if (scene != nullptr)
         {
             Eigen::Vector3d minSc, maxSc;
-            scene->getBoundingBox(minSc, maxSc);
+            scene->boundingBox(minSc, maxSc);
 
             QList<AreaData*> selectedAreas;
 
@@ -292,7 +260,7 @@ void PB_StepExportPointsByXYArea::compute()
                 CT_AreaShape2DData* area = areaData->_area;
 
                 Eigen::Vector3d minAr, maxAr;
-                area->getBoundingBox(minAr, maxAr);
+                area->boundingBox(minAr, maxAr);
 
                 if (maxSc(0) >= minAr(0) && minSc(0) <= maxAr(0) && maxSc(1) >= minAr(1) && minSc(1) <= maxAr(1))
                 {
@@ -301,8 +269,7 @@ void PB_StepExportPointsByXYArea::compute()
                 }
             }
 
-
-            const CT_AbstractPointCloudIndex* inCloudIndex = scene->getPointCloudIndex();
+            const CT_AbstractPointCloudIndex* inCloudIndex = scene->pointCloudIndex();
 
             CT_PointIterator itP(inCloudIndex);
             const size_t nPoints = itP.size();
@@ -316,7 +283,6 @@ void PB_StepExportPointsByXYArea::compute()
                 for (int i = 0 ; i < selectedAreas.size() ; i++)
                 {
                     AreaData* areaData = selectedAreas.at(i);
-
 
                     CT_AreaShape2DData* area = areaData->_area;
 
@@ -332,7 +298,6 @@ void PB_StepExportPointsByXYArea::compute()
             }
         }
     }
-
 
     setProgress(20);
 
@@ -362,7 +327,7 @@ void PB_StepExportPointsByXYArea::compute()
     setProgress(90);
 
     // Last turn : finalize export files
-    if (counter != NULL && counter->getCurrentTurn() == counter->getNTurns())
+    if (counter != nullptr && counter->getCurrentTurn() == counter->getNTurns())
     {
         for (int i = 0 ; i < _areas.size() ; i++)
         {

@@ -6,12 +6,6 @@
 #include "ct_itemdrawable/abstract/ct_abstractimage2d.h"
 #include "ct_itemdrawable/abstract/ct_abstractareashape2d.h"
 #include "ct_itemdrawable/ct_attributeslist.h"
-#include "ct_pointcloudindex/ct_pointcloudindexvector.h"
-#include "ct_itemdrawable/tools/iterator/ct_groupiterator.h"
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/inModel/ct_inresultmodelgrouptocopy.h"
-#include "ct_result/model/outModel/tools/ct_outresultmodelgrouptocopypossibilities.h"
-#include "ct_view/ct_stepconfigurabledialog.h"
 
 #include "ct_abstractstepplugin.h"
 
@@ -23,15 +17,7 @@
 
 #include <QDebug>
 
-// Alias for indexing models
-#define DEFin_res "res"
-#define DEFin_grp "grp"
-#define DEFin_raster "raster"
-#define DEFin_areaShape "shapeArea"
-
-
-// Constructor : initialization of parameters
-PB_StepComputeRasterMetrics::PB_StepComputeRasterMetrics(CT_StepInitializeData &dataInit) : CT_AbstractStep(dataInit)
+PB_StepComputeRasterMetrics::PB_StepComputeRasterMetrics() : SuperClass()
 {
 }
 
@@ -41,19 +27,16 @@ PB_StepComputeRasterMetrics::~PB_StepComputeRasterMetrics()
     m_selectedRasterMetrics.clear();
 }
 
-// Step description (tooltip of contextual menu)
-QString PB_StepComputeRasterMetrics::getStepDescription() const
+QString PB_StepComputeRasterMetrics::description() const
 {
     return tr("2- Métriques de rasters");
 }
 
-// Step detailled description
-QString PB_StepComputeRasterMetrics::getStepDetailledDescription() const
+QString PB_StepComputeRasterMetrics::detailledDescription() const
 {
     return PB_ConfigurableElementTools::formatHtmlStepDetailledDescription(getPluginAs<PB_StepPluginManager>()->rasterMetricsAvailable());
 }
 
-// Step URL
 QString PB_StepComputeRasterMetrics::getStepURL() const
 {
     //return tr("STEP URL HERE");
@@ -82,16 +65,14 @@ bool PB_StepComputeRasterMetrics::restorePostSettings(SettingsReaderInterface &r
                                                                                                    reader);
 }
 
-// Step copy method
-CT_VirtualAbstractStep* PB_StepComputeRasterMetrics::createNewInstance(CT_StepInitializeData &dataInit)
+CT_VirtualAbstractStep* PB_StepComputeRasterMetrics::createNewInstance()
 {
-    return new PB_StepComputeRasterMetrics(dataInit);
+    return new PB_StepComputeRasterMetrics();
 }
 
 //////////////////// PROTECTED METHODS //////////////////
 
-// Creation and affiliation of IN models
-void PB_StepComputeRasterMetrics::createInResultModelListProtected()
+void PB_StepComputeRasterMetrics::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_InResultModelGroupToCopy *resIn_res = createNewInResultModelForCopy(DEFin_res, tr("Points"));
     resIn_res->setZeroOrMoreRootGroup();
@@ -101,8 +82,8 @@ void PB_StepComputeRasterMetrics::createInResultModelListProtected()
 }
 
 bool PB_StepComputeRasterMetrics::postConfigure()
-{    
-    CTG_ConfigurableElementsSelector cd(NULL, !getStepChildList().isEmpty());
+{
+    CTG_ConfigurableElementsSelector cd(nullptr, !getStepChildList().isEmpty());
     cd.setWindowTitle("Métriques séléctionnées");
     cd.setElementsAvailable(getPluginAs<PB_StepPluginManager>()->rasterMetricsAvailable());
     cd.setElementsSelected(&m_selectedRasterMetrics);
@@ -128,13 +109,11 @@ bool PB_StepComputeRasterMetrics::finalizePostConfiguration()
     return true;
 }
 
-
-// Creation and affiliation of OUT models
-void PB_StepComputeRasterMetrics::createOutResultModelListProtected()
-{       
+void PB_StepComputeRasterMetrics::declareOutputModels(CT_StepOutModelStructureManager& manager)
+{
     CT_OutResultModelGroupToCopyPossibilities *resCpy_res = createNewOutResultModelToCopy(DEFin_res);
 
-    if(resCpy_res != NULL) {
+    if(resCpy_res != nullptr) {
         resCpy_res->addItemModel(DEFin_grp, _outMetrics_ModelName, new CT_AttributesList(), tr("Métriques calculées"));
 
         QListIterator<CT_AbstractConfigurableElement *> it(m_selectedRasterMetrics);
@@ -156,11 +135,11 @@ void PB_StepComputeRasterMetrics::compute()
     while (itCpy_grp.hasNext() && !isStopped())
     {
         CT_StandardItemGroup* grp = (CT_StandardItemGroup*) itCpy_grp.next();
-        
+
         const CT_AbstractImage2D* raster = (CT_AbstractImage2D*)grp->firstItemByINModelName(this, DEFin_raster);
         const CT_AbstractAreaShape2D* plotArea = (CT_AbstractAreaShape2D*)grp->firstItemByINModelName(this, DEFin_areaShape);
 
-        if (raster != NULL)
+        if (raster != nullptr)
         {
             CT_AttributesList* outAttributes = new CT_AttributesList(_outMetrics_ModelName.completeName(), outRes);
             grp->addItemDrawable(outAttributes);
@@ -170,10 +149,10 @@ void PB_StepComputeRasterMetrics::compute()
             {
                 CT_AbstractMetric_Raster* metric = (CT_AbstractMetric_Raster*) it.next();
 
-                if (metric != NULL)
+                if (metric != nullptr)
                 {
-                    const CT_AreaShape2DData* areaData = NULL;
-                    if (plotArea != NULL) {areaData = &plotArea->getAreaData();}
+                    const CT_AreaShape2DData* areaData = nullptr;
+                    if (plotArea != nullptr) {areaData = &plotArea->getAreaData();}
 
                     if (metric->initDatas(raster, areaData))
                     {

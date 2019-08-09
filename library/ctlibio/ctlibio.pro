@@ -32,9 +32,9 @@ HEADERS +=  \
 #    readers/ct_reader_obj_def_models.h \
 #    readers/ct_reader_asciigrid3d.h \
 #    readers/ct_reader_asciigrid3d_def_models.h \
-#    readers/ct_reader_pgm.h \
+#    readers/ct_reader_pgm.h \              -> A supprimer
 #    readers/ct_reader_pgm_def_models.h \
-#    readers/ct_reader_pbm.h \
+#    readers/ct_reader_pbm.h \              -> A supprimer
 #    readers/ct_reader_pbm_def_models.h \
 #    readers/ct_reader_points_ascii.h \
 #    readers/ct_reader_points_ascii_def_models.h \

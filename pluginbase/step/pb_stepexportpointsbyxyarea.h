@@ -5,81 +5,43 @@
 
 #include "ct_exporter/abstract/ct_abstractexporter.h"
 #include "ct_itemdrawable/abstract/ct_abstractareashape2d.h"
-#include "ct_pointcloudindex/ct_pointcloudindexvector.h"
 
 class PB_StepExportPointsByXYArea: public CT_AbstractStep
 {
     Q_OBJECT
+    using SuperClass = CT_AbstractStep;
     typedef CT_AbstractStep SuperClass;
 
 public:
 
-    /*! \brief Step constructor
-     * 
-     * Create a new instance of the step
-     * 
-     * \param dataInit Step parameters object
-     */
-    PB_StepExportPointsByXYArea(CT_StepInitializeData &dataInit);
+    PB_StepExportPointsByXYArea();
 
     ~PB_StepExportPointsByXYArea();
 
-    /*! \brief Step description
-     * 
-     * Return a description of the step function
-     */
-    QString getStepDescription() const;
+    QString description() const;
 
-    /*! \brief Step detailled description
-     * 
-     * Return a detailled description of the step function
-     */
-    QString getStepDetailledDescription() const;
+    QString detailledDescription() const;
 
-    /*! \brief Step URL
-     * 
-     * Return a URL of a wiki for this step
-     */
     QString getStepURL() const;
 
     void savePostSettings(SettingsWriterInterface& writer) const override;
     bool restorePostSettings(SettingsReaderInterface &reader) override;
 
-    /*! \brief Step copy
-     * 
-     * Step copy, used when a step is added by step contextual menu
-     */
-    CT_VirtualAbstractStep* createNewInstance(CT_StepInitializeData &dataInit);
+    CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
 
-    /*! \brief Input results specification
-     * 
-     * Specification of input results models needed by the step (IN)
-     */
-    void createInResultModelListProtected();
+    void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
     bool postConfigure();
     void refreshExporterToUse();
     bool configureExporter();
 
-    /*! \brief Parameters DialogBox
-     * 
-     * DialogBox asking for step parameters
-     */
-    void createPostConfigurationDialog();
+    void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog) final;
 
-    /*! \brief Output results specification
-     * 
-     * Specification of output results models created by the step (OUT)
-     */
-    void createOutResultModelListProtected();
+    void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
-    /*! \brief Algorithm of the step
-     * 
-     * Step computation, using input results, and creating output results
-     */
-    void compute();
+    void compute() final;
 
 private:
 
@@ -89,7 +51,7 @@ private:
         {
             _area = area;
             _exporter = exporter;
-            _cloudIndex = NULL;
+            _cloudIndex = nullptr;
         }
 
         ~AreaData()
@@ -100,18 +62,17 @@ private:
 
         void setPointCloudIndex(CT_PointCloudIndexVector* cloudIndex)
         {
-            if (_cloudIndex != NULL)
+            if (_cloudIndex != nullptr)
             {
                 delete _cloudIndex;
             }
             _cloudIndex = cloudIndex;
         }
 
-
         void deletePointCloudIndex()
         {
             delete _cloudIndex;
-            _cloudIndex = NULL;
+            _cloudIndex = nullptr;
         }
 
         CT_AreaShape2DData* _area;
