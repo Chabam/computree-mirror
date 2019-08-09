@@ -269,7 +269,7 @@ bool GDocumentViewForGraphics::setDefaultAction(CT_AbstractAction *action, bool 
     if(action == nullptr)
         m_graphics->setDefaultAction(nullptr);
     else
-        m_graphics->setDefaultAction((CT_AbstractActionForGraphicsView*)action->copy());
+        m_graphics->setDefaultAction((CT_AbstractActionForGraphicsView*)action->createInstance());
 
     redrawGraphics();
 
@@ -1015,7 +1015,7 @@ bool GDocumentViewForGraphics::setCurrentAction(bool internal, CT_AbstractAction
     if(action == nullptr)
         m_graphics->setCurrentAction(nullptr);
     else {
-        CT_AbstractActionForGraphicsView* newAction = (CT_AbstractActionForGraphicsView*)action->copy();
+        CT_AbstractActionForGraphicsView* newAction = (CT_AbstractActionForGraphicsView*)action->createInstance();
 
         if(internal)
             m_graphics->setCurrentInternalAction(newAction);
