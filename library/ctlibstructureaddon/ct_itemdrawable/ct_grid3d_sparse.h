@@ -29,7 +29,6 @@
 #define CT_GRID3D_SPARSE_H
 
 #include "ct_itemdrawable/abstract/ct_abstractgrid3d.h"
-#include "ct_itemdrawable/tools/ct_itemplateddata3darray.h"
 
 #include "opencv2/core/core.hpp"
 #include <QMutex>
@@ -45,7 +44,7 @@ template< typename DataT > class CT_StandardGrid3D_SparseDrawManager;
  *
  */
 template< typename DataT>
-class CT_Grid3D_Sparse : public CT_AbstractGrid3D, public CT_ITemplatedData3DArray<DataT>
+class CT_Grid3D_Sparse : public CT_AbstractGrid3D
 {
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Grid3D_Sparse, DataT, CT_AbstractGrid3D, 3D sparse grid)
     using SuperClass = CT_AbstractGrid3D;
@@ -148,8 +147,6 @@ public:
      */
     ~CT_Grid3D_Sparse() override;
 
-    const CT_ITemplatedData3DArray<DataT>* iTemplatedData3DArray() const { return this; }
-
     /*!
      * \brief Generic setter taking a double as input value
      * \param index Index of cell to modify
@@ -179,16 +176,6 @@ public:
      * \return Min value
      */
     inline DataT dataMin() const { return _dataMin; }
-
-
-    // CT_ITemplatedData3DArray
-    size_t xArraySize() const override { return xdim(); }
-
-    // CT_ITemplatedData3DArray
-    size_t yArraySize() const override { return ydim(); }
-
-    // CT_ITemplatedData3DArray
-    size_t zArraySize() const override { return zdim(); }
 
 
     /*!
@@ -266,11 +253,6 @@ public:
       */
     DataT value(const size_t colx, const size_t liny, const size_t levz) const;
 
-    // CT_ITemplatedData3DArray
-    DataT dataFromArray(const size_t &x, const size_t &y, const size_t &z) const override;
-
-    // CT_ITemplatedData3DArray
-    DataT dataFromArray(const size_t &index) const override;
 
     /**
       * \brief Gives the value at (x,y,z) coordinate

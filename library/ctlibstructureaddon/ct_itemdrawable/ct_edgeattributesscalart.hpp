@@ -1,6 +1,3 @@
-#ifndef CT_EDGEATTRIBUTESSCALART_HPP
-#define CT_EDGEATTRIBUTESSCALART_HPP
-
 #include "ct_itemdrawable/ct_edgeattributesscalart.h"
 
 template<typename SCALAR>
@@ -30,4 +27,3 @@ CT_EdgeAttributesScalarT<SCALAR>::CT_EdgeAttributesScalarT(CT_ECIR pcir,
 {
 }
 
-#endif // CT_EDGEATTRIBUTESSCALART_HPP

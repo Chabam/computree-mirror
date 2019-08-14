@@ -1,6 +1,3 @@
-#ifndef CT_POINTSATTRIBUTESSCALARTEMPLATED_HPP
-#define CT_POINTSATTRIBUTESSCALARTEMPLATED_HPP
-
 #include "ct_pointsattributesscalartemplated.h"
 
 template<typename SCALAR>
@@ -28,4 +25,3 @@ CT_PointsAttributesScalarTemplated<SCALAR>::CT_PointsAttributesScalarTemplated(C
 {
 }
 
-#endif // CT_POINTSATTRIBUTESSCALARTEMPLATED_HPP

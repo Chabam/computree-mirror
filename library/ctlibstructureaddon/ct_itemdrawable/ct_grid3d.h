@@ -29,7 +29,6 @@
 #define CT_GRID3D_H
 
 #include "ct_itemdrawable/abstract/ct_abstractgrid3d.h"
-#include "ct_itemdrawable/tools/ct_itemplateddata3darray.h"
 
 template< typename DataT > class CT_StandardGrid3DDrawManager;
 
@@ -42,7 +41,7 @@ template< typename DataT > class CT_StandardGrid3DDrawManager;
  *
  */
 template< typename DataT>
-class CT_Grid3D : public CT_AbstractGrid3D, public CT_ITemplatedData3DArray<DataT>
+class CT_Grid3D : public CT_AbstractGrid3D
 {
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Grid3D, DataT, CT_AbstractGrid3D, 3D grid)
     using SuperClass = CT_AbstractGrid3D;
@@ -156,19 +155,17 @@ public:
 
     CT_ITEM_COPY_IMP(CT_Grid3D<DataT>)
 
-    const CT_ITemplatedData3DArray<DataT>* iTemplatedData3DArray() const { return this; }
-
     /*!
      * \brief Generic setter taking a double as input value
      * \param index Index of cell to modify
      * \param value Double value to cast in effective type
      */
-    virtual void setValueAtIndexFromDouble(const size_t &index, const double &value);
+    virtual void setValueAtIndexFromDouble(const size_t &index, const double &value) override;
 
     /*!
      * \brief Compute min and max values
      */
-    void computeMinMax();
+    void computeMinMax() override;
 
     /**
       * \brief Gives the NA value
@@ -187,17 +184,6 @@ public:
      * \return Min value
      */
     inline DataT dataMin() const { return _dataMin; }
-
-
-    // CT_ITemplatedData3DArray
-    size_t xArraySize() const { return xdim(); }
-
-    // CT_ITemplatedData3DArray
-    size_t yArraySize() const { return ydim(); }
-
-    // CT_ITemplatedData3DArray
-    size_t zArraySize() const { return zdim(); }
-
 
     /*!
      * \brief Set value at specified index
@@ -241,7 +227,7 @@ public:
      * \param index index in the grid
      * \return A double value between 0 (min value) and 1 (max value), or -1 for NA
      */
-    virtual double ratioValueAtIndex(const size_t index) const;
+    virtual double ratioValueAtIndex(const size_t index) const override;
 
 
     /*!
@@ -249,7 +235,7 @@ public:
      * \param index index in the grid
      * \return A double value
      */
-    virtual double valueAtIndexAsDouble(const size_t index) const;
+    virtual double valueAtIndexAsDouble(const size_t index) const override;
 
 
     /*!
@@ -257,13 +243,13 @@ public:
      * \param index index in the grid
      * \return A QString représenting value
      */
-    virtual QString valueAtIndexAsString(const size_t index) const;
+    virtual QString valueAtIndexAsString(const size_t index) const override;
 
     /*!
      * \brief return na value as a string
      *
      */
-    virtual QString NAAsString() const;
+    virtual QString NAAsString() const override;
 
     /**
       * \brief Gives the value at row liny and column colx and z level levz
@@ -273,12 +259,6 @@ public:
       * \return Value at row liny and column clox
       */
     DataT value(const size_t colx, const size_t liny, const size_t levz) const;
-
-    // CT_ITemplatedData3DArray
-    DataT dataFromArray(const size_t &x, const size_t &y, const size_t &z) const;
-
-    // CT_ITemplatedData3DArray
-    DataT dataFromArray(const size_t &index) const;
 
     /**
       * \brief Gives the value at (x,y,z) coordinate

@@ -2,7 +2,6 @@
 #define CT_GRID4D_H
 
 #include "ct_itemdrawable/abstract/ct_abstractgrid4d.h"
-#include "ct_itemdrawable/tools/ct_itemplateddata4darray.h"
 #include <typeinfo>
 
 //#include "ct_math/ct_math.h"
@@ -18,7 +17,7 @@ template< typename DataT > class CT_StandardGrid4DDrawManager;
  * It represents grid in 4D, with templated values in cells.
  */
 template< typename DataT>
-class   CT_Grid4D  : public CT_AbstractGrid4D, public CT_ITemplatedData4DArray<DataT>
+class   CT_Grid4D  : public CT_AbstractGrid4D
 {
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Grid4D, DataT, CT_AbstractGrid4D, 4D grid)
     using SuperClass = CT_AbstractGrid4D;
@@ -272,7 +271,7 @@ public:
      * \param index Index of cell to modify
      * \param value Double value to cast in effective type
      */
-    inline virtual void setValueAtIndexFromDouble(const size_t &index, const double &value) { setValueAtIndex(index, (DataT) value); }
+    inline virtual void setValueAtIndexFromDouble(const size_t &index, const double &value) { setValueAtIndex(index, static_cast<DataT>(value)); }
 
     /*!
      * \brief Set value at specified index
@@ -319,63 +318,6 @@ public:
         }
         return false;
     }
-
-    //**********************************************//
-    //    Getters from CT_ITemplatedData4DArray     //
-    //**********************************************//
-    /*!
-     * \brief Same as value(w,x,y,z). Redefined Since grid4d heritates from CT_ITemplatedData4DArray
-     * \param w w level (0 is first)
-     * \param x x level (0 is first)
-     * \param y y level (0 is first)
-     * \param z z level (0 is first)
-     * \return Value at (w,x,y,z)
-     */
-    DataT dataFromArray(const size_t &w, const size_t &x, const size_t &y, const size_t &z) const;
-
-    /*!
-     * \brief Same as valueAtIndex. Redefined Since grid4d heritates from CT_ITemplatedData4DArray
-     * \param index Index
-     * \return Value at index
-     */
-    DataT dataFromArray(const size_t &index) const;
-
-    //**********************************************//
-    //    Setters from CT_ITemplatedData4DArray     //
-    //**********************************************//
-    /*!
-     * \brief wArraySize
-     * Gives the number of cells along the w axis
-     * \return the number of cells along the w axis
-     */
-    inline size_t wArraySize() const { return wdim(); }
-
-    /*!
-     * \brief xArraySize
-     * Gives the number of cells along the x axis
-     * \return the number of cells along the x axis
-     */
-    inline size_t xArraySize() const { return xdim(); }
-
-    /*!
-     * \brief yArraySize
-     * Gives the number of cells along the y axis
-     * \return the number of cells along the y axis
-     */
-    inline size_t yArraySize() const { return ydim(); }
-
-    /*!
-     * \brief zArraySize
-     * Gives the number of cells along the z axis
-     * \return the number of cells along the z axis
-     */
-    inline size_t zArraySize() const { return zdim(); }
-
-    //**********************************************//
-    //          CompuTree Core and GUI tools        //
-    //**********************************************//
-    inline const CT_ITemplatedData4DArray<DataT>* iTemplatedData4DArray()
-    const { return this; }
 
     /*!
      * \brief Compute min and max values

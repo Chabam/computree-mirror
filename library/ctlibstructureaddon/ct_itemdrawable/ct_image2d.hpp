@@ -25,10 +25,8 @@
 
 *****************************************************************************/
 
-#ifndef CT_IMAGE2D_HPP
-#define CT_IMAGE2D_HPP
-
 #include "ct_itemdrawable/ct_image2d.h"
+#include "ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h"
 
 #include <math.h>
 #include <typeinfo>
@@ -46,31 +44,31 @@ CT_Image2D<DataT>::CT_Image2D() : SuperClass()
 template< typename DataT>
 CT_Image2D<DataT>::CT_Image2D(double xmin,
                               double ymin,
-                              size_t dimx,
-                              size_t dimy,
+                              int dimx,
+                              int dimy,
                               double resolution,
                               double zlevel,
                               DataT na,
                               DataT initValue) : SuperClass()
 {
     _res = resolution;
-    _dimCol = dimx;
-    _dimLin = dimy;
+    _dimx = dimx;
+    _dimy = dimy;
 
     this->setBoundingBox(xmin,
                          ymin,
                          zlevel,
-                         xmin + this->_res * this->_dimCol,
-                         ymin + this->_res * this->_dimLin,
+                         xmin + this->_res * this->_dimx,
+                         ymin + this->_res * this->_dimy,
                          zlevel);
 
-    this->_minColCoord = xmin;
-    this->_minLinCoord = ymin;
+    this->_minXCoord = xmin;
+    this->_minYCoord = ymin;
 
     this->_level = zlevel;
     this->_NAdata = na;
 
-    this->_data = cv::Mat_<DataT>(int(this->_dimLin), int(this->_dimCol));
+    this->_data = cv::Mat_<DataT>(this->_dimy, this->_dimx);
 
     initGridWithValue(initValue);
 
@@ -102,8 +100,8 @@ CT_Image2D<DataT>* CT_Image2D<DataT>::createImage2DFromXYCoords(double xmin,
                                                                    DataT na,
                                                                    DataT initValue)
 {
-    size_t dimx = ceil((xmax - xmin)/resolution);
-    size_t dimy = ceil((ymax - ymin)/resolution);
+    int dimx = int(std::ceil((xmax - xmin)/resolution));
+    int dimy = int(std::ceil((ymax - ymin)/resolution));
 
     // to ensure a point exactly on a maximum limit of the grid will be included in the grid
     while (xmax >= (xmin + dimx * resolution))
@@ -160,19 +158,20 @@ bool CT_Image2D<DataT>::setValueAtIndex(const size_t index, const DataT value)
 {
     if (index >= nCells()) {return false;}
 
-    size_t lin, col;
-    indexToGrid(index, col, lin);
+    int y, x;
+    indexToGrid(index, x, y);
 
-    return setValue(col, lin, value);
+    return setValue(x, y, value);
 }
 
 template< typename DataT>
-bool CT_Image2D<DataT>::setValue(const size_t col, const size_t lin, const DataT value)
+bool CT_Image2D<DataT>::setValue(const int x, const int y, const DataT value)
 {
-    if ((col >= _dimCol) || (lin >= _dimLin)) {return false;}
-    _data(int(lin), int(col)) = value;
+    if ((x < 0) || (x >= _dimx) || (y < 0) || (y >= _dimy)) {return false;}
+    _data(y, x) = value;
     return true;
 }
+
 
 template< typename DataT>
 bool CT_Image2D<DataT>::setValueAtCoords(const double x, const double y, const DataT value)
@@ -188,29 +187,17 @@ DataT CT_Image2D<DataT>::valueAtIndex(const size_t index) const
 {
     if (index >= nCells()) {return NA();}
 
-    size_t lin, col;
-    indexToGrid(index, col, lin);
+    int y, x;
+    indexToGrid(index, x, y);
 
-    return value(col, lin);
+    return value(x, y);
 }
 
 template< typename DataT>
-DataT CT_Image2D<DataT>::value(const size_t col, const size_t lin) const
+DataT CT_Image2D<DataT>::value(const int x, const int y) const
 {
-    if ((col >= _dimCol) || (lin >= _dimLin)) {return NA();}
-    return _data(int(lin), int(col));
-}
-
-template< typename DataT>
-DataT CT_Image2D<DataT>::dataFromArray(const size_t &x, const size_t &y) const
-{
-    return value(y, x);
-}
-
-template< typename DataT>
-DataT CT_Image2D<DataT>::dataFromArray(const size_t &index) const
-{
-    return valueAtIndex(index);
+    if ((x < 0) || (x >= _dimx) || (y < 0) || (y >= _dimy)) {return NA();}
+    return _data(y, x);
 }
 
 template< typename DataT>
@@ -227,10 +214,10 @@ bool CT_Image2D<DataT>::setMaxValueAtIndex(const size_t index, const DataT value
 {
     if (index >= nCells()) {return false;}
 
-    size_t lin, col;
-    if (indexToGrid(index, col, lin))
+    int y, x;
+    if (indexToGrid(index, x, y))
     {
-        DataT currentValue = _data(lin, col);
+        DataT currentValue = _data(y, x);
 
         if ((currentValue == NA()) || (value > currentValue)) {
             return setValueAtIndex(index, value);
@@ -255,10 +242,10 @@ bool CT_Image2D<DataT>::setMinValueAtIndex(const size_t index, const DataT value
 {
     if (index >= nCells()) {return false;}
 
-    size_t lin, col;
-    if (indexToGrid(index, col, lin))
+    int y, x;
+    if (indexToGrid(index, x, y))
     {
-        DataT currentValue = _data(lin, col);
+        DataT currentValue = _data(y, x);
 
         if ((currentValue == NA()) || (value < currentValue)) {
             return setValueAtIndex(index, value);
@@ -282,10 +269,10 @@ bool CT_Image2D<DataT>::addValueAtIndex(const size_t index, const DataT value)
 {
     if (index >= nCells()) {return false;}
 
-    size_t lin, col;
-    if (indexToGrid(index, col, lin))
+    int y, x;
+    if (indexToGrid(index, x, y))
     {
-        DataT currentValue = _data(lin, col);
+        DataT currentValue = _data(y, x);
 
         if (currentValue == NA())
         {
@@ -304,7 +291,7 @@ double CT_Image2D<DataT>::ratioValueAtIndex(const size_t index) const
     if (_dataMax <= _dataMin) {return 1;}
     DataT value = valueAtIndex(index);
     if (value == NA()) {return -1;}
-    return (double) (((double)(value - _dataMin))/((double)(_dataMax - _dataMin)));
+    return double((value - _dataMin)/(_dataMax - _dataMin));
 }
 
 template< typename DataT>
@@ -357,30 +344,32 @@ bool CT_Image2D<DataT>::addValueAtCoords(const double x, const double y, const D
 }
 
 template< typename DataT>
-QList<DataT> CT_Image2D<DataT>::neighboursValues(const size_t col, const size_t lin, const size_t distance, const bool keepNAs, const CenterMode centermode) const
+QList<DataT> CT_Image2D<DataT>::neighboursValues(const int x, const int y, const int distance, const bool keepNAs, const CenterMode centermode) const
 {
     QList<DataT> liste;
 
     if (distance < 1) {return liste;}
-    if (col >= _dimCol) {return liste;}
-    if (lin >= _dimLin) {return liste;}
+    if (x < 0)        {return liste;}
+    if (y < 0)        {return liste;}
+    if (x >= _dimx)   {return liste;}
+    if (y >= _dimy)   {return liste;}
 
-    size_t firstcol = col-distance;
-    size_t lastcol = col+distance;
-    size_t firstlin = lin-distance;
-    size_t lastlin = lin+distance;
+    int firstcol = x - distance;
+    int lastcol  = x + distance;
+    int firstlin = y - distance;
+    int lastlin  = y + distance;
 
-    if (firstcol >= _dimCol) {firstcol = 0;}
-    if (lastcol >= _dimCol) {lastcol = _dimCol - 1;}
-    if (firstlin >= _dimLin) {firstlin = 0;}
-    if (lastlin >= _dimLin) {lastlin = _dimLin - 1;}
+    if (firstcol < 0)      {firstcol = 0;}
+    if (lastcol >= _dimx)  {lastcol = _dimx - 1;}
+    if (firstlin < 0)      {firstlin = 0;}
+    if (lastlin >= _dimy)  {lastlin = _dimy - 1;}
 
-    for (size_t xx = firstcol ; xx <= lastcol ; xx++)
+    for (int xx = firstcol ; xx <= lastcol ; xx++)
     {
-        for (size_t yy = firstlin ; yy <= lastlin ; yy++)
+        for (int yy = firstlin ; yy <= lastlin ; yy++)
         {
             DataT value = this->value(xx, yy);
-            if ((xx == col) && (yy == lin)) {
+            if ((xx == x) && (yy == y)) {
                 if (centermode == CM_KeepCenter) {
                     if ((value != NA()) || keepNAs) {liste.append(value);}
                 } else if (centermode == CM_NAasCenter) {
@@ -394,5 +383,3 @@ QList<DataT> CT_Image2D<DataT>::neighboursValues(const size_t col, const size_t 
 
     return liste;
 }
-
-#endif // CT_IMAGE2D_HPP

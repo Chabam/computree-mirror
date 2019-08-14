@@ -29,9 +29,11 @@
 #define CT_IMAGE2D_H
 
 #include "ct_itemdrawable/abstract/ct_abstractimage2d.h"
-#include "ct_itemdrawable/tools/ct_itemplateddata2darray.h"
-#include "ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h"
+
 #include "opencv2/core/core.hpp"
+
+template< typename DataT > class CT_StandardImage2DDrawManager;
+
 
 /*!
  * \class CT_Image2D
@@ -42,7 +44,7 @@
  *
  */
 template< typename DataT>
-class CT_Image2D : public CT_AbstractImage2D, public CT_ITemplatedData2DArray<DataT>
+class CT_Image2D : public CT_AbstractImage2D
 {
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Image2D, DataT, CT_AbstractImage2D, Raster)
     using SuperClass = CT_AbstractImage2D;
@@ -81,8 +83,8 @@ public:
      */
     CT_Image2D(double xmin,
                double ymin,
-               size_t dimx,
-               size_t dimy,
+               int dimx,
+               int dimy,
                double resolution,
                double zlevel,
                DataT na,
@@ -147,12 +149,10 @@ public:
      */
     void initGridWithValue(const DataT val);
 
-    const CT_ITemplatedData2DArray<DataT>* iTemplatedData2DArray() const { return this; }
-
     /*!
      * \brief Compute min and max values
      */
-    void computeMinMax();
+    void computeMinMax() override;
 
     void setMinMax(DataT min, DataT max);
 
@@ -175,12 +175,6 @@ public:
      */
     inline DataT dataMin() const { return _dataMin; }
 
-    // CT_ITemplatedData2DArray
-    size_t xArraySize() const { return colDim(); }
-
-    // CT_ITemplatedData2DArray
-    size_t yArraySize() const { return linDim(); }
-
     /*!
      * \brief Set value at specified index
      * \param index Index
@@ -190,13 +184,13 @@ public:
     bool setValueAtIndex(const size_t index, const DataT value);
 
     /**
-      * \brief Set the value at row lin and columne col to value
-      * \param col column, first one is 0
-      * \param lin row, first one is 0
+      * \brief Set the value at x y and columne col to value
+      * \param x column, first one is 0
+      * \param y row, first one is 0
       * \param value Value
       * \return True if the value has actually been set
       */
-    bool setValue(const size_t col, const size_t lin, const DataT value);
+    bool setValue(const int x, const int y, const DataT value);
 
     /*!
      * \brief ives the value at specified index
@@ -206,18 +200,12 @@ public:
     DataT valueAtIndex(const size_t index) const;
 
     /**
-      * \brief Gives the value at row lin and columne col
-      * \param col column, first one is 0
-      * \param lin row, first one is 0
-      * \return Value at row lin and column clox
+      * \brief Gives the value at x y and columne col
+      * \param x column, first one is 0
+      * \param y row, first one is 0
+      * \return Value at x y and column clox
       */
-    DataT value(const size_t col, const size_t lin) const;
-
-    // CT_ITemplatedData2DArray
-    DataT dataFromArray(const size_t &x, const size_t &y) const;
-
-    // CT_ITemplatedData2DArray
-    DataT dataFromArray(const size_t &index) const;
+    DataT value(const int x, const int y) const;
 
     /**
       * \brief Set the value for the cell at specified index, if value is superior to actual one
@@ -250,7 +238,7 @@ public:
      * \param index index in the grid
      * \return A double value between 0 (min value) and 1 (max value), or -1 for NA
      */
-    virtual double ratioValueAtIndex(const size_t index) const;
+    virtual double ratioValueAtIndex(const size_t index) const override;
 
 
     /*!
@@ -258,7 +246,7 @@ public:
      * \param index index in the grid
      * \return A double value
      */
-    virtual double valueAtIndexAsDouble(const size_t index) const;
+    virtual double valueAtIndexAsDouble(const size_t index) const override;
 
 
     /*!
@@ -266,43 +254,43 @@ public:
      * \param index index in the grid
      * \return A QString représenting value
      */
-    virtual QString valueAtIndexAsString(const size_t index) const;
+    virtual QString valueAtIndexAsString(const size_t index) const override;
 
 
     /*!
      * \brief return na value as a string
      *
      */
-    virtual QString NAAsString() const;
+    virtual QString NAAsString() const override;
 
 
     /*!
      * \brief return na value as a double
      *
      */
-    virtual double NAAsDouble() const;
+    virtual double NAAsDouble() const override;
 
-    virtual double minValueAsDouble() const;
-    virtual double maxValueAsDouble() const;
+    virtual double minValueAsDouble() const override;
+    virtual double maxValueAsDouble() const override;
 
 
     /**
       * \brief Gives neighbours values
-      * \param col column, first one is 0
-      * \param lin row, first one is 0
+      * \param x column, first one is 0
+      * \param y row, first one is 0
       * \param distance : Distance for neighbours search in cells
       * \param keepNAs : Should the NA values be kept ?
       * \param centermode : How should be treated the central cell ?
       * \return List of neighbours values
       */
-    QList<DataT> neighboursValues(const size_t col, const size_t lin, const size_t distance, const bool keepNAs, const CenterMode centermode) const;
+    QList<DataT> neighboursValues(const int x, const int y, const int distance, const bool keepNAs, const CenterMode centermode) const;
 
     inline DataT* getPointerToData() {return &_data(0,0);}
 
     /**
       * \brief Gives the value at (x,y) coordinate
-      * \param col X coordinate
-      * \param lin Y coordinate
+      * \param x X coordinate
+      * \param y Y coordinate
       * \return Value at (x,y)
       */
     DataT valueAtCoords(const double x, const double y) const;
@@ -358,8 +346,8 @@ protected:
     cv::Mat_<DataT>     _data;      /*!< Tableau contenant les données pour chaque case de la grille*/
 
     CT_DEFAULT_IA_BEGIN(CT_Image2D<DataT>)
-    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Image2D<DataT>::colDim, QObject::tr("X dimension"))
-    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Image2D<DataT>::linDim, QObject::tr("Y dimension"))
+    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Image2D<DataT>::xdim, QObject::tr("X dimension"))
+    CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Image2D<DataT>::ydim, QObject::tr("Y dimension"))
     CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Image2D<DataT>::resolution, QObject::tr("Resolution"))
     CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataNa(), &CT_Image2D<DataT>::NA, QObject::tr("NA"))
     CT_DEFAULT_IA_V2(CT_Image2D<DataT>, CT_AbstractCategory::staticInitDataValue(), &CT_Image2D<DataT>::dataMin, QObject::tr("Min Value"))
@@ -394,7 +382,7 @@ template<>
 CTLIBSTRUCTUREADDON_EXPORT bool CT_Image2D<bool>::addValueAtIndex(const size_t index, const bool value);
 
 template<>
-CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Image2D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t distance, const bool keepNAs, const CenterMode centermode) const;
+CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Image2D<bool>::neighboursValues(const int x, const int y, const int distance, const bool keepNAs, const CenterMode centermode) const;
 
 // TODO : unsigned long not vailable with opencv 4
 /*template<>

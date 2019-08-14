@@ -1,6 +1,3 @@
-#ifndef CT_GRID4D_DENSE_HPP
-#define CT_GRID4D_DENSE_HPP
-
 #include "ct_itemdrawable/ct_grid4d_dense.h"
 
 #include <math.h>
@@ -198,4 +195,3 @@ void CT_Grid4D_Dense<DataT>::initGridWithValue(const DataT val)
     this->_dataMax = val;
 }
 
-#endif // CT_GRID4D_DENSE_HPP

@@ -25,9 +25,6 @@
 
 *****************************************************************************/
 
-#ifndef CT_PROFILE_HPP
-#define CT_PROFILE_HPP
-
 #include "ct_itemdrawable/ct_profile.h"
 #include "ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.h"
 
@@ -485,4 +482,3 @@ void CT_Profile<DataT>::standardize()
     }
 }
 
-#endif // CT_PROFILE_HPP

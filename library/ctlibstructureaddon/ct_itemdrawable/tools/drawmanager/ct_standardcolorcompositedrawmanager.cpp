@@ -47,38 +47,39 @@ void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface& view,
         if (mode3D && zvalue != nullptr)
         {
             // sinon dessiner seulement les points
-            double x, y, value;
+            double x, y;
+            float value;
 
-            for (size_t ly = 0 ; ly < red->linDim()-1 ; ly++)
+            for (int ly = 0 ; ly < red->ydim()-1 ; ly++)
             {
-                for (size_t cx = 0 ; cx < red->colDim()-1 ; cx++)
+                for (int cx = 0 ; cx < red->xdim()-1 ; cx++)
                 {
                     x = red->getCellCenterColCoord(cx);
                     y = red->getCellCenterLinCoord(ly);
 
                     value = zvalue->valueAtCoords(x, y);
 
-                    if (value != zvalue->NA())
+                    if (!qFuzzyCompare(value, zvalue->NA()))
                     {
-                        int r = red->value(cx, ly);
-                        int g = green->value(cx, ly);
-                        int b = blue->value(cx, ly);
+                        int r = int(red->value(cx, ly));
+                        int g = int(green->value(cx, ly));
+                        int b = int(blue->value(cx, ly));
 
                         if (r < minRed) {r = 0;}
                         else if (r > maxRed) {r = 255;}
-                        else {r = 255*(r - minRed)/ampliRed;}
+                        else {r = int(255*(r - minRed)/ampliRed);}
 
                         if (g < minRed) {g = 0;}
                         else if (g > maxRed) {g = 255;}
-                        else {g = 255*(g - minRed)/ampliRed;}
+                        else {g = int(255*(g - minRed)/ampliRed);}
 
                         if (b < minRed) {b = 0;}
                         else if (b > maxRed) {b = 255;}
-                        else {b = 255*(b - minRed)/ampliRed;}
+                        else {b = int(255*(b - minRed)/ampliRed);}
 
                         painter.setColor(r, g, b);
 
-                        painter.drawPoint(x, y, value);
+                        painter.drawPoint(x, y, double(value));
                     }
                 }
             }
@@ -88,9 +89,9 @@ void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface& view,
             double z_val = red->level();
             if (fixerZ) {z_val = z;}
 
-            for (size_t cx = 0 ; cx < red->colDim() ; cx++)
+            for (int cx = 0 ; cx < red->xdim() ; cx++)
             {
-                for (size_t ly = 0 ; ly < red->linDim() ; ly++)
+                for (int ly = 0 ; ly < red->ydim() ; ly++)
                 {
                     double x = red->getCellCenterColCoord(cx);
                     double y = red->getCellCenterLinCoord(ly);
@@ -101,15 +102,15 @@ void CT_StandardColorCompositeDrawManager::draw(GraphicsViewInterface& view,
 
                     if (r < minRed) {r = 0;}
                     else if (r > maxRed) {r = 255;}
-                    else {r = 255*(r - minRed)/ampliRed;}
+                    else {r = int(255*(r - minRed)/ampliRed);}
 
                     if (g < minRed) {g = 0;}
                     else if (g > maxRed) {g = 255;}
-                    else {g = 255*(g - minRed)/ampliRed;}
+                    else {g = int(255*(g - minRed)/ampliRed);}
 
                     if (b < minRed) {b = 0;}
                     else if (b > maxRed) {b = 255;}
-                    else {b = 255*(b - minRed)/ampliRed;}
+                    else {b = int(255*(b - minRed)/ampliRed);}
 
                     painter.setColor(QColor(r, g, b));
 

@@ -146,7 +146,7 @@ void CT_Grid3D<DataT>::initGridWithValue(const DataT val)
 template< typename DataT>
 void CT_Grid3D<DataT>::setValueAtIndexFromDouble(const size_t &index, const double &value)
 {
-    setValueAtIndex(index, (DataT) value);
+    setValueAtIndex(index, DataT(value));
 }
 
 
@@ -247,24 +247,6 @@ DataT CT_Grid3D<DataT>::value(const size_t colx, const size_t liny, const size_t
         return valueAtIndex(i);
     }
     return NA();
-}
-
-template< typename DataT>
-DataT CT_Grid3D<DataT>::dataFromArray(const size_t &x, const size_t &y, const size_t &z) const
-{
-    size_t i;
-    if (index(x, y, z, i))
-    {
-        return valueAtIndex(i);
-    }
-    return NA();
-}
-
-template< typename DataT>
-DataT CT_Grid3D<DataT>::dataFromArray(const size_t &index) const
-{
-    if (index >= nCells()) {return NA();}
-    return _data[index];
 }
 
 template< typename DataT>

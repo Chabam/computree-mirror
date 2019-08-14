@@ -1,6 +1,3 @@
-#ifndef CT_STANDARDGRID3DDRAWMANAGER_HPP
-#define CT_STANDARDGRID3DDRAWMANAGER_HPP
-
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.h"
 #include "ct_itemdrawable/ct_grid3d.h"
 #include "painterinterface.h"
@@ -249,4 +246,3 @@ QString CT_StandardGrid3DDrawManager<DataT>::staticInitConfigShowTrueOnly()
 {
     return "A3DGD_STO";
 }
-#endif // CT_STANDARDGRID3DDRAWMANAGER_HPP

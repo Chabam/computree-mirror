@@ -104,11 +104,11 @@ const CT_Image2D<float>*CT_ColorComposite::getZValueRaster() const
 bool CT_ColorComposite::computeBands(CT_AbstractImage2D* red, CT_AbstractImage2D* green, CT_AbstractImage2D* blue, CT_Image2D<float>* zvalue)
 {
     if (red != nullptr && green != nullptr && blue != nullptr &&
-            red->minX() == green->minX() && red->minX() == green->minX() &&
-            red->minY() == green->minY() && red->minY() == green->minY() &&
-            red->colDim() == green->colDim() && red->colDim() == green->colDim() &&
-            red->linDim() == green->linDim() && red->linDim() == green->linDim() &&
-            red->resolution() == green->resolution() && red->resolution() == green->resolution())
+            qFuzzyCompare(red->minX(), green->minX()) && qFuzzyCompare(red->minX(), green->minX()) &&
+            qFuzzyCompare(red->minY(), green->minY()) && qFuzzyCompare(red->minY(), green->minY()) &&
+            (red->xdim() == green->xdim()) && (red->xdim() == green->xdim()) &&
+            (red->ydim() == green->ydim()) && (red->ydim() == green->ydim()) &&
+            qFuzzyCompare(red->resolution(), green->resolution()) && qFuzzyCompare(red->resolution(), green->resolution()))
     {
         _zValue = zvalue;
 
@@ -116,9 +116,9 @@ bool CT_ColorComposite::computeBands(CT_AbstractImage2D* red, CT_AbstractImage2D
         delete _green;
         delete _blue;
 
-        _red = new CT_Image2D<quint8>(red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
-        _green = new CT_Image2D<quint8>(red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
-        _blue = new CT_Image2D<quint8>(red->minX(), red->minY(), red->colDim(), red->linDim(), red->resolution(), 0, 0, 0);
+        _red = new CT_Image2D<quint8>(red->minX(), red->minY(), red->xdim(), red->ydim(), red->resolution(), 0, 0, 0);
+        _green = new CT_Image2D<quint8>(red->minX(), red->minY(), red->xdim(), red->ydim(), red->resolution(), 0, 0, 0);
+        _blue = new CT_Image2D<quint8>(red->minX(), red->minY(), red->xdim(), red->ydim(), red->resolution(), 0, 0, 0);
 
         const double minRed = red->minValueAsDouble();
         const double minGreen = green->minValueAsDouble();
@@ -127,14 +127,14 @@ bool CT_ColorComposite::computeBands(CT_AbstractImage2D* red, CT_AbstractImage2D
         const double amplitudeGreen = green->maxValueAsDouble() - minGreen;
         const double amplitudeBlue = blue->maxValueAsDouble() - minBlue;
 
-        const size_t nCol = red->colDim();
-        const size_t nLin = red->linDim();
+        const int nCol = red->xdim();
+        const int nLin = red->ydim();
 
         size_t index;
 
-        for (size_t xx = 0 ; xx < nCol ; xx++)
+        for (int xx = 0 ; xx < nCol ; xx++)
         {
-            for (size_t yy = 0 ; yy < nLin ; yy++)
+            for (int yy = 0 ; yy < nLin ; yy++)
             {
                 if (red->index(xx, yy, index))
                 {
@@ -142,9 +142,9 @@ bool CT_ColorComposite::computeBands(CT_AbstractImage2D* red, CT_AbstractImage2D
                     const double greenV = green->valueAtIndexAsDouble(index);
                     const double blueV = blue->valueAtIndexAsDouble(index);
 
-                    _red->setValue(xx, yy, 255*(redV / amplitudeRed));
-                    _green->setValue(xx, yy, 255*(greenV / amplitudeGreen));
-                    _blue->setValue(xx, yy, 255*(blueV / amplitudeBlue));
+                    _red->setValue  (xx, yy, uchar(255*(redV / amplitudeRed)));
+                    _green->setValue(xx, yy, uchar(255*(greenV / amplitudeGreen)));
+                    _blue->setValue (xx, yy, uchar(255*(blueV / amplitudeBlue)));
                 }
             }
         }

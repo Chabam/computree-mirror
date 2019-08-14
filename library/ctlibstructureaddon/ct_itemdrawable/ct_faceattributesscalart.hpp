@@ -1,6 +1,3 @@
-#ifndef CT_FACEATTRIBUTESSCALART_HPP
-#define CT_FACEATTRIBUTESSCALART_HPP
-
 #include "ct_itemdrawable/ct_faceattributesscalart.h"
 
 template<typename SCALAR>
@@ -31,4 +28,3 @@ CT_FaceAttributesScalarT<SCALAR>::CT_FaceAttributesScalarT(CT_FCIR pcir,
 {
 }
 
-#endif // CT_FACEATTRIBUTESSCALART_HPP

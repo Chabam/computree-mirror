@@ -32,8 +32,6 @@
 
 #include <Eigen/Core>
 
-#define EPSILON_GRID2D 0.000001    // 10^-6
-
 /*!
  * \class CT_AbstractImage2D
  * \ingroup PluginShared_Items
@@ -110,75 +108,75 @@ public:
 
     /*!
      * \brief Compute index for given column, row
-     * \param col Column
-     * \param lin Row
+     * \param x Column
+     * \param y Row
      * \param returnedIndex Returned index
      * \return true if index is valid
      */
-    inline bool index(const size_t col, const size_t lin, size_t &returnedIndex) const
+    inline bool index(const int x, const int y, size_t &returnedIndex) const
     {
-        if ((col >= _dimCol) || (lin >= _dimLin))
+        if ((x < 0) || (x >= _dimx) || (y < 0) || (y >= _dimy))
         {
             return false;
         }
         else
         {
-            returnedIndex = lin*_dimCol + col;
+            returnedIndex = size_t(y)*size_t(_dimx) + size_t(x);
             return true;
         }
     }
 
     /*!
      * \brief Return column for specified colCoord coordinate
-     * \param colCoord Column coordinate
-     * \param column Column number
+     * \param xCoord Column coordinate
+     * \param xcolumn Column number
      * \return true if index is valid
      */
-    inline bool col(const double colCoord, size_t &column) const
+    inline bool xcol(const double xCoord, int &xcolumn) const
     {
-        if (fabs(colCoord - minColCoord()) < EPSILON_GRID2D) {column = 0;         return true;}
-        if (fabs(colCoord - maxColCoord()) < EPSILON_GRID2D) {column = _dimCol - 1; return true;}
+        if (qFuzzyCompare(xCoord, minXCoord())) {xcolumn = 0;         return true;}
+        if (qFuzzyCompare(xCoord, maxXCoord())) {xcolumn = _dimx - 1; return true;}
 
-        if (colCoord < minColCoord() || colCoord > maxColCoord()) {return false;}
-        if (colCoord == maxColCoord())
+        if (xCoord < minXCoord() || xCoord > maxXCoord()) {return false;}
+        if (qFuzzyCompare(xCoord, maxXCoord()))
         {
-            column = _dimCol - 1;
+            xcolumn = _dimx - 1;
         }
-        column = (size_t) floor((colCoord - minColCoord()) / _res);
+        xcolumn = int(floor((xCoord - minXCoord()) / _res));
         return true;
     }
 
     /*!
      * \brief Return row for specified linCoord coordinate
-     * \param linCoord Row coordinate
-     * \param Row number
+     * \param yCoord Row coordinate
+     * \param yrow number
      * \return true if index is valid
      */
-    inline bool lin(const double linCoord, size_t &row) const
+    inline bool lin(const double yCoord, int &yrow) const
     {
-        if (fabs(linCoord - minLinCoord()) < EPSILON_GRID2D) {row = 0;         return true;}
-        if (fabs(linCoord - maxLinCoord()) < EPSILON_GRID2D) {row = _dimLin - 1; return true;}
+        if (qFuzzyCompare(yCoord, minYCoord())) {yrow = 0;         return true;}
+        if (qFuzzyCompare(yCoord, maxYCoord())) {yrow = _dimy - 1; return true;}
 
-        if (linCoord < minLinCoord() || linCoord > maxLinCoord()) {return false;}
-        if (linCoord == minLinCoord())
+        if (yCoord < minYCoord() || yCoord > maxYCoord()) {return false;}
+        if (qFuzzyCompare(yCoord, minYCoord()))
         {
-            row = _dimLin - 1;
+            yrow = _dimy - 1;
         }
-        row = (size_t) floor((maxLinCoord() - linCoord) / _res);
+        yrow = int(floor((maxYCoord() - yCoord) / _res));
         return true;
     }
 
     /*!
-     * \brief Compute index for given (colCoord, linCoord) coordinate
-     * \param colCoord column coordinate
-     * \param linCoord Row coordinate
+     * \brief Compute index for given (xCoord, yCoord) coordinate
+     * \param xCoord column coordinate
+     * \param yCoord Row coordinate
      * \param index Returned index
      * \return true if returnedIndex is valid
      */
-    inline bool indexAtCoords(const double colCoord, const double linCoord, size_t &returnedIndex) const
+    inline bool indexAtCoords(const double xCoord, const double yCoord, size_t &returnedIndex) const
     {
-        size_t colx, liny;
-        if (!col(colCoord, colx) || !lin(linCoord, liny)) {return false;}
+        int colx, liny;
+        if (!xcol(xCoord, colx) || !lin(yCoord, liny)) {return false;}
 
         return index(colx, liny, returnedIndex);
     }
@@ -186,16 +184,16 @@ public:
     /*!
      * \brief indexToGrid Convert index in (coly, lin) grid coordinates
      * \param index Index of the cell
-     * \param col Resulting column of the cell
-     * \param lin Resulting row of the cell
+     * \param x Resulting column of the cell
+     * \param y Resulting row of the cell
      * \return true if the index is in the grid
      */
-    inline bool indexToGrid(const size_t index, size_t &col, size_t &lin) const
+    inline bool indexToGrid(const size_t index, int &x, int &y) const
     {
         if (index >= nCells()) {return false;}
 
-        lin = index / _dimCol;
-        col = index % _dimCol;
+        y = int(index / size_t(_dimx));
+        x = int(index % size_t(_dimx));
 
         return true;
     }
@@ -229,8 +227,8 @@ public:
      */
     inline void getMinCoordinates(Eigen::Vector2d &min) const
     {
-        min(0) = minColCoord();
-        min(1) = minLinCoord();
+        min(0) = minXCoord();
+        min(1) = minYCoord();
     }
 
     /**
@@ -247,57 +245,57 @@ public:
       * \brief Gives the number of columns
       * \return Number of columns
       */
-    inline size_t colDim() const {return _dimCol;}
+    inline int xdim() const {return _dimx;}
 
     /**
       * \brief Gives the number of rows
       * \return Number of rows
       */
-    inline size_t linDim() const {return _dimLin;}
+    inline int ydim() const {return _dimy;}
 
     /**
       * \brief Gives the minimum column coordinate
       * \return minimum column coordinate
       */
-    inline double minColCoord() const {return _minColCoord;}
+    inline double minXCoord() const {return _minXCoord;}
 
     /**
       * \brief Gives the minimum row coordinate
       * \return minimum row coordinate
       */
-    inline double minLinCoord() const {return _minLinCoord;}
+    inline double minYCoord() const {return _minYCoord;}
 
     /**
       * \brief Gives the maximum column coordinate
       * \return maximum column coordinate
       */
-    inline double maxColCoord() const {return _minColCoord + _dimCol*_res;}
+    inline double maxXCoord() const {return _minXCoord + _dimx*_res;}
 
     /**
       * \brief Gives the maximum row coordinate
       * \return maximum row coordinate
       */
-    inline double maxLinCoord() const {return _minLinCoord + _dimLin*_res;}
+    inline double maxYCoord() const {return _minYCoord + _dimy*_res;}
 
     /*!
      * \brief Total number of cells for the raster
      * \return Number of cells
      */
-    inline size_t nCells() const {return _dimCol*_dimLin;}
+    inline size_t nCells() const {return size_t(_dimx)*size_t(_dimy);}
 
     /*!
      * \brief Gives the column coordinate of the center of cells of column col
-     * \param col Column, first one is 0
+     * \param x Column, first one is 0
      * \return Column coordinate
      */
-    inline double getCellCenterColCoord(const size_t col) const {return minColCoord() + col*_res + _res/2;}
+    inline double getCellCenterColCoord(const int x) const {return minXCoord() + x*_res + _res/2;}
 
     /*!
      * \brief Gives the row coordinate of the center of cells of row lin
-     * \param lin Row, first one is 0
+     * \param y Row, first one is 0
      * \return Row coordinate
      */
-    inline double getCellCenterLinCoord(const size_t lin) const {return maxLinCoord() - lin*_res - _res/2;}
+    inline double getCellCenterLinCoord(const int y) const {return maxYCoord() - y*_res - _res/2;}
 
     /*!
      * \brief getCellCoordinates Give min and max coordinates of a cell
@@ -308,22 +306,22 @@ public:
      */
     inline bool getCellCoordinates(const size_t index, Eigen::Vector2d &bottom, Eigen::Vector2d &top) const
     {
-        size_t col, lin;
+        int col, lin;
         if (!indexToGrid(index, col, lin)) {return false;}
-        bottom(0) = minColCoord() + col*_res;
-        bottom(1) = maxLinCoord() - (lin + 1)*_res;
+        bottom(0) = minXCoord() + col*_res;
+        bottom(1) = maxYCoord() - (lin + 1)*_res;
 
         top(0) = bottom(0) + _res;
         top(1) = bottom(1) + _res;
         return true;
     }
 
-    inline bool getCellCenterCoordinates(const size_t col, const size_t lin, Eigen::Vector3d &center) const
+    inline bool getCellCenterCoordinates(const int x, const int y, Eigen::Vector3d &center) const
     {
-        if (col >= colDim() || lin >= linDim()) {return false;}
+        if ((x < 0) || (x >= xdim()) || (y < 0) || (y >= ydim())) {return false;}
 
-        center(0) = minColCoord() + col*_res + _res/2.0;
-        center(1) = maxLinCoord() - lin*_res - _res/2.0;
+        center(0) = minXCoord() + x*_res + _res/2.0;
+        center(1) = maxYCoord() - y*_res - _res/2.0;
         center(2) = _level;
 
         return true;
@@ -331,11 +329,11 @@ public:
 
     inline bool getCellCenterCoordinates(const size_t index, Eigen::Vector3d &center) const
     {
-        size_t col, lin;
+        int col, lin;
         if (!indexToGrid(index, col, lin)) {return false;}
 
-        center(0) = minColCoord() + col*_res + _res/2.0;
-        center(1) = maxLinCoord() - lin*_res - _res/2.0;
+        center(0) = minXCoord() + col*_res + _res/2.0;
+        center(1) = maxYCoord() - lin*_res - _res/2.0;
         center(2) = _level;
 
         return true;
@@ -344,41 +342,41 @@ public:
 
 
     /*!
-     * \brief Get the left corner coordinates of the cell defined by (col, lin)
-     * \param col Column
-     * \param lin Row
+     * \brief Get the left corner coordinates of the cell defined by (x, y)
+     * \param x Column
+     * \param y Row
      * \param bottom Output coordinates
      * \return A Eigen::Vector2d coordinates for the bottom left corner
      */
-    inline bool getCellBottomLeftCorner(const size_t col, const size_t lin, Eigen::Vector2d &bottom) const
+    inline bool getCellBottomLeftCorner(const int x, const int y, Eigen::Vector2d &bottom) const
     {
-        if ((col >= _dimCol) || (lin >= _dimLin)) {return false;}
-        bottom(0) = minColCoord() + col*_res;
-        bottom(1) = maxLinCoord() - (lin + 1)*_res;
+        if ((x < 0) || (x >= xdim()) || (y < 0) || (y >= ydim())) {return false;}
+        bottom(0) = minXCoord() + x*_res;
+        bottom(1) = maxYCoord() - (y + 1)*_res;
 
         return true;
     }
 
     /*!
-     * \brief Get the left corner coordinates of the cell containing by (colCoord, linCoord)
-     * \param colCoord column coordinate
-     * \param linCoord Row coordinate
+     * \brief Get the left corner coordinates of the cell containing by (xCoord, yCoord)
+     * \param xCoord column coordinate
+     * \param yCoord Row coordinate
      * \param bottom Output coordinates
      * \return A Eigen::Vector2d coordinates for the bottom left corner
      */
-    inline bool getCellBottomLeftCornerAtCoords(const double colCoord, const double linCoord, Eigen::Vector2d &bottom) const
+    inline bool getCellBottomLeftCornerAtCoords(const double xCoord, const double yCoord, Eigen::Vector2d &bottom) const
     {
 
-        return getCellBottomLeftCorner((size_t) floor((colCoord - minColCoord()) / _res),
-                                       (size_t) floor((maxLinCoord() - linCoord) / _res),
+        return getCellBottomLeftCorner(int(floor((xCoord - minXCoord()) / _res)),
+                                       int(floor((maxYCoord() - yCoord) / _res)),
                                        bottom);
     }
 
 protected:
-    size_t      _dimCol;        /*!< Nombre de cases selon x du raster*/
-    size_t      _dimLin;        /*!< Nombre de cases selon y du raster*/
-    double       _minColCoord;   /*!< Coordonnée colonne minimum*/
-    double       _minLinCoord;   /*!< Coordonnée ligne minimum*/
+    int          _dimx;        /*!< Nombre de cases selon x du raster*/
+    int          _dimy;        /*!< Nombre de cases selon y du raster*/
+    double       _minXCoord;   /*!< Coordonnée colonne minimum*/
+    double       _minYCoord;   /*!< Coordonnée ligne minimum*/
     double       _res;           /*!< Resolution de la grille (taille d'une case)*/
     double       _level;         /*!< Niveau Z de placement du raster*/
 

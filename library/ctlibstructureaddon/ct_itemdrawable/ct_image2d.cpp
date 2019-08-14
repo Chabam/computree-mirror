@@ -33,10 +33,6 @@ template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<float>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<double>)
-/*template<>
-CT_DEFAULT_IA_INIT(CT_Image2D<long>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Image2D<unsigned long>)*/
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<qint8>)
 template<>
@@ -47,12 +43,12 @@ template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<quint16>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<qint32>)
-/*template<>
+template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<quint32>)
 template<>
 CT_DEFAULT_IA_INIT(CT_Image2D<qint64>)
 template<>
-CT_DEFAULT_IA_INIT(CT_Image2D<quint64>)*/
+CT_DEFAULT_IA_INIT(CT_Image2D<quint64>)
 
 /////////////////////////////////////////////////////////////////////
 /// Specialisations for bool type ///////////////////////////////////
@@ -100,32 +96,42 @@ bool CT_Image2D<bool>::setMinValueAtIndex(const size_t index, const bool value)
 }
 
 template<>
-bool CT_Image2D<bool>::addValueAtIndex(const size_t /*index*/, const bool /*value*/)
+bool CT_Image2D<bool>::addValueAtIndex(const size_t index, const bool value)
 {
-    //bool currentValue = _data[index];
-    return true;//setValueAtIndex(index, value + currentValue);
+    if (value) {setValueAtIndex(index, true);}
+    return true;
 }
 
 template<>
-QList<bool> CT_Image2D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t distance, const bool keepNAs, const CenterMode centermode) const
+QList<bool> CT_Image2D<bool>::neighboursValues(const int x, const int y, const int distance, const bool keepNAs, const CenterMode centermode) const
 {
     Q_UNUSED(keepNAs);
 
     QList<bool> liste;
 
     if (distance < 1) {return liste;}
+    if (x < 0)        {return liste;}
+    if (y < 0)        {return liste;}
+    if (x >= _dimx)   {return liste;}
+    if (y >= _dimy)   {return liste;}
 
-    size_t firstColx = colx-distance;
-    size_t lastColx = colx+distance;
-    size_t firstLiny = liny-distance;
-    size_t lastLiny = liny+distance;
+    int firstcol = x - distance;
+    int lastcol  = x + distance;
+    int firstlin = y - distance;
+    int lastlin  = y + distance;
 
-    for (size_t xx = firstColx ; xx <= lastColx ; xx++)
+    if (firstcol < 0)      {firstcol = 0;}
+    if (lastcol >= _dimx)  {lastcol = _dimx - 1;}
+    if (firstlin < 0)      {firstlin = 0;}
+    if (lastlin >= _dimy)  {lastlin = _dimy - 1;}
+
+
+    for (int xx = firstcol ; xx <= lastcol ; xx++)
     {
-        for (size_t yy = firstLiny ; yy <= lastLiny ; yy++)
+        for (int yy = firstlin ; yy <= lastlin ; yy++)
         {
             bool value = this->value(xx, yy);
-            if ((xx == colx) && (yy == liny))
+            if ((xx == x) && (yy == y))
             {
                 if (centermode == CM_KeepCenter) {liste.append(value);}
             } else {
@@ -144,15 +150,3 @@ QString CT_Image2D<bool>::valueAtIndexAsString(const size_t index) const
     return "F";
 }
 
-/*template<>
-QString CT_Image2D<unsigned long>::valueAtIndexAsString(const size_t index) const
-{
-    return QString::number(valueAtIndex(index), 'g', 50);
-}
-
-template<>
-QString CT_Image2D<unsigned long>::NAAsString() const
-{
-    return QString::number(NA(), 'g', 50);
-}
-*/

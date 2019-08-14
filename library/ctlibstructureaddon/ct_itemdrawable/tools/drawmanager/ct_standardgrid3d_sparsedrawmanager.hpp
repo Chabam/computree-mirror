@@ -1,6 +1,3 @@
-#ifndef CT_STANDARDGRID3D_SPARSEDRAWMANAGER_HPP
-#define CT_STANDARDGRID3D_SPARSEDRAWMANAGER_HPP
-
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h"
 #include "ct_itemdrawable/ct_grid3d.h"
 #include "painterinterface.h"
@@ -252,4 +249,3 @@ QString CT_StandardGrid3D_SparseDrawManager<DataT>::staticInitConfigShowTrueOnly
 {
     return "A3DSPGD_STO";
 }
-#endif // CT_STANDARDGRID3D_SPARSEDRAWMANAGER_HPP

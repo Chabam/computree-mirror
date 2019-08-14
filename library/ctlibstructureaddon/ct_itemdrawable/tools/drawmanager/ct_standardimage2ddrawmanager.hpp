@@ -1,6 +1,3 @@
-#ifndef CT_STANDARDIMAGE2DDRAWMANAGER_HPP
-#define CT_STANDARDIMAGE2DDRAWMANAGER_HPP
-
 #include "ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h"
 #include "painterinterface.h"
 
@@ -59,9 +56,9 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
     QMap<DataT, QColor> colors;
     if (clusterMode)
     {
-        for (size_t cx = 0 ; cx < item.colDim()-1 ; cx++)
+        for (int cx = 0 ; cx < item.xdim()-1 ; cx++)
         {
-            for (size_t ly = 0 ; ly < item.linDim()-1 ; ly++)
+            for (int ly = 0 ; ly < item.ydim()-1 ; ly++)
             {
                 DataT value = item.value(cx, ly);
                 if (!colors.contains(value))
@@ -92,14 +89,14 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
             double x0, x1, y0, y1, z0, z1, z2, z3;
             int c0, c1, c2, c3;
 
-            for (size_t cx = 0 ; cx < item.colDim()-1 ; cx++)
+            for (int cx = 0 ; cx < item.xdim()-1 ; cx++)
             {
-                for (size_t ly = 0 ; ly < item.linDim()-1 ; ly++)
+                for (int ly = 0 ; ly < item.ydim()-1 ; ly++)
                 {
-                    value = item.value(cx, ly);
+                    value = double(item.value(cx, ly));
 
-                    // Dessinner le relief
-                    if (value != item.NA())
+                    // Dessiner le relief
+                    if (!qFuzzyCompare(value, double(item.NA())))
                     {
 
                         if (relief)
@@ -115,10 +112,10 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                             z2 = item.value(cx+1, ly+1);
                             z3 = item.value(cx+1, ly);
 
-                            c0 = ((z0 - (double)item.dataMin()) / amplitude)*255;
-                            c1 = ((z1 - (double)item.dataMin()) / amplitude)*255;
-                            c2 = ((z2 - (double)item.dataMin()) / amplitude)*255;
-                            c3 = ((z3 - (double)item.dataMin()) / amplitude)*255;
+                            c0 = ((z0 - double(item.dataMin()) / amplitude)*255);
+                            c1 = ((z1 - double(item.dataMin()) / amplitude)*255);
+                            c2 = ((z2 - double(item.dataMin()) / amplitude)*255);
+                            c3 = ((z3 - double(item.dataMin()) / amplitude)*255);
 
                             if (echelle)
                             {
@@ -156,23 +153,23 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
             double lasty = 0;
             double lastz = 0;
 
-            for (size_t ly = 0 ; ly < item.linDim() ; ly++)
+            for (int ly = 0 ; ly < item.ydim() ; ly++)
             {
                 double y = item.getCellCenterLinCoord(ly);
 
-                for (size_t cx = 0 ; cx < item.colDim() ; cx++)
+                for (int cx = 0 ; cx < item.xdim() ; cx++)
                 {
                     double value = item.value(cx, ly);
                     double x = item.getCellCenterColCoord(cx);
 
-                    if (value != item.NA())
+                    if (!qFuzzyCompare(value, double(item.NA())))
                     {
                         if (echelle)
                         {
-                            value = (value - (double)item.dataMin()) * scaling + zmin;
+                            value = (value - double(item.dataMin())) * scaling + zmin;
                         }
 
-                        if ( lastz != item.NA() )
+                        if (!qFuzzyCompare(lastz, double(item.NA())))
                         {
                             if (cx > 0)
                             {
@@ -187,23 +184,23 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                 }
             }
 
-            for (size_t cx = 0 ; cx < item.colDim() ; cx++)
+            for (int cx = 0 ; cx < item.xdim() ; cx++)
             {
                 double x = item.getCellCenterColCoord(cx);
 
-                for (size_t ly = 0 ; ly < item.linDim() ; ly++)
+                for (int ly = 0 ; ly < item.ydim() ; ly++)
                 {
                     double value = item.value(cx, ly);
                     double y = item.getCellCenterLinCoord(ly);
 
-                    if (value != item.NA())
+                    if (!qFuzzyCompare(value, double(item.NA())))
                     {
                         if (echelle)
                         {
-                            value = (value - (double)item.dataMin()) * scaling + zmin;
+                            value = (value - double(item.dataMin())) * scaling + zmin;
                         }
 
-                        if ( lastz != item.NA() )
+                        if (!qFuzzyCompare(lastz, double(item.NA())))
                         {
                             if (ly > 0)
                             {
@@ -224,18 +221,18 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
             // sinon dessiner seulement les points
             double x, y, value;
 
-            for (size_t ly = 0 ; ly < item.linDim()-1 ; ly++)
+            for (int ly = 0 ; ly < item.ydim()-1 ; ly++)
             {
-                for (size_t cx = 0 ; cx < item.colDim()-1 ; cx++)
+                for (int cx = 0 ; cx < item.xdim()-1 ; cx++)
                 {
                     value = item.value(cx, ly);
 
                     if (echelle)
                     {
-                        value = (value - (double)item.dataMin()) * scaling + zmin;
+                        value = (value - double(item.dataMin())) * scaling + zmin;
                     }
 
-                    if (value != item.NA())
+                    if (!qFuzzyCompare(value, double(item.NA())))
                     {
                         x = item.getCellCenterColCoord(cx);
                         y = item.getCellCenterLinCoord(ly);
@@ -251,15 +248,15 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
         double z_val = item.level();
         if (fixerZ) {z_val = z;}
 
-        for (size_t cx = 0 ; cx < item.colDim() ; cx++)
+        for (int cx = 0 ; cx < item.xdim() ; cx++)
         {
-            for (size_t ly = 0 ; ly < item.linDim() ; ly++)
+            for (int ly = 0 ; ly < item.ydim() ; ly++)
             {
                 double x = item.getCellCenterColCoord(cx);
                 double y = item.getCellCenterLinCoord(ly);
                 double value = item.value(cx, ly);
 
-                if (value == item.NA())
+                if (qFuzzyCompare(value, double(item.NA())))
                 {
                     painter.setColor(QColor(125, 0, 0));
                 } else {
@@ -268,7 +265,7 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                     {
                         painter.setColor(colors.value(value, QColor(255, 255, 255)));
                     } else {
-                        int colorLevel = ((value - (double)item.dataMin()) / amplitude)*255;
+                        int colorLevel = ((value - double(item.dataMin())) / amplitude)*255;
                         if (colorLevel < 0) {colorLevel = 0;}
                         if (colorLevel > 255) {colorLevel = 255;}
                         painter.setColor(QColor(colorLevel, colorLevel, colorLevel));
@@ -382,4 +379,3 @@ QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeClusterMode
     return "IM2D_COLMD";
 }
 
-#endif // CT_STANDARDIMAGE2DDRAWMANAGER_HPP

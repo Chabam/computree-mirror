@@ -1,6 +1,3 @@
-#ifndef CT_GRID4D_SPARSE_HPP
-#define CT_GRID4D_SPARSE_HPP
-
 #include "ct_itemdrawable/ct_grid4d_sparse.h"
 
 #include <math.h>
@@ -172,4 +169,3 @@ void CT_Grid4D_Sparse<DataT>::computeMinMax()
     }
 }
 
-#endif // CT_GRID4D_SPARSE_HPP

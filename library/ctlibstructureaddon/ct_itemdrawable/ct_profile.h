@@ -29,7 +29,6 @@
 #define CT_PROFILE_H
 
 #include "ct_itemdrawable/abstract/ct_abstractprofile.h"
-#include "ct_itemdrawable/tools/ct_itemplateddata3darray.h"
 #include <QMutex>
 
 template< typename DataT > class CT_StandardProfileDrawManager;

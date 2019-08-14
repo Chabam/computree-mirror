@@ -103,7 +103,7 @@ double CT_Grid4D<DataT>::ratioValueAtIndex(const size_t index) const
         return -1;
     }
 
-    return (double) (((double)(value - _dataMin))/((double)(_dataMax - _dataMin)));
+    return double((value - _dataMin)/(_dataMax - _dataMin));
 }
 
 template< typename DataT>
@@ -265,23 +265,6 @@ template< typename DataT>
 QString CT_Grid4D<DataT>::NAAsString() const
 {
     return QString::number(NA());
-}
-
-template< typename DataT>
-DataT CT_Grid4D<DataT>::dataFromArray(const size_t &w, const size_t &x, const size_t &y, const size_t &z) const
-{
-    size_t i;
-    if ( index(w,x, y, z, i) )
-    {
-        return valueAtIndex(i);
-    }
-    return NA();
-}
-
-template< typename DataT>
-DataT CT_Grid4D<DataT>::dataFromArray(const size_t &index) const
-{
-    return valueAtIndex(index);
 }
 
 template< typename DataT>

@@ -161,10 +161,6 @@ HEADERS += \
     ct_itemdrawable/abstract/ct_abstractshape2d.h \
     ct_itemdrawable/abstract/ct_abstractimage2d.h \
     ct_itemdrawable/abstract/ct_abstractprofile.h \
-    ct_itemdrawable/tools/ct_itemplateddata1darray.h \
-    ct_itemdrawable/tools/ct_itemplateddata2darray.h \
-    ct_itemdrawable/tools/ct_itemplateddata3darray.h \
-    ct_itemdrawable/tools/ct_itemplateddata4darray.h \
     ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.h \
     ct_tools/attributes/ct_abstractattributestocloudworker.h \
     ct_tools/attributes/ct_attributestocloudworkert.h \

@@ -1,6 +1,3 @@
-#ifndef CT_POINTSATTRIBUTESSCALARMASKT_HPP
-#define CT_POINTSATTRIBUTESSCALARMASKT_HPP
-
 #include "ct_itemdrawable/ct_pointsattributesscalarmaskt.h"
 
 template<typename StructType>
@@ -108,4 +105,3 @@ CT_StandardCloudStdVectorT<StructType>* CT_PointsAttributesScalarMaskT<StructTyp
     return m_collection;
 }
 
-#endif // CT_POINTSATTRIBUTESSCALARMASKT_HPP

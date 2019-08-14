@@ -1,6 +1,3 @@
-#ifndef CT_STANDARDGRID4DDRAWMANAGER_HPP
-#define CT_STANDARDGRID4DDRAWMANAGER_HPP
-
 #include "ct_standardgrid4ddrawmanager.h"
 
 #include "ct_itemdrawable/ct_grid4d.h"
@@ -261,4 +258,3 @@ QString CT_StandardGrid4DDrawManager<DataT>::staticInitConfigShowTrueOnly()
     return "A4DGD_STO";
 }
 
-#endif // CT_STANDARDGRID4DDRAWMANAGER_HPP

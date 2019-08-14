@@ -237,6 +237,9 @@ private:
         Q_ASSERT_X((parent.minimum() > 0)
                       || ((parent.minimum() == 0) && (child.minimum() == 0)), "checkStructureValidityAtRunTime", "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0).");
         #undef QT_FORCE_ASSERTS
+
+        Q_UNUSED(parent);
+        Q_UNUSED(child);
     }
 
     /*****************************************************/

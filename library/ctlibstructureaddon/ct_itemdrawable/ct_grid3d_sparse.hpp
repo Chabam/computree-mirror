@@ -25,9 +25,6 @@
 
 *****************************************************************************/
 
-#ifndef CT_GRID3D_SPARSE_HPP
-#define CT_GRID3D_SPARSE_HPP
-
 #include "ct_itemdrawable/ct_grid3d_sparse.h"
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h"
 
@@ -135,7 +132,7 @@ CT_Grid3D_Sparse<DataT>::~CT_Grid3D_Sparse()
 template< typename DataT>
 void CT_Grid3D_Sparse<DataT>::setValueAtIndexFromDouble(const size_t &index, const double &value)
 {
-    setValueAtIndex(index, (DataT) value);
+    setValueAtIndex(index, DataT(value));
 }
 
 template< typename DataT>
@@ -210,7 +207,7 @@ double CT_Grid3D_Sparse<DataT>::ratioValueAtIndex(const size_t index) const
     if (_dataMax <= _dataMin) {return 1;}
     DataT value = valueAtIndex(index);
     if (value == NA()) {return -1;}
-    return (double) (((double)(value - _dataMin))/((double)(_dataMax - _dataMin)));
+    return double((value - _dataMin)/(_dataMax - _dataMin));
 }
 
 template< typename DataT>
@@ -243,28 +240,6 @@ DataT CT_Grid3D_Sparse<DataT>::value(const size_t colx, const size_t liny, const
         return valueAtIndex(i);
     }
     return NA();
-}
-
-template< typename DataT>
-DataT CT_Grid3D_Sparse<DataT>::dataFromArray(const size_t &x, const size_t &y, const size_t &z) const
-{
-    size_t i;
-    if (index(x, y, z, i))
-    {
-        return valueAtIndex(i);
-    }
-    return NA();
-}
-
-template< typename DataT>
-DataT CT_Grid3D_Sparse<DataT>::dataFromArray(const size_t &index) const
-{
-    if (index >= nCells()) {return NA();}
-
-    const DataT* val = _data.template find<DataT>(int(index));
-    if (val == nullptr) {return _initData;}
-
-    return _data(int(index));
 }
 
 template< typename DataT>
@@ -411,9 +386,7 @@ void CT_Grid3D_Sparse<DataT>::getIndicesWithData(QList<size_t> &list) const
     cv::SparseMatConstIterator it = _data.begin(), it_end = _data.end();
     for( ; it != it_end; ++it )
     {
-        size_t ind = it.node()->idx[0];
+        size_t ind = size_t(it.node()->idx[0]);
         list.append(ind);
     }
 }
-
-#endif // CT_GRID3D_SPARSE_HPP
