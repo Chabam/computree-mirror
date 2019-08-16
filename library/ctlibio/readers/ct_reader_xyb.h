@@ -88,7 +88,7 @@ private:
     };
 
     Params      m_current;
-    float       m_filterRadius;
+    double       m_filterRadius;
     double      m_zMinFilter;
     double      m_zMaxFilter;
 

@@ -63,6 +63,9 @@ public:
         LP_Items,
         LP_Raster,
         LP_Vector,
+        LP_GDALRaster,
+        LP_GDALVector,
+        LP_GDALOthers,
         LP_Voxels,
         LP_Meshes,
         LP_ItemAttributes

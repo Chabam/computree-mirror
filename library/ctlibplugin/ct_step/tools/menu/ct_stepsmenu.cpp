@@ -109,6 +109,9 @@ QString CT_StepsMenu::staticPredefinedToString(CT_StepsMenu::LevelPredefined pre
     case LP_Items: return QObject::tr("Géométrie 3D");
     case LP_Raster: return QObject::tr("Rasters / Images");
     case LP_Vector: return QObject::tr("Géométrie 2D");
+    case LP_GDALRaster: return QObject::tr("GDAL Raster");
+    case LP_GDALVector: return QObject::tr("GDAL Vecteur");
+    case LP_GDALOthers: return QObject::tr("GDAL Divers");
     case LP_Voxels: return QObject::tr("Voxels");
     case LP_Meshes: return QObject::tr("Maillages");
     case LP_ItemAttributes: return QObject::tr("Attributs");

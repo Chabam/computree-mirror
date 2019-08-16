@@ -16,7 +16,6 @@
 #include "rapidxml/rapidxml_utils.hpp"
 
 #include "ctlibio/ctlibio_global.h"
-#include "ct_reader_opf_def_models.h"
 
 class CT_OPF_Attribute
 {

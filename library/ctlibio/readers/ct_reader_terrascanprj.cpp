@@ -3,40 +3,21 @@
 #include <QIODevice>
 #include <QTextStream>
 
-#include <QDebug>
-
-#include "ct_global/ct_context.h"
-
 #include <limits>
 
-CT_Reader_TerraScanPrj::CT_Reader_TerraScanPrj() : CT_AbstractReader()
+CT_Reader_TerraScanPrj::CT_Reader_TerraScanPrj(int subMenuLevel) : SuperClass(subMenuLevel)
 {
-    _headerModel = NULL;
-    _boxModel = NULL;
+    addNewReadableFormat(FileFormat("prj", tr("Fichier TerraScan PRJ")));
+    setToolTip(tr("Charge un fichier d'emprises de dalles (LIDAR), au format TerraScan PRJ"));
 }
 
-CT_Reader_TerraScanPrj::CT_Reader_TerraScanPrj(const CT_Reader_TerraScanPrj &other) : CT_AbstractReader(other)
+CT_Reader_TerraScanPrj::CT_Reader_TerraScanPrj(const CT_Reader_TerraScanPrj &other) : SuperClass(other)
 {
-    _headerModel = NULL;
-    _boxModel = NULL;
-
-    const QList<CT_OutStdGroupModel*> &models = outGroupsModel();
-
-    if(!models.isEmpty()) {
-        CT_OutStdGroupModel *grp = models.first();
-        _headerModel = (CT_OutStdSingularItemModel*)grp->findModelInTree(DEF_CT_Reader_TERRASCANPRJ_headerOut);
-        _boxModel = (CT_OutStdSingularItemModel*)grp->findModelInTree(DEF_CT_Reader_TERRASCANPRJ_boxOut);
-    }
 }
 
-QString CT_Reader_TerraScanPrj::GetReaderName() const
+QString CT_Reader_TerraScanPrj::displayableName() const
 {
     return tr("Fichier TerraScan - PRJ");
-}
-
-CT_StepsMenu::LevelPredefined CT_Reader_TerraScanPrj::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Vector;
 }
 
 bool CT_Reader_TerraScanPrj::setFilePath(const QString &filepath)
@@ -63,33 +44,14 @@ bool CT_Reader_TerraScanPrj::setFilePath(const QString &filepath)
     return false;
 }
 
-CT_AbstractReader* CT_Reader_TerraScanPrj::copy() const
+
+void CT_Reader_TerraScanPrj::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    return new CT_Reader_TerraScanPrj();
+    manager.addItem(m_box, tr("Emprise de la dalle"));
+    manager.addItem(m_fileName, tr("Fichier de la dalle"));
 }
 
-void CT_Reader_TerraScanPrj::protectedInit()
-{
-    addNewReadableFormat(FileFormat("prj", tr("Fichier TerraScan PRJ")));
-
-    setToolTip(tr("Charge un fichier d'emprises de dalles (LIDAR), au format TerraScan PRJ"));
-}
-
-void CT_Reader_TerraScanPrj::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    CT_OutStdGroupModel *grp = new CT_OutStdGroupModel(DEF_CT_Reader_TERRASCANPRJ_grpOut, new CT_StandardItemGroup(), tr("Dalle"));
-
-    _headerModel = new CT_OutStdSingularItemModel(DEF_CT_Reader_TERRASCANPRJ_headerOut, new CT_FileHeader(), tr("Fichier de la dalle"));
-    _boxModel = new CT_OutStdSingularItemModel(DEF_CT_Reader_TERRASCANPRJ_boxOut, new CT_Box2D(), tr("Emprise de la dalle"));
-
-    grp->addItem(_headerModel);
-    grp->addItem(_boxModel);
-    addOutGroupModel(grp);
-}
-
-bool CT_Reader_TerraScanPrj::protectedReadFile()
+bool CT_Reader_TerraScanPrj::internalReadFile(CT_StandardItemGroup* group)
 {
     // Test File validity
     if(QFile::exists(filepath()))
@@ -143,18 +105,15 @@ bool CT_Reader_TerraScanPrj::protectedReadFile()
                     {
                         file = -1;
 
-                        CT_StandardItemGroup *group = new CT_StandardItemGroup(NULL, NULL);
-
-                        CT_FileHeader *header = new CT_FileHeader(_headerModel, NULL);
-                        header->setFile(fileName);
-
                         CT_Box2DData *data = new CT_Box2DData(min, max);
-                        CT_Box2D *box = new CT_Box2D(_boxModel, NULL, data);
+                        CT_Box2D *box = new CT_Box2D(data);
 
-                        group->addItemDrawable(header);
-                        group->addItemDrawable(box);
+                        group->addSingularItem(m_box, box);
 
-                        addOutGroup(DEF_CT_Reader_TERRASCANPRJ_grpOut, group);
+                        CT_FileHeader *header = new CT_FileHeader();
+                        header->setFilePath(fileName);
+
+                        group->addSingularItem(m_fileName, header);
                     }
                 }
             }

@@ -4,7 +4,7 @@
 #include <QTextStream>
 
 #include "ct_colorcloud/ct_colorcloudstdvector.h"
-#include "ct_global/ct_context.h"
+#include "ct_log/ct_logmanager.h"
 #include <QDebug>
 
 #include <limits>
@@ -19,27 +19,28 @@
                                                             PS_LOG->addErrorMessage(LogInterface::reader, argErrMsg); \
                                                             return false; }
 
-#define wood_surface_Exist (wood_surface!=NULL)
-#define wood_volume_Exist (wood_volume!=NULL)
-#define leaf_surface_Exist (leaf_surface!=NULL)
-#define leaf_volume_Exist (leaf_volume!=NULL)
-#define all_surface_Exist (all_surface!=NULL)
-#define all_volume_Exist (all_volume!=NULL)
+#define wood_surface_Exist (wood_surface != nullptr)
+#define wood_volume_Exist (wood_volume != nullptr)
+#define leaf_surface_Exist (leaf_surface != nullptr)
+#define leaf_volume_Exist (leaf_volume != nullptr)
+#define all_surface_Exist (all_surface != nullptr)
+#define all_volume_Exist (all_volume != nullptr)
 
-CT_Reader_LArchitect_Grid::CT_Reader_LArchitect_Grid() : CT_AbstractReader()
+CT_Reader_LArchitect_Grid::CT_Reader_LArchitect_Grid(int subMenuLevel) : SuperClass(subMenuLevel)
 {
+    addNewReadableFormat(FileFormat("grid", tr("Fichiers de grilles 3D LArchitect")));
     setToolTip(tr("Charge des grilles 3D depuis un fichier au format LArchitect"));
 }
 
-
-QString CT_Reader_LArchitect_Grid::GetReaderName() const
+CT_Reader_LArchitect_Grid::CT_Reader_LArchitect_Grid(const CT_Reader_LArchitect_Grid& other) : SuperClass(other)
 {
-    return tr("Grilles 3D, format LArchitect");
 }
 
-CT_StepsMenu::LevelPredefined CT_Reader_LArchitect_Grid::getReaderSubMenuName() const
+
+
+QString CT_Reader_LArchitect_Grid::displayableName() const
 {
-    return CT_StepsMenu::LP_Voxels;
+    return tr("Grilles 3D, format LArchitect");
 }
 
 bool CT_Reader_LArchitect_Grid::setFilePath(const QString &filepath)
@@ -74,29 +75,18 @@ bool CT_Reader_LArchitect_Grid::setFilePath(const QString &filepath)
     return false;
 }
 
-CT_AbstractReader* CT_Reader_LArchitect_Grid::copy() const
+
+void CT_Reader_LArchitect_Grid::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    return new CT_Reader_LArchitect_Grid();
+    manager.addItem(m_wood_surface, tr("Wood surface"));
+    manager.addItem(m_leaf_surface, tr("Leaf surface"));
+    manager.addItem(m_wood_volume, tr("Wood volume"));
+    manager.addItem(m_leaf_volume, tr("Leaf volume"));
+    manager.addItem(m_all_surface, tr("Total surface"));
+    manager.addItem(m_all_volume, tr("Total volume"));
 }
 
-void CT_Reader_LArchitect_Grid::protectedInit()
-{
-    addNewReadableFormat(FileFormat("grid", tr("Fichiers de grilles 3D LArchitect")));
-}
-
-void CT_Reader_LArchitect_Grid::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    addOutItemDrawableModel(DEF_CT_Reader_LArchitect_Grid_wood_surface, new CT_Grid3D<float>(), tr("Wood surface"));
-    addOutItemDrawableModel(DEF_CT_Reader_LArchitect_Grid_leaf_surface, new CT_Grid3D<float>(), tr("Leaf surface"));
-    addOutItemDrawableModel(DEF_CT_Reader_LArchitect_Grid_wood_volume, new CT_Grid3D<float>(), tr("Wood volume"));
-    addOutItemDrawableModel(DEF_CT_Reader_LArchitect_Grid_leaf_volume, new CT_Grid3D<float>(), tr("Leaf volume"));
-    addOutItemDrawableModel(DEF_CT_Reader_LArchitect_Grid_all_surface, new CT_Grid3D<float>(), tr("Total surface"));
-    addOutItemDrawableModel(DEF_CT_Reader_LArchitect_Grid_all_volume, new CT_Grid3D<float>(), tr("Total volume"));
-}
-
-bool CT_Reader_LArchitect_Grid::protectedReadFile()
+bool CT_Reader_LArchitect_Grid::internalReadFile(CT_StandardItemGroup* group)
 {
     // Test File validity
     if(QFile::exists(filepath()))
@@ -116,13 +106,13 @@ bool CT_Reader_LArchitect_Grid::protectedReadFile()
 
             if(readHeader(stream, min, max, res, dim, nMat, matNames)) {
 
-                CT_Grid3D<float> *wood_surface = NULL;
-                CT_Grid3D<float> *leaf_surface = NULL;
-                CT_Grid3D<float> *wood_volume = NULL;
-                CT_Grid3D<float> *leaf_volume = NULL;
-                CT_Grid3D<float> *all_surface = NULL;
-                CT_Grid3D<float> *all_volume = NULL;
-                CT_Grid3D<float> *refGrid = NULL;
+                CT_Grid3D<float> *wood_surface = nullptr;
+                CT_Grid3D<float> *leaf_surface = nullptr;
+                CT_Grid3D<float> *wood_volume = nullptr;
+                CT_Grid3D<float> *leaf_volume = nullptr;
+                CT_Grid3D<float> *all_surface = nullptr;
+                CT_Grid3D<float> *all_volume = nullptr;
+                CT_Grid3D<float> *refGrid = nullptr;
 
                 if (1)
                 {
@@ -235,7 +225,7 @@ bool CT_Reader_LArchitect_Grid::protectedReadFile()
                         }
                     }
 
-                    setProgress((readedSize*100)/fileSize);
+                    setProgress(int((readedSize*100.0)/fileSize));
                 }
 
                 f.close();
@@ -247,12 +237,12 @@ bool CT_Reader_LArchitect_Grid::protectedReadFile()
                 if (all_surface_Exist) {all_surface->computeMinMax();}
                 if (all_volume_Exist) {all_volume->computeMinMax();}
 
-                addOutItemDrawable(DEF_CT_Reader_LArchitect_Grid_all_surface, all_surface);
-                addOutItemDrawable(DEF_CT_Reader_LArchitect_Grid_all_volume, all_volume);
-                addOutItemDrawable(DEF_CT_Reader_LArchitect_Grid_leaf_surface, leaf_surface);
-                addOutItemDrawable(DEF_CT_Reader_LArchitect_Grid_leaf_volume, leaf_volume);
-                addOutItemDrawable(DEF_CT_Reader_LArchitect_Grid_wood_surface, wood_surface);
-                addOutItemDrawable(DEF_CT_Reader_LArchitect_Grid_wood_volume, wood_volume);
+                group->addSingularItem(m_all_surface, all_surface);
+                group->addSingularItem(m_all_volume, all_volume);
+                group->addSingularItem(m_leaf_surface, leaf_surface);
+                group->addSingularItem(m_leaf_volume, leaf_volume);
+                group->addSingularItem(m_wood_surface, wood_surface);
+                group->addSingularItem(m_wood_volume, wood_volume);
 
                 return true;
             }
@@ -303,7 +293,7 @@ bool CT_Reader_LArchitect_Grid::readHeader(QTextStream &stream, Eigen::Vector3d 
     if (!ok[0] || !ok[1] || !ok[2])
         return false;
 
-    if ((res[0] != res[1]) || (res[0] != res[2]))
+    if (!qFuzzyCompare(res[0], res[1]) || !qFuzzyCompare(res[0], res[2]))
         return false;
 
     // read dimensions of the grid
@@ -355,5 +345,5 @@ bool CT_Reader_LArchitect_Grid::readHeader(QTextStream &stream, Eigen::Vector3d 
 
 CT_Grid3D<float>* CT_Reader_LArchitect_Grid::createGrid(Eigen::Vector3d &min, Eigen::Vector3d &res, CT_Reader_LArchitect_Grid::EigenVector3ui64 &dim) const
 {
-    return new CT_Grid3D<float>(NULL, NULL, min[0], min[1], min[2], dim[0], dim[1], dim[2], res[0], -1, 0);
+    return new CT_Grid3D<float>(min[0], min[1], min[2], dim[0], dim[1], dim[2], res[0], -1, 0);
 }

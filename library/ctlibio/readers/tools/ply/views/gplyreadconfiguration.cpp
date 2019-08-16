@@ -28,11 +28,11 @@ GPlyReadConfiguration::GPlyReadConfiguration(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_currentItemConfiguration = NULL;
-    m_vertexItem = NULL;
-    m_vertexColorItem = NULL;
-    m_vertexNormalItem = NULL;
-    m_vertexScalarItem = NULL;
+    m_currentItemConfiguration = nullptr;
+    m_vertexItem = nullptr;
+    m_vertexColorItem = nullptr;
+    m_vertexNormalItem = nullptr;
+    m_vertexScalarItem = nullptr;
 
     ui->treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->treeWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
@@ -46,7 +46,7 @@ GPlyReadConfiguration::GPlyReadConfiguration(QWidget *parent) :
 
 GPlyReadConfiguration::~GPlyReadConfiguration()
 {
-    m_currentItemConfiguration = NULL;
+    m_currentItemConfiguration = nullptr;
 
     qDeleteAll(m_itemConfiguration.begin(), m_itemConfiguration.end());
     m_itemConfiguration.clear();
@@ -123,7 +123,7 @@ PlyReadConfiguration GPlyReadConfiguration::getConfiguration() const
 
 void GPlyReadConfiguration::resetUi()
 {
-    m_currentItemConfiguration = NULL;
+    m_currentItemConfiguration = nullptr;
 
     qDeleteAll(m_itemConfiguration.begin(), m_itemConfiguration.end());
     m_itemConfiguration.clear();
@@ -169,8 +169,8 @@ QTreeWidgetItem* GPlyReadConfiguration::addNewObjectInItem(QTreeWidgetItem *pare
 
 QTreeWidgetItem* GPlyReadConfiguration::addNewObjectFromItemType(QTreeWidgetItem* parentItem)
 {
-    if(parentItem == NULL)
-        return NULL;
+    if(parentItem == nullptr)
+        return nullptr;
 
     const int type = parentItem->data(0, Qt::UserRole).toInt();
 
@@ -181,7 +181,7 @@ QTreeWidgetItem* GPlyReadConfiguration::addNewObjectFromItemType(QTreeWidgetItem
     else if(type == NORMAL_DATA)
         return addNewObjectInItem(parentItem, tr("Normale %1").arg(parentItem->childCount()+1), NORMAL_OBJECT_DATA);
 
-    return NULL;
+    return nullptr;
 }
 
 int GPlyReadConfiguration::getComboBoxElementCurrentData() const
@@ -193,7 +193,7 @@ void GPlyReadConfiguration::showContextMenu(const QPoint &point)
 {
     QTreeWidgetItem* item = ui->treeWidget->itemAt(point);
 
-    if(item != NULL) {
+    if(item != nullptr) {
         const int type = item->data(0, Qt::UserRole).toInt();
 
         if((type == COLOR_DATA)
@@ -203,7 +203,7 @@ void GPlyReadConfiguration::showContextMenu(const QPoint &point)
             QMenu menu;
 
             QAction* action = menu.addAction(tr("Nouveau"), this, SLOT(addNewObject()));
-            action->setData(qVariantFromValue((void*)item));
+            action->setData(qVariantFromValue(static_cast<void*>(item)));
 
             menu.exec(ui->treeWidget->mapToGlobal(point));
         } else if((type == COLOR_OBJECT_DATA)
@@ -212,7 +212,7 @@ void GPlyReadConfiguration::showContextMenu(const QPoint &point)
             QMenu menu;
 
             QAction* action = menu.addAction(tr("Supprimer"), this, SLOT(deleteObject()));
-            action->setData(qVariantFromValue((void*)item));
+            action->setData(qVariantFromValue(static_cast<void*>(item)));
 
             menu.exec(ui->treeWidget->mapToGlobal(point));
         }
@@ -221,19 +221,19 @@ void GPlyReadConfiguration::showContextMenu(const QPoint &point)
 
 void GPlyReadConfiguration::itemSelectionChanged()
 {
-    if(m_currentItemConfiguration != NULL) {
+    if(m_currentItemConfiguration != nullptr) {
         ui->verticalLayout->removeWidget(m_currentItemConfiguration->configurationWidget->toWidget());
         m_currentItemConfiguration->configurationWidget->toWidget()->setVisible(false);
     }
 
-    m_currentItemConfiguration = NULL;
+    m_currentItemConfiguration = nullptr;
 
     QList<QTreeWidgetItem*> items = ui->treeWidget->selectedItems();
 
     if(!items.isEmpty()) {
         QTreeWidgetItem* item = items.last();
 
-        ItemConfiguration* newConfig = NULL;
+        ItemConfiguration* newConfig = nullptr;
 
         if(item->data(0, Qt::UserRole).toInt() == VERTEX_DATA)
             newConfig = createOrGetItemConfiguration<GPlyVertexConfiguration>(item);
@@ -244,7 +244,7 @@ void GPlyReadConfiguration::itemSelectionChanged()
         else if(item->data(0, Qt::UserRole).toInt() == NORMAL_OBJECT_DATA)
             newConfig = createOrGetItemConfiguration<GPlyNormalConfiguration>(item);
 
-        if(newConfig != NULL) {
+        if(newConfig != nullptr) {
             if(newConfig->configurationWidget->getPlyElement() != -1)
                 ui->comboBoxElement->setCurrentIndex(ui->comboBoxElement->findData(newConfig->configurationWidget->getPlyElement()));
 
@@ -263,19 +263,19 @@ void GPlyReadConfiguration::elementChanged(int index)
 {
     Q_UNUSED(index)
 
-    if(m_currentItemConfiguration != NULL)
+    if(m_currentItemConfiguration != nullptr)
         m_currentItemConfiguration->configurationWidget->setPlyElement(ui->comboBoxElement->currentData().toInt());
 }
 
 void GPlyReadConfiguration::addNewObject()
 {
-    QAction* act = (QAction*)sender();
-    addNewObjectFromItemType((QTreeWidgetItem*)act->data().value<void*>());
+    QAction* act = static_cast<QAction*>(sender());
+    addNewObjectFromItemType(static_cast<QTreeWidgetItem*>(act->data().value<void*>()));
 }
 
 void GPlyReadConfiguration::on_pushButtonNewObject_clicked()
 {
-    QTreeWidgetItem* parentItem = NULL;
+    QTreeWidgetItem* parentItem = nullptr;
 
     if(!ui->treeWidget->selectedItems().isEmpty())
         parentItem = ui->treeWidget->selectedItems().first();
@@ -285,12 +285,12 @@ void GPlyReadConfiguration::on_pushButtonNewObject_clicked()
 
 void GPlyReadConfiguration::deleteObject()
 {
-    QAction* act = (QAction*)sender();
+    QAction* act = static_cast<QAction*>(sender());
 
-    QTreeWidgetItem* item = (QTreeWidgetItem*)act->data().value<void*>();
+    QTreeWidgetItem* item = static_cast<QTreeWidgetItem*>(act->data().value<void*>());
 
-    if(item != NULL) {
-        m_currentItemConfiguration = NULL;
+    if(item != nullptr) {
+        m_currentItemConfiguration = nullptr;
         delete m_itemConfiguration.take(item);
         delete item;
         ui->treeWidget->clearSelection();

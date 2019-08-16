@@ -5,32 +5,29 @@
 #include "ct_itemdrawable/ct_box2d.h"
 
 #include "ctlibio/ctlibio_global.h"
-#include "ct_reader_terrascanprj_def_models.h"
 
 class CTLIBIO_EXPORT CT_Reader_TerraScanPrj : public CT_AbstractReader
 {
     Q_OBJECT
+    typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_TerraScanPrj();
-    CT_Reader_TerraScanPrj(const CT_Reader_TerraScanPrj &other);
+    CT_Reader_TerraScanPrj(int subMenuLevel = 0);
+    CT_Reader_TerraScanPrj(const CT_Reader_TerraScanPrj& other);
 
-    QString GetReaderName() const;
-    CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    QString displayableName() const override;
 
-    bool setFilePath(const QString &filepath);
+    bool setFilePath(const QString &filepath) override;
 
-    CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_TerraScanPrj)
+    READER_ALL_COPY_IMP(CT_Reader_TerraScanPrj)
 
 protected:
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
-    bool protectedReadFile();
+        void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+        bool internalReadFile(CT_StandardItemGroup* group) override;
 
 private:
-    CT_OutStdSingularItemModel* _headerModel;
-    CT_OutStdSingularItemModel* _boxModel;
+        CT_HandleOutSingularItem<CT_Box2D>          m_box;
+        CT_HandleOutSingularItem<CT_FileHeader>     m_fileName;
 };
 
 #endif // CT_READER_TERRASCANPRJ_H

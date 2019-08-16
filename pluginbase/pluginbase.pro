@@ -28,7 +28,6 @@ HEADERS += $$CT_LIB_PREFIX/ctlibplugin/pluginentryinterface.h\
 #    views/exporters/csv/pbg_csvpreviewwidget.h \
 #    actions/pb_actionpickitemsinlist.h \
 #    views/actions/pb_actionpickitemsinlistoptions.h \
-#    step/pb_stepcreatereaderlist.h \
 #    step/pb_stepusereadertoloadfiles.h \
 #    step/pb_stepexportattributesinloop.h \
 #    step/pb_stepexportpointsbyxyarea.h \
@@ -42,9 +41,9 @@ HEADERS += $$CT_LIB_PREFIX/ctlibplugin/pluginentryinterface.h\
 #    tools/pb_configurableelementtools.h \
 #    tools/pb_readerstools.h \
     tools/pb_exportertools.h \
-    step/pb_stepcreatereaderlist.h \
-#    step/pb_stepusereadertoloadfiles.h
-    tools/pb_readerstools.h
+#    step/pb_stepusereadertoloadfiles.h \
+    tools/pb_readerstools.h \
+    step/pb_stepcreatereaderlist.h
 
 SOURCES += \
     pb_pluginentry.cpp \
@@ -64,7 +63,6 @@ SOURCES += \
 #    views/exporters/csv/pbg_csvpreviewwidget.cpp \
 #    actions/pb_actionpickitemsinlist.cpp \
 #    views/actions/pb_actionpickitemsinlistoptions.cpp \
-#    step/pb_stepcreatereaderlist.cpp \
 #    step/pb_stepusereadertoloadfiles.cpp \
 #    step/pb_stepexportattributesinloop.cpp \
 #    step/pb_stepexportpointsbyxyarea.cpp \
@@ -75,8 +73,8 @@ SOURCES += \
 #    step/pb_steplooponfiles.cpp \
 #    step/pb_steplooponfilesets.cpp \
 #    step/pb_steploadfilebyname.cpp
-    step/pb_stepcreatereaderlist.cpp \
-#    step/pb_stepusereadertoloadfiles.cpp
+#    step/pb_stepusereadertoloadfiles.cpp \
+    step/pb_stepcreatereaderlist.cpp
 
 RESOURCES += resource.qrc
 

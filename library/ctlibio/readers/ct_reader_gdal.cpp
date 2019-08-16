@@ -31,12 +31,25 @@ CT_Reader_GDAL::CT_Reader_GDAL(const GDALDriver* driver, int defaultMenuLevel, i
 
     const QString driverType = getTypeOfDriver();
 
-    if (driverType == "Raster")
-        setSubMenuLevel(rasterMenuLevel == -1 ? defaultMenuLevel : rasterMenuLevel);
-    else if (driverType == "Vector")
-        setSubMenuLevel(vectorMenuLevel == -1 ? defaultMenuLevel : vectorMenuLevel);
-    else
+    QStringList ext = QString(m_driver->GetMetadataItem(GDAL_DMD_EXTENSION)).split("/");
+
+    if (ext.size() == 1 && ext.first().isEmpty())
+    {
         setSubMenuLevel(defaultMenuLevel);
+
+    }
+    else if (driverType == "Raster")
+    {
+        setSubMenuLevel(rasterMenuLevel == -1 ? defaultMenuLevel : rasterMenuLevel);
+    }
+    else if (driverType == "Vector")
+    {
+        setSubMenuLevel(vectorMenuLevel == -1 ? defaultMenuLevel : vectorMenuLevel);
+    }
+    else
+    {
+        setSubMenuLevel(defaultMenuLevel);
+    }
 
     init();
 }
@@ -46,9 +59,20 @@ CT_Reader_GDAL::CT_Reader_GDAL(const GDALDriver* driver, int defaultMenuLevel, i
 QString CT_Reader_GDAL::getTypeOfDriver() const
 {
 #ifdef USE_GDAL
-    if(m_driver == nullptr) return QString();
-    if((m_driver->GetMetadataItem(GDAL_DCAP_RASTER) != nullptr) && (m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) == nullptr)) return "Raster";
-    if((m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) != nullptr) && (m_driver->GetMetadataItem(GDAL_DCAP_RASTER) == nullptr)) return "Vector";
+    if(m_driver == nullptr)
+    {
+        return QString();
+    }
+
+    if((m_driver->GetMetadataItem(GDAL_DCAP_RASTER) != nullptr) && (m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) == nullptr))
+    {
+        return "Raster";
+    }
+
+    if((m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) != nullptr) && (m_driver->GetMetadataItem(GDAL_DCAP_RASTER) == nullptr))
+    {
+        return "Vector";
+    }
 #endif
 
     return QString();

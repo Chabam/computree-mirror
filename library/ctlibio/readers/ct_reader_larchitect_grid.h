@@ -3,35 +3,42 @@
 
 #include "ct_reader/abstract/ct_abstractreader.h"
 #include "ct_itemdrawable/ct_grid3d.h"
-#include <QMap>
 
 #include "ctlibio/ctlibio_global.h"
-#include "ct_reader_larchitect_grid_def_models.h"
 
 class CTLIBIO_EXPORT CT_Reader_LArchitect_Grid : public CT_AbstractReader
 {
     Q_OBJECT
+    typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_LArchitect_Grid();
+    CT_Reader_LArchitect_Grid(int subMenuLevel = 0);
+    CT_Reader_LArchitect_Grid(const CT_Reader_LArchitect_Grid& other);
 
-    QString GetReaderName() const;
-    CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    QString displayableName() const override;
 
-    bool setFilePath(const QString &filepath);
+    bool setFilePath(const QString &filepath) override;
 
-    CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_LArchitect_Grid)
+    READER_ALL_COPY_IMP(CT_Reader_LArchitect_Grid)
 
 protected:
     typedef Eigen::Matrix<size_t, 3, 1> EigenVector3ui64;
 
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
-    bool protectedReadFile();
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+    bool internalReadFile(CT_StandardItemGroup* group) override;
 
     bool readHeader(QTextStream &stream, Eigen::Vector3d &min, Eigen::Vector3d &max, Eigen::Vector3d &res, EigenVector3ui64 &dim, int &nMat, QMap<QString, int>  &matNames) const;
     CT_Grid3D<float>* createGrid(Eigen::Vector3d &min, Eigen::Vector3d &res, EigenVector3ui64 &dim) const;
+
+private:
+    CT_HandleOutSingularItem<CT_Grid3D<float> >          m_wood_surface;
+    CT_HandleOutSingularItem<CT_Grid3D<float> >          m_leaf_surface;
+    CT_HandleOutSingularItem<CT_Grid3D<float> >          m_wood_volume;
+    CT_HandleOutSingularItem<CT_Grid3D<float> >          m_leaf_volume;
+    CT_HandleOutSingularItem<CT_Grid3D<float> >          m_all_surface;
+    CT_HandleOutSingularItem<CT_Grid3D<float> >          m_all_volume;
+
+
 };
 
 #endif // CT_READER_LARCHITECT_GRID_H

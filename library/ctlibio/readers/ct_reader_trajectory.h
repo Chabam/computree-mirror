@@ -2,11 +2,10 @@
 #define CT_READER_TRAJECTORY_H
 
 #include "ct_reader/abstract/ct_abstractreader.h"
+#include "ctlibio/ctlibio_global.h"
 
 #include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
-
-#include "ctlibio/ctlibio_global.h"
-#include "ct_reader_trajectory_def_model.h"
+#include "ct_itemdrawable/ct_scanpath.h"
 
 #include "Eigen/Core"
 
@@ -23,22 +22,18 @@ class CTLIBIO_EXPORT CT_Reader_Trajectory : public CT_AbstractReader, public CT_
     typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_Trajectory();
+    CT_Reader_Trajectory(int subMenuLevel = 0);
+    CT_Reader_Trajectory(const CT_Reader_Trajectory& other);
 
     /**
      * @brief Returns a displayable name of the reader
      */
-    QString GetReaderName() const;
-
-    /**
-     * @brief Returns the sub menu level where we can store this reader
-     */
-    CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    QString displayableName() const override;
 
     /**
      * @brief Show a dialog to configure this reader
      */
-    bool configure();
+    bool configure() override;
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
@@ -65,8 +60,7 @@ public:
 
     bool canLoadPoints() const;
 
-    CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_Trajectory)
+    READER_ALL_COPY_IMP(CT_Reader_Trajectory)
 
 private:
     bool    m_firstConfiguration;
@@ -79,15 +73,15 @@ private:
     QString m_separator;
     QString m_localeName;
 
+    CT_HandleOutSingularItem<CT_ScanPath>          m_hOutScanPath;
+
+
 protected:
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
-    bool protectedReadFile();
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+    bool internalReadFile(CT_StandardItemGroup* group) override;
 
     int maxColumnIndex() const;
-
     void skipLines(QTextStream &stream, qint64 &currentSizeRead) const;
-
     bool readPoint(const QStringList &wordsOfLine, const QLocale &locale, Eigen::Vector3d &point, double &gpsTime) const;
 };
 

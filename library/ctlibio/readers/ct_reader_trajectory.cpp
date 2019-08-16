@@ -1,8 +1,11 @@
 #include "ct_reader_trajectory.h"
 
 #include "ct_view/tools/ct_textfileconfigurationdialog.h"
-#include "ct_itemdrawable/ct_scanpath.h"
 #include "ct_coordinates/tools/ct_coordinatesystemmanager.h"
+
+#include "ct_log/ct_logmanager.h"
+
+#include <QDebug>
 
 #define CHK_ERR(argFunc, argErrStr) if(!error && !argFunc) { error = true; PS_LOG->addErrorMessage(LogInterface::reader, argErrStr); }
 
@@ -11,7 +14,7 @@
 #define Z_COLUMN "Height"
 #define GPS_TIME_COLUMN tr("GPStime")
 
-CT_Reader_Trajectory::CT_Reader_Trajectory() : CT_AbstractReader(), CT_ReaderPointsFilteringExtension()
+CT_Reader_Trajectory::CT_Reader_Trajectory(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {
     m_firstConfiguration = true;
     m_columnXIndex = -1;
@@ -22,16 +25,34 @@ CT_Reader_Trajectory::CT_Reader_Trajectory() : CT_AbstractReader(), CT_ReaderPoi
     m_hasHeader = false;
     m_separator = ".";
     m_localeName = "";
+
+    addNewReadableFormat(FileFormat(QStringList() << "xyz" << "asc" << "txt" << "csv" << "ptx", tr("Fichiers ascii")));
+
+    setToolTip(tr("Chargement d'un fichier de trajectoire au format ASCII.<br>"
+                  "L'import est configurable, le fichier devant contenir les champs suivants :<br>"
+                  "- X          : Coordonnée X du points<br>"
+                  "- Y          : Coordonnée Y du point<br>"
+                  "- Z          : Coordonnée Y du point<br><br>"
+                  "- GPSTime    : Temps GPS du point<br>"));
 }
 
-QString CT_Reader_Trajectory::GetReaderName() const
+CT_Reader_Trajectory::CT_Reader_Trajectory(const CT_Reader_Trajectory &other) : SuperClass(other)
+{
+    m_firstConfiguration = other.m_firstConfiguration;
+    m_columnXIndex = other.m_columnXIndex;
+    m_columnYIndex = other.m_columnYIndex;
+    m_columnZIndex = other.m_columnZIndex;
+    m_columnGPSTimeIndex = other.m_columnGPSTimeIndex;
+    m_nLinesToSkip = other.m_nLinesToSkip;
+    m_hasHeader = other.m_hasHeader;
+    m_separator = other.m_separator;
+    m_localeName = other.m_localeName;
+
+}
+
+QString CT_Reader_Trajectory::displayableName() const
 {
     return tr("Trajectoire, Fichiers ASCII");
-}
-
-CT_StepsMenu::LevelPredefined CT_Reader_Trajectory::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
 }
 
 bool CT_Reader_Trajectory::configure()
@@ -40,12 +61,12 @@ bool CT_Reader_Trajectory::configure()
     QList<CT_TextFileConfigurationFields> fieldList;
     fieldList.append(CT_TextFileConfigurationFields(X_COLUMN, QRegExp(" *[xX] *| *[eE][aA][sS][tT] *")));            // x
     fieldList.append(CT_TextFileConfigurationFields(Y_COLUMN, QRegExp(" *[yY] *| *[nN][oO][rR][tT][hH] *")));            // y
-    fieldList.append(CT_TextFileConfigurationFields(Z_COLUMN, QRegExp(" *[zZ] *| *[hH][eE][iI][gG][hH][tT] *")));            // z
+    fieldList.append(CT_TextFileConfigurationFields(Z_COLUMN, QRegExp(" *[zZ] *| *[hH][eE][iI][gG][hH][tT] *| *[aA][lL][tT][iI] *")));            // z
     fieldList.append(CT_TextFileConfigurationFields(GPS_TIME_COLUMN, QRegExp("[gG][pP][sS] *| *[tT][iI][mM][eE] *")));      // GPS Time
 
 
     // a configurable dialog that help the user to select the right column and auto-detect some columns
-    CT_TextFileConfigurationDialog dialog(fieldList, NULL, filepath());
+    CT_TextFileConfigurationDialog dialog(fieldList, nullptr, filepath());
     dialog.setFileExtensionAccepted(readableFormats());
     dialog.setFilePathCanBeModified(filePathCanBeModified());
 
@@ -232,32 +253,13 @@ bool CT_Reader_Trajectory::canLoadPoints() const
     return (m_columnXIndex >= 0) && (m_columnYIndex >= 0) && (m_columnZIndex >= 0) && (m_columnGPSTimeIndex >= 0);
 }
 
-CT_AbstractReader* CT_Reader_Trajectory::copy() const
+
+void CT_Reader_Trajectory::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    return new CT_Reader_Trajectory();
+    manager.addItem(m_hOutScanPath, tr("ScanPath"));
 }
 
-void CT_Reader_Trajectory::protectedInit()
-{
-    addNewReadableFormat(FileFormat(QStringList() << "xyz" << "asc" << "txt" << "csv" << "ptx", tr("Fichiers ascii")));
-
-    setToolTip(tr("Chargement d'un fichier de trajectoire au format ASCII.<br>"
-                  "L'import est configurable, le fichier devant contenir les champs suivants :<br>"
-                  "- X          : Coordonnée X du points<br>"
-                  "- Y          : Coordonnée Y du point<br>"
-                  "- Z          : Coordonnée Y du point<br><br>"
-                  "- GPSTime    : Temps GPS du point<br>"));
-}
-
-void CT_Reader_Trajectory::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    if(canLoadPoints())
-        addOutItemDrawableModel(DEF_CT_Reader_Trajectory_pointCloudOut, new CT_ScanPath());
-}
-
-bool CT_Reader_Trajectory::protectedReadFile()
+bool CT_Reader_Trajectory::internalReadFile(CT_StandardItemGroup* group)
 {
     if(!canLoadPoints())
         return false;
@@ -285,14 +287,14 @@ bool CT_Reader_Trajectory::protectedReadFile()
             QLocale locale(m_localeName);
             bool error = false;
 
-            CT_ScanPath* scanPath = new CT_ScanPath(NULL, NULL);
+            CT_ScanPath* scanPath = new CT_ScanPath();
             // While we did not reached the end of file
             while(!stream.atEnd() && !isStopped() && !error) {
                 // Read the currentLine
                 ++nLine;
                 currentLine = stream.readLine();
                 currentSizeRead += currentLine.size();
-                setProgress((currentSizeRead*100) / fileSize);
+                setProgress(int((float(currentSizeRead)*100.0f) / float(fileSize)));
 
                 if(currentLine.isEmpty())
                     continue;
@@ -307,7 +309,7 @@ bool CT_Reader_Trajectory::protectedReadFile()
                 }
 
                 Eigen::Vector3d pt;
-                double gpsTime;
+                double gpsTime = 0;
 
                 CHK_ERR(readPoint(wordsOfLine, locale, pt, gpsTime), tr("Error loading point at line %1").arg(nLine));
 
@@ -316,7 +318,7 @@ bool CT_Reader_Trajectory::protectedReadFile()
 
             f.close();
 
-            addOutItemDrawable(DEF_CT_Reader_Trajectory_pointCloudOut, scanPath);
+            group->addSingularItem(m_hOutScanPath, scanPath);
 
             return !error;
         }
