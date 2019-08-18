@@ -14,7 +14,7 @@ class GPlyColorConfiguration : public QWidget, public IPlyGenericConfiguration
     Q_OBJECT
 
 public:
-    explicit GPlyColorConfiguration(QWidget *parent = 0);
+    explicit GPlyColorConfiguration(QWidget *parent = nullptr);
     ~GPlyColorConfiguration();
 
     /**

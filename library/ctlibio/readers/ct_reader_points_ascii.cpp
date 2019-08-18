@@ -1,15 +1,13 @@
 #include "ct_reader_points_ascii.h"
 
 #include "ct_view/tools/ct_textfileconfigurationdialog.h"
-#include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
-#include "ct_itemdrawable/ct_pointsattributesnormal.h"
 #include "ct_colorcloud/ct_colorcloudstdvector.h"
 #include "ct_normalcloud/ct_normalcloudstdvector.h"
 #include "ct_point.h"
 #include "ct_normal.h"
 #include "ct_coordinates/tools/ct_coordinatesystemmanager.h"
+
+#include "ct_log/ct_logmanager.h"
 
 #define CHK_ERR(argFunc, argErrStr) if(!error && !argFunc) { error = true; PS_LOG->addErrorMessage(LogInterface::reader, argErrStr); }
 
@@ -25,7 +23,9 @@
 #define NZ_COLUMN tr("Normale Z")
 #define NW_COLUMN tr("Normale Curvature")
 
-CT_Reader_Points_ASCII::CT_Reader_Points_ASCII() : CT_AbstractReader(), CT_ReaderPointsFilteringExtension()
+
+
+CT_Reader_Points_ASCII::CT_Reader_Points_ASCII(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {
     m_firstConfiguration = true;
     m_columnXIndex = -1;
@@ -43,16 +43,48 @@ CT_Reader_Points_ASCII::CT_Reader_Points_ASCII() : CT_AbstractReader(), CT_Reade
     m_hasHeader = false;
     m_separator = ".";
     m_localeName = "";
+
+    addNewReadableFormat(FileFormat(QStringList() << "xyz" << "asc" << "txt" << "csv" << "ptx", tr("Fichiers ascii")));
+
+    setToolTip(tr("Chargement d'un fichier de points au format ASCII.<br>"
+                  "L'import est configurable, le fichier devant contenir les champs suivants :<br>"
+                  "- X      : Coordonnée X du points<br>"
+                  "- Y      : Coordonnée Y du point<br>"
+                  "- Z      : Coordonnée Y du point<br><br>"
+                  "De plus les champs suivants peuvent être fournis mais sont optionnels :<br>"
+                  "- Intensité      : Intensité du point<br>"
+                  "- Rouge          : Composante rouge du point<br>"
+                  "- Vert           : Composante verte du point<br>"
+                  "- Bleu           : Composante bleue du point<br>"
+                  "- Normale X      : Coordonnée Y de la normale au point<br>"
+                  "- Normale Y      : Coordonnée Y de la normale au point<br>"
+                  "- Normale Z      : Coordonnée Y de la normale au point<br>"));
+
 }
 
-QString CT_Reader_Points_ASCII::GetReaderName() const
+CT_Reader_Points_ASCII::CT_Reader_Points_ASCII(const CT_Reader_Points_ASCII &other) : SuperClass(other)
+{
+    m_firstConfiguration = other.m_firstConfiguration;
+    m_columnXIndex = other.m_columnXIndex;
+    m_columnYIndex = other.m_columnYIndex;
+    m_columnZIndex = other.m_columnZIndex;
+    m_columnIntensityIndex = other.m_columnIntensityIndex;
+    m_columnRedIndex = other.m_columnRedIndex;
+    m_columnGreenIndex = other.m_columnGreenIndex;
+    m_columnBlueIndex = other.m_columnBlueIndex;
+    m_columnNxIndex = other.m_columnNxIndex;
+    m_columnNyIndex = other.m_columnNyIndex;
+    m_columnNzIndex = other.m_columnNzIndex;
+    m_columnNCurvatureIndex = other.m_columnNCurvatureIndex;
+    m_nLinesToSkip = other.m_nLinesToSkip;
+    m_hasHeader = other.m_hasHeader;
+    m_separator = other.m_separator;
+    m_localeName = other.m_localeName;
+}
+
+QString CT_Reader_Points_ASCII::displayableName() const
 {
     return tr("Nuage de points, Fichiers ASCII (paramétrable)");
-}
-
-CT_StepsMenu::LevelPredefined CT_Reader_Points_ASCII::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
 }
 
 bool CT_Reader_Points_ASCII::configure()
@@ -73,7 +105,7 @@ bool CT_Reader_Points_ASCII::configure()
 
 
     // a configurable dialog that help the user to select the right column and auto-detect some columns
-    CT_TextFileConfigurationDialog dialog(fieldList, NULL, filepath());
+    CT_TextFileConfigurationDialog dialog(fieldList, nullptr, filepath());
     dialog.setFileExtensionAccepted(readableFormats());
     dialog.setFilePathCanBeModified(filePathCanBeModified());
 
@@ -394,48 +426,30 @@ bool CT_Reader_Points_ASCII::canLoadNormals() const
     return (m_columnNxIndex >= 0) && (m_columnNyIndex >= 0) && (m_columnNzIndex >= 0);
 }
 
-CT_AbstractReader* CT_Reader_Points_ASCII::copy() const
+void CT_Reader_Points_ASCII::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    return new CT_Reader_Points_ASCII();
-}
-
-void CT_Reader_Points_ASCII::protectedInit()
-{
-    addNewReadableFormat(FileFormat(QStringList() << "xyz" << "asc" << "txt" << "csv" << "ptx", tr("Fichiers ascii")));
-
-    setToolTip(tr("Chargement d'un fichier de points au format ASCII.<br>"
-                  "L'import est configurable, le fichier devant contenir les champs suivants :<br>"
-                  "- X      : Coordonnée X du points<br>"
-                  "- Y      : Coordonnée Y du point<br>"
-                  "- Z      : Coordonnée Y du point<br><br>"
-                  "De plus les champs suivants peuvent être fournis mais sont optionnels :<br>"
-                  "- Intensité      : Intensité du point<br>"
-                  "- Rouge          : Composante rouge du point<br>"
-                  "- Vert           : Composante verte du point<br>"
-                  "- Bleu           : Composante bleue du point<br>"
-                  "- Normale X      : Coordonnée Y de la normale au point<br>"
-                  "- Normale Y      : Coordonnée Y de la normale au point<br>"
-                  "- Normale Z      : Coordonnée Y de la normale au point<br>"));
-}
-
-void CT_Reader_Points_ASCII::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
     if(canLoadPoints())
-        addOutItemDrawableModel(DEF_CT_Reader_Points_ASCII_pointCloudOut, new CT_Scene());
+    {
+        manager.addItem(m_outPointCloud, tr("Scène(s)"));
+    }
 
     if(canLoadIntensity())
-        addOutItemDrawableModel(DEF_CT_Reader_Points_ASCII_intensityOut, new CT_PointsAttributesScalarTemplated<float>());
+    {
+        manager.addItem(m_outIntensity, tr("Intensités"));
+    }
 
     if(canLoadColors())
-        addOutItemDrawableModel(DEF_CT_Reader_Points_ASCII_colorsOut, new CT_PointsAttributesColor());
+    {
+        manager.addItem(m_outColors, tr("Couleurs"));
+    }
 
     if(canLoadNormals())
-        addOutItemDrawableModel(DEF_CT_Reader_Points_ASCII_normalsOut, new CT_PointsAttributesNormal());
+    {
+        manager.addItem(m_outNormals, tr("Normales"));
+    }
 }
 
-bool CT_Reader_Points_ASCII::protectedReadFile()
+bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
 {
     if(!canLoadPoints())
         return false;
@@ -482,7 +496,7 @@ bool CT_Reader_Points_ASCII::protectedReadFile()
                 ++nLine;
                 currentLine = stream.readLine();
                 currentSizeRead += currentLine.size();
-                setProgress((currentSizeRead*100) / fileSize);
+                setProgress(int((currentSizeRead*100) / fileSize));
 
                 if(currentLine.isEmpty())
                     continue;
@@ -510,41 +524,21 @@ bool CT_Reader_Points_ASCII::protectedReadFile()
             f.close();
 
             CT_PCIR pcir = PS_REPOSITORY->registerUndefinedSizePointCloud(uspc);
+            group->addSingularItem(m_outPointCloud, new CT_Scene(pcir));
 
-            addOutItemDrawable(DEF_CT_Reader_Points_ASCII_pointCloudOut, new CT_Scene(NULL, NULL, pcir));
-
-            if(intensityCloud != NULL) {
-                CT_PointsAttributesScalarTemplated<float> *item = new CT_PointsAttributesScalarTemplated<float>(NULL,
-                                                                                                                NULL,
-                                                                                                                pcir,
-                                                                                                                intensityCloud,
-                                                                                                                minIntensity,
-                                                                                                                maxIntensity);
-                item->setBoundingBox(minBB[0], minBB[1], minBB[2], maxBB[0], maxBB[1], maxBB[2]);
-
-                addOutItemDrawable(DEF_CT_Reader_Points_ASCII_intensityOut, item);
+            if(intensityCloud != nullptr) {
+                CT_PointsAttributesScalarTemplated<float> *item = new CT_PointsAttributesScalarTemplated<float>(pcir, intensityCloud, minIntensity, maxIntensity);
+                group->addSingularItem(m_outIntensity, item);
             }
 
-            if(colorCloud != NULL) {
-                CT_PointsAttributesColor *item = new CT_PointsAttributesColor(NULL,
-                                                                              NULL,
-                                                                              pcir,
-                                                                              colorCloud);
-
-                item->setBoundingBox(minBB[0], minBB[1], minBB[2], maxBB[0], maxBB[1], maxBB[2]);
-
-                addOutItemDrawable(DEF_CT_Reader_Points_ASCII_colorsOut, item);
+            if(colorCloud != nullptr) {
+                CT_PointsAttributesColor *item = new CT_PointsAttributesColor(pcir, colorCloud);
+                group->addSingularItem(m_outColors, item);
             }
 
-            if(normalCloud != NULL) {
-                CT_PointsAttributesNormal *item = new CT_PointsAttributesNormal(NULL,
-                                                                                NULL,
-                                                                                pcir,
-                                                                                normalCloud);
-
-                item->setBoundingBox(minBB[0], minBB[1], minBB[2], maxBB[0], maxBB[1], maxBB[2]);
-
-                addOutItemDrawable(DEF_CT_Reader_Points_ASCII_normalsOut, item);
+            if(normalCloud != nullptr) {
+                CT_PointsAttributesNormal *item = new CT_PointsAttributesNormal(pcir, normalCloud);
+                group->addSingularItem(m_outNormals, item);
             }
 
             return !error;
@@ -564,7 +558,7 @@ CT_StandardCloudStdVectorT<float> *CT_Reader_Points_ASCII::createIntensityArray(
     if(canLoadIntensity())
         return new CT_StandardCloudStdVectorT<float>();
 
-    return NULL;
+    return nullptr;
 }
 
 CT_ColorCloudStdVector* CT_Reader_Points_ASCII::createColorsArray() const
@@ -572,7 +566,7 @@ CT_ColorCloudStdVector* CT_Reader_Points_ASCII::createColorsArray() const
     if(canLoadColors())
         return new CT_ColorCloudStdVector();
 
-    return NULL;
+    return nullptr;
 }
 
 CT_NormalCloudStdVector* CT_Reader_Points_ASCII::createNormalsArray() const
@@ -580,7 +574,7 @@ CT_NormalCloudStdVector* CT_Reader_Points_ASCII::createNormalsArray() const
     if(canLoadNormals())
         return new CT_NormalCloudStdVector();
 
-    return NULL;
+    return nullptr;
 }
 
 int CT_Reader_Points_ASCII::maxColumnIndex() const
@@ -664,7 +658,7 @@ void CT_Reader_Points_ASCII::addPoint(const CT_Point &point,
 
 bool CT_Reader_Points_ASCII::readAndAddIntensity(const QStringList &wordsOfLine, const QLocale &locale, CT_StandardCloudStdVectorT<float> *array, float &minI, float &maxI) const
 {
-    if(array == NULL)
+    if(array == nullptr)
         return true;
 
     bool ok;
@@ -684,23 +678,23 @@ bool CT_Reader_Points_ASCII::readAndAddIntensity(const QStringList &wordsOfLine,
 
 bool CT_Reader_Points_ASCII::readAndAddColor(const QStringList &wordsOfLine, const QLocale &locale, CT_ColorCloudStdVector *array) const
 {
-    if(array == NULL)
+    if(array == nullptr)
         return true;
 
     bool ok;
 
     CT_Color color;
-    color.r() = locale.toInt(wordsOfLine.at(m_columnRedIndex), &ok);
+    color.r() = uchar(locale.toInt(wordsOfLine.at(m_columnRedIndex), &ok));
 
     if(!ok)
         return false;
 
-    color.g() = locale.toInt(wordsOfLine.at(m_columnGreenIndex), &ok);
+    color.g() = uchar(locale.toInt(wordsOfLine.at(m_columnGreenIndex), &ok));
 
     if(!ok)
         return false;
 
-    color.b() = locale.toInt(wordsOfLine.at(m_columnBlueIndex), &ok);
+    color.b() = uchar(locale.toInt(wordsOfLine.at(m_columnBlueIndex), &ok));
 
     if(!ok)
         return false;
@@ -712,7 +706,7 @@ bool CT_Reader_Points_ASCII::readAndAddColor(const QStringList &wordsOfLine, con
 
 bool CT_Reader_Points_ASCII::readAndAddNormal(const QStringList &wordsOfLine, const QLocale &locale, CT_NormalCloudStdVector *array) const
 {
-    if(array == NULL)
+    if(array == nullptr)
         return true;
 
     bool ok;

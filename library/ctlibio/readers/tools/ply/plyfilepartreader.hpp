@@ -115,7 +115,7 @@ bool PlyFilePartReaderT::addVertexScalarPart(ScalarManager* scalarM,
 
     Q_ASSERT_X(false, "PlyFilePartReaderT::addVertexScalarPart", "TODO");
 
-    if(m_vertexElementReader == NULL)
+    if(m_vertexElementReader == nullptr)
         return false;
 
     // we will record index when we read the vertex element
@@ -139,6 +139,7 @@ bool PlyFilePartReaderT::addVertexScalarPart(ScalarManager* scalarM,
     /*PlyIndexAndValuesMapper* mapper = new PlyIndexAndValuesMapper(indexRecorder,
                                                                   scalarRecorder,
                                                                   scalarM);*/
+    Q_UNUSED(scalarM);
 
     return true;
 }
@@ -268,7 +269,7 @@ bool PlyFilePartReaderT::addVertexNormalPart(NormalManager* normalM,
 PLY_FILE_PART_READER_TEMPLATES_DEFINITION
 void PlyFilePartReaderT::setListener(const IPlyReaderListener *listener)
 {
-    m_listener = (IPlyReaderListener*)listener;
+    m_listener = const_cast<IPlyReaderListener*>(listener);
 }
 
 PLY_FILE_PART_READER_TEMPLATES_DEFINITION
@@ -333,7 +334,7 @@ PlyElementReader* PlyFilePartReaderT::createOrGetElementReader(const int& elemen
 
     PlyElementReader* reader = m_allReaders.value(elementIndex, NULL);
 
-    if(reader == NULL) {
+    if(reader == nullptr) {
         reader = new PlyElementReader(m_header.getElements().at(elementIndex));
         m_allReaders.insert(elementIndex, reader);
     }

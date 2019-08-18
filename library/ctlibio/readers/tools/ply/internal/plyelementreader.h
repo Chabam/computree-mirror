@@ -70,7 +70,7 @@ public:
                     PlyReaderTools::staticReadProperty<Streamer>(stream, properties[propertyIndex]);
 
                 ++current;
-                setProgress((int)((current*100)/size));
+                setProgress(int((current*100)/size));
             }
 
             return true;
@@ -100,7 +100,7 @@ public:
             informSetterOneLineReaded();
 
             ++current;
-            setProgress((int)((current*100)/size));
+            setProgress(int((current*100)/size));
         }
 
         informSetterEndOfRead();

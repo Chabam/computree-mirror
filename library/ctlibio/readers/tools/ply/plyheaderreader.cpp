@@ -167,7 +167,7 @@ PlyElement PlyHeaderReader::readElement(QTextStream &stream, QString elementLine
     if(!ok)
         return el;
 
-    el = PlyElement(elName, size);
+    el = PlyElement(elName, size_t(size));
 
     while(!stream.atEnd()) {
         lastLineReaded = stream.readLine().trimmed().toLower();

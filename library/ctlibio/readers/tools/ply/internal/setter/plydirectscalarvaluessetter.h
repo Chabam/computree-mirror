@@ -22,7 +22,7 @@ public:
      */
     PlyDirectScalarValuesSetter(const size_t& size,
                           const Manager* manager) : PlyAbstractValuesSetter(size) {
-        m_manager = (Manager*)manager;
+        m_manager = const_cast<Manager*>(manager);
         m_currentIndex = 0;
     }
 

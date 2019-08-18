@@ -14,7 +14,7 @@ class GPlyScalarConfiguration : public QWidget, public IPlyGenericConfiguration
     Q_OBJECT
 
 public:
-    explicit GPlyScalarConfiguration(QWidget *parent = 0);
+    explicit GPlyScalarConfiguration(QWidget *parent = nullptr);
     ~GPlyScalarConfiguration();
 
     /**

@@ -15,7 +15,7 @@ PlyHeader::PlyHeader(const QString &filepath, const PlyFormatType &format, const
 bool PlyHeader::isValid() const
 {
     if((m_formatType == PLY_unknown_format)
-            || (m_formatVersion <= 0.0)
+            || (m_formatVersion <= 0.0f)
             || (m_endPos <= 0)
             || m_filepath.isEmpty())
         return false;

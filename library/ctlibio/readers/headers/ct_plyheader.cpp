@@ -2,25 +2,16 @@
 
 CT_DEFAULT_IA_INIT(CT_PLYHeader)
 
-CT_PLYHeader::CT_PLYHeader() : CT_FileHeader()
-{
-}
-
-CT_PLYHeader::CT_PLYHeader(const CT_OutAbstractSingularItemModel *model,
-                           const CT_AbstractResult *result) : CT_FileHeader(model, result)
-{
-}
-
-CT_PLYHeader::CT_PLYHeader(const QString &modelName,
-                           const CT_AbstractResult *result) : CT_FileHeader(modelName, result)
+CT_PLYHeader::CT_PLYHeader() : SuperClass()
 {
 }
 
 void CT_PLYHeader::setHeader(const PlyHeader &h)
 {
     m_header = h;
-    setFile(m_header.getFilePath());
+    setFilePath(m_header.getFilePath());
 }
+
 
 PlyHeader CT_PLYHeader::getHeader() const
 {
@@ -58,15 +49,4 @@ int CT_PLYHeader::getNumberOfProperties() const
 bool CT_PLYHeader::isValid() const
 {
     return m_header.isValid();
-}
-
-CT_AbstractItemDrawable* CT_PLYHeader::copy(const CT_OutAbstractItemModel *model, const CT_AbstractResult *result, CT_ResultCopyModeList copyModeList)
-{
-    Q_UNUSED(copyModeList);
-
-    CT_PLYHeader *cpy = new CT_PLYHeader((CT_OutAbstractSingularItemModel*) model, result);
-    cpy->setFile(_fileInfo.absoluteFilePath());
-    cpy->setHeader(m_header);
-
-    return cpy;
 }

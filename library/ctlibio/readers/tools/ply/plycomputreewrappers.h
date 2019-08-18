@@ -12,7 +12,6 @@
 
 #include "ct_point.h"
 #include "ct_accessor/ct_pointaccessor.h"
-#include "ct_global/ct_context.h"
 #include "ct_cloudindex/registered/abstract/ct_abstractnotmodifiablecloudindexregisteredt.h"
 #include "ct_colorcloud/ct_colorcloudstdvector.h"
 #include "ct_normalcloud/ct_normalcloudstdvector.h"
@@ -30,7 +29,7 @@ struct Ply_CT_Point_Wrapper {
     {
         globalIndex = 0;
         updateIt = true;
-        accessor = NULL;
+        accessor = nullptr;
     }
 
     /**
@@ -38,7 +37,7 @@ struct Ply_CT_Point_Wrapper {
      */
     void setAccessor(const CT_PointAccessor* acc)
     {
-        accessor = (CT_PointAccessor*)acc;
+        accessor = const_cast<CT_PointAccessor*>(acc);
     }
 
     /**
@@ -74,7 +73,7 @@ struct Ply_CT_Point_Wrapper {
      */
     double& operator[](const size_t& index)
     {
-        return p[index];
+        return p[qlonglong(index)];
     }
 
     bool                updateIt;
@@ -93,7 +92,7 @@ struct Ply_CT_PointCloud_Wrapper {
 
     Ply_CT_PointCloud_Wrapper()
     {
-        pcir = CT_NMPCIR(NULL);
+        pcir = CT_NMPCIR(nullptr);
         beginIndex = 0;
         point.setAccessor(&accessor);
     }
@@ -177,7 +176,7 @@ using Ply_CT_ScalarCloud_Wrapper = Ply_CT_GenericCloud_Wrapper<CT_StandardCloudS
  */
 class GPly_CT_ReadConfiguration_Wrapper : public CT_AbstractConfigurableWidget {
 public:
-    GPly_CT_ReadConfiguration_Wrapper(QWidget *parent = NULL) : CT_AbstractConfigurableWidget(parent) {
+    GPly_CT_ReadConfiguration_Wrapper(QWidget *parent = nullptr) : CT_AbstractConfigurableWidget(parent) {
         QVBoxLayout* layout = new QVBoxLayout(this);
 
         plyConfig = new GPlyReadConfiguration();
@@ -194,7 +193,7 @@ public:
         if(plyConfig->isValid())
             return true;
 
-        if(err != NULL)
+        if(err != nullptr)
             *err = tr("Certains éléments ne sont pas complètement renseignés.");
 
         return false;

@@ -1,17 +1,10 @@
 #include "ct_reader_ptx.h"
 
 
-#include "ct_global/ct_context.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
-#include "ct_itemdrawable/ct_transformationmatrix.h"
-#include "ct_colorcloud/ct_colorcloudstdvector.h"
-#include "ct_iterator/ct_mutablepointiterator.h"
 #include "ct_view/ct_genericconfigurablewidget.h"
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 
 #include <QTextStream>
-#include <QDebug>
 
 #define DEF_CT_Reader_PTX_groupOut      "grp"
 #define DEF_CT_Reader_PTX_sceneOut      "sce"
@@ -20,20 +13,25 @@
 #define DEF_CT_Reader_PTX_scannerOut    "sca"
 #define DEF_CT_Reader_PTX_matrixOut     "mt"
 
-CT_Reader_PTX::CT_Reader_PTX() : CT_AbstractReader()
+CT_Reader_PTX::CT_Reader_PTX(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     m_applyTransformation = true;
+
+    addNewReadableFormat(FileFormat("ptx", tr("Fichiers de points .ptx")));
+
+    setToolTip(tr("Chargement de points depuis un fichier format ascii PTX"));
 }
 
-QString CT_Reader_PTX::GetReaderName() const
+CT_Reader_PTX::CT_Reader_PTX(const CT_Reader_PTX &other) : SuperClass(other)
+{
+    m_applyTransformation = other.m_applyTransformation;
+}
+
+QString CT_Reader_PTX::displayableName() const
 {
     return tr("Points, Fichier PTX");
 }
 
-CT_StepsMenu::LevelPredefined CT_Reader_PTX::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
-}
 
 bool CT_Reader_PTX::setFilePath(const QString &filepath)
 {
@@ -98,11 +96,6 @@ bool CT_Reader_PTX::restoreSettings(SettingsReaderInterface &reader)
         setApplyTransformationMatrix(value.toBool());
 
     return true;
-}
-
-CT_AbstractReader* CT_Reader_PTX::copy() const
-{
-    return new CT_Reader_PTX();
 }
 
 bool CT_Reader_PTX::readHeaderValues(QTextStream &stream, int &nColumn, int &nRow, Eigen::Matrix4d &matrix, bool &hasColors) const
@@ -174,35 +167,16 @@ bool CT_Reader_PTX::readHeaderValues(QTextStream &stream, int &nColumn, int &nRo
     return true;
 }
 
-void CT_Reader_PTX::protectedInit()
+void CT_Reader_PTX::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    addNewReadableFormat(FileFormat("ptx", tr("Fichiers de points .ptx")));
-
-    setToolTip(tr("Chargement de points depuis un fichier format ascii PTX (FARO)"));
+    manager.addItem(m_outScene, tr("Scène"));
+    manager.addItem(m_outIntensity, tr("Intensité"));
+    manager.addItem(m_outRGB, tr("RGB"));
+    manager.addItem(m_outMatrix, tr("Matrice de transformation"));
+    manager.addItem(m_outScanner, tr("Scanner"));
 }
 
-void CT_Reader_PTX::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    CT_OutStdGroupModel *group = new CT_OutStdGroupModel(DEF_CT_Reader_PTX_groupOut, new CT_StandardItemGroup(), tr("Scenes"));
-
-    m_sceneModel = new CT_OutStdSingularItemModel(DEF_CT_Reader_PTX_sceneOut, new CT_Scene(), tr("Scène"));
-    m_intModel = new CT_OutStdSingularItemModel(DEF_CT_Reader_PTX_intensityOut, new CT_PointsAttributesScalarTemplated<double>(), tr("Intensité"));
-    m_rgbModel = new CT_OutStdSingularItemModel(DEF_CT_Reader_PTX_rgbOut, new CT_PointsAttributesColor(), tr("RGB"));
-    m_matrixModel = new CT_OutStdSingularItemModel(DEF_CT_Reader_PTX_matrixOut, new CT_TransformationMatrix(), tr("Matrice de transformation"));
-    m_scannerModel = new CT_OutStdSingularItemModel(DEF_CT_Reader_PTX_scannerOut, new CT_Scanner(), tr("Scanner"));
-
-    group->addItem(m_sceneModel);
-    group->addItem(m_intModel);
-    group->addItem(m_rgbModel);
-    group->addItem(m_matrixModel);
-    group->addItem(m_scannerModel);
-
-    addOutGroupModel(group);
-}
-
-bool CT_Reader_PTX::protectedReadFile()
+bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
 {
     if(QFile::exists(filepath()))
     {
@@ -218,7 +192,7 @@ bool CT_Reader_PTX::protectedReadFile()
 
             while(readHeaderValues(stream, nColumn, nRow, matrix, hasColors)) {
 
-                size_t nPoints = nRow*nColumn;
+                size_t nPoints = size_t(nRow)*size_t(nColumn);
 
                 CT_Point pReaded;
 
@@ -226,7 +200,7 @@ bool CT_Reader_PTX::protectedReadFile()
                 CT_MutablePointIterator it(pcir);
 
                 CT_StandardCloudStdVectorT<double> *collection = new CT_StandardCloudStdVectorT<double>(nPoints);
-                CT_ColorCloudStdVector *cc;
+                CT_ColorCloudStdVector *cc = nullptr;
 
                 if(hasColors) {
                     cc = new CT_ColorCloudStdVector(nPoints);
@@ -262,9 +236,9 @@ bool CT_Reader_PTX::protectedReadFile()
                         stream >> g;
                         stream >> b;
 
-                        color.r() = r;
-                        color.g() = g;
-                        color.b() = b;
+                        color.r() = uchar(r);
+                        color.g() = uchar(g);
+                        color.b() = uchar(b);
 
                         (*cc)[a] = color;
                     }
@@ -300,35 +274,25 @@ bool CT_Reader_PTX::protectedReadFile()
                     setProgress(int(a*100/nPoints));
                 }
 
-                CT_StandardItemGroup *group = new CT_StandardItemGroup(NULL, NULL);
-
-                CT_Scene *scene = new CT_Scene(m_sceneModel, NULL, pcir);
+                CT_Scene *scene = new CT_Scene(pcir);
                 scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
 
                 // add the scene
-                group->addItemDrawable(scene);
+                group->addSingularItem(m_outScene, scene);
 
-                CT_PointsAttributesScalarTemplated<double> *pas = new CT_PointsAttributesScalarTemplated<double>(m_intModel,
-                                                                                                                   NULL,
-                                                                                                                   pcir,
-                                                                                                                   collection,
-                                                                                                                   imin,
-                                                                                                                   imax);
+                CT_PointsAttributesScalarTemplated<double> *pas = new CT_PointsAttributesScalarTemplated<double>(pcir, collection, imin, imax);
 
                 // add attributes
-                group->addItemDrawable(pas);
+                group->addSingularItem(m_outIntensity, pas);
 
                 if (hasColors) {
-                    CT_PointsAttributesColor *colors = new CT_PointsAttributesColor(m_rgbModel,
-                                                                                    NULL,
-                                                                                    pcir,
-                                                                                    cc);
+                    CT_PointsAttributesColor *colors = new CT_PointsAttributesColor(pcir, cc);
 
-                    addOutItemDrawable(DEF_CT_Reader_PTX_rgbOut, colors);
+                    group->addSingularItem(m_outRGB, colors);
                 }
 
-                double hres = 150.0 / ((double)nRow);
-                double vres = 360.0 / ((double)nColumn);
+                double hres = 150.0 / (double(nRow));
+                double vres = 360.0 / (double(nColumn));
 
                 Eigen::Vector3d scanPos;
                 //scanPos(0) = matrix(0,4);
@@ -346,12 +310,10 @@ bool CT_Reader_PTX::protectedReadFile()
                 }
 
                 // add the scanner
-                group->addItemDrawable(new CT_Scanner(m_scannerModel, NULL, 0, scanPos, Eigen::Vector3d(0,1,0), 360, 150, hres, vres, 0, 0, true, false));
+                group->addSingularItem(m_outScanner, new CT_Scanner(0, scanPos, Eigen::Vector3d(0,1,0), 360, 150, hres, vres, 0, 0, true, false));
 
                 // add the matrix
-                group->addItemDrawable(new CT_TransformationMatrix(m_matrixModel, NULL, matrix));
-
-                addOutGroup(DEF_CT_Reader_PTX_groupOut, group);
+                group->addSingularItem(m_outMatrix, new CT_TransformationMatrix(matrix));
             }
 
             f.close();

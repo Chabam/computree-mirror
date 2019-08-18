@@ -4,7 +4,6 @@
 #include "ct_reader/abstract/ct_abstractreader.h"
 
 #include "ctlibio/ctlibio_global.h"
-#include "ct_reader_asciigrid3d_def_models.h"
 
 #include "ct_itemdrawable/ct_grid3d.h"
 
@@ -14,25 +13,22 @@
 class CTLIBIO_EXPORT CT_Reader_AsciiGrid3D : public CT_AbstractReader
 {
     Q_OBJECT
+    typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_AsciiGrid3D();
+    CT_Reader_AsciiGrid3D(int subMenuLevel = 0);
+    CT_Reader_AsciiGrid3D(const CT_Reader_AsciiGrid3D& other);
 
     /**
      * @brief Returns a displayable name of the reader
      */
-    QString GetReaderName() const;
-
-    /**
-     * @brief Returns
-     */
-    CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    QString displayableName() const override;
 
     /**
      * @brief Set the filepath to the reader. The file will be opened to search faces, if no face was found
      *        the reader will load a PointCloud otherwise it will load a Mesh.
      */
-    bool setFilePath(const QString &filepath);
+    bool setFilePath(const QString &filepath) override;
 
     /**
      * @brief Returns the type used (float by default, modified after call to "setFilePath")
@@ -55,16 +51,30 @@ public:
      */
     static QList<QMetaType::Type> getTypeThatCanBeUsed();
 
-    CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_AsciiGrid3D)
+    READER_ALL_COPY_IMP(CT_Reader_AsciiGrid3D)
 
 private:
     QMetaType::Type m_dataType;
 
+    CT_HandleOutSingularItem<CT_Grid3D<bool> >         _outGrid_bool;
+    CT_HandleOutSingularItem<CT_Grid3D<int> >          _outGrid_int;
+    CT_HandleOutSingularItem<CT_Grid3D<uint> >         _outGrid_uint;
+    CT_HandleOutSingularItem<CT_Grid3D<qlonglong> >    _outGrid_qlonglong;
+    CT_HandleOutSingularItem<CT_Grid3D<qulonglong> >   _outGrid_qulonglong;
+    CT_HandleOutSingularItem<CT_Grid3D<double> >       _outGrid_double;
+    CT_HandleOutSingularItem<CT_Grid3D<long> >         _outGrid_long;
+    CT_HandleOutSingularItem<CT_Grid3D<short> >        _outGrid_short;
+    CT_HandleOutSingularItem<CT_Grid3D<char> >         _outGrid_char;
+    CT_HandleOutSingularItem<CT_Grid3D<ulong> >        _outGrid_ulong;
+    CT_HandleOutSingularItem<CT_Grid3D<ushort> >       _outGrid_ushort;
+    CT_HandleOutSingularItem<CT_Grid3D<uchar> >        _outGrid_uchar;
+    CT_HandleOutSingularItem<CT_Grid3D<float> >        _outGrid_float;
+
+
 protected:
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
-    bool protectedReadFile();
+
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+    bool internalReadFile(CT_StandardItemGroup* group) override;
 
     /**
      * @brief Read the header and returns true if it was readed successfully
@@ -86,7 +96,6 @@ protected:
     template<typename TYPE>
     void loadGrid(QTextStream& stream,
                   CT_Grid3D<TYPE>* loadedGrid,
-                  const QString& modelName,
                   const size_t& nCols,
                   const size_t& nRows,
                   const size_t& nZLev,
@@ -106,7 +115,7 @@ protected:
                     for ( size_t k = 0 ; (k < nCols) && !isStopped() ; ++k )
                     {
                         currentValue = noDataValue;
-                        if (values.size() > k)
+                        if (values.size() > int(k))
                         {
                             bool ok;
                             currentValue = values.at(int(k)).toDouble(&ok);
@@ -119,9 +128,7 @@ protected:
             }
             stream.readLine();
         }
-
         loadedGrid->computeMinMax();
-        addOutItemDrawable(modelName, loadedGrid);
     }
 };
 

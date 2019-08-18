@@ -2,11 +2,13 @@
 #define CT_READER_POINTS_ASCII_H
 
 #include "ct_reader/abstract/ct_abstractreader.h"
-
 #include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
+#include "ct_itemdrawable/ct_scene.h"
+#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
+#include "ct_itemdrawable/ct_pointsattributescolor.h"
+#include "ct_itemdrawable/ct_pointsattributesnormal.h"
 
 #include "ctlibio/ctlibio_global.h"
-#include "ct_reader_points_ascii_def_models.h"
 
 class CT_ColorCloudStdVector;
 class CT_NormalCloudStdVector;
@@ -20,22 +22,18 @@ class CTLIBIO_EXPORT CT_Reader_Points_ASCII : public CT_AbstractReader, public C
     typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_Points_ASCII();
+    CT_Reader_Points_ASCII(int subMenuLevel = 0);
+    CT_Reader_Points_ASCII(const CT_Reader_Points_ASCII& other);
 
     /**
      * @brief Returns a displayable name of the reader
      */
-    QString GetReaderName() const;
-
-    /**
-     * @brief Returns the sub menu level where we can store this reader
-     */
-    CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    QString displayableName() const override;
 
     /**
      * @brief Show a dialog to configure this reader
      */
-    bool configure();
+    bool configure() override;
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
@@ -82,8 +80,7 @@ public:
     bool canLoadColors() const;
     bool canLoadNormals() const;
 
-    CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_Points_ASCII)
+    READER_ALL_COPY_IMP(CT_Reader_Points_ASCII)
 
 private:
     bool    m_firstConfiguration;
@@ -103,10 +100,17 @@ private:
     QString m_separator;
     QString m_localeName;
 
+
+    CT_HandleOutSingularItem<CT_Scene>                                      m_outPointCloud;
+    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> >    m_outIntensity;
+    CT_HandleOutSingularItem<CT_PointsAttributesColor>                      m_outColors;
+    CT_HandleOutSingularItem<CT_PointsAttributesNormal>                     m_outNormals;
+
+
 protected:
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
-    bool protectedReadFile();
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+    bool internalReadFile(CT_StandardItemGroup* group) override;
+
 
     CT_AbstractUndefinedSizePointCloud* createPointCloud() const;
     CT_StandardCloudStdVectorT<float>* createIntensityArray() const;

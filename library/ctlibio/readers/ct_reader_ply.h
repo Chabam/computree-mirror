@@ -4,7 +4,11 @@
 #include "ct_reader/abstract/ct_abstractreader.h"
 
 #include "ctlibio/ctlibio_global.h"
-#include "ct_reader_ply_def_models.h"
+
+#include "ct_itemdrawable/ct_scene.h"
+#include "ct_itemdrawable/ct_pointsattributescolor.h"
+#include "ct_itemdrawable/ct_pointsattributesnormal.h"
+#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
 
 #include "ctlibio/readers/tools/ply/plyreadconfiguration.h"
 #include "ctlibio/readers/tools/ply/iplyreaderlistener.h"
@@ -18,22 +22,18 @@ class CTLIBIO_EXPORT CT_Reader_PLY : public CT_AbstractReader, public IPlyReader
     typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_PLY();
+    CT_Reader_PLY(int subMenuLevel = 0);
+    CT_Reader_PLY(const CT_Reader_PLY& other);
 
     /**
      * @brief Returns a displayable name of the reader
      */
-    QString GetReaderName() const;
-
-    /**
-     * @brief Returns the sub menu level where we can store this reader
-     */
-    CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    QString displayableName() const override;
 
     /**
      * @brief Show a dialog to configure this reader
      */
-    bool configure();
+    bool configure() override;
 
     /**
      * @brief Set a configuration
@@ -48,32 +48,40 @@ public:
     /**
      * @brief Returns an empty file header (just to know the class type)
      */
-    CT_FileHeader* createHeaderPrototype() const;
+    CT_FileHeader* createHeaderPrototype() const override;
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
 
-    CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_PLY)
+    READER_ALL_COPY_IMP(CT_Reader_PLY)
 
     /**
      * @brief This method must returns true if the read must be stopped
      */
-    bool plyReadMustStop() const;
+    bool plyReadMustStop() const override;
 
     /**
      * @brief This method is called when the progress changed
      */
-    void plyProgressChanged(int progress);
+    void plyProgressChanged(int progress) override;
 
 private:
     PlyReadConfiguration    m_config;
 
+
+    CT_HandleOutSingularItem<CT_Scene>                                             m_outScene;
+
+    // TODOV6 - Erreur de compilation sur les QVector<handle...>
+    //QVector<CT_HandleOutSingularItem<CT_PointsAttributesColor> >                   m_outColorVector;
+    //QVector<CT_HandleOutSingularItem<CT_PointsAttributesNormal> >                  m_outNormalVector;
+    //QVector<CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> > > m_outScalarVector;
+
 protected:
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
-    bool protectedReadFile();
-    CT_FileHeader* protectedReadHeader(const QString &filepath, QString &error) const;
+
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+    CT_FileHeader* internalReadHeader(const QString &filepath, QString &error) const override;
+    bool internalReadFile(CT_StandardItemGroup* group) override;
+
 };
 
 #endif // CT_READER_PLY_H

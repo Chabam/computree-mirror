@@ -4,7 +4,9 @@
 #include "ct_reader/abstract/ct_abstractreader.h"
 
 #include "ctlibio/ctlibio_global.h"
-#include "ct_reader_obj_def_models.h"
+
+#include "ct_itemdrawable/ct_scene.h"
+#include "ct_itemdrawable/ct_meshmodel.h"
 
 /**
  * @brief Reader that can load a obj file (*.obj) that represent a Mesh or a PointCloud
@@ -15,17 +17,13 @@ class CTLIBIO_EXPORT CT_Reader_OBJ : public CT_AbstractReader
     typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_OBJ();
+    CT_Reader_OBJ(int subMenuLevel = 0);
+    CT_Reader_OBJ(const CT_Reader_OBJ& other);
 
     /**
      * @brief Returns a displayable name of the reader
      */
-    QString GetReaderName() const;
-
-    /**
-     * @brief Returns the sub menu level where we can store this reader
-     */
-    CT_StepsMenu::LevelPredefined getReaderSubMenuName() const;
+    QString displayableName() const override;
 
     /**
      * @brief Set if we must load the file like a PointCloud (true) or like a Mesh (false)
@@ -50,22 +48,24 @@ public:
     /**
      * @brief Show a dialog to configure this reader
      */
-    bool configure();
+    bool configure() override;
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
 
-    CT_AbstractReader* copy() const;
-    READER_COPY_FULL_IMP(CT_Reader_OBJ)
+    READER_ALL_COPY_IMP(CT_Reader_OBJ)
 
 private:
     bool    m_searchHEdges;
     bool    m_loadAsPointCloud;
 
+    CT_HandleOutSingularItem<CT_Scene>          _outScene;
+    CT_HandleOutSingularItem<CT_MeshModel>      _outMeshModel;
+
+
 protected:
-    void protectedInit();
-    void protectedCreateOutItemDrawableModelList();
-    bool protectedReadFile();
+    void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+    bool internalReadFile(CT_StandardItemGroup* group) override;
 
     bool checkIsAVertex(const QString &buf) const;
     bool checkHasInfoOfVertex(const QString &buf) const;

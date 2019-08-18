@@ -1,27 +1,32 @@
 #include "ct_reader_obj.h"
 
-#include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_meshmodel.h"
 #include "ct_mesh/ct_face.h"
 #include "ct_mesh/ct_edge.h"
 #include "ct_mesh/tools/ct_meshallocator.h"
 #include "ct_view/ct_genericconfigurablewidget.h"
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 
-CT_Reader_OBJ::CT_Reader_OBJ() : CT_AbstractReader()
+#include "ct_log/ct_logmanager.h"
+
+CT_Reader_OBJ::CT_Reader_OBJ(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     m_searchHEdges = false;
     m_loadAsPointCloud = false;
+
+    addNewReadableFormat(FileFormat("obj", tr("Fichiers de géométrie 3D .obj")));
+
+    setToolTip(tr("Charge un maillage ou un nuage de points depuis un fichier au format OBJ (Objet 3D)"));
 }
 
-QString CT_Reader_OBJ::GetReaderName() const
+CT_Reader_OBJ::CT_Reader_OBJ(const CT_Reader_OBJ &other) : SuperClass(other)
+{
+    m_searchHEdges = other.m_searchHEdges;
+    m_loadAsPointCloud = other.m_loadAsPointCloud;
+}
+
+QString CT_Reader_OBJ::displayableName() const
 {
     return tr("Mesh ou Points, Fichier OBJ");
-}
-
-CT_StepsMenu::LevelPredefined CT_Reader_OBJ::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Meshes;
 }
 
 void CT_Reader_OBJ::setLoadAsPointCloud(bool enable)
@@ -81,29 +86,20 @@ bool CT_Reader_OBJ::restoreSettings(SettingsReaderInterface &reader)
     return true;
 }
 
-CT_AbstractReader* CT_Reader_OBJ::copy() const
+
+void CT_Reader_OBJ::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    return new CT_Reader_OBJ();
-}
-
-void CT_Reader_OBJ::protectedInit()
-{
-    addNewReadableFormat(FileFormat("obj", tr("Fichiers de géométrie 3D .obj")));
-
-    setToolTip(tr("Charge un maillage ou un nuage de points depuis un fichier au format OBJ (Objet 3D)"));
-}
-
-void CT_Reader_OBJ::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
     if(loadAsPointCloud())
-        addOutItemDrawableModel(DEF_CT_Reader_OBJ_meshOrSceneOut, new CT_Scene(), tr("Scene"));
+    {
+        manager.addItem(_outScene, tr("Scene"));
+    }
     else
-        addOutItemDrawableModel(DEF_CT_Reader_OBJ_meshOrSceneOut, new CT_MeshModel(), tr("Mesh Model"));
+    {
+        manager.addItem(_outScene, tr("Mesh Model"));
+    }
 }
 
-bool CT_Reader_OBJ::protectedReadFile()
+bool CT_Reader_OBJ::internalReadFile(CT_StandardItemGroup* group)
 {
     Eigen::Vector3d min;
     min[0] = std::numeric_limits<double>::max();
@@ -128,19 +124,19 @@ bool CT_Reader_OBJ::protectedReadFile()
 
                 if(!pcir.isNull()) {
 
-                    CT_Scene *scene = new CT_Scene(NULL, NULL, pcir);
+                    CT_Scene *scene = new CT_Scene(pcir);
                     scene->setBoundingBox(min[0], min[1], min[2], max[0], max[1], max[2]);
 
-                    addOutItemDrawable(DEF_CT_Reader_OBJ_meshOrSceneOut, scene);
+                    group->addSingularItem(_outScene, scene);
                 }
             } else {
                 CT_Mesh *mesh = loadFileAsMesh(stream, min, max);
 
-                if(mesh != NULL) {
-                    CT_MeshModel *meshModel = new CT_MeshModel(NULL, NULL, mesh);
+                if(mesh != nullptr) {
+                    CT_MeshModel *meshModel = new CT_MeshModel(mesh);
                     meshModel->setBoundingBox(min[0], min[1], min[2], max[0], max[1], max[2]);
 
-                    addOutItemDrawable(DEF_CT_Reader_OBJ_meshOrSceneOut, meshModel);
+                    group->addSingularItem(_outMeshModel, meshModel);
                 }
             }
 
@@ -197,16 +193,16 @@ bool CT_Reader_OBJ::loadFace(const QString &buf, const size_t &beginVertexIndex,
     {
         size_t p0,p1,p2;
 
-        p0 = beginVertexIndex + (sl.at(1).split("/").at(0).toInt() - 1);
-        p1 = beginVertexIndex + (sl.at(2).split("/").at(0).toInt() - 1);
-        p2 = beginVertexIndex + (sl.at(3).split("/").at(0).toInt() - 1);
+        p0 = beginVertexIndex + size_t(sl.at(1).split("/").at(0).toInt() - 1);
+        p1 = beginVertexIndex + size_t(sl.at(2).split("/").at(0).toInt() - 1);
+        p2 = beginVertexIndex + size_t(sl.at(3).split("/").at(0).toInt() - 1);
 
         CT_Face &face = itFaces.next().cT();
         size_t faceIndex = itFaces.cIndex();
 
-        CT_Edge *twinE1 = NULL;
-        CT_Edge *twinE2 = NULL;
-        CT_Edge *twinE3 = NULL;
+        CT_Edge *twinE1 = nullptr;
+        CT_Edge *twinE2 = nullptr;
+        CT_Edge *twinE3 = nullptr;
 
         if(m_searchHEdges)
         {
@@ -245,19 +241,19 @@ bool CT_Reader_OBJ::loadFace(const QString &buf, const size_t &beginVertexIndex,
         e3.setNext(e1Index);
         e3.setPrevious(e2Index);
 
-        if(twinE1 != NULL)
+        if(twinE1 != nullptr)
         {
             e1.setTwin(twinE1);
             twinE1->setTwin(e1Index);
         }
 
-        if(twinE2 != NULL)
+        if(twinE2 != nullptr)
         {
             e2.setTwin(twinE2);
             twinE2->setTwin(e2Index);
         }
 
-        if(twinE3 != NULL)
+        if(twinE3 != nullptr)
         {
             e3.setTwin(twinE3);
             twinE3->setTwin(e3Index);
@@ -271,8 +267,8 @@ bool CT_Reader_OBJ::loadFace(const QString &buf, const size_t &beginVertexIndex,
 
 CT_Edge* CT_Reader_OBJ::findHEdgeTwin(const CT_Mesh *mesh, const size_t &p0, const size_t &p1) const
 {
-    if(mesh->abstractHedge() == NULL)
-        return 0;
+    if(mesh->abstractHedge() == nullptr)
+        return nullptr;
 
     CT_EdgeIterator it(mesh->abstractHedge());
 
@@ -285,7 +281,7 @@ CT_Edge* CT_Reader_OBJ::findHEdgeTwin(const CT_Mesh *mesh, const size_t &p0, con
             return &he;
     }
 
-    return 0;
+    return nullptr;
 }
 
 void CT_Reader_OBJ::updateMinMax(const CT_Point &point, Eigen::Vector3d &bboxMin, Eigen::Vector3d &bboxMax) const
@@ -301,7 +297,7 @@ void CT_Reader_OBJ::updateMinMax(const CT_Point &point, Eigen::Vector3d &bboxMin
 
 CT_Mesh* CT_Reader_OBJ::loadFileAsMesh(QTextStream &stream, Eigen::Vector3d &bboxMin, Eigen::Vector3d &bboxMax)
 {
-    CT_Mesh *mesh = NULL;
+    CT_Mesh *mesh = nullptr;
 
     size_t nv, nf;
     nv = 0;
@@ -386,7 +382,7 @@ CT_NMPCIR CT_Reader_OBJ::loadFileAsPointCloud(QTextStream &stream, const qint64 
     CT_AbstractUndefinedSizePointCloud* mpcir = PS_REPOSITORY->createNewUndefinedSizePointCloud();
     CT_Point point;
 
-    size_t p = 0;
+    int p = 0;
     QString buf;
 
     stream.seek(0);

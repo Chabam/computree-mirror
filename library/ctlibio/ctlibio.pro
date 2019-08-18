@@ -22,23 +22,19 @@ HEADERS +=  \
     readers/ct_reader_terrascanprj.h \
     readers/ct_reader_xyb.h \
     ctlibio_global.h \
-#    readers/ct_reader_obj.h \
-#    readers/ct_reader_obj_def_models.h \
-#    readers/ct_reader_asciigrid3d.h \
-#    readers/ct_reader_asciigrid3d_def_models.h \
-#    readers/ct_reader_points_ascii.h \
-#    readers/ct_reader_points_ascii_def_models.h \
+    readers/ct_reader_obj.h \
+    readers/ct_reader_asciigrid3d.h \
+    readers/ct_reader_points_ascii.h \
     readers/ct_reader_idxyz.h \
     readers/headers/ct_xybheader.h \
-#    readers/ct_reader_ptx.h \
+    readers/ct_reader_ptx.h \
     readers/tools/ply/internal/plyelement.h \
     readers/tools/ply/internal/plyproperty.h \
     readers/tools/ply/internal/plytype.h \
     readers/tools/ply/plyheader.h \
     readers/tools/ply/plyheaderreader.h \
-#    readers/headers/ct_plyheader.h \
-#    readers/ct_reader_ply.h \
-#    readers/ct_reader_ply_def_models.h \
+    readers/headers/ct_plyheader.h \
+    readers/ct_reader_ply.h \
     readers/tools/ply/plyfilepartreader.h \
     readers/tools/ply/plyfilepartreader.hpp \
     readers/tools/ply/internal/plyelementreader.h \
@@ -90,18 +86,18 @@ SOURCES += \
     readers/ct_reader_opf.cpp \
     readers/ct_reader_terrascanprj.cpp \
     readers/ct_reader_xyb.cpp \
-#    readers/ct_reader_obj.cpp \
-#    readers/ct_reader_asciigrid3d.cpp \
-#    readers/ct_reader_points_ascii.cpp \
+    readers/ct_reader_obj.cpp \
+    readers/ct_reader_asciigrid3d.cpp \
+    readers/ct_reader_points_ascii.cpp \
     readers/ct_reader_idxyz.cpp \
     readers/headers/ct_xybheader.cpp \
-#    readers/ct_reader_ptx.cpp \
+    readers/ct_reader_ptx.cpp \
     readers/tools/ply/plyheader.cpp \
     readers/tools/ply/internal/plyelement.cpp \
     readers/tools/ply/internal/plyproperty.cpp \
     readers/tools/ply/plyheaderreader.cpp \
-#    readers/headers/ct_plyheader.cpp \
-#    readers/ct_reader_ply.cpp \
+    readers/headers/ct_plyheader.cpp \
+    readers/ct_reader_ply.cpp \
     readers/tools/ply/internal/plyelementreader.cpp \
     readers/tools/ply/internal/plyqtextstream.cpp \
     readers/tools/ply/views/gplyreadconfiguration.cpp \

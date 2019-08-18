@@ -7,16 +7,9 @@
 #include "readers/tools/ply/plyfilepartreader.h"
 #include "readers/tools/ply/plycomputreewrappers.h"
 
-#include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
-#include "ct_itemdrawable/ct_pointsattributesnormal.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
-
-#include "ct_colorcloud/ct_colorcloudstdvector.h"
-#include "ct_normalcloud/ct_normalcloudstdvector.h"
-#include "ct_cloud/ct_standardcloudstdvectort.h"
-
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
+
+#include "ct_log/ct_logmanager.h"
 
 #define DEF_Scene "sce"
 #define DEF_Color "col"
@@ -42,18 +35,21 @@
                                                 if(!ok) \
                                                     return false;
 
-CT_Reader_PLY::CT_Reader_PLY() : CT_AbstractReader()
+CT_Reader_PLY::CT_Reader_PLY(int subMenuLevel) : SuperClass(subMenuLevel)
 {
+    addNewReadableFormat(FileFormat("ply", tr("Fichiers de géométrie 3D .ply")));
+
+    setToolTip(tr("Charge un nuage de points depuis un fichier au format PLY (Objet 3D)"));
 }
 
-QString CT_Reader_PLY::GetReaderName() const
+CT_Reader_PLY::CT_Reader_PLY(const CT_Reader_PLY &other) : SuperClass(other)
+{
+
+}
+
+QString CT_Reader_PLY::displayableName() const
 {
     return tr("Points, Fichier PLY");
-}
-
-CT_StepsMenu::LevelPredefined CT_Reader_PLY::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
 }
 
 bool CT_Reader_PLY::configure()
@@ -194,11 +190,6 @@ bool CT_Reader_PLY::restoreSettings(SettingsReaderInterface &reader)
     return setConfiguration(config);
 }
 
-CT_AbstractReader* CT_Reader_PLY::copy() const
-{
-    return new CT_Reader_PLY();
-}
-
 bool CT_Reader_PLY::plyReadMustStop() const
 {
     return isStopped();
@@ -209,36 +200,44 @@ void CT_Reader_PLY::plyProgressChanged(int progress)
     setProgress(progress);
 }
 
-void CT_Reader_PLY::protectedInit()
+
+void CT_Reader_PLY::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    addNewReadableFormat(FileFormat("ply", tr("Fichiers de géométrie 3D .ply")));
-
-    setToolTip(tr("Charge un nuage de points depuis un fichier au format PLY (Objet 3D)"));
-}
-
-void CT_Reader_PLY::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    addOutItemDrawableModel(DEF_Scene, new CT_Scene(), tr("Scene"));
+    manager.addItem(m_outScene, tr("Scene"));
 
     int size = m_config.colors.size();
 
-    for(int i=0; i<size; ++i)
-        addOutItemDrawableModel(DEF_Color + QString().setNum(i), new CT_PointsAttributesColor(), tr("Color %1").arg(i+1));
+    // TODOV6 - Erreur de compilation sur les QVector<handle...>
+    //m_outColorVector.resize(size);
+
+    for(int i = 0 ; i < size ; ++i)
+    {
+        // TODOV6 - Erreur de compilation sur les QVector<handle...>
+        //manager.addItem(m_outColorVector[i], tr("Color %1").arg(i+1));
+    }
 
     size = m_config.normals.size();
+    // TODOV6 - Erreur de compilation sur les QVector<handle...>
+    //m_outNormalVector.resize(size);
 
-    for(int i=0; i<size; ++i)
-        addOutItemDrawableModel(DEF_Normal + QString().setNum(i), new CT_PointsAttributesNormal, tr("Normal %1").arg(i+1));
+    for(int i = 0 ; i < size ; ++i)
+    {
+        // TODOV6 - Erreur de compilation sur les QVector<handle...>
+        //manager.addItem(m_outNormalVector[i], tr("Normal %1").arg(i+1));
+    }
 
     size = m_config.scalars.size();
+    // TODOV6 - Erreur de compilation sur les QVector<handle...>
+    //m_outScalarVector.resize(size);
 
-    for(int i=0; i<size; ++i)
-        addOutItemDrawableModel(DEF_Scalar + QString().setNum(i), new CT_PointsAttributesScalarTemplated<float>(), tr("Scalar %1").arg(i+1));
+    for(int i = 0 ; i < size ; ++i)
+    {
+        // TODOV6 - Erreur de compilation sur les QVector<handle...>
+        //manager.addItem(m_outScalarVector[i], tr("Scalar %1").arg(i+1));
+    }
 }
 
-bool CT_Reader_PLY::protectedReadFile()
+bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
 {
     PlyHeaderReader headerReader;
     headerReader.setFilePath(filepath());
@@ -252,9 +251,9 @@ bool CT_Reader_PLY::protectedReadFile()
 
     PlyHeader header = headerReader.getHeader();
     PlyFilePartReader<Ply_CT_PointCloud_Wrapper,
-                      Ply_CT_ScalarCloud_Wrapper<float>,
-                      Ply_CT_ColorCloud_Wrapper,
-                      Ply_CT_NormalCloud_Wrapper> partReader(header);
+            Ply_CT_ScalarCloud_Wrapper<float>,
+            Ply_CT_ColorCloud_Wrapper,
+            Ply_CT_NormalCloud_Wrapper> partReader(header);
 
     partReader.setListener(this);
 
@@ -282,11 +281,11 @@ bool CT_Reader_PLY::protectedReadFile()
         Ply_CT_NormalCloud_Wrapper* normalCloud = new Ply_CT_NormalCloud_Wrapper();
 
         partReader.addVertexNormalPart(normalCloud,
-                                      cc.elementIndex,
-                                      cc.nxPropertyIndex,
-                                      cc.nyPropertyIndex,
-                                      cc.nzPropertyIndex,
-                                      cc.ncPropertyIndex);
+                                       cc.elementIndex,
+                                       cc.nxPropertyIndex,
+                                       cc.nyPropertyIndex,
+                                       cc.nzPropertyIndex,
+                                       cc.ncPropertyIndex);
 
         normalsCloud.append(normalCloud);
     }
@@ -303,23 +302,33 @@ bool CT_Reader_PLY::protectedReadFile()
 
     partReader.process();
 
-    CT_Scene* scene = new CT_Scene(NULL, NULL, wrapper.pcir);
+    CT_Scene* scene = new CT_Scene(wrapper.pcir);
     scene->updateBoundingBox();
 
     // add the scene
-    addOutItemDrawable(DEF_Scene, scene);
+    group->addSingularItem(m_outScene, scene);
 
     int index = 0;
     foreach(Ply_CT_ColorCloud_Wrapper* cc, colorsCloud)
-        addOutItemDrawable(DEF_Color + QString().setNum(index++), new CT_PointsAttributesColor(NULL, NULL, wrapper.pcir, cc->cloud));
+    {
+
+        // TODOV6 - Erreur de compilation sur les QVector<handle...>
+        //group->addSingularItem(m_outColorVector[index++], new CT_PointsAttributesColor(wrapper.pcir, cc->cloud));
+    }
 
     index = 0;
     foreach(Ply_CT_NormalCloud_Wrapper* nc, normalsCloud)
-        addOutItemDrawable(DEF_Normal + QString().setNum(index++), new CT_PointsAttributesNormal(NULL, NULL, wrapper.pcir, nc->cloud));
+    {
+        // TODOV6 - Erreur de compilation sur les QVector<handle...>
+        //group->addSingularItem(m_outNormalVector[index++], new CT_PointsAttributesNormal(wrapper.pcir, nc->cloud));
+    }
 
     index = 0;
     foreach(Ply_CT_ScalarCloud_Wrapper<float>* sc, scalarsCloud)
-        addOutItemDrawable(DEF_Scalar + QString().setNum(index++), new CT_PointsAttributesScalarTemplated<float>(NULL, NULL, wrapper.pcir, sc->cloud));
+    {
+        // TODOV6 - Erreur de compilation sur les QVector<handle...>
+        //group->addSingularItem(m_outScalarVector[index++], new CT_PointsAttributesScalarTemplated<float>(wrapper.pcir, sc->cloud));
+    }
 
     qDeleteAll(colorsCloud.begin(), colorsCloud.end());
     qDeleteAll(normalsCloud.begin(), normalsCloud.end());
@@ -328,8 +337,10 @@ bool CT_Reader_PLY::protectedReadFile()
     return true;
 }
 
-CT_FileHeader* CT_Reader_PLY::protectedReadHeader(const QString &filepath, QString &error) const
+CT_FileHeader* CT_Reader_PLY::internalReadHeader(const QString &filepath, QString &error) const
 {
+    Q_UNUSED(error);
+
     PlyHeaderReader headerReader;
     headerReader.setFilePath(filepath);
     headerReader.process();

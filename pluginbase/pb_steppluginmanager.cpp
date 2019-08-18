@@ -85,11 +85,11 @@
 #include "ctlibio/readers/ct_reader_trajectory.h"
 #include "ctlibio/readers/ct_reader_larchitect_grid.h"
 #include "ctlibio/readers/ct_reader_terrascanprj.h"
-//#include "ctlibio/readers/ct_reader_ptx.h"
-//#include "ctlibio/readers/ct_reader_obj.h"
-//#include "ctlibio/readers/ct_reader_asciigrid3d.h"
-//#include "ctlibio/readers/ct_reader_points_ascii.h"
-//#include "ctlibio/readers/ct_reader_ply.h"
+#include "ctlibio/readers/ct_reader_obj.h"
+#include "ctlibio/readers/ct_reader_asciigrid3d.h"
+#include "ctlibio/readers/ct_reader_points_ascii.h"
+#include "ctlibio/readers/ct_reader_ptx.h"
+#include "ctlibio/readers/ct_reader_ply.h"
 
 //#include "ctlibmetrics/ct_metric/points/ct_cloudmetrics.h"
 //#include "ctlibmetrics/ct_metric/abstract/ct_abstractmetric_raster.h"
@@ -327,11 +327,11 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_Trajectory(CT_StepsMenu::LP_Items));
     sep->addReader(new CT_Reader_LArchitect_Grid(CT_StepsMenu::LP_Voxels));    
     sep->addReader(new CT_Reader_TerraScanPrj(CT_StepsMenu::LP_Vector));
-//    sep->addReader(new CT_Reader_PTX());
-//    sep->addReader(new CT_Reader_OBJ());
-//    sep->addReader(new CT_Reader_AsciiGrid3D());
-//    sep->addReader(new CT_Reader_Points_ASCII());
-//    sep->addReader(new CT_Reader_PLY());
+    sep->addReader(new CT_Reader_OBJ(CT_StepsMenu::LP_Meshes));
+    sep->addReader(new CT_Reader_AsciiGrid3D(CT_StepsMenu::LP_Voxels));
+    sep->addReader(new CT_Reader_Points_ASCII(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_PTX(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_PLY());
 
 
     // load gdal drivers and create readers and exporters

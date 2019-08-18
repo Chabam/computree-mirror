@@ -14,7 +14,7 @@ class GPlyNormalConfiguration : public QWidget, public IPlyGenericConfiguration
     Q_OBJECT
 
 public:
-    explicit GPlyNormalConfiguration(QWidget *parent = 0);
+    explicit GPlyNormalConfiguration(QWidget *parent = nullptr);
     ~GPlyNormalConfiguration();
 
     /**

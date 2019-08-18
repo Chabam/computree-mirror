@@ -3,12 +3,12 @@
 PlyElementReader::PlyElementReader(const PlyElement &el)
 {
     m_element = el;
-    m_listener = NULL;
+    m_listener = nullptr;
 }
 
 void PlyElementReader::setListener(const IPlyReaderListener *listener)
 {
-    m_listener = (IPlyReaderListener*)listener;
+    m_listener = const_cast<IPlyReaderListener*>(listener);
 }
 
 bool PlyElementReader::addSetterForProperty(const int &propertyIndex,
@@ -16,7 +16,7 @@ bool PlyElementReader::addSetterForProperty(const int &propertyIndex,
                                             const PlyAbstractValuesSetter* setter)
 {
     SetterInfo info;
-    info.setter = (PlyAbstractValuesSetter*)setter;
+    info.setter = const_cast<PlyAbstractValuesSetter*>(setter);
     info.channelIndex = channelIndex;
 
     m_settersByProperty.insert(propertyIndex, info);
@@ -67,7 +67,7 @@ void PlyElementReader::passValueToSetter(const double &value,
 
 bool PlyElementReader::mustStop() const
 {
-    if(m_listener != NULL)
+    if(m_listener != nullptr)
         return m_listener->plyReadMustStop();
 
     return false;
@@ -75,6 +75,6 @@ bool PlyElementReader::mustStop() const
 
 void PlyElementReader::setProgress(int p)
 {
-    if(m_listener != NULL)
+    if(m_listener != nullptr)
         return m_listener->plyProgressChanged(p);
 }

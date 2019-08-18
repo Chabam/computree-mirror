@@ -1,5 +1,7 @@
 #include "ct_reader_asciigrid3d.h"
 
+#include "ct_log/ct_logmanager.h"
+
 #define LOAD_DATA_HEADER(VVV, LINESTART, DATATYPESTR, CONVERTTO)    ++line; \
                                                                     currentLine = stream.readLine().toLower(); \
                                                                     if(!currentLine.startsWith(LINESTART)) { \
@@ -18,37 +20,24 @@
                                                                         return false; \
                                                                     }
 
-#define CREATE_GRID_MODEL(METATYPE, REALTYPE)   if(m_dataType == METATYPE) \
-                                                    addOutItemDrawableModel(modelName, new CT_Grid3D<REALTYPE>(), displayableName);
 
-#define LOAD_GRID(METATYPE, REALTYPE)if(m_dataType == METATYPE) { \
-                                            CT_Grid3D<REALTYPE>* loadedGrid = new CT_Grid3D<REALTYPE>( NULL, \
-                                                                                                 NULL, \
-                                                                                                 min[0], \
-                                                                                                 min[1], \
-                                                                                                 min[2], \
-                                                                                                 nCols, \
-                                                                                                 nRows, \
-                                                                                                 nZLev, \
-                                                                                                 cellSize, \
-                                                                                                 noDataValue, \
-                                                                                                 0.0); \
-                                            loadGrid<REALTYPE>(stream, loadedGrid, DEF_CT_Reader_ASCIIGRD3D_grid3DOut, nCols, nRows, nZLev, noDataValue); \
-                                        }
-
-CT_Reader_AsciiGrid3D::CT_Reader_AsciiGrid3D()
+CT_Reader_AsciiGrid3D::CT_Reader_AsciiGrid3D(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     m_dataType = QMetaType::Float;
+
+    addNewReadableFormat(FileFormat(QStringList() << "grid3d" << "grd3d" << "GRD3D", tr("Fichiers grille 3D")));
+
+    setToolTip(tr("Chargement d'une grille 3D depuis un fichier ASCII (format inspiré du format raster ESRI GRID)."));
 }
 
-QString CT_Reader_AsciiGrid3D::GetReaderName() const
+CT_Reader_AsciiGrid3D::CT_Reader_AsciiGrid3D(const CT_Reader_AsciiGrid3D &other) : SuperClass(other)
+{
+    m_dataType = other.m_dataType;
+}
+
+QString CT_Reader_AsciiGrid3D::displayableName() const
 {
     return tr("Grille 3D, Fichiers ascii GRD3D");
-}
-
-CT_StepsMenu::LevelPredefined CT_Reader_AsciiGrid3D::getReaderSubMenuName() const
-{
-    return CT_StepsMenu::LP_Voxels;
 }
 
 bool CT_Reader_AsciiGrid3D::setFilePath(const QString &filepath)
@@ -101,41 +90,28 @@ bool CT_Reader_AsciiGrid3D::setTypeToUse(QMetaType::Type dataType)
     return true;
 }
 
-CT_AbstractReader* CT_Reader_AsciiGrid3D::copy() const
+
+void CT_Reader_AsciiGrid3D::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    return new CT_Reader_AsciiGrid3D();
-}
-
-void CT_Reader_AsciiGrid3D::protectedInit()
-{
-    addNewReadableFormat(FileFormat(QStringList() << "grid3d" << "grd3d" << "GRD3D", tr("Fichiers grille 3D")));
-
-    setToolTip(tr("Chargement d'une grille 3D depuis un fichier ASCII (format inspiré du format raster ESRI GRID)."));
-}
-
-void CT_Reader_AsciiGrid3D::protectedCreateOutItemDrawableModelList()
-{
-    CT_AbstractReader::protectedCreateOutItemDrawableModelList();
-
-    const QString modelName = DEF_CT_Reader_ASCIIGRD3D_grid3DOut;
     const QString displayableName = tr("Grille 3D");
 
-    CREATE_GRID_MODEL(QMetaType::Bool, bool);
-    CREATE_GRID_MODEL(QMetaType::Int, int);
-    CREATE_GRID_MODEL(QMetaType::UInt, uint);
-    CREATE_GRID_MODEL(QMetaType::LongLong, qlonglong);
-    CREATE_GRID_MODEL(QMetaType::ULongLong, qulonglong);
-    CREATE_GRID_MODEL(QMetaType::Double, double);
-    CREATE_GRID_MODEL(QMetaType::Long, long);
-    CREATE_GRID_MODEL(QMetaType::Short, short);
-    CREATE_GRID_MODEL(QMetaType::Char, char);
-    CREATE_GRID_MODEL(QMetaType::ULong, ulong);
-    CREATE_GRID_MODEL(QMetaType::UShort, ushort);
-    CREATE_GRID_MODEL(QMetaType::UChar, uchar);
-    CREATE_GRID_MODEL(QMetaType::Float, float);
+    if(m_dataType == QMetaType::Bool)       {manager.addItem(_outGrid_bool, displayableName);}
+    if(m_dataType == QMetaType::Int)        {manager.addItem(_outGrid_int, displayableName);}
+    if(m_dataType == QMetaType::UInt)       {manager.addItem(_outGrid_uint, displayableName);}
+    if(m_dataType == QMetaType::LongLong)   {manager.addItem(_outGrid_qlonglong, displayableName);}
+    if(m_dataType == QMetaType::ULongLong)  {manager.addItem(_outGrid_qulonglong, displayableName);}
+    if(m_dataType == QMetaType::Double)     {manager.addItem(_outGrid_double, displayableName);}
+    if(m_dataType == QMetaType::Long)       {manager.addItem(_outGrid_long, displayableName);}
+    if(m_dataType == QMetaType::Short)      {manager.addItem(_outGrid_short, displayableName);}
+    if(m_dataType == QMetaType::Char)       {manager.addItem(_outGrid_char, displayableName);}
+    if(m_dataType == QMetaType::ULong)      {manager.addItem(_outGrid_ulong, displayableName);}
+    if(m_dataType == QMetaType::UShort)     {manager.addItem(_outGrid_ushort, displayableName);}
+    if(m_dataType == QMetaType::UChar)      {manager.addItem(_outGrid_uchar, displayableName);}
+    if(m_dataType == QMetaType::Float)      {manager.addItem(_outGrid_float, displayableName);}
+
 }
 
-bool CT_Reader_AsciiGrid3D::protectedReadFile()
+bool CT_Reader_AsciiGrid3D::internalReadFile(CT_StandardItemGroup* group)
 {
     if(QFile::exists(filepath()))
     {
@@ -160,19 +136,98 @@ bool CT_Reader_AsciiGrid3D::protectedReadFile()
                     return false;
                 }
 
-                LOAD_GRID(QMetaType::Bool, bool);
-                LOAD_GRID(QMetaType::Int, int);
-                LOAD_GRID(QMetaType::UInt, uint);
-                LOAD_GRID(QMetaType::LongLong, qlonglong);
-                LOAD_GRID(QMetaType::ULongLong, qulonglong);
-                LOAD_GRID(QMetaType::Double, double);
-                LOAD_GRID(QMetaType::Long, long);
-                LOAD_GRID(QMetaType::Short, short);
-                LOAD_GRID(QMetaType::Char, char);
-                LOAD_GRID(QMetaType::ULong, ulong);
-                LOAD_GRID(QMetaType::UShort, ushort);
-                LOAD_GRID(QMetaType::UChar, uchar);
-                LOAD_GRID(QMetaType::Float, float);
+
+                if(m_dataType == QMetaType::Bool)
+                {
+                    CT_Grid3D<bool>* loadedGrid = new CT_Grid3D<bool>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, bool(noDataValue), 0.0);
+                    loadGrid<bool>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_bool, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::Int)
+                {
+                    CT_Grid3D<int>* loadedGrid = new CT_Grid3D<int>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, int(noDataValue), 0.0);
+                    loadGrid<int>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_int, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::UInt)
+                {
+                    CT_Grid3D<uint>* loadedGrid = new CT_Grid3D<uint>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, uint(noDataValue), 0.0);
+                    loadGrid<uint>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_uint, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::LongLong)
+                {
+                    CT_Grid3D<qlonglong>* loadedGrid = new CT_Grid3D<qlonglong>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, qlonglong(noDataValue), 0.0);
+                    loadGrid<qlonglong>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_qlonglong, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::ULongLong)
+                {
+                    CT_Grid3D<qulonglong>* loadedGrid = new CT_Grid3D<qulonglong>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, qulonglong(noDataValue), 0.0);
+                    loadGrid<qulonglong>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_qulonglong, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::Double)
+                {
+                    CT_Grid3D<double>* loadedGrid = new CT_Grid3D<double>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, double(noDataValue), 0.0);
+                    loadGrid<double>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_double, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::Long)
+                {
+                    CT_Grid3D<long>* loadedGrid = new CT_Grid3D<long>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, long(noDataValue), 0.0);
+                    loadGrid<long>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_long, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::Short)
+                {
+                    CT_Grid3D<short>* loadedGrid = new CT_Grid3D<short>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, short(noDataValue), 0.0);
+                    loadGrid<short>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_short, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::Char)
+                {
+                    CT_Grid3D<char>* loadedGrid = new CT_Grid3D<char>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, char(noDataValue), 0.0);
+                    loadGrid<char>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_char, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::ULong)
+                {
+                    CT_Grid3D<ulong>* loadedGrid = new CT_Grid3D<ulong>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, ulong(noDataValue), 0.0);
+                    loadGrid<ulong>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_ulong, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::UShort)
+                {
+                    CT_Grid3D<ushort>* loadedGrid = new CT_Grid3D<ushort>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, ushort(noDataValue), 0.0);
+                    loadGrid<ushort>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_ushort, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::UChar)
+                {
+                    CT_Grid3D<uchar>* loadedGrid = new CT_Grid3D<uchar>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, uchar(noDataValue), 0.0);
+                    loadGrid<uchar>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_uchar, loadedGrid);
+
+                }
+                if(m_dataType == QMetaType::Float)
+                {
+                    CT_Grid3D<float>* loadedGrid = new CT_Grid3D<float>(min[0], min[1], min[2], nCols, nRows, nZLev, cellSize, float(noDataValue), 0.0);
+                    loadGrid<float>(stream, loadedGrid, nCols, nRows, nZLev, noDataValue);
+                    group->addSingularItem(_outGrid_float, loadedGrid);
+
+                }
 
                 f.close();
 
@@ -232,7 +287,7 @@ bool CT_Reader_AsciiGrid3D::readHeader(QTextStream &stream,
         std::string str = splitline.at(1).toStdString();
 
         // find type by name of the metatype
-        dataTypeReaded = (QMetaType::Type)QMetaType::type(str.data());
+        dataTypeReaded = static_cast<QMetaType::Type>(QMetaType::type(str.data()));
 
         if(canReadDataType(dataTypeReaded)) {
             dataType = dataTypeReaded;

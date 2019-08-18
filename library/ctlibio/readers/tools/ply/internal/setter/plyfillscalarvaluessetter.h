@@ -21,7 +21,7 @@ public:
 
     PlyFillScalarValuesSetter(const size_t& size,
                         const Manager* manager) : PlyAbstractValuesSetter(size) {
-        m_manager = (Manager*)manager;
+        m_manager = const_cast<Manager*>(manager);
     }
 
     void beginReadElement() {

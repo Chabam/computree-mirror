@@ -16,7 +16,7 @@ class GPlyReadConfiguration : public QWidget
     Q_OBJECT
 
 public:
-    explicit GPlyReadConfiguration(QWidget *parent = 0);
+    explicit GPlyReadConfiguration(QWidget *parent = nullptr);
     ~GPlyReadConfiguration();
 
     /**
@@ -42,7 +42,7 @@ public:
 private:
     struct ItemConfiguration {
         ItemConfiguration() {
-            configurationWidget = NULL;
+            configurationWidget = nullptr;
         }
 
         ~ItemConfiguration() {
@@ -82,9 +82,9 @@ private:
      */
     template<typename WidgetToCreate>
     ItemConfiguration* createOrGetItemConfiguration(QTreeWidgetItem* item) const {
-        ItemConfiguration* c = m_itemConfiguration.value(item, NULL);
+        ItemConfiguration* c = m_itemConfiguration.value(item, nullptr);
 
-        if(c == NULL) {
+        if(c == nullptr) {
             c = new ItemConfiguration();
             c->configurationWidget = new WidgetToCreate();
             c->configurationWidget->setHeader(m_header);

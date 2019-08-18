@@ -14,7 +14,7 @@ class GPlyVertexConfiguration : public QWidget, public IPlyGenericConfiguration
     Q_OBJECT
 
 public:
-    explicit GPlyVertexConfiguration(QWidget *parent = 0);
+    explicit GPlyVertexConfiguration(QWidget *parent = nullptr);
     ~GPlyVertexConfiguration();
 
     /**

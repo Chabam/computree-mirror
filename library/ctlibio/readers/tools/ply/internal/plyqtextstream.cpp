@@ -17,49 +17,49 @@ QIODevice* PlyQTextStream::device() const
 
 PlyQTextStream &PlyQTextStream::operator>>(qint8 &v)
 {
-    v = getInteger();
+    v = qint8(getInteger());
 
     return *this;
 }
 
 PlyQTextStream &PlyQTextStream::operator>>(quint8 &v)
 {
-    v = getUInteger();
+    v = quint8(getUInteger());
 
     return *this;
 }
 
 PlyQTextStream &PlyQTextStream::operator>>(qint16 &v)
 {
-    v = getInteger();
+    v = qint16(getInteger());
 
     return *this;
 }
 
 PlyQTextStream &PlyQTextStream::operator>>(quint16 &v)
 {
-    v = getUInteger();
+    v = quint16(getUInteger());
 
     return *this;
 }
 
 PlyQTextStream &PlyQTextStream::operator>>(qint32 &v)
 {
-    v = getInteger();
+    v = qint32(getInteger());
 
     return *this;
 }
 
 PlyQTextStream &PlyQTextStream::operator>>(quint32 &v)
 {
-    v = getUInteger();
+    v = quint32(getUInteger());
 
     return *this;
 }
 
 PlyQTextStream &PlyQTextStream::operator>>(float &v)
 {
-    v = getDouble();
+    v = float(getDouble());
 
     return *this;
 }
