@@ -12,9 +12,9 @@ PlyFilePartReaderT::PlyFilePartReader(const PlyHeader& header)
 {
     m_header = header;
     m_vertexElementIndex = -1;
-    m_vertexElementReader = NULL;
+    m_vertexElementReader = nullptr;
     m_maxElementIndex = -1;
-    m_listener = NULL;
+    m_listener = nullptr;
 }
 
 PLY_FILE_PART_READER_TEMPLATES_DEFINITION
@@ -26,7 +26,7 @@ PlyFilePartReaderT::~PlyFilePartReader()
 PLY_FILE_PART_READER_TEMPLATES_DEFINITION
 bool PlyFilePartReaderT::isValid() const
 {
-    return m_header.isValid() && (m_vertexElementReader != NULL);
+    return m_header.isValid() && (m_vertexElementReader != nullptr);
 }
 
 PLY_FILE_PART_READER_TEMPLATES_DEFINITION
@@ -35,7 +35,7 @@ void PlyFilePartReaderT::clear()
     m_allReaders.remove(m_vertexElementIndex);
 
     delete m_vertexElementReader;
-    m_vertexElementReader = NULL;
+    m_vertexElementReader = nullptr;
 
     qDeleteAll(m_allReaders.begin(), m_allReaders.end());
     m_allReaders.clear();
@@ -77,7 +77,7 @@ bool PlyFilePartReaderT::addVertexScalarPart(ScalarManager* scalarM,
                                              const int& elementIndex,
                                              const int& scalarPIndex)
 {
-    if(m_vertexElementReader == NULL)
+    if(m_vertexElementReader == nullptr)
         return false;
 
     const PlyElement el = m_header.getElements().at(elementIndex);
@@ -152,7 +152,7 @@ bool PlyFilePartReaderT::addVertexColorPart(ColorManager* colorM,
                                             const int& bluePIndex,
                                             const int& alphaPIndex)
 {
-    if(m_vertexElementReader == NULL)
+    if(m_vertexElementReader == nullptr)
         return false;
 
     const PlyElement el = m_header.getElements().at(elementIndex);
@@ -213,7 +213,7 @@ bool PlyFilePartReaderT::addVertexNormalPart(NormalManager* normalM,
                                              const int& nzPIndex,
                                              const int& nCurvaturePIndex)
 {
-    if(m_vertexElementReader == NULL)
+    if(m_vertexElementReader == nullptr)
         return false;
 
     const PlyElement el = m_header.getElements().at(elementIndex);
@@ -314,7 +314,7 @@ bool PlyFilePartReaderT::process()
 PLY_FILE_PART_READER_TEMPLATES_DEFINITION
 bool PlyFilePartReaderT::plyReadMustStop() const
 {
-    if(m_listener != NULL)
+    if(m_listener != nullptr)
         return m_listener->plyReadMustStop();
 
     return false;
@@ -323,7 +323,7 @@ bool PlyFilePartReaderT::plyReadMustStop() const
 PLY_FILE_PART_READER_TEMPLATES_DEFINITION
 void PlyFilePartReaderT::plyProgressChanged(int progress)
 {
-    if((m_listener != NULL) && (m_progressDivisor != 0))
+    if((m_listener != nullptr) && (m_progressDivisor != 0))
         return m_listener->plyProgressChanged((m_currentProgress + progress) / m_progressDivisor);
 }
 
@@ -332,7 +332,7 @@ PlyElementReader* PlyFilePartReaderT::createOrGetElementReader(const int& elemen
 {
     m_maxElementIndex = qMax(m_maxElementIndex, elementIndex);
 
-    PlyElementReader* reader = m_allReaders.value(elementIndex, NULL);
+    PlyElementReader* reader = m_allReaders.value(elementIndex, nullptr);
 
     if(reader == nullptr) {
         reader = new PlyElementReader(m_header.getElements().at(elementIndex));

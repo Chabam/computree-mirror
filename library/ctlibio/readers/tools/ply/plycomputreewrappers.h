@@ -139,7 +139,7 @@ struct Ply_CT_GenericCloud_Wrapper {
 
     Ply_CT_GenericCloud_Wrapper()
     {
-        cloud = NULL;
+        cloud = nullptr;
     }
 
     /**
@@ -147,7 +147,7 @@ struct Ply_CT_GenericCloud_Wrapper {
      */
     void resize(const size_t& newSize)
     {
-        if(cloud == NULL)
+        if(cloud == nullptr)
             cloud = new Cloud(newSize);
     }
 

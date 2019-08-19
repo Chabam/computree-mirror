@@ -14,6 +14,9 @@ TARGET = ctlibstructureaddon
 DEFINES += CTLIBSTRUCTUREADDON_LIBRARY
 
 HEADERS += \
+    ct_itemdrawable/tools/gridtools/ct_abstractgrid3dbeamvisitor.h \
+    ct_itemdrawable/tools/gridtools/ct_grid3dbeamvisitor_indexlist.h \
+    ct_itemdrawable/tools/gridtools/ct_grid3dwootraversalalgorithm.h \
     ctlibstructureaddon_global.h \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h \
@@ -195,6 +198,9 @@ SOURCES += \
     ct_itemdrawable/ct_scanner.cpp \
     ct_itemdrawable/ct_beam.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardbeamdrawmanager.cpp \
+    ct_itemdrawable/tools/gridtools/ct_abstractgrid3dbeamvisitor.cpp \
+    ct_itemdrawable/tools/gridtools/ct_grid3dbeamvisitor_indexlist.cpp \
+    ct_itemdrawable/tools/gridtools/ct_grid3dwootraversalalgorithm.cpp \
     ct_itemdrawable/tools/scanner/ct_shot.cpp \
     ct_itemdrawable/tools/scanner/ct_thetaphishootingpattern.cpp \
     ct_itemdrawable/ct_affiliationid.cpp \

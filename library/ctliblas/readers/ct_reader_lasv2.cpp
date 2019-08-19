@@ -14,7 +14,7 @@
 
 CT_Reader_LASV2::CT_Reader_LASV2(int subMenuLevel) : SuperClass(subMenuLevel)
 {    
-    m_headerFromConfiguration = NULL;
+    m_headerFromConfiguration = nullptr;
 
     addNewReadableFormat(FileFormat("las", tr("Fichiers LAS .las")));
 
@@ -23,10 +23,10 @@ CT_Reader_LASV2::CT_Reader_LASV2(int subMenuLevel) : SuperClass(subMenuLevel)
 
 CT_Reader_LASV2::CT_Reader_LASV2(const CT_Reader_LASV2 &other) : SuperClass(other)
 {
-    m_headerFromConfiguration = NULL;
+    m_headerFromConfiguration = nullptr;
 
-    if(other.m_headerFromConfiguration != NULL)
-        m_headerFromConfiguration = (CT_LASHeader*)other.m_headerFromConfiguration->copy(NULL, NULL);
+    if(other.m_headerFromConfiguration != nullptr)
+        m_headerFromConfiguration = (CT_LASHeader*)other.m_headerFromConfiguration->copy(nullptr, nullptr);
 }
 
 CT_Reader_LASV2::~CT_Reader_LASV2()
@@ -44,7 +44,7 @@ bool CT_Reader_LASV2::setFilePath(const QString& filepath)
     QString err;
     CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath, err);
 
-    if(header != NULL) {
+    if(header != nullptr) {
         if(CT_AbstractReader::setFilePath(filepath)) {
             setToolTip(header->toString());
             delete header;
@@ -63,7 +63,7 @@ bool CT_Reader_LASV2::configure()
     QString err;
     CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath(), err);
 
-    if(header != NULL) {
+    if(header != nullptr) {
         delete m_headerFromConfiguration;
         m_headerFromConfiguration = header;
         return true;
@@ -81,14 +81,14 @@ CT_FileHeader* CT_Reader_LASV2::createHeaderPrototype() const
 bool CT_Reader_LASV2::restoreSettings(SettingsReaderInterface &reader)
 {
     delete m_headerFromConfiguration;
-    m_headerFromConfiguration = NULL;
+    m_headerFromConfiguration = nullptr;
 
     if(SuperClass::restoreSettings(reader)) {
         QString error;
         m_headerFromConfiguration = (CT_LASHeader*)internalReadHeader(filepath(), error);
     }
 
-    return (m_headerFromConfiguration != NULL);
+    return (m_headerFromConfiguration != nullptr);
 }
 
 void CT_Reader_LASV2::internalDeclareOutputModels(CT_ReaderOutModelStructureManager &manager)
@@ -127,7 +127,7 @@ void CT_Reader_LASV2::internalDeclareOutputModels(CT_ReaderOutModelStructureMana
 
 CT_FileHeader *CT_Reader_LASV2::internalReadHeader(const QString &filepath, QString &error) const
 {
-    CT_LASHeader *header = NULL;
+    CT_LASHeader *header = nullptr;
 
     // Test File validity
     if(QFile::exists(filepath))
@@ -143,7 +143,7 @@ CT_FileHeader *CT_Reader_LASV2::internalReadHeader(const QString &filepath, QStr
 
             if(!header->read(stream, error)) {
                 delete header;
-                header = NULL;
+                header = nullptr;
             }
         }
 
@@ -160,7 +160,7 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
 
     CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath(), error);
 
-    if(header == NULL) {
+    if(header == nullptr) {
         PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier %1").arg(filepath()));
         return false;
     }
@@ -202,20 +202,20 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPoints);
 
         // VECTOR
-        CT_StandardCloudStdVectorT<qint16> *scanAngleRankV6_10 = NULL;
-        CT_StandardCloudStdVectorT<PointCore6_10> *mask6_10V = NULL;
+        CT_StandardCloudStdVectorT<qint16> *scanAngleRankV6_10 = nullptr;
+        CT_StandardCloudStdVectorT<PointCore6_10> *mask6_10V = nullptr;
 
         mask6_10V = new CT_StandardCloudStdVectorT<PointCore6_10>(nPoints);
         scanAngleRankV6_10 = new CT_StandardCloudStdVectorT<qint16>(nPoints);
 
         // ItemDrawable 6_10
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *rn6_10 = NULL;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *nor6_10 = NULL;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *sdf6_10 = NULL;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *efl6_10 =  NULL;
-        CT_PointsAttributesScalarTemplated<qint16> *scanAngleRank6_10 = NULL;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *cf = NULL;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *sc = NULL;
+        CT_PointsAttributesScalarMaskT<PointCore6_10> *rn6_10 = nullptr;
+        CT_PointsAttributesScalarMaskT<PointCore6_10> *nor6_10 = nullptr;
+        CT_PointsAttributesScalarMaskT<PointCore6_10> *sdf6_10 = nullptr;
+        CT_PointsAttributesScalarMaskT<PointCore6_10> *efl6_10 =  nullptr;
+        CT_PointsAttributesScalarTemplated<qint16> *scanAngleRank6_10 = nullptr;
+        CT_PointsAttributesScalarMaskT<PointCore6_10> *cf = nullptr;
+        CT_PointsAttributesScalarMaskT<PointCore6_10> *sc = nullptr;
 
         // Vector in all point data format :
         CT_StandardCloudStdVectorT<quint16> *intensitiesV = new CT_StandardCloudStdVectorT<quint16>(nPoints);
@@ -224,16 +224,16 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         CT_StandardCloudStdVectorT<quint16> *pointSourceIDV = new CT_StandardCloudStdVectorT<quint16>(nPoints);
 
         // Vector not in all point data format :
-        CT_StandardCloudStdVectorT<double> *gpsTimeV = NULL;
-        CT_ColorCloudStdVector *colorsV = NULL;
-        CT_StandardCloudStdVectorT<quint16> *colorsRV = NULL;
-        CT_StandardCloudStdVectorT<quint16> *colorsGV = NULL;
-        CT_StandardCloudStdVectorT<quint16> *colorsBV = NULL;
-        CT_StandardCloudStdVectorT<quint8> *wpdiV = NULL;
-        CT_StandardCloudStdVectorT<quint64> *botwdV = NULL;
-        CT_StandardCloudStdVectorT<quint32> *wpsibV = NULL;
-        CT_StandardCloudStdVectorT<float> *rpwlV = NULL;
-        CT_StandardCloudStdVectorT<quint16> *nirV = NULL;
+        CT_StandardCloudStdVectorT<double> *gpsTimeV = nullptr;
+        CT_ColorCloudStdVector *colorsV = nullptr;
+        CT_StandardCloudStdVectorT<quint16> *colorsRV = nullptr;
+        CT_StandardCloudStdVectorT<quint16> *colorsGV = nullptr;
+        CT_StandardCloudStdVectorT<quint16> *colorsBV = nullptr;
+        CT_StandardCloudStdVectorT<quint8> *wpdiV = nullptr;
+        CT_StandardCloudStdVectorT<quint64> *botwdV = nullptr;
+        CT_StandardCloudStdVectorT<quint32> *wpsibV = nullptr;
+        CT_StandardCloudStdVectorT<float> *rpwlV = nullptr;
+        CT_StandardCloudStdVectorT<quint16> *nirV = nullptr;
 
         if((m_headerFromConfiguration->m_pointDataRecordFormat == 1)
                 || (m_headerFromConfiguration->m_pointDataRecordFormat > 2))
@@ -306,11 +306,11 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
             stream >> pointSourceIDV->tAt(i);
 
             // gps time is always after pointSourceID
-            if(gpsTimeV != NULL)
+            if(gpsTimeV != nullptr)
                 stream >> gpsTimeV->tAt(i);
 
             // color is always after gpsTime if exist otherwise after pointSourceID
-            if(colorsRV != NULL)
+            if(colorsRV != nullptr)
             {
                 CT_Color &colRGBA = colorsV->tAt(i);
                 quint16 &colR = colorsRV->tAt(i);
@@ -326,11 +326,11 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
             }
 
             // NIR is always after colors if exist
-            if(nirV != NULL)
+            if(nirV != nullptr)
                 stream >> nirV->tAt(i);
 
             // wave packet is always after NIR if exist
-            if(wpdiV != NULL)
+            if(wpdiV != nullptr)
                 stream >> wpdiV->tAt(i) >> botwdV->tAt(i) >> wpsibV->tAt(i) >> rpwlV->tAt(i);
 
             // CONVERT POINT
@@ -422,38 +422,38 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         CT_AbstractPointAttributesScalar* attUserData = new CT_PointsAttributesScalarTemplated<quint8>(pcir, userDataV);
         CT_AbstractPointAttributesScalar* attPointSourceID = new CT_PointsAttributesScalarTemplated<quint16>(pcir, pointSourceIDV);
         CT_AbstractPointAttributesScalar* attScanAngle = scanAngleRank6_10;
-        CT_AbstractPointAttributesScalar* attGPSTime = (gpsTimeV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<double>(pcir, gpsTimeV));
-        CT_AbstractPointAttributesScalar* attRed = (colorsRV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsRV));
-        CT_AbstractPointAttributesScalar* attGreen = (colorsGV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsGV));
-        CT_AbstractPointAttributesScalar* attBlue = (colorsBV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsBV));
-        CT_AbstractPointAttributesScalar* attWavePacketDescriptorIndex = (wpdiV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint8>(pcir, wpdiV));
-        CT_AbstractPointAttributesScalar* attByteOffsetToWaveformData = (botwdV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint64>(pcir, botwdV));
-        CT_AbstractPointAttributesScalar* attWaveformPacketSizeInBytes = (wpsibV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint32>(pcir, wpsibV));
-        CT_AbstractPointAttributesScalar* attReturnPointWaveformLocation = (rpwlV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<float>(pcir, rpwlV));
-        CT_AbstractPointAttributesScalar* attNIR = (nirV == NULL ? NULL : new CT_PointsAttributesScalarTemplated<quint16>(pcir, nirV));
+        CT_AbstractPointAttributesScalar* attGPSTime = (gpsTimeV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<double>(pcir, gpsTimeV));
+        CT_AbstractPointAttributesScalar* attRed = (colorsRV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsRV));
+        CT_AbstractPointAttributesScalar* attGreen = (colorsGV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsGV));
+        CT_AbstractPointAttributesScalar* attBlue = (colorsBV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsBV));
+        CT_AbstractPointAttributesScalar* attWavePacketDescriptorIndex = (wpdiV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint8>(pcir, wpdiV));
+        CT_AbstractPointAttributesScalar* attByteOffsetToWaveformData = (botwdV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint64>(pcir, botwdV));
+        CT_AbstractPointAttributesScalar* attWaveformPacketSizeInBytes = (wpsibV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint32>(pcir, wpsibV));
+        CT_AbstractPointAttributesScalar* attReturnPointWaveformLocation = (rpwlV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<float>(pcir, rpwlV));
+        CT_AbstractPointAttributesScalar* attNIR = (nirV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint16>(pcir, nirV));
 
-        if (container != NULL) {group->addSingularItem(m_hOutAllAtt, container);}
-        if (attIntensity != NULL) {group->addSingularItem(m_hOutIntensity, attIntensity);}
-        if (attReturnNumber != NULL) {group->addSingularItem(m_hOutReturnNumber, attReturnNumber);}
-        if (attNumberOfReturn != NULL) {group->addSingularItem(m_hOutNumberOfReturn, attNumberOfReturn);}
-        if (attClassificationFlag != NULL) {group->addSingularItem(m_hOutClassificationFlag, attClassificationFlag);}
-        if (attScannerChannel != NULL) {group->addSingularItem(m_hOutScannerChannel, attScannerChannel);}
-        if (attScanDirectionFlag != NULL) {group->addSingularItem(m_hOutScanDirectionFlag, attScanDirectionFlag);}
-        if (attEdgeOfFlightLine != NULL) {group->addSingularItem(m_hOutEdgeOfFlightLine, attEdgeOfFlightLine);}
-        if (attClassification != NULL) {group->addSingularItem(m_hOutClassification, attClassification);}
-        if (attScanAngle != NULL) {group->addSingularItem(m_hOutScanAngle, attScanAngle);}
-        if (attUserData != NULL) {group->addSingularItem(m_hOutUserData, attUserData);}
-        if (attPointSourceID != NULL) {group->addSingularItem(m_hOutPointSourceID, attPointSourceID);}
-        if (attGPSTime != NULL) {group->addSingularItem(m_hOutGPSTime, attGPSTime);}
-        if (colorsV != NULL) {group->addSingularItem(m_hOutColor, new CT_PointsAttributesColor(pcir, colorsV));}
-        if (attRed != NULL) {group->addSingularItem(m_hOutRed, attRed);}
-        if (attGreen != NULL) {group->addSingularItem(m_hOutGreen, attGreen);}
-        if (attBlue != NULL) {group->addSingularItem(m_hOutBlue, attBlue);}
-        if (attWavePacketDescriptorIndex != NULL) {group->addSingularItem(m_hOutWavePacketDescriptorIndex, attWavePacketDescriptorIndex);}
-        if (attByteOffsetToWaveformData != NULL) {group->addSingularItem(m_hOutByteOffsetToWaveformData, attByteOffsetToWaveformData);}
-        if (attWaveformPacketSizeInBytes != NULL) {group->addSingularItem(m_hOutWaveformPacketSizeInBytes, attWaveformPacketSizeInBytes);}
-        if (attReturnPointWaveformLocation != NULL) {group->addSingularItem(m_hOutReturnPointWaveformLocation, attReturnPointWaveformLocation);}
-        if (attNIR != NULL) {group->addSingularItem(m_hOutNIR, attNIR);}
+        if (container != nullptr) {group->addSingularItem(m_hOutAllAtt, container);}
+        if (attIntensity != nullptr) {group->addSingularItem(m_hOutIntensity, attIntensity);}
+        if (attReturnNumber != nullptr) {group->addSingularItem(m_hOutReturnNumber, attReturnNumber);}
+        if (attNumberOfReturn != nullptr) {group->addSingularItem(m_hOutNumberOfReturn, attNumberOfReturn);}
+        if (attClassificationFlag != nullptr) {group->addSingularItem(m_hOutClassificationFlag, attClassificationFlag);}
+        if (attScannerChannel != nullptr) {group->addSingularItem(m_hOutScannerChannel, attScannerChannel);}
+        if (attScanDirectionFlag != nullptr) {group->addSingularItem(m_hOutScanDirectionFlag, attScanDirectionFlag);}
+        if (attEdgeOfFlightLine != nullptr) {group->addSingularItem(m_hOutEdgeOfFlightLine, attEdgeOfFlightLine);}
+        if (attClassification != nullptr) {group->addSingularItem(m_hOutClassification, attClassification);}
+        if (attScanAngle != nullptr) {group->addSingularItem(m_hOutScanAngle, attScanAngle);}
+        if (attUserData != nullptr) {group->addSingularItem(m_hOutUserData, attUserData);}
+        if (attPointSourceID != nullptr) {group->addSingularItem(m_hOutPointSourceID, attPointSourceID);}
+        if (attGPSTime != nullptr) {group->addSingularItem(m_hOutGPSTime, attGPSTime);}
+        if (colorsV != nullptr) {group->addSingularItem(m_hOutColor, new CT_PointsAttributesColor(pcir, colorsV));}
+        if (attRed != nullptr) {group->addSingularItem(m_hOutRed, attRed);}
+        if (attGreen != nullptr) {group->addSingularItem(m_hOutGreen, attGreen);}
+        if (attBlue != nullptr) {group->addSingularItem(m_hOutBlue, attBlue);}
+        if (attWavePacketDescriptorIndex != nullptr) {group->addSingularItem(m_hOutWavePacketDescriptorIndex, attWavePacketDescriptorIndex);}
+        if (attByteOffsetToWaveformData != nullptr) {group->addSingularItem(m_hOutByteOffsetToWaveformData, attByteOffsetToWaveformData);}
+        if (attWaveformPacketSizeInBytes != nullptr) {group->addSingularItem(m_hOutWaveformPacketSizeInBytes, attWaveformPacketSizeInBytes);}
+        if (attReturnPointWaveformLocation != nullptr) {group->addSingularItem(m_hOutReturnPointWaveformLocation, attReturnPointWaveformLocation);}
+        if (attNIR != nullptr) {group->addSingularItem(m_hOutNIR, attNIR);}
 
         container->insertPointsAttributesAt(CT_LasDefine::Intensity, attIntensity);
         container->insertPointsAttributesAt(CT_LasDefine::Return_Number, attReturnNumber);

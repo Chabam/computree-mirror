@@ -21,7 +21,7 @@
                     }
 
 */
-class PLUGINSHAREDSHARED_EXPORT CT_Grid3DWooTraversalAlgorithm
+class CTLIBSTRUCTUREADDON_EXPORT CT_Grid3DWooTraversalAlgorithm
 {
 public:
 
@@ -36,13 +36,11 @@ public:
 
     CT_Grid3DWooTraversalAlgorithm(const CT_AbstractGrid3D *grid, bool keepFirst); // version sans visitors (ne pas utiliser Compute)
 
-    ~CT_Grid3DWooTraversalAlgorithm();
-
 
     /*!
      * \brief compute method of the algorithm
      */
-    virtual void compute(CT_Beam &data, Eigen::Vector3d* endPoint = NULL);
+    void compute(CT_Beam &data, Eigen::Vector3d* endPoint = nullptr);
 
     // Pour utilisation pas à pas, sans visitors
     bool init(CT_Beam &data, size_t returnedIndex);

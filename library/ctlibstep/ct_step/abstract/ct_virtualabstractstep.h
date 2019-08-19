@@ -48,6 +48,8 @@
 #include <QDateTime>
 #include <QTime>
 
+#include <QDebug>
+
 class CT_AbstractStepPlugin;
 
 using CT_StepInModelStructureManager = CT_InModelStructureManager;

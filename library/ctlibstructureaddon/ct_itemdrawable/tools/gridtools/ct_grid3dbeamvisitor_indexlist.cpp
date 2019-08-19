@@ -1,6 +1,6 @@
 #include "ct_grid3dbeamvisitor_indexlist.h"
 
-CT_Grid3DBeamVisitor_IndexList::CT_Grid3DBeamVisitor_IndexList()
+CT_Grid3DBeamVisitor_IndexList::CT_Grid3DBeamVisitor_IndexList() : CT_AbstractGrid3DBeamVisitor()
 {
 }
 

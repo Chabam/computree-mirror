@@ -16,8 +16,8 @@ CT_ActionSelectTool::CT_ActionSelectTool()
     m_selectionTool = Point;
     m_keyModifiers = Qt::NoModifier;
 
-    m_view = NULL;
-    m_option = NULL;
+    m_view = nullptr;
+    m_option = nullptr;
 
     connect(&m_rectangleTools, SIGNAL(mustBeRedraw()), this, SLOT(redrawOverlay()), Qt::DirectConnection);
     connect(&m_polygonTools, SIGNAL(mustBeRedraw()), this, SLOT(redrawOverlay()), Qt::DirectConnection);
@@ -285,7 +285,7 @@ void CT_ActionSelectTool::pick()
 
     setSelectionTool(CT_ActionSelectTool::Point);
 
-    if(m_option != NULL)
+    if(m_option != nullptr)
         m_option->setSelectionTool(CT_ActionSelectItemDrawableGV::Point);
 
     m_view->setSelectionMode(selectionMode());

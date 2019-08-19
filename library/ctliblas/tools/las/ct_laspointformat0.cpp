@@ -20,7 +20,7 @@ CT_LasPointInfo* CT_LASPointFormat0::write(QDataStream &stream, const CT_Point &
     // x / y / z
     stream << m_x << m_y << m_z;
 
-    if(info != NULL)
+    if(info != nullptr)
     {
         // intensity
         CT_WRITE_LAS_SCALAR(info->m_i, quint16);
@@ -28,16 +28,16 @@ CT_LasPointInfo* CT_LASPointFormat0::write(QDataStream &stream, const CT_Point &
         // return number + number of return + scan direction flag + edge of flight line
         quint8 tmp = 0;
 
-        if(info->m_rn.first != NULL)
+        if(info->m_rn.first != nullptr)
             tmp |= (((quint8)info->m_rn.first->dValueAt(info->m_rn.second)) << 0);
 
-        if(info->m_nor.first != NULL)
+        if(info->m_nor.first != nullptr)
             tmp |= (((quint8)info->m_nor.first->dValueAt(info->m_nor.second)) << 3);
 
-        if(info->m_sdf.first != NULL)
+        if(info->m_sdf.first != nullptr)
             tmp |= (((quint8)info->m_sdf.first->dValueAt(info->m_sdf.second)) << 6);
 
-        if(info->m_efl.first != NULL)
+        if(info->m_efl.first != nullptr)
             tmp |= (((quint8)info->m_efl.first->dValueAt(info->m_efl.second)) << 7);
 
         stream << tmp;

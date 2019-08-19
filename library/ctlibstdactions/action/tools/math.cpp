@@ -61,7 +61,7 @@ namespace AMKgl {
         Eigen::Vector4d test(p(0), p(1), p(2), 1);
         test = inversedMatrix * test;
 
-        if(inversedP != NULL)
+        if(inversedP != nullptr)
             *inversedP = test.block(0,0,3,1);
 
         const double val = test.block(0,0,3,1).norm();
@@ -73,7 +73,7 @@ namespace AMKgl {
         Eigen::Vector4d test(p(0), p(1), p(2), 1);
         test = inversedMatrix * test;
 
-        if(inversedP != NULL)
+        if(inversedP != nullptr)
             *inversedP = test.block(0,0,3,1);
 
         const double val = sqrt(pow(test(0),2) + pow(test(2), 2));
@@ -86,7 +86,7 @@ namespace AMKgl {
         Eigen::Vector4d test(p(0), p(1), p(2), 1);
         test = inversedMatrix * test;
 
-        if(inversedP != NULL)
+        if(inversedP != nullptr)
             *inversedP = test.block(0,0,3,1);
 
         const double val = test.block(0,0,3,1).norm();
@@ -99,14 +99,14 @@ namespace AMKgl {
 
         distance = std::numeric_limits<double>::max();
 
-        if(index != NULL)
+        if(index != nullptr)
             *index = -1;
 
         if(!pol.isEmpty()) {
             retP = pol.first();
             double dist = distancePoints(retP, p);
 
-            if(index != NULL)
+            if(index != nullptr)
                 *index = 0;
 
             int i = 0;
@@ -118,7 +118,7 @@ namespace AMKgl {
                     retP = pos;
                     dist = nDist;
 
-                    if(index != NULL)
+                    if(index != nullptr)
                         *index = i;
 
                 }

@@ -5,7 +5,7 @@
 
 CT_AbstractLASPointFormat::CT_AbstractLASPointFormat()
 {
-    m_lasHeader = NULL;
+    m_lasHeader = nullptr;
 }
 
 CT_AbstractLASPointFormat::~CT_AbstractLASPointFormat()
@@ -46,15 +46,15 @@ bool CT_AbstractLASPointFormat::initWrite(bool fastButConsumeMoreMemory)
             CT_LasDefine::LASPointAttributesType type = itT.next();
 
             // get it in the attributes map
-            CT_AbstractPointAttributesScalar *scalar = m_attributes.value(type, NULL);
+            CT_AbstractPointAttributesScalar *scalar = m_attributes.value(type, nullptr);
 
             // if exist
-            if(scalar != NULL)
+            if(scalar != nullptr)
             {
                 // get the point cloud index
                 const CT_AbstractPointCloudIndex *indexes = scalar->pointCloudIndex();
 
-                if(indexes != NULL)
+                if(indexes != nullptr)
                 {
                     size_t pIndex = 0;
 
@@ -64,15 +64,15 @@ bool CT_AbstractLASPointFormat::initWrite(bool fastButConsumeMoreMemory)
                     while(it.hasNext()) {
 
                         // get info for this global point index
-                        CT_LasPointInfo *info = NULL;
+                        CT_LasPointInfo *info = nullptr;
 
                         if(fastButConsumeMoreMemory) {
                             info = &m_infosFaster[it.next().cIndex()];
                         } else {
-                            info = m_infos.value(it.next().cIndex(), NULL);
+                            info = m_infos.value(it.next().cIndex(), nullptr);
 
                             // if info doesn't already exist
-                            if(info == NULL)
+                            if(info == nullptr)
                             {
                                 // create it
                                 info = new CT_LasPointInfo();

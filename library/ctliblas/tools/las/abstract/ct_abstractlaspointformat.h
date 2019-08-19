@@ -5,7 +5,7 @@
 #include "ctliblas/readers/headers/ct_lasheader.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
 
-#define CT_WRITE_LAS_SCALAR(information, type) if(information.first == NULL) { stream << (type)0; } else { stream << (type)information.first->dValueAt(information.second); }
+#define CT_WRITE_LAS_SCALAR(information, type) if(information.first == nullptr) { stream << (type)0; } else { stream << (type)information.first->dValueAt(information.second); }
 
 /**
  * @brief A tool class that can be use to write a point in a LAS File
@@ -59,7 +59,7 @@ public:
      */
     inline CT_LasPointInfo* infoOfPoint(const size_t &globalIndex) const {
         if(m_infosFaster.empty())
-            return m_infos.value(globalIndex, NULL);
+            return m_infos.value(globalIndex, nullptr);
 
         return &const_cast<CT_AbstractLASPointFormat*>(this)->m_infosFaster[globalIndex];
     }

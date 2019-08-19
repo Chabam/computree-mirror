@@ -157,7 +157,7 @@ bool CT_LASHeader::read(QDataStream &stream, QString &error)
             || (m_fileSignature[2] != 'S')
             || (m_fileSignature[3] != 'F')) {
         error = QObject::tr("Not a LAS File");
-        return NULL;
+        return nullptr;
     }
 
     // File Source ID
@@ -199,7 +199,7 @@ bool CT_LASHeader::read(QDataStream &stream, QString &error)
     if(m_offsetToPointData < m_headerSize) {
 
         error = QObject::tr("The offset to the start of points data (%1) is smaller than the header size (%2).").arg(m_offsetToPointData).arg(m_headerSize);
-        return NULL;
+        return nullptr;
     }
 
     // Number of Variable Length Records

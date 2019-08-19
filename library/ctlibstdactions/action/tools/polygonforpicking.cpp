@@ -440,7 +440,7 @@ namespace AMKgl {
 
                 intersect = true;
 
-                if(intersectionPoint != NULL)
+                if(intersectionPoint != nullptr)
                     *intersectionPoint = intersection;
             }
         } else if(type == QLineF::UnboundedIntersection) {
@@ -448,7 +448,7 @@ namespace AMKgl {
                     && Math::distancePointSegment(line2, intersection) < 2) {
                 intersect = true;
 
-                if(intersectionPoint != NULL)
+                if(intersectionPoint != nullptr)
                     *intersectionPoint = intersection;
             }
         }

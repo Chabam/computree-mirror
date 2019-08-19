@@ -3,7 +3,7 @@
 #include <QDebug>
 CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut() : CT_StdLASPointsAttributesContainer()
 {
-    _container = NULL;
+    _container = nullptr;
 }
 
 
@@ -17,19 +17,19 @@ void CT_StdLASPointsAttributesContainerShortcut::insertPointsAttributesAt(CT_Las
 
 CT_AbstractPointsAttributes *CT_StdLASPointsAttributesContainerShortcut::pointsAttributesAt(const int &key) const
 {
-    if (_container != NULL)
+    if (_container != nullptr)
     {
         return _container->pointsAttributesAt(key);
     }
 
     qFatal("CT_StdLASPointsAttributesContainerShortcut class not correctly initialized");
-    return NULL;
+    return nullptr;
 
 }
 
 QList<CT_LasDefine::LASPointAttributesType> CT_StdLASPointsAttributesContainerShortcut::lasPointAttributesTypes() const
 {
-    if (_container != NULL)
+    if (_container != nullptr)
     {
         return _container->lasPointAttributesTypes();
     }
@@ -40,7 +40,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_StdLASPointsAttributesContainerSh
 
 void CT_StdLASPointsAttributesContainerShortcut::getLASDataAt(const size_t i, CT_LASData &data) const
 {
-    if (_container != NULL)
+    if (_container != nullptr)
     {
         _container->getLASDataAt(i, data);
     } else {
@@ -50,7 +50,7 @@ void CT_StdLASPointsAttributesContainerShortcut::getLASDataAt(const size_t i, CT
 
 QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> CT_StdLASPointsAttributesContainerShortcut::lasPointsAttributes() const
 {
-    if (_container != NULL)
+    if (_container != nullptr)
     {
         return _container->lasPointsAttributes();
     }

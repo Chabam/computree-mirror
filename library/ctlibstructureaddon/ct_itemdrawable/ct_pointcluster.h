@@ -124,7 +124,7 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_PointCluster : public CT_AbstractItemDrawabl
     using SuperClass = CT_AbstractItemDrawableWithPointCloud;
 
 public:
-    CT_PointCluster(bool prototype = true);
+    CT_PointCluster();
     CT_PointCluster(const CT_PointCluster& other) = default;
 
     /**
@@ -163,8 +163,10 @@ private:
     CT_PointClusterBarycenter                           _barycenter;
     CT_PointCloudIndexVector*                           m_pIndex;
 
+
 protected:
     void initBarycenter();
+    void createCloudIndex();
 };
 
 #endif // CT_POINTCLUSTER_H

@@ -5,7 +5,6 @@
 
 #include "ct_colorcloud/ct_colorcloudstdvector.h"
 #include "ct_log/ct_logmanager.h"
-#include <QDebug>
 
 #include <limits>
 

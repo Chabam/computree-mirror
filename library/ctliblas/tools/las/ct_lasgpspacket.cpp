@@ -22,7 +22,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASGpsPacket::gpsPacketTypesNeede
 
 void CT_LASGpsPacket::writeGpsPacket(QDataStream &stream, CT_LasPointInfo *info)
 {
-    if(info != NULL)
+    if(info != nullptr)
     {
         CT_WRITE_LAS_SCALAR(info->m_gpsT, double) // gps time
     }

@@ -32,26 +32,33 @@
 #include "ct_accessor/ct_pointaccessor.h"
 #include "ct_iterator/ct_pointiterator.h"
 
+#include <QDebug>
+
 const CT_StandardPointClusterDrawManager CT_PointCluster::POINTCLUSTER_DRAW_MANAGER;
 
-CT_PointCluster::CT_PointCluster(bool prototype) : SuperClass()
+CT_PointCluster::CT_PointCluster() : SuperClass()
 {
     m_pIndex = nullptr;
     _barycenter.reset();
 
-    if(!prototype) {
-        CT_PointCloudIndexVector* cloudIndex = new CT_PointCloudIndexVector();
-        m_pIndex = cloudIndex;
-
-        cloudIndex->setSortType(CT_AbstractPointCloudIndex::NotSorted); // Important to be able to store Polylines
-        setPointCloudIndexRegistered(PS_REPOSITORY->registerPointCloudIndex(cloudIndex));
-    }
+    m_pIndex = nullptr;
 
     setBaseDrawManager(&POINTCLUSTER_DRAW_MANAGER);
 }
 
+void CT_PointCluster::createCloudIndex()
+{
+    CT_PointCloudIndexVector* cloudIndex = new CT_PointCloudIndexVector();
+    m_pIndex = cloudIndex;
+
+    cloudIndex->setSortType(CT_AbstractPointCloudIndex::NotSorted); // Important to be able to store Polylines
+    setPointCloudIndexRegistered(PS_REPOSITORY->registerPointCloudIndex(cloudIndex));
+}
+
 bool CT_PointCluster::addPoint(size_t index, bool verifyIfExist, bool firstPosition)
 {
+    if (m_pIndex == nullptr) {createCloudIndex();}
+
     if(verifyIfExist && m_pIndex->contains(index))
         return false;
 
@@ -59,9 +66,13 @@ bool CT_PointCluster::addPoint(size_t index, bool verifyIfExist, bool firstPosit
     const CT_Point& point = pAccess.constPointAt(index);
 
     if (firstPosition)
+    {
         m_pIndex->push_front(index);
+    }
     else
+    {
         m_pIndex->addIndex(index);
+    }
 
     _barycenter.addPoint(point);
 
@@ -88,26 +99,35 @@ const CT_PointClusterBarycenter& CT_PointCluster::getBarycenter() const
 
 CT_PointCluster* CT_PointCluster::merge(CT_PointCluster& pCLuster1, CT_PointCluster& pCLuster2, bool verifyDuplicated)
 {
-    CT_PointCluster* pMerged = new CT_PointCluster(false);
+    CT_PointCluster* pMerged = new CT_PointCluster();
 
     const CT_AbstractPointCloudIndex* pIndex1 = pCLuster1.pointCloudIndex();
     const CT_AbstractPointCloudIndex* pIndex2 = pCLuster2.pointCloudIndex();
 
-    size_t size = pIndex1->size();
-    size_t index;
+    size_t size = 0;
+    size_t index = 0;
 
-    for(size_t i=0; i<size; ++i)
+    if (pIndex1 != nullptr)
     {
-        pIndex1->indexAt(i, index);
-        pMerged->addPoint(index);
+        size = pIndex1->size();
+
+        for(size_t i=0; i<size; ++i)
+        {
+            pIndex1->indexAt(i, index);
+            pMerged->addPoint(index);
+        }
     }
 
-    size = pIndex2->size();
 
-    for(size_t i=0; i<size; ++i)
+    if (pIndex2 != nullptr)
     {
-        pIndex2->indexAt(i, index);
-        pMerged->addPoint(index, verifyDuplicated);
+        size = pIndex2->size();
+
+        for(size_t i=0; i<size; ++i)
+        {
+            pIndex2->indexAt(i, index);
+            pMerged->addPoint(index, verifyDuplicated);
+        }
     }
 
     return pMerged;
@@ -117,13 +137,16 @@ void CT_PointCluster::initBarycenter()
 {
     _barycenter.reset();
 
-    CT_PointIterator it(pointCloudIndex());
-
-    while(it.hasNext())
+    if (pointCloudIndex() != nullptr)
     {
-        it.next();
-        _barycenter.addPoint(it.currentPoint());
-    }
+        CT_PointIterator it(pointCloudIndex());
 
-    _barycenter.compute();
+        while(it.hasNext())
+        {
+            it.next();
+            _barycenter.addPoint(it.currentPoint());
+        }
+
+        _barycenter.compute();
+    }
 }

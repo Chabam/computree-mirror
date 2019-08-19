@@ -16,7 +16,7 @@ CT_Grid3DWooTraversalAlgorithm::CT_Grid3DWooTraversalAlgorithm(const CT_Abstract
     _numberOfVisitors = list.size();
     _calibrationGrid = grid;
 
-    _calibrationGrid->getBoundingBox(_gridBottom, _gridTop);
+    _calibrationGrid->boundingBox(_gridBottom, _gridTop);
     _gridRes = _calibrationGrid->resolution();
     _keepFirst = keepFirst;
 
@@ -39,7 +39,7 @@ CT_Grid3DWooTraversalAlgorithm::CT_Grid3DWooTraversalAlgorithm(const CT_Abstract
     _numberOfVisitors = 0;
     _calibrationGrid = grid;
 
-    _calibrationGrid->getBoundingBox(_gridBottom, _gridTop);
+    _calibrationGrid->boundingBox(_gridBottom, _gridTop);
     _gridRes = _calibrationGrid->resolution();
     _keepFirst = keepFirst;
 
@@ -58,15 +58,11 @@ CT_Grid3DWooTraversalAlgorithm::CT_Grid3DWooTraversalAlgorithm(const CT_Abstract
 }
 
 
-CT_Grid3DWooTraversalAlgorithm::~CT_Grid3DWooTraversalAlgorithm()
-{
-}
-
 void CT_Grid3DWooTraversalAlgorithm::compute(CT_Beam &data, Eigen::Vector3d *endPoint)
 {
     _intersects = data.intersect(_gridBottom, _gridTop, _start, _end);
 
-    bool hasEndPoint = (endPoint != NULL);
+    bool hasEndPoint = (endPoint != nullptr);
     if (hasEndPoint)
     {
         size_t indexPt;
@@ -119,15 +115,15 @@ void CT_Grid3DWooTraversalAlgorithm::compute(CT_Beam &data, Eigen::Vector3d *end
 
         // Initializing the tMax values
         for (int i = 0 ; i < 3 ; i++) {
-            data.getDirection()(i) != 0 ?
-                        _tMax(i) = fabs((_boundary(i) - _start(i)) / data.getDirection()(i)) :
+            !qFuzzyCompare(data.direction()(i), 0) ?
+                        _tMax(i) = fabs((_boundary(i) - _start(i)) / data.direction()(i)) :
                     _tMax(i) = std::numeric_limits<double>::max();
         }
 
         // Initializing the deltaT values
         for (int i = 0 ; i < 3 ; i++) {
-            data.getDirection()(i) != 0 ?
-                        _tDel(i) = fabs(_gridRes / data.getDirection()(i)) :
+            !qFuzzyCompare(data.direction()(i), 0) ?
+                        _tDel(i) = fabs(_gridRes / data.direction()(i)) :
                     _tDel(i) = std::numeric_limits<double>::max();
         }
 
@@ -153,9 +149,9 @@ void CT_Grid3DWooTraversalAlgorithm::compute(CT_Beam &data, Eigen::Vector3d *end
             _nextStepAxis = _chooseAxis[bits];
 
             // Going to next voxel along this direction
-            if      (_nextStepAxis==0) {_currentCol = _currentCol + _stepAxis(0);}
-            else if (_nextStepAxis==1) {_currentLin = _currentLin + _stepAxis(1);}
-            else if (_nextStepAxis==2) {_currentLevz = _currentLevz + _stepAxis(2);}
+            if      (_nextStepAxis == 0) {_currentCol = _currentCol + size_t(_stepAxis(0));}
+            else if (_nextStepAxis == 1) {_currentLin = _currentLin + size_t(_stepAxis(1));}
+            else if (_nextStepAxis == 2) {_currentLevz = _currentLevz + size_t(_stepAxis(2));}
 
             // Checks if the currentvoxel is outside the grid, the algorithm has finished
             if (_currentCol >= _calibrationGrid->xdim()) {return;}
@@ -231,15 +227,15 @@ bool CT_Grid3DWooTraversalAlgorithm::init(CT_Beam &data, size_t returnedIndex)
 
         // Initializing the tMax values
         for (int i = 0 ; i < 3 ; i++) {
-            data.getDirection()(i) != 0 ?
-                        _tMax(i) = fabs((_boundary(i) - _start(i)) / data.getDirection()(i)) :
+            !qFuzzyCompare(data.direction()(i), 0) ?
+                        _tMax(i) = fabs((_boundary(i) - _start(i)) / data.direction()(i)) :
                     _tMax(i) = std::numeric_limits<double>::max();
         }
 
         // Initializing the deltaT values
         for (int i = 0 ; i < 3 ; i++) {
-            data.getDirection()(i) != 0 ?
-                        _tDel(i) = fabs(_gridRes / data.getDirection()(i)) :
+            !qFuzzyCompare(data.direction()(i), 0) ?
+                        _tDel(i) = fabs(_gridRes / data.direction()(i)) :
                     _tDel(i) = std::numeric_limits<double>::max();
         }
 
@@ -270,9 +266,9 @@ bool CT_Grid3DWooTraversalAlgorithm::getNextIndex(size_t returnedIndex)
         _nextStepAxis = _chooseAxis[bits];
 
         // Going to next voxel along this direction
-        if      (_nextStepAxis==0) {_currentCol = _currentCol + _stepAxis(0);}
-        else if (_nextStepAxis==1) {_currentLin = _currentLin + _stepAxis(1);}
-        else if (_nextStepAxis==2) {_currentLevz = _currentLevz + _stepAxis(2);}
+        if      (_nextStepAxis==0) {_currentCol = _currentCol + size_t(_stepAxis(0));}
+        else if (_nextStepAxis==1) {_currentLin = _currentLin + size_t(_stepAxis(1));}
+        else if (_nextStepAxis==2) {_currentLevz = _currentLevz + size_t(_stepAxis(2));}
 
         // Checks if the currentvoxel is outside the grid, the algorithm has finished
         if (_currentCol >= _calibrationGrid->xdim()) {return false;}

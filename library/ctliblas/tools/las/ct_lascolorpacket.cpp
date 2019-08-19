@@ -24,7 +24,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASColorPacket::colorPacketTypesN
 
 void CT_LASColorPacket::writeColorPacket(QDataStream &stream, CT_LasPointInfo *info)
 {
-    if(info != NULL)
+    if(info != nullptr)
     {
         // red
         CT_WRITE_LAS_SCALAR(info->m_red, quint16);

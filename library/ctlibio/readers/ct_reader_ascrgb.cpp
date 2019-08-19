@@ -3,8 +3,6 @@
 #include <QIODevice>
 #include <QTextStream>
 
-#include <QDebug>
-
 #include "ct_colorcloud/ct_colorcloudstdvector.h"
 #include "ct_cloudindex/registered/ct_standardnotmodifiablecloudindexregisteredt.h"
 #include "ct_log/ct_logmanager.h"

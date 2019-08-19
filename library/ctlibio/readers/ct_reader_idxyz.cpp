@@ -2,7 +2,6 @@
 #include <QFile>
 #include <QIODevice>
 #include <QTextStream>
-#include <QDebug>
 
 #include "ct_log/ct_logmanager.h"
 #include "ct_point.h"

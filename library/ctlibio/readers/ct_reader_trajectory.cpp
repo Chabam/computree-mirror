@@ -5,8 +5,6 @@
 
 #include "ct_log/ct_logmanager.h"
 
-#include <QDebug>
-
 #define CHK_ERR(argFunc, argErrStr) if(!error && !argFunc) { error = true; PS_LOG->addErrorMessage(LogInterface::reader, argErrStr); }
 
 #define X_COLUMN "Easting"

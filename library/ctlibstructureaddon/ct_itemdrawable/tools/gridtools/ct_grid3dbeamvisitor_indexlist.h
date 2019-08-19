@@ -6,7 +6,7 @@
 /*!
  * \brief Simple visitor used to obtain an ordered indices list of traversed voxels
  */
-class PLUGINSHAREDSHARED_EXPORT CT_Grid3DBeamVisitor_IndexList : public CT_AbstractGrid3DBeamVisitor
+class CTLIBSTRUCTUREADDON_EXPORT CT_Grid3DBeamVisitor_IndexList : public CT_AbstractGrid3DBeamVisitor
 {
 public:
     CT_Grid3DBeamVisitor_IndexList();

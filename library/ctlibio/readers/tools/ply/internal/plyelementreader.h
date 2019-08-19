@@ -31,7 +31,7 @@ public:
      * @param propertyIndex : index of the property to read
      * @param channelIndex : index of the channel in the setter where to set the value of the readed property
      * @param setter : setter to use
-     * @return false if one index is < 0 or setter is NULL
+     * @return false if one index is < 0 or setter is nullptr
      */
     bool addSetterForProperty(const int& propertyIndex,
                               const int& channelIndex,

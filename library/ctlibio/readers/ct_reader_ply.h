@@ -24,6 +24,7 @@ class CTLIBIO_EXPORT CT_Reader_PLY : public CT_AbstractReader, public IPlyReader
 public:
     CT_Reader_PLY(int subMenuLevel = 0);
     CT_Reader_PLY(const CT_Reader_PLY& other);
+    ~CT_Reader_PLY() override;
 
     /**
      * @brief Returns a displayable name of the reader
@@ -72,9 +73,9 @@ private:
     CT_HandleOutSingularItem<CT_Scene>                                             m_outScene;
 
     // TODOV6 - Erreur de compilation sur les QVector<handle...>
-    //QVector<CT_HandleOutSingularItem<CT_PointsAttributesColor> >                   m_outColorVector;
-    //QVector<CT_HandleOutSingularItem<CT_PointsAttributesNormal> >                  m_outNormalVector;
-    //QVector<CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> > > m_outScalarVector;
+    QVector<CT_HandleOutSingularItem<CT_PointsAttributesColor>* >                   m_outColorVector;
+    QVector<CT_HandleOutSingularItem<CT_PointsAttributesNormal>* >                  m_outNormalVector;
+    QVector<CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> >* > m_outScalarVector;
 
 protected:
 

@@ -25,7 +25,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASWavePacket::wavePacketTypesNee
 
 void CT_LASWavePacket::writeWavePacket(QDataStream &stream, CT_LasPointInfo *info)
 {
-    if(info != NULL)
+    if(info != nullptr)
     {
         // wave packet descriptor index
         CT_WRITE_LAS_SCALAR(info->m_wpdi, quint8);

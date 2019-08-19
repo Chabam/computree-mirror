@@ -17,7 +17,7 @@
 #define DEF_Scalar "sca"
 
 #define readConfiguration(SNG, ELNAME, VAR) snv = SNG->firstValueByTagName(ELNAME); \
-                                            if(snv == NULL) \
+                                            if(snv == nullptr) \
                                                 return false; \
                                             VAR = snv->value().toInt(&ok); \
                                             if(!ok) \
@@ -45,6 +45,13 @@ CT_Reader_PLY::CT_Reader_PLY(int subMenuLevel) : SuperClass(subMenuLevel)
 CT_Reader_PLY::CT_Reader_PLY(const CT_Reader_PLY &other) : SuperClass(other)
 {
 
+}
+
+CT_Reader_PLY::~CT_Reader_PLY()
+{
+    qDeleteAll(m_outColorVector);
+    qDeleteAll(m_outNormalVector);
+    qDeleteAll(m_outScalarVector);
 }
 
 QString CT_Reader_PLY::displayableName() const
@@ -207,33 +214,41 @@ void CT_Reader_PLY::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
 
     int size = m_config.colors.size();
 
+    qDeleteAll(m_outColorVector);
+    qDeleteAll(m_outNormalVector);
+    qDeleteAll(m_outScalarVector);
+
+
     // TODOV6 - Erreur de compilation sur les QVector<handle...>
-    //m_outColorVector.resize(size);
+    m_outColorVector.resize(size);
 
     for(int i = 0 ; i < size ; ++i)
     {
         // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        //manager.addItem(m_outColorVector[i], tr("Color %1").arg(i+1));
+        m_outColorVector[i] = new CT_HandleOutSingularItem<CT_PointsAttributesColor>();
+        manager.addItem(*m_outColorVector[i], tr("Color %1").arg(i+1));
     }
 
     size = m_config.normals.size();
     // TODOV6 - Erreur de compilation sur les QVector<handle...>
-    //m_outNormalVector.resize(size);
+    m_outNormalVector.resize(size);
 
     for(int i = 0 ; i < size ; ++i)
     {
         // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        //manager.addItem(m_outNormalVector[i], tr("Normal %1").arg(i+1));
+        m_outNormalVector[i] = new CT_HandleOutSingularItem<CT_PointsAttributesNormal>();
+        manager.addItem(*m_outNormalVector[i], tr("Normal %1").arg(i+1));
     }
 
     size = m_config.scalars.size();
     // TODOV6 - Erreur de compilation sur les QVector<handle...>
-    //m_outScalarVector.resize(size);
+    m_outScalarVector.resize(size);
 
     for(int i = 0 ; i < size ; ++i)
     {
         // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        //manager.addItem(m_outScalarVector[i], tr("Scalar %1").arg(i+1));
+        m_outScalarVector[i] = new CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> >();
+        manager.addItem(*m_outScalarVector[i], tr("Scalar %1").arg(i+1));
     }
 }
 
@@ -313,21 +328,21 @@ bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
     {
 
         // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        //group->addSingularItem(m_outColorVector[index++], new CT_PointsAttributesColor(wrapper.pcir, cc->cloud));
+        group->addSingularItem(*m_outColorVector[index++], new CT_PointsAttributesColor(wrapper.pcir, cc->cloud));
     }
 
     index = 0;
     foreach(Ply_CT_NormalCloud_Wrapper* nc, normalsCloud)
     {
         // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        //group->addSingularItem(m_outNormalVector[index++], new CT_PointsAttributesNormal(wrapper.pcir, nc->cloud));
+        group->addSingularItem(*m_outNormalVector[index++], new CT_PointsAttributesNormal(wrapper.pcir, nc->cloud));
     }
 
     index = 0;
     foreach(Ply_CT_ScalarCloud_Wrapper<float>* sc, scalarsCloud)
     {
         // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        //group->addSingularItem(m_outScalarVector[index++], new CT_PointsAttributesScalarTemplated<float>(wrapper.pcir, sc->cloud));
+        group->addSingularItem(*m_outScalarVector[index++], new CT_PointsAttributesScalarTemplated<float>(wrapper.pcir, sc->cloud));
     }
 
     qDeleteAll(colorsCloud.begin(), colorsCloud.end());
