@@ -66,9 +66,9 @@ template< typename DataT>
 CT_Grid3D_Sparse<DataT>::CT_Grid3D_Sparse(double xmin,
                                           double ymin,
                                           double zmin,
-                                          size_t dimx,
-                                          size_t dimy,
-                                          size_t dimz,
+                                          int dimx,
+                                          int dimy,
+                                          int dimz,
                                           double resolution,
                                           DataT na,
                                           DataT initValue) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
@@ -168,7 +168,7 @@ bool CT_Grid3D_Sparse<DataT>::setValueAtIndex(const size_t index, const DataT va
 }
 
 template< typename DataT>
-bool CT_Grid3D_Sparse<DataT>::setValue(const size_t colx, const size_t liny, const size_t levz, const DataT value)
+bool CT_Grid3D_Sparse<DataT>::setValue(const int colx, const int liny, const int levz, const DataT value)
 {
     size_t i;
     if (index(colx, liny, levz, i))
@@ -232,7 +232,7 @@ QString CT_Grid3D_Sparse<DataT>::NAAsString() const
 }
 
 template< typename DataT>
-DataT CT_Grid3D_Sparse<DataT>::value(const size_t colx, const size_t liny, const size_t levz) const
+DataT CT_Grid3D_Sparse<DataT>::value(const int colx, const int liny, const int levz) const
 {
     size_t i;
     if (index(colx, liny, levz, i))
@@ -308,7 +308,7 @@ bool CT_Grid3D_Sparse<DataT>::addValueAtIndex(const size_t index, DataT value)
 {
     if (index >= nCells()) {return false;}
 
-    DataT currentValue = _data(index);
+    DataT currentValue = _data(int(index));
 
     if (currentValue == NA())
     {
@@ -332,42 +332,48 @@ bool CT_Grid3D_Sparse<DataT>::addValueAtXYZ(const double x, const double y, cons
 }
 
 template< typename DataT>
-QList<DataT> CT_Grid3D_Sparse<DataT>::neighboursValues(const size_t colx, const size_t liny, const size_t levz, const size_t distance, const bool keepNAs, const CenterMode centermode) const
+QList<DataT> CT_Grid3D_Sparse<DataT>::neighboursValues(const int colx, const int liny, const int levz, const int distance, const bool keepNAs, const CenterMode centermode) const
 {
     QList<DataT> liste;
 
     if (distance < 1) {return liste;}
+    if (colx < 0)     {return liste;}
+    if (liny < 0)     {return liste;}
+    if (levz < 0)     {return liste;}
     if (colx >= _dimx) {return liste;}
     if (liny >= _dimy) {return liste;}
     if (levz >= _dimz) {return liste;}
 
-    size_t firstColx = colx-distance;
-    size_t lastColx = colx+distance;
-    size_t firstLiny = liny-distance;
-    size_t lastLiny = liny+distance;
-    size_t firstLinz = levz-distance;
-    size_t lastLinz = levz+distance;
+    int firstColx = colx - distance;
+    int lastColx = colx + distance;
+    int firstLiny = liny - distance;
+    int lastLiny = liny + distance;
+    int firstLinz = levz - distance;
+    int lastLinz = levz + distance;
 
-    if (firstColx >= _dimx) {firstColx = 0;}
+    if (firstColx < 0)     {firstColx = 0;}
     if (lastColx >= _dimx) {lastColx = _dimx - 1;}
-    if (firstLiny >= _dimy) {firstLiny = 0;}
+    if (firstLiny < 0)     {firstLiny = 0;}
     if (lastLiny >= _dimy) {lastLiny = _dimy - 1;}
-    if (firstLinz >= _dimz) {firstLinz = 0;}
+    if (firstLinz <0)      {firstLinz = 0;}
     if (lastLinz >= _dimz) {lastLinz = _dimz - 1;}
 
 
-    for (size_t xx = firstColx ; xx <= lastColx ; xx++)
+    for (int xx = firstColx ; xx <= lastColx ; xx++)
     {
-        for (size_t yy = firstLiny ; yy <= lastLiny ; yy++)
+        for (int yy = firstLiny ; yy <= lastLiny ; yy++)
         {
-            for (size_t zz = firstLinz ; zz <= lastLinz ; zz++)
+            for (int zz = firstLinz ; zz <= lastLinz ; zz++)
             {
 
                 DataT val = value(xx, yy, zz);
-                if ((xx == colx) && (yy == liny) && (zz == levz)) {
-                    if (centermode == CM_KeepCenter) {
+                if ((xx == colx) && (yy == liny) && (zz == levz))
+                {
+                    if (centermode == CM_KeepCenter)
+                    {
                         if ((val != NA()) || keepNAs) {liste.append(val);}
-                    } else if (centermode == CM_NAasCenter) {
+                    } else if (centermode == CM_NAasCenter)
+                    {
                         liste.append(NA());
                     }
                 } else {

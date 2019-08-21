@@ -14,18 +14,19 @@ class CTLIBLAS_EXPORT CT_StdLASPointsAttributesContainerShortcut : public CT_Std
 public:     
 
     CT_StdLASPointsAttributesContainerShortcut();
+    CT_StdLASPointsAttributesContainerShortcut(CT_StdLASPointsAttributesContainer* container);
 
     CT_StdLASPointsAttributesContainerShortcut(const CT_StdLASPointsAttributesContainerShortcut& other) = default;
 
-    void insertPointsAttributesAt(CT_LasDefine::LASPointAttributesType key, const CT_AbstractPointAttributesScalar *att);
+    void insertPointsAttributesAt(CT_LasDefine::LASPointAttributesType key, const CT_AbstractPointAttributesScalar *att) override;
 
-    CT_AbstractPointsAttributes* pointsAttributesAt(const int &key) const;
+    CT_AbstractPointsAttributes* pointsAttributesAt(const int &key) const override;
 
-    QList<CT_LasDefine::LASPointAttributesType> lasPointAttributesTypes() const;
+    QList<CT_LasDefine::LASPointAttributesType> lasPointAttributesTypes() const override;
 
-    void getLASDataAt(const size_t i, CT_LASData &data) const;
+    void getLASDataAt(const size_t i, CT_LASData &data) const override;
 
-    QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar*> lasPointsAttributes() const;
+    QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar*> lasPointsAttributes() const override;
 
     CT_ITEM_COPY_IMP(CT_StdLASPointsAttributesContainerShortcut)
 

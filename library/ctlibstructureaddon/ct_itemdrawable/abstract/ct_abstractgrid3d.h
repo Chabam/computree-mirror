@@ -31,9 +31,6 @@
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
 #include "ctlibstructureaddon_global.h"
 
-#define EPSILON_GRID3D 0.000001    // 10^-6
-
-
 /*!
  * \class CT_AbstractGrid3D
  * \ingroup PluginShared_Items
@@ -55,17 +52,17 @@ public:
       * \brief Empty Contructor vide
       */
     CT_AbstractGrid3D();
-    CT_AbstractGrid3D(size_t dimx,
-                      size_t dimy,
-                      size_t dimz,
+    CT_AbstractGrid3D(int dimx,
+                      int dimy,
+                      int dimz,
                       double resolution);
 
     CT_AbstractGrid3D(double xmin,
                       double ymin,
                       double zmin,
-                      size_t dimx,
-                      size_t dimy,
-                      size_t dimz,
+                      int dimx,
+                      int dimy,
+                      int dimz,
                       double resolution);
 
     CT_AbstractGrid3D(double xmin,
@@ -112,15 +109,15 @@ public:
      * \param index Returned index
      * \return false if index is invalid
      */
-    inline bool index(const size_t colx, const size_t liny, const size_t levz, size_t &returnedIndex) const
+    inline bool index(const int colx, const int liny, const int levz, size_t &returnedIndex) const
     {
-        if ((colx >= _dimx) || (liny >= _dimy) || (levz >= _dimz))
+        if ((colx < 0) || (liny < 0) || (levz <0) || (colx >= _dimx) || (liny >= _dimy) || (levz >= _dimz))
         {
             return false;
         }
         else
         {
-            returnedIndex = levz*_dimx*_dimy + liny*_dimx + colx;
+            returnedIndex = size_t(levz)*size_t(_dimx)*size_t(_dimy) + size_t(liny)*size_t(_dimx) + size_t(colx);
             return true;
         }
     }
@@ -131,18 +128,15 @@ public:
      * \param colx Returned column
      * \return false if x invalid
      */
-    inline bool colX(const double x, size_t &colx) const
+    inline bool colX(const double x, int &colx) const
     {
-        if (fabs(x - minX()) < EPSILON_GRID3D) {colx = 0;         return true;}
-        if (fabs(x - maxX()) < EPSILON_GRID3D) {colx = _dimx - 1; return true;}
+        if (qFuzzyCompare(x, minX())) {colx = 0; return true;}
+        if (qFuzzyCompare(x, maxX())) {colx = _dimx - 1; return true;}
 
         if (x < minX() || x > maxX()) {return false;}
-        if (x == maxX())
-        {
-            colx =  _dimx - 1;
-        } else {
-            colx = (size_t) floor((x - minX()) / _res);
-        }
+
+        colx = int(floor((x - minX()) / _res));
+
         return true;
     }
 
@@ -152,18 +146,15 @@ public:
      * \param liny Returned row
      * \return false if y invalid
      */
-    inline bool linY(const double y, size_t &liny) const
+    inline bool linY(const double y, int &liny) const
     {
-        if (fabs(y - minY()) < EPSILON_GRID3D) {liny = 0;         return true;}
-        if (fabs(y - maxY()) < EPSILON_GRID3D) {liny = _dimy - 1; return true;}
+        if (qFuzzyCompare(y, minY())) {liny = 0; return true;}
+        if (qFuzzyCompare(y, maxY())) {liny = _dimy - 1; return true;}
 
         if (y < minY() || y > maxY()) {return false;}
-        if (y == maxY())
-        {
-            liny =  _dimy - 1;
-        } else {
-            liny = (size_t) floor((y - minY()) / _res);
-        }
+
+        liny = int(floor((y - minY()) / _res));
+
         return true;
     }
 
@@ -173,18 +164,15 @@ public:
      * \param levz Returned z level
      * \return false if z invalid
      */
-    inline bool levelZ(const double z, size_t &levz) const
+    inline bool levelZ(const double z, int &levz) const
     {
-        if (fabs(z - minZ()) < EPSILON_GRID3D) {levz = 0;         return true;}
-        if (fabs(z - maxZ()) < EPSILON_GRID3D) {levz = _dimz - 1; return true;}
+        if (qFuzzyCompare(z,  minZ())) {levz = 0; return true;}
+        if (qFuzzyCompare(z,  maxZ())) {levz = _dimz - 1; return true;}
 
         if (z < minZ() || z > maxZ()) {return false;}
-        if (z == maxZ())
-        {
-            levz =  _dimz - 1;
-        } else {
-            levz = (size_t) floor((z - minZ()) / _res);
-        }
+
+        levz = int(floor((z - minZ()) / _res));
+
         return true;
     }
 
@@ -196,17 +184,17 @@ public:
      * \param levz Resulting z level of the cell
      * \return true if the index is in the grid
      */
-    inline bool indexToGrid(const size_t index, size_t &colx, size_t &liny, size_t &levz) const
+    inline bool indexToGrid(const size_t index, int &colx, int &liny, int &levz) const
     {
         if (index>=nCells()) {return false;}
 
         size_t mod;
 
-        levz = index / (_dimx*_dimy);
-        mod = index % (_dimx*_dimy);
+        levz = int(index / (size_t(_dimx)*size_t(_dimy)));
+        mod = index % (size_t(_dimx)*size_t(_dimy));
 
-        liny = mod / _dimx;
-        colx = mod % _dimx;
+        liny = int(mod / size_t(_dimx));
+        colx = int(mod % size_t(_dimx));
 
         return true;
     }
@@ -221,7 +209,7 @@ public:
      */
     inline bool indexAtXYZ(const double x, const double y, const double z, size_t &returnedIndex) const
     {
-        size_t colx, liny, levz;
+        int colx, liny, levz;
 
         if (!colX(x, colx) || !linY(y, liny) || !levelZ(z, levz)) {return false;}
 
@@ -268,34 +256,34 @@ public:
       * \brief Gives the number of columns
       * \return Number of columns
       */
-    inline size_t xdim() const {return _dimx;}
+    inline int xdim() const {return _dimx;}
 
     /**
       * \brief Gives the number of rows
       * \return Number of rows
       */
-    inline size_t ydim() const {return _dimy;}
+    inline int ydim() const {return _dimy;}
 
     /**
       * \brief Gives the number of z levels
       * \return Number of z levels
       */
-    inline size_t zdim() const {return _dimz;}
+    inline int zdim() const {return _dimz;}
 
     /*!
      * \brief Total number of cells for the grid
      * \return Number of cells
      */
-    inline size_t nCells() const {return _dimx*_dimy*_dimz;}
+    inline size_t nCells() const {return size_t(_dimx)*size_t(_dimy)*size_t(_dimz);}
 
     /*!
      * \brief Gives the X coordinate of the center of cells of column colx
      * \param colx Column, first one is 0
      * \return X coordinate
      */
-    inline double getCellCenterX(const size_t colx) const
+    inline double getCellCenterX(const int colx) const
     {
-        return minX() + ((double)colx)*_res + _res/2;
+        return minX() + (double(colx))*_res + _res/2.0;
     }
 
     /*!
@@ -303,9 +291,9 @@ public:
      * \param liny Row, first one is 0
      * \return Y coordinate
      */
-    inline double getCellCenterY(const size_t liny) const
+    inline double getCellCenterY(const int liny) const
     {
-        return minY() + ((double)liny)*_res + _res/2;
+        return minY() + (double(liny))*_res + _res/2.0;
     }
 
     /*!
@@ -313,9 +301,9 @@ public:
      * \param levz z level, first one is 0
      * \return Z coordinate
      */
-    inline double getCellCenterZ(const size_t levz) const
+    inline double getCellCenterZ(const int levz) const
     {
-        return minZ() + ((double)levz)*_res + _res/2;
+        return minZ() + (double(levz))*_res + _res/2.0;
     }
 
     /*!
@@ -327,7 +315,7 @@ public:
      */
     inline bool getCellCoordinates(const size_t index, Eigen::Vector3d &bottom, Eigen::Vector3d &top) const
     {
-        size_t colx, liny, levz;
+        int colx, liny, levz;
         if (!indexToGrid(index, colx, liny, levz)) {return false;}
         bottom(0) = minX() + colx*_res;
         bottom(1) = minY() + liny*_res;
@@ -347,7 +335,7 @@ public:
      */
     inline bool getCellCenterCoordinates(const size_t index, Eigen::Vector3d &center) const
     {
-        size_t colx, liny, levz;
+        int colx, liny, levz;
         if (!indexToGrid(index, colx, liny, levz)) {return false;}
         double demiRes = _res / 2.0;
         center(0) = minX() + colx*_res + demiRes;
@@ -364,7 +352,7 @@ public:
      * \param bottom Output coordinates
      * \return A Eigen::Vector3d coordinates for the bottom left corner
      */
-    inline bool getCellBottomLeftCorner(const size_t colx, const size_t liny, const size_t levz, Eigen::Vector3d &bottom) const
+    inline bool getCellBottomLeftCorner(const int colx, const int liny, const int levz, Eigen::Vector3d &bottom) const
     {
         if ((colx >= _dimx) || (liny >= _dimy) || (levz >= _dimz)) {return false;}
         bottom(0) = minX() + colx*_res;
@@ -385,9 +373,9 @@ public:
     inline bool getCellBottomLeftCornerAtXYZ(const double x, const double y, const double z, Eigen::Vector3d &bottom) const
     {
 
-        return getCellBottomLeftCorner((size_t) floor((x - minX()) / _res),
-                                       (size_t) floor((y - minY()) / _res),
-                                       (size_t) floor((z - minZ()) / _res),
+        return getCellBottomLeftCorner(int(floor((x - minX()) / _res)),
+                                       int(floor((y - minY()) / _res)),
+                                       int(floor((z - minZ()) / _res)),
                                        bottom);
     }
 
@@ -416,9 +404,9 @@ public:
                                                 bool extends,
                                                 OtherArgs... args)
     {
-        size_t dimx = ceil((xmax - xmin)/resolution);
-        size_t dimy = ceil((ymax - ymin)/resolution);
-        size_t dimz = ceil((zmax - zmin)/resolution);
+        int dimx = int(ceil((xmax - xmin)/resolution));
+        int dimy = int(ceil((ymax - ymin)/resolution));
+        int dimz = int(ceil((zmax - zmin)/resolution));
 
         if (extends)
         {
@@ -443,10 +431,10 @@ public:
     }
 
 protected:
-    size_t         _dimx;      /*!< Nombre de cases selon x du grid*/
-    size_t         _dimy;      /*!< Nombre de cases selon y du grid*/
-    size_t         _dimz;      /*!< Nombre de cases selon z du grid*/
-    double          _res;       /*!< Resolution de la grille (taille d'une case*/
+    int         _dimx;      /*!< Nombre de cases selon x du grid*/
+    int         _dimy;      /*!< Nombre de cases selon y du grid*/
+    int         _dimz;      /*!< Nombre de cases selon z du grid*/
+    double      _res;       /*!< Resolution de la grille (taille d'une case*/
 };
 
 #endif // CT_ABSTRACTGRID3D_H

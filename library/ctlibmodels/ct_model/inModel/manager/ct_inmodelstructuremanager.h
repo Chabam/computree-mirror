@@ -92,7 +92,7 @@ public:
     template<class HandleInResult, class HandleInGroup>
     void setRootGroup(const HandleInResult& handleResult,
                       HandleInGroup& rootGroupHandle,
-                      const QString& displayableName = QString(),
+                      const QString& displayableName = QString("Group"),
                       const QString& shortDescription = QString(),
                       const QString& detailledDescription = QString()) {
 
@@ -117,7 +117,7 @@ public:
     template<class HandleInGroupParent, class HandleInGroup>
     void addGroup(const HandleInGroupParent& parentGroup,
                   HandleInGroup& groupHandle,
-                  const QString& displayableName = QString(),
+                  const QString& displayableName = QString("Group"),
                   const QString& shortDescription = QString(),
                   const QString& detailledDescription = QString()) {
 

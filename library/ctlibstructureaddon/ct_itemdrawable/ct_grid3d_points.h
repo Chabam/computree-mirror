@@ -42,7 +42,7 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D_Points : public CT_AbstractGrid3D
 public:
     CT_Grid3D_Points();
     CT_Grid3D_Points(const CT_Grid3D_Points& other);
-    ~CT_Grid3D_Points();
+    ~CT_Grid3D_Points() override;
 
 
     /*!
@@ -59,9 +59,9 @@ public:
     CT_Grid3D_Points(double xmin,
               double ymin,
               double zmin,
-              size_t dimx,
-              size_t dimy,
-              size_t dimz,
+              int dimx,
+              int dimy,
+              int dimz,
               double resolution);
 
     /*!
@@ -94,11 +94,11 @@ public:
 
     const QList<size_t>* getConstPointIndexList(size_t cellIndex) const;
 
-    QList<size_t> getCellIndicesAtNeighbourhoodN(size_t originIndex, size_t n) const;
+    QList<size_t> getCellIndicesAtNeighbourhoodN(size_t originIndex, int n) const;
 
-    size_t getPointsIndicesInsideSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const;
+    int getPointsIndicesInsideSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const;
 
-    size_t getPointIndicesIncludingKNearestNeighbours(Eigen::Vector3d position, size_t k, double maxDist, QList<size_t> &indexList) const;
+    int getPointIndicesIncludingKNearestNeighbours(Eigen::Vector3d position, int k, double maxDist, QList<size_t> &indexList) const;
 
     void getIndicesWithPoints(QList<size_t> &list) const {list.append(_cells.keys());}
 
@@ -106,8 +106,8 @@ public:
     // Neutralize useless Methods
     double ratioValueAtIndex(const size_t index) const override {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
     double valueAtIndexAsDouble(const size_t index) const override {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
-    QString NAAsString() const override {qDebug() << "This method should not be used in this context";return 0;}
-    QString valueAtIndexAsString(const size_t index) const override {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return 0;}
+    QString NAAsString() const override {qDebug() << "This method should not be used in this context";return nullptr;}
+    QString valueAtIndexAsString(const size_t index) const override {Q_UNUSED(index); qDebug() << "This method should not be used in this context";return nullptr;}
     void computeMinMax() override {qDebug() << "This method should not be used in this context";}
     void setValueAtIndexFromDouble(const size_t &index, const double &value) override {Q_UNUSED(index); Q_UNUSED(value); qDebug() << "This method should not be used in this context";}
 

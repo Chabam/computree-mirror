@@ -6,6 +6,11 @@ CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerSh
     _container = nullptr;
 }
 
+CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut(CT_StdLASPointsAttributesContainer *container)
+{
+    _container = container;
+}
+
 
 void CT_StdLASPointsAttributesContainerShortcut::insertPointsAttributesAt(CT_LasDefine::LASPointAttributesType key, const CT_AbstractPointAttributesScalar *att)
 {

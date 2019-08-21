@@ -51,9 +51,9 @@ bool CT_Reader_AsciiGrid3D::setFilePath(const QString &filepath)
         {
             QTextStream stream(&f);
 
-            size_t          nCols;
-            size_t          nRows;
-            size_t          nZLev;
+            int          nCols;
+            int          nRows;
+            int          nZLev;
             Eigen::Vector3d min;
             double          cellSize;
             double          noDataValue;
@@ -121,9 +121,9 @@ bool CT_Reader_AsciiGrid3D::internalReadFile(CT_StandardItemGroup* group)
         {
             QTextStream stream(&f);
 
-            size_t          nCols;
-            size_t          nRows;
-            size_t          nZLev;
+            int          nCols;
+            int          nRows;
+            int          nZLev;
             Eigen::Vector3d min;
             double          cellSize;
             double          noDataValue;
@@ -242,9 +242,9 @@ bool CT_Reader_AsciiGrid3D::internalReadFile(CT_StandardItemGroup* group)
 }
 
 bool CT_Reader_AsciiGrid3D::readHeader(QTextStream &stream,
-                                       size_t &nCols,
-                                       size_t &nRows,
-                                       size_t &nZLev,
+                                       int &nCols,
+                                       int &nRows,
+                                       int &nZLev,
                                        Eigen::Vector3d &min,
                                        double &cellSize,
                                        double &noDataValue,
@@ -261,9 +261,9 @@ bool CT_Reader_AsciiGrid3D::readHeader(QTextStream &stream,
         PS_LOG->addInfoMessage(LogInterface::reader, tr("Read header of file \"%1\"").arg(filepath));
 
     // Initialise les parametres de la grille
-    LOAD_DATA_HEADER(nCols, "ncols", "integer", toULongLong);
-    LOAD_DATA_HEADER(nRows, "nrows", "integer", toULongLong);
-    LOAD_DATA_HEADER(nZLev, "nzlev", "integer", toULongLong);
+    LOAD_DATA_HEADER(nCols, "ncols", "integer", toInt);
+    LOAD_DATA_HEADER(nRows, "nrows", "integer", toInt);
+    LOAD_DATA_HEADER(nZLev, "nzlev", "integer", toInt);
     LOAD_DATA_HEADER(min[0], "xllcorner", "real", toDouble);
     LOAD_DATA_HEADER(min[1], "yllcorner", "real", toDouble);
     LOAD_DATA_HEADER(min[2], "zllcorner", "real", toDouble);

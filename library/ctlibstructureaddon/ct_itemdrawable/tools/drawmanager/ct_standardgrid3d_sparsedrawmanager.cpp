@@ -20,19 +20,19 @@ void CT_StandardGrid3D_SparseDrawManager<bool>::draw(GraphicsViewInterface &view
     int     transparencyValue = drawConfiguration()->variableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
     bool    showTrueOnly = drawConfiguration()->variableValue(INDEX_CONFIG_SHOW_TRUES_ONLY).toBool();
 
-    size_t     nXinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toUInt();
-    size_t     nXsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toUInt();
-    size_t     nYinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toUInt();
-    size_t     nYsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toUInt();
-    size_t     nZinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toUInt();
-    size_t     nZsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toUInt();
+    int     nXinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
+    int     nXsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
+    int     nYinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
+    int     nYsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
+    int     nZinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
+    int     nZsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
 
-    size_t xinf = nXinf;
-    size_t yinf = nYinf;
-    size_t zinf = nZinf;
-    size_t xsup = 0;
-    size_t ysup = 0;
-    size_t zsup = 0;
+    int xinf = nXinf;
+    int yinf = nYinf;
+    int zinf = nZinf;
+    int xsup = 0;
+    int ysup = 0;
+    int zsup = 0;
 
     if (nXsup < item.xdim()) {xsup = item.xdim() - nXsup - 1;}
     if (nYsup < item.ydim()) {ysup = item.ydim() - nYsup - 1;}
@@ -51,7 +51,7 @@ void CT_StandardGrid3D_SparseDrawManager<bool>::draw(GraphicsViewInterface &view
     double demiRes = reductionCoef*item.resolution() / 2.0;
 
     double xmin, ymin, zmin, xmax, ymax, zmax;
-    size_t xx, yy, zz;
+    int xx, yy, zz;
 
     // For each voxel of the grid   
     QList<size_t> indices;

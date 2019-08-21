@@ -56,7 +56,7 @@ bool CT_Reader_LArchitect_Grid::setFilePath(const QString &filepath)
             Eigen::Vector3d min;
             Eigen::Vector3d max;
             Eigen::Vector3d res;
-            EigenVector3ui64 dim;
+            Eigen::Vector3i dim;
             int nMat;
             QMap<QString, int>  matNames;
 
@@ -99,7 +99,7 @@ bool CT_Reader_LArchitect_Grid::internalReadFile(CT_StandardItemGroup* group)
             Eigen::Vector3d min;
             Eigen::Vector3d max;
             Eigen::Vector3d res;
-            EigenVector3ui64 dim;
+            Eigen::Vector3i dim;
             int nMat;
             QMap<QString, int>  matNames;
 
@@ -167,11 +167,11 @@ bool CT_Reader_LArchitect_Grid::internalReadFile(CT_StandardItemGroup* group)
                 QStringList list;
                 int lSize;
 
-                for (size_t xx = 0 ; (xx < dim[0]) && !isStopped(); ++xx)
+                for (int xx = 0 ; (xx < dim[0]) && !isStopped(); ++xx)
                 {
-                    for (size_t yy = 0 ; (yy < dim[1]) && !isStopped(); ++yy)
+                    for (int yy = 0 ; (yy < dim[1]) && !isStopped(); ++yy)
                     {
-                        for (size_t zz = 0 ; (zz < dim[2]) && !stream.atEnd() && !isStopped(); ++zz)
+                        for (int zz = 0 ; (zz < dim[2]) && !stream.atEnd() && !isStopped(); ++zz)
                         {
                             line = stream.readLine();
                             readedSize += line.size();
@@ -253,7 +253,7 @@ bool CT_Reader_LArchitect_Grid::internalReadFile(CT_StandardItemGroup* group)
     return false;
 }
 
-bool CT_Reader_LArchitect_Grid::readHeader(QTextStream &stream, Eigen::Vector3d &min, Eigen::Vector3d &max, Eigen::Vector3d &res, EigenVector3ui64 &dim, int &nMat, QMap<QString, int> &matNames) const
+bool CT_Reader_LArchitect_Grid::readHeader(QTextStream &stream, Eigen::Vector3d &min, Eigen::Vector3d &max, Eigen::Vector3d &res, Eigen::Vector3i &dim, int &nMat, QMap<QString, int> &matNames) const
 {
     if(stream.atEnd())
         return false;
@@ -303,9 +303,9 @@ bool CT_Reader_LArchitect_Grid::readHeader(QTextStream &stream, Eigen::Vector3d 
     if (values.size() < 3)
         return false;
 
-    dim[0] = values.at(0).toUInt(&ok[0]);
-    dim[1] = values.at(1).toUInt(&ok[1]);
-    dim[2] = values.at(2).toUInt(&ok[2]);
+    dim[0] = values.at(0).toInt(&ok[0]);
+    dim[1] = values.at(1).toInt(&ok[1]);
+    dim[2] = values.at(2).toInt(&ok[2]);
 
     if (!ok[0] || !ok[1] || !ok[2])
         return false;
@@ -342,7 +342,7 @@ bool CT_Reader_LArchitect_Grid::readHeader(QTextStream &stream, Eigen::Vector3d 
     return true;
 }
 
-CT_Grid3D<float>* CT_Reader_LArchitect_Grid::createGrid(Eigen::Vector3d &min, Eigen::Vector3d &res, CT_Reader_LArchitect_Grid::EigenVector3ui64 &dim) const
+CT_Grid3D<float>* CT_Reader_LArchitect_Grid::createGrid(Eigen::Vector3d &min, Eigen::Vector3d &res, Eigen::Vector3i &dim) const
 {
     return new CT_Grid3D<float>(min[0], min[1], min[2], dim[0], dim[1], dim[2], res[0], -1, 0);
 }

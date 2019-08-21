@@ -20,12 +20,12 @@ void CT_StandardGrid3DDrawManager<bool>::draw(GraphicsViewInterface &view, Paint
     int     transparencyValue = drawConfiguration()->variableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
     bool    showTrueOnly = drawConfiguration()->variableValue(INDEX_CONFIG_SHOW_TRUES_ONLY).toBool();
 
-    size_t     nXinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toUInt();
-    size_t     nXsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toUInt();
-    size_t     nYinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toUInt();
-    size_t     nYsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toUInt();
-    size_t     nZinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toUInt();
-    size_t     nZsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toUInt();
+    int     nXinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
+    int     nXsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
+    int     nYinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
+    int     nYsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
+    int     nZinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
+    int     nZsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
 
     if (nXinf < 0) {nXinf = 0;}
     if (nYinf < 0) {nYinf = 0;}
@@ -45,19 +45,19 @@ void CT_StandardGrid3DDrawManager<bool>::draw(GraphicsViewInterface &view, Paint
 
     QColor color = painter.getColor();
 
-    size_t xdim = item.xdim();
-    size_t ydim = item.ydim();
-    size_t zdim = item.zdim();
+    int xdim = item.xdim();
+    int ydim = item.ydim();
+    int zdim = item.zdim();
     double demiRes = reductionCoef*item.resolution() / 2.0;
 
     double xmin, ymin, zmin, xmax, ymax, zmax;
 
     // For each voxel of the grid
-    for (size_t xx = nXinf ; xx < (xdim - nXsup) ; xx++)
+    for (int xx = nXinf ; xx < (xdim - nXsup) ; xx++)
     {
-        for (size_t yy = nYinf ; yy < (ydim - nYsup)  ; yy++)
+        for (int yy = nYinf ; yy < (ydim - nYsup)  ; yy++)
         {
-            for (size_t zz = nZinf ; zz < (zdim - nZsup); zz++)
+            for (int zz = nZinf ; zz < (zdim - nZsup); zz++)
             {
                 size_t index;
 

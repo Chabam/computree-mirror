@@ -2,7 +2,7 @@
 
 #include "ct_math/delaunay2d/ct_delaunaytriangulation.h"
 
-CT_Image2DNaturalNeighboursInterpolator::CT_Image2DNaturalNeighboursInterpolator(CT_Image2D<float>* raster,
+CT_Image2DNaturalNeighboursInterpolator::CT_Image2DNaturalNeighboursInterpolator(const CT_Image2D<float>* raster,
                                                                                  CT_Image2D<float>* rasterI,
                                                                                  int ncells)
 {
@@ -21,8 +21,10 @@ void CT_Image2DNaturalNeighboursInterpolator::interpolateForOneCell(const size_t
         delaunay->init(xi - _nCells - 2, yi - _nCells - 2, xi + _nCells + 2, yi + _nCells + 2);
 
         int cpt = 0;
-        for (int xx = xi - _nCells ; xx <= xi + _nCells ; xx++) {
-            for (int yy = yi - _nCells ; yy  <= yi + _nCells ; yy++) {
+        for (int xx = xi - _nCells ; xx <= xi + _nCells ; xx++)
+        {
+            for (int yy = yi - _nCells ; yy  <= yi + _nCells ; yy++)
+            {
                 if (xx >= 0 && yy >= 0 && (xx != xi || yy != yi))
                 {
                     float value = _raster->value(xx,yy);

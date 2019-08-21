@@ -82,9 +82,9 @@ public:
     CT_Grid3D(double xmin,
               double ymin,
               double zmin,
-              size_t dimx,
-              size_t dimy,
-              size_t dimz,
+              int dimx,
+              int dimy,
+              int dimz,
               double resolution,
               DataT na,
               DataT initValue);
@@ -202,7 +202,7 @@ public:
       * \param value Value
       * \return True if the value has actually been set
       */
-    bool setValue(const size_t colx, const size_t liny, const size_t levz, DataT value);
+    bool setValue(const int colx, const int liny, const int levz, DataT value);
 
     /**
       * \brief Set the value for the cell containing (x,y,z) coordinate to value
@@ -258,7 +258,7 @@ public:
       * \param levz z level, first one is 0
       * \return Value at row liny and column clox
       */
-    DataT value(const size_t colx, const size_t liny, const size_t levz) const;
+    DataT value(const int colx, const int liny, const int levz) const;
 
     /**
       * \brief Gives the value at (x,y,z) coordinate
@@ -334,7 +334,7 @@ public:
       * \param centermode : How should be treated the central cell ?
       * \return List of neighbours values
       */
-    QList<DataT> neighboursValues(const size_t colx, const size_t liny, const size_t levz, const size_t distance, const bool keepNAs = false, const CenterMode centermode = CT_Grid3D::CM_DropCenter) const;
+    QList<DataT> neighboursValues(const int colx, const int liny, const int levz, const int distance, const bool keepNAs = false, const CenterMode centermode = CT_Grid3D::CM_DropCenter) const;
 
 
     /** Methods for colors management
@@ -399,7 +399,7 @@ template<>
 CTLIBSTRUCTUREADDON_EXPORT bool CT_Grid3D<bool>::addValueAtIndex(const size_t index, const bool value);
 
 template<>
-CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Grid3D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t levz, const size_t distance, const bool keepNAs, const CenterMode centermode) const;
+CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Grid3D<bool>::neighboursValues(const int colx, const int liny, const int levz, const int distance, const bool keepNAs, const CenterMode centermode) const;
 
 template<>
 CTLIBSTRUCTUREADDON_EXPORT QString CT_Grid3D<unsigned long>::valueAtIndexAsString(const size_t index) const;

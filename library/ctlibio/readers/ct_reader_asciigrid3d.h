@@ -80,9 +80,9 @@ protected:
      * @brief Read the header and returns true if it was readed successfully
      */
     bool readHeader(QTextStream &stream,
-                    size_t &nCols,
-                    size_t &nRows,
-                    size_t &nZLev,
+                    int &nCols,
+                    int &nRows,
+                    int &nZLev,
                     Eigen::Vector3d &min,
                     double &cellSize,
                     double &noDataValue,
@@ -96,23 +96,23 @@ protected:
     template<typename TYPE>
     void loadGrid(QTextStream& stream,
                   CT_Grid3D<TYPE>* loadedGrid,
-                  const size_t& nCols,
-                  const size_t& nRows,
-                  const size_t& nZLev,
+                  const int& nCols,
+                  const int& nRows,
+                  const int& nZLev,
                   const double& noDataValue) {
         double currentValue;
         QString currentValueStr;
 
-        for ( size_t i = 0 ; (i < nZLev) && !isStopped() ; ++i )
+        for ( int i = 0 ; (i < nZLev) && !isStopped() ; ++i )
         {
-            for ( size_t j = 0; (j < nRows) && !isStopped(); ++j )
+            for ( int j = 0; (j < nRows) && !isStopped(); ++j )
             {
                 currentValueStr = stream.readLine().trimmed();
 
                 if(!currentValueStr.isEmpty()) {
                     const QStringList values = currentValueStr.split(QRegExp("\\s+"));
 
-                    for ( size_t k = 0 ; (k < nCols) && !isStopped() ; ++k )
+                    for ( int k = 0 ; (k < nCols) && !isStopped() ; ++k )
                     {
                         currentValue = noDataValue;
                         if (values.size() > int(k))

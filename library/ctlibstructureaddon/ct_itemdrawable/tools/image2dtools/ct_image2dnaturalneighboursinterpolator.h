@@ -7,7 +7,7 @@
 class CTLIBSTRUCTUREADDON_EXPORT CT_Image2DNaturalNeighboursInterpolator
 {
 public:
-    CT_Image2DNaturalNeighboursInterpolator(CT_Image2D<float>* raster,
+    CT_Image2DNaturalNeighboursInterpolator(const CT_Image2D<float> *raster,
                                             CT_Image2D<float>* rasterI,
                                             int ncells);
 
@@ -20,9 +20,9 @@ public:
     void interpolateForOneCell(const size_t& index);
 
 private:
-    CT_Image2D<float>*  _raster;
-    CT_Image2D<float>*  _rasterInterpol;
-    int                 _nCells;
+    const CT_Image2D<float>*  _raster;
+    CT_Image2D<float>*        _rasterInterpol;
+    int                      _nCells;
 };
 
 #endif // CT_IMAGE2DNATURALNEIGHBOURSINTERPOLATOR_H

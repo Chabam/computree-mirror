@@ -22,13 +22,12 @@ public:
     READER_ALL_COPY_IMP(CT_Reader_LArchitect_Grid)
 
 protected:
-    typedef Eigen::Matrix<size_t, 3, 1> EigenVector3ui64;
 
     void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
     bool internalReadFile(CT_StandardItemGroup* group) override;
 
-    bool readHeader(QTextStream &stream, Eigen::Vector3d &min, Eigen::Vector3d &max, Eigen::Vector3d &res, EigenVector3ui64 &dim, int &nMat, QMap<QString, int>  &matNames) const;
-    CT_Grid3D<float>* createGrid(Eigen::Vector3d &min, Eigen::Vector3d &res, EigenVector3ui64 &dim) const;
+    bool readHeader(QTextStream &stream, Eigen::Vector3d &min, Eigen::Vector3d &max, Eigen::Vector3d &res, Eigen::Vector3i &dim, int &nMat, QMap<QString, int>  &matNames) const;
+    CT_Grid3D<float>* createGrid(Eigen::Vector3d &min, Eigen::Vector3d &res, Eigen::Vector3i &dim) const;
 
 private:
     CT_HandleOutSingularItem<CT_Grid3D<float> >          m_wood_surface;

@@ -59,6 +59,60 @@ CT_DEFAULT_IA_INIT(CT_Grid3D<quint64>)
 /////////////////////////////////////////////////////////////////////
 
 template<>
+CT_Grid3D<bool>::CT_Grid3D() : SuperClass()
+{
+    _NAdata = false;
+    _dataMax = true;
+    _dataMin = false;
+
+    setBaseDrawManager(&ABSGRID3D_DRAW_MANAGER);
+}
+
+template<>
+CT_Grid3D<bool>::CT_Grid3D(double xmin,
+                            double ymin,
+                            double zmin,
+                            int dimx,
+                            int dimy,
+                            int dimz,
+                            double resolution,
+                            bool na,
+                            bool initValue) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
+{
+
+    _NAdata = na;
+    _dataMax = true;
+    _dataMin = false;
+
+    _data.resize(nCells());
+    initGridWithValue(initValue);
+
+    setBaseDrawManager(&ABSGRID3D_DRAW_MANAGER);
+}
+
+template<>
+CT_Grid3D<bool>::CT_Grid3D(double xmin,
+                            double ymin,
+                            double zmin,
+                            double xmax,
+                            double ymax,
+                            double zmax,
+                            double resolution,
+                            bool na,
+                            bool initValue) : SuperClass(xmin, ymin, zmin, xmax, ymax, zmax, resolution)
+{
+
+    _NAdata = na;
+    _dataMax = true;
+    _dataMin = false;
+
+    _data.resize(nCells());
+    initGridWithValue(initValue);
+
+    setBaseDrawManager(&ABSGRID3D_DRAW_MANAGER);
+}
+
+template<>
 void CT_Grid3D<bool>::computeMinMax()
 {
     _dataMin = false;
@@ -107,29 +161,44 @@ bool CT_Grid3D<bool>::addValueAtIndex(const size_t index, const bool value)
 }
 
 template<>
-QList<bool> CT_Grid3D<bool>::neighboursValues(const size_t colx, const size_t liny, const size_t levz, const size_t distance, const bool keepNAs, const CenterMode centermode) const
+QList<bool> CT_Grid3D<bool>::neighboursValues(const int colx, const int liny, const int levz, const int distance, const bool keepNAs, const CenterMode centermode) const
 {
     Q_UNUSED(keepNAs);
 
     QList<bool> liste;
 
-    if (distance < 1) {return liste;}
+    if (distance < 1)  {return liste;}
 
-    size_t firstColx = colx-distance;
-    size_t lastColx = colx+distance;
-    size_t firstLiny = liny-distance;
-    size_t lastLiny = liny+distance;
-    size_t firstLinz = levz-distance;
-    size_t lastLinz = levz+distance;
+    if (distance < 1)  {return liste;}
+    if (colx < 0)      {return liste;}
+    if (liny < 0)      {return liste;}
+    if (levz < 0)      {return liste;}
+    if (colx >= _dimx) {return liste;}
+    if (liny >= _dimy) {return liste;}
+    if (levz >= _dimz) {return liste;}
 
-    for (size_t xx = firstColx ; xx <= lastColx ; xx++)
+    int firstColx = colx - distance;
+    int lastColx = colx + distance;
+    int firstLiny = liny - distance;
+    int lastLiny = liny + distance;
+    int firstLinz = levz - distance;
+    int lastLinz = levz + distance;
+
+    if (firstColx < 0)     {firstColx = 0;}
+    if (lastColx >= _dimx) {lastColx = _dimx - 1;}
+    if (firstLiny < 0)     {firstLiny = 0;}
+    if (lastLiny >= _dimy) {lastLiny = _dimy - 1;}
+    if (firstLinz <0)      {firstLinz = 0;}
+    if (lastLinz >= _dimz) {lastLinz = _dimz - 1;}
+
+    for (int xx = firstColx ; xx <= lastColx ; xx++)
     {
-        for (size_t yy = firstLiny ; yy <= lastLiny ; yy++)
+        for (int yy = firstLiny ; yy <= lastLiny ; yy++)
         {
-            for (size_t zz = firstLinz ; zz <= lastLinz ; zz++)
+            for (int zz = firstLinz ; zz <= lastLinz ; zz++)
             {
-
                 bool value = this->value(xx, yy, zz);
+
                 if ((xx == colx) && (yy == liny) && (zz == levz))
                 {
                     if (centermode == CM_KeepCenter) {liste.append(value);}

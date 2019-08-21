@@ -59,9 +59,9 @@ private:
     Eigen::Vector3d     _start;
     Eigen::Vector3d     _end;
     Eigen::Vector3d     _boundary;
-    size_t              _currentCol;   /*!< current voxel column all along the algorithm (grid coordinate system)*/
-    size_t              _currentLin;   /*!< current voxel row all along the algorithm (grid coordinate system)*/
-    size_t              _currentLevz;  /*!< current voxel z level all along the algorithm (grid coordinate system)*/
+    int                 _currentCol;   /*!< current voxel column all along the algorithm (grid coordinate system)*/
+    int                 _currentLin;   /*!< current voxel row all along the algorithm (grid coordinate system)*/
+    int                 _currentLevz;  /*!< current voxel z level all along the algorithm (grid coordinate system)*/
     Eigen::Vector3d     _stepAxis;     /*!< indicates for each axis wether the ray goes forward (in the same direction than the base vector => 1) or backward (the opposite direction => -1)*/
     Eigen::Vector3d     _tMax;         /*!< "the value of t at which the ray crosses the first voxel boundary (along each direction)"*/
     Eigen::Vector3d     _tDel;         /*!< "how far along the ray we must move (in units of t)" for each component "of such a movement to equal the width of a voxel"*/
@@ -69,9 +69,9 @@ private:
     int         _chooseAxis[8];
     int         _nextStepAxis;
 
-    size_t              _endPtCol;
-    size_t              _endPtLin;
-    size_t              _endPtLevz;
+    int                 _endPtCol;
+    int                 _endPtLin;
+    int                 _endPtLevz;
 
 
 

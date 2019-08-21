@@ -25,9 +25,6 @@
 
 *****************************************************************************/
 
-#ifndef CT_GRID3D_HPP
-#define CT_GRID3D_HPP
-
 #include "ct_itemdrawable/ct_grid3d.h"
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.h"
 
@@ -52,9 +49,9 @@ template< typename DataT>
 CT_Grid3D<DataT>::CT_Grid3D(double xmin,
                             double ymin,
                             double zmin,
-                            size_t dimx,
-                            size_t dimy,
-                            size_t dimz,
+                            int dimx,
+                            int dimy,
+                            int dimz,
                             double resolution,
                             DataT na,
                             DataT initValue) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
@@ -104,9 +101,9 @@ CT_Grid3D<DataT>* CT_Grid3D<DataT>::createGrid3DFromXYZCoords(double xmin,
                                                               DataT initValue,
                                                               bool extends)
 {
-    size_t dimx = ceil((xmax - xmin)/resolution);
-    size_t dimy = ceil((ymax - ymin)/resolution);
-    size_t dimz = ceil((zmax - zmin)/resolution);
+    int dimx = int(ceil((xmax - xmin)/resolution));
+    int dimy = int(ceil((ymax - ymin)/resolution));
+    int dimz = int(ceil((zmax - zmin)/resolution));
 
     if (extends)
     {
@@ -179,7 +176,7 @@ bool CT_Grid3D<DataT>::setValueAtIndex(const size_t index, const DataT value)
 }
 
 template< typename DataT>
-bool CT_Grid3D<DataT>::setValue(const size_t colx, const size_t liny, const size_t levz, const DataT value)
+bool CT_Grid3D<DataT>::setValue(const int colx, const int liny, const int levz, const DataT value)
 {
     size_t i;
     if (index(colx, liny, levz, i))
@@ -214,7 +211,7 @@ double CT_Grid3D<DataT>::ratioValueAtIndex(const size_t index) const
     if (_dataMax <= _dataMin) {return 1;}
     DataT value = valueAtIndex(index);
     if (value == NA()) {return -1;}
-    return (double) (((double)(value - _dataMin))/((double)(_dataMax - _dataMin)));
+    return double((double(value - _dataMin))/(double(_dataMax - _dataMin)));
 }
 
 template< typename DataT>
@@ -239,7 +236,7 @@ QString CT_Grid3D<DataT>::NAAsString() const
 }
 
 template< typename DataT>
-DataT CT_Grid3D<DataT>::value(const size_t colx, const size_t liny, const size_t levz) const
+DataT CT_Grid3D<DataT>::value(const int colx, const int liny, const int levz) const
 {
     size_t i;
     if (index(colx, liny, levz, i))
@@ -339,42 +336,48 @@ bool CT_Grid3D<DataT>::addValueAtXYZ(const double x, const double y, const doubl
 }
 
 template< typename DataT>
-QList<DataT> CT_Grid3D<DataT>::neighboursValues(const size_t colx, const size_t liny, const size_t levz, const size_t distance, const bool keepNAs, const CenterMode centermode) const
+QList<DataT> CT_Grid3D<DataT>::neighboursValues(const int colx, const int liny, const int levz, const int distance, const bool keepNAs, const CenterMode centermode) const
 {
     QList<DataT> liste;
 
     if (distance < 1) {return liste;}
+    if (colx < 0)     {return liste;}
+    if (liny < 0)     {return liste;}
+    if (levz < 0)     {return liste;}
     if (colx >= _dimx) {return liste;}
     if (liny >= _dimy) {return liste;}
     if (levz >= _dimz) {return liste;}
 
-    size_t firstColx = colx-distance;
-    size_t lastColx = colx+distance;
-    size_t firstLiny = liny-distance;
-    size_t lastLiny = liny+distance;
-    size_t firstLinz = levz-distance;
-    size_t lastLinz = levz+distance;
+    int firstColx = colx - distance;
+    int lastColx = colx + distance;
+    int firstLiny = liny - distance;
+    int lastLiny = liny + distance;
+    int firstLinz = levz - distance;
+    int lastLinz = levz + distance;
 
-    if (firstColx >= _dimx) {firstColx = 0;}
+    if (firstColx < 0)     {firstColx = 0;}
     if (lastColx >= _dimx) {lastColx = _dimx - 1;}
-    if (firstLiny >= _dimy) {firstLiny = 0;}
+    if (firstLiny < 0)     {firstLiny = 0;}
     if (lastLiny >= _dimy) {lastLiny = _dimy - 1;}
-    if (firstLinz >= _dimz) {firstLinz = 0;}
+    if (firstLinz <0)      {firstLinz = 0;}
     if (lastLinz >= _dimz) {lastLinz = _dimz - 1;}
 
 
-    for (size_t xx = firstColx ; xx <= lastColx ; xx++)
+    for (int xx = firstColx ; xx <= lastColx ; xx++)
     {
-        for (size_t yy = firstLiny ; yy <= lastLiny ; yy++)
+        for (int yy = firstLiny ; yy <= lastLiny ; yy++)
         {
-            for (size_t zz = firstLinz ; zz <= lastLinz ; zz++)
+            for (int zz = firstLinz ; zz <= lastLinz ; zz++)
             {
-
                 DataT val = value(xx, yy, zz);
-                if ((xx == colx) && (yy == liny) && (zz == levz)) {
-                    if (centermode == CM_KeepCenter) {
+
+                if ((xx == colx) && (yy == liny) && (zz == levz))
+                {
+                    if (centermode == CM_KeepCenter)
+                    {
                         if ((val != NA()) || keepNAs) {liste.append(val);}
-                    } else if (centermode == CM_NAasCenter) {
+                    } else if (centermode == CM_NAasCenter)
+                    {
                         liste.append(NA());
                     }
                 } else {
@@ -386,5 +389,3 @@ QList<DataT> CT_Grid3D<DataT>::neighboursValues(const size_t colx, const size_t 
 
     return liste;
 }
-
-#endif // CT_GRID3D_HPP

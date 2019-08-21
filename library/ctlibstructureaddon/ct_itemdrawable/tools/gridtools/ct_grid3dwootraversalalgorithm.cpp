@@ -149,9 +149,9 @@ void CT_Grid3DWooTraversalAlgorithm::compute(CT_Beam &data, Eigen::Vector3d *end
             _nextStepAxis = _chooseAxis[bits];
 
             // Going to next voxel along this direction
-            if      (_nextStepAxis == 0) {_currentCol = _currentCol + size_t(_stepAxis(0));}
-            else if (_nextStepAxis == 1) {_currentLin = _currentLin + size_t(_stepAxis(1));}
-            else if (_nextStepAxis == 2) {_currentLevz = _currentLevz + size_t(_stepAxis(2));}
+            if      (_nextStepAxis == 0) {_currentCol = _currentCol + int(_stepAxis(0));}
+            else if (_nextStepAxis == 1) {_currentLin = _currentLin + int(_stepAxis(1));}
+            else if (_nextStepAxis == 2) {_currentLevz = _currentLevz + int(_stepAxis(2));}
 
             // Checks if the currentvoxel is outside the grid, the algorithm has finished
             if (_currentCol >= _calibrationGrid->xdim()) {return;}
@@ -266,9 +266,9 @@ bool CT_Grid3DWooTraversalAlgorithm::getNextIndex(size_t returnedIndex)
         _nextStepAxis = _chooseAxis[bits];
 
         // Going to next voxel along this direction
-        if      (_nextStepAxis==0) {_currentCol = _currentCol + size_t(_stepAxis(0));}
-        else if (_nextStepAxis==1) {_currentLin = _currentLin + size_t(_stepAxis(1));}
-        else if (_nextStepAxis==2) {_currentLevz = _currentLevz + size_t(_stepAxis(2));}
+        if      (_nextStepAxis==0) {_currentCol = _currentCol + int(_stepAxis(0));}
+        else if (_nextStepAxis==1) {_currentLin = _currentLin + int(_stepAxis(1));}
+        else if (_nextStepAxis==2) {_currentLevz = _currentLevz + int(_stepAxis(2));}
 
         // Checks if the currentvoxel is outside the grid, the algorithm has finished
         if (_currentCol >= _calibrationGrid->xdim()) {return false;}

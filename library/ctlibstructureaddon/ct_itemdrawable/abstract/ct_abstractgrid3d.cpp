@@ -35,7 +35,7 @@ CT_AbstractGrid3D::CT_AbstractGrid3D() : SuperClass()
     _dimz = 0;
 }
 
-CT_AbstractGrid3D::CT_AbstractGrid3D(size_t dimx, size_t dimy, size_t dimz, double resolution)
+CT_AbstractGrid3D::CT_AbstractGrid3D(int dimx, int dimy, int dimz, double resolution)
 {
     _res = resolution;
     _dimx = dimx;
@@ -43,7 +43,7 @@ CT_AbstractGrid3D::CT_AbstractGrid3D(size_t dimx, size_t dimy, size_t dimz, doub
     _dimz = dimz;
 }
 
-CT_AbstractGrid3D::CT_AbstractGrid3D(double xmin, double ymin, double zmin, size_t dimx, size_t dimy, size_t dimz, double resolution)
+CT_AbstractGrid3D::CT_AbstractGrid3D(double xmin, double ymin, double zmin, int dimx, int dimy, int dimz, double resolution)
 {
     _res = resolution;
     _dimx = dimx;
@@ -57,9 +57,9 @@ CT_AbstractGrid3D::CT_AbstractGrid3D(double xmin, double ymin, double zmin, size
 CT_AbstractGrid3D::CT_AbstractGrid3D(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax, double resolution)
 {
     _res = resolution;
-    _dimx = ceil((xmax - xmin)/resolution);
-    _dimy = ceil((ymax - ymin)/resolution);
-    _dimz = ceil((zmax - zmin)/resolution);
+    _dimx = int(ceil((xmax - xmin)/resolution));
+    _dimy = int(ceil((ymax - ymin)/resolution));
+    _dimz = int(ceil((zmax - zmin)/resolution));
 
     Eigen::Vector3d maxCoordinates(xmin + resolution * _dimx,
                                    ymin + resolution * _dimy,

@@ -52,9 +52,9 @@ CT_Grid3D_Points::~CT_Grid3D_Points()
 CT_Grid3D_Points::CT_Grid3D_Points(double xmin,
                                    double ymin,
                                    double zmin,
-                                   size_t dimx,
-                                   size_t dimy,
-                                   size_t dimz,
+                                   int dimx,
+                                   int dimy,
+                                   int dimz,
                                    double resolution) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
 {
 }
@@ -138,7 +138,7 @@ const QList<size_t> *CT_Grid3D_Points::getConstPointIndexList(size_t cellIndex) 
     return &_emptyList;
 }
 
-QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, size_t n) const
+QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, int n) const
 {
     QList<size_t> indices;
 
@@ -147,19 +147,19 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
         indices.append(originIndex);
     } else {
 
-        size_t lin, col, levz;
+        int lin, col, levz;
         this->indexToGrid(originIndex, col, lin, levz);
 
 
         // Upper plane
-        size_t neighbLevz = levz + n;
+        int neighbLevz = levz + n;
         if (neighbLevz < this->_dimz)
         {
-            for (size_t xx = col - n ; xx <= col + n ; xx++)
+            for (int xx = col - n ; xx <= col + n ; xx++)
             {
                 if (xx < this->_dimx)
                 {
-                    for (size_t yy = lin - n ; yy <= lin + n ; yy++)
+                    for (int yy = lin - n ; yy <= lin + n ; yy++)
                     {
                         size_t neighbIndex;
 
@@ -176,11 +176,11 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
         neighbLevz = levz - n;
         if (neighbLevz < this->_dimz)
         {
-            for (size_t xx = col - n ; xx <= col + n ; xx++)
+            for (int xx = col - n ; xx <= col + n ; xx++)
             {
                 if (xx < this->_dimx)
                 {
-                    for (size_t yy = lin - n ; yy <= lin + n ; yy++)
+                    for (int yy = lin - n ; yy <= lin + n ; yy++)
                     {
                         size_t neighbIndex;
                         if (this->index(xx, yy, neighbLevz, neighbIndex))
@@ -193,14 +193,14 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
         }
 
         // other levels
-        for (size_t zz = levz - n + 1 ; zz <= levz + n - 1 ; zz++)
+        for (int zz = levz - n + 1 ; zz <= levz + n - 1 ; zz++)
         {
             if (zz < this->_dimz)
             {
-                size_t yval = lin - n;
+                int yval = lin - n;
                 if (yval < this->_dimy)
                 {
-                    for (size_t xx = col - n ; xx <= col + n ; xx++)
+                    for (int xx = col - n ; xx <= col + n ; xx++)
                     {
                         size_t neighbIndex;
                         if (this->index(xx, yval, zz, neighbIndex))
@@ -213,7 +213,7 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
                 yval = lin + n;
                 if (yval < this->_dimy)
                 {
-                    for (size_t xx = col - n ; xx <= col + n ; xx++)
+                    for (int xx = col - n ; xx <= col + n ; xx++)
                     {
                         size_t neighbIndex;
                         if (this->index(xx, yval, zz, neighbIndex))
@@ -223,10 +223,10 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
                     }
                 }
 
-                size_t xval = col - n;
+                int xval = col - n;
                 if (xval < this->_dimx)
                 {
-                    for (size_t yy = lin - n + 1; yy <= lin + n - 1; yy++)
+                    for (int yy = lin - n + 1; yy <= lin + n - 1; yy++)
                     {
                         size_t neighbIndex;
                         if (this->index(xval, yy, zz, neighbIndex))
@@ -239,7 +239,7 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
                 xval = col + n;
                 if (xval < this->_dimx)
                 {
-                    for (size_t yy = lin - n + 1; yy <= lin + n - 1; yy++)
+                    for (int yy = lin - n + 1; yy <= lin + n - 1; yy++)
                     {
                         size_t neighbIndex;
                         if (this->index(xval, yy, zz, neighbIndex))
@@ -255,10 +255,10 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
     return indices;
 }
 
-size_t CT_Grid3D_Points::getPointsIndicesInsideSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const
+int CT_Grid3D_Points::getPointsIndicesInsideSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const
 {
     // point number
-    size_t n = 0;
+    int n = 0;
     double radius2 = radius*radius;
 
     // center of reference cell (center of the sphere)
@@ -268,7 +268,7 @@ size_t CT_Grid3D_Points::getPointsIndicesInsideSphere(size_t gridIndex, double r
     if (this->getCellCenterCoordinates(gridIndex, refCenter))
     {
         // Compute bounding box for search
-        size_t minXcol, maxXcol, minYlin, maxYlin, minZlev, maxZlev;
+        int minXcol, maxXcol, minYlin, maxYlin, minZlev, maxZlev;
         if (!this->colX(refCenter(0) - radius, minXcol)) {minXcol = 0;}
         if (!this->colX(refCenter(0) + radius, maxXcol)) {maxXcol = this->xdim() - 1;}
         if (!this->linY(refCenter(1) - radius, minYlin)) {minYlin = 0;}
@@ -276,11 +276,11 @@ size_t CT_Grid3D_Points::getPointsIndicesInsideSphere(size_t gridIndex, double r
         if (!this->levelZ(refCenter(2) - radius, minZlev)) {minZlev = 0;}
         if (!this->levelZ(refCenter(2) + radius, maxZlev)) {maxZlev = this->zdim() - 1;}
 
-        for (size_t xx = minXcol ; xx <= maxXcol ; xx++)
+        for (int xx = minXcol ; xx <= maxXcol ; xx++)
         {
-            for (size_t yy = minYlin ; yy <= maxYlin ; yy++)
+            for (int yy = minYlin ; yy <= maxYlin ; yy++)
             {
-                for (size_t zz = minZlev ; zz <= maxZlev ; zz++)
+                for (int zz = minZlev ; zz <= maxZlev ; zz++)
                 {
                     if (this->index(xx, yy, zz, cellIndex))
                     {
@@ -311,9 +311,9 @@ size_t CT_Grid3D_Points::getPointsIndicesInsideSphere(size_t gridIndex, double r
     return n;
 }
 
-size_t CT_Grid3D_Points::getPointIndicesIncludingKNearestNeighbours(Eigen::Vector3d position, size_t k, double maxDist, QList<size_t> &indexList) const
+int CT_Grid3D_Points::getPointIndicesIncludingKNearestNeighbours(Eigen::Vector3d position, int k, double maxDist, QList<size_t> &indexList) const
 {
-    size_t n = 0;
+    int n = 0;
 
     size_t index;
     if (this->indexAtXYZ(position(0), position(1), position(2), index))
