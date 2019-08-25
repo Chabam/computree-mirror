@@ -48,12 +48,18 @@ public:
     /**
      * @brief Returns the point cloud index
      */
-    virtual const CT_AbstractPointCloudIndex* pointCloudIndex() const;
+    virtual const CT_AbstractPointCloudIndex* pointCloudIndex() const override;
+
+    /**
+     * @brief Modify the point cloud index (use with precautions)
+     */
+    virtual void setPointCloudIndexRegistered(CT_PCIR pcir);
+
 
     /**
      * @brief Returns the point cloud index registered
      */
-    virtual CT_PCIR pointCloudIndexRegistered() const;
+    virtual CT_PCIR pointCloudIndexRegistered() const override;
 
 private:
     static CT_StandardAbstractPointsAttributesDrawManager APA_DRAW_MANAGER;

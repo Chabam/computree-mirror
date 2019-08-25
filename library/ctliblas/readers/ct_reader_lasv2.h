@@ -1,12 +1,12 @@
 #ifndef CT_READER_LASV2_H
 #define CT_READER_LASV2_H
 
-#include "ctliblas/ctliblas_global.h"
 
-#include "ctliblas/readers/headers/ct_lasheader.h"
 
 #include "ct_reader/abstract/ct_abstractreader.h"
 
+#include "ctliblas/ctliblas_global.h"
+#include "ctliblas/readers/headers/ct_lasheader.h"
 
 #include "ct_itemdrawable/ct_scene.h"
 #include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
@@ -42,14 +42,14 @@ public:
 
     CT_Reader_LASV2(int subMenuLevel = 0);
     CT_Reader_LASV2(const CT_Reader_LASV2 &other);
-    virtual ~CT_Reader_LASV2();
+    virtual ~CT_Reader_LASV2() override;
 
     QString displayableName() const override;
 
     bool setFilePath(const QString& filepath) override;
 
-    bool configure();
-    CT_FileHeader* createHeaderPrototype() const;
+    bool configure() override;
+    CT_FileHeader* createHeaderPrototype() const override;
 
     virtual bool hasBoundingBox() {return true;}
 

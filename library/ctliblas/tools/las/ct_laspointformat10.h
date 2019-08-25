@@ -1,9 +1,9 @@
 #ifndef CT_LASPOINTFORMAT10_H
 #define CT_LASPOINTFORMAT10_H
 
-#include "ct_laspointformat9.h"
-#include "ct_lascolorpacket.h"
-#include "ct_lasnirpacket.h"
+#include "ctliblas/tools/las/ct_laspointformat9.h"
+#include "ctliblas/tools/las/ct_lascolorpacket.h"
+#include "ctliblas/tools/las/ct_lasnirpacket.h"
 
 class CTLIBLAS_EXPORT CT_LASPointFormat10 : public CT_LASPointFormat9, public CT_LASColorPacket, public CT_LASNirPacket
 {

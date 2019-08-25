@@ -24,8 +24,4 @@ CT_LASData::CT_LASData()
     _Return_Point_Waveform_Location = 0;
 }
 
-CT_LASData::~CT_LASData()
-{
-
-}
 

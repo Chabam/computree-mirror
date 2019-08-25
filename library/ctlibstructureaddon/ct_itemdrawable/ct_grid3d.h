@@ -115,7 +115,7 @@ public:
               DataT na,
               DataT initValue);
 
-    CT_Grid3D(const CT_Grid3D& other) = default;
+    CT_Grid3D(const CT_Grid3D& other);
 
     /*!
      * \brief Factory with min and max (X,Y,Z) coordinates
@@ -376,6 +376,18 @@ protected:
 
 template<>
 inline bool CT_Grid3D<bool>::NA() const {return false;}
+
+template<>
+CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D<bool>::CT_Grid3D();
+
+template<>
+CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D<bool>::CT_Grid3D(const CT_Grid3D& other);
+
+template<>
+CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D<bool>::CT_Grid3D(double xmin, double ymin, double zmin, int dimx, int dimy, int dimz, double resolution, bool na, bool initValue);
+
+template<>
+CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D<bool>::CT_Grid3D(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax, double resolution, bool na, bool initValue);
 
 template<>
 CTLIBSTRUCTUREADDON_EXPORT void CT_Grid3D<bool>::computeMinMax();

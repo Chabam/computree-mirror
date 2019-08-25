@@ -1,8 +1,8 @@
 #ifndef CT_LASPOINTFORMAT9_H
 #define CT_LASPOINTFORMAT9_H
 
-#include "ct_laspointformat6.h"
-#include "ct_laswavepacket.h"
+#include "ctliblas/tools/las/ct_laspointformat6.h"
+#include "ctliblas/tools/las/ct_laswavepacket.h"
 
 class CTLIBLAS_EXPORT CT_LASPointFormat9 : public CT_LASPointFormat6, public CT_LASWavePacket
 {

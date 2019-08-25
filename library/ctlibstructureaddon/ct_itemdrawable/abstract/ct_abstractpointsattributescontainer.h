@@ -1,6 +1,8 @@
 #ifndef CT_ABSTRACTPOINTSATTRIBUTESCONTAINER_H
 #define CT_ABSTRACTPOINTSATTRIBUTESCONTAINER_H
 
+#include "ctlibstructureaddon_global.h"
+
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointsattributes.h"
 

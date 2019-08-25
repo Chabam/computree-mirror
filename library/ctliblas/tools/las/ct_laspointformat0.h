@@ -3,7 +3,7 @@
 
 #include "ctliblas/ctliblas_global.h"
 
-#include "abstract/ct_abstractlaspointformat.h"
+#include "ctliblas/tools/las/abstract/ct_abstractlaspointformat.h"
 
 /**
  * @brief A tool class that can be use to write a point of format 0 in a LAS File

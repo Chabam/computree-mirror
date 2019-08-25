@@ -382,6 +382,19 @@ public:
 template<>
 inline bool CT_Grid3D_Sparse<bool>::NA() const {return false;}
 
+
+template<>
+CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse();
+
+template<>
+CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(const CT_Grid3D_Sparse& other);
+
+template<>
+CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(double xmin, double ymin, double zmin, int dimx, int dimy, int dimz, double resolution, bool na, bool initValue);
+
+template<>
+CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax, double resolution, bool na, bool initValue);
+
 template<>
 CTLIBSTRUCTUREADDON_EXPORT void CT_Grid3D_Sparse<bool>::computeMinMax();
 

@@ -26,7 +26,7 @@ CT_Reader_LASV2::CT_Reader_LASV2(const CT_Reader_LASV2 &other) : SuperClass(othe
     m_headerFromConfiguration = nullptr;
 
     if(other.m_headerFromConfiguration != nullptr)
-        m_headerFromConfiguration = (CT_LASHeader*)other.m_headerFromConfiguration->copy(nullptr, nullptr);
+        m_headerFromConfiguration = static_cast<CT_LASHeader*>(other.m_headerFromConfiguration->copy(nullptr, nullptr));
 }
 
 CT_Reader_LASV2::~CT_Reader_LASV2()
@@ -42,7 +42,7 @@ QString CT_Reader_LASV2::displayableName() const
 bool CT_Reader_LASV2::setFilePath(const QString& filepath)
 {
     QString err;
-    CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath, err);
+    CT_LASHeader *header = static_cast<CT_LASHeader*>(internalReadHeader(filepath, err));
 
     if(header != nullptr) {
         if(CT_AbstractReader::setFilePath(filepath)) {
@@ -61,7 +61,7 @@ bool CT_Reader_LASV2::setFilePath(const QString& filepath)
 bool CT_Reader_LASV2::configure()
 {
     QString err;
-    CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath(), err);
+    CT_LASHeader *header = static_cast<CT_LASHeader*>(internalReadHeader(filepath(), err));
 
     if(header != nullptr) {
         delete m_headerFromConfiguration;
@@ -85,7 +85,7 @@ bool CT_Reader_LASV2::restoreSettings(SettingsReaderInterface &reader)
 
     if(SuperClass::restoreSettings(reader)) {
         QString error;
-        m_headerFromConfiguration = (CT_LASHeader*)internalReadHeader(filepath(), error);
+        m_headerFromConfiguration = static_cast<CT_LASHeader*>(internalReadHeader(filepath(), error));
     }
 
     return (m_headerFromConfiguration != nullptr);
@@ -158,7 +158,7 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
     bool ok = false;
     QString error;
 
-    CT_LASHeader *header = (CT_LASHeader*)internalReadHeader(filepath(), error);
+    CT_LASHeader *header = static_cast<CT_LASHeader*>(internalReadHeader(filepath(), error));
 
     if(header == nullptr) {
         PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier %1").arg(filepath()));
@@ -193,10 +193,13 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         stream.setByteOrder(QDataStream::LittleEndian);
 
         qint32 x, y, z;
-        double xc, yc, zc;
+        double xc = 0;
+        double yc = 0;
+        double zc = 0;
+
         CT_Point pAdded;
 
-        quint64 pos = f.pos();
+        qint64 pos = f.pos();
         bool mustTransformPoint = header->mustTransformPoints();
 
         CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPoints);
@@ -347,7 +350,7 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
             pos += header->m_pointDataRecordLength;
             f.seek(pos);
 
-            setProgress((100.0*i)/nPoints);
+            setProgress(int((100.0*i)/nPoints));
         }
 
         CT_Scene *scene = new CT_Scene(pcir);

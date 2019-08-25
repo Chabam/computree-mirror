@@ -14,9 +14,11 @@ HEADERS += \
     ctlibstepaddon_global.h \
     ct_step/abstract/ct_abstractsteploadfileinscene.h \
     ct_step/ct_stepbeginloop.h \
-    ct_step/ct_stependloop.h
+    ct_step/ct_stependloop.h \
+    ct_tools/ct_monitoredqthread.h
 
 SOURCES += \
     ct_step/abstract/ct_abstractsteploadfileinscene.cpp \
     ct_step/ct_stepbeginloop.cpp \
-    ct_step/ct_stependloop.cpp
+    ct_step/ct_stependloop.cpp \
+    ct_tools/ct_monitoredqthread.cpp

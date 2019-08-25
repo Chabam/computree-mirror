@@ -1,7 +1,6 @@
 #include "ct_stdlaspointsattributescontainershortcut.h"
 
-#include <QDebug>
-CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut() : CT_StdLASPointsAttributesContainer()
+CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut() : SuperClass()
 {
     _container = nullptr;
 }

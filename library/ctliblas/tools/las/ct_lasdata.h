@@ -9,7 +9,6 @@ class CTLIBLAS_EXPORT CT_LASData
 {
 public:
     CT_LASData();
-    ~CT_LASData();
 
     quint16 _Intensity;
     quint16 _Return_Number;

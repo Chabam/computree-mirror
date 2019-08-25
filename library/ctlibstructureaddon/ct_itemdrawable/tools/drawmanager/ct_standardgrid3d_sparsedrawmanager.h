@@ -1,5 +1,5 @@
-#ifndef CT_STANDARDRASTER3D_SPARSEDRAWMANAGER_H
-#define CT_STANDARDRASTER3D_SPARSEDRAWMANAGER_H
+#ifndef CT_STANDARDGRID3D_SPARSEDRAWMANAGER_H
+#define CT_STANDARDGRID3D_SPARSEDRAWMANAGER_H
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.h"
 #include "ct_itemdrawable/ct_grid3d_sparse.h"
@@ -60,4 +60,4 @@ CTLIBSTRUCTUREADDON_EXPORT CT_ItemDrawableConfiguration CT_StandardGrid3D_Sparse
 
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp"
 
-#endif // CT_STANDARDRASTER3D_SPARSEDRAWMANAGER_H
+#endif // CT_STANDARDGRID3D_SPARSEDRAWMANAGER_H

@@ -1,6 +1,8 @@
 #ifndef CT_STDLASPOINTSATTRIBUTESCONTAINERSHORTCUT_H
 #define CT_STDLASPOINTSATTRIBUTESCONTAINERSHORTCUT_H
 
+#include "ctliblas/ctliblas_global.h"
+
 #include "ctliblas/itemdrawable/las/ct_stdlaspointsattributescontainer.h"
 
 /**
@@ -10,6 +12,8 @@ class CTLIBLAS_EXPORT CT_StdLASPointsAttributesContainerShortcut : public CT_Std
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_StdLASPointsAttributesContainerShortcut, CT_StdLASPointsAttributesContainer, LAS Point attributes shortcut)
+
+    using SuperClass = CT_StdLASPointsAttributesContainer;
 
 public:     
 

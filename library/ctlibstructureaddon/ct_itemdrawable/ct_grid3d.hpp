@@ -45,6 +45,25 @@ CT_Grid3D<DataT>::CT_Grid3D() : SuperClass()
     setBaseDrawManager(&ABSGRID3D_DRAW_MANAGER);
 }
 
+
+template< typename DataT>
+CT_Grid3D<DataT>::CT_Grid3D(const CT_Grid3D<DataT>& other) : SuperClass(other)
+{
+    _NAdata = other._NAdata;
+    _dataMax = other._dataMax;
+    _dataMin = other._dataMin;
+
+    _data.resize(other._data.size());
+    for (size_t i = 0 ; i < other._data.size() ; i++)
+    {
+        _data[i] = other._data[i];
+    }
+
+    _colorMap = other._colorMap;
+    _defaultColor = other._defaultColor;
+}
+
+
 template< typename DataT>
 CT_Grid3D<DataT>::CT_Grid3D(double xmin,
                             double ymin,

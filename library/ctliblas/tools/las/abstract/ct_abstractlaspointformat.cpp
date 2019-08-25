@@ -15,7 +15,7 @@ CT_AbstractLASPointFormat::~CT_AbstractLASPointFormat()
 
 void CT_AbstractLASPointFormat::setHeader(const CT_LASHeader *header)
 {
-    m_lasHeader = (CT_LASHeader*)header;
+    m_lasHeader = const_cast<CT_LASHeader*>(header);
 }
 
 void CT_AbstractLASPointFormat::setAttributes(const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> &attributes)

@@ -1,8 +1,8 @@
 #ifndef CT_LASPOINTFORMAT3_H
 #define CT_LASPOINTFORMAT3_H
 
-#include "ct_laspointformat2.h"
-#include "ct_lasgpspacket.h"
+#include "ctliblas/tools/las/ct_laspointformat2.h"
+#include "ctliblas/tools/las/ct_lasgpspacket.h"
 
 class CTLIBLAS_EXPORT CT_LASPointFormat3 : public CT_LASPointFormat2, public CT_LASGpsPacket
 {

@@ -21,6 +21,12 @@ const CT_AbstractPointCloudIndex* CT_AbstractPointsAttributes::pointCloudIndex()
     return m_apci;
 }
 
+void CT_AbstractPointsAttributes::setPointCloudIndexRegistered(CT_PCIR pcir)
+{
+    m_pcir = pcir;
+    m_apci =(m_pcir.data() == NULL ? NULL : m_pcir->abstractCloudIndexT());
+}
+
 CT_PCIR CT_AbstractPointsAttributes::pointCloudIndexRegistered() const
 {
     return m_pcir;

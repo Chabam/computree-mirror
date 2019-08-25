@@ -1,7 +1,7 @@
 #ifndef CT_LASPOINTINFO_H
 #define CT_LASPOINTINFO_H
 
-#include "ct_lasdefine.h"
+#include "ctliblas/tools/las/ct_lasdefine.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
 

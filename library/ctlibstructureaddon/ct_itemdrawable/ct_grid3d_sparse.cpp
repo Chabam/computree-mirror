@@ -59,6 +59,79 @@ CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<quint64>)
 /////////////////////////////////////////////////////////////////////
 
 template<>
+CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse() : SuperClass()
+{
+    _NAdata = false;
+    _initData = false;
+    _dataMax = false;
+    _dataMin = true;
+
+    int ncells[1];
+    ncells[0] = 1;
+    this->_data.create(1, ncells);
+
+    setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
+}
+
+template<>
+CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(const CT_Grid3D_Sparse<bool>& other) : SuperClass(other)
+{
+    _NAdata = other._NAdata;
+    _initData = other._initData;
+    _dataMax = other._dataMax;
+    _dataMin = other._dataMin;
+    _data = other._data.clone();
+    _colorMap = other._colorMap;
+    _defaultColor = other._defaultColor;
+}
+
+template<>
+CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(double xmin,
+                                          double ymin,
+                                          double zmin,
+                                          int dimx,
+                                          int dimy,
+                                          int dimz,
+                                          double resolution,
+                                          bool na,
+                                          bool initValue) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
+{
+    _NAdata = na;
+    _initData = initValue;
+    _dataMax = initValue;
+    _dataMin = initValue;
+
+    int ncells[1];
+    ncells[0] = 1;
+    this->_data.create(1, ncells);
+
+    setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
+}
+
+template<>
+CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(double xmin,
+                                          double ymin,
+                                          double zmin,
+                                          double xmax,
+                                          double ymax,
+                                          double zmax,
+                                          double resolution,
+                                          bool na,
+                                          bool initValue) : SuperClass(xmin, ymin, zmin, xmax, ymax, zmax, resolution)
+{
+    _NAdata = na;
+    _initData = initValue;
+    _dataMax = initValue;
+    _dataMin = initValue;
+
+    int ncells[1];
+    ncells[0] = 1;
+    this->_data.create(1, ncells);
+
+    setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
+}
+
+template<>
 void CT_Grid3D_Sparse<bool>::computeMinMax()
 {
     _dataMin = false;

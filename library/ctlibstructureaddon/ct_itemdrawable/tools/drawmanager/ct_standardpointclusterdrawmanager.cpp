@@ -35,8 +35,8 @@ void CT_StandardPointClusterDrawManager::draw(GraphicsViewInterface& view, Paint
 
             for(size_t i=0 ; i<size; ++i)
             {
-                const size_t index1 = pointCloudIndex->constIndexAt(i);
-                const size_t index2 = pointCloudIndex->constIndexAt(i+1);
+                const size_t index1 = size_t(pointCloudIndex->constIndexAt(i));
+                const size_t index2 = size_t(pointCloudIndex->constIndexAt(i+1));
 
                 const CT_Point& point1 = pointAccessor.constPointAt(index1);
                 const CT_Point& point2 = pointAccessor.constPointAt(index2);

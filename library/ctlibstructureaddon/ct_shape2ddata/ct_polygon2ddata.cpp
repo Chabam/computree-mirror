@@ -306,10 +306,22 @@ void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector2d>& pointList)
     std::sort(pointList.begin(), pointList.end(), compareV2d);
 }
 
+void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector2d*>& pointList)
+{
+    std::sort(pointList.begin(), pointList.end(), compareV2dptr);
+}
+
+
 bool CT_Polygon2DData::compareV2d(const Eigen::Vector2d& p1, const Eigen::Vector2d& p2)
 {
-     return (p1(0) < p2(0) || (p1(0) == p2(0) && p1(1) < p2(1)));
+     return (p1(0) < p2(0) || (qFuzzyCompare(p1(0), p2(0)) && p1(1) < p2(1)));
 }
+
+bool CT_Polygon2DData::compareV2dptr(const Eigen::Vector2d* p1, const Eigen::Vector2d* p2)
+{
+     return ((*p1)(0) < (*p2)(0) || (qFuzzyCompare((*p1)(0), (*p2)(0)) && (*p1)(1) < (*p2)(1)));
+}
+
 
 // 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
 // Returns a positive value, if OAB makes a counter-clockwise turn,
@@ -351,15 +363,58 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector2d>& ord
     return new CT_Polygon2DData(H);
 }
 
+CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector2d*>& orderedCandidates)
+{
+    // Adapted from http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
+    // And also: http://www.codecodex.com/wiki/Andrew's_Monotone_Chain_Algorithm
+
+    const int n = orderedCandidates.size();
+
+    if (n < 3) {return nullptr;}
+
+    int k = 0;
+
+    QVector<Eigen::Vector2d> H(2*n);
+
+    // Build lower hull
+    for (int i = 0 ; i < n ; ++i) {
+        while (k >= 2 && cross(H[k-2], H[k-1], *orderedCandidates[i]) <= 0) {k--;}
+        H[k++] = *orderedCandidates[i];
+    }
+
+    // Build upper hull
+    for (int i = n-2, t = k + 1 ; i >= 0; i--) {
+        while (k >= t && cross(H[k-2], H[k-1], *orderedCandidates[i]) <= 0) {k--;}
+        H[k++] = *orderedCandidates[i];
+    }
+
+    H.resize(k-1);
+
+    return new CT_Polygon2DData(H);
+}
+
+
 void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector3d>& pointList)
 {
     std::sort(pointList.begin(), pointList.end(), compareV3d);
 }
 
+void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector3d*>& pointList)
+{
+    std::sort(pointList.begin(), pointList.end(), compareV3dptr);
+}
+
+
 bool CT_Polygon2DData::compareV3d(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2)
 {
-     return (p1(0) < p2(0) || (p1(0) == p2(0) && p1(1) < p2(1)));
+     return (p1(0) < p2(0) || (qFuzzyCompare(p1(0), p2(0)) && p1(1) < p2(1)));
 }
+
+bool CT_Polygon2DData::compareV3dptr(const Eigen::Vector3d* p1, const Eigen::Vector3d* p2)
+{
+     return ((*p1)(0) < (*p2)(0) || (qFuzzyCompare((*p1)(0), (*p2)(0)) && (*p1)(1) < (*p2)(1)));
+}
+
 
 // 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
 // Returns a positive value, if OAB makes a counter-clockwise turn,
@@ -400,5 +455,36 @@ CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector3d>& ord
 
     return  new CT_Polygon2DData(H);
 }
+
+CT_Polygon2DData* CT_Polygon2DData::createConvexHull(QList<Eigen::Vector3d*>& orderedCandidates)
+{
+    // Adapted from http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
+    // And also: http://www.codecodex.com/wiki/Andrew's_Monotone_Chain_Algorithm
+
+    const int n = orderedCandidates.size();
+
+    if (n < 3) {return nullptr;}
+
+    int k = 0;
+
+    QVector<Eigen::Vector3d> H(2*n);
+
+    // Build lower hull
+    for (int i = 0 ; i < n ; ++i) {
+        while (k >= 2 && cross(H[k-2], H[k-1], *orderedCandidates[i]) <= 0) {k--;}
+        H[k++] = *orderedCandidates[i];
+    }
+
+    // Build upper hull
+    for (int i = n-2, t = k + 1; i >= 0; i--) {
+        while (k >= t && cross(H[k-2], H[k-1], *orderedCandidates[i]) <= 0) {k--;}
+        H[k++] = *orderedCandidates[i];
+    }
+
+    H.resize(k-1);
+
+    return  new CT_Polygon2DData(H);
+}
+
 
 

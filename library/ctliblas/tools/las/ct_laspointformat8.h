@@ -1,8 +1,8 @@
 #ifndef CT_LASPOINTFORMAT8_H
 #define CT_LASPOINTFORMAT8_H
 
-#include "ct_laspointformat7.h"
-#include "ct_lasnirpacket.h"
+#include "ctliblas/tools/las/ct_laspointformat7.h"
+#include "ctliblas/tools/las/ct_lasnirpacket.h"
 
 class CTLIBLAS_EXPORT CT_LASPointFormat8 : public CT_LASPointFormat7, public CT_LASNirPacket
 {

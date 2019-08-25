@@ -1,8 +1,8 @@
 #ifndef CT_LASPOINTFORMAT7_H
 #define CT_LASPOINTFORMAT7_H
 
-#include "ct_laspointformat6.h"
-#include "ct_lascolorpacket.h"
+#include "ctliblas/tools/las/ct_laspointformat6.h"
+#include "ctliblas/tools/las/ct_lascolorpacket.h"
 
 class CTLIBLAS_EXPORT CT_LASPointFormat7 : public CT_LASPointFormat6, public CT_LASColorPacket
 {

@@ -64,13 +64,13 @@ void CT_ThetaPhiShootingPattern::resetCache()
 
 size_t CT_ThetaPhiShootingPattern::numberOfShots() const
 {
-    return m_nHRays*m_nVRays;
+    return size_t(m_nHRays)*size_t(m_nVRays);
 }
 
 CT_Shot CT_ThetaPhiShootingPattern::shotAt(const size_t& index)
 {
-    size_t i = index/nVRays();
-    size_t j = index - (i*nVRays());
+    size_t i = size_t(index/nVRays());
+    size_t j = size_t(index - (i*nVRays()));
     return shotAt(i, j);
 }
 
@@ -113,7 +113,17 @@ CT_ShootingPattern* CT_ThetaPhiShootingPattern::clone() const
 
 void CT_ThetaPhiShootingPattern::updateNumberOfRays()
 {
+    m_nHRays = 0;
+    m_nVRays = 0;
+
     // Calculates the number of horizontal and vertical rays
-    m_nHRays = (int)ceil(fabs(m_hFov/m_hRes));
-    m_nVRays = (int)ceil(fabs(m_vFov/m_vRes));
+    if (!qFuzzyCompare(m_hRes, 0))
+    {
+        m_nHRays = int(ceil(fabs(m_hFov/m_hRes)));
+    }
+
+    if (!qFuzzyCompare(m_vRes, 0))
+    {
+        m_nVRays = int(ceil(fabs(m_vFov/m_vRes)));
+    }
 }

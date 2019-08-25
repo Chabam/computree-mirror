@@ -1,8 +1,8 @@
 #ifndef CT_LASNIRPACKET_H
 #define CT_LASNIRPACKET_H
 
-#include "ct_lasdefine.h"
-#include "ct_laspointinfo.h"
+#include "ctliblas/tools/las/ct_lasdefine.h"
+#include "ctliblas/tools/las/ct_laspointinfo.h"
 
 #include <QDataStream>
 
