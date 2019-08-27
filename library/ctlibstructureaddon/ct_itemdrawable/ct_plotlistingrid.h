@@ -31,6 +31,8 @@
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"
 #include "ct_shape2ddata/ct_areashape2ddata.h"
 
+#include <QHash>
+
 class CTLIBSTRUCTUREADDON_EXPORT CT_PlotListInGrid : public CT_AbstractItemDrawableWithoutPointCloud
 {
     Q_OBJECT
