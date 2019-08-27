@@ -62,7 +62,7 @@ public:
 
     void setIndices(size_t firstIndex, size_t indexJumpAtEOL);
 
-    QMap<CT_AreaShape2DData *, size_t> createPlots(CT_PlotListInGrid::Type type);
+    QHash<CT_AreaShape2DData *, size_t> createPlots(CT_PlotListInGrid::Type type);
 
     static bool orderTopLeftToBottomRight(CT_PlotListInGrid *s1, CT_PlotListInGrid *s2)
     {

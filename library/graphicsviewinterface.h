@@ -930,6 +930,12 @@ public:
      * @brief Return the height of the graphics
      */
     virtual int height() const = 0;
+
+    /**
+     * @brief Allow to force 2D mode (top view and orthographic)
+     */
+    virtual void active2DView(bool e) = 0;
+
 };
 
 class CameraInterface : public QObject

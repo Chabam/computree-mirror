@@ -114,13 +114,13 @@ void CT_PlotListInGrid::setIndices(size_t firstIndex, size_t indexJumpAtEOL)
     _indexJumpAtEOL = indexJumpAtEOL;
 }
 
-QMap<CT_AreaShape2DData*, size_t> CT_PlotListInGrid::createPlots(CT_PlotListInGrid::Type type)
+QHash<CT_AreaShape2DData*, size_t> CT_PlotListInGrid::createPlots(CT_PlotListInGrid::Type type)
 {
     double size2 = 2.0*_size;
     size_t index = _firstIndex;
     size_t lastBeginningIndex = _firstIndex;
 
-    QMap<CT_AreaShape2DData*, size_t> plots;
+    QHash<CT_AreaShape2DData*, size_t> plots;
     for (double y = _max(1) ; y >= _min(1) ; y -= _spacing)
     {
         for (double x = _min(0) ; x <= _max(0) ; x += _spacing)

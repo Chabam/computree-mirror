@@ -55,6 +55,8 @@ public:
 
     double getRadius() const;
 
+    CT_ITEM_COPY_IMP(CT_Circle2D)
+
 private:
     static const CT_StandardCircle2DDrawManager   CIRCLE2D_DRAW_MANAGER;
 
