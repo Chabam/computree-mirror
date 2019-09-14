@@ -27,6 +27,7 @@
 #include "view/drawmodeconfigurator.h"
 
 #include "tools/itemdrawable/dm_documentmenugenerator.h"
+#include "tools/attributes/dm_attributesbuildingcollectiont.h"
 
 #include <QInputDialog>
 #include <QLineEdit>
@@ -39,6 +40,7 @@
 GDocumentViewForGraphics::GDocumentViewForGraphics(GDocumentManagerView &manager, QString title, QString type) : GDocumentView(manager, title)
 {
     m_scene = new PermanentSceneToRender();
+    mResultGui.init();
 
     m_graphics = nullptr;
     _graphicsOptionsView = nullptr;
@@ -167,6 +169,7 @@ QList<GGraphicsView *> GDocumentViewForGraphics::getGraphicsList() const
 void GDocumentViewForGraphics::addItemDrawable(CT_AbstractItemDrawable &item)
 {
     GDocumentView::addItemDrawable(item);
+    mResultGui.addItemDrawable(item);
     // TODO : model !
     m_scene->addItem(&item, nullptr, *m_graphics);
 }
@@ -174,7 +177,7 @@ void GDocumentViewForGraphics::addItemDrawable(CT_AbstractItemDrawable &item)
 void GDocumentViewForGraphics::removeItemDrawable(CT_AbstractItemDrawable &item)
 {
     GDocumentView::removeItemDrawable(item);
-    m_scene->removeItem(&item, nullptr);
+    removeItemDrawableFromScene(item);
 }
 
 void GDocumentViewForGraphics::updateDrawing3DOfItemDrawablesInGraphicsView(const QList<CT_AbstractItemDrawable *> &items)
@@ -683,7 +686,7 @@ void GDocumentViewForGraphics::pluginExporterManagerReloaded()
 void GDocumentViewForGraphics::exporterActionTriggered()
 {
     // TODO : export with gui
-    /*if(m_graphics == nullptr)
+    if(m_graphics == nullptr)
         return;
 
     CDM_Tools tools(GUI_MANAGER->getPluginManager());
@@ -692,14 +695,52 @@ void GDocumentViewForGraphics::exporterActionTriggered()
 
     CT_AbstractExporter *exCopy = exporter->copy();
 
-    QList<CT_AbstractItemDrawable*> selectedItems = getSelectedItemDrawable();
+    exCopy->declareInputModels();
+
+    if(exCopy->inputsModelManager()->doesAtLeastOneInputModelsUseType(CT_AbstractAttributes::staticType()))
+    {
+        const QList<CT_VirtualAbstractStep*> steps = GUI_MANAGER->getStepManager()->getStepRootList();
+
+        QList<CT_AbstractAttributes*> allAttributes;
+        DM_AttributesBuildingCollectionT<CT_AbstractAttributes> builder;
+
+        for(CT_VirtualAbstractStep* step : steps)
+        {
+            builder.buildFrom(step);
+            allAttributes.append(builder.attributesCollection());
+        }
+
+        mResultGui.setAttributes(allAttributes);
+    }
+
+    mResultGui.setGraphicsView(m_graphics);
+    mResultGui.finalizeBeforeUseIt();
+
+    if(exCopy->findInputsInOutputsOfThisManager(*mResultGui.outModelStructureManager()))
+    {
+        if(exCopy->showInputsConfigurationDialog())
+        {
+            const QString filepath = QFileDialog::getSaveFileName(nullptr, tr("Exporter sous..."), exporter->filePath(), tools.createFileExtensionForExporter(exCopy));
+
+            if(!filepath.isEmpty()
+                    && exCopy->setFilePath(filepath))
+            {
+                exporter->setFilePath(filepath);
+
+                GUI_MANAGER->asyncExport(exCopy, nullptr);
+                return;
+            }
+        }
+    }
+
+    /*QList<CT_AbstractItemDrawable*> selectedItems = getSelectedItemDrawable();
 
     bool pointsAlreadyExported = false;
     bool edgesAlreadyExported = false;
     bool facesAlreadyExported = false;
 
     if(exCopy->canExportPoints() || exCopy->canExportEdges() || exCopy->canExportFaces()) {
-        foreach (CT_AbstractItemDrawable* item, selectedItems) {
+        for(CT_AbstractItemDrawable* item : selectedItems) {
             if(dynamic_cast<CT_IAccessPointCloud*>(item))
                 pointsAlreadyExported = true;
             else if(dynamic_cast<CT_IAccessEdgeCloud*>(item))
@@ -708,9 +749,6 @@ void GDocumentViewForGraphics::exporterActionTriggered()
                 facesAlreadyExported = true;
         }
     }
-
-    if(exCopy->canExportItems())
-        exCopy->setItemDrawableToExport(selectedItems);
 
     if(exCopy->canExportPoints() && !pointsAlreadyExported)
     {
@@ -767,9 +805,9 @@ void GDocumentViewForGraphics::exporterActionTriggered()
     else if(!exCopy->errorMessage().isEmpty())
     {
         QMessageBox::critical(nullptr, tr("Erreur"), exCopy->errorMessage(), QMessageBox::Ok);
-    }
+    }*/
 
-    delete exCopy;*/
+    delete exCopy;
 }
 
 void GDocumentViewForGraphics::mustUpdateItemDrawablesThatColorWasModified()
@@ -808,6 +846,7 @@ void GDocumentViewForGraphics::mustDirtyNormalsOfItemDrawablesWithPoints()
 void GDocumentViewForGraphics::removeItemDrawableFromScene(CT_AbstractItemDrawable &item)
 {
     // TODO : model !
+    mResultGui.removeItemDrawable(item);
     m_scene->removeItem(&item, nullptr);
 }
 

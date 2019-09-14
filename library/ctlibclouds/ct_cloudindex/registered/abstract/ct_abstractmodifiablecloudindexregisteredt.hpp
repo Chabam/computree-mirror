@@ -1,6 +1,3 @@
-#ifndef CT_ABSTRACTMODIFIABLECLOUDINDEXREGISTEREDT_HPP
-#define CT_ABSTRACTMODIFIABLECLOUDINDEXREGISTEREDT_HPP
-
 #include "ct_cloudindex/registered/abstract/ct_abstractmodifiablecloudindexregisteredt.h"
 
 #include "ct_cloudindex/tools/abstract/ct_abstractcloudindexregistrationmanagert.h"
@@ -34,5 +31,3 @@ CT_AbstractModifiableCloudIndexRegisteredT<T>::CT_AbstractModifiableCloudIndexRe
 {
     m_modifiableIndex = ci;
 }
-
-#endif // CT_ABSTRACTMODIFIABLECLOUDINDEXREGISTEREDT_HPP

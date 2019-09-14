@@ -34,6 +34,8 @@
 #include "ct_actions/ct_actionsseparator.h"
 #include "ct_exporter/ct_standardexporterseparator.h"
 #include "ct_reader/ct_standardreaderseparator.h"
+#include "ct_filter/abstract/ct_abstractfilter.h"
+#include "ct_metric/abstract/ct_abstractmetric.h"
 
 #include "ct_step/abstract/ct_abstractsteploadfile.h"
 

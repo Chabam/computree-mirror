@@ -423,7 +423,7 @@ void CTG_InModelPossibilitiesChoiceComboBoxDelegate::comboBoxIndexChanged()
 // CTG_InModelPossibilitiesChoice //
 
 CTG_InModelPossibilitiesChoice::CTG_InModelPossibilitiesChoice(QWidget *parent) :
-    QWidget(parent),
+    SuperClass(parent),
     ui(new Ui::CTG_InModelPossibilitiesChoice)
 {
     ui->setupUi(this);

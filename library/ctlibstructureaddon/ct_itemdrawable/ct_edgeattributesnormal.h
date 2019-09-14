@@ -14,7 +14,7 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_EdgeAttributesNormal : public CT_AbstractEdg
 public:
     CT_EdgeAttributesNormal();
     CT_EdgeAttributesNormal(CT_ECIR pcir);
-    CT_EdgeAttributesNormal(CT_ECIR pcir, CT_AbstractNormalCloud *nc);
+    CT_EdgeAttributesNormal(CT_ECIR pcir, CT_AbstractNormalCloud *nc, bool autoDeleteNormalCloud = true);
     CT_EdgeAttributesNormal(const CT_EdgeAttributesNormal& other) = default;
 
     size_t attributesSize() const override { return CT_AttributesNormal::attributesSize(); }

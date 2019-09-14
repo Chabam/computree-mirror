@@ -29,6 +29,11 @@ public:
     bool needInputs() const;
 
     /**
+     * @brief Returns true if at least one model (recursive) use the specified type
+     */
+    bool doesAtLeastOneInputModelsUseType(const QString& type) const;
+
+    /**
      * @brief Add a new input result model to the structure (result are always root)
      * @param handleResult : the handle to use to create the result model and access it later
      */
@@ -250,7 +255,9 @@ private:
                            ConstructorArgs&& ...constructorArgs) {
         MODELS_ASSERT(!handleResult.isValid());
 
-        auto resultModel = new HandleInResult::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);
+        auto resultModel = new HandleInResult::ModelType(std::forward<ConstructorArgs>(constructorArgs)...,
+                                                         HandleInResult::MinValue,
+                                                         HandleInResult::MaxValue);
         handleResult.setModel(resultModel);
 
         m_results.append(resultModel);

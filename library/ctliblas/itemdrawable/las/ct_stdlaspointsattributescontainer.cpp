@@ -1,5 +1,7 @@
 #include "ct_stdlaspointsattributescontainer.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_StdLASPointsAttributesContainer)
+
 void CT_StdLASPointsAttributesContainer::insertPointsAttributesAt(CT_LasDefine::LASPointAttributesType key, const CT_AbstractPointAttributesScalar *att)
 {
     if(att != nullptr)

@@ -3,6 +3,8 @@
 
 CT_StandardPointsAttributesNormalDrawManager CT_PointsAttributesNormal::PAN_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_PointsAttributesNormal)
+
 CT_PointsAttributesNormal::CT_PointsAttributesNormal() : SuperClass1(), SuperClass2()
 {
     setBaseDrawManager(&PAN_DRAW_MANAGER);
@@ -15,7 +17,7 @@ CT_PointsAttributesNormal::CT_PointsAttributesNormal(CT_PCIR pcir) : SuperClass1
 }
 
 CT_PointsAttributesNormal::CT_PointsAttributesNormal(CT_PCIR pcir,
-                                                     CT_AbstractNormalCloud* nc) : SuperClass1(pcir), SuperClass2(nc)
+                                                     CT_AbstractNormalCloud* nc, bool autoDeleteNormalCloud) : SuperClass1(pcir), SuperClass2(nc, autoDeleteNormalCloud)
 {
     setBaseDrawManager(&PAN_DRAW_MANAGER);
 }

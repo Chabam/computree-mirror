@@ -27,6 +27,7 @@
 
 #include "ct_abstractareashape2d.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractAreaShape2D)
 
 CT_AbstractAreaShape2D::CT_AbstractAreaShape2D() : SuperClass()
 {

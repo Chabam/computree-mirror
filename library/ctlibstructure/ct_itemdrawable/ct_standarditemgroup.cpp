@@ -6,18 +6,20 @@
 
 const CT_StandardStandardItemGroupDrawManager CT_StandardItemGroup::SIG_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_StandardItemGroup)
+
 CT_StandardItemGroup::CT_StandardItemGroup() : SuperClass(),
-    m_context(nullptr),
     m_removedLaterFlags(Nothing),
-    m_parentContainer(nullptr)
+    m_parentContainer(nullptr),
+    m_context(nullptr)
 {
     setBaseDrawManager(&SIG_DRAW_MANAGER);
 }
 
 CT_StandardItemGroup::CT_StandardItemGroup(const CT_StandardItemGroup& other) : SuperClass(other),
-    m_context(other.m_context),
     m_removedLaterFlags(other.m_removedLaterFlags),
-    m_parentContainer(nullptr)
+    m_parentContainer(nullptr),
+    m_context(other.m_context)
 {
 }
 
@@ -267,7 +269,6 @@ bool CT_StandardItemGroup::removeSingularItemWithOutModel(const DEF_CT_AbstractI
 bool CT_StandardItemGroup::removeSingularItem(const CT_AbstractSingularItemDrawable* item)
 {
     Q_ASSERT(item != nullptr);
-    Q_ASSERT(item->parentGroup() == this);
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
@@ -294,9 +295,11 @@ bool CT_StandardItemGroup::containsSingularItemInSelectedPossibilitiesOfInModel(
 bool CT_StandardItemGroup::containsSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel) const
 {
     Q_ASSERT(outModel != nullptr);
-    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
+
+    if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() != model()->uniqueIndex())
+        return false;
 
     ItemContainerType* ct = itemContainerWithOutModel(outModel);
 
@@ -304,6 +307,15 @@ bool CT_StandardItemGroup::containsSingularItemWithOutModel(const DEF_CT_Abstrac
         return false;
 
     return !ct->willBeRemovedLater();
+}
+
+bool CT_StandardItemGroup::containsSingularItem(const CT_AbstractSingularItemDrawable* item) const
+{
+    Q_ASSERT(item != nullptr);
+
+    QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
+
+    return containsSingularItemWithOutModel(static_cast<DEF_CT_AbstractItemDrawableModelOut*>(item->model()));
 }
 
 int CT_StandardItemGroup::nSingularItem() const
@@ -380,7 +392,7 @@ CT_StandardItemGroup::SingularItemIterator CT_StandardItemGroup::singularItems()
     using iterator = ItemContainerType::const_iterator;
     using info = QPair<iterator, iterator>;
 
-    std::vector<info> infos;
+    QVector<info> infos;
     infos.resize(m_newItemsAdded.size() + m_itemsCopied.size());
     int currentIndex = 0;
 
@@ -426,7 +438,7 @@ CT_StandardItemGroup::SingularItemIterator CT_StandardItemGroup::newSingularItem
     using iterator = ItemContainerType::const_iterator;
     using info = QPair<iterator, iterator>;
 
-    std::vector<info> infos;
+    QVector<info> infos;
     infos.resize(m_newItemsAdded.size());
     int currentIndex = 0;
 
@@ -465,7 +477,7 @@ CT_StandardItemGroup::SingularItemIterator CT_StandardItemGroup::backupSingularI
     using iterator = ItemContainerType::const_iterator;
     using info = QPair<iterator, iterator>;
 
-    std::vector<info> infos;
+    QVector<info> infos;
     infos.resize(m_itemsCopied.size());
     int currentIndex = 0;
 
@@ -582,6 +594,11 @@ bool CT_StandardItemGroup::removeGroup(CT_StandardItemGroup* group)
     return true;
 }
 
+void CT_StandardItemGroup::removeFromParent(bool ifEmptyRemoveParentTooRecursively)
+{
+    setBeRemovedLater(ifEmptyRemoveParentTooRecursively);
+}
+
 bool CT_StandardItemGroup::visitGroups(const CT_StandardItemGroup::GroupVisitor& visitor) const
 {
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
@@ -599,7 +616,7 @@ CT_StandardItemGroup::GroupIterator CT_StandardItemGroup::groups() const
     using iterator = GroupContainerType::const_iterator;
     using info = QPair<iterator, iterator>;
 
-    std::vector<info> infos;
+    QVector<info> infos;
     infos.resize(m_newGroupsAdded.size() + m_groupsCopied.size());
     int currentIndex = 0;
 
@@ -648,7 +665,7 @@ CT_StandardItemGroup::GroupIterator CT_StandardItemGroup::newGroups() const
     using iterator = GroupContainerType::const_iterator;
     using info = QPair<iterator, iterator>;
 
-    std::vector<info> infos;
+    QVector<info> infos;
     infos.resize(m_newGroupsAdded.size());
     int currentIndex = 0;
 
@@ -690,7 +707,7 @@ CT_StandardItemGroup::GroupIterator CT_StandardItemGroup::backupGroups() const
     using iterator = GroupContainerType::const_iterator;
     using info = QPair<iterator, iterator>;
 
-    std::vector<info> infos;
+    QVector<info> infos;
     infos.resize(m_groupsCopied.size());
     int currentIndex = 0;
 
@@ -771,7 +788,7 @@ CT_StandardItemGroup* CT_StandardItemGroup::groupWithOutModel(const DEF_CT_Abstr
     GroupContainerType* container = groupContainerWithOutModel(outModel);
 
     if(container == nullptr)
-        return false;
+        return nullptr;
 
     CT_StandardItemGroup* group = nullptr;
     container->visitElementsToKeep([&group](const CT_StandardItemGroup* gr) -> bool {
@@ -806,9 +823,11 @@ bool CT_StandardItemGroup::visitGroupsInSelectedPossibilitiesOfInModel(const DEF
 bool CT_StandardItemGroup::containsGroupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel) const
 {
     Q_ASSERT(outModel != nullptr);
-    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessGroup));
+
+    if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() != model()->uniqueIndex())
+        return false;
 
     GroupContainerType* container = groupContainerWithOutModel(outModel);
 
@@ -858,7 +877,7 @@ bool CT_StandardItemGroup::atLeastOneChildMustBeRemovedLater() const
     return m_removedLaterFlags.testFlag(ChildRemoveLater);
 }
 
-void CT_StandardItemGroup::setBeRemovedLater()
+void CT_StandardItemGroup::setBeRemovedLater(bool ifEmptyRemoveParentTooRecursively)
 {
     Q_ASSERT(parentContainer() != nullptr);
 
@@ -871,6 +890,9 @@ void CT_StandardItemGroup::setBeRemovedLater()
     m_removedLaterFlags |= RemoveLater;
 
     parentContainer()->unlock();
+
+    if(ifEmptyRemoveParentTooRecursively && (parentGroup() != nullptr) && (parentGroup()->isEmpty()))
+        parentGroup()->removeFromParent(true);
 }
 
 void CT_StandardItemGroup::setAtLeastOneChildMustBeRemovedLater()

@@ -47,8 +47,10 @@ bool CT_CheckBox::restoreSettings(SettingsReaderInterface &reader)
 {
     QVariant value;
 
-    if(reader.parameter(this, "Checked", value))
+    if(reader.parameter(this, "Checked", value)) {
         setWidgetValue(value);
+        updateValue();
+    }
 
     return true;
 }

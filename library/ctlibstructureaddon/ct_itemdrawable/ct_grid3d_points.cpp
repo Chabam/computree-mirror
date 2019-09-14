@@ -27,6 +27,8 @@
 
 #include "ct_grid3d_points.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_Grid3D_Points)
+
 CT_Grid3D_Points::CT_Grid3D_Points() : SuperClass()
 {
 }

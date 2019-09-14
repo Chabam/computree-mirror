@@ -31,6 +31,8 @@
 
 const CT_StandardScanPathDrawManager CT_ScanPath::SCANPATH_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_ScanPath)
+
 CT_ScanPath::CT_ScanPath() : SuperClass(),
     _minGPSTime(std::numeric_limits<double>::max()),
     _maxGPSTime(-std::numeric_limits<double>::max()),

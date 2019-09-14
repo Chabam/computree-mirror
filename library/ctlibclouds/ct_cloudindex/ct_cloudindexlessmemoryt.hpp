@@ -1,6 +1,3 @@
-#ifndef CT_CLOUDINDEXLESSMEMORYT_HPP
-#define CT_CLOUDINDEXLESSMEMORYT_HPP
-
 #include "ct_cloudindex/ct_cloudindexlessmemoryt.h"
 
 template<typename T>
@@ -86,7 +83,7 @@ size_t CT_CloudIndexLessMemoryT<T>::lowerBound(const size_t &value) const
     if((value >= m_begin) && (value <= last()))
         return value-m_begin;
 
-    return -1;
+    return std::numeric_limits<size_t>::max();
 }
 
 template<typename T>
@@ -95,7 +92,7 @@ size_t CT_CloudIndexLessMemoryT<T>::upperBound(const size_t &value) const
     if((value >= m_begin) && (value <= last()))
         return (value-m_begin)+1;
 
-    return -1;
+    return std::numeric_limits<size_t>::max();
 }
 
 template<typename T>
@@ -182,5 +179,3 @@ void CT_CloudIndexLessMemoryT<T>::internalClear()
     m_begin = 0;
     m_size = 0;
 }
-
-#endif // CT_CLOUDINDEXLESSMEMORYT_HPP

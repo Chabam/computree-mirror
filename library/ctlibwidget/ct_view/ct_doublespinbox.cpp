@@ -63,8 +63,10 @@ bool CT_DoubleSpinBox::restoreSettings(SettingsReaderInterface &reader)
 {
     QVariant value;
 
-    if(reader.parameter(this, "DoubleValue", value))
+    if(reader.parameter(this, "DoubleValue", value)) {
         setWidgetValue(value);
+        updateValue();
+    }
 
     return true;
 }

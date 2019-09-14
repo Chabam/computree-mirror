@@ -2,6 +2,8 @@
 
 const CT_StandardTriangulation2DDrawManager CT_Triangulation2D::TRIANGULATION2D_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_Triangulation2D)
+
 CT_Triangulation2D::CT_Triangulation2D() : CT_Triangulation2D(nullptr)
 {
 }

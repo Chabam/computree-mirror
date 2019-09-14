@@ -4,7 +4,7 @@
 
 CT_StepEndLoop::CT_StepEndLoop() : CT_AbstractStep()
 {
-    m_mustRecheckTree = false;
+    m_mustRestartFromStep = nullptr;
     setDebuggable(true);
 }
 
@@ -24,9 +24,9 @@ CT_VirtualAbstractStep* CT_StepEndLoop::createNewInstance() const
     return new CT_StepEndLoop();
 }
 
-bool CT_StepEndLoop::mustRecheckTree() const
+CT_VirtualAbstractStep* CT_StepEndLoop::restartComputeFromStep() const
 {
-    return m_mustRecheckTree;
+    return m_mustRestartFromStep;
 }
 
 void CT_StepEndLoop::declareInputModels(CT_StepInModelStructureManager& manager)
@@ -45,23 +45,24 @@ void CT_StepEndLoop::declareOutputModels(CT_StepOutModelStructureManager& manage
 
 void CT_StepEndLoop::compute()
 {    
-    m_mustRecheckTree = false;
+    m_mustRestartFromStep = nullptr;
 
     for(CT_LoopCounter* counter : m_hInLoopCounter.iterateOutputs(m_hInResultCopy)) {
 
         STEP_LOG->addInfoMessage(tr("Fin de boucle, tour %1 sur %2").arg(counter->currentTurn()).arg(counter->nTurns()));
 
         // Use the debug mode at step loop scale (and not at step scale as usual)
-        if (counter->currentTurn() % currentNumberOfBreakPointToJump() == 0)
+        if ((currentNumberOfBreakPointToJump() != 0) && ((counter->currentTurn() % currentNumberOfBreakPointToJump()) == 0))
             waitForAckIfInDebugMode();
 
-        if (counter->hasNextTurn())
+        if(counter->hasNextTurn())
         {
-            m_mustRecheckTree = true;
+            m_mustRestartFromStep = counter->beginLoopStep();
             counter->beginNextTurn();
-        } else {
+        }
+        else
+        {
             counter->setCurrentTurn(1);
-            counter->beginLoopStep()->clearCounter();
         }
 
         return;

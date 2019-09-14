@@ -27,9 +27,9 @@
 
 #include "ct_polygon2d.h"
 
-CT_DEFAULT_IA_INIT(CT_Polygon2D)
-
 const CT_StandardPolygon2DDrawManager CT_Polygon2D::POLYGON2D_DRAW_MANAGER;
+
+CT_DEFAULT_IA_INIT(CT_Polygon2D)
 
 CT_Polygon2D::CT_Polygon2D() : SuperClass()
 {

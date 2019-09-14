@@ -1,6 +1,3 @@
-#ifndef CT_ATTRIBUTESSCALART_HPP
-#define CT_ATTRIBUTESSCALART_HPP
-
 #include "ct_attributes/ct_attributesscalart.h"
 
 #include <limits>
@@ -127,5 +124,3 @@ bool CT_AttributesScalarT<SCALAR>::staticCompareScalar(const SCALAR &a, const SC
 {
     return a < b;
 }
-
-#endif // CT_ATTRIBUTESSCALART_HPP

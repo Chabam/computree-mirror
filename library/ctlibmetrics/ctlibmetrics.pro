@@ -1,26 +1,23 @@
-CT_PREFIX = ../..
-CT_PREFIX_INSTALL = ../../..
+QT = core gui
 
-include($${CT_PREFIX}/shared.pri)
-include($${PLUGIN_SHARED_DIR}/include.pri)
+contains ( QT_VERSION, "^5.*" ) {
+    QT *= widgets
+}
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
+include(../library_shared.pri)
 
-QT += xml
-
-DESTDIR = $${PLUGINSHARED_DESTDIR}
 TARGET = ctlibmetrics
 
 DEFINES += CTLIBMETRICS_LIBRARY
 
-HEADERS += $${PLUGIN_SHARED_INTERFACE_DIR}/interfaces.h \ 
-    ctlibmetrics_global.h \
+HEADERS += ctlibmetrics_global.h \
     ct_metric/abstract/ct_abstractmetric.h \
     ct_metric/abstract/ct_abstractmetric_raster.h \
     ct_metric/abstract/ct_abstractmetric_xyz.h \
     ct_metric/points/ct_cloudmetrics.h \
     tools/ct_valueandbool.h \
-    ct_metric/abstract/ct_abstractmetricgeneric.h
+    ct_metric/abstract/ct_abstractmetricgeneric.h \
+    ct_metric/tools/ct_metricoutmodelstructuremanager.h
 
 SOURCES += \
     ct_metric/abstract/ct_abstractmetric.cpp \

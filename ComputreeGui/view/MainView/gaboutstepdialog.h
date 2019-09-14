@@ -47,6 +47,8 @@ private:
     void createForChildrens(QTreeWidgetItem *parent , const CT_OutAbstractModel *model) const;
     void createForChildrens(QTreeWidgetItem *parent , const CT_InAbstractModel *model) const;
 
+    void setFontForInModel(QTreeWidgetItem *item , const CT_InAbstractModel *model) const;
+
 private:
     Ui::GAboutStepDialog *ui;
 };

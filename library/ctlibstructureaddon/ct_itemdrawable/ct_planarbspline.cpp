@@ -27,7 +27,6 @@
 
 #include "ct_planarbspline.h"
 
-
 const CT_StandardPlanarBSplineDrawManager CT_PlanarBSpline::PLANARBSPLINE_DRAW_MANAGER;
 
 CT_DEFAULT_IA_INIT(CT_PlanarBSpline)

@@ -1,6 +1,3 @@
-#ifndef CT_STANDARDPROFILEDRAWMANAGER_HPP
-#define CT_STANDARDPROFILEDRAWMANAGER_HPP
-
 #include "ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.h"
 #include "ct_itemdrawable/ct_profile.h"
 #include "painterinterface.h"
@@ -82,7 +79,7 @@ void CT_StandardProfileDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                 {
                     painter.setColor(QColor(125, 0, 0));
                 }  else {
-                    int colorLevel = ((value - (double)item.dataMin()) / amplitude)*255;
+                    int colorLevel = ((value - static_cast<double>(item.dataMin())) / amplitude)*255;
                     painter.setColor(QColor(colorLevel, colorLevel, colorLevel));
                 }
 
@@ -96,7 +93,7 @@ void CT_StandardProfileDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
 
             if (graphMode)
             {
-                if (scale) {value = (value - (double)item.dataMin()) * scaling;}
+                if (scale) {value = (value - static_cast<double>(item.dataMin())) * scaling;}
 
                 Eigen::Vector3d normalVector;
                 if ((direction(0) >= direction(1)) && (direction(0) >= direction(2)))
@@ -261,5 +258,3 @@ QString CT_StandardProfileDrawManager<DataT>::staticInitConfigScaleCoeff()
 {
     return "PROF_COE";
 }
-
-#endif // CT_STANDARDPROFILEDRAWMANAGER_HPP

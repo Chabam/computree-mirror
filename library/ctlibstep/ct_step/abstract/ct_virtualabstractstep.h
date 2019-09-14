@@ -457,9 +457,9 @@ public:
     virtual bool mustBeRestarted() const;
 
     /**
-     * @brief Returns true if this step want that the core recheck all step of the tree. By default return false.
+     * @brief Returns the step where we must restart the process or nullptr if we must continue. By default return nullptr.
      */
-    virtual bool mustRecheckTree() const;
+    virtual CT_VirtualAbstractStep* restartComputeFromStep() const;
 
     /************ SAVE/RESTORE ************/
 

@@ -11,6 +11,8 @@ template<typename T>
 class CT_CloudIndexLessMemoryT : virtual public CT_AbstractCloudIndexT<T>
 {
 public:
+    CT_CloudIndexLessMemoryT(const size_t &begin, const size_t &size);
+
     // CT_AbstractCloudIndex
     bool doIndexesFollowEachOther() const { return true; }
     size_t size() const;
@@ -35,14 +37,8 @@ public:
     CT_AbstractCloud* copy() const;
 
 private:
-
     template<typename A, class CloudIndexLessMemory> friend class CT_CloudIndexRegistrationManagerT;
     template<typename B, typename CLOUD> friend class CT_GlobalCloudManagerT;
-
-    /**
-     * @brief The constructor is private because only the CT_GlobalCloudManagerT can create this type of cloud index
-     */
-    CT_CloudIndexLessMemoryT(const size_t &begin, const size_t &size);
 
     size_t                                      m_begin;
     size_t                                      m_size;

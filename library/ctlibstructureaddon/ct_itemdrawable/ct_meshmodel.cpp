@@ -2,6 +2,8 @@
 
 const CT_StandardMeshModelDrawManager CT_MeshModel::CT_MESHMODEL_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_MeshModel)
+
 CT_MeshModel::CT_MeshModel() : SuperClass(),
     m_mesh(nullptr),
     m_autoDeleteMesh(true)

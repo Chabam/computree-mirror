@@ -1,6 +1,3 @@
-#ifndef CT_STDCLOUDREGISTEREDT_HPP
-#define CT_STDCLOUDREGISTEREDT_HPP
-
 #include "ct_cloud/registered/ct_stdcloudregisteredt.h"
 
 template<typename T >
@@ -26,5 +23,3 @@ CT_StdCloudRegisteredT<T>::CT_StdCloudRegisteredT(T *cloud) : CT_AbstractCloudRe
 {
     m_cloud = cloud;
 }
-
-#endif // CT_STDCLOUDREGISTEREDT_HPP

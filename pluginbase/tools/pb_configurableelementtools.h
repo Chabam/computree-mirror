@@ -56,7 +56,7 @@ public:
      */
     template<class Collection>
     static bool restoreSettingsOfConfigurableElementAndSaveItInACollection(Collection& cToAdd, const Collection& cToSearch, const QObject* caller, const QString& elementName, SettingsReaderInterface& reader) {
-        qDeleteAll(cToAdd);
+        qDeleteAll(cToAdd.begin(), cToAdd.end());
         cToAdd.clear();
 
         QVariant value;
@@ -99,7 +99,7 @@ public:
         if(getCollection == nullptr)
             return;
 
-        const PluginManagerInterface* pm = PS_CONTEXT->pluginManager();
+        const PluginManagerInterface* pm = CT_Context::staticInstance()->pluginManager();
 
         const int nPlugins = pm->countPluginLoaded();
 

@@ -17,6 +17,8 @@
 
 #include "view/DocumentView/GraphicsViews/3D/ggraphicsviewimp.h"
 
+#include "tools/document/dm_resultgroupgui.h"
+
 #include <QHBoxLayout>
 #include <QToolButton>
 
@@ -175,6 +177,8 @@ private:
     bool                        _viewDetached;
     QWidget*                    _previousParent;
     Qt::WindowFlags             _flags;
+
+    DM_ResultGroupGui           mResultGui;
 
     void createAndAddCameraAndGraphicsOptions(QWidget *parent);
     void createAndAddItemDrawableWidgetContainer(QWidget *parent);

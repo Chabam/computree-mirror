@@ -2,6 +2,7 @@
 #define CTG_INRESULTMODELCONFIGURATION_H
 
 #include "ct_model/inModel/manager/ct_inmodelstructuremanager.h"
+#include "ct_model/inModel/views/iinmodelpossibilitieschoice.h"
 
 #include <QDialog>
 #include <QString>
@@ -14,13 +15,13 @@ class CTG_InResultModelConfiguration;
  * @brief Dialog that present all input models and their possibilities and let the user choose
  *        which possibility use with which input model.
  */
-class CTG_InResultModelConfiguration : public QDialog
+class CTLIBMODELS_EXPORT CTG_InResultModelConfiguration : public QDialog
 {
     Q_OBJECT
     
 public:
-    explicit CTG_InResultModelConfiguration(QWidget* parent = 0);
-    ~CTG_InResultModelConfiguration();
+    explicit CTG_InResultModelConfiguration(IInModelPossibilitiesChoice* widgetInModelPossibilities, QWidget* parent = nullptr);
+    ~CTG_InResultModelConfiguration() final;
     
     /**
      * @brief Set the input result models manager to use
@@ -40,6 +41,8 @@ private:
      * @brief Manager of input result models
      */
     CT_InModelStructureManager*         m_inputResultModelManager;
+
+    IInModelPossibilitiesChoice*        mInModelPossibilities;
 
 public slots:
     /**

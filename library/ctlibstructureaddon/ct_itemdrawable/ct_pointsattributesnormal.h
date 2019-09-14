@@ -20,7 +20,8 @@ public:
     CT_PointsAttributesNormal(CT_PCIR pcir);
 
     CT_PointsAttributesNormal(CT_PCIR pcir,
-                              CT_AbstractNormalCloud* nc);
+                              CT_AbstractNormalCloud* nc,
+                              bool autoDeleteNormalCloud = true);
 
     /**
      * @brief Copy constructor.

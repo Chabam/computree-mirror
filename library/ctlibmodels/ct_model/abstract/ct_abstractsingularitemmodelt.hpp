@@ -1,6 +1,3 @@
-#ifndef CT_ABSTRACTITEMDRAWABLEMODELT_HPP
-#define CT_ABSTRACTITEMDRAWABLEMODELT_HPP
-
 #include "ct_abstractsingularitemmodelt.h"
 
 template <class GroupModelT, class AttributModelT, class InheritedT>
@@ -95,5 +92,3 @@ GroupModelT* CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, Inherite
 
     return static_cast<GroupModelT*>(pGroup->rootGroup());
 }
-
-#endif // CT_ABSTRACTITEMDRAWABLEMODELT_HPP

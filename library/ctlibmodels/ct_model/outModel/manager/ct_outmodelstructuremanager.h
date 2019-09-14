@@ -59,7 +59,7 @@
                                                       std::false_type, \
                                                       ConstructorArgs&& ...constructorArgs) { \
                                      \
-                                            MODELS_ASSERT(outParent.isValid() && !outHandle.isValid()); \
+                                            MODELS_ASSERT(m_ignoreInvalidParentHandle || (outParent.isValid() && !outHandle.isValid())); \
                                      \
                                             auto outModelPrototypeToCopy = new HandleOut::ModelType(std::forward<ConstructorArgs>(constructorArgs)...); \
                                      \
@@ -88,7 +88,13 @@
 class CTLIBMODELS_EXPORT CT_OutModelStructureManager
 {
 public:
+    CT_OutModelStructureManager() : m_ignoreInvalidParentHandle(false) {}
     virtual ~CT_OutModelStructureManager();
+
+    /**
+     * @brief Call it if you want ot ignore invalid parent handle (parent handle that does not have at least one model)
+     */
+    void setIgnoreInvalidParentHandle(bool ignore);
 
     /**
      * @brief Add a new output result model to the structure (result are always root)
@@ -206,10 +212,10 @@ public:
     }
 
     /**
-     * @brief Add an item to a group model
-     * @param parentItem : the handle of an input or an output item model to use to add the new group
+     * @brief Add an item attribute to an item model
+     * @param parentItem : the handle of an input or an output item model to use to add the new item attribute
      * @param itemAttributeHandle : the handle of the output item attribute model to use to create the new item attribute model and access it later
-     * @param category : a category, per example PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE)
+     * @param category : a category, per example CT_AbstractCategory::DATA_VALUE
      * @param displayableName : the displayable that must be set to the new item attribute model
      * @param shortDescription : the short description that must be set to the new item attribute model
      * @param detailledDescription : the detailled description that must be set to the new item attribute model
@@ -285,7 +291,7 @@ public:
      */
     void clearResults(bool deleteFromMemory = true);
 
-private:
+protected:
     /**
      * @brief A structure to keep the output result model and a boolean to know if it must be deleted
      *        from memory by this class or not
@@ -303,11 +309,35 @@ private:
         bool                        mustBeAutoDelete;
     };
 
+    void internalAddResultModel(CT_OutAbstractResultModel* resultModel, bool autoDeleteIt = true)
+    {
+        m_results.append(new OutModelInfo(resultModel, autoDeleteIt));
+    }
+
+    template<typename ResultCopyModel>
+    void internalAddResultCopyModel(ResultCopyModel* inModel)
+    {
+        MODELS_ASSERT(!m_inResultsCopy.contains(inModel) || (inModel->toolToModifyResultModelCopies() == nullptr));
+
+        m_inResultsCopy.insert(inModel);
+
+        const auto tool = inModel->createOutResultModelCopiesAccordingToNumberOfPossibility();
+
+        const auto visitor = [this](const CT_OutAbstractResultModel* outResultModel) -> bool {
+            internalAddResultModel(const_cast<CT_OutAbstractResultModel*>(outResultModel), false);
+            return true;
+        };
+
+        tool->visitOutResultModelCopies(visitor);
+    }
+
+private:
     /**
      * @brief Collection of output result model
      */
     QList<OutModelInfo*>                m_results;
     QSet<CT_InAbstractResultModel*>     m_inResultsCopy;
+    bool                                m_ignoreInvalidParentHandle;
 
     GENERATE_ADD_XXX_TO(internalAddGroupTo, addGroupWithInputTool, addGroup)
     GENERATE_ADD_XXX_TO(internalAddItemTo, addItemWithInputTool, addItem)
@@ -325,7 +355,7 @@ private:
         auto resultModel = new HandleOutResult::ModelType(nullptr, std::forward<ConstructorArgs>(constructorArgs)...);
         handleResult.setModel(resultModel);
 
-        m_results.append(new OutModelInfo(resultModel, true));
+        internalAddResultModel(resultModel, true);
     }
 
     template<class HandleOutResult, typename... ConstructorArgs>
@@ -358,20 +388,7 @@ private:
 
         MODELS_ASSERT(handleInResultCopy.isValid());
 
-        auto inModel = handleInResultCopy.model();
-
-        MODELS_ASSERT(!m_inResultsCopy.contains(inModel) || (inModel->toolToModifyResultModelCopies() == nullptr));
-
-        m_inResultsCopy.insert(inModel);
-
-        const auto tool = inModel->createOutResultModelCopiesAccordingToNumberOfPossibility();
-
-        const auto visitor = [this](const CT_OutAbstractResultModel* outResultModel) -> bool {
-            m_results.append(new OutModelInfo(const_cast<CT_OutAbstractResultModel*>(outResultModel), false));
-            return true;
-        };
-
-        tool->visitOutResultModelCopies(visitor);
+        internalAddResultCopyModel(handleInResultCopy.model());
     }
 
     template<class HandleInResultCopy>

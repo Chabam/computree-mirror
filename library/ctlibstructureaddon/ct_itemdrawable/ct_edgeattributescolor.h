@@ -14,7 +14,7 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_EdgeAttributesColor : public CT_AbstractEdge
 public:
     CT_EdgeAttributesColor();
     CT_EdgeAttributesColor(CT_ECIR pcir);
-    CT_EdgeAttributesColor(CT_ECIR pcir, CT_AbstractColorCloud *cc);
+    CT_EdgeAttributesColor(CT_ECIR pcir, CT_AbstractColorCloud *cc, bool autoDeleteColorCloud = true);
     CT_EdgeAttributesColor(const CT_EdgeAttributesColor& other) = default;
 
     size_t attributesSize() const override { return CT_AttributesColor::attributesSize(); }

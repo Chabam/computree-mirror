@@ -3,27 +3,26 @@
 
 #include "ctliblas/ctliblas_global.h"
 #include "ctliblas/itemdrawable/las/ct_stdlaspointsattributescontainer.h"
-
-#include "ctlibfilters/filters/abstract/ct_abstractfilter_xyz.h"
+#include "ct_filter/abstract/ct_abstractfilter_xyz.h"
 
 class CTLIBLAS_EXPORT CT_AbstractFilter_LAS : public CT_AbstractFilter_XYZ
 {
     Q_OBJECT
+
 public:
     CT_AbstractFilter_LAS();
     CT_AbstractFilter_LAS(const CT_AbstractFilter_LAS& other);
-    ~CT_AbstractFilter_LAS();
 
     /**
      * @brief Set LAS attributes to use.
-     * @return false if it was NULL
+     * @return false if it was nullptr
      */
     virtual bool setLASAttributesContainer(const CT_StdLASPointsAttributesContainer *lasAttributes);
 
     /**
      * @brief Inherited to use las data
      */
-    virtual bool filterPointCloudIndex();
+    bool filterPointCloudIndex() override;
 
     /**
      * @brief Call to check if a point is valid (not filtered) or not (filtered)
@@ -36,7 +35,7 @@ public:
     /**
      * @brief Inherited to use las data if exist
      */
-    bool validatePoint(const CT_PointIterator &pointIt);
+    bool validatePoint(const CT_PointIterator &pointIt) override;
 
 private:
     CT_StdLASPointsAttributesContainer  *_lasAttributes;

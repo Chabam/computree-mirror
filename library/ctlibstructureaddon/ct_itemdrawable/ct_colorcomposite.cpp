@@ -29,6 +29,8 @@
 
 const CT_StandardColorCompositeDrawManager CT_ColorComposite::COLOR_COMPOSITE_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_ColorComposite)
+
 CT_ColorComposite::CT_ColorComposite() : SuperClass(),
     _red(nullptr),
     _green(nullptr),

@@ -129,7 +129,10 @@ CT_AbstractResult* CT_ResultGroup::copy(const CT_OutAbstractResultModel* newMode
     if(rootGroupModel != nullptr) {
 
         const auto visitor = [&c, &rootGroupModel](const CT_StandardItemGroup* rootGroup) -> bool {
-            c->m_rootGroups->append(static_cast<CT_StandardItemGroup*>(rootGroup->copy(rootGroupModel, c)));
+            CT_StandardItemGroup* rootGroupCpy = static_cast<CT_StandardItemGroup*>(rootGroup->copy(rootGroupModel, c));
+            c->m_rootGroups->append(rootGroupCpy);
+            rootGroupCpy->setParentContainer(c->m_rootGroups);
+
             return true;
         };
 

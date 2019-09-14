@@ -1,6 +1,3 @@
-#ifndef CT_GLOBALCLOUDMANAGERT_HPP
-#define CT_GLOBALCLOUDMANAGERT_HPP
-
 #include "ct_cloud/tools/ct_globalcloudmanagert.h"
 
 
@@ -116,7 +113,7 @@ typename CT_GlobalCloudManagerT<T, CLOUD>::CT_AbstractNotModifiableCIR CT_Global
 }
 
 template<typename T, typename CLOUD>
-CT_AbstractCloud *CT_GlobalCloudManagerT<T, CLOUD>::globalAbstractCloud() const
+CT_AbstractCloud* CT_GlobalCloudManagerT<T, CLOUD>::globalAbstractCloud() const
 {
     return (CT_AbstractCloud*)&m_cloud;
 }
@@ -371,5 +368,3 @@ void CT_GlobalCloudManagerT<T, CLOUD>::deleteMultipleCloud()
         this->m_multipleDeleteCollection.clear();
     }
 }
-
-#endif // CT_GLOBALCLOUDMANAGERT_HPP

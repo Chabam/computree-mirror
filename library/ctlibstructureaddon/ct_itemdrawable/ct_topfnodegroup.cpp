@@ -2,6 +2,8 @@
 
 #include "ct_model/outModel/ct_outopfnodegroupmodel.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_TOPFNodeGroup)
+
 CT_TOPFNodeGroup::CT_TOPFNodeGroup() : CT_TNodeGroup()
 {
 }

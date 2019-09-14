@@ -21,6 +21,23 @@ bool CT_InModelStructureManager::needInputs() const
             && (dynamic_cast<CT_InResultModelNotNeedInputResult*>(m_results.first()) == nullptr);
 }
 
+bool CT_InModelStructureManager::doesAtLeastOneInputModelsUseType(const QString& type) const
+{
+   bool yes = false;
+
+   visitResults([&yes, &type](const CT_InAbstractResultModel* resultModel) -> bool {
+       resultModel->recursiveVisitInChildrens([&yes, &type](const CT_InAbstractModel* model) -> bool {
+           const CT_InAbstractItemModel* itemModel = dynamic_cast<const CT_InAbstractItemModel*>(model);
+           yes = itemModel->itemType().startsWith(type);
+           return !yes;
+       });
+
+       return !yes;
+   });
+
+   return yes;
+}
+
 int CT_InModelStructureManager::nResults() const
 {
     return m_results.size();

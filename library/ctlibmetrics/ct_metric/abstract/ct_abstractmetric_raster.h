@@ -4,7 +4,6 @@
 #include "ctlibmetrics/ctlibmetrics_global.h"
 #include "ctlibmetrics/ct_metric/abstract/ct_abstractmetricgeneric.h"
 
-// from pluginshared
 #include "ct_itemdrawable/abstract/ct_abstractimage2d.h"
 #include "ct_shape2ddata/ct_areashape2ddata.h"
 
@@ -15,8 +14,6 @@ class CTLIBMETRICS_EXPORT CT_AbstractMetric_Raster : public CT_AbstractMetricGen
 public:
     CT_AbstractMetric_Raster();
     CT_AbstractMetric_Raster(const CT_AbstractMetric_Raster &other);
-
-    ~CT_AbstractMetric_Raster();
 
     bool initDatas(const CT_AbstractImage2D* inRaster, const CT_AreaShape2DData *plotArea);
 

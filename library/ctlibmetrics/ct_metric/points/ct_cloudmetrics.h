@@ -7,7 +7,7 @@
 class CTLIBMETRICS_EXPORT CT_CloudMetrics : public CT_AbstractMetric_XYZ
 {
     Q_OBJECT
-    typedef CT_AbstractMetric_XYZ SuperClass;
+    using SuperClass = CT_AbstractMetric_XYZ;
 
 public:
     static const int PERCENTILE_ARRAY_SIZE = 15;
@@ -54,21 +54,19 @@ public:
      */
     void setMetricConfiguration(const CT_CloudMetrics::Config &conf);
 
-
-
-    // inherited from CT_AbstractConfigurableElement
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
 
-    QString getShortDescription() const;
-    CT_AbstractConfigurableElement* copy() const;
+    QString getShortDescription() const override;
 
-    CT_AbstractConfigurableWidget *createConfigurationWidget();
+    CT_AbstractConfigurableWidget* createConfigurationWidget() override;
+
+    CT_AbstractConfigurableElement* copy() const final;
 
 protected:
     void declareAttributes();
 
-    void computeMetric();
+    void computeMetric() override;
 
     void initValues();
 

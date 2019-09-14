@@ -32,6 +32,8 @@
 
 const CT_StandardBeamDrawManager CT_Beam::BEAM_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_Beam)
+
 CT_Beam::CT_Beam() : SuperClass(),
     m_shot(CT_Shot(true))
 {

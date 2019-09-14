@@ -1,5 +1,7 @@
 #include "ct_abstractpointsattributescontainer.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractPointsAttributesContainer)
+
 CT_AbstractPointsAttributesContainer::CT_AbstractPointsAttributesContainer() : SuperClass()
 {
 }

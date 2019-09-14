@@ -39,7 +39,7 @@ bool CT_AbstractFilter_XYZ::setPointCloud(const CT_AbstractItemDrawableWithPoint
 bool CT_AbstractFilter_XYZ::setPointCloud(const CT_AbstractPointCloudIndex *ci)
 {
     m_minMaxUpdated = false;
-    _inCloud = (CT_AbstractPointCloudIndex*)ci;
+    _inCloud = const_cast<CT_AbstractPointCloudIndex*>(ci);
 
     return (_inCloud != nullptr);
 }

@@ -9,7 +9,7 @@
 template<typename T>
 class CT_StandardNotModifiableCloudIndexRegisteredT : public CT_AbstractNotModifiableCloudIndexRegisteredT<T>
 {
-protected:
+public:
     template<typename U> friend class CT_AbstractCloudIndexRegistrationManagerT;
     template<typename U> friend class CT_AbstractGlobalCloudManagerT;
 

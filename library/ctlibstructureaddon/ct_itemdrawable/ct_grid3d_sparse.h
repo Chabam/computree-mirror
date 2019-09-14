@@ -419,13 +419,6 @@ CTLIBSTRUCTUREADDON_EXPORT bool CT_Grid3D_Sparse<bool>::addValueAtIndex(const si
 template<>
 CTLIBSTRUCTUREADDON_EXPORT QList<bool> CT_Grid3D_Sparse<bool>::neighboursValues(const int colx, const int liny, const int levz, const int distance, const bool keepNAs, const CenterMode centermode) const;
 
-/*template<>
-CTLIBSTRUCTUREADDON_EXPORT QString CT_Grid3D_Sparse<unsigned long>::valueAtIndexAsString(const size_t index) const;
-
-template<>
-CTLIBSTRUCTUREADDON_EXPORT QString CT_Grid3D_Sparse<unsigned long>::NAAsString() const;
-*/
-
 // fin des spécialisations
 
 

@@ -77,6 +77,21 @@ bool CT_InAbstractModel::isObligatory() const
     return needOutputModel() && (minimumNumberOfPossibilityToSelect() > 0);
 }
 
+bool CT_InAbstractModel::recursiveAtLeastOneChildrenOrThisIsObligatory() const
+{
+    if(isObligatory())
+        return true;
+
+    bool o = false;
+
+    recursiveVisitInChildrens([&o](const CT_InAbstractModel* model) -> bool {
+        o = model->isObligatory();
+        return !o;
+    });
+
+    return o;
+}
+
 bool CT_InAbstractModel::needOutputModel() const
 {
     return !((minimumNumberOfPossibilityToSelect() == 0) && (maximumNumberOfPossibilityThatCanBeSelected() == 0));
@@ -575,7 +590,7 @@ int CT_InAbstractModel::recursiveFindPossibilitiesInModel(const CT_OutAbstractMo
     // if this output model cannot be a possibility for this input model
     // we return the last finalOk value
     if(!canBeAPossibility(outModel)) {
-        DEBUG_MODEL_SEARCH(&outModel << " not added");
+        DEBUG_MODEL_SEARCH(&outModel << " not added (" << (isOptionnal() ? "this = OPTIONNAL" : QString()) << ")");
         DEBUG_MODEL_SEARCH("return " << finalOk);
         END_RECURSIVE_DEBUG
         return finalOk;
@@ -588,7 +603,7 @@ int CT_InAbstractModel::recursiveFindPossibilitiesInModel(const CT_OutAbstractMo
     const auto visitor = [&myInputChildrens, &atLeastOneInputChildIsObligatory] (const CT_InAbstractModel* child) -> bool {
         myInputChildrens.append(const_cast<CT_InAbstractModel*>(child));
 
-        if(child->isObligatory())
+        if(child->recursiveAtLeastOneChildrenOrThisIsObligatory())
             atLeastOneInputChildIsObligatory = true;
 
         return true;
@@ -679,7 +694,7 @@ int CT_InAbstractModel::recursiveFindPossibilitiesInModel(const CT_OutAbstractMo
         {
             bool atLeastOnePossibilityFound = false;
 
-            const auto visitor = [this, &myInputChild, &atLeastOnePossibilityFound](const CT_OutAbstractModel* child) -> bool {
+            const auto visitor = [&myInputChild, &atLeastOnePossibilityFound](const CT_OutAbstractModel* child) -> bool {
                 CT_OutAbstractModel* oam = const_cast<CT_OutAbstractModel*>(child);
 
                 // if the output model match criteria for the children and recursively
@@ -697,10 +712,11 @@ int CT_InAbstractModel::recursiveFindPossibilitiesInModel(const CT_OutAbstractMo
             // finish the save cycle
             myInputChild->finishSaveCycle();
 
-            if(myInputChild->isObligatory()) {
-                if(!atLeastOnePossibilityFound)
+            if(myInputChild->recursiveAtLeastOneChildrenOrThisIsObligatory()) {
+                if(!atLeastOnePossibilityFound) {
                     allObligatoryChildrensHasFoundAtLeastOnePossibility = false;
-                else
+                    DEBUG_MODEL_SEARCH_PRECISE_1("Children (" << myInputChild << ") obligatory but no possibility found.");
+                } else
                     atLeastOneObligatoryChildHasFoundAtLeastOnePossibility = true;
             }
 
@@ -726,6 +742,7 @@ int CT_InAbstractModel::recursiveFindPossibilitiesInModel(const CT_OutAbstractMo
             }
 
             DEBUG_MODEL_SEARCH_PRECISE_1("all obligatory childrens must found at least one possibility but one of them has not found");
+            DEBUG_MODEL_SEARCH_PRECISE_1("return " << finalOk);
             END_RECURSIVE_DEBUG
             return finalOk;
         }

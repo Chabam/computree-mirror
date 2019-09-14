@@ -43,7 +43,7 @@ CT_ReaderItem::CT_ReaderItem(CT_AbstractReader* reader,
 }
 
 CT_ReaderItem::CT_ReaderItem(const CT_ReaderItem& other) : SuperClass(other),
-    m_reader((m_reader == nullptr) ? nullptr : other.m_reader->copyFull()),
+    m_reader((other.m_reader == nullptr) ? nullptr : other.m_reader->copyFull()),
     m_mustAutoDeleteReader(true)
 {
 }

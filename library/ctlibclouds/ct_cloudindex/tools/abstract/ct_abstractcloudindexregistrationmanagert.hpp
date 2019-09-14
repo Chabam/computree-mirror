@@ -1,6 +1,3 @@
-#ifndef CT_ABSTRACTCLOUDINDEXREGISTRATIONMANAGERT_HPP
-#define CT_ABSTRACTCLOUDINDEXREGISTRATIONMANAGERT_HPP
-
 #include "ct_cloudindex/tools/abstract/ct_abstractcloudindexregistrationmanagert.h"
 
 template<typename T>
@@ -30,7 +27,7 @@ bool CT_AbstractCloudIndexRegistrationManagerT<T>::unregisterIndex(const CT_Abst
 {
     QMutexLocker locker(m_mutex);
 
-    if(m_cirArray.removeOne((CT_AbstractModifiableCloudIndexRegisteredT<T>*)index))
+    if(m_cirArray.removeOne(const_cast<CT_AbstractModifiableCloudIndexRegisteredT<T>*>(index)))
         return true;
 
     return false;
@@ -41,7 +38,7 @@ bool CT_AbstractCloudIndexRegistrationManagerT<T>::unregisterIndex(const CT_Abst
 {
     QMutexLocker locker(m_mutex);
 
-    if(m_cirMergedArray.removeOne((CT_AbstractNotModifiableCloudIndexRegisteredT<T>*)index))
+    if(m_cirMergedArray.removeOne(const_cast<CT_AbstractNotModifiableCloudIndexRegisteredT<T>*>(index)))
         return true;
 
     return false;
@@ -68,5 +65,3 @@ QList< CT_AbstractNotModifiableCloudIndexRegisteredT<T>* > CT_AbstractCloudIndex
 {
     return m_cirMergedArray;
 }
-
-#endif // CT_ABSTRACTCLOUDINDEXREGISTRATIONMANAGERT_HPP

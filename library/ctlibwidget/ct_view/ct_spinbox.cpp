@@ -51,8 +51,10 @@ bool CT_SpinBox::restoreSettings(SettingsReaderInterface &reader)
 {
     QVariant value;
 
-    if(reader.parameter(this, "Value", value))
+    if(reader.parameter(this, "Value", value)) {
         setWidgetValue(value);
+        updateValue();
+    }
 
     return true;
 }

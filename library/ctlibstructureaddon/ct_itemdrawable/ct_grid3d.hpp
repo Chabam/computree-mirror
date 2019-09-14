@@ -165,7 +165,6 @@ void CT_Grid3D<DataT>::setValueAtIndexFromDouble(const size_t &index, const doub
     setValueAtIndex(index, DataT(value));
 }
 
-
 template< typename DataT>
 void CT_Grid3D<DataT>::computeMinMax()
 {

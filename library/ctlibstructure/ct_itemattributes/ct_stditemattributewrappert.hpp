@@ -1,6 +1,3 @@
-#ifndef CT_STDITEMATTRIBUTEWRAPPERT_HPP
-#define CT_STDITEMATTRIBUTEWRAPPERT_HPP
-
 #include "ct_stditemattributewrappert.h"
 
 template <class ClassType, typename VType>
@@ -32,5 +29,3 @@ VType CT_StdItemAttributeWrapperT<ClassType,VType>::data(const CT_AbstractItem* 
 {
     return (static_cast<const ClassType*>(item)->*m_gMethod)();
 }
-
-#endif // CT_STDITEMATTRIBUTEWRAPPERT_HPP

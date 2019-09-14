@@ -88,7 +88,8 @@ HEADERS += ct_model/abstract/ct_abstractgroupmodelt.h \
     ../settingsinterfaces.h \
     ct_model/handle/ct_handlewithmultipleabstractmodel.h \
     ct_model/inModel/handle/abstract/ct_abstractinhandlewithmodelt.h \
-    ct_model/inModel/handle/ct_inhandleminmaxwithmodelt.h
+    ct_model/inModel/handle/ct_inhandleminmaxwithmodelt.h \
+    ct_model/inModel/views/iinmodelpossibilitieschoice.h
 
 SOURCES += \ 
     ct_model/inModel/ct_inresultmodelgroup.cpp \

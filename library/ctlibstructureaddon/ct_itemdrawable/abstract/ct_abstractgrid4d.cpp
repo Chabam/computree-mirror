@@ -1,5 +1,7 @@
 #include "ct_abstractgrid4d.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractGrid4D)
+
 CT_AbstractGrid4D::CT_AbstractGrid4D() : SuperClass()
 {
     _bot(0) =0;

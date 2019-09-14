@@ -32,6 +32,8 @@
 #include "ct_itemdrawable/tools/drawmanager/abstract/ct_abstractitemdrawabledrawmanager.h"
 #include "ct_tools/ct_staticmethodinvoker.h"
 #include "ct_tools/ct_typeinfo.h"
+#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
+#include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
 
 #include <QMap>
 #include <QString>
@@ -41,7 +43,7 @@
 #include "Eigen/Core"
 
 /**
-  * @brief Use this define in your class to add type information
+  * @brief Use this define in your class to add type information and don't forget to use "CT_TYPE_IMPL_INIT_MACRO" in your .cpp
   * @example class MyItemDrawable : public CT_AbstractSingularItemDrawable
   *          {
   *             Q_OBJECT
@@ -52,17 +54,23 @@
   *             ....
   *          };
   */
-#define CT_TYPE_IMPL_MACRO(ThisClassName, SuperClassName, Name) public: \
+#define CT_TYPE_IMPL_MACRO(ThisClassName, SuperClassName, Name) \
+public: \
     QString name() const override {return staticName();} \
     static QString staticName() {return #Name;} \
     QString type() const override { return staticType(); } \
     static QString staticType() { QString statType = SuperClassName::staticType() + "/" + #ThisClassName; return statType; } \
+private: \
     static void staticInitNameTypeCorresp() { ThisClassName::addNameTypeCorresp(staticType(), staticName()); } \
-    CT_StaticMethodInvoker INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&staticInitNameTypeCorresp);
-
+    static CT_StaticMethodInvoker INVOKER_DEFAULT_NT;
 
 /**
-  * @brief Use this define in your class (if it was templated) to add type information
+  * Use this define in your .cpp BUT if you use CT_DEFAULT_IA_INIT in your .cpp it is not necessary to call this define too.
+  */
+#define CT_TYPE_IMPL_INIT_MACRO(ThisClassName) CT_StaticMethodInvoker ThisClassName::INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&staticInitNameTypeCorresp);
+
+/**
+  * @brief Use this define in your class (if it was templated) to add type information and don't forget to use "CT_TYPE_TEMPLATED_IMPL_XXX_INIT_MACRO" in your .cpp
   * @example class MyItemDrawable : public CT_AbstractSingularItemDrawable
   *          {
   *             Q_OBJECT
@@ -73,13 +81,68 @@
   *             ....
   *          };
   */
-#define CT_TYPE_TEMPLATED_IMPL_MACRO(ThisClassName, TemplateType, SuperClassName, Name) public: \
+#define CT_TYPE_TEMPLATED_IMPL_MACRO(ThisClassName, TemplateType, SuperClassName, Name) \
+public: \
     QString name() const override {return staticName();} \
     static QString staticName() { return QString(#Name).contains("%1") ? QString(#Name).arg(CT_TypeInfo::name<TemplateType>()) : QString("%1<%2>").arg(#Name).arg(CT_TypeInfo::name<TemplateType>()); } \
     QString type() const override { return staticType(); } \
     static QString staticType() { return SuperClassName::staticType() + "/" + #ThisClassName + "<" + CT_TypeInfo::name<TemplateType>() + ">"; } \
+private: \
     static void staticInitNameTypeCorresp() { ThisClassName::addNameTypeCorresp(staticType(), staticName()); } \
-    CT_StaticMethodInvoker INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&staticInitNameTypeCorresp);
+    static CT_StaticMethodInvoker INVOKER_DEFAULT_NT;
+
+/**
+  * Use this define in your .cpp. BUT if you use CT_DEFAULT_IA_INIT_TEMPLATED_VALUES in your .hpp it is not necessary to call this define too.
+  */
+#define CT_TYPE_TEMPLATED_IMPL_VALUES_INIT_MACRO(ThisClassName) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<bool>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<float>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<double>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<long>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<unsigned long>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<qint8>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<quint8>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<qint16>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<quint16>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<qint32>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<quint32>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<qint64>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<quint64>)
+
+/**
+  * Use this define in your .cpp. BUT if you use CT_DEFAULT_IA_INIT_TEMPLATED_OPENCV in your .hpp it is not necessary to call this define too.
+  */
+#define CT_TYPE_TEMPLATED_IMPL_OPENCV_INIT_MACRO(ThisClassName) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<bool>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<float>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<double>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<qint8>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<quint8>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<qint16>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<quint16>) \
+template<> \
+CT_TYPE_IMPL_INIT_MACRO(ThisClassName<qint32>) \
+
 
 /**
   * @brief Use this define in your class to add the copy method without write your own.
@@ -119,7 +182,7 @@ public:
      *          - Document list is not copied
      */
     CT_AbstractItemDrawable(const CT_AbstractItemDrawable& other);
-    ~CT_AbstractItemDrawable();
+    ~CT_AbstractItemDrawable() override;
 
     /**
       * @warning DON'T FORGET TO REDEFINE THIS METHOD IN YOUR ITEM !!!
@@ -442,6 +505,33 @@ private:
     static quint64  NEXTID;
     static QMap<QString, QString> NAMEMAP;
     static QMutex NAMEMAP_Mutex;
+
+protected:
+
+    template<typename InHandleType, typename Visitor>
+    bool visitInModelWithPossibilitiesFromInHandle(const InHandleType& inHandle, const Visitor& visitor) const {
+        const CT_InAbstractModel* inOriginalModel = inHandle.model();
+        const CT_InAbstractResultModel* inOriginalResultModel = dynamic_cast<CT_InAbstractResultModel*>(inOriginalModel->rootModel());
+
+        Q_ASSERT(inOriginalResultModel != nullptr);
+
+        const int nResultPossibility = inOriginalResultModel->nPossibilitySelected();
+
+        for(int i=0; i<nResultPossibility; ++i)
+        {
+            CT_InStdResultModelPossibility* resultP = static_cast<CT_InStdResultModelPossibility*>(inOriginalResultModel->possibilitySelectedAt(i));
+
+            CT_InAbstractModel* inModelWithPossibilities = resultP->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(inOriginalModel);
+
+            if(inModelWithPossibilities != nullptr)
+            {
+                if(!visitor(inModelWithPossibilities))
+                    return false;
+            }
+        }
+
+        return true;
+    }
 };
 
 #endif // CT_ABSTRACTITEMDRAWABLE_H

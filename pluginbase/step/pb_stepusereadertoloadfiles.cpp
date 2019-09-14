@@ -5,6 +5,7 @@
 PB_StepUseReaderToLoadFiles::PB_StepUseReaderToLoadFiles() : SuperClass()
 {
     _conditionnal = false;
+    m_readerPrototype = nullptr;
 }
 
 QString PB_StepUseReaderToLoadFiles::description() const
@@ -19,7 +20,7 @@ CT_VirtualAbstractStep* PB_StepUseReaderToLoadFiles::createNewInstance() const
 
 void PB_StepUseReaderToLoadFiles::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    preInputpostInputConfigDialog->addBool(tr("Conditionner le chargement à un attribut booléen"), "", "", _conditionnal);
+    preInputConfigDialog->addBool(tr("Conditionner le chargement à un attribut booléen"), "", "", _conditionnal);
 }
 
 void PB_StepUseReaderToLoadFiles::declareInputModels(CT_StepInModelStructureManager& manager)
@@ -38,79 +39,72 @@ void PB_StepUseReaderToLoadFiles::declareInputModels(CT_StepInModelStructureMana
 
 void PB_StepUseReaderToLoadFiles::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
+    m_readerPrototype = nullptr;
+
     manager.addResultCopy(m_hInResultGroupCopy);
 
-    CT_ReaderOutModelStructureManager rManager = CT_ReaderOutModelStructureManager::createFromInHandle(manager, m_hInGroup);
+    CT_OutAbstractModel* outReaderItemModel = m_hInReaderItem.outModelSelected(m_hInResultGroupCopy);
 
-    // TODO : how to add reader models ?
-    //m_reader->declareOutputModels(rManager);
+    if(outReaderItemModel != nullptr)
+    {
+        CT_ReaderItem* readerItemPrototype = dynamic_cast<CT_ReaderItem*>(outReaderItemModel->prototype());
+
+        if((readerItemPrototype != nullptr) && (readerItemPrototype->reader() != nullptr)) {
+            m_readerPrototype = readerItemPrototype->reader();
+            m_readerPrototype->declareOutputModelsInGroup(manager, m_hInGroup);
+        }
+    }
 }
-
-/*void PB_StepUseReaderToLoadFiles::declareOutputModels(CT_StepOutModelStructureManager& manager)
-{
-    m_readerAddingTools.clear();
-
-    CT_OutResultModelGroupToCopyPossibilities *res = createNewOutResultModelToCopy(DEFin_res);
-
-    m_readerAddingTools.addReaderResults(DEFin_group, DEFin_reader, res, m_readerAutoIndex);
-}*/
 
 void PB_StepUseReaderToLoadFiles::compute()
 {
-    auto groupIterator = m_hInGroup.iterate(m_hInResultGroupCopy);
+    auto groupIterator = m_hInGroup.iterateOutputs(m_hInResultGroupCopy);
 
     m_totalReaderProgress = groupIterator.count();
     m_currentReaderProgress = 0;
 
-    if(m_totalReaderProgress > 0) {
-        float readerStepProgress = 100.0/m_totalReaderProgress;
+    if(m_totalReaderProgress > 0)
+    {
+        if(m_readerPrototype != nullptr)
+        {
+            connect(this, SIGNAL(stopped()), m_readerPrototype, SLOT(cancel()), Qt::DirectConnection);
+            connect(m_readerPrototype, SIGNAL(progressChanged(int)), this, SLOT(readerProgressChanged(int)), Qt::DirectConnection);
+        }
 
-        for(CT_StandardItemGroup* group : groupIterator) {
+        float readerStepProgress = 100.0f/m_totalReaderProgress;
 
-            auto readerItemIterator = group->singularItemsWithInHandle(m_hInReaderItem);
+        for(CT_StandardItemGroup* group : groupIterator)
+        {
+            const CT_ReaderItem* readerItem = group->singularItem(m_hInReaderItem);
 
-            if(!readerItemIterator.isEmpty())
+            if(readerItem != nullptr)
             {
-                CT_ReaderItem* readerItem = *readerItemIterator.begin();
-
                 bool load = true;
 
                 if (_conditionnal)
                 {
                     load = false;
 
-                    auto conditionnalItemIterator = group->singularItemsWithInHandle(m_hInConditionnalItem);
+                    auto conditionnalItem = group->singularItem(m_hInConditionnalItem);
 
-                    if(!conditionnalItemIterator.isEmpty())
+                    if(conditionnalItem != nullptr)
                     {
-                        CT_AbstractSingularItemDrawable* conditionnalItem = *conditionnalItemIterator.begin();
+                        auto attribute = conditionnalItem->itemAttribute(m_hInConditionnalAttribute);
 
-                        auto attributeIterator = conditionnalItem->itemAttributeWithInHandle(m_hInConditionnalAttribute);
-
-                        if(!attributeIterator.isEmpty())
-                        {
-                            auto attribute = *attributeIterator.begin();
+                        if(attribute != nullptr)
                             load = attribute->toBool(conditionnalItem, nullptr);
-                        }
                     }
                 }
 
                 if (load)
                 {
-                    CT_AbstractReader* reader = readerItem->getReader();
-
-                    if(reader != nullptr) {
-                        connect(this, SIGNAL(stopped()), reader, SLOT(cancel()), Qt::DirectConnection);
-                        connect(reader, SIGNAL(progressChanged(int)), this, SLOT(readerProgressChanged(int)), Qt::DirectConnection);
-
-                        if(reader->readFile(group))
+                    if(m_readerPrototype != nullptr)
+                    {
+                        if(m_readerPrototype->setFilePath(readerItem->readerFilePath()))
                         {
-                            STEP_LOG->addInfoMessage(tr("Chargement du fichier %1").arg(reader->filepath()));
-                            //m_readerAddingTools.addReaderResults(outRes, group, reader, m_readerAutoIndex);
+                            if(m_readerPrototype->readFile(group))
+                                STEP_LOG->addInfoMessage(tr("Chargement du fichier %1").arg(m_readerPrototype->filepath()));
                         }
-
-                        disconnect(this, SIGNAL(stopped()), reader, SLOT(cancel()));
-                        disconnect(reader, SIGNAL(progressChanged(int)), this, SLOT(readerProgressChanged(int)));
                     }
                 }
             }
@@ -118,7 +112,13 @@ void PB_StepUseReaderToLoadFiles::compute()
             m_currentReaderProgress += readerStepProgress;
 
             if(isStopped())
-                return;
+                break;
+        }        
+
+        if(m_readerPrototype != nullptr)
+        {
+            disconnect(this, SIGNAL(stopped()), m_readerPrototype, SLOT(cancel()));
+            disconnect(m_readerPrototype, SIGNAL(progressChanged(int)), this, SLOT(readerProgressChanged(int)));
         }
     }
 }

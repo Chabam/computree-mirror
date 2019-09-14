@@ -36,6 +36,8 @@
 
 const CT_StandardPointClusterDrawManager CT_PointCluster::POINTCLUSTER_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_PointCluster)
+
 CT_PointCluster::CT_PointCluster() : SuperClass()
 {
     m_pIndex = nullptr;

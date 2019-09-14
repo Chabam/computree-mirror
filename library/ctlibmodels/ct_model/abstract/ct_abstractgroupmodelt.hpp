@@ -1,6 +1,3 @@
-#ifndef CT_ABSTRACTGROUPMODELT_HPP
-#define CT_ABSTRACTGROUPMODELT_HPP
-
 #include "ct_abstractgroupmodelt.h"
 
 template< class ItemT, class InheritedT >
@@ -163,5 +160,3 @@ bool CT_AbstractGroupModelT<ItemT,InheritedT>::isEmpty() const
 {
     return (_groups.isEmpty() && _items.isEmpty());
 }
-
-#endif // CT_ABSTRACTGROUPMODELT_HPP

@@ -4,7 +4,6 @@
 #include "ctlibmetrics/ctlibmetrics_global.h"
 #include "ctlibmetrics/ct_metric/abstract/ct_abstractmetricgeneric.h"
 
-// from pluginshared
 #include "ct_pointcloudindex/ct_pointcloudindexvector.h"
 #include "ct_shape2ddata/ct_areashape2ddata.h"
 
@@ -14,16 +13,14 @@ class CTLIBMETRICS_EXPORT CT_AbstractMetric_XYZ : public CT_AbstractMetricGeneri
 
 public:
     CT_AbstractMetric_XYZ();
-    CT_AbstractMetric_XYZ(const CT_AbstractMetric_XYZ &other);
-
-    ~CT_AbstractMetric_XYZ();
+    CT_AbstractMetric_XYZ(const CT_AbstractMetric_XYZ &other) = default;
 
     bool initDatas(const CT_AbstractPointCloudIndex* inCloud, const CT_AreaShape2DData *plotArea);
 
     const CT_AbstractPointCloudIndex* pointCloud() const;
     const CT_AreaShape2DData* plotArea() const;
 
-private:
+protected:
     const CT_AbstractPointCloudIndex* _inCloud;
     const CT_AreaShape2DData*         _plotArea;
 };

@@ -10,13 +10,15 @@
 
 CT_InResultModelGroup::CT_InResultModelGroup(const QString& displayableName,
                                              const QString& shortDescription,
-                                             bool recursive) : SuperClass(displayableName),
+                                             bool recursive,
+                                             quint8 minimumNumberOfPossibilityToSelect,
+                                             int maximumNumberOfPossibilityThatCanBeSelected) : SuperClass(displayableName),
     m_rootGroup(nullptr)
 {
     setShortDescription(shortDescription.isEmpty() ? displayableName : shortDescription);
     setRecursive(recursive);
-    setMinimumNumberOfPossibilityToSelect(1);
-    setMaximumNumberOfPossibilityThatCanBeSelected(1);
+    setMinimumNumberOfPossibilityToSelect(minimumNumberOfPossibilityToSelect);
+    setMaximumNumberOfPossibilityThatCanBeSelected(maximumNumberOfPossibilityThatCanBeSelected);
 }
 
 CT_InResultModelGroup::CT_InResultModelGroup(const CT_InResultModelGroup& other,

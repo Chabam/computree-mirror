@@ -1,6 +1,3 @@
-#ifndef DM_ATTRIBUTESSCALART_HPP
-#define DM_ATTRIBUTESSCALART_HPP
-
 #include "tools/attributes/worker/dm_attributesscalart.h"
 
 #include "dm_guimanager.h"
@@ -75,7 +72,7 @@ bool DM_AttributesScalarT<Type>::setTypeAttributes(const Type *ta, const CT_Abst
         return false;
 
     setAttributes(ta);
-    m_as = (CT_AbstractAttributesScalar*)as;
+    m_as = const_cast<CT_AbstractAttributesScalar*>(as);
 
     if(m_autoAdjust)
         autoAdjustMinMax();
@@ -206,5 +203,3 @@ void DM_AttributesScalarT<Type>::autoAdjustMinMax()
     m_manualMin = m_as->dMin();
     m_manualMax = m_as->dMax();
 }
-
-#endif // DM_ATTRIBUTESSCALART_HPP

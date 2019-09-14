@@ -14,7 +14,7 @@
 #endif //!_WIN32
 
 // There can be only ONE SignalHandler per process
-SignalHandler* g_handler(NULL);
+SignalHandler* g_handler(nullptr);
 
 #ifdef _WIN32
 
@@ -33,7 +33,7 @@ int POSIX_logicalToPhysical(int);
 
 SignalHandler::SignalHandler(int mask) : _mask(mask)
 {
-    assert(g_handler == NULL);
+    assert(g_handler == nullptr);
     g_handler = this;
 
 #ifdef _WIN32

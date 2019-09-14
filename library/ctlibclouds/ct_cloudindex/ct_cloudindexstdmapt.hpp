@@ -1,6 +1,3 @@
-#ifndef CT_CLOUDINDEXSTDMAPT_HPP
-#define CT_CLOUDINDEXSTDMAPT_HPP
-
 #include "ct_cloudindex/ct_cloudindexstdmapt.h"
 
 #include <functional>
@@ -384,5 +381,3 @@ void CT_CloudIndexStdMapT<T, ValueT>::internalClear()
 {
     m_collection->clear();
 }
-
-#endif // CT_CLOUDINDEXSTDMAPT_HPP

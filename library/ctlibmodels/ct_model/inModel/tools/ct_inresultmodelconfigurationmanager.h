@@ -4,6 +4,7 @@
 #include "ctlibmodels_global.h"
 #include "ct_model/inModel/manager/ct_inmodelstructuremanager.h"
 #include "ct_model/inModel/views/ctg_inresultmodelconfiguration.h"
+#include "ct_model/inModel/tools/ct_instdmodelpossibility.h"
 
 /**
  * @brief This class manage the creation of the dialog that let the user choose all input models that he want to use
@@ -36,7 +37,27 @@ public:
      * @return Returns CreateNotNecessary if create is not necessary or CreateSuccess if already created or creation is a success.
      * @warning Call it in GUI thread
      */
-    CT_InResultModelConfigurationManager::CreateDialogReturn createInResultModelConfigurationDialog();
+    template<typename InModelPossibilitiesWidgetType>
+    CT_InResultModelConfigurationManager::CreateDialogReturn createInResultModelConfigurationDialog()
+    {
+        CT_InResultModelConfigurationManager::CreateDialogReturn returnVal = CT_InResultModelConfigurationManager::CreateSuccess;
+
+        // si on a pas plusieurs possibilités il n'y a rien a configurer
+        if(!checkIfMustCreateOrShowConfigurationDialog())
+            returnVal = CT_InResultModelConfigurationManager::CreateNotNecessary;
+
+        if(m_inputModelsConfigurationDialog == nullptr)
+        {
+            m_inputModelsConfigurationDialog = new CTG_InResultModelConfiguration(new InModelPossibilitiesWidgetType());
+            m_inputModelsConfigurationDialog->setWindowTitle(m_inputModelsConfigurationDialog->windowTitle());
+            m_inputModelsConfigurationDialog->setWindowState(m_inputModelsConfigurationDialog->windowState() | Qt::WindowMaximized);
+            m_inputModelsConfigurationDialog->setInResultModelManager(&m_inModelsStructureManager);
+            m_inputModelsConfigurationDialog->setWindowFlags(m_inputModelsConfigurationDialog->windowFlags() | Qt::WindowMaximizeButtonHint);
+        }
+
+        return returnVal;
+    }
+
 
     /**
      * @brief Call it to display the model configuration dialog to let the user configure input models to use.
@@ -45,7 +66,7 @@ public:
      *         dialog. Returns ConfigureError if it was a problem.
      * @warning Call it in GUI thread
      */
-    CT_InResultModelConfigurationManager::ConfigureReturn configureInResultModel();
+    CT_InResultModelConfigurationManager::ConfigureReturn configureInResultModel(bool forceShow = false);
 
     /**
      * @brief Display the model configuration dialog in read only mode so the user cannot change anything
@@ -61,7 +82,38 @@ public:
     /**
      * @brief Restore the state
      */
-    bool restoreSettings(SettingsReaderInterface& reader);
+    template<typename InModelPossibilitiesWidgetType>
+    bool restoreSettings(SettingsReaderInterface& reader)
+    {
+        // unselect all possibilities
+        m_inModelsStructureManager.visitResults([](const CT_InAbstractResultModel* resultModel) -> bool {
+
+            const_cast<CT_InAbstractResultModel*>(resultModel)->recursiveVisitPossibilities([](const CT_InAbstractModel*, const CT_InStdModelPossibility* possibility) -> bool {
+                const_cast<CT_InStdModelPossibility*>(possibility)->setSelected(false);
+                return true;
+            });
+
+            return true;
+        });
+
+        delete m_inputModelsConfigurationDialog;
+        m_inputModelsConfigurationDialog = nullptr;
+
+        createInResultModelConfigurationDialog<InModelPossibilitiesWidgetType>();
+
+        const bool restoreOK = m_inModelsStructureManager.visitResults([&reader](const CT_InAbstractResultModel* resultModel) -> bool {
+            return const_cast<CT_InAbstractResultModel*>(resultModel)->restoreSettings(reader);
+        });
+
+        if(restoreOK)
+            return true;
+
+        delete m_inputModelsConfigurationDialog;
+        m_inputModelsConfigurationDialog = nullptr;
+
+        return false;
+    }
+
 
     /**
      * @brief Check if possibilities can be selected by default and if not returns false.

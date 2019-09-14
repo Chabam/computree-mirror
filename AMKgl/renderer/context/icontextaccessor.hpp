@@ -1,6 +1,3 @@
-#ifndef ICONTEXTACCESSOR_HPP
-#define ICONTEXTACCESSOR_HPP
-
 #include "icontextaccessor.h"
 
 template<typename RendererContextT>
@@ -12,11 +9,11 @@ IContextAccessor<RendererContextT>::~IContextAccessor()
 template<typename RendererContextT>
 void IContextAccessor<RendererContextT>::addedTo(const IGraphicsDocument* doc, const QOpenGLContext* newContext)
 {
-    if(m_contexts.contains((QOpenGLContext*)newContext))
+    if(m_contexts.contains(const_cast<QOpenGLContext*>(newContext)))
         return;
 
     RendererContextT *c = new RendererContextT(doc, newContext);
-    m_contexts.insert((QOpenGLContext*)newContext, c);
+    m_contexts.insert(const_cast<QOpenGLContext*>(newContext), c);
 }
 
 template<typename RendererContextT>
@@ -35,7 +32,7 @@ void IContextAccessor<RendererContextT>::removedFrom(const IGraphicsDocument* do
 }
 
 template<typename RendererContextT>
-typename const IContextAccessor<RendererContextT>::ContextCollection& IContextAccessor<RendererContextT>::getContexts() const
+const typename IContextAccessor<RendererContextT>::ContextCollection& IContextAccessor<RendererContextT>::getContexts() const
 {
     return m_contexts;
 }
@@ -54,5 +51,3 @@ IGraphicsDocument* IContextAccessor<RendererContextT>::getCurrentDocument() cons
 
     return getCurrentContext()->getDocument();
 }
-
-#endif // ICONTEXTACCESSOR_HPP

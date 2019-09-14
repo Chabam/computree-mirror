@@ -27,10 +27,9 @@
 
 #include "ct_abstractshape2d.h"
 
-// initialize default item attributes of this class for each unique number declared
-CT_DEFAULT_IA_INIT(CT_AbstractShape2D)
-
 double CT_AbstractShape2D::Z_PLANE_FOR_2D_SHAPES = 0;
+
+CT_DEFAULT_IA_INIT(CT_AbstractShape2D)
 
 CT_AbstractShape2D::CT_AbstractShape2D() : SuperClass(),
     _data(nullptr),

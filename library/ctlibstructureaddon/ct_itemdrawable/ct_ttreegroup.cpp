@@ -1,6 +1,13 @@
 #include "ct_ttreegroup.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_TTreeGroup)
+
 CT_TTreeGroup::CT_TTreeGroup() : SuperClass()
+{
+    m_rootNode = nullptr;
+}
+
+CT_TTreeGroup::CT_TTreeGroup(const CT_TTreeGroup& other) : SuperClass(other)
 {
     m_rootNode = nullptr;
 }

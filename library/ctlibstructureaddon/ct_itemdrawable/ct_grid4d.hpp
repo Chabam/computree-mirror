@@ -1,6 +1,3 @@
-#ifndef CT_GRID4D_HPP
-#define CT_GRID4D_HPP
-
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.h"
 #include "ct_itemdrawable/ct_grid4d.h"
 
@@ -287,5 +284,3 @@ void CT_Grid4D<DataT>::computeMinMax()
         }
     }
 }
-
-#endif // CT_GRID4D_HPP

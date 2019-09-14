@@ -202,11 +202,60 @@ bool CT_ModelSelectionHelper::canSelectOneGraphForPossibilityOfRootModel(const C
 }
 */
 
-bool CT_ModelSelectionHelper::selectOneGraphForPossibilityOfRootModel(const CT_InStdModelPossibility *possibility, qint8 index) const
+bool CT_ModelSelectionHelper::selectOneGraphForPossibilityOfRootModel(const CT_InStdResultModelPossibility *possibility) const
 {
-    //TODO
-    return true;
+    CT_InAbstractResultModel* inResultModel = possibility->inResultModel();
 
+    inResultModel->recursiveVisitInChildrens([] (const CT_InAbstractModel* inModel)-> bool
+    {
+        if(inModel->nPossibilitySelected() > 0)
+            return false;
+
+        // if it is a leaf
+        if(inModel->isEmpty())
+        {
+            if(inModel->nPossibilitySaved() > 0)
+            {
+                CT_InStdModelPossibility* p = inModel->possibilitySavedAt(0);
+                p->setSelected(true);
+
+                CT_OutAbstractModel* outModel = p->outModel();
+
+                // go up (recursively) to select parents
+                CT_InAbstractModel* parentInModel = static_cast<CT_InAbstractModel*>(inModel->parentModel());
+
+                int nP = 0;
+                bool stop = false;
+
+                // if the current model has a parent model and the parent model has at least one possibility saved
+                while(!stop && (parentInModel != nullptr) && ((nP = parentInModel->nPossibilitySaved()) > 0))
+                {
+                    stop = true;
+
+                    for(int i=0; i<nP; ++i)
+                    {
+                        CT_InStdModelPossibility* parentPossibility = parentInModel->possibilitySavedAt(i);
+
+                        // if the out model used by the possibility if the parent of the current out model
+                        if(parentPossibility->outModel() == outModel->parentModel()) {
+                            // we select it (this will call the method "createOrDeleteConnectionWhenPossibilitySelectionStateHasChanged"
+                            // that will create a connection and this method will be called again until the out model has no parent)
+                            parentPossibility->setSelected(true);
+                            outModel = parentPossibility->outModel();
+                            i = nP;
+                            stop = false;
+                        }
+                    }
+
+                    parentInModel = static_cast<CT_InAbstractModel*>(parentInModel->parentModel());
+                }
+            }
+        }
+
+        return true;
+    });
+
+    return true;
     /*if(!canSelectOneGraphForPossibilityOfRootModel(possibility, index))
         return false;
 

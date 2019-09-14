@@ -107,7 +107,7 @@ bool Batch::execute()
     if(isRunning())
         return false;
 
-    return _stepManager->executeStep(NULL);
+    return _stepManager->executeStep(nullptr);
 }
 
 bool Batch::isRunning()

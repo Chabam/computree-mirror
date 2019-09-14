@@ -26,7 +26,7 @@ CT_InStdSingularItemModel::CT_InStdSingularItemModel(const CT_InStdSingularItemM
         return true;
     };
 
-    visitAttributes(visitor);
+    other.visitAttributes(visitor);
 
     if(withPossibilities)
         staticCopyPossibilitiesToModel(&other, this);

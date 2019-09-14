@@ -9,7 +9,8 @@
 class CTLIBCLOUDS_EXPORT CT_AttributesNormal
 {
 public:
-    CT_AttributesNormal(CT_AbstractNormalCloud* cloud = nullptr);
+    CT_AttributesNormal(CT_AbstractNormalCloud* cloud = nullptr,
+                        bool autoDeleteNormalCloud = true);
 
     /**
      * @brief Copy constructor
@@ -25,7 +26,8 @@ public:
 
     const CT_Normal& constNormalAt(const size_t& index) const;
 
-    void setNormalCloud(CT_AbstractNormalCloud* cloud);
+    void setNormalCloud(CT_AbstractNormalCloud* cloud,
+                        bool autoDeleteNormalCloud = true);
 
     CT_AbstractNormalCloud* normalCloud() const;
 
@@ -33,6 +35,7 @@ public:
 
 private:
     CT_AbstractNormalCloud  *m_normalCloud;
+    bool                    mAutoDeleteNormalCloud;
 };
 
 #endif // CT_ATTRIBUTESNORMAL_H

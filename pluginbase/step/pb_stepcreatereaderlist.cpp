@@ -85,20 +85,25 @@ void PB_StepCreateReaderList::declareOutputModels(CT_StepOutModelStructureManage
     manager.addResult(m_hOutResult, tr("Liste de readers"));
     manager.setRootGroup(m_hOutResult, m_hOutRootGroup);
 
-    CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
+    PB_StepPluginManager* plugin = pluginStaticCastT<PB_StepPluginManager>();
 
-    // if one reader was selected and at least one file is defined
-    if((reader != nullptr)
-            && (m_filepathCollection.size() > 0))
+    if(plugin != nullptr)
     {
-        manager.addGroup(m_hOutRootGroup, m_hOutFileGroup, tr("Fichier"));
-        manager.addItem(m_hOutRootGroup, m_hOutReaderItem, tr("Reader"), "", "", new CT_ReaderItem(reader, false));
+        CT_AbstractReader* reader = plugin->readerAvailableByUniqueName(m_readerSelectedUniqueName);
 
-        // get the header
-        CT_FileHeader* rHeader = reader->createHeaderPrototype();
+        // if one reader was selected and at least one file is defined
+        if((reader != nullptr)
+                && (m_filepathCollection.size() > 0))
+        {
+            manager.addGroup(m_hOutRootGroup, m_hOutFileGroup, tr("Fichier"));
+            manager.addItem(m_hOutFileGroup, m_hOutReaderItem, tr("Reader"), "", "", new CT_ReaderItem(reader, false));
 
-        if(rHeader != nullptr)
-            manager.addItem(m_hOutRootGroup, m_hOutFileHeader, tr("Entête"), "", "", rHeader);
+            // get the header
+            CT_FileHeader* rHeader = reader->createHeaderPrototype();
+
+            if(rHeader != nullptr)
+                manager.addItem(m_hOutFileGroup, m_hOutFileHeader, tr("Entête"), "", "", rHeader);
+        }
     }
 }
 

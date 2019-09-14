@@ -1,18 +1,17 @@
 #include "ct_cloudmetrics.h"
 
-#include "ct_view/ct_stepconfigurabledialog.h"
 #include "ct_iterator/ct_pointiterator.h"
 
 // percentiles must be in ascending order (25 and 75 must be kept to compute the interquartileDistance !)
 int CT_CloudMetrics::PERCENTILE_COEFF[CT_CloudMetrics::PERCENTILE_ARRAY_SIZE] = {1, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 99};
 
-CT_CloudMetrics::CT_CloudMetrics() : CT_AbstractMetric_XYZ()
+CT_CloudMetrics::CT_CloudMetrics() : SuperClass()
 {
     declareAttributes();
     m_configAndResults.minZ = -1;
 }
 
-CT_CloudMetrics::CT_CloudMetrics(const CT_CloudMetrics &other)  : CT_AbstractMetric_XYZ(other)
+CT_CloudMetrics::CT_CloudMetrics(const CT_CloudMetrics &other) : SuperClass(other)
 {
     declareAttributes();
     m_configAndResults = other.m_configAndResults;
@@ -30,26 +29,40 @@ void CT_CloudMetrics::setMetricConfiguration(const CT_CloudMetrics::Config &conf
 
 void CT_CloudMetrics::saveSettings(SettingsWriterInterface &writer) const
 {
-    SuperClass::saveSettings(writer);
-
     writer.addParameter(this, "MinZ", m_configAndResults.minZ);
+
+    SuperClass::saveSettings(writer);
 }
 
 bool CT_CloudMetrics::restoreSettings(SettingsReaderInterface &reader)
 {
-    if(!SuperClass::restoreSettings(reader))
-        return false;
-
     QVariant value;
     if(reader.parameter(this, "MinZ", value))
         m_configAndResults.minZ = value.toDouble();
 
-    return true;
+    return SuperClass::restoreSettings(reader);
 }
 
 QString CT_CloudMetrics::getShortDescription() const
 {
     return tr("Calcul des indicateurs statistiques standards (FUSION)");
+}
+
+CT_AbstractConfigurableWidget* CT_CloudMetrics::createConfigurationWidget()
+{
+    CT_GenericConfigurableWidget *wid = new CT_GenericConfigurableWidget();
+
+    wid->addDouble(tr("Ne conserver que les points avec Z >= "), "m", -1e+10, 1e+10, 4, m_configAndResults.minZ);
+    wid->addEmpty();
+
+    addAllVaBToWidget(wid);
+
+    return wid;
+}
+
+CT_AbstractConfigurableElement* CT_CloudMetrics::copy() const
+{
+    return new CT_CloudMetrics(*this);
 }
 
 void CT_CloudMetrics::computeMetric()
@@ -71,7 +84,7 @@ void CT_CloudMetrics::computeMetric()
     {
         const CT_Point& point = it.next().currentPoint();
 
-        if(((area == NULL) || area->contains(point(CT_Point::X), point(CT_Point::Y))) && (point(CT_Point::Z) >= m_configAndResults.minZ))
+        if(((area == nullptr) || area->contains(point(CT_Point::X), point(CT_Point::Y))) && (point(CT_Point::Z) >= m_configAndResults.minZ))
         {
             zValue = point(CT_Point::Z);
 
@@ -98,10 +111,10 @@ void CT_CloudMetrics::computeMetric()
 
         m_configAndResults.mean.value /= nD;
 
-        size_t percentile50Index = 0;
+        int percentile50Index = 0;
 
         for(int i=0; i<CT_CloudMetrics::PERCENTILE_ARRAY_SIZE; ++i) {
-            double coeff = CT_CloudMetrics::PERCENTILE_COEFF[i];
+            const int coeff = CT_CloudMetrics::PERCENTILE_COEFF[i];
             m_configAndResults.percentileValues[i].value = computePercentile(zValues, nPoints, (coeff/100.0));
 
             // percentile coeff is in ascending order
@@ -371,24 +384,6 @@ double CT_CloudMetrics::computeMode(const std::vector<double> &array, const size
 
 //    return (*it);
 }
-
-CT_AbstractConfigurableElement *CT_CloudMetrics::copy() const
-{
-    return new CT_CloudMetrics(*this);
-}
-
-CT_AbstractConfigurableWidget* CT_CloudMetrics::createConfigurationWidget()
-{
-    CT_GenericConfigurableWidget *wid = new CT_GenericConfigurableWidget();
-
-    wid->addDouble(tr("Ne conserver que les points avec Z >= "), "m", -1e+10, 1e+10, 4, m_configAndResults.minZ);
-    wid->addEmpty();
-
-    addAllVaBToWidget(wid);
-
-    return wid;
-}
-
 
 void CT_CloudMetrics::declareAttributes()
 {

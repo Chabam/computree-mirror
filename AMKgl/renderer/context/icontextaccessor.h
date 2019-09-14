@@ -44,7 +44,7 @@ public:
     /**
      * @brief Returns all contexts
      */
-    typename const IContextAccessor<RendererContextT>::ContextCollection& getContexts() const;
+    const typename IContextAccessor<RendererContextT>::ContextCollection& getContexts() const;
 
     /**
      * @brief Returns the current context

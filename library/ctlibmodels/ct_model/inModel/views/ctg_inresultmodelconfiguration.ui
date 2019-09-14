@@ -44,16 +44,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="CTG_InModelPossibilitiesChoice" name="inModelPossibilities" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>3</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -73,12 +63,6 @@
    <class>CTG_InResultModelPossibilities</class>
    <extends>QWidget</extends>
    <header>ct_model/inModel/views/ctg_inresultmodelpossibilities.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>CTG_InModelPossibilitiesChoice</class>
-   <extends>QWidget</extends>
-   <header>ct_model/inModel/views/ctg_inmodelpossibilitieschoice.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

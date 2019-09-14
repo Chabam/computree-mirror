@@ -1,6 +1,3 @@
-#ifndef DM_ATTRIBUTESCOLORT_HPP
-#define DM_ATTRIBUTESCOLORT_HPP
-
 #include "tools/attributes/worker/dm_attributescolort.h"
 
 template<typename Type>
@@ -16,7 +13,7 @@ bool DM_AttributesColorT<Type>::setTypeAttributes(const Type *ta, const CT_Attri
         return false;
 
     setAttributes(ta);
-    m_ac = (CT_AttributesColor*)ac;
+    m_ac = const_cast<CT_AttributesColor*>(ac);
 
     return true;
 }
@@ -38,5 +35,3 @@ Type* DM_AttributesColorT<Type>::abstractTypeAttributes() const
 {
     return dynamic_cast<Type*>(abstractAttributes());
 }
-
-#endif // DM_ATTRIBUTESCOLORT_HPP

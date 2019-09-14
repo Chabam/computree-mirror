@@ -59,8 +59,10 @@ bool CT_ButtonGroup::restoreSettings(SettingsReaderInterface &reader)
 {
     QVariant value;
 
-    if(reader.parameter(this, "CheckedIndex", value))
+    if(reader.parameter(this, "CheckedIndex", value)) {
         setWidgetValue(value);
+        updateValue();
+    }
 
     return true;
 }

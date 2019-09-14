@@ -2,6 +2,9 @@
 
 #include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 
+#include "ct_global/ct_structurecontext.h"
+#include "ct_categories/tools/ct_categorymanager.h"
+
 CT_AbstractItemAttribute::CT_AbstractItemAttribute() : SuperClass()
 {
     m_iaTool.m_pointer = this;
@@ -32,6 +35,10 @@ CT_AbstractItemAttribute::CT_AbstractItemAttribute(const CT_AbstractCategory* ca
 
     Q_ASSERT_X(category != nullptr, "CT_AbstractItemAttribute constructor", "When you create a ItemAttribute the category must not be null !");
     m_category = const_cast<CT_AbstractCategory*>(category);
+}
+
+CT_AbstractItemAttribute::CT_AbstractItemAttribute(const QString& categoryName) : CT_AbstractItemAttribute(PS_CATEGORY_MANAGER->findByUniqueName(categoryName))
+{
 }
 
 bool CT_AbstractItemAttribute::isValid() const

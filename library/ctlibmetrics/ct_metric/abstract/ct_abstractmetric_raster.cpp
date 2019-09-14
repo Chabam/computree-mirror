@@ -2,8 +2,8 @@
 
 CT_AbstractMetric_Raster::CT_AbstractMetric_Raster() : CT_AbstractMetricGeneric()
 {
-    _inRaster = NULL;
-    _plotArea = NULL;
+    _inRaster = nullptr;
+    _plotArea = nullptr;
 }
 
 CT_AbstractMetric_Raster::CT_AbstractMetric_Raster(const CT_AbstractMetric_Raster &other) : CT_AbstractMetricGeneric(other)
@@ -12,14 +12,10 @@ CT_AbstractMetric_Raster::CT_AbstractMetric_Raster(const CT_AbstractMetric_Raste
     _plotArea = other._plotArea;
 }
 
-CT_AbstractMetric_Raster::~CT_AbstractMetric_Raster()
-{
-}
-
 bool CT_AbstractMetric_Raster::initDatas(const CT_AbstractImage2D *inRaster, const CT_AreaShape2DData *plotArea)
 {
     _inRaster = inRaster;
     _plotArea = plotArea;
 
-    return (_inRaster != NULL);
+    return (_inRaster != nullptr);
 }

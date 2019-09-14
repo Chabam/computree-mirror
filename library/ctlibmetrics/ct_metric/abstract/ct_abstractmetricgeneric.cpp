@@ -16,7 +16,7 @@ CT_AbstractVaB* CT_AbstractMetricGeneric::findAttributeValueVaBFromDisplayableNa
             return static_cast<CT_AbstractVaB*>(it.key());
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void CT_AbstractMetricGeneric::saveSettings(SettingsWriterInterface &writer) const
@@ -53,7 +53,7 @@ bool CT_AbstractMetricGeneric::restoreSettings(SettingsReaderInterface &reader)
 
             CT_AbstractVaB* vab = findAttributeValueVaBFromDisplayableName(vabDisplayableName);
 
-            if(vab != NULL) {
+            if(vab != nullptr) {
                 if(reader.parameterInfo(this, pID, "used", value))
                     vab->used = value.toBool();
             }
@@ -66,7 +66,7 @@ bool CT_AbstractMetricGeneric::restoreSettings(SettingsReaderInterface &reader)
 CT_AbstractConfigurableWidget* CT_AbstractMetricGeneric::createConfigurationWidget()
 {
     if(m_vab.isEmpty())
-        return NULL;
+        return nullptr;
 
     CT_GenericConfigurableWidget *wid = new CT_GenericConfigurableWidget();
     addAllVaBToWidget(wid);
@@ -80,7 +80,7 @@ void CT_AbstractMetricGeneric::addAllVaBToWidget(CT_GenericConfigurableWidget* w
 
     while(it.hasNext()) {
         CT_AbstractVaB *vab = it.next();
-        wid->addBool("", "", m_attributesVaB.value(vab, NULL)->_displayableName, vab->used);
+        wid->addBool("", "", m_attributesVaB.value(vab, nullptr)->_displayableName, vab->used);
     }
 }
 
@@ -92,6 +92,6 @@ void CT_AbstractMetricGeneric::createAttributes()
         CT_AbstractVaB *vab = it.next();
 
         if(vab->used)
-            internalInsertAttributeObject(vab->valueToVoidPtr(), m_attributesVaB.value(vab, NULL)->copy());
+            internalInsertAttributeObject(vab->valueToVoidPtr(), m_attributesVaB.value(vab, nullptr)->copy());
     }
 }

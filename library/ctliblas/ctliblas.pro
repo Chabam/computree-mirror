@@ -38,10 +38,10 @@ HEADERS += \
     tools/las/ct_laspointformat9.h \
     tools/las/ct_laspointformat10.h \
     tools/las/ct_laspointinfo.h \
-    tools/las/ct_laswavepacket.h
+    tools/las/ct_laswavepacket.h \
 #    exporters/ct_exporter_las.h \
-#    filters/abstract/ct_abstractfilter_las.h \
-#    metrics/abstract/ct_abstractmetric_las.h \
+    filters/abstract/ct_abstractfilter_las.h \
+    metrics/abstract/ct_abstractmetric_las.h
 #    mergers/ct_sameheadermerger_las.h \
 #    mergers/ct_sameheaderformatmerger_las.h
 
@@ -67,10 +67,10 @@ SOURCES += \
     tools/las/ct_laspointformat9.cpp \
     tools/las/ct_laspointformat10.cpp \
     tools/las/ct_laspointinfo.cpp \
-    tools/las/ct_laswavepacket.cpp
+    tools/las/ct_laswavepacket.cpp \
 #    exporters/ct_exporter_las.cpp \
-#    filters/abstract/ct_abstractfilter_las.cpp \
-#    metrics/abstract/ct_abstractmetric_las.cpp \
+    filters/abstract/ct_abstractfilter_las.cpp \
+    metrics/abstract/ct_abstractmetric_las.cpp
 #    mergers/ct_sameheadermerger_las.cpp \
 #    mergers/ct_sameheaderformatmerger_las.cpp
 

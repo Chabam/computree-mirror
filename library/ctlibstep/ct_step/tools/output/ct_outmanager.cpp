@@ -37,6 +37,9 @@ bool CT_OutManager::createOutputModels(CT_VirtualAbstractStep& step)
     // clear all previously result models added
     m_outModelsStructureManager.clearResults();
 
+    // ignore invalid parent handle if the step is a prototype to resolve possible crash due to Q_ASSERT
+    m_outModelsStructureManager.setIgnoreInvalidParentHandle(step.isAPrototype());
+
     // we ask the step to produce output models, so it will be added to the output models manager
     step.declareOutputModels(m_outModelsStructureManager);
 

@@ -27,6 +27,8 @@
 
 #include "ct_abstractimage2d.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractImage2D)
+
 CT_AbstractImage2D::CT_AbstractImage2D() :
     _dimx(0),
     _dimy(0),

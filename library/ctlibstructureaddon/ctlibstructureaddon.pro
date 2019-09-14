@@ -299,4 +299,8 @@ SOURCES += \
     ct_itemdrawable/abstract/ct_abstractimage2d.cpp \
     ct_itemdrawable/abstract/ct_abstractprofile.cpp \
     ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.cpp \
-    ct_tools/attributes/ct_abstractattributestocloudworker.cpp
+    ct_tools/attributes/ct_abstractattributestocloudworker.cpp \
+    ct_itemdrawable/ct_edgeattributesscalart.cpp \
+    ct_itemdrawable/ct_pointsattributesscalartemplated.cpp \
+    ct_itemdrawable/ct_pointsattributesscalarmaskt.cpp \
+    ct_itemdrawable/ct_faceattributesscalart.cpp

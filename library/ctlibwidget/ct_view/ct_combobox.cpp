@@ -51,8 +51,10 @@ void CT_ComboBox::saveSettings(SettingsWriterInterface &writer) const
 bool CT_ComboBox::restoreSettings(SettingsReaderInterface &reader)
 {
     QVariant value;
-    if(reader.parameter(this, "CurrentTextIndex", value))
+    if(reader.parameter(this, "CurrentTextIndex", value)) {
         setWidgetValue(value);
+        updateValue();
+    }
 
     return true;
 }

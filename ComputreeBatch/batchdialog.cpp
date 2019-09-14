@@ -12,15 +12,15 @@ BatchDialog::BatchDialog(Batch& batch, QWidget *parent) :
     ui->setupUi(this);
 
     _batchPluginManager.load();
-    _pluginSelected = NULL;
-    _trayIcon = NULL;
+    _pluginSelected = nullptr;
+    _trayIcon = nullptr;
 
     connect(&_batch, SIGNAL(loadError(QString)), this, SLOT(batchLoadingError(QString)));
     connect(&_batch, SIGNAL(mustQuitApplication()), this, SLOT(quitApplication()), Qt::DirectConnection);
 
     initUi();
 
-    if(_trayIcon != NULL)
+    if(_trayIcon != nullptr)
         _trayIcon->show();
 }
 
@@ -117,8 +117,8 @@ void BatchDialog::on_comboBoxPlugins_currentIndexChanged(int index)
 
 void BatchDialog::on_pushButtonStart_clicked()
 {
-    if(_pluginSelected != NULL)
-        disconnect(_pluginSelected, NULL, this, NULL);
+    if(_pluginSelected != nullptr)
+        disconnect(_pluginSelected, nullptr, this, nullptr);
 
     _pluginSelected = _batchPluginManager.getPlugin(ui->comboBoxPlugins->currentIndex());
     _pluginSelected->setBatchInterface(&_batch);

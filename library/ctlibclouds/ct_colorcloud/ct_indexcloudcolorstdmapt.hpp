@@ -1,6 +1,3 @@
-#ifndef CT_INDEXCLOUDCOLORSTDMAPT_HPP
-#define CT_INDEXCLOUDCOLORSTDMAPT_HPP
-
 #include "ct_colorcloud/ct_indexcloudcolorstdmapt.h"
 
 template<typename T>
@@ -22,9 +19,9 @@ CT_Color* CT_IndexCloudColorStdMapT<T>::colorAtGlobalIndex(const size_t &index, 
     typename std::map< ct_index_type,CT_Color >::const_iterator it = collect->find(ct_index_type(index));
 
     if(it != collect->end())
-        return (CT_Color*)&(it->second);
+        return const_cast<CT_Color*>(&(it->second));
 
-    return (CT_Color*)defaultValue;
+    return const_cast<CT_Color*>(defaultValue);
 }
 
 template<typename T>
@@ -35,9 +32,9 @@ CT_Color* CT_IndexCloudColorStdMapT<T>::colorAt(const size_t &index, const CT_Co
     std::advance(it, index);
 
     if(it != collect->end())
-        return (CT_Color*)&(it->second);
+        return const_cast<CT_Color*>(&(it->second));
 
-    return (CT_Color*)defaultValue;
+    return const_cast<CT_Color*>(defaultValue);
 }
 
 template<typename T>
@@ -144,5 +141,3 @@ CT_AbstractCloud* CT_IndexCloudColorStdMapT<T>::copy() const
 
     return index;
 }
-
-#endif // CT_INDEXCLOUDCOLORSTDMAPT_HPP

@@ -109,7 +109,7 @@ void GStepManager2::addOpenFileStep(QString filePath)
     if(pluginManager->isAPluginLoaded())
     {
         QList<CT_AbstractStepLoadFile*>    stepLfList;
-        CT_AbstractStepLoadFile            *stepToCopy = NULL;
+        CT_AbstractStepLoadFile            *stepToCopy = nullptr;
 
         int count = pluginManager->countPluginLoaded();
 
@@ -126,7 +126,7 @@ void GStepManager2::addOpenFileStep(QString filePath)
 
         if(stepLfList.size() > 1)
         {
-            stepToCopy = NULL;
+            stepToCopy = nullptr;
 
             QDialog dialog(this);
             dialog.setLayout(new QVBoxLayout());
@@ -158,15 +158,15 @@ void GStepManager2::addOpenFileStep(QString filePath)
             }
         }
 
-        if(stepToCopy != NULL)
+        if(stepToCopy != nullptr)
         {
             stepLfList.removeOne(stepToCopy);
 
-            CT_VirtualAbstractStep *newStep = stepToCopy->pluginStaticCastT<>()->createNewInstanceOfStep(*stepToCopy, NULL);
+            CT_VirtualAbstractStep *newStep = stepToCopy->pluginStaticCastT<>()->createNewInstanceOfStep(*stepToCopy, nullptr);
 
             CT_AbstractStepLoadFile *newStepLF = dynamic_cast<CT_AbstractStepLoadFile*>(newStep);
 
-            if(newStepLF != NULL)
+            if(newStepLF != nullptr)
             {
                 if(newStepLF->setFilePath(filePath))
                 {
@@ -252,7 +252,7 @@ void GStepManager2::addStepToCurrentStepOrToRootAndConfigure(CT_VirtualAbstractS
 {
     QMutexLocker locker(m_protectTreeMutex);
 
-    if((stepToCopy != NULL) && (stepToCopy->plugin() != NULL))
+    if((stepToCopy != nullptr) && (stepToCopy->plugin() != nullptr))
     {
         CT_VirtualAbstractStep* parentStep = extractStepFromItem(ui->treeWidget->currentItem());
 
@@ -260,7 +260,7 @@ void GStepManager2::addStepToCurrentStepOrToRootAndConfigure(CT_VirtualAbstractS
 
             QString error = tr("Impossible d'ajouter l'étape %1").arg(staticGetStepNameFromConfiguration(stepToCopy, m_stepNameConfig, true));
 
-            if(parentStep != NULL)
+            if(parentStep != nullptr)
                 error += tr(" après l'étape %2 car elles ne sont pas compatible !").arg(staticGetStepNameFromConfiguration(parentStep, m_stepNameConfig, true));
             else
                 error += tr(" à la racine !");
@@ -294,24 +294,24 @@ void GStepManager2::addStepToCurrentStepOrToRootAndConfigure(CT_VirtualAbstractS
 
 CT_VirtualAbstractStep* GStepManager2::extractStepFromItem(QTreeWidgetItem *item)
 {
-    if(item == NULL)
-        return NULL;
+    if(item == nullptr)
+        return nullptr;
 
     if(item->data(0, Qt::UserRole).toInt() == DT_Step)
         return static_cast<CT_VirtualAbstractStep*>(item->data(0, Qt::UserRole+1).value<void*>());
 
-    return NULL;
+    return nullptr;
 }
 
 CT_AbstractResult* GStepManager2::extractResultFromItem(QTreeWidgetItem *item)
 {
-    if(item == NULL)
-        return NULL;
+    if(item == nullptr)
+        return nullptr;
 
     if(item->data(0, Qt::UserRole).toInt() == DT_Result)
         return static_cast<CT_AbstractResult*>(item->data(0, Qt::UserRole+1).value<void*>());
 
-    return NULL;
+    return nullptr;
 }
 
 void GStepManager2::setStepToItem(CT_VirtualAbstractStep *step, QTreeWidgetItem *item)
@@ -360,7 +360,7 @@ void GStepManager2::addResultsThatMustBe()
 
         QTreeWidgetItem* parentItem = m_steps.value(pair.first);
 
-        if(parentItem != NULL) {
+        if(parentItem != nullptr) {
             parentItem->insertChild(0, pair.second);
             m_results.insert(it.key(), pair.second);
             ui->treeWidget->expandItem(parentItem);
@@ -416,7 +416,7 @@ void GStepManager2::expandCurrentItem()
 {
     QTreeWidgetItem* item = ui->treeWidget->currentItem();
 
-    if(item != NULL)
+    if(item != nullptr)
         ui->treeWidget->expandItem(item);
 }
 
@@ -424,7 +424,7 @@ void GStepManager2::collapseCurrentItem()
 {
     QTreeWidgetItem* item = ui->treeWidget->currentItem();
 
-    if(item != NULL)
+    if(item != nullptr)
         ui->treeWidget->collapseItem(item);
 }
 
@@ -445,10 +445,10 @@ void GStepManager2::stepAdded(CT_VirtualAbstractStep *step)
 
     QTreeWidgetItem* parentItem = ui->treeWidget->topLevelItem(0);
 
-    if(step->parentStep() != NULL)
+    if(step->parentStep() != nullptr)
         parentItem = m_steps.value(step->parentStep());
 
-    if(parentItem != NULL) {
+    if(parentItem != nullptr) {
         QTreeWidgetItem* child = createAndAddItemForStep(step, parentItem);
         m_steps.insert(step, child);
     }
@@ -459,9 +459,9 @@ void GStepManager2::stepInserted(int row, CT_VirtualAbstractStep *step)
     // GUI thread
     QMutexLocker locker(m_protectTreeMutex);
 
-    QTreeWidgetItem* parentItem = m_steps.value(step, NULL);
+    QTreeWidgetItem* parentItem = m_steps.value(step, nullptr);
 
-    if(parentItem != NULL) {
+    if(parentItem != nullptr) {
         QTreeWidgetItem* child = createAndAddItemForStep(step, parentItem, row);
         m_steps.insert(step, child);
     }
@@ -472,7 +472,7 @@ void GStepManager2::stepToBeRemoved(CT_VirtualAbstractStep* step)
     // NOT GUI thread !
     QMutexLocker locker(m_protectTreeMutex);
 
-    setStepToItem(NULL, m_steps.take(step));
+    setStepToItem(nullptr, m_steps.take(step));
 }
 
 void GStepManager2::resultAdded(const CT_AbstractResult* result)
@@ -481,7 +481,7 @@ void GStepManager2::resultAdded(const CT_AbstractResult* result)
     QMutexLocker locker(m_protectTreeMutex);
 
     QTreeWidgetItem* parentItem = m_steps.value(static_cast<CT_VirtualAbstractStep*>(result->parentStep()));
-    if(parentItem != NULL) {
+    if(parentItem != nullptr) {
         QTreeWidgetItem* child = createItemForResult(result);
         m_resultsToAdd.insert((CT_AbstractResult*)result, qMakePair(static_cast<CT_VirtualAbstractStep*>(result->parentStep()), child));
     }
@@ -494,10 +494,10 @@ void GStepManager2::resultToBeRemoved(const CT_AbstractResult *result)
 
     QTreeWidgetItem* item = m_results.take((CT_AbstractResult*)result);
 
-    if(item == NULL)
+    if(item == nullptr)
         delete m_resultsToAdd.take((CT_AbstractResult*)result).second;
     else
-        setResultToItem(NULL, item);
+        setResultToItem(nullptr, item);
 }
 
 void GStepManager2::updateTree()
@@ -530,7 +530,7 @@ bool GStepManager2::updateResultInTree(QTreeWidgetItem* child)
         return true;
     }
 
-    if(child->parent() != NULL)
+    if(child->parent() != nullptr)
         child->parent()->removeChild(child);
 
     delete child;
@@ -543,13 +543,13 @@ bool GStepManager2::extractResultInformationFromTree(QTreeWidgetItem *child, QSt
 
     CT_AbstractResult* result = extractResultFromItem(child);
 
-    if(result != NULL) {
+    if(result != nullptr) {
         name = result->displayableName();
         isClearedFromMemory = result->isClearedFromMemory();
         isBusy = result->isBusy();
     }
 
-    return (result != NULL);
+    return (result != nullptr);
 }
 
 bool GStepManager2::updateStepInTree(QTreeWidgetItem* child)
@@ -570,7 +570,7 @@ bool GStepManager2::updateStepInTree(QTreeWidgetItem* child)
         return true;
     }
 
-    if(child->parent() != NULL)
+    if(child->parent() != nullptr)
         child->parent()->removeChild(child);
 
     delete child;
@@ -590,7 +590,7 @@ bool GStepManager2::extractStepInformationFromTree(QTreeWidgetItem* child,
 
     CT_VirtualAbstractStep* step = extractStepFromItem(child);
 
-    if(step != NULL) {
+    if(step != nullptr) {
         filepath = "";
         name = staticGetStepNameFromConfiguration(step, m_stepNameConfig, true);
         debugModeOn = step->isDebugModeOn();
@@ -601,11 +601,11 @@ bool GStepManager2::extractStepInformationFromTree(QTreeWidgetItem* child,
 
         CT_AbstractStepLoadFile *stepLF = dynamic_cast<CT_AbstractStepLoadFile*>(step);
 
-        if(stepLF != NULL)
+        if(stepLF != nullptr)
             filepath = stepLF->filePath();
     }
 
-    return (step != NULL);
+    return (step != nullptr);
 }
 
 void GStepManager2::updateStepNameInTree(QTreeWidgetItem* child, QString name, const bool& isSettingsModified, const int& progress, const QString& filepath)
@@ -666,7 +666,7 @@ void GStepManager2::expandOrCollapseAllTypeSameAsCurrentItem(bool expand)
 
     QTreeWidgetItem* item = ui->treeWidget->currentItem();
 
-    if(item != NULL) {
+    if(item != nullptr) {
         const int type = item->data(0, Qt::UserRole).toInt();
 
         items.enqueue(item);

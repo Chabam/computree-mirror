@@ -1,6 +1,3 @@
-#ifndef CT_CLOUDINDEXSTDVECTORT_HPP
-#define CT_CLOUDINDEXSTDVECTORT_HPP
-
 #include "ct_cloudindex/ct_cloudindexstdvectort.h"
 
 #include <functional>
@@ -216,7 +213,7 @@ typename std::vector<ct_index_type>::iterator CT_CloudIndexStdVectorT<T>::vector
     typename std::vector<ct_index_type>::iterator first = _vector.begin();
     typename std::vector<ct_index_type>::iterator last = _vector.end();
 
-    size_t tmp;
+    ct_index_type tmp;
 
     while (first!=last)
     {
@@ -248,5 +245,3 @@ void CT_CloudIndexStdVectorT<T>::internalClear()
 {
     m_impl->internalClear();
 }
-
-#endif // CT_CLOUDINDEXSTDVECTORT_HPP

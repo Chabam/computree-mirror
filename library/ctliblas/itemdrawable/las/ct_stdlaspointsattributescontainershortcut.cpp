@@ -1,11 +1,13 @@
 #include "ct_stdlaspointsattributescontainershortcut.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_StdLASPointsAttributesContainerShortcut)
+
 CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut() : SuperClass()
 {
     _container = nullptr;
 }
 
-CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut(CT_StdLASPointsAttributesContainer *container)
+CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerShortcut(CT_StdLASPointsAttributesContainer *container) : SuperClass()
 {
     _container = container;
 }

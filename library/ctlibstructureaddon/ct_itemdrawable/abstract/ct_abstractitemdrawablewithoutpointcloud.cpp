@@ -29,6 +29,8 @@
 
 const CT_StandardAbstractItemDrawableWithoutPointCloudDrawManager CT_AbstractItemDrawableWithoutPointCloud::IDWITHOUTPC_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractItemDrawableWithoutPointCloud)
+
 CT_AbstractItemDrawableWithoutPointCloud::CT_AbstractItemDrawableWithoutPointCloud() : SuperClass()
 {
     setBaseDrawManager(&IDWITHOUTPC_DRAW_MANAGER);

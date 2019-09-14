@@ -1,13 +1,13 @@
 #include "ct_abstractfilter_las.h"
+
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_pointcloudindex/ct_pointcloudindexvector.h"
-
-#include <QDebug>
+#include "ct_log/ct_logmanager.h"
 
 CT_AbstractFilter_LAS::CT_AbstractFilter_LAS() : CT_AbstractFilter_XYZ()
 {
-    _lasAttributes = NULL;
-    m_lasPointCloudIndex = NULL;
+    _lasAttributes = nullptr;
+    m_lasPointCloudIndex = nullptr;
 }
 
 CT_AbstractFilter_LAS::CT_AbstractFilter_LAS(const CT_AbstractFilter_LAS &other) : CT_AbstractFilter_XYZ(other)
@@ -16,13 +16,9 @@ CT_AbstractFilter_LAS::CT_AbstractFilter_LAS(const CT_AbstractFilter_LAS &other)
     m_lasPointCloudIndex = other.m_lasPointCloudIndex;
 }
 
-CT_AbstractFilter_LAS::~CT_AbstractFilter_LAS()
-{
-}
-
 bool CT_AbstractFilter_LAS::filterPointCloudIndex()
 {
-    if((_lasAttributes == NULL) || (inputPointCloudIndex() == NULL))
+    if((_lasAttributes == nullptr) || (inputPointCloudIndex() == nullptr))
         return false;
 
     CT_LASData lasData;
@@ -32,7 +28,7 @@ bool CT_AbstractFilter_LAS::filterPointCloudIndex()
     CT_PointIterator itP(inputPointCloudIndex());
 
     size_t cptErrors = 0;
-    size_t maxAttSize = _lasAttributes->pointsAttributesAt(CT_LasDefine::Return_Number)->getPointCloudIndex()->size();
+    size_t maxAttSize = _lasAttributes->pointsAttributesAt(CT_LasDefine::Return_Number)->pointCloudIndex()->size();
     while(itP.hasNext())
     {
         size_t globalIndex = itP.next().currentGlobalIndex();
@@ -62,7 +58,7 @@ bool CT_AbstractFilter_LAS::filterPointCloudIndex()
 
 bool CT_AbstractFilter_LAS::validatePoint(const CT_PointIterator &pointIt)
 {
-    if(_lasAttributes != NULL)
+    if(_lasAttributes != nullptr)
     {
         size_t lasIndex = m_lasPointCloudIndex->indexOf(pointIt.currentGlobalIndex());
 
@@ -90,10 +86,10 @@ CT_AbstractPointCloudIndex *CT_AbstractFilter_LAS::lasPointCloudIndex() const
 
 bool CT_AbstractFilter_LAS::setLASAttributesContainer(const CT_StdLASPointsAttributesContainer *lasAttributes)
 {
-    _lasAttributes = (CT_StdLASPointsAttributesContainer*)lasAttributes;
-    m_lasPointCloudIndex = NULL;
+    _lasAttributes = const_cast<CT_StdLASPointsAttributesContainer*>(lasAttributes);
+    m_lasPointCloudIndex = nullptr;
 
-    if (_lasAttributes == NULL)
+    if (_lasAttributes == nullptr)
         return false;
 
     QHashIterator<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> it(_lasAttributes->lasPointsAttributes());
@@ -103,9 +99,9 @@ bool CT_AbstractFilter_LAS::setLASAttributesContainer(const CT_StdLASPointsAttri
 
     CT_AbstractPointAttributesScalar *firstAttribute = it.next().value();
 
-    if((m_lasPointCloudIndex = (CT_AbstractPointCloudIndex*)firstAttribute->getPointCloudIndex()) == NULL)
-        _lasAttributes = NULL;
+    if((m_lasPointCloudIndex = const_cast<CT_AbstractPointCloudIndex*>(firstAttribute->pointCloudIndex())) == nullptr)
+        _lasAttributes = nullptr;
 
-    return (_lasAttributes != NULL);
+    return (_lasAttributes != nullptr);
 }
 

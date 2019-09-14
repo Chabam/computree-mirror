@@ -3,29 +3,29 @@
 
 #include "ct_step/abstract/ct_abstractstep.h"
 #include "ct_element/abstract/ct_abstractconfigurableelement.h"
-#include "ct_filter/abstract/ct_abstractfilter.h"
 
-// Inclusion of auto-indexation system
+#include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
+#include "ct_itemdrawable/abstract/ct_abstractimage2d.h"
+#include "ct_itemdrawable/abstract/ct_abstractareashape2d.h"
+#include "ct_itemdrawable/ct_itemattributelist.h"
+#include "ct_pointcloudindex/ct_pointcloudindexvector.h"
 
 class PB_StepComputeRasterMetrics: public CT_AbstractStep
 {
     Q_OBJECT
-    using SuperClass = CT_AbstractStep;
     typedef CT_AbstractStep SuperClass;
 
 public:
 
     PB_StepComputeRasterMetrics();
-    ~PB_StepComputeRasterMetrics();
+    ~PB_StepComputeRasterMetrics() final;
 
-    QString description() const;
+    QString description() const final;
 
-    QString detailledDescription() const;
-
-    QString getStepURL() const;
+    QString detailledDescription() const final;
 
     void savePostSettings(SettingsWriterInterface& writer) const override;
-    bool restorePostSettings(SettingsReaderInterface& reader) override;
+    bool restorePostSettings(SettingsReaderInterface &reader) override;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 
@@ -33,9 +33,9 @@ protected:
 
     void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
-    bool postConfigure();
+    bool postInputConfigure() final;
 
-    bool finalizePostConfiguration() override;
+    void finalizePostSettings() final;
 
     void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
@@ -43,12 +43,18 @@ protected:
 
 private:
 
-    // Declaration of autoRenames Variables (groups or items added to In models copies)
+    CT_HandleInResultGroupCopy<>                                    mInResult;
+    CT_HandleInStdZeroOrMoreGroup                                   mInRootGroup;
+    CT_HandleInStdGroup<>                                           mInGroup;
+    CT_HandleInSingularItem<CT_AbstractImage2D>                     mInRaster;
+    CT_HandleInSingularItem<CT_AbstractAreaShape2D, 0>              mInArea;
+
+    CT_HandleOutItem<CT_ItemAttributeList>                          mOutAttributeList;
 
     /**
      * @brief The collection of selected metrics to use in the compute method
      */
-    QList<CT_AbstractConfigurableElement *> m_selectedRasterMetrics;
+    QList<CT_AbstractConfigurableElement *>                         m_selectedRasterMetrics;
 
 };
 

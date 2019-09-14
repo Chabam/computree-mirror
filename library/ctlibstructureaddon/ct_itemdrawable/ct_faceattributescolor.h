@@ -16,7 +16,7 @@ public:
     CT_FaceAttributesColor();
     CT_FaceAttributesColor(CT_FCIR pcir);
     CT_FaceAttributesColor(CT_FCIR pcir,
-                           CT_AbstractColorCloud *cc);
+                           CT_AbstractColorCloud *cc, bool autoDeleteColorCloud = true);
     CT_FaceAttributesColor(const CT_FaceAttributesColor& other) = default;
 
     size_t attributesSize() const override { return CT_AttributesColor::attributesSize(); }

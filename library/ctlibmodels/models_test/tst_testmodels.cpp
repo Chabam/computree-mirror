@@ -1933,7 +1933,7 @@ void TestModels::testHandleResultCopyAddItemRemoveGroup()
 
     // verify that selection is ok
     QCOMPARE(handleResultIn.model()->nPossibilitySelected(), 1);
-    QCOMPARE(handleGroupIn.modelForPossibilities(handleResultIn)->nPossibilitySelected(), 3);
+    QCOMPARE(handleGroupIn.inModelForSavedPossibilities(handleResultIn)->nPossibilitySelected(), 3);
 
     CT_OutModelStructureManager outManager2;
     CT_HandleOutItem<ItemForTest>   handleItemOut2_1;

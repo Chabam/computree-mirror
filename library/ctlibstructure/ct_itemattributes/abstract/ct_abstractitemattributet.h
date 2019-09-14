@@ -26,6 +26,7 @@ public:
      * @param category : the category of the item attribute. Must not be nullptr !
      */
     CT_AbstractItemAttributeT(const CT_AbstractCategory *category);
+    CT_AbstractItemAttributeT(const QString& categoryName);
 
     /**
      * @brief Copy contructor

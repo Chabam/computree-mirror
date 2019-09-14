@@ -1,5 +1,7 @@
 #include "ct_shootingpatternd.h"
 
+CT_DEFAULT_IA_INIT(CT_ShootingPatternD)
+
 CT_ShootingPatternD::CT_ShootingPatternD() : SuperClass(),
     m_pattern(nullptr)
 {

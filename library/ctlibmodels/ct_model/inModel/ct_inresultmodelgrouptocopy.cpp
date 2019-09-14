@@ -7,9 +7,13 @@
 
 CT_InResultModelGroupToCopy::CT_InResultModelGroupToCopy(const QString& displayableName,
                                                          const QString& shortDescription,
-                                                         bool recursive) : SuperClass(displayableName,
-                                                                                      shortDescription,
-                                                                                      recursive),
+                                                         bool recursive,
+                                                         quint8 minimumNumberOfPossibilityToSelect,
+                                                         int maximumNumberOfPossibilityThatCanBeSelected) : SuperClass(displayableName,
+                                                                                                                       shortDescription,
+                                                                                                                       recursive,
+                                                                                                                       minimumNumberOfPossibilityToSelect,
+                                                                                                                       maximumNumberOfPossibilityThatCanBeSelected),
     m_tool(nullptr)
 {
 }

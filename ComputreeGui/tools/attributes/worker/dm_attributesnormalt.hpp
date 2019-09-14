@@ -1,6 +1,3 @@
-#ifndef DM_ATTRIBUTESNORMALT_HPP
-#define DM_ATTRIBUTESNORMALT_HPP
-
 #include "tools/attributes/worker/dm_attributesnormalt.h"
 
 #include "ct_global/ct_context.h"
@@ -18,7 +15,7 @@ bool DM_AttributesNormalT<Type>::setTypeAttributes(const Type *ta, const CT_Attr
         return false;
 
     setAttributes(ta);
-    m_an = (CT_AttributesNormal*)an;
+    m_an = const_cast<CT_AttributesNormal*>(an);
 
     return true;
 }
@@ -40,5 +37,3 @@ Type* DM_AttributesNormalT<Type>::abstractTypeAttributes() const
 {
     return dynamic_cast<Type*>(abstractAttributes());
 }
-
-#endif // DM_ATTRIBUTESNORMALT_HPP

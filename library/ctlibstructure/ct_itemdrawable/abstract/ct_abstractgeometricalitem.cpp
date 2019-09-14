@@ -1,7 +1,6 @@
 #include "ct_abstractgeometricalitem.h"
 
-// initialize default item attributes of this class for each unique number declared
-CT_DEFAULT_IA_INIT(CT_AbstractGeometricalItem)
+CT_DEFAULT_IA_INIT(CT_AbstractGeometricalItem);
 
 CT_AbstractGeometricalItem::CT_AbstractGeometricalItem() : SuperClass()
 {

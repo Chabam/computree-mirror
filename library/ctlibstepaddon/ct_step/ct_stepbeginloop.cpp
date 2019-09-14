@@ -26,19 +26,6 @@ CT_VirtualAbstractStep* CT_StepBeginLoop::createNewInstance() const
     return new CT_StepBeginLoop();
 }
 
-bool CT_StepBeginLoop::isSettingsModified() const
-{
-    if (_counter.isNull())
-        return SuperClass::isSettingsModified();
-
-    return !_counter->isFinished();
-}
-
-void CT_StepBeginLoop::clearCounter()
-{
-    _counter.clear();
-}
-
 void CT_StepBeginLoop::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     manager.setNotNeedInputResult();
@@ -47,7 +34,6 @@ void CT_StepBeginLoop::declareInputModels(CT_StepInModelStructureManager& manage
 void CT_StepBeginLoop::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* configDialog)
 {
     configDialog->addInt(tr("Nombre d'itérations"), "", 1, std::numeric_limits<int>::max(), m_nTurns);
-    _counter.clear();
 }
 
 void CT_StepBeginLoop::declareOutputModels(CT_StepOutModelStructureManager& manager)

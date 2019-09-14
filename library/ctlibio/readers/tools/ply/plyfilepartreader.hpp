@@ -1,6 +1,3 @@
-#ifndef PLYFILEPARTREADER_HPP
-#define PLYFILEPARTREADER_HPP
-
 #include "plyfilepartreader.h"
 #include "readers/tools/ply/internal/plyqtextstream.h"
 
@@ -378,5 +375,3 @@ void PlyFilePartReaderT::registerSetter(PlyAbstractValuesSetter* setter)
 {
     m_allSetters.append(setter);
 }
-
-#endif // PLYFILEPARTREADER_HPP

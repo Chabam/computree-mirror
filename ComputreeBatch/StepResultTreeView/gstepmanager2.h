@@ -56,24 +56,24 @@ public slots:
     void addOpenFileStep(QString filePath);
 
     /**
-     * @brief Call it to execute the specified step or NULL to execute step that must be
+     * @brief Call it to execute the specified step or nullptr to execute step that must be
      */
-    void executeStep(CT_VirtualAbstractStep *step = NULL);
+    void executeStep(CT_VirtualAbstractStep *step = nullptr);
 
     /**
-     * @brief Call it to execute the specified step or NULL to execute step that must be
+     * @brief Call it to execute the specified step or nullptr to execute step that must be
      */
-    void executeOrForwardStepInDebugMode(CT_VirtualAbstractStep *step = NULL);
+    void executeOrForwardStepInDebugMode(CT_VirtualAbstractStep *step = nullptr);
 
     /**
-     * @brief Call it to execute the specified step or NULL to execute step that must be
+     * @brief Call it to execute the specified step or nullptr to execute step that must be
      */
-    void executeOrForwardStepFastInDebugMode(CT_VirtualAbstractStep *step = NULL);
+    void executeOrForwardStepFastInDebugMode(CT_VirtualAbstractStep *step = nullptr);
 
     /**
-     * @brief Call it to execute the specified step or NULL to execute step that must be
+     * @brief Call it to execute the specified step or nullptr to execute step that must be
      */
-    void executeOrForwardStepAutoInDebugMode(CT_VirtualAbstractStep *step = NULL);
+    void executeOrForwardStepAutoInDebugMode(CT_VirtualAbstractStep *step = nullptr);
 
 private:
     Ui::GStepManager2 *ui;
@@ -124,12 +124,12 @@ private:
     QTimer                                                                      m_updateTreeTimer;
 
     /**
-     * @brief Extract the step from the item. Can be NULL !
+     * @brief Extract the step from the item. Can be nullptr !
      */
     static CT_VirtualAbstractStep* extractStepFromItem(QTreeWidgetItem* item);
 
     /**
-     * @brief Extract the step from the item. Can be NULL !
+     * @brief Extract the step from the item. Can be nullptr !
      */
     static CT_AbstractResult* extractResultFromItem(QTreeWidgetItem* item);
 

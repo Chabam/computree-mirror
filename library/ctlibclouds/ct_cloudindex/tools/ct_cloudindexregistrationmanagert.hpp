@@ -1,6 +1,3 @@
-#ifndef CT_CLOUDINDEXREGISTRATIONMANAGERT_HPP
-#define CT_CLOUDINDEXREGISTRATIONMANAGERT_HPP
-
 #include "ct_cloudindex/tools/ct_cloudindexregistrationmanagert.h"
 
 #include "ct_cloudindex/registered/ct_standardmodifiablecloudindexregisteredt.h"
@@ -13,7 +10,7 @@
 template<typename T, class CloudIndexLessMemory>
 CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::CT_CloudIndexRegistrationManagerT(const CT_AbstractGlobalCloudManagerT<T> &gcManager) : CT_AbstractCloudIndexRegistrationManagerT<T>()
 {
-    m_gcManager = (CT_AbstractGlobalCloudManagerT<T>*)&gcManager;
+    m_gcManager = const_cast<CT_AbstractGlobalCloudManagerT<T>*>(&gcManager);
     m_gcManager->addGlobalCloudListener(this);
 }
 
@@ -174,7 +171,7 @@ void CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::syncModifiableI
 
         // on garde en mémoire les nuages qu'il faut enlever de l'enregistrement (puisqu'ils n'ont plus d'index)
         if(index->mustBeUnregisteredWhenIsEmpty() && (index->size() == 0))
-            toUnregister.append((CT_AbstractModifiableCloudIndexRegisteredT<T>*)cir);
+            toUnregister.append(const_cast<CT_AbstractModifiableCloudIndexRegisteredT<T>*>(cir));
     }
 
     // on supprime les nuages qui n'ont plus d'index
@@ -253,19 +250,17 @@ void CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::syncLessMemoryI
 template<typename T, class CloudIndexLessMemory>
 bool CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::staticFindIf(void *context, const size_t &value)
 {
-    return value >= ((FindShiftRemoveContext*)context)->beginIndex;
+    return value >= static_cast<FindShiftRemoveContext*>(context)->beginIndex;
 }
 
 template<typename T, class CloudIndexLessMemory>
 bool CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::staticShiftIf(void *context, const size_t &value)
 {
-    return value > ((FindShiftRemoveContext*)context)->endIndex;
+    return value > static_cast<FindShiftRemoveContext*>(context)->endIndex;
 }
 
 template<typename T, class CloudIndexLessMemory>
 bool CT_CloudIndexRegistrationManagerT<T, CloudIndexLessMemory>::staticRemoveIf(void *context, const size_t &value)
 {
-    return (value >= ((FindShiftRemoveContext*)context)->beginIndex) && (value <= ((FindShiftRemoveContext*)context)->endIndex);
+    return (value >= static_cast<FindShiftRemoveContext*>(context)->beginIndex) && (value <= static_cast<FindShiftRemoveContext*>(context)->endIndex);
 }
-
-#endif // CT_CLOUDINDEXREGISTRATIONMANAGERT_HPP

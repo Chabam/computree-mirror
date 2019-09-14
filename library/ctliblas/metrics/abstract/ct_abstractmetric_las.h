@@ -4,7 +4,7 @@
 #include "ctliblas/ctliblas_global.h"
 #include "ctliblas/itemdrawable/las/ct_stdlaspointsattributescontainer.h"
 
-#include "ctlibmetrics/ct_metric/abstract/ct_abstractmetric_xyz.h"
+#include "ct_metric/abstract/ct_abstractmetric_xyz.h"
 
 class CTLIBLAS_EXPORT CT_AbstractMetric_LAS : public CT_AbstractMetric_XYZ
 {
@@ -12,8 +12,7 @@ class CTLIBLAS_EXPORT CT_AbstractMetric_LAS : public CT_AbstractMetric_XYZ
 
 public:
     CT_AbstractMetric_LAS();
-    CT_AbstractMetric_LAS(const CT_AbstractMetric_LAS& other);
-    ~CT_AbstractMetric_LAS();
+    CT_AbstractMetric_LAS(const CT_AbstractMetric_LAS& other) = default;
 
     bool initLasDatas(const CT_AbstractPointCloudIndex* inCloud, const CT_AreaShape2DData *plotArea, const CT_StdLASPointsAttributesContainer *lasAttributes);
 

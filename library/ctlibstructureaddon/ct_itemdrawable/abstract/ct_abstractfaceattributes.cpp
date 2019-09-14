@@ -2,6 +2,8 @@
 
 #include "ct_cloudindex/abstract/ct_abstractcloudindext.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractFaceAttributes)
+
 CT_AbstractFaceAttributes::CT_AbstractFaceAttributes() : SuperClass()
 {
     m_aci = nullptr;

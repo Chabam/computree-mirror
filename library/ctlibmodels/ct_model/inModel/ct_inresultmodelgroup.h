@@ -25,10 +25,14 @@ public:
      * @param shortDescription : a short description of the result you search. If empty by default use the displayable name.
      * @param recursive : true if you want that this model research recusively results in all step in the tree (go up in hierarchy) or false
      *                    if you want just research in results of the step passed in parameter of the method "searchResultsInStep...". False by default.
+     * @param minimumNumberOfPossibilityToSelect : the minimum number of possibility that must be selected
+     * @param maximumNumberOfPossibilityThatCanBeSelected : the maximum number of possibility that can be selected. -1 if you want no limit.
      */
     CT_InResultModelGroup(const QString& displayableName = "Result",
                           const QString& shortDescription = "",
-                          bool recursive = false);
+                          bool recursive = false,
+                          quint8 minimumNumberOfPossibilityToSelect = 1,
+                          int maximumNumberOfPossibilityThatCanBeSelected = -1);
 
     /**
      * @brief Copy constructor
@@ -37,7 +41,7 @@ public:
      */
     CT_InResultModelGroup(const CT_InResultModelGroup& other, const bool& withPossibilities);
 
-    ~CT_InResultModelGroup();
+    ~CT_InResultModelGroup() override;
 
     /**
      * @brief Returns the root group model

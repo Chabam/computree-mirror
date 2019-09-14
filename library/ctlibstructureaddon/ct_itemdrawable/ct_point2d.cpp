@@ -31,6 +31,8 @@
 
 const CT_StandardPoint2DDrawManager CT_Point2D::POINT2D_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_Point2D)
+
 CT_Point2D::CT_Point2D() : SuperClass()
 {
     setBaseDrawManager(&POINT2D_DRAW_MANAGER);

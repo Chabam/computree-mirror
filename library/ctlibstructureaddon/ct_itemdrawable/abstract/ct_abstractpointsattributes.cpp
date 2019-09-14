@@ -4,6 +4,8 @@
 
 CT_StandardAbstractPointsAttributesDrawManager CT_AbstractPointsAttributes::APA_DRAW_MANAGER;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractPointsAttributes)
+
 CT_AbstractPointsAttributes::CT_AbstractPointsAttributes() : SuperClass()
 {
     m_apci = nullptr;

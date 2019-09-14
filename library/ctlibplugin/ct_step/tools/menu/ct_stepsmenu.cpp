@@ -9,11 +9,8 @@ CT_StepsMenu::CT_StepsMenu()
 }
 
 CT_StepsMenu::~CT_StepsMenu()
-{
-    QMapIterator<LevelOperationType, CT_MenuLevel*> it(m_rootLevels);
-
-    while(it.hasNext())
-        delete it.next().value();
+{    
+    qDeleteAll(m_rootLevels.begin(), m_rootLevels.end());
 }
 
 CT_MenuLevel* CT_StepsMenu::createOrGetRootLevel(CT_StepsMenu::LevelOperationType operation)

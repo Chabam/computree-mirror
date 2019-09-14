@@ -2,8 +2,6 @@
 #define CT_VALUEANDBOOL_H
 
 #include "ctlibmetrics/ctlibmetrics_global.h"
-#include "ct_tools/ct_numerictostringconversiont.h"
-#include "ct_tools/ct_stringtonumericconversiont.h"
 
 class CTLIBMETRICS_EXPORT CT_AbstractVaB
 {

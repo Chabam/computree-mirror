@@ -2,6 +2,14 @@
 
 #include <QFileInfo>
 
+#include "ct_model/inModel/tools/ct_inresultmodelconfigurationmanager.h"
+
+#include "ct_model/inModel/views/ctg_inmodelpossibilitieschoice.h"
+#include "ctlibmodelsextraviews/ctg_modelslinkconfigurationflowview.h"
+
+//#define InModelPossibilitiesChoiceWidgetType CTG_InModelPossibilitiesChoice
+#define InModelPossibilitiesChoiceWidgetType CTG_ModelsLinkConfigurationFlowView
+
 CT_AbstractExporter::CT_AbstractExporter(int subMenuLevel)
 {
     m_stop = false;
@@ -38,6 +46,11 @@ CT_AbstractExporter::CT_AbstractExporter(const CT_AbstractExporter &other) : QOb
     mNameOfTheFileContainsTurnNameFromACounter = false;
     mExportEachItemInSeparateFile = false;
     mFileNameUsedFromAttributeOfAnotherItem = false;
+}
+
+CT_AbstractExporter::~CT_AbstractExporter()
+{
+    delete m_inModelsStructureManager;
 }
 
 QString CT_AbstractExporter::displayableName() const
@@ -177,6 +190,10 @@ void CT_AbstractExporter::declareInputModels(CT_InModelStructureManager& manager
     mExportEachItemInSeparateFile = exportEachItemInSeperateFile;
     mFileNameUsedFromAttributeOfAnotherItem = fileNameUsedFromAttributeOfAnotherItem;
 
+    mInModelSManager.clearResults();
+    delete m_inModelsStructureManager;
+    m_inModelsStructureManager = nullptr;
+
     manager.addResult(m_handleResultExport, tr("Résultat"), QString(), true);
     manager.setZeroOrMoreRootGroup(m_handleResultExport, m_handleZeroOrMoreGroupExport);
 
@@ -227,6 +244,11 @@ void CT_AbstractExporter::declareInputModels()
     internalDeclareInputModels(*m_inModelsStructureManager);
 }
 
+const CT_ExporterInModelStructureManager* CT_AbstractExporter::inputsModelManager() const
+{
+    return m_inModelsStructureManager;
+}
+
 bool CT_AbstractExporter::needInputs() const
 {
     return m_inModelsStructureManager->needInputs();
@@ -260,6 +282,22 @@ bool CT_AbstractExporter::findInputsInOutputsOfThisManager(const CT_OutModelStru
     });
 
     return findInputsInOutputsOfThisManagerWithSpecifiedResultModels(manager, resModels.begin(), resModels.end());
+}
+
+bool CT_AbstractExporter::showInputsConfigurationDialog()
+{
+    CT_InResultModelConfigurationManager inModelConfigurationManager(mInModelSManager);
+    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = inModelConfigurationManager.createInResultModelConfigurationDialog<InModelPossibilitiesChoiceWidgetType>();
+
+    // If it was an error (does not happen)
+    if(crReturn == CT_InResultModelConfigurationManager::CreateError) {
+        qFatal("Erreur lors de la creation de la fenetre de configuration des resultats d'entree");
+        return false;
+    }
+
+    CT_InResultModelConfigurationManager::ConfigureReturn cReturn = inModelConfigurationManager.configureInResultModel(true);
+
+    return (cReturn == CT_InResultModelConfigurationManager::ConfigureSuccess);
 }
 
 bool CT_AbstractExporter::exportToFile()
@@ -455,7 +493,7 @@ int CT_AbstractExporter::maximumItemToExportInFile(const int nToExport) const
 {
     const_cast<CT_AbstractExporter*>(this)->mMaximumItemToExportCalled = true;
 
-    return mExportEachItemInSeparateFile ? 1 : nToExport;
+    return mustUseModels() ? (mExportEachItemInSeparateFile ? 1 : nToExport) : nToExport;
 }
 
 bool CT_AbstractExporter::findInputsInOutputsOfThisManagerWithSpecifiedResultModels(const CT_OutModelStructureManager& manager,

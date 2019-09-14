@@ -1,6 +1,3 @@
-#ifndef CT_ITEMDRAWABLECOLLECTIONBUILDERT_HPP
-#define CT_ITEMDRAWABLECOLLECTIONBUILDERT_HPP
-
 #include "ct_tools/itemdrawable/ct_itemdrawablecollectionbuildert.h"
 
 template<typename... Type>
@@ -132,5 +129,3 @@ void CT_ItemDrawableCollectionBuilderT<Type...>::recursiveBuildFromModels(QList<
         }
     }
 }
-
-#endif // CT_ITEMDRAWABLECOLLECTIONBUILDERT_HPP

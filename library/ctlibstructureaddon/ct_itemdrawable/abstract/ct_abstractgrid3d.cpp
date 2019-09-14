@@ -27,6 +27,8 @@
 
 #include "ct_abstractgrid3d.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractGrid3D)
+
 CT_AbstractGrid3D::CT_AbstractGrid3D() : SuperClass()
 {
     _res = 1;

@@ -26,3 +26,5 @@
 *****************************************************************************/
 
 #include "ct_abstractprofile.h"
+
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractProfile)

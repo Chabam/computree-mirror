@@ -27,9 +27,9 @@
 
 #include "ct_polyline2d.h"
 
-CT_DEFAULT_IA_INIT(CT_Polyline2D)
-
 const CT_StandardPolyline2DDrawManager CT_Polyline2D::POLYLINE2D_DRAW_MANAGER;
+
+CT_DEFAULT_IA_INIT(CT_Polyline2D)
 
 CT_Polyline2D::CT_Polyline2D() : CT_AbstractShape2D()
 {

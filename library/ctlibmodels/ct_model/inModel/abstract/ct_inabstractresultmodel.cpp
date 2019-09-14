@@ -73,6 +73,44 @@ bool CT_InAbstractResultModel::recursiveFindAllPossibilitiesInModel(const CT_Out
     return false;
 }
 
+bool CT_InAbstractResultModel::recursiveHasTheMinimumNumberOfSelectedPossibilityRequired(QStringList* errors) const
+{
+    if(!hasTheMinimumNumberOfSelectedPossibilityRequired(errors))
+        return false;
+
+    const bool isThisResultModelAPossibility = (possibilitiesGroup()->nPossibility() > 0)
+            && (static_cast<const CT_InStdResultModelPossibility*>(possibilitiesGroup()->getPossibilities().first())->inResultModel() == this);
+
+    if(isThisResultModelAPossibility)
+        return SuperClass::recursiveHasTheMinimumNumberOfSelectedPossibilityRequired(errors);
+
+    QList<QStringList> modelErrors;
+    int nOK = 0;
+
+    const auto childVisitor = [&modelErrors, &nOK](const CT_InAbstractModel* model) -> bool {
+        QStringList err;
+
+        if(model->recursiveHasTheMinimumNumberOfSelectedPossibilityRequired(&err))
+            ++nOK;
+        else
+            modelErrors.append(err);
+
+        return true;
+    };
+
+    visitInChildrensOrInModelOfPossibilities(childVisitor);
+
+    if(nOK < minimumNumberOfPossibilityToSelect())
+    {
+        if((errors != nullptr) && !modelErrors.isEmpty())
+            errors->append(modelErrors.first());
+
+        return false;
+    }
+
+    return true;
+}
+
 bool CT_InAbstractResultModel::visitRealResultsThatMatchWithSelectedPossibilities(const CT_InAbstractResultModel::RealResultVisitor& visitor) const
 {
     const auto visitorAdapter = [this, &visitor](const CT_InStdModelPossibility* possibility) -> bool {

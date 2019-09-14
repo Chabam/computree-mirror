@@ -69,7 +69,10 @@ CT_VirtualAbstractStep::CT_VirtualAbstractStep() :
 
 CT_VirtualAbstractStep::~CT_VirtualAbstractStep()
 {
-    uniqueIndexGenerator()->objectWillBeDeleted(this);
+    CT_UniqueIndexGenerator* uig = uniqueIndexGenerator();
+
+    if(uig != nullptr)
+        uig->objectWillBeDeleted(this);
 
     qDeleteAll(m_childrens);
     m_childrens.clear();
@@ -77,9 +80,13 @@ CT_VirtualAbstractStep::~CT_VirtualAbstractStep()
     clearOutResult();
 
     delete m_preInputConfigDialog;
+    m_preInputConfigDialog = nullptr;
+
     delete m_postInputConfigDialog;
+    m_postInputConfigDialog = nullptr;
 
     delete m_uniqueIndexGenerator;
+    m_uniqueIndexGenerator = nullptr;
 }
 
 IStepToolForModel* CT_VirtualAbstractStep::stepToolForModel() const
@@ -430,9 +437,9 @@ bool CT_VirtualAbstractStep::mustBeRestarted() const
                 && (m_outputManager.resultAt(0)->isClearedFromMemory())));
 }
 
-bool CT_VirtualAbstractStep::mustRecheckTree() const
+CT_VirtualAbstractStep* CT_VirtualAbstractStep::restartComputeFromStep() const
 {
-    return false;
+    return nullptr;
 }
 
 void CT_VirtualAbstractStep::savePreSettings(SettingsWriterInterface &writer) const
@@ -462,12 +469,15 @@ bool CT_VirtualAbstractStep::restorePreSettings(SettingsReaderInterface &reader)
 {
     createPreInputConfigurationDialog();
 
+    bool ok = true;
+
     if(m_preInputConfigDialog != nullptr)
-        m_preInputConfigDialog->restoreSettings(reader);
+        ok = m_preInputConfigDialog->restoreSettings(reader);
 
-    finalizePreSettings();
+    if(ok)
+        finalizePreSettings();
 
-    return true;
+    return ok;
 }
 
 bool CT_VirtualAbstractStep::restoreInputSettings(SettingsReaderInterface &reader)
@@ -490,13 +500,15 @@ bool CT_VirtualAbstractStep::restorePostSettings(SettingsReaderInterface &reader
 {
     createPostInputConfigurationDialog();
 
+    bool ok = true;
     // pre-configuration
     if(m_postInputConfigDialog != nullptr)
-        return m_postInputConfigDialog->restoreSettings(reader);
+        ok = m_postInputConfigDialog->restoreSettings(reader);
 
-    finalizePostSettings();
+    if(ok)
+        finalizePostSettings();
 
-    return true;
+    return ok;
 }
 
 bool CT_VirtualAbstractStep::restoreOthersSettings(SettingsReaderInterface &reader)

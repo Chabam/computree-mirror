@@ -1,21 +1,9 @@
 #include "ct_abstractmetric_xyz.h"
-#include "ct_iterator/ct_pointiterator.h"
-#include "ct_attributes/ct_stditemattributet.h"
 
 CT_AbstractMetric_XYZ::CT_AbstractMetric_XYZ() : CT_AbstractMetricGeneric()
 {
-    _inCloud = NULL;
-    _plotArea = NULL;
-}
-
-CT_AbstractMetric_XYZ::CT_AbstractMetric_XYZ(const CT_AbstractMetric_XYZ &other) : CT_AbstractMetricGeneric(other)
-{
-    _inCloud = other._inCloud;
-    _plotArea = other._plotArea;
-}
-
-CT_AbstractMetric_XYZ::~CT_AbstractMetric_XYZ()
-{
+    _inCloud = nullptr;
+    _plotArea = nullptr;
 }
 
 bool CT_AbstractMetric_XYZ::initDatas(const CT_AbstractPointCloudIndex* inCloud, const CT_AreaShape2DData* plotArea)
@@ -23,7 +11,7 @@ bool CT_AbstractMetric_XYZ::initDatas(const CT_AbstractPointCloudIndex* inCloud,
     _inCloud = inCloud;
     _plotArea = plotArea;
 
-    return (_inCloud != NULL);
+    return (_inCloud != nullptr);
 }
 
 const CT_AreaShape2DData *CT_AbstractMetric_XYZ::plotArea() const

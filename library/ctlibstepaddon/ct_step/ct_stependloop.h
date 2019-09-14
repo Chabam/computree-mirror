@@ -18,7 +18,7 @@ public:
 
     CT_VirtualAbstractStep* createNewInstance() const override;
 
-    bool mustRecheckTree() const override;
+    CT_VirtualAbstractStep* restartComputeFromStep() const override;
 
 protected:
 
@@ -29,7 +29,7 @@ protected:
     void compute() override;
 
 private:
-    bool                                    m_mustRecheckTree;
+    CT_VirtualAbstractStep*                 m_mustRestartFromStep;
 
     CT_HandleInResultGroupCopy<>            m_hInResultCopy;
     CT_HandleInStdGroup<>                   m_hInRootGroup;

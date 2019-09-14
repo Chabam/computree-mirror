@@ -8,6 +8,7 @@
 #include "tools/treeview/dm_iitemdrawablestandarditembuildert.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
+#include "ct_itemdrawable/ct_standarditemgroup.h"
 
 /**
  * @brief This class is a worker (can call the method apply() with a thread) to create the list of QStandardItem for the list of CT_AbstractItemDrawable

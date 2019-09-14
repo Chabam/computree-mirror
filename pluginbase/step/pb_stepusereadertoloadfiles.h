@@ -8,7 +8,7 @@
  * @brief Step that use a result that contains a collection of CT_ReaderItem (in a group) and use
  *        it to load multiple files.
  */
-class PB_StepUseReaderToLoadFiles: public CT_AbstractStep
+class PB_StepUseReaderToLoadFiles : public CT_AbstractStep
 {
     Q_OBJECT
     using SuperClass = CT_AbstractStep;
@@ -35,13 +35,14 @@ private:
     CT_HandleInStdGroup<>                                       m_hInGroup;
     CT_HandleInSingularItem<CT_ReaderItem>                      m_hInReaderItem;
     CT_HandleInSingularItem<>                                   m_hInConditionnalItem;
-    CT_HandleInStdItemAttributeT<CT_AbstractCategory::BOOLEAN>  m_hInConditionnalAttribute;
+    CT_HandleInStdItemAttribute<CT_AbstractCategory::BOOLEAN>   m_hInConditionnalAttribute;
 
     bool                                    _conditionnal;
-    CT_ReaderResultAddingTools              m_readerAddingTools;
     int                                     m_readerAutoIndex;
     int                                     m_totalReaderProgress;
     float                                   m_currentReaderProgress;
+
+    CT_AbstractReader*                      m_readerPrototype;
 
 private slots:
     void readerProgressChanged(int p);

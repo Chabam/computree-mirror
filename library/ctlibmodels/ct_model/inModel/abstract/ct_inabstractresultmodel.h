@@ -56,6 +56,11 @@ public:
     bool recursiveFindAllPossibilitiesInModel(const CT_OutAbstractModel& rootModel, bool mustClearPossibilitiesSaved = true) override;
 
     /**
+     * @brief Redefined to use the recursivity parameter
+     */
+    bool recursiveHasTheMinimumNumberOfSelectedPossibilityRequired(QStringList* errors = nullptr) const final;
+
+    /**
      * @brief Redefined because this model is a result and create a tree for each possibility. The possibility
      *        has a root input result model.
      */

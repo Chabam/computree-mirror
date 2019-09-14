@@ -199,6 +199,8 @@ void GAboutStepDialog::recursiveCreateItemsForResultModel(QTreeWidgetItem *paren
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     item->setText(0, "Result : " + rModel->displayableName());
 
+    setFontForInModel(item, rModel);
+
     item->setExpanded(true);
     createForChildrens(item, rModel);
 }
@@ -223,6 +225,8 @@ void GAboutStepDialog::recursiveCreateItemsForItemModel(QTreeWidgetItem *parent,
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     item->setText(0, iModel->displayableName() + " [" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + "]");
 
+    setFontForInModel(item, iModel);
+
     item->setExpanded(true);
     createForChildrens(item, iModel);
 }
@@ -243,6 +247,8 @@ void GAboutStepDialog::recursiveCreateItemsForItemAttributesModel(QTreeWidgetIte
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     item->setText(0, iaModel->displayableName() + " [" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + "]");
 
+    setFontForInModel(item, iaModel);
+
     item->setExpanded(false);
     parent->setExpanded(true);
     createForChildrens(item, iaModel);
@@ -262,6 +268,16 @@ void GAboutStepDialog::createForChildrens(QTreeWidgetItem *parent, const CT_InAb
         this->recursiveCreateItemsForModel(parent, child);
         return true;
     });
+}
+
+void GAboutStepDialog::setFontForInModel(QTreeWidgetItem* item, const CT_InAbstractModel* model) const
+{
+    // model->parentModel() == nullptr if it is a result model
+    const bool obligatory = model->parentModel() == nullptr ? model->isObligatory() : model->recursiveAtLeastOneChildrenOrThisIsObligatory();
+    QFont f = item->font(0);
+    f.setItalic(!obligatory);
+    f.setBold(obligatory);
+    item->setFont(0, f);
 }
 
 void GAboutStepDialog::on_cb_ris_toggled(bool checked)

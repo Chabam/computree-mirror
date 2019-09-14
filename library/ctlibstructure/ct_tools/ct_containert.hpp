@@ -155,6 +155,8 @@ void CT_ContainerT<T, Locker>::clearElementsToKeep()
 {
     if(m_autoDelete)
         qDeleteAll(m_elementsToKeep);
+
+    m_elementsToKeep.clear();
 }
 
 template<typename T, typename Locker>
@@ -162,4 +164,6 @@ void CT_ContainerT<T, Locker>::clearElementsToBeRemovedLater()
 {
     if(m_autoDelete)
         qDeleteAll(m_elementsToBeRemovedLater);
+
+    m_elementsToBeRemovedLater.clear();
 }

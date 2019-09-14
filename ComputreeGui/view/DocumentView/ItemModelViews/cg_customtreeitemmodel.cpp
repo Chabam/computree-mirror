@@ -153,7 +153,7 @@ QModelIndex CG_CustomTreeItemModel::indexFromItem(const CG_CustomTreeItem *item)
 
 QVariant CG_CustomTreeItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    CG_CustomTreeItem *headerItem = 0;
+    CG_CustomTreeItem *headerItem = nullptr;
 
     if (orientation == Qt::Horizontal)
         headerItem = m_columnHeaderItems.at(section);
@@ -248,22 +248,20 @@ void CG_CustomTreeItemModel::fetchMore(const QModelIndex &parent)
 
 void CG_CustomTreeItemModel::setColumnCount(int c)
 {
-    m_columnCount = c;
-
-    if(m_columnHeaderItems.size() < m_columnCount)
+    if(m_columnHeaderItems.size() < c)
     {
-        beginInsertColumns(QModelIndex(), m_columnHeaderItems.size(), m_columnCount - 1);
+        beginInsertColumns(QModelIndex(), m_columnHeaderItems.size(), c - 1);
 
-        while(m_columnHeaderItems.size() < m_columnCount)
+        while(m_columnHeaderItems.size() < c)
             m_columnHeaderItems.append(nullptr);
 
         endInsertColumns();
     }
-    else if(m_columnHeaderItems.size() > m_columnCount)
+    else if(m_columnHeaderItems.size() > c)
     {
-        beginRemoveColumns(QModelIndex(), m_columnCount, m_columnHeaderItems.size() - 1);
+        beginRemoveColumns(QModelIndex(), c, m_columnHeaderItems.size() - 1);
 
-        while(m_columnHeaderItems.size() > m_columnCount)
+        while(m_columnHeaderItems.size() > c)
         {
             CG_CustomTreeItem *item = m_columnHeaderItems.takeLast();
             item->setModel(nullptr);
@@ -272,6 +270,8 @@ void CG_CustomTreeItemModel::setColumnCount(int c)
 
         endRemoveColumns();
     }
+
+    m_columnCount = c;
 }
 
 void CG_CustomTreeItemModel::dataOfCustomItemChanged(CG_CustomTreeItem *item)

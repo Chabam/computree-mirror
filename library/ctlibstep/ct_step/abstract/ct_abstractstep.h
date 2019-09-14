@@ -35,6 +35,7 @@
 #include "ct_handle/ct_handleinstdzeroormoregroup.h"
 #include "ct_handle/ct_handleinstdgroup.h"
 #include "ct_handle/ct_handleinsingularitem.h"
+#include "ct_handle/ct_handleinstditemattribute.h"
 #include "ct_handle/ct_handleinstditemattributet.h"
 
 #include "ct_handle/ct_handleoutresultgroup.h"

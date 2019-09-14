@@ -22,14 +22,16 @@ class CT_OPF_Attribute
 public:
     CT_OPF_Attribute() {}
 
-    CT_OPF_Attribute(const QString &name, const QString &type)
+    CT_OPF_Attribute(const QString &name, const QString &type, const int& indexCreation)
     {
         m_name = name;
         m_type = type;
+        m_indexCreation = indexCreation;
     }
 
     QString                 m_name;
     QString                 m_type;
+    int                     m_indexCreation;
 
     bool operator ==(const CT_OPF_Attribute &o)
     {
@@ -42,16 +44,18 @@ class CT_OPF_Type
 public:
     CT_OPF_Type() {}
 
-    CT_OPF_Type(const QString &name, const quint8 &level, const size_t &id)
+    CT_OPF_Type(const QString &name, const quint8 &level, const size_t &id, const int& indexCreation)
     {
         m_name = name;
         m_level = level;
         m_id = id;
+        m_indexCreation = indexCreation;
     }
 
     QString                             m_name;
     quint8                              m_level;
     size_t                              m_id;
+    int                                 m_indexCreation;
     QHash<QString, CT_OPF_Attribute>    m_attributes;
 };
 
@@ -149,7 +153,8 @@ private:
                                        QHash<QString,
                                        CT_OPF_Type> &types,
                                        const QHash<QString,
-                                       CT_OPF_Attribute> &attributes);
+                                       CT_OPF_Attribute> &attributes,
+                                       int& nTypesCreated);
 
     void recursiveReadTopology(rapidxml::xml_node<> *xmlNode,
                                CT_TOPFNodeGroup *node,

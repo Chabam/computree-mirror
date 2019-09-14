@@ -27,33 +27,8 @@
 
 #include "ct_grid3d_sparse.h"
 
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<bool>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<float>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<double>)
-/*template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<long>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<unsigned long>)*/
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<qint8>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<quint8>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<qint16>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<quint16>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<qint32>)
-/*template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<quint32>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<qint64>)
-template<>
-CT_DEFAULT_IA_INIT(CT_Grid3D_Sparse<quint64>)
-*/
+CT_DEFAULT_IA_INIT_TEMPLATED_OPENCV(CT_Grid3D_Sparse)
+
 /////////////////////////////////////////////////////////////////////
 /// Specialisations for bool type ///////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -240,16 +215,3 @@ QString CT_Grid3D_Sparse<bool>::valueAtIndexAsString(const size_t index) const
     if (valueAtIndex(index)) {return "T";}
     return "F";
 }
-
-/*template<>
-QString CT_Grid3D_Sparse<unsigned long>::valueAtIndexAsString(const size_t index) const
-{
-    return QString::number(valueAtIndex(index), 'g', 50);
-}
-
-template<>
-QString CT_Grid3D_Sparse<unsigned long>::NAAsString() const
-{
-    return QString::number(NA(), 'g', 50);
-}
-*/

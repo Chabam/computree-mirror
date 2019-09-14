@@ -23,12 +23,12 @@ CT_AbstractModel::~CT_AbstractModel()
 
 QString CT_AbstractModel::shortDescription() const
 {
-    return m_shortDescription;
+    return m_shortDescription.isEmpty() ? displayableName() : m_shortDescription;
 }
 
 QString CT_AbstractModel::detailledDescription() const
 {
-    return m_fullDescription;
+    return m_fullDescription.isEmpty() ? shortDescription() : m_fullDescription;
 }
 
 QString CT_AbstractModel::displayableName() const

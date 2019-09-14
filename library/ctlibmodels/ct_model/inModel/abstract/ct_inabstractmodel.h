@@ -76,6 +76,11 @@ public:
     bool isObligatory() const;
 
     /**
+     * @brief Returns true if this model or at least one children (recursively) is obligatory (minimum number of possibility is > 0 and this model need output model)
+     */
+    bool recursiveAtLeastOneChildrenOrThisIsObligatory() const;
+
+    /**
      * @brief A model doesn't need a output model if the minimum and the maximum of possibility is set to 0.
      */
     bool needOutputModel() const;
@@ -209,7 +214,7 @@ public:
      * @param errors : you can pass a pointer to a string list that will contains all errors if the method return false, otherwise the list will be empty
      * @return true is the test pass.
      */
-    bool recursiveHasTheMinimumNumberOfSelectedPossibilityRequired(QStringList* errors = nullptr) const;
+    virtual bool recursiveHasTheMinimumNumberOfSelectedPossibilityRequired(QStringList* errors = nullptr) const;
 
     /**
      * @brief Returns the group that contains possibilities

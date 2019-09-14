@@ -45,8 +45,10 @@ void CT_LineEdit::saveSettings(SettingsWriterInterface &writer) const
 bool CT_LineEdit::restoreSettings(SettingsReaderInterface &reader)
 {
     QVariant value;
-    if(reader.parameter(this, "Text", value))
+    if(reader.parameter(this, "Text", value)) {
         setWidgetValue(value);
+        updateValue();
+    }
 
     return true;
 }

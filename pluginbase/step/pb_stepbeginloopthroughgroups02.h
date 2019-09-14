@@ -4,36 +4,41 @@
 #include "ct_step/ct_stepbeginloop.h"
 #include "ct_itemdrawable/ct_loopcounter.h"
 #include "ct_itemdrawable/ct_standarditemgroup.h"
+#include "ct_result/ct_resultgroup.h"
+
 
 class PB_StepBeginLoopThroughGroups02 : public CT_StepBeginLoop
 {
     Q_OBJECT
-    using SuperClass = CT_AbstractStep;
+    using SuperClass = CT_StepBeginLoop;
+
 public:
     PB_StepBeginLoopThroughGroups02();
 
-    ~PB_StepBeginLoopThroughGroups02();
+    QString description() const final;
 
-    QString description() const;
+    QString detailledDescription() const final;
 
-    QString detailledDescription() const;
-
-    virtual CT_VirtualAbstractStep* createNewInstance() const final;
+    CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
 
-    virtual void declareInputModels(CT_StepInModelStructureManager& manager) final;
+    void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
-    virtual void createOutResultModelListProtected(CT_OutResultModelGroup *firstResultModel);
+    void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
 
-    virtual void createPostConfigurationDialog(int &nTurns);
+    void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
-    virtual void compute(CT_ResultGroup *outRes, CT_StandardItemGroup* group);
+    void compute() final;
 
 private:
-    QList<CT_AbstractSingularItemDrawable*>               _ids;
+    CT_HandleInResultGroupCopy<>                                m_hInResultCopy;
+    CT_HandleInStdZeroOrMoreGroup                               m_hInZeroOrMoreRootGroup;
+    CT_HandleInStdGroup<>                                       m_hInGroup;
+    CT_HandleInSingularItem<CT_AbstractSingularItemDrawable>    m_hInItem;
+    CT_HandleInStdItemAttribute<CT_AbstractCategory::ANY>       m_hInItemAttribute;
 
-    void recursiveRemoveGroupIfEmpty(CT_StandardItemGroup *parent, CT_StandardItemGroup *group) const;
+    QList<const CT_AbstractSingularItemDrawable*>               _ids;
 };
 
 #endif // PB_STEPBEGINLOOPTHROOUGHGROUPS02_H

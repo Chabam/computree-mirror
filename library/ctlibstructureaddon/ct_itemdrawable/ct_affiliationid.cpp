@@ -27,9 +27,9 @@
 
 #include "ct_itemdrawable/ct_affiliationid.h"
 
-CT_DEFAULT_IA_INIT(CT_AffiliationID)
-
 size_t CT_AffiliationID::LASTID = 0;
+
+CT_DEFAULT_IA_INIT(CT_AffiliationID)
 
 CT_AffiliationID::CT_AffiliationID() : SuperClass()
 {

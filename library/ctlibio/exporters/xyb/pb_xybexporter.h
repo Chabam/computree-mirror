@@ -61,9 +61,7 @@ private:
 
     void exportPoints(QDataStream &stream,
                       const CT_AbstractPointCloudIndex *constPCIndex,
-                      const CT_AbstractColorCloud *cc,
-                      const int &nExported,
-                      const int &totalToExport);
+                      const CT_AbstractColorCloud *cc);
 };
 
 #endif // PB_XYBEXPORTER_H

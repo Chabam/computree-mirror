@@ -49,18 +49,23 @@ QString CT_Reader_OPF::displayableName() const
 void CT_Reader_OPF::recursiveReadTopologyForModel(rapidxml::xml_node<> *node,
                                                   int &totalNode,
                                                   QHash<QString, CT_OPF_Type> &types,
-                                                  const QHash<QString, CT_OPF_Attribute> &attributes)
+                                                  const QHash<QString, CT_OPF_Attribute> &attributes,
+                                                  int& nTypesCreated)
 {
     ++totalNode;
 
-    QString nameT = node->first_attribute("class")->value();
+    QString nameT = node->first_attribute("class", 0, false)->value();
 
-    rapidxml::xml_attribute<>* scaleAttribute = node->first_attribute("scale");
-    rapidxml::xml_attribute<>* idAttribute = node->first_attribute("id");
+    rapidxml::xml_attribute<>* scaleAttribute = node->first_attribute("scale", 0, false);
+    rapidxml::xml_attribute<>* idAttribute = node->first_attribute("id", 0, false);
 
     CT_OPF_Type type = types.value(nameT, CT_OPF_Type(nameT,
                                                       scaleAttribute ? QString(scaleAttribute->value()).toInt() : 0,
-                                                      idAttribute ? QString(idAttribute->value()).toInt() : 0));
+                                                      idAttribute ? QString(idAttribute->value()).toInt() : 0,
+                                                      nTypesCreated+1));
+
+    if(type.m_indexCreation > nTypesCreated)
+        nTypesCreated = type.m_indexCreation;
 
     bool addAttributes = (type.m_attributes.size() != attributes.size());
 
@@ -75,7 +80,8 @@ void CT_Reader_OPF::recursiveReadTopologyForModel(rapidxml::xml_node<> *node,
             recursiveReadTopologyForModel(nextNode,
                                           totalNode,
                                           types,
-                                          attributes);
+                                          attributes,
+                                          nTypesCreated);
         }
         else if(addAttributes
                 && attributes.contains(name))
@@ -96,10 +102,10 @@ void CT_Reader_OPF::recursiveReadTopology(rapidxml::xml_node<> *xmlNode,
 {
     ++nNodeReaded;
 
-    rapidxml::xml_attribute<>* idAttribute = xmlNode->first_attribute("id");
+    rapidxml::xml_attribute<>* idAttribute = xmlNode->first_attribute("id", 0, false);
 
     node->setOPFID(idAttribute ? QString(idAttribute->value()).toInt() : 0);
-    const QString typeName = xmlNode->first_attribute("class")->value();
+    const QString typeName = xmlNode->first_attribute("class", 0, false)->value();
 
     CT_ItemAttributeList *attList = new CT_ItemAttributeList();
     node->addSingularItem(*registeredHandlePtr<AttributeListHandleType>(typeName + "_a"), attList);
@@ -117,14 +123,14 @@ void CT_Reader_OPF::recursiveReadTopology(rapidxml::xml_node<> *xmlNode,
         }
         else if(((name == "decomp") || (name == "follow")))
         {
-            const QString typeName2 = xmlChild->first_attribute("class")->value();
+            const QString typeName2 = xmlChild->first_attribute("class", 0, false)->value();
 
             newNode = new CT_TOPFNodeGroup();
             node->addComponent(*registeredHandlePtr<NodeGroupHandleType>(typeName2), newNode);
         }
         else if(name == "branch")
         {
-            const QString typeName2 = xmlChild->first_attribute("class")->value();
+            const QString typeName2 = xmlChild->first_attribute("class", 0, false)->value();
 
             newNode = new CT_TOPFNodeGroup();
             node->addBranch(*registeredHandlePtr<NodeGroupHandleType>(typeName2), newNode);
@@ -160,7 +166,9 @@ bool CT_Reader_OPF::postVerifyFile(const QString& filepath)
     rapidxml::xml_document<> doc;
     doc.parse<0>(xmlFile.data());
 
-    rapidxml::xml_node<> *root = doc.first_node("opf");
+    rapidxml::xml_node<> *root = doc.first_node("opf", 0, false);
+
+    int nTypesCreated = 0;
 
     if(root != nullptr)
     {
@@ -178,9 +186,9 @@ bool CT_Reader_OPF::postVerifyFile(const QString& filepath)
 
                 while(child  != nullptr)
                 {
-                    QString name = child->first_attribute("name")->value();
+                    QString name = child->first_attribute("name", 0, false)->value();
 
-                    attributes.insert(name, CT_OPF_Attribute(name, child->first_attribute("class")->value()));
+                    attributes.insert(name, CT_OPF_Attribute(name, child->first_attribute("class", 0, false)->value(), attributes.size()));
 
                     child = child->next_sibling();
                 }
@@ -190,7 +198,8 @@ bool CT_Reader_OPF::postVerifyFile(const QString& filepath)
                 recursiveReadTopologyForModel(node,
                                               totalNode,
                                               types,
-                                              attributes);
+                                              attributes,
+                                              nTypesCreated);
                 node = nullptr;
             }
 
@@ -221,11 +230,23 @@ void CT_Reader_OPF::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
 
     QHashIterator<QString, CT_OPF_Type> it(m_types);
 
+    QMap<int, CT_OPF_Type> typesSorted;
+
     while(it.hasNext())
     {
         it.next();
 
         const CT_OPF_Type &type = it.value();
+        typesSorted.insert(type.m_indexCreation, type);
+    }
+
+    QMapIterator<int, CT_OPF_Type> itS(typesSorted);
+
+    while(itS.hasNext())
+    {
+        itS.next();
+
+        const CT_OPF_Type &type = itS.value();
 
         // Node Group
         NodeGroupHandleType* nodeHandle = new NodeGroupHandleType();
@@ -245,11 +266,23 @@ void CT_Reader_OPF::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
 
         QHashIterator<QString, CT_OPF_Attribute> itA(type.m_attributes);
 
+        QMap<int, CT_OPF_Attribute> attributesSorted;
+
         while(itA.hasNext())
         {
             itA.next();
 
             const CT_OPF_Attribute &attribute = itA.value();
+            attributesSorted.insert(attribute.m_indexCreation, attribute);
+        }
+
+        QMapIterator<int, CT_OPF_Attribute> itAS(attributesSorted);
+
+        while(itAS.hasNext())
+        {
+            itAS.next();
+
+            const CT_OPF_Attribute &attribute = itAS.value();
 
             if((attribute.m_type == "String") || (attribute.m_type == "Color"))
                 createAndAddItemAttributeHandle<AttributeStringHandleType>(manager, *attListHandle, type, attribute);
@@ -281,7 +314,7 @@ bool CT_Reader_OPF::internalReadFile(CT_StandardItemGroup* rootGroup)
         rapidxml::xml_document<> doc;
         doc.parse<0>(xmlFile.data());
 
-        rapidxml::xml_node<> *xmlRoot = doc.first_node("opf");
+        rapidxml::xml_node<> *xmlRoot = doc.first_node("opf", 0, false);
 
         int nNodeReaded = 0;
 
@@ -304,7 +337,7 @@ bool CT_Reader_OPF::internalReadFile(CT_StandardItemGroup* rootGroup)
                 {
                     if(m_loadMeshes)
                     {
-                        rapidxml::xml_node<> *xmlMesh = xmlNode->first_node("mesh");
+                        rapidxml::xml_node<> *xmlMesh = xmlNode->first_node("mesh", 0, false);
 
                         while(xmlMesh != nullptr)
                         {
@@ -317,7 +350,7 @@ bool CT_Reader_OPF::internalReadFile(CT_StandardItemGroup* rootGroup)
                 {
                     if(m_loadMeshes)
                     {
-                        rapidxml::xml_node<> *xmlShape = xmlNode->first_node("shape");
+                        rapidxml::xml_node<> *xmlShape = xmlNode->first_node("shape", 0, false);
 
                         while(xmlShape != nullptr)
                         {
@@ -328,7 +361,7 @@ bool CT_Reader_OPF::internalReadFile(CT_StandardItemGroup* rootGroup)
                 }
                 else if(nn == "topology")
                 {
-                    const QString typeName = xmlNode->first_attribute("class")->value();
+                    const QString typeName = xmlNode->first_attribute("class", 0, false)->value();
 
                     node = new CT_TOPFNodeGroup();
                     tree->setRootNode(*registeredHandlePtr<NodeGroupHandleType>(typeName), node);
@@ -436,7 +469,7 @@ void CT_Reader_OPF::clearShapes()
 
 void CT_Reader_OPF::readMesh(rapidxml::xml_node<> *xmlNode)
 {
-    int id = QString(xmlNode->first_attribute("Id")->value()).toInt();
+    int id = QString(xmlNode->first_attribute("Id", 0, false)->value()).toInt();
 
     CT_OPF_Mesh *mesh = new CT_OPF_Mesh();
     mesh->m_mesh = new CT_Mesh();
@@ -479,7 +512,7 @@ void CT_Reader_OPF::readMesh(rapidxml::xml_node<> *xmlNode)
         }
         else if(nn == "faces")
         {
-            rapidxml::xml_node<> *xmlFace = xmlChild->first_node("face");
+            rapidxml::xml_node<> *xmlFace = xmlChild->first_node("face", 0, false);
 
             while(xmlFace != nullptr)
             {
@@ -540,9 +573,9 @@ void CT_Reader_OPF::readMesh(rapidxml::xml_node<> *xmlNode)
 
 void CT_Reader_OPF::readShape(rapidxml::xml_node<> *xmlNode)
 {
-    int id = QString(xmlNode->first_attribute("Id")->value()).toInt();
+    int id = QString(xmlNode->first_attribute("Id", 0, false)->value()).toInt();
 
-    rapidxml::xml_node<> *xmlChild = xmlNode->first_node("meshIndex");
+    rapidxml::xml_node<> *xmlChild = xmlNode->first_node("meshIndex", 0, false);
 
     if(xmlChild != nullptr)
         m_shapes.insert(id, m_meshes.value(QString(xmlChild->value()).toInt(), nullptr));

@@ -213,7 +213,7 @@ protected:
     using CT_Grid4D<DataT>::nCells;
     using CT_Grid4D<DataT>::NA;
     using CT_Grid4D<DataT>::id;
-    using CT_Grid4D<DataT>::getAlternativeDrawManager;
+    using CT_Grid4D<DataT>::alternativeDrawManager;
     using CT_Grid4D<DataT>::_top;
     using CT_Grid4D<DataT>::_bot;
     using CT_Grid4D<DataT>::_dimw;

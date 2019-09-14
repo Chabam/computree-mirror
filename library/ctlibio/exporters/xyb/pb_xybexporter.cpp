@@ -1,6 +1,8 @@
 #include "pb_xybexporter.h"
 
 #include <math.h>
+#include <limits>
+
 #include <QMessageBox>
 #include <QTextStream>
 #include <QEventLoop>
@@ -17,7 +19,8 @@
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_point.h"
 
-PB_XYBExporter::PB_XYBExporter(int subMenuLevel) : SuperClass(subMenuLevel)
+PB_XYBExporter::PB_XYBExporter(int subMenuLevel) : SuperClass(subMenuLevel),
+    m_scanner(nullptr)
 {
     setCanExportPoints(true);
     addNewExportFormat(FileFormat("xyb", tr("Fichiers binaire de points .xyb")));
@@ -26,6 +29,7 @@ PB_XYBExporter::PB_XYBExporter(int subMenuLevel) : SuperClass(subMenuLevel)
 
 PB_XYBExporter::PB_XYBExporter(const PB_XYBExporter& other) : SuperClass(other)
 {
+    m_scanner = nullptr;
 }
 
 QString PB_XYBExporter::displayableName() const
@@ -97,55 +101,49 @@ bool PB_XYBExporter::createExportFileForPieceByPieceExport()
 
     QFile file(m_currentFilePath);
 
-    if(file.open(QFile::WriteOnly | QFile::Text))
-    {
-        QTextStream txtStream(&file);
-
-        txtStream << "# SCENE XYZ binary format v1.0\n";
-
-        if(pattern != nullptr)
-        {
-            double x = pattern->origin().x();
-            double y = pattern->origin().y();
-            double z = pattern->origin().z();
-
-            txtStream << "ScanPosition " << x << " " << y << " " << z << "\n";
-            txtStream << "Rows " << pattern->nVRays() << "\n";
-            txtStream << "Cols " << pattern->nHRays() << "\n";
-        }
-        else
-        {
-            txtStream << "ScanPosition 0.00000000 0.00000000 0.00000000 \n";
-            txtStream << "Rows 0\n";
-            txtStream << "Cols 0\n";
-        }
-
-        file.close();
-    } else {
+    if(!file.open(QFile::WriteOnly | QFile::Text))
         return false;
+
+    QTextStream txtStream(&file);
+
+    txtStream << "# SCENE XYZ binary format v1.0\n";
+
+    if(pattern != nullptr)
+    {
+        double x = pattern->origin().x();
+        double y = pattern->origin().y();
+        double z = pattern->origin().z();
+
+        txtStream << "ScanPosition " << x << " " << y << " " << z << "\n";
+        txtStream << "Rows " << pattern->nVRays() << "\n";
+        txtStream << "Cols " << pattern->nHRays() << "\n";
+    }
+    else
+    {
+        txtStream << "ScanPosition 0.00000000 0.00000000 0.00000000 \n";
+        txtStream << "Rows 0\n";
+        txtStream << "Cols 0\n";
     }
 
-    if(file.open(QFile::Append))
-    {
-        QDataStream stream(&file);
-        stream.setByteOrder(QDataStream::LittleEndian);
+    file.close();
 
-        char d_data[8];
-
-        // write header
-        d_data[0] = 0;
-        d_data[1] = 0;
-        d_data[2] = 0;
-        d_data[3] = 0;
-
-        stream.writeRawData(d_data, 4);
-
-        file.close();
-        return true;
-    } else {
+    if(!file.open(QFile::Append))
         return false;
-    }
 
+    QDataStream stream(&file);
+    stream.setByteOrder(QDataStream::LittleEndian);
+
+    char d_data[8];
+
+    // write header
+    d_data[0] = 0;
+    d_data[1] = 0;
+    d_data[2] = 0;
+    d_data[3] = 0;
+
+    stream.writeRawData(d_data, 4);
+
+    file.close();
     return true;
 }
 
@@ -153,81 +151,62 @@ bool PB_XYBExporter::exportOnePieceOfDataToFile()
 {
     QFile file(m_currentFilePath);
 
-    if(file.open(QFile::Append))
+    if(!file.open(QFile::Append))
+        return false;
+
+    CT_AbstractColorCloud *cc = createColorCloud();
+
+    QDataStream stream(&file);
+    stream.setByteOrder(QDataStream::LittleEndian);
+
+    if(mustUseModels())
     {
-        CT_AbstractColorCloud *cc = createColorCloud();
-
-        QDataStream stream(&file);
-        stream.setByteOrder(QDataStream::LittleEndian);
-
-        if(mustUseModels())
+        if(m_iteratorItemBegin == m_iteratorItemEnd)
         {
-            if(m_iteratorItemBegin == m_iteratorItemEnd)
-            {
-                auto iterator = m_hInItem.iterateInputs(m_handleResultExport);
-                m_iteratorItemBegin = iterator.begin();
-                m_iteratorItemEnd = iterator.end();
-            }
-
-            int nExported = 0;
-            const int totalToExport = maximumItemToExportInFile(std::distance(m_iteratorItemBegin, m_iteratorItemEnd));
-
-            // write data
-            while((m_iteratorItemBegin != m_iteratorItemEnd)
-                  && (nExported < totalToExport))
-            {
-                const CT_AbstractItemDrawableWithPointCloud *item = *m_iteratorItemBegin;
-
-                exportPoints(stream,
-                             dynamic_cast<const CT_IAccessPointCloud*>(item)->pointCloudIndex(),
-                             cc,
-                             nExported,
-                             totalToExport);
-
-                ++nExported;
-                ++m_iteratorItemBegin;
-            }
-        }
-        else
-        {
-            int totalToExport = m_items.size();
-            int nExported = 0;
-
-            for(const CT_AbstractItemDrawableWithPointCloud* item : m_items)
-            {
-                exportPoints(stream,
-                             dynamic_cast<const CT_IAccessPointCloud*>(item)->pointCloudIndex(),
-                             cc,
-                             nExported,
-                             totalToExport);
-
-                ++nExported;
-                ++m_iteratorItemBegin;
-            }
-
-            const QList<CT_AbstractCloudIndex*> &pointsSelected = pointsToExport();
-            QListIterator<CT_AbstractCloudIndex*> itCI(pointsSelected);
-
-            nExported = 0;
-            totalToExport = pointsSelected.size();
-
-            while(itCI.hasNext())
-            {
-                exportPoints(stream,
-                             dynamic_cast<CT_AbstractPointCloudIndex*>(itCI.next()),
-                             cc,
-                             nExported,
-                             totalToExport);
-
-                ++nExported;
-            }
+            auto iterator = m_hInItem.iterateInputs(m_handleResultExport);
+            m_iteratorItemBegin = iterator.begin();
+            m_iteratorItemEnd = iterator.end();
         }
 
-        file.close();
-        return true;
+        int nExported = 0;
+        const int totalToExport = maximumItemToExportInFile(std::numeric_limits<int>::max());
+
+        // write data
+        while((m_iteratorItemBegin != m_iteratorItemEnd)
+              && (nExported < totalToExport))
+        {
+            const CT_AbstractItemDrawableWithPointCloud *item = *m_iteratorItemBegin;
+
+            exportPoints(stream,
+                         dynamic_cast<const CT_IAccessPointCloud*>(item)->pointCloudIndex(),
+                         cc);
+
+            ++nExported;
+            ++m_iteratorItemBegin;
+        }
+    }
+    else
+    {
+        for(const CT_AbstractItemDrawableWithPointCloud* item : m_items)
+        {
+            exportPoints(stream,
+                         dynamic_cast<const CT_IAccessPointCloud*>(item)->pointCloudIndex(),
+                         cc);
+        }
+
+        const QList<CT_AbstractCloudIndex*> &pointsSelected = pointsToExport();
+        QListIterator<CT_AbstractCloudIndex*> itCI(pointsSelected);
+
+        while(itCI.hasNext())
+        {
+            exportPoints(stream,
+                         dynamic_cast<CT_AbstractPointCloudIndex*>(itCI.next()),
+                         cc);
+        }
     }
 
-    return false;
+    file.close();
+    return true;
 }
 
 
@@ -265,6 +244,7 @@ void PB_XYBExporter::clearIterators()
 
 CT_AbstractColorCloud* PB_XYBExporter::createColorCloud()
 {
+    // TODO : find when we must clear it !
     if(m_attributsColorPointWorker.colorCloud().data() != nullptr)
         return m_attributsColorPointWorker.colorCloud()->abstractColorCloud();
 
@@ -290,9 +270,7 @@ CT_AbstractColorCloud* PB_XYBExporter::createColorCloud()
 
 void PB_XYBExporter::exportPoints(QDataStream &stream,
                                   const CT_AbstractPointCloudIndex *constPCIndex,
-                                  const CT_AbstractColorCloud *cc,
-                                  const int &nExported,
-                                  const int &totalToExport)
+                                  const CT_AbstractColorCloud *cc)
 {
     size_t i = 0;
 
@@ -319,10 +297,9 @@ void PB_XYBExporter::exportPoints(QDataStream &stream,
 
         ++i;
 
-        //const int currentProgress = ((i*100)/totalSize);
+        const int currentProgress = static_cast<int>((i*100)/totalSize);
 
-        // TODO : export progress problem
-        setExportProgress(int((((i*100)/totalSize)+nExported)/totalToExport));
+        setExportProgress(currentProgress);
     }
 }
 

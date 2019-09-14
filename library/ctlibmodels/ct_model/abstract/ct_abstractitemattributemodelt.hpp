@@ -1,6 +1,3 @@
-#ifndef CT_ABSTRACTITEMATTRIBUTEMODELT_HPP
-#define CT_ABSTRACTITEMATTRIBUTEMODELT_HPP
-
 #include "ct_abstractitemattributemodelt.h"
 
 template <class ItemModelT, class InheritedT>
@@ -21,5 +18,3 @@ bool CT_AbstractItemAttributeModelT<ItemModelT, InheritedT>::isEmpty() const
 {
     return true;
 }
-
-#endif // CT_ABSTRACTITEMATTRIBUTEMODELT_HPP

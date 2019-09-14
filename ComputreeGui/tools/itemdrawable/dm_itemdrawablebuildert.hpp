@@ -1,6 +1,3 @@
-#ifndef DM_ITEMDRAWABLEBUILDERT_HPP
-#define DM_ITEMDRAWABLEBUILDERT_HPP
-
 #include "dm_itemdrawablebuildert.h"
 
 template<typename T, class ItemT>
@@ -193,7 +190,7 @@ template<typename Type, class ItemTTT>
 DM_ItemDrawableType<Type,ItemTTT>::DM_ItemDrawableType(const Type &type, const DM_ItemDrawableTypeBackup<ItemTTT> *backup)
 {
     m_type = type;
-    m_backup = (DM_ItemDrawableTypeBackup<ItemTTT>*)backup;
+    m_backup = const_cast<DM_ItemDrawableTypeBackup<ItemTTT>*>(backup);
 }
 
 template<typename Type, class ItemTTT>
@@ -217,13 +214,13 @@ bool DM_ItemDrawableType<Type,ItemTTT>::isEmpty() const
 template<class ItemTT>
 void DM_ItemDrawableTypeBackup<ItemTT>::add(const ItemTT &item, const int &level)
 {
-    m_itemsWithLevel.insert((ItemTT*)&item, level);
+    m_itemsWithLevel.insert(const_cast<ItemTT*>(&item), level);
 }
 
 template<class ItemTT>
 void DM_ItemDrawableTypeBackup<ItemTT>::remove(const ItemTT &item, const int &level)
 {
-    m_itemsWithLevel.remove((ItemTT*)&item, level);
+    m_itemsWithLevel.remove(const_cast<ItemTT*>(&item), level);
 }
 
 template<class ItemTT>
@@ -237,6 +234,3 @@ int DM_ItemDrawableTypeBackup<ItemTT>::size() const
 {
     return m_itemsWithLevel.size();
 }
-
-
-#endif // DM_ITEMDRAWABLEBUILDERT_HPP

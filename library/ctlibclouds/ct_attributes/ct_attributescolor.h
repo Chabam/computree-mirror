@@ -9,7 +9,7 @@
 class CTLIBCLOUDS_EXPORT CT_AttributesColor
 {
 public:
-    CT_AttributesColor(CT_AbstractColorCloud* cloud = nullptr);
+    CT_AttributesColor(CT_AbstractColorCloud* cloud = nullptr, bool autoDeleteColorCloud = true);
 
     /**
      * @brief Copy constructor
@@ -25,14 +25,15 @@ public:
 
     const CT_Color& constColorAt(const size_t& index) const;
 
-    void setColorCloud(CT_AbstractColorCloud* cloud);
+    void setColorCloud(CT_AbstractColorCloud* cloud, bool autoDeleteColorCloud = true);
 
     CT_AbstractColorCloud* colorCloud() const;
 
     size_t attributesSize() const;
 
 private:
-    CT_AbstractColorCloud* m_colorCloud;
+    CT_AbstractColorCloud*  m_colorCloud;
+    bool                    mAutoDeleteColorCloud;
 };
 
 #endif // CT_ATTRIBUTESCOLOR_H

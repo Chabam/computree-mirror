@@ -1,5 +1,7 @@
 #include "ct_stdpointsattributescontainer.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_StdPointsAttributesContainer)
+
 CT_StdPointsAttributesContainer::CT_StdPointsAttributesContainer() : SuperClass()
 {
 }

@@ -20,13 +20,9 @@ public:
 
     CT_VirtualAbstractStep* createNewInstance() const override;
 
-    bool isSettingsModified() const override;
-
     void addToLogCurrentTurnInformation();
 
     QSharedPointer<CT_Counter> counter() const;
-
-    void clearCounter();
 
 protected:
     void declareInputModels(CT_StepInModelStructureManager& manager) override;
@@ -37,7 +33,6 @@ protected:
 
     void compute() override;
 
-private:
     int                                         m_nTurns;
     QSharedPointer<CT_Counter>                  _counter;
 

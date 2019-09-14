@@ -6,37 +6,34 @@
 #include "ct_filter/abstract/ct_abstractfilter.h"
 #include "ct_view/elements/ctg_configurableelementsselector.h"
 
-// Inclusion of auto-indexation system
+#include "ct_itemdrawable/ct_scene.h"
+#include "ctliblas/itemdrawable/las/ct_stdlaspointsattributescontainer.h"
 
 class PB_StepApplyPointFilters: public CT_AbstractStep
 {
     Q_OBJECT
     using SuperClass = CT_AbstractStep;
-    typedef CT_AbstractStep SuperClass;
 
 public:
-
     PB_StepApplyPointFilters();
-    ~PB_StepApplyPointFilters();
+    ~PB_StepApplyPointFilters() final;
 
-    QString description() const;
+    QString description() const final;
 
-    QString detailledDescription() const;
-
-    QString getStepURL() const;
-
-    CT_VirtualAbstractStep* createNewInstance() const final;
+    QString detailledDescription() const final;
 
     void savePostSettings(SettingsWriterInterface& writer) const override;
     bool restorePostSettings(SettingsReaderInterface &reader) override;
+
+    CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
 
     void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
-    bool postConfigure();
+    bool postInputConfigure() final;
 
-    bool finalizePostConfiguration() override;
+    void finalizePostSettings() final;
 
     void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
@@ -44,9 +41,13 @@ protected:
 
 private:
 
-    // Declaration of autoRenames Variables (groups or items added to In models copies)
+    CT_HandleInResultGroupCopy<>                                    mInResult;
+    CT_HandleInStdZeroOrMoreGroup                                   mInRootGroup;
+    CT_HandleInStdGroup<>                                           mInGroup;
+    CT_HandleInSingularItem<CT_AbstractItemDrawableWithPointCloud>  mInItem;
+    CT_HandleInSingularItem<CT_StdLASPointsAttributesContainer, 0>  mInLasPointsAttributesContainer;
 
-    QMap<CT_AbstractConfigurableElement*,
+    QList<CT_HandleOutSingularItem<CT_Scene>*>                      mOutHandles;
     /**
      * @brief The collection of selected filters to use in the compute method
      */

@@ -1,5 +1,7 @@
 #include "ct_opfmeshmodel.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_OPFMeshModel)
+
 CT_OPFMeshModel::CT_OPFMeshModel() : SuperClass(),
     m_dUp(1.0),
     m_dDown(1.0)

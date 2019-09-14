@@ -1,6 +1,3 @@
-#ifndef DM_ITEMDRAWABLETREEVIEWMODELBUILDERT_HPP
-#define DM_ITEMDRAWABLETREEVIEWMODELBUILDERT_HPP
-
 #include <QtConcurrentMap>
 #include "tools/treeview/dm_itemdrawabletreeviewmodelbuildert.h"
 
@@ -20,13 +17,13 @@ DM_ItemDrawableTreeViewModelBuilderT<Item>::DM_ItemDrawableTreeViewModelBuilderT
 template<class Item>
 void DM_ItemDrawableTreeViewModelBuilderT<Item>::setCollection(const QVector<QList<Item*> > *collection)
 {
-    m_collection = (QVector<QList<Item*> >*)collection;
+    m_collection = const_cast<QVector<QList<Item*> >*>(collection);
 }
 
 template<class Item>
 void DM_ItemDrawableTreeViewModelBuilderT<Item>::setStandardItemBuilder(const DM_IItemDrawableStandardItemBuilderT<Item> *builder)
 {
-    m_itemModelBuilder = (DM_IItemDrawableStandardItemBuilderT<Item>*)builder;
+    m_itemModelBuilder = const_cast<DM_IItemDrawableStandardItemBuilderT<Item>*>(builder);
 }
 
 template<class Item>
@@ -56,20 +53,27 @@ void DM_ItemDrawableTreeViewModelBuilderT<Item>::staticRecursiveCreateItemForNex
                                                                                        const int &level,
                                                                                        const int &maxNLevel)
 {
-    item->visitChildrensOfTypeItem([&itemModelBuilder, &parent, &level, &maxNLevel](const CT_AbstractItemDrawable* child) -> bool {
+    CT_StandardItemGroup *group = dynamic_cast<CT_StandardItemGroup*>(item);
 
-        QList<Item*> items = itemModelBuilder->createItems(*child, level);
+    if(group != nullptr)
+    {
+        group->visitChildrensForTreeView([&itemModelBuilder, &parent, &level, &maxNLevel](const CT_AbstractItem* child) -> bool {
 
-        if(!items.isEmpty())
-        {
-            static_cast<Item*>(parent)->appendRow(items);
+            const CT_AbstractItemDrawable* itemD = static_cast<const CT_AbstractItemDrawable*>(child);
 
-            if((level+1) < maxNLevel)
-                staticRecursiveCreateItemForNextLevel(itemModelBuilder, const_cast<CT_AbstractItemDrawable*>(child), items.first(), level+1, maxNLevel);
-        }
+            QList<Item*> items = itemModelBuilder->createItems(*itemD, level);
 
-        return true;
-    });
+            if(!items.isEmpty())
+            {
+                static_cast<Item*>(parent)->appendRow(items);
+
+                if((level+1) < maxNLevel)
+                    staticRecursiveCreateItemForNextLevel(itemModelBuilder, const_cast<CT_AbstractItemDrawable*>(itemD), items.first(), level+1, maxNLevel);
+            }
+
+            return true;
+        });
+    }
 }
 
 template<class Item>
@@ -228,5 +232,3 @@ void DM_ItemDrawableTreeViewModelBuilderT<Item>::apply()
 
     setFinished();
 }
-
-#endif // DM_ITEMDRAWABLETREEVIEWMODELBUILDERT_HPP

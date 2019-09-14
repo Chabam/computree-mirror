@@ -27,6 +27,7 @@ public:
      * @param data : the data.
      */
     CT_StdItemAttributeT(const CT_AbstractCategory* category, const VType& data);
+    CT_StdItemAttributeT(const QString& categoryName, const VType& data);
 
     /**
      * @brief Copy contructor

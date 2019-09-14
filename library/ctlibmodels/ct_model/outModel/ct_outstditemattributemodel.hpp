@@ -9,7 +9,7 @@ CT_OutStdItemAttributeModel<ItemAttribute>::CT_OutStdItemAttributeModel(const IC
 {
     if(prototype == nullptr) {
         prototype = new ItemAttribute();
-        prototype->setCategory(static_cast<const ItemAttribute::CategoryType*>(category));
+        prototype->setCategory(static_cast<const typename ItemAttribute::CategoryType*>(category));
     }
 
     Q_ASSERT(prototype->category() == category);

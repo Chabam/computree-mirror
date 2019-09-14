@@ -36,7 +36,7 @@ public:
      *          - Parent container is set to nullptr
      *          - Childrens (items, sucessor, components, branches) was not copied (you must copy the CT_TTreeGroup that will set the structure)
      */
-    CT_TNodeGroup(const CT_TNodeGroup& other) = default;
+    CT_TNodeGroup(const CT_TNodeGroup& other);
 
     /**
      * @brief Visit childrens but inly for tree view

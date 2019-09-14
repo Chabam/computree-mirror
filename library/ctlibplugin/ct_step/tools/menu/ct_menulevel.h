@@ -17,6 +17,8 @@ class CTLIBPLUGIN_EXPORT CT_MenuLevel : public QObject
     Q_OBJECT
 
 public:
+    ~CT_MenuLevel();
+
     /**
      * @brief This is a special structure that you can use when a step
      *        was not found when plugins has been loaded
@@ -130,7 +132,6 @@ private:
 
     CT_MenuLevel();
     CT_MenuLevel(const QString& displayableName);
-    ~CT_MenuLevel();
 
     /**
      * @brief Check if this level has at least one step and if not test sub-level

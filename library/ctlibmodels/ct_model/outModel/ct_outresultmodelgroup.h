@@ -15,7 +15,7 @@ class CT_OutResultModelGroup : public CT_OutAbstractResultModelGroup
 public:
     /**
      * @brief Construct an output model that represent a result group
-     * @param rootGroupModel : the root model that represent a group. Must not be nullptr !
+     * @param rootGroupModel : the root model that represent a group.
      * @param resultName: the name that will be set to the result. Empty by default.
      * @param displayableName : a displayable name (used in gui for user information). Empty by default.
      * @param shortDescription : a short description of the result you search. Empty by default.

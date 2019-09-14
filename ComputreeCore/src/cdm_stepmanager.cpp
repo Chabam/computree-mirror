@@ -383,11 +383,12 @@ void CDM_StepManager::run()
 {
     if(_action == ExecuteStep)
     {
-        bool restart;
+        CT_VirtualAbstractStep* restartFromStep;
+        bool forceExecution = false;
 
         do
         {
-            restart = false;
+            restartFromStep = nullptr;
 
             if(_beginStep == nullptr)
             {
@@ -396,22 +397,23 @@ void CDM_StepManager::run()
                 QListIterator<CT_VirtualAbstractStep*> it(_stepRootList);
 
                 while(continueLoop
-                      && !restart
+                      && (restartFromStep == nullptr)
                       && it.hasNext())
                 {
-                    continueLoop = recursiveExecuteStep(*it.next(), restart, false);
+                    continueLoop = recursiveExecuteStep(*it.next(), restartFromStep, false);
                 }
 
-                if(restart)
-                    _beginStep = nullptr;
+                _beginStep = restartFromStep;
+                forceExecution = (restartFromStep != nullptr);
             }
             else
             {
-                recursiveExecuteStep(*_beginStep, restart, _force);
-                _beginStep = nullptr;
+                recursiveExecuteStep(*_beginStep, restartFromStep, _force | forceExecution);
+                _beginStep = restartFromStep;
+                forceExecution = (restartFromStep != nullptr);
             }
 
-        }while(restart);
+        }while(restartFromStep != nullptr);
 
         m_debugAutoMode = false;
         _debugMode = false;
@@ -425,7 +427,7 @@ void CDM_StepManager::run()
 
 ////////////// PRIVATE //////////////
 
-bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &restart, bool force)
+bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, CT_VirtualAbstractStep*& restartFromStep, bool force)
 {
 
     bool continueLoop = true;
@@ -493,24 +495,22 @@ bool CDM_StepManager::recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &r
 
     if(continueLoop)
     {
-        if(step.mustRecheckTree())
-        {
-            restart = true;
-            return continueLoop;
-        }
+        restartFromStep = step.restartComputeFromStep();
+
+        if(restartFromStep != nullptr)
+            return true;
     }
 
-
-    // si on a pas stopp l'etape ou si il n'y a pas eu d'erreur
+    // si on a pas stoppé l'étape ou si il n'y a pas eu d'erreur
     if(continueLoop)
     {
         // on continu avec les tapes filles
-        step.visitChildrens([this, &continueLoop, &restart, &forceAfterExecute](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
-            continueLoop = this->recursiveExecuteStep(*const_cast<CT_VirtualAbstractStep*>(child), restart, forceAfterExecute);
-            return continueLoop && !restart;
+        step.visitChildrens([this, &continueLoop, &restartFromStep, &forceAfterExecute](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+            continueLoop = this->recursiveExecuteStep(*const_cast<CT_VirtualAbstractStep*>(child), restartFromStep, forceAfterExecute);
+            return continueLoop && (restartFromStep == nullptr);
         });
 
-        if(!restart)
+        if(restartFromStep == nullptr)
         {
             // si on doit supprimer de la mmoire les rsultats des tapes et
             // que la sauvegarde automatique n'est pas active

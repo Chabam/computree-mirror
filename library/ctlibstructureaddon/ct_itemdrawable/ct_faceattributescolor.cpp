@@ -14,7 +14,8 @@ CT_FaceAttributesColor::CT_FaceAttributesColor(CT_FCIR pcir) : SuperClass(pcir),
 }
 
 CT_FaceAttributesColor::CT_FaceAttributesColor(CT_FCIR pcir,
-                                               CT_AbstractColorCloud *cc) : SuperClass(pcir),
-    CT_AttributesColor(cc)
+                                               CT_AbstractColorCloud *cc,
+                                               bool autoDeleteColorCloud) : SuperClass(pcir),
+    CT_AttributesColor(cc, autoDeleteColorCloud)
 {
 }

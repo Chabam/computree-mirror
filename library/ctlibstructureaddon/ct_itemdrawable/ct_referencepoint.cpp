@@ -31,6 +31,8 @@
 const CT_StandardReferencePointDrawManager CT_ReferencePoint::REFERENCEPOINT_DRAW_MANAGER;
 int CT_ReferencePoint::_currentRefId = 0;
 
+CT_TYPE_IMPL_INIT_MACRO(CT_ReferencePoint)
+
 CT_ReferencePoint::CT_ReferencePoint() : SuperClass(),
     _refId(-1) // referencePoint non valide
 {

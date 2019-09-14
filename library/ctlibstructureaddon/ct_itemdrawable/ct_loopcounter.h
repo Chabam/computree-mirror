@@ -48,14 +48,14 @@ public:
     CT_LoopCounter(QSharedPointer<CT_Counter> counter, CT_StepBeginLoop* beginStep);
     CT_LoopCounter(const CT_LoopCounter& other) = default;
 
-    inline size_t nTurns() const {return _counter->nTurns();}
-    inline size_t currentTurn() const {return _counter->currentTurn();}
+    inline int nTurns() const {return _counter->nTurns();}
+    inline int currentTurn() const {return _counter->currentTurn();}
     inline QString turnName() const {return _counter->turnName();}
     inline bool hasNextTurn() {return _counter->hasNextTurn();}
 
     inline void beginNextTurn() {_counter->beginNextTurn();}
 
-    inline void setCurrentTurn(size_t n) {_counter->setCurrentTurn(n);}
+    inline void setCurrentTurn(int n) {_counter->setCurrentTurn(n);}
 
     inline void setTurnName(QString name) {_counter->setTurnName(name);}
 

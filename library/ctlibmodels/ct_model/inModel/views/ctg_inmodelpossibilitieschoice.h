@@ -10,6 +10,8 @@
 #include "ct_model/outModel/abstract/ct_outabstractresultmodelgroup.h"
 #include "ct_model/outModel/abstract/def_ct_abstractgroupmodelout.h"
 
+#include "iinmodelpossibilitieschoice.h"
+
 namespace Ui {
 class CTG_InModelPossibilitiesChoice;
 }
@@ -237,10 +239,12 @@ private slots:
  *        and let the user choose which item, group, etc... use for each child possibility of
  *        the "input result model possibility".
  */
-class CTG_InModelPossibilitiesChoice : public QWidget
+class CTG_InModelPossibilitiesChoice : public IInModelPossibilitiesChoice
 {
     Q_OBJECT
     
+    using SuperClass = IInModelPossibilitiesChoice;
+
 public:
     explicit CTG_InModelPossibilitiesChoice(QWidget *parent = 0);
     ~CTG_InModelPossibilitiesChoice();
@@ -252,19 +256,19 @@ public:
     /**
      * @brief Returns true if the user cannot change anything but just display the treeview
      */
-    bool isReadOnly() const;
+    bool isReadOnly() const final;
 
 public slots:
     /**
      * @brief Set which "input result model possibility" to display
      * @param possibility : possibility to use to construct the treeview
      */
-    void setInResultModelPossibility(const CT_InStdResultModelPossibility* possibility);
+    void setInResultModelPossibility(const CT_InStdResultModelPossibility* possibility) final;
 
     /**
      * @brief Set to true if you want that the user cannot change anything but just display the treeview
      */
-    void setReadOnly(bool enabled);
+    void setReadOnly(bool enabled) final;
 
 private:
     Ui::CTG_InModelPossibilitiesChoice          *ui;

@@ -1,6 +1,3 @@
-#ifndef CT_STDITEMATTRIBUTET_HPP
-#define CT_STDITEMATTRIBUTET_HPP
-
 #include "ct_stditemattributet.h"
 
 template <typename VType>
@@ -12,6 +9,13 @@ CT_StdItemAttributeT<VType>::CT_StdItemAttributeT() : SuperClass(),
 template <typename VType>
 CT_StdItemAttributeT<VType>::CT_StdItemAttributeT(const CT_AbstractCategory *category,
                                                   const VType& data) : SuperClass(category),
+    m_data(data)
+{
+}
+
+template <typename VType>
+CT_StdItemAttributeT<VType>::CT_StdItemAttributeT(const QString& categoryName,
+                                                  const VType& data) : SuperClass(categoryName),
     m_data(data)
 {
 }
@@ -31,5 +35,3 @@ VType CT_StdItemAttributeT<VType>::data(const CT_AbstractItem*) const
 {
     return m_data;
 }
-
-#endif // CT_STDITEMATTRIBUTET_HPP

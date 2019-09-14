@@ -1,6 +1,3 @@
-#ifndef CT_CLOUDINDEXSTDLISTT_HPP
-#define CT_CLOUDINDEXSTDLISTT_HPP
-
 #include "ct_cloudindex/ct_cloudindexstdlistt.h"
 
 #include <functional>
@@ -456,5 +453,3 @@ void CT_CloudIndexStdListT<T>::internalClear()
 {
     m_collection->clear();
 }
-
-#endif // CT_CLOUDINDEXSTDLISTT_HPP

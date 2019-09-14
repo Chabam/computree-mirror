@@ -21,6 +21,7 @@ PB_StepGenericExporter::PB_StepGenericExporter(CT_AbstractExporter *exporter) : 
 PB_StepGenericExporter::~PB_StepGenericExporter()
 {
     delete _exporter;
+    _exporter = nullptr;
 }
 
 const CT_AbstractExporter *PB_StepGenericExporter::exporter() const

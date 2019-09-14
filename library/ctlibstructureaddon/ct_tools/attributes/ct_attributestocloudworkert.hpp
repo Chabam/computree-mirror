@@ -1,6 +1,3 @@
-#ifndef CT_ATTRIBUTESTOCLOUDWORKERT_HPP
-#define CT_ATTRIBUTESTOCLOUDWORKERT_HPP
-
 #include "ct_tools/attributes/ct_attributestocloudworkert.h"
 
 #include "ct_attributes/abstract/ct_abstractattributesscalar.h"
@@ -135,5 +132,3 @@ void CT_AttributesToCloudWorkerT<TypeAttribute>::apply()
     setProgress(100);
     emit finished();
 }
-
-#endif // CT_ATTRIBUTESTOCLOUDWORKERT_HPP

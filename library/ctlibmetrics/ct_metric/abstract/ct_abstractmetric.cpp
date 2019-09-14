@@ -1,26 +1,18 @@
 #include "ct_abstractmetric.h"
-#include "ct_attributes/ct_stditemattributet.h"
+
+#include "ct_log/ct_logmanager.h"
 
 CT_AbstractMetric::CT_AbstractMetric() : CT_AbstractConfigurableElement()
 {
-    m_result = NULL;
 }
 
-CT_AbstractMetric::CT_AbstractMetric(const CT_AbstractMetric &other)
+CT_AbstractMetric::CT_AbstractMetric(const CT_AbstractMetric& /*other*/)
 {
-    m_result = other.m_result;
-
-    AttributesContainerIterator it(m_attributes);
-
-    while(it.hasNext()) {
-        it.next();
-        m_attributes.insert(it.key(), it.value()->copy());
-    }
 }
 
 CT_AbstractMetric::~CT_AbstractMetric()
 {
-    clearAttributes();
+    clearAttributesRegistered();
 }
 
 QString CT_AbstractMetric::getDetailledDisplayableName() const
@@ -45,29 +37,28 @@ QString CT_AbstractMetric::getDetailledDisplayableName() const
     return result;
 }
 
-void CT_AbstractMetric::initAttributesModels(CT_OutResultModelGroupToCopyPossibilities* resPoss, const CT_AutoRenameModels &parentModel)
+
+void CT_AbstractMetric::finalizeConfiguration()
+{
+    clearAttributesRegistered();
+    createAttributes();
+}
+
+void CT_AbstractMetric::declareOutputItemAttributeModels(CT_MetricOutModelStructureManager& manager)
 {
     AttributesContainerIterator it(m_attributes);
 
     while(it.hasNext())
     {
-        AbstractAttributeObject *attributeObject = it.next().value();
-
-        CT_AbstractItemAttribute *attributePrototype = attributeObject->createPrototypeAttribute();
-
-        resPoss->addItemAttributeModel(parentModel,
-                                       *(attributeObject->_autoRenameModel),
-                                       attributePrototype,
-                                       attributeObject->_displayableName);
+        AbstractAttributeObject* attributeObject = it.next().value();
+        attributeObject->declareOutputItemAttributeModels(manager);
     }
 }
 
 void CT_AbstractMetric::computeMetric(CT_AbstractSingularItemDrawable *item)
 {
-    if((item == NULL) || (item->result() == NULL))
+    if((item == nullptr) || (item->result() == nullptr))
         return;
-
-    m_result = dynamic_cast<CT_ResultGroup*>(item->result());
 
     computeMetric();
 
@@ -76,12 +67,7 @@ void CT_AbstractMetric::computeMetric(CT_AbstractSingularItemDrawable *item)
     while (it.hasNext())
     {
         AbstractAttributeObject* attributeObject = it.next().value();
-
-        if (attributeObject->_attributeInstance != NULL)
-        {
-            item->addItemAttribute(attributeObject->_attributeInstance);
-            attributeObject->_attributeInstance = NULL;
-        }
+        attributeObject->addItemAttributeInItem(item);
     }
 }
 
@@ -97,32 +83,26 @@ bool CT_AbstractMetric::restoreSettings(SettingsReaderInterface &reader)
     return true;
 }
 
-void CT_AbstractMetric::clearAttributes()
+void CT_AbstractMetric::clearAttributesRegistered()
 {
     qDeleteAll(m_attributes.begin(), m_attributes.end());
     m_attributes.clear();
 }
 
-void CT_AbstractMetric::postConfigure()
-{
-    clearAttributes();
-    createAttributes();
-}
-
 CT_AbstractMetric::AbstractAttributeObject* CT_AbstractMetric::getAttributeObject(void* classMember, CT_AbstractCategory::ValueType type)
 {
-    CT_AbstractMetric::AbstractAttributeObject *attributeObject = m_attributes.value(classMember, NULL);
+    CT_AbstractMetric::AbstractAttributeObject *attributeObject = m_attributes.value(classMember, nullptr);
 
-    if(attributeObject == NULL)
+    if(attributeObject == nullptr)
     {
         PS_LOG->addErrorMessage(LogInterface::metric, tr("Impossible de trouver l'attribut recherché (métrique : %2) !").arg(getShortDisplayableName()));
-        return NULL;
+        return nullptr;
     }
 
     if(attributeObject->valueType() != type)
     {
         PS_LOG->addErrorMessage(LogInterface::metric, tr("Mauvais type pour l'attribut recherché (%1 au lieu de %2) !").arg(CT_AbstractCategory::valueTypeToString(type)).arg(attributeObject->valueType()));
-        return NULL;
+        return nullptr;
     }
 
     return attributeObject;

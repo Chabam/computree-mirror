@@ -1,16 +1,6 @@
 #include "pb_stepbeginloopthroughgroups02.h"
 
-#include "ct_result/model/inModel/tools/ct_instdresultmodelpossibility.h"
-
-#include "ct_model/tools/ct_modelsearchhelper.h"
-
-#include <QDebug>
-
-PB_StepBeginLoopThroughGroups02::PB_StepBeginLoopThroughGroups02() : CT_StepBeginLoop()
-{
-}
-
-PB_StepBeginLoopThroughGroups02::~PB_StepBeginLoopThroughGroups02()
+PB_StepBeginLoopThroughGroups02::PB_StepBeginLoopThroughGroups02() : SuperClass()
 {
 }
 
@@ -24,114 +14,68 @@ QString PB_StepBeginLoopThroughGroups02::detailledDescription() const
     return tr("Nécessite une CT_StepEndLoop pour terminer la boucle");
 }
 
-CT_VirtualAbstractStep* PB_StepBeginLoopThroughGroups02::createNewInstance()
+CT_VirtualAbstractStep* PB_StepBeginLoopThroughGroups02::createNewInstance() const
 {
     // cree une copie de cette etape
     return new PB_StepBeginLoopThroughGroups02();
 }
 
-//////////////////// PROTECTED //////////////////
-
 void PB_StepBeginLoopThroughGroups02::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    CT_InResultModelGroupToCopy *resultModel = createNewInResultModelForCopy(DEF_inResult_g, tr("Résultat"));
-    resultModel->setZeroOrMoreRootGroup();
-    resultModel->addStdGroupModel("", DEF_inGroup, CT_StandardItemGroup::staticGetType(), tr("Groupe"), "", CT_InAbstractGroupModel::CG_ChooseOneIfMultiple);
-    resultModel->addStdItemModel(DEF_inGroup, DEF_inItem, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"));
-    resultModel->addStdItemAttributeModel(DEF_inItem, DEF_inAttName, QList<QString>() << CT_AbstractCategory::DATA_FILE_NAME << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Nom"));
+    manager.addResult(m_hInResultCopy);
+    manager.setZeroOrMoreRootGroup(m_hInResultCopy, m_hInZeroOrMoreRootGroup);
+    manager.addGroup(m_hInZeroOrMoreRootGroup, m_hInGroup, tr("Groupe"));
+    manager.addItem(m_hInGroup, m_hInItem, tr("Item"));
+    manager.addItemAttribute(m_hInItem, m_hInItemAttribute, QStringList() << CT_AbstractCategory::DATA_FILE_NAME << CT_AbstractCategory::DATA_VALUE, tr("Nom"));
 }
 
-// Redefine in children steps to complete ConfigurationDialog
-void PB_StepBeginLoopThroughGroups02::createPostConfigurationDialog(int &nTurns)
+void PB_StepBeginLoopThroughGroups02::fillPostInputConfigurationDialog(CT_StepConfigurableDialog*)
 {
-    Q_UNUSED(nTurns);
 }
 
-// Redefine in children steps to complete out Models
-void PB_StepBeginLoopThroughGroups02::createOutResultModelListProtected(CT_OutResultModelGroup *firstResultModel)
+void PB_StepBeginLoopThroughGroups02::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
-    Q_UNUSED(firstResultModel);
-    createNewOutResultModelToCopy(DEF_inResult_g);
+    SuperClass::declareOutputModels(manager);
+
+    manager.addResultCopy(m_hInResultCopy);
 }
 
-// Redefine in children steps to complete compute method
-void PB_StepBeginLoopThroughGroups02::compute(CT_ResultGroup *outRes, CT_StandardItemGroup* group)
+void PB_StepBeginLoopThroughGroups02::compute()
 {
-    Q_UNUSED(outRes);
-    Q_UNUSED(group);
+    SuperClass::compute();
 
-    CT_ResultGroup *outResult = getOutResultList().at(1);
+    const int currentTurn = _counter->currentTurn();
 
-    int currentTurn = (int) _counter->getCurrentTurn();
-
-    if (currentTurn == 1)
+    if(currentTurn == 1)
     {
         _ids.clear();
-        CT_ResultGroupIterator it(outResult, this, DEF_inGroup);
-        while (it.hasNext())
-        {
-            CT_StandardItemGroup *group = (CT_StandardItemGroup*) it.next();
 
-            if (group != nullptr)
-            {
-                CT_AbstractSingularItemDrawable* item = (CT_AbstractSingularItemDrawable*) group->firstItemByINModelName(this, DEF_inItem);
-                if (item != nullptr)
-                {
-                    _ids.append(item);
-                }
-            }
+        for(const CT_AbstractSingularItemDrawable* item : m_hInItem.iterateInputs(m_hInResultCopy))
+        {
+            _ids.append(item); // one item = one turn
         }
-        _counter->setNTurns(_ids.size());
+
+        _counter->setNTurns(_ids.isEmpty() ? 1 : _ids.size());
     }
 
-    QList<CT_StandardItemGroup*> groupsToBeRemoved;
-    CT_ResultGroupIterator it2(outResult, this, DEF_inGroup);
-    while (it2.hasNext() && (!isStopped()))
+    if((currentTurn - 1) < _ids.size())
     {
-        CT_StandardItemGroup *group = (CT_StandardItemGroup*) it2.next();
+        const CT_AbstractSingularItemDrawable* currentItem = _ids.at(currentTurn - 1);
 
-        CT_AbstractSingularItemDrawable* item = (CT_AbstractSingularItemDrawable*) group->firstItemByINModelName(this, DEF_inItem);
-        if (item != nullptr)
+        const CT_AbstractItemAttribute* att = currentItem->itemAttribute(m_hInItemAttribute);
+
+        const QString turnName = (att != nullptr) ? att->toString(currentItem, nullptr) : QString("Turn%1").arg(currentTurn);
+
+        _counter->setTurnName(turnName);
+
+        for(CT_StandardItemGroup* group : m_hInGroup.iterateOutputs(m_hInResultCopy))
         {
-
-            CT_AbstractSingularItemDrawable* currentItem = _ids.at(currentTurn - 1);
-            if (item == currentItem)
-            {
-                QString turnName = QString("Turn%1").arg(currentTurn);
-                CT_AbstractItemAttribute* att = item->firstItemAttributeByINModelName(outResult, this, DEF_inAttName);
-                if (att !=  nullptr)
-                {
-                    turnName = att->toString(item, nullptr);
-                }
-                _counter->setTurnName(turnName);
-            } else {
-                groupsToBeRemoved.append(group);
-            }
+            if(!group->containsSingularItem(currentItem))
+                group->removeFromParent(true);
         }
     }
 
-    NTurnsSelected();
-
-    while (!groupsToBeRemoved.isEmpty())
-    {
-        CT_StandardItemGroup *group = groupsToBeRemoved.takeLast();
-        recursiveRemoveGroupIfEmpty(group->parentGroup(), group);
-    }
+    addToLogCurrentTurnInformation();
 
     setProgress( 100 );
-}
-
-void PB_StepBeginLoopThroughGroups02::recursiveRemoveGroupIfEmpty(CT_StandardItemGroup *parent, CT_StandardItemGroup *group) const
-{
-    if(parent != nullptr)
-    {
-        parent->removeGroup(group);
-
-        if(parent->isEmpty())
-            recursiveRemoveGroupIfEmpty(parent->parentGroup(), parent);
-    }
-    else
-    {
-        ((CT_ResultGroup*)group->result())->removeGroupSomethingInStructure(group);
-    }
 }

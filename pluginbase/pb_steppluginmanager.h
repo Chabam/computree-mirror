@@ -124,17 +124,17 @@ private:
     /**
      * @brief Search in all plugins raster metrics available and add it to the collection
      */
-    //void initRasterMetricsCollection();
+    void initRasterMetricsCollection();
 
     /**
      * @brief Search in all plugins xyz metrics available and add it to the collection
      */
-    //void initXyzMetricsCollection();
+    void initXyzMetricsCollection();
 
     /**
      * @brief Search in all plugins xyz filters available and add it to the collection
      */
-    //void initXyzFiltersCollection();
+    void initXyzFiltersCollection();
 
     /**
      * @brief Search in all plugins readers available and add it to the collection

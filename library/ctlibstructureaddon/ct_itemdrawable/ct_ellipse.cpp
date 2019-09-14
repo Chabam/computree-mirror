@@ -27,8 +27,9 @@
 
 #include "ct_ellipse.h"
 
-CT_DEFAULT_IA_INIT(CT_Ellipse)
 const CT_StandardEllipseDrawManager CT_Ellipse::ELLIPSE_DRAW_MANAGER;
+
+CT_DEFAULT_IA_INIT(CT_Ellipse)
 
 CT_Ellipse::CT_Ellipse(): SuperClass()
 {

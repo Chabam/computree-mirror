@@ -1,6 +1,3 @@
-#ifndef DM_ITEMDRAWABLETREEVIEWCONTROLLERT_HPP
-#define DM_ITEMDRAWABLETREEVIEWCONTROLLERT_HPP
-
 #include "tools/treeview/dm_itemdrawabletreeviewcontrollert.h"
 
 template<class Model, class Item>
@@ -29,19 +26,19 @@ DM_ItemDrawableTreeViewControllerT<Model, Item>::DM_ItemDrawableTreeViewControll
 template<class Model, class Item>
 void DM_ItemDrawableTreeViewControllerT<Model, Item>::setModel(const Model *model)
 {
-    m_model = (Model*)model;
+    m_model = const_cast<Model*>(model);
 }
 
 template<class Model, class Item>
 void DM_ItemDrawableTreeViewControllerT<Model, Item>::setStandardItemBuilder(const DM_IItemDrawableStandardItemBuilderT<Item> *builder)
 {
-    m_standardItemBuilder = (DM_IItemDrawableStandardItemBuilderT<Item>*)builder;
+    m_standardItemBuilder = const_cast<DM_IItemDrawableStandardItemBuilderT<Item>*>(builder);
 }
 
 template<class Model, class Item>
 void DM_ItemDrawableTreeViewControllerT<Model, Item>::setTreeViewManager(const DM_ITreeViewManagerT<Item> *manager)
 {
-    m_treeViewManager = (DM_ITreeViewManagerT<Item>*)manager;
+    m_treeViewManager = const_cast<DM_ITreeViewManagerT<Item>*>(manager);
 }
 
 template<class Model, class Item>
@@ -504,5 +501,3 @@ void DM_ItemDrawableTreeViewControllerT<Model, Item>::slotRemoveTemporaryItemsIn
         m_treeViewManager->refreshHeaders();
     }
 }
-
-#endif // DM_ITEMDRAWABLETREEVIEWCONTROLLERT_HPP

@@ -593,9 +593,12 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
     itemDisplay->setEditable(false);
     itemDisplay->setCheckable(true);
     itemDisplay->setCheckState(item.isSelected() ? Qt::Checked : Qt::Unchecked);
+    itemDisplay->setText(item.model()->displayableName());
     itemDisplay->setData(qVariantFromValue((void*)&item), Qt::UserRole + 1);
+
     QObject::connect(&item, SIGNAL(selectChange(bool)), itemDisplay, SLOT(setBoolData(bool)), Qt::DirectConnection);
     QObject::connect(itemDisplay, SIGNAL(dataChanged(CG_CustomTreeItem*,int,QVariant)), this, SLOT(slotItemDataChanged(CG_CustomTreeItem*,int,QVariant)), Qt::QueuedConnection);
+
     l << itemDisplay;
 
     const int nColumnOfAttributes = m_dataReferencesToUse.size();
@@ -627,8 +630,6 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
     }
     else
     {
-        itemDisplay->setText(item.model()->displayableName());
-
         const CT_StandardItemGroup *group = dynamic_cast<const CT_StandardItemGroup*>(&item);
 
         if(group != nullptr)

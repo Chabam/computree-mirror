@@ -1,6 +1,3 @@
-#ifndef DM_ITEMDRAWABLETREEVIEWMODELRESEARCHERT_HPP
-#define DM_ITEMDRAWABLETREEVIEWMODELRESEARCHERT_HPP
-
 #include "tools/treeview/dm_itemdrawabletreeviewmodelresearchert.h"
 
 template<class Item>
@@ -13,13 +10,13 @@ DM_ItemDrawableTreeViewModelResearcherT<Item>::DM_ItemDrawableTreeViewModelResea
 template<class Item>
 void DM_ItemDrawableTreeViewModelResearcherT<Item>::setCollection(const QVector<QList<Item*> > *collection)
 {
-    m_collection = (QVector<QList<Item*> >*)collection;
+    m_collection = const_cast<QVector<QList<Item*> >*>(collection);
 }
 
 template<class Item>
 void DM_ItemDrawableTreeViewModelResearcherT<Item>::setTreeViewManager(const DM_ITreeViewManagerT<Item> *man)
 {
-    m_treeViewManager = (DM_ITreeViewManagerT<Item>*)man;
+    m_treeViewManager = const_cast<DM_ITreeViewManagerT<Item>*>(man);
 }
 
 template<class Item>
@@ -53,6 +50,3 @@ void DM_ItemDrawableTreeViewModelResearcherT<Item>::apply()
 
     setFinished();
 }
-
-
-#endif // DM_ITEMDRAWABLETREEVIEWMODELRESEARCHERT_HPP

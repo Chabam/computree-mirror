@@ -4,8 +4,6 @@
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
 #include "ct_itemattributes/tools/ct_defaultitemattributemanager.h"
 #include "ct_itemattributes/tools/ct_itemattributecontainer.h"
-#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
-#include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
 #include "tools/sfinae.h"
 
 #include <QColor>
@@ -274,27 +272,6 @@ private:
      */
     QString pDisplayableName() const { return displayableName(); }
 
-    template<typename InHandleType, typename Visitor>
-    bool visitInModelWithPossibilitiesFromInHandle(const InHandleType& inHandle, const Visitor& visitor) const {
-        const CT_InAbstractModel* inOriginalModel = inHandle.model();
-        const CT_InAbstractResultModel* inOriginalResultModel = dynamic_cast<CT_InAbstractResultModel*>(inOriginalModel->rootModel());
-
-        Q_ASSERT(inOriginalResultModel != nullptr);
-
-        const int nResultPossibility = inOriginalResultModel->nPossibilitySaved();
-
-        for(int i=0; i<nResultPossibility; ++i) {
-            if(inOriginalResultModel->possibilitySavedAt(i)->isSelected()) {
-                CT_InAbstractModel* inModelWithPossibilities = static_cast<CT_InStdResultModelPossibility*>(inOriginalResultModel->possibilitySavedAt(i))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(inOriginalModel);
-
-                if(!visitor(inModelWithPossibilities))
-                    return false;
-            }
-        }
-
-        return true;
-    }
-
     /**
      * @brief Returns the first item attribute that use the model in the specified handle.
      * @param outItemHandle : the handle of the item (output)
@@ -346,7 +323,6 @@ private:
     }
 
     // declare that we will add default item attributes in this class
-    //  => We must add CT_DEFAULT_IA_INIT(CT_AbstractSingularItemDrawable) in top of cpp file
     CT_DEFAULT_IA_BEGIN(CT_AbstractSingularItemDrawable)
     CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataId(), &CT_AbstractSingularItemDrawable::pId, QObject::tr("ID"))
     CT_DEFAULT_IA_V2(CT_AbstractSingularItemDrawable, CT_AbstractCategory::staticInitDataDisplayableName(), &CT_AbstractSingularItemDrawable::pDisplayableName, QObject::tr("Name"))

@@ -27,6 +27,7 @@
 
 #include "ct_abstractshape.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_AbstractShape)
 
 CT_AbstractShape::CT_AbstractShape() : SuperClass(),
     _data(nullptr)

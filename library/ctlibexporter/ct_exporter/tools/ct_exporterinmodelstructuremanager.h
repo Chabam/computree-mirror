@@ -33,6 +33,13 @@ public:
     }
 
     /**
+     * @brief Returns true if at least one model (recursive) use the specified type
+     */
+    bool doesAtLeastOneInputModelsUseType(const QString& type) const {
+        return m_manager.doesAtLeastOneInputModelsUseType(type);
+    }
+
+    /**
      * @brief Add a group to the root group model
      * @param parentGroup : the handle of the input group model to use to add the new group
      * @param groupHandle : the handle of the input group model to use to create the new group model and access it later
@@ -101,6 +108,31 @@ public:
         m_manager.addItemAttribute(parentItem,
                                    itemAttributeHandle,
                                    categories,
+                                   displayableName,
+                                   shortDescription,
+                                   detailledDescription);
+    }
+
+    /**
+     * @brief Add an item attribute to an item model
+     * @param parentItem : the handle of the input item model to use to add the new item attribute
+     * @param itemAttributeHandle : the handle of the input item attribute model to use to create the new item attribute model and access it later
+     * @param category : a category string from category manager, per example CT_AbstractCategory::DATA_VALUE
+     * @param displayableName : the displayable that must be set to the new item attribute model
+     * @param shortDescription : the short description that must be set to the new item attribute model
+     * @param detailledDescription : the detailled description that must be set to the new item attribute model
+     */
+    template<class HandleInItemParent, class HandleInItemAttribute>
+    void addItemAttributeAndFindCategory(const HandleInItemParent& parentItem,
+                                         HandleInItemAttribute& itemAttributeHandle,
+                                         const QString& category,
+                                         const QString& displayableName = QString{"In Item Attribute"},
+                                         const QString& shortDescription = QString(),
+                                         const QString& detailledDescription = QString()) {
+
+        m_manager.addItemAttribute(parentItem,
+                                   itemAttributeHandle,
+                                   PS_CATEGORY_MANAGER->findByUniqueName(category),
                                    displayableName,
                                    shortDescription,
                                    detailledDescription);

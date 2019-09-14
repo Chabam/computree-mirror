@@ -62,9 +62,8 @@ public:
      * @brief Select the first graph that contains the possibility.
      * @param possibility : one of possibility of the iResultModel
      * @return false if there was no graph present for this possibility
-     * @param index : the index of the graph to select (if -1 search the best by default)
      */
-    bool selectOneGraphForPossibilityOfRootModel(const CT_InStdModelPossibility *possibility, qint8 index = -1) const;
+    bool selectOneGraphForPossibilityOfRootModel(const CT_InStdResultModelPossibility* possibility) const;
 
     // -- OTHER -- //
 

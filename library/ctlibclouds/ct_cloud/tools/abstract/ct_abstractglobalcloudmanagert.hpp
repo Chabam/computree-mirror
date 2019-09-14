@@ -1,6 +1,3 @@
-#ifndef CT_ABSTRACTGLOBALCLOUDMANAGERT_HPP
-#define CT_ABSTRACTGLOBALCLOUDMANAGERT_HPP
-
 #include "ct_cloud/tools/abstract/ct_abstractglobalcloudmanagert.h"
 
 template<typename T>
@@ -87,5 +84,3 @@ bool CT_AbstractGlobalCloudManagerT<T>::nextIndexToIgnoreToSync(const size_t &cu
 
     return false;
 }
-
-#endif // CT_ABSTRACTGLOBALCLOUDMANAGERT_HPP

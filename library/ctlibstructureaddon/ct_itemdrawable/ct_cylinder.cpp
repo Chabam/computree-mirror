@@ -27,9 +27,9 @@
 
 #include "ct_cylinder.h"
 
-CT_DEFAULT_IA_INIT(CT_Cylinder)
-
 const CT_StandardCylinderDrawManager CT_Cylinder::CYLINDER_DRAW_MANAGER;
+
+CT_DEFAULT_IA_INIT(CT_Cylinder)
 
 CT_Cylinder::CT_Cylinder() : SuperClass()
 {

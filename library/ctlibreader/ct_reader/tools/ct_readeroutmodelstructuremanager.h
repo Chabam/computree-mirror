@@ -175,45 +175,8 @@ public:
     }
 
     /**
-     * @brief Add an item attribute to the root group
-     * @param itemAttributeHandle : the handle of the output item attribute model to use to create the new item attribute model and access it later
-     * @param category : a category, per example PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE)
-     * @param displayableName : the displayable that must be set to the new item attribute model
-     * @param shortDescription : the short description that must be set to the new item attribute model
-     * @param detailledDescription : the detailled description that must be set to the new item attribute model
-     */
-    template<class HandleOutItemAttribute, typename Category>
-    void addItemAttribute(HandleOutItemAttribute& itemAttributeHandle,
-                          const Category& category,
-                          const QString& displayableName = QString{"Out Item Attribute"},
-                          const QString& shortDescription = QString{""},
-                          const QString& detailledDescription = QString{""},
-                          typename HandleOutItemAttribute::ItemAttributeType* prototype = nullptr) {
-
-        if(m_hOutGroup != nullptr) {
-            this->addItemAttribute(*m_hOutGroup,
-                                   itemAttributeHandle,
-                                   category,
-                                   displayableName,
-                                   shortDescription,
-                                   detailledDescription,
-                                   prototype);
-            return;
-        }
-
-        m_manager.addItemAttributeWithInputTool(m_inParentModel,
-                                                m_inTool,
-                                                itemAttributeHandle,
-                                                category,
-                                                displayableName,
-                                                shortDescription,
-                                                detailledDescription,
-                                                prototype);
-    }
-
-    /**
-     * @brief Add an item to a group model
-     * @param parentItem : the handle of an output item model to use to add the new group
+     * @brief Add an item attribute to an item model
+     * @param parentItem : the handle of an output item model to use to add the new item attribute
      * @param itemAttributeHandle : the handle of the output item attribute model to use to create the new item attribute model and access it later
      * @param category : a category, per example PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE)
      * @param displayableName : the displayable that must be set to the new item attribute model
@@ -239,8 +202,8 @@ public:
     }
 
     /**
-     * @brief Add an item to a group model
-     * @param parentItem : the handle of an output item model to use to add the new group
+     * @brief Add an item attribute to an item model
+     * @param parentItem : the handle of an output item model to use to add the new item attribute
      * @param itemAttributeHandle : the handle of the output item attribute model to use to create the new item attribute model and access it later
      * @param category : a category string from category manager, per example CT_AbstractCategory::DATA_VALUE
      * @param displayableName : the displayable that must be set to the new item attribute model
@@ -266,7 +229,6 @@ public:
     }
 
 private:
-
     CT_OutModelStructureManager&            m_manager;
     CT_HandleOutStdGroup*                   m_hOutGroup;
     CT_InStdGroupModel*                     m_inParentModel;

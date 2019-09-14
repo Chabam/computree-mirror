@@ -1,6 +1,3 @@
-#ifndef CT_CloudIndexStdVectorTMethodImpl_HPP
-#define CT_CloudIndexStdVectorTMethodImpl_HPP
-
 #include "ct_cloudindex/tools/ct_cloudindexstdvectortmethodimpl.h"
 
 template<typename T>
@@ -391,5 +388,3 @@ void CT_CloudIndexStdVectorTMethodImpl<T>::copy(std::vector<T> &destination)
         ++itDest;
     }
 }
-
-#endif // CT_CloudIndexStdVectorTMethodImpl_HPP

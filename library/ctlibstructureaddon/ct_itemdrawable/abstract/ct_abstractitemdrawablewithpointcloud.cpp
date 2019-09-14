@@ -35,6 +35,7 @@
 #include "ct_iterator/ct_pointiterator.h"
 
 CT_StandardAbstractItemDrawableWithPointCloudDrawManager CT_AbstractItemDrawableWithPointCloud::IDWITHPC_DRAW_MANAGER;
+
 CT_DEFAULT_IA_INIT(CT_AbstractItemDrawableWithPointCloud)
 
 CT_AbstractItemDrawableWithPointCloud::CT_AbstractItemDrawableWithPointCloud() : SuperClass()

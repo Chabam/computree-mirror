@@ -34,68 +34,79 @@
 #include "ct_reader/ct_standardreaderseparator.h"
 
 #include "step/pb_stepgenericexporter.h"
+//#include "step/pb_stepuseritemselection.h"
 #include "step/pb_stepgenericloadfile.h"
 #include "step/pb_stepcreatereaderlist.h"
+/*#include "step/pb_steplooponfiles.h"
+#include "step/pb_steplooponfilesets.h"
+#include "step/pb_steploadfilebyname.h"
+*/
 
-//#include "step/pb_stepuseritemselection.h"
-//#include "step/pb_steplooponfiles.h"
-//#include "step/pb_steplooponfilesets.h"
-//#include "step/pb_steploadfilebyname.h"
-//#include "step/pb_stepusereadertoloadfiles.h"
-//#include "step/pb_stepcomputepointmetrics.h"
-//#include "step/pb_stepcomputerastermetrics.h"
+#include "step/pb_stepusereadertoloadfiles.h"
+#include "step/pb_stepcomputepointmetrics.h"
+#include "step/pb_stepcomputerastermetrics.h"
 
-//#include "ct_step/ct_stependloop.h"
-//#include "step/pb_stepbeginloopthroughgroups.h"
-//#include "step/pb_stepbeginloopthroughgroups02.h"
-//#include "step/pb_stepapplypointfilters.h"
-//#include "step/pb_stepexportitemlist.h"
-//#include "step/pb_stepexportpointsbyxyarea.h"
-//#include "step/pb_stepexportattributesinloop.h"
-//#include "actions/pb_actionselectitemdrawablegv.h"
-//#include "actions/pb_actionshowitemdatagv.h"
+#include "ct_step/ct_stependloop.h"
+#include "step/pb_stepbeginloopthroughgroups02.h"
 
+#include "step/pb_stepapplypointfilters.h"
+/*
+#include "step/pb_stepexportitemlist.h"
+#include "step/pb_stepexportpointsbyxyarea.h"
+#include "step/pb_stepexportattributesinloop.h"
+#include "actions/pb_actionselectitemdrawablegv.h"
+#include "actions/pb_actionshowitemdatagv.h"
+*/
 #include "ctlibstdactions/action/ct_actionselectitemdrawablegv.h"
-
-//#include "exporters/csv/pb_csvexporter.h"
-//#include "exporters/profile/pb_profileexporter.h"
-//#include "exporters/grid2d/pb_grid2dexporter.h"
-//#include "exporters/grid3d/pb_grid3dexporter.h"
-//#include "exporters/grid3d/pb_grid3dastableexporter.h"
-
+/*
+#include "exporters/csv/pb_csvexporter.h"
+#include "exporters/profile/pb_profileexporter.h"
+#include "exporters/grid2d/pb_grid2dexporter.h"
+#include "exporters/grid3d/pb_grid3dexporter.h"
+#include "exporters/grid3d/pb_grid3dastableexporter.h"
+*/
 #include "exporters/xyb/pb_xybexporter.h"
+/*
+#include "exporters/xyb/pb_multixybexporter.h"
+#include "exporters/ascrgb/pb_ascrgbexporter.h"
+#include "exporters/groupdata/pb_groupdataexporter.h"
+#include "exporters/mesh/pb_meshobjexporter.h"
+#include "exporters/topology/pb_opfexporter.h"
+#include "exporters/pbm/pb_pbmexporter.h"
+#include "exporters/pgm/pb_pgmexporter.h"
+#include "exporters/polygon2d/pb_polygon2dexporter.h"
+#include "ctliblas/exporters/ct_exporter_las.h"
+#include "exporters/gdal/pb_gdalexporter.h"
+#include "exporters/ascid/pb_ascidexporter.h"
 
-//#include "exporters/xyb/pb_multixybexporter.h"
-//#include "exporters/ascrgb/pb_ascrgbexporter.h"
-//#include "exporters/groupdata/pb_groupdataexporter.h"
-//#include "exporters/mesh/pb_meshobjexporter.h"
-//#include "exporters/topology/pb_opfexporter.h"
-//#include "exporters/polygon2d/pb_polygon2dexporter.h"
-//#include "ctliblas/exporters/ct_exporter_las.h"
-//#include "exporters/gdal/pb_gdalexporter.h"
-//#include "exporters/ascid/pb_ascidexporter.h"
-
-
+*/
 #include "ctlibio/readers/ct_reader_xyb.h"
 #include "ctlibio/readers/ct_reader_ascrgb.h"
+/*#include "ctlibio/readers/ct_reader_ptx.h"
+#include "ctlibio/readers/ct_reader_obj.h"
+#include "ctlibio/readers/ct_reader_larchitect_grid.h"
+*/
 #include "ctlibio/readers/ct_reader_opf.h"
+
 #include "ctliblas/readers/ct_reader_lasv2.h"
+
 #include "ctlibio/readers/ct_reader_gdal.h"
 #include "ctlibio/readers/ct_reader_idxyz.h"
-#include "ctlibio/readers/ct_reader_trajectory.h"
-#include "ctlibio/readers/ct_reader_larchitect_grid.h"
-#include "ctlibio/readers/ct_reader_terrascanprj.h"
-#include "ctlibio/readers/ct_reader_obj.h"
+/*#include "ctlibio/readers/ct_reader_terrascanprj.h"
 #include "ctlibio/readers/ct_reader_asciigrid3d.h"
+#include "ctlibio/readers/ct_reader_pgm.h"
+#include "ctlibio/readers/ct_reader_pbm.h"
 #include "ctlibio/readers/ct_reader_points_ascii.h"
-#include "ctlibio/readers/ct_reader_ptx.h"
 #include "ctlibio/readers/ct_reader_ply.h"
+#include "ctlibio/readers/ct_reader_trajectory.h"
+*/
 
-//#include "ctlibmetrics/ct_metric/points/ct_cloudmetrics.h"
-//#include "ctlibmetrics/ct_metric/abstract/ct_abstractmetric_raster.h"
-//#include "ctlibfilters/filters/abstract/ct_abstractfilter_xyz.h"
+#include "ctlibmetrics/ct_metric/points/ct_cloudmetrics.h"
+#include "ctlibmetrics/ct_metric/abstract/ct_abstractmetric_raster.h"
 
-//#include "tools/pb_configurableelementtools.h"
+#include "ct_filter/abstract/ct_abstractfilter_xyz.h"
+
+#include "tools/pb_configurableelementtools.h"
 #include "tools/pb_readerstools.h"
 #include "tools/pb_exportertools.h"
 
@@ -199,24 +210,22 @@ QSettings* PB_StepPluginManager::initQSettings()
 
 bool PB_StepPluginManager::loadGenericsStep()
 {
+    addNewWorkflowStep<PB_StepBeginLoopThroughGroups02>(CT_StepsMenu::LP_Loops);
+    addNewWorkflowStep<CT_StepEndLoop>(CT_StepsMenu::LP_Loops);
+    addNewPointsStep<PB_StepApplyPointFilters>(CT_StepsMenu::LP_Filter);
+    //addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter);
+    addNewMetricStep<PB_StepComputePointMetrics>();
+    addNewMetricStep<PB_StepComputeRasterMetrics>();
 
-//    addNewLoadStep<PB_StepCreateReaderList>("");
+    addNewLoadStep<PB_StepCreateReaderList>();
+    addNewLoadStep<PB_StepUseReaderToLoadFiles>();
+    /*addNewLoadStep<PB_StepLoadFileByName>();
+    addNewLoadStep<PB_StepLoopOnFileSets>();
+    addNewLoadStep<PB_StepLoopOnFiles>();
 
-//    addNewWorkflowStep<PB_StepBeginLoopThroughGroups02>(CT_StepsMenu::LP_Loops);
-//    addNewWorkflowStep<CT_StepEndLoop>(CT_StepsMenu::LP_Loops);
-//    addNewPointsStep<PB_StepApplyPointFilters>(CT_StepsMenu::LP_Filter);
-//    addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter);
-//    addNewMetricStep<PB_StepComputePointMetrics>("");
-//    addNewMetricStep<PB_StepComputeRasterMetrics>("");
-
-//    addNewLoadStep<PB_StepUseReaderToLoadFiles>("");
-//    addNewLoadStep<PB_StepLoadFileByName>("");
-//    addNewLoadStep<PB_StepLoopOnFileSets>("");
-//    addNewLoadStep<PB_StepLoopOnFiles>("");
-
-//    addNewExportStep<PB_StepExportItemList>("");
-//    addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
-//    addNewExportStep<PB_StepExportAttributesInLoop>("");
+    //addNewExportStep<PB_StepExportItemList>();
+    addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
+    addNewExportStep<PB_StepExportAttributesInLoop>();*/
 
     return true;
 }
@@ -238,8 +247,8 @@ bool PB_StepPluginManager::loadActions()
     CT_ActionsSeparator *sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_SELECTION));
     sep->addAction(new CT_ActionSelectItemDrawableGV());
 
-//    sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_INFORMATION));
-//    sep->addAction(new PB_ActionShowItemDataGV());
+    /*sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_INFORMATION));
+    sep->addAction(new PB_ActionShowItemDataGV());*/
     return true;
 }
 
@@ -261,19 +270,21 @@ bool PB_StepPluginManager::loadExporters()
 
     CT_StandardExporterSeparator *sep = addNewSeparator(new CT_StandardExporterSeparator("Exporters"));
     sep->addExporter(new PB_XYBExporter(CT_StepsMenu::LP_Points));
-//    sep->addExporter(new PB_CSVExporter());
-//    sep->addExporter(new PB_GroupDataExporter());
-//    //sep->addExporter(new PB_MultiXYBExporter());
-//    sep->addExporter(new PB_ASCRGBExporter());
-//    sep->addExporter(new PB_ASCIDExporter());
-//    sep->addExporter(new PB_ProfileExporter());
-//    sep->addExporter(new PB_Grid2DExporter());
-//    sep->addExporter(new PB_Grid3DExporter());
-//    sep->addExporter(new PB_Grid3DAsTableExporter());
-//    sep->addExporter(new PB_Polygon2DExporter());
-//    sep->addExporter(new PB_MeshObjExporter());
-//    sep->addExporter(new PB_OPFExporter());
-//    sep->addExporter(new CT_Exporter_LAS());
+    /*sep->addExporter(new PB_CSVExporter());
+    sep->addExporter(new PB_GroupDataExporter());
+    //sep->addExporter(new PB_MultiXYBExporter());
+    sep->addExporter(new PB_ASCRGBExporter());
+    sep->addExporter(new PB_ASCIDExporter());
+    sep->addExporter(new PB_ProfileExporter());
+    sep->addExporter(new PB_Grid2DExporter());
+    sep->addExporter(new PB_Grid3DExporter());
+    sep->addExporter(new PB_Grid3DAsTableExporter());
+    sep->addExporter(new PB_Polygon2DExporter());
+    sep->addExporter(new PB_MeshObjExporter());
+    sep->addExporter(new PB_OPFExporter());
+    sep->addExporter(new PB_PbmExporter());
+    sep->addExporter(new PB_PgmExporter());
+    sep->addExporter(new CT_Exporter_LAS());*/
 
 #ifdef USE_GDAL
     GDALDriverManager *driverManager = GetGDALDriverManager();
@@ -324,17 +335,18 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_IDXYZ(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_LASV2(CT_StepsMenu::LP_Points));
-    sep->addReader(new CT_Reader_Trajectory(CT_StepsMenu::LP_Items));
-    sep->addReader(new CT_Reader_LArchitect_Grid(CT_StepsMenu::LP_Voxels));    
-    sep->addReader(new CT_Reader_TerraScanPrj(CT_StepsMenu::LP_Vector));
-    sep->addReader(new CT_Reader_OBJ(CT_StepsMenu::LP_Meshes));
-    sep->addReader(new CT_Reader_AsciiGrid3D(CT_StepsMenu::LP_Voxels));
-    sep->addReader(new CT_Reader_Points_ASCII(CT_StepsMenu::LP_Points));
-    sep->addReader(new CT_Reader_PTX(CT_StepsMenu::LP_Points));
+    /*sep->addReader(new CT_Reader_PTX());
+    sep->addReader(new CT_Reader_OBJ());
+    sep->addReader(new CT_Reader_LArchitect_Grid());
+    sep->addReader(new CT_Reader_TerraScanPrj());
+    sep->addReader(new CT_Reader_AsciiGrid3D());
+    sep->addReader(new CT_Reader_PGM());
+    sep->addReader(new CT_Reader_PBM());
+    sep->addReader(new CT_Reader_Points_ASCII());
     sep->addReader(new CT_Reader_PLY());
-
-
+    sep->addReader(new CT_Reader_Trajectory());*/
     // load gdal drivers and create readers and exporters
+
 #ifdef USE_GDAL
     GDALAllRegister();
     GDALDriverManager *driverManager = GetGDALDriverManager();
@@ -349,11 +361,11 @@ bool PB_StepPluginManager::loadReaders()
             QString name = CT_GdalTools::staticGdalDriverName(driver);
 
             if(!name.isEmpty())
-                gdalReaderC.append(new CT_Reader_GDAL(driver, CT_StepsMenu::LP_GDALOthers, CT_StepsMenu::LP_GDALRaster, CT_StepsMenu::LP_GDALVector));
+                gdalReaderC.append(new CT_Reader_GDAL(driver, CT_StepsMenu::LP_Raster, CT_StepsMenu::LP_Vector, CT_StepsMenu::LP_Others));
         }
 
         if(!gdalReaderC.isEmpty()) {
-            std::sort(gdalReaderC.begin(), gdalReaderC.end(), GDALReaderLessThan);
+            qSort(gdalReaderC.begin(), gdalReaderC.end(), GDALReaderLessThan);
 
             QListIterator<CT_Reader_GDAL*> itGD(gdalReaderC);
 
@@ -376,15 +388,15 @@ bool PB_StepPluginManager::loadFilters()
 
 bool PB_StepPluginManager::loadMetrics()
 {
-    //addNewMetric(new CT_CloudMetrics());
+    addNewMetric(new CT_CloudMetrics());
     return true;
 }
 
 bool PB_StepPluginManager::loadAfterAllPluginsLoaded()
 {
-    /*initRasterMetricsCollection();
+    initRasterMetricsCollection();
     initXyzMetricsCollection();
-    initXyzFiltersCollection();*/
+    initXyzFiltersCollection();
     initReadersCollection();
     initExportersCollection();
 
@@ -416,7 +428,7 @@ void PB_StepPluginManager::aboutToBeUnloaded()
     qDeleteAll(m_exportersOfAllPluginsForPointsWithPieceByPieceAvailable);
     m_exportersOfAllPluginsForPointsWithPieceByPieceAvailable.clear();
 }
-
+*/
 void PB_StepPluginManager::initRasterMetricsCollection()
 {
     PB_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractMetric*>>(m_rasterMetricsOfAllPlugins,
@@ -439,6 +451,7 @@ void PB_StepPluginManager::initXyzMetricsCollection()
                                                                    });
 }
 
+
 void PB_StepPluginManager::initXyzFiltersCollection()
 {
     PB_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractFilter*>>(m_xyzFiltersOfAllPlugins,
@@ -449,7 +462,7 @@ void PB_StepPluginManager::initXyzFiltersCollection()
                                                                         return dynamic_cast<const CT_AbstractFilter_XYZ*>(filter) != nullptr;
                                                                    });
 }
-*/
+
 void PB_StepPluginManager::initReadersCollection()
 {
     PB_ReadersTools::initAvailableReaders(m_readersOfAllPlugins, nullptr);
@@ -465,10 +478,8 @@ void PB_StepPluginManager::initExportersCollection()
 }
 
 #ifdef USE_GDAL
-void PB_StepPluginManager::staticGdalErrorHandler(CPLErr eErrClass, int err_no, const char *msg)
+void PB_StepPluginManager::staticGdalErrorHandler(CPLErr eErrClass, int /*err_no*/, const char *msg)
 {
-    Q_UNUSED(err_no);
-
     int severity = LogInterface::trace;
 
     switch(eErrClass) {
@@ -483,7 +494,8 @@ void PB_StepPluginManager::staticGdalErrorHandler(CPLErr eErrClass, int err_no, 
 
     case CE_Fatal: severity = LogInterface::fatal;
         break;
-    case CE_None: ;
+
+    case CE_None:
         break;
     }
 

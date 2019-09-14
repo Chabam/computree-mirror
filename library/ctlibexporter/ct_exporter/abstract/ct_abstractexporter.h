@@ -46,6 +46,7 @@ public:
      * @warning Don't forget to add the macro Q_OBJECT in your class.
      */
     CT_AbstractExporter(const CT_AbstractExporter& other);
+    ~CT_AbstractExporter();
 
     /**
      * @brief Returns the displayable name of the exporter. By default return the result of method "uniqueName()"
@@ -130,6 +131,12 @@ public:
     void declareInputModels();
 
     /**
+     * @brief If you have called the method "declareInputModels()" (without argruments) you can get the
+     *        inputs model manager used to declare inputs.
+     */
+    const CT_ExporterInModelStructureManager* inputsModelManager() const;
+
+    /**
      * @brief Returns true if it was at least one model in the model manager of this class
      * @warning You can only call this method if you have called the method "declareInputModels()".
      */
@@ -156,6 +163,12 @@ public:
      *         possibilities can be used to see which out models has been saved.
      */
     bool findInputsInOutputsOfThisManager(const CT_OutModelStructureManager& manager);
+
+    /**
+     * @brief Call it to display configuration dialog to let the user choose inputs/outputs link
+     * @return false if user cancel, true otherwise
+     */
+    bool showInputsConfigurationDialog();
 
     /**
       * \brief Return available export formats (per example : CSV or XML or DXF, etc...)

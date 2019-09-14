@@ -20,7 +20,8 @@ public:
     CT_PointsAttributesColor(CT_PCIR pcir);
 
     CT_PointsAttributesColor(CT_PCIR pcir,
-                             CT_AbstractColorCloud* cc);
+                             CT_AbstractColorCloud* cc,
+                             bool autoDeleteColorCloud = true);
 
     /**
      * @brief Copy constructor.

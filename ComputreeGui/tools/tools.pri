@@ -53,7 +53,9 @@ HEADERS += \
     $$PWD/amkgl/dm_amkglglobaledgescloudmanager.h \
     $$PWD/amkgl/dm_meshobjectsmodifier.h \
     $$PWD/amkgl/dm_multipleobjectsmodifier.h \
-    $$PWD/itemdrawable/dm_documentmenugenerator.h
+    $$PWD/itemdrawable/dm_documentmenugenerator.h \
+    $$PWD/document/dm_resultgroupgui.h \
+    $$PWD/document/dm_itemgroupgui.h
 
 SOURCES += \
     tools/worker/dm_abstractworker.cpp \
@@ -91,5 +93,7 @@ SOURCES += \
     $$PWD/amkgl/dm_amkglglobaledgescloudmanager.cpp \
     $$PWD/amkgl/dm_meshobjectsmodifier.cpp \
     $$PWD/amkgl/dm_multipleobjectsmodifier.cpp \
-    $$PWD/itemdrawable/dm_documentmenugenerator.cpp
+    $$PWD/itemdrawable/dm_documentmenugenerator.cpp \
+    $$PWD/document/dm_resultgroupgui.cpp \
+    $$PWD/document/dm_itemgroupgui.cpp
 

@@ -49,7 +49,7 @@ public:
      *          - Parent container is set to nullptr
      *          - Childrens (root node or items) was not copied
      */
-    CT_TTreeGroup(const CT_TTreeGroup& other) = default;
+    CT_TTreeGroup(const CT_TTreeGroup& other);
 
     /**
      * @brief Visit the root node if not nullptr

@@ -335,6 +335,11 @@ public:
     bool containsSingularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel) const;
 
     /**
+     * @brief Returns true if the group contains the specified singular item
+     */
+    bool containsSingularItem(const CT_AbstractSingularItemDrawable* item) const;
+
+    /**
      * @brief Returns the number of items in this group that must not be removed later.
      */
     int nSingularItem() const;
@@ -511,6 +516,13 @@ public:
     bool removeGroup(CT_StandardItemGroup* group);
 
     /**
+     * @brief Call it to remove this group from his parent.
+     * @param ifEmptyRemoveParentTooRecursively : if true it will check if the parent is empty and if true the parent will
+     * be removed too from his parent, etc... recursively. if false only this group will be removed from his parent.
+     */
+    void removeFromParent(bool ifEmptyRemoveParentTooRecursively = false);
+
+    /**
      * @brief Visit all groups that will not be removed
      * @param visitor : the visitor to use
      * @return Returns true if no items has been visited otherwise returns the result of the visitor.
@@ -653,10 +665,9 @@ public:
     void* getContext() const;
 
     /**
-     * @brief Called from result to inform that group that it must be removed later. Inform parent that this
-     *        group must be removed later.
+     * @brief Call it to remove this group from his parent.
      */
-    void setBeRemovedLater();
+    void setBeRemovedLater(bool ifEmptyRemoveParentTooRecursively = false);
 
     /**
      * @brief Called from children to inform parent that at least one child must be removed later
@@ -753,11 +764,11 @@ protected:
      */
     IChildrensIteratorQtStylePtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
 
-private:
-
-    class GroupQtIterator : public IChildrensIteratorQtStyle {
+protected:
+    template<typename CollectionType>
+    class CollectionQtIterator : public IChildrensIteratorQtStyle {
     public:
-        GroupQtIterator(GroupContainerType::iterator begin, GroupContainerType::iterator end) : m_begin(begin), m_end(end) {}
+        CollectionQtIterator(typename CollectionType::iterator begin, typename CollectionType::iterator end) : m_begin(begin), m_end(end) {}
 
         bool hasNext() const override { return m_begin != m_end; }
 
@@ -767,12 +778,14 @@ private:
             return c;
         }
 
-        IChildrensIteratorQtStyle* copy() const override { return new GroupQtIterator(m_begin, m_end); }
+        IChildrensIteratorQtStyle* copy() const override { return new CollectionQtIterator(m_begin, m_end); }
 
     private:
-        GroupContainerType::iterator m_begin;
-        GroupContainerType::iterator m_end;
+        typename CollectionType::iterator m_begin;
+        typename CollectionType::iterator m_end;
     };
+
+    using GroupQtIterator = CollectionQtIterator<GroupContainerType>;
 
     class ItemQtIterator : public IChildrensIteratorQtStyle {
     public:
@@ -794,7 +807,6 @@ private:
 
     const static CT_StandardStandardItemGroupDrawManager SIG_DRAW_MANAGER;
 
-protected:
     LockAccessTool      m_lockAccessTool;
 
 private:
@@ -907,27 +919,6 @@ private:
         }
 
         return Iterator(MultiCollectionIterator::create(infos), MultiCollectionIterator());
-    }
-
-    template<typename InHandleType, typename Visitor>
-    bool visitInModelWithPossibilitiesFromInHandle(const InHandleType& inHandle, const Visitor& visitor) const {
-        const CT_InAbstractModel* inOriginalModel = inHandle.model();
-        const CT_InAbstractResultModel* inOriginalResultModel = dynamic_cast<CT_InAbstractResultModel*>(inOriginalModel->rootModel());
-
-        Q_ASSERT(inOriginalResultModel != nullptr);
-
-        const int nResultPossibility = inOriginalResultModel->nPossibilitySaved();
-
-        for(int i=0; i<nResultPossibility; ++i) {
-            if(inOriginalResultModel->possibilitySavedAt(i)->isSelected()) {
-                CT_InAbstractModel* inModelWithPossibilities = static_cast<CT_InStdResultModelPossibility*>(inOriginalResultModel->possibilitySavedAt(i))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(inOriginalModel);
-
-                if(!visitor(inModelWithPossibilities))
-                    return false;
-            }
-        }
-
-        return true;
     }
 
     template<typename Iterator, typename MultiCollectionIterator, typename ContainerType, typename InHandleType>

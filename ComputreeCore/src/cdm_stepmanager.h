@@ -233,7 +233,7 @@ private:
 
     QMutex                      _mutex;
 
-    bool recursiveExecuteStep(CT_VirtualAbstractStep &step, bool &restart, bool force = false);
+    bool recursiveExecuteStep(CT_VirtualAbstractStep &step, CT_VirtualAbstractStep*& restartFromStep, bool force = false);
 
     void recursiveClearResult(CT_VirtualAbstractStep &step);
 

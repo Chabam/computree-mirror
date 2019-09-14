@@ -1,6 +1,3 @@
-#ifndef CT_STANDARDCLOUDSTDVECTORT_HPP
-#define CT_STANDARDCLOUDSTDVECTORT_HPP
-
 #include "ct_cloud/ct_standardcloudstdvectort.h"
 
 template<typename T>
@@ -142,5 +139,3 @@ void CT_StandardCloudStdVectorT<T>::replaceT(const size_t &index, T &newVal)
 {
     m_collection[index] = newVal;
 }
-
-#endif // CT_STANDARDCLOUDSTDVECTORT_HPP

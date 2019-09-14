@@ -27,6 +27,8 @@
 
 #include "ct_scene.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_Scene)
+
 CT_Scene::CT_Scene(CT_PCIR pcir) : CT_Scene()
 {
     setPointCloudIndexRegistered(pcir, true);

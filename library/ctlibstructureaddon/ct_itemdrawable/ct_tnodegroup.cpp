@@ -2,7 +2,23 @@
 
 #include "ct_ttreegroup.h"
 
+CT_TYPE_IMPL_INIT_MACRO(CT_TNodeGroup)
+
 CT_TNodeGroup::CT_TNodeGroup() : SuperClass()
+{
+    m_tree = nullptr;
+
+    m_successor = nullptr;
+    m_ancestor = nullptr;
+
+    m_complex = nullptr;
+    m_rootComponent = nullptr;
+    m_lastComponent = nullptr;
+
+    m_bearer = nullptr;
+}
+
+CT_TNodeGroup::CT_TNodeGroup(const CT_TNodeGroup& other) : SuperClass(other)
 {
     m_tree = nullptr;
 

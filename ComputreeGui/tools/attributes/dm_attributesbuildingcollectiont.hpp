@@ -1,6 +1,3 @@
-#ifndef DM_ATTRIBUTESBUILDINGCOLLECTIONT_HPP
-#define DM_ATTRIBUTESBUILDINGCOLLECTIONT_HPP
-
 #include "tools/attributes/dm_attributesbuildingcollectiont.h"
 
 #include "ct_result/abstract/ct_abstractresult.h"
@@ -61,5 +58,3 @@ void DM_AttributesBuildingCollectionT<Type>::recursiveBuildAttributesFromStep(co
         return true;
     });
 }
-
-#endif // DM_ATTRIBUTESBUILDINGCOLLECTIONT_HPP

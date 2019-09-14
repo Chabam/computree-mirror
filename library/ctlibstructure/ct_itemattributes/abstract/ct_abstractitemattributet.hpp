@@ -1,10 +1,12 @@
-#ifndef CT_ABSTRACTITEMATTRIBUTET_HPP
-#define CT_ABSTRACTITEMATTRIBUTET_HPP
-
 #include "ct_abstractitemattributet.h"
 
 template <typename DataT>
 CT_AbstractItemAttributeT<DataT>::CT_AbstractItemAttributeT(const CT_AbstractCategory *category) : SuperClass(category)
+{
+}
+
+template <typename DataT>
+CT_AbstractItemAttributeT<DataT>::CT_AbstractItemAttributeT(const QString& categoryName) : SuperClass(categoryName)
 {
 }
 
@@ -49,7 +51,7 @@ long double CT_AbstractItemAttributeT<DataT>::toLongDouble(const CT_AbstractItem
     if(ok != nullptr)
         *ok = false;
 
-    return 0.0;
+    return static_cast<long double>(0.0);
 }
 
 template <typename DataT>
@@ -105,5 +107,3 @@ QString CT_AbstractItemAttributeT<DataT>::valueTypeToString() const
 {
     return CT_AbstractCategory::staticValueTypeToCategoryTypeString<DataT>();
 }
-
-#endif // CT_ABSTRACTITEMATTRIBUTET_HPP

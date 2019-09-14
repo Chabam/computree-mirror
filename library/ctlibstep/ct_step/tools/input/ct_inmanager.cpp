@@ -5,6 +5,12 @@
 #include "ct_result/abstract/ct_abstractresult.h"
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 
+#include "ct_model/inModel/views/ctg_inmodelpossibilitieschoice.h"
+#include "ctlibmodelsextraviews/ctg_modelslinkconfigurationflowview.h"
+
+//#define InModelPossibilitiesChoiceWidgetType CTG_InModelPossibilitiesChoice
+#define InModelPossibilitiesChoiceWidgetType CTG_ModelsLinkConfigurationFlowView
+
 CT_InManager::CT_InManager()
 {
     m_inModelConfigurationManager = new CT_InResultModelConfigurationManager(m_inModelsStructureManager);
@@ -84,7 +90,7 @@ bool CT_InManager::findInputsInOutputsOfThisStepOrRecursively(const CT_VirtualAb
 
 CT_InManager::ConfigureReturn CT_InManager::configureInputs(bool forceReadOnly)
 {
-    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = m_inModelConfigurationManager->createInResultModelConfigurationDialog();
+    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = m_inModelConfigurationManager->createInResultModelConfigurationDialog<InModelPossibilitiesChoiceWidgetType>();
 
     // If it was an error (does not happen)
     if(crReturn == CT_InResultModelConfigurationManager::CreateError) {
@@ -181,7 +187,7 @@ void CT_InManager::saveSettings(SettingsWriterInterface& writer) const
 
 bool CT_InManager::restoreSettings(SettingsReaderInterface& reader)
 {
-    return m_inModelConfigurationManager->restoreSettings(reader);
+    return m_inModelConfigurationManager->restoreSettings<InModelPossibilitiesChoiceWidgetType>(reader);
 }
 
 bool CT_InManager::findInputsInOutputsOfThisStepOrRecursivelyWithSpecifiedResultModels(const CT_VirtualAbstractStep* step,
@@ -194,7 +200,7 @@ bool CT_InManager::findInputsInOutputsOfThisStepOrRecursivelyWithSpecifiedResult
     if(!needInputs())
         return true;
 
-    const int nResults = std::distance(begin, end);
+    const auto nResults = std::distance(begin, end);
 
     CT_VirtualAbstractStep* parentStep = const_cast<CT_VirtualAbstractStep*>(step);
     bool isCurrentlyInRecursivity = false;

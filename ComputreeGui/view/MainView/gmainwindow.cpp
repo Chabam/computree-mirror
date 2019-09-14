@@ -735,6 +735,7 @@ void GMainWindow::showMessageIfScriptBackupIsAvailable()
 void GMainWindow::loadConfiguration()
 {
     m_inLoadConfiguration = true;
+    bool mustShowMaximized = false;
 
     CONFIG_FILE->beginGroup("MainWindow");
 
@@ -751,12 +752,13 @@ void GMainWindow::loadConfiguration()
             if(!isMaximized) {
                 resize(size);
                 move(pos);
-            } else if(!windowState().testFlag(Qt::WindowMaximized)){
-                showMaximized();
+            } else if(!windowState().testFlag(Qt::WindowMaximized)) {
+                mustShowMaximized = true;
             }
+
         } else if(!windowState().testFlag(Qt::WindowMaximized)){
             setWindowState(Qt::WindowNoState);
-            showMaximized();
+            mustShowMaximized = true;
         }
 
         CONFIG_FILE->beginGroup("Document");
@@ -877,6 +879,9 @@ void GMainWindow::loadConfiguration()
 
         CONFIG_FILE->endGroup(); // StepsChooser
     CONFIG_FILE->endGroup(); // MainWindow
+
+    if(mustShowMaximized)
+        showMaximized();
 }
 
 void GMainWindow::computeStepChooserDialogDefaults(QPoint &defaultPos, QSize &defaultSize, bool left)

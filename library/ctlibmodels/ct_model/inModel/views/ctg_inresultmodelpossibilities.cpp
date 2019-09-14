@@ -151,14 +151,20 @@ void CTG_InResultModelPossibilities::showFirstSelectedOrFirstResultPossibility()
             firstItem = firstItemSelected;
 
         if(firstItem != nullptr) {
+            const QStandardItem* parent = firstItem->parent();
+            const CT_InAbstractResultModel* model = static_cast<CT_InAbstractResultModel*>(parent->data().value<void*>());
             CT_InStdResultModelPossibility* p = static_cast<CT_InStdResultModelPossibility*>(firstItem->data().value<void*>());
 
             if(!m_readOnly)
+            {
+                enableResultPossibility(model, p);
                 firstItem->setCheckState(p->setSelected(true) ? Qt::Checked : Qt::Unchecked);
+            }
             else
+            {
                 firstItem->setCheckState(Qt::Checked);
-
-            showResultPossibility(p);
+                showResultPossibility(p);
+            }
         }
     }
 }
@@ -212,7 +218,7 @@ QList<QStandardItem*> CTG_InResultModelPossibilities::createItemsForResultModel(
         rowList.append(item);
 
         // Displayable name of the step that has generated this output model
-        item = new QStandardItem(possibility->outModel()->step()->stepToolForModel()->displayableCustomName());
+        item = new QStandardItem(possibility->outModel()->step() == nullptr ? tr("No Step") : possibility->outModel()->step()->stepToolForModel()->displayableCustomName());
         item->setDragEnabled(false);
         item->setEditable(false);
         item->setData(qVariantFromValue((void*)possibility), Qt::UserRole+1); // pointer to the possibility
@@ -241,9 +247,9 @@ void CTG_InResultModelPossibilities::enableResultPossibility(const CT_InAbstract
         CT_ModelSelectionHelper selectionHelper(model);
         //selectionHelper.debugPrintGraphs();
         selectionHelper.selectOneGraphForPossibilityOfRootModel(possibility);
-
-        showResultPossibility(possibility);
     }
+
+    showResultPossibility(possibility);
 }
 
 void CTG_InResultModelPossibilities::disableResultPossibility(CT_InStdResultModelPossibility* possibility)

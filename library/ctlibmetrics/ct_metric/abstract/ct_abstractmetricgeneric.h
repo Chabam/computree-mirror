@@ -4,7 +4,6 @@
 #include "ctlibmetrics/ctlibmetrics_global.h"
 #include "ctlibmetrics/tools/ct_valueandbool.h"
 
-// from pluginshared
 #include "ct_metric/abstract/ct_abstractmetric.h"
 #include "ct_view/ct_genericconfigurablewidget.h"
 
@@ -16,7 +15,7 @@ class CTLIBMETRICS_EXPORT CT_AbstractMetricGeneric : public CT_AbstractMetric
 public:
     CT_AbstractMetricGeneric() : CT_AbstractMetric() {}
     CT_AbstractMetricGeneric(const CT_AbstractMetricGeneric &other)  : CT_AbstractMetric(other) {}
-    ~CT_AbstractMetricGeneric();
+    ~CT_AbstractMetricGeneric() override;
 
     /**
      * @brief Declare a attribute that you will set in your compute method. Call this method in your constructor.
@@ -27,9 +26,11 @@ public:
      */
     template<typename VType>
     void registerAttributeVaB(const VaB<VType> &classMember, const QString &categoryName, const QString &displayableName) {
-        if(!m_vab.contains((CT_AbstractVaB*)&classMember)) {
-            m_vab.append((CT_AbstractVaB*)&classMember);
-            m_attributesVaB.insert((void*)&classMember, new CT_AbstractMetric::AttributeObject<VType>(displayableName, categoryName, NULL));
+        CT_AbstractVaB* vab = static_cast<CT_AbstractVaB*>(const_cast<VaB<VType>*>(&classMember));
+
+        if(!m_vab.contains(vab)) {
+            m_vab.append(vab);
+            m_attributesVaB.insert(static_cast<void*>(vab), new CT_AbstractMetric::AttributeObject<VType>(displayableName, categoryName));
         }
     }
 
@@ -44,7 +45,7 @@ public:
     }
 
     /**
-     * @brief Search and return the attribute from his displyable name if founded, otherwise return NULL
+     * @brief Search and return the attribute from his displyable name if founded, otherwise return nullptr
      */
     CT_AbstractVaB* findAttributeValueVaBFromDisplayableName(const QString& dName) const;
 
@@ -61,7 +62,7 @@ public:
     /**
      * @brief Returns a default widget to choose attributes to compute if you have used "addAttributeVaB" method
      */
-    virtual CT_AbstractConfigurableWidget* createConfigurationWidget();
+    CT_AbstractConfigurableWidget* createConfigurationWidget() override;
 
     /**
      * @brief Add a checkBox for each VaB to the given widget
@@ -80,7 +81,7 @@ protected:
      * @brief Inherit this method to add your unselectable attributes
      * @warning Don't forget to call this method ! CT_AbstractMetricGeneric::createAttributes()
      */
-    void createAttributes();
+    void createAttributes() override;
 };
 
 #endif // CT_ABSTRACTMETRICGENERIC_H

@@ -35,10 +35,10 @@
 
 #include "ct_itemdrawable/tools/scanner/ct_thetaphishootingpattern.h"
 
-CT_DEFAULT_IA_INIT(CT_Scanner)
-
 // Initializing the draw manager
 const CT_StandardScannerDrawManager CT_Scanner::CT_SCANNER_DRAW_MANAGER;
+
+CT_DEFAULT_IA_INIT(CT_Scanner)
 
 CT_Scanner::CT_Scanner(int scanID, bool clockWise) :
     SuperClass(),

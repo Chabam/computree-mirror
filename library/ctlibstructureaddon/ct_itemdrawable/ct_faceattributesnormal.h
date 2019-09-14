@@ -16,7 +16,7 @@ public:
     CT_FaceAttributesNormal();
     CT_FaceAttributesNormal(CT_FCIR pcir);
     CT_FaceAttributesNormal(CT_FCIR pcir,
-                            CT_AbstractNormalCloud *nc);
+                            CT_AbstractNormalCloud *nc, bool autoDeleteNormalCloud = true);
     CT_FaceAttributesNormal(const CT_FaceAttributesNormal& other) = default;
 
     size_t attributesSize() const override { return CT_AttributesNormal::attributesSize(); }

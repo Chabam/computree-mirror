@@ -30,17 +30,15 @@ public:
         if(inResultModel == nullptr)
             return final_const_iterator(const_iterator(), const_iterator());
 
-        const int nResultPossibility = inResultModel->nPossibilitySaved();
+        const int nResultPossibility = inResultModel->nPossibilitySelected();
 
         for(int i=0; i<nResultPossibility; ++i) {
-            if(inResultModel->possibilitySavedAt(i)->isSelected()) {
-                const CT_InStdModelPossibilitySelectionGroup* selectionGroup = this->modelForPossibilities(inResult, i)->possibilitiesGroup();
+            const CT_InStdModelPossibilitySelectionGroup* selectionGroup = this->inModelForSelectedPossibilities(inResult, i)->possibilitiesGroup();
 
-                outModels.resize(outModels.size() + selectionGroup->nPossibilitySelected());
+            outModels.resize(outModels.size() + selectionGroup->nPossibilitySelected());
 
-                for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
-                    outModels[currentIndex++] = possibility->outModel();
-                }
+            for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
+                outModels[currentIndex++] = possibility->outModel();
             }
         }
 
@@ -85,29 +83,27 @@ private:
 
         MODELS_ASSERT(tool != nullptr);
 
-        const int nResultPossibility = inResultModel->nPossibilitySaved();
+        const int nResultPossibility = inResultModel->nPossibilitySelected();
 
         for(int i=0; i<nResultPossibility; ++i) {
-            if(inResultModel->possibilitySavedAt(i)->isSelected()) {
-                const CT_InStdModelPossibilitySelectionGroup* selectionGroup = this->modelForPossibilities(inResultCopy, i)->possibilitiesGroup();
+            const CT_InStdModelPossibilitySelectionGroup* selectionGroup = this->inModelForSelectedPossibilities(inResultCopy, i)->possibilitiesGroup();
 
-                outModels.resize(outModels.size() + selectionGroup->nPossibilitySelected());
+            outModels.resize(outModels.size() + selectionGroup->nPossibilitySelected());
 
-                for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
-                    const CT_OutAbstractModel* originalOutModel = possibility->outModel();
+            for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
+                const CT_OutAbstractModel* originalOutModel = possibility->outModel();
 
-                    const auto visitor = [&originalOutModel, &outModels, &currentIndex](const OutResultModelType* outResultModel) -> bool {
+                const auto visitor = [&originalOutModel, &outModels, &currentIndex](const OutResultModelType* outResultModel) -> bool {
 
-                        CT_OutAbstractModel* copiedOutModel = outResultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(originalOutModel);
+                    CT_OutAbstractModel* copiedOutModel = outResultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(originalOutModel);
 
-                        Q_ASSERT(copiedOutModel != nullptr);
+                    Q_ASSERT(copiedOutModel != nullptr);
 
-                        outModels[currentIndex++] = static_cast<DEF_CT_AbstractGroupModelOut*>(copiedOutModel);
-                        return true;
-                    };
+                    outModels[currentIndex++] = static_cast<DEF_CT_AbstractGroupModelOut*>(copiedOutModel);
+                    return true;
+                };
 
-                    tool->visitOutResultModelCopies(visitor);
-                }
+                tool->visitOutResultModelCopies(visitor);
             }
         }
     }

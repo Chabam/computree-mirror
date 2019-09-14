@@ -4,7 +4,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
-CTG_InResultModelConfiguration::CTG_InResultModelConfiguration(QWidget *parent) :
+CTG_InResultModelConfiguration::CTG_InResultModelConfiguration(IInModelPossibilitiesChoice* widgetInModelPossibilities, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CTG_InResultModelConfiguration)
 {
@@ -12,11 +12,16 @@ CTG_InResultModelConfiguration::CTG_InResultModelConfiguration(QWidget *parent) 
 
     m_inputResultModelManager = nullptr;
 
-    connect(ui->inResultModelPossibilities, SIGNAL(showInResultModelPossibility(const CT_InStdResultModelPossibility*)), ui->inModelPossibilities, SLOT(setInResultModelPossibility(const CT_InStdResultModelPossibility*)), Qt::DirectConnection);
+    mInModelPossibilities = widgetInModelPossibilities;
+    ui->horizontalLayout->addWidget(mInModelPossibilities);
+
+    connect(ui->inResultModelPossibilities, SIGNAL(showInResultModelPossibility(const CT_InStdResultModelPossibility*)), mInModelPossibilities, SLOT(setInResultModelPossibility(const CT_InStdResultModelPossibility*)), Qt::DirectConnection);
 }
 
 CTG_InResultModelConfiguration::~CTG_InResultModelConfiguration()
 {
+    delete mInModelPossibilities;
+
     delete ui;
 }
 
@@ -29,13 +34,13 @@ void CTG_InResultModelConfiguration::setInResultModelManager(const CT_InModelStr
 
 void CTG_InResultModelConfiguration::setReadOnly(bool enabled)
 {
-    ui->inModelPossibilities->setReadOnly(enabled);
+    mInModelPossibilities->setReadOnly(enabled);
     ui->inResultModelPossibilities->setReadOnly(enabled);
 }
 
 void CTG_InResultModelConfiguration::accept()
 {
-    if(ui->inModelPossibilities->isReadOnly()) {
+    if(mInModelPossibilities->isReadOnly()) {
         QTimer::singleShot(100, this, SLOT(reject()));
         return;
     }

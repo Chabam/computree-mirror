@@ -2,26 +2,16 @@
 
 CT_AbstractMetric_LAS::CT_AbstractMetric_LAS() : CT_AbstractMetric_XYZ()
 {
-    _lasAttributes = NULL;
-    m_lasPointCloudIndex = NULL;
-}
-
-CT_AbstractMetric_LAS::CT_AbstractMetric_LAS(const CT_AbstractMetric_LAS &other) : CT_AbstractMetric_XYZ(other)
-{
-    _lasAttributes = other._lasAttributes;
-    m_lasPointCloudIndex = other.m_lasPointCloudIndex;
-}
-
-CT_AbstractMetric_LAS::~CT_AbstractMetric_LAS()
-{
+    _lasAttributes = nullptr;
+    m_lasPointCloudIndex = nullptr;
 }
 
 bool CT_AbstractMetric_LAS::initLasDatas(const CT_AbstractPointCloudIndex *inCloud, const CT_AreaShape2DData *plotArea, const CT_StdLASPointsAttributesContainer *lasAttributes)
 {
-    _lasAttributes = (CT_StdLASPointsAttributesContainer*)lasAttributes;
-    m_lasPointCloudIndex = NULL;
+    _lasAttributes = const_cast<CT_StdLASPointsAttributesContainer*>(lasAttributes);
+    m_lasPointCloudIndex = nullptr;
 
-    if (_lasAttributes == NULL)
+    if (_lasAttributes == nullptr)
         return false;
 
     QHashIterator<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> it(_lasAttributes->lasPointsAttributes());
@@ -31,15 +21,15 @@ bool CT_AbstractMetric_LAS::initLasDatas(const CT_AbstractPointCloudIndex *inClo
 
     CT_AbstractPointAttributesScalar *firstAttribute = it.next().value();
 
-    if((m_lasPointCloudIndex = (CT_AbstractPointCloudIndex*)firstAttribute->getPointCloudIndex()) == NULL)
-        _lasAttributes = NULL;
+    if((m_lasPointCloudIndex = const_cast<CT_AbstractPointCloudIndex*>(firstAttribute->pointCloudIndex())) == nullptr)
+        _lasAttributes = nullptr;
 
-    if((_lasAttributes != NULL) && !initDatas(inCloud, plotArea)) {
-        _lasAttributes = NULL;
-        m_lasPointCloudIndex = NULL;
+    if((_lasAttributes != nullptr) && !initDatas(inCloud, plotArea)) {
+        _lasAttributes = nullptr;
+        m_lasPointCloudIndex = nullptr;
     }
 
-    return (_lasAttributes != NULL);
+    return (_lasAttributes != nullptr);
 }
 
 CT_StdLASPointsAttributesContainer *CT_AbstractMetric_LAS::lasAttributes() const

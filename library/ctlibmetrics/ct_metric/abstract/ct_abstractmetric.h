@@ -1,45 +1,55 @@
 #ifndef CT_ABSTRACTMETRIC_H
 #define CT_ABSTRACTMETRIC_H
 
+#include "ctlibmetrics_global.h"
 #include "ct_element/abstract/ct_abstractconfigurableelement.h"
-#include "ct_attributes/abstract/ct_abstractitemattribute.h"
-#include "ct_tools/model/ct_autorenamemodels.h"
-#include "ct_result/ct_resultgroup.h"
-#include "ct_result/model/outModel/tools/ct_outresultmodelgrouptocopypossibilities.h"
+#include "ct_metric/tools/ct_metricoutmodelstructuremanager.h"
+#include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
+#include "ct_handle/ct_handleoutstditemattribute.h"
 
 /**
  * @brief A metric can export only attributes (but multiple attributes of different type)
  */
-class PLUGINSHAREDSHARED_EXPORT CT_AbstractMetric : public CT_AbstractConfigurableElement
+class CTLIBMETRICS_EXPORT CT_AbstractMetric : public CT_AbstractConfigurableElement
 {
     Q_OBJECT
 
 public:
     CT_AbstractMetric();
     CT_AbstractMetric(const CT_AbstractMetric &other);
-    ~CT_AbstractMetric();
+    ~CT_AbstractMetric() override;
 
     /**
      * @brief Returns the name of this metric + name of all attributes declared
      */
-    QString getDetailledDisplayableName() const;
+    QString getDetailledDisplayableName() const override;
 
     /**
-     * @brief Call this method to clear and create attributes (after configuration)
+     * @brief Call this method before declare output models to clear and declare attributes
      */
-    void postConfigure();
+    void finalizeConfiguration() override;
 
     /**
-     * @brief Call this method to init attributes models
-     * @param resPoss : the result model
-     * @param parentModel : the autorename object of the singular item that will contains attributes
+     * @brief Call it to declare all output item attribute models.
      */
-    void initAttributesModels(CT_OutResultModelGroupToCopyPossibilities* resPoss, const CT_AutoRenameModels &parentModel);
+    void declareOutputItemAttributeModels(CT_MetricOutModelStructureManager& manager);
 
     /**
-     * @brief Call this method to compute metrics for the item passed in parameter
+     * @brief Call it to declare all output models in a group of your result.
+     * @param manager : The manager of output models
+     * @param hParentItem : The parent item where to add output models. It can be an input or an output handle
+     *                       but must be of type CT_HandleXXXSingularItem
      */
-    void computeMetric(CT_AbstractSingularItemDrawable *item);
+    template<typename HandleItem>
+    void declareOutputItemAttributeModelsInItem(CT_OutModelStructureManager& manager, HandleItem& hParentItem) {
+        CT_MetricOutModelStructureManager rManager = CT_MetricOutModelStructureManager::createFromHandle(manager, hParentItem);
+        this->declareOutputItemAttributeModels(rManager);
+    }
+
+    /**
+     * @brief Call this method to compute metrics and add attributes to item passed in parameter
+     */
+    void computeMetric(CT_AbstractSingularItemDrawable* item);
 
     /**
      * @brief This method is called when the core will save settings of this object
@@ -56,44 +66,38 @@ protected:
      * @brief Abstract class that declare a method to create a attribute and
      *        save all necessary element to create the attribute later
      */
-    class PLUGINSHAREDSHARED_EXPORT AbstractAttributeObject
+    class CTLIBMETRICS_EXPORT AbstractAttributeObject
     {
     public:
         AbstractAttributeObject()
         {
-            _autoRenameModel = NULL;
-            _attributeInstance = NULL;
+            _attributeInstance = nullptr;
+        }
+
+        AbstractAttributeObject(QString displayableName,
+                                QString category)
+        {
+            _displayableName = displayableName;
+            _categoryName = category;
+            _attributeInstance = nullptr;
         }
 
         AbstractAttributeObject(const AbstractAttributeObject &other)
         {
             _displayableName = other._displayableName;
             _categoryName = other._categoryName;
-            _autoRenameModel = new CT_AutoRenameModels();
-            _attributeInstance = NULL;
-        }
-
-        AbstractAttributeObject(QString displayableName,
-                                QString category,
-                                CT_AutoRenameModels* autoRenameModel)
-        {
-            _displayableName = displayableName;
-            _categoryName = category;
-            _autoRenameModel = autoRenameModel;
-            _attributeInstance = NULL;
+            _attributeInstance = nullptr;
         }
 
         virtual ~AbstractAttributeObject() {
-            delete _autoRenameModel;
             delete _attributeInstance;
         }
 
         virtual CT_AbstractCategory::ValueType valueType() const = 0;
 
-        /**
-         * @brief Create a new attribute and return it
-         */
-        virtual CT_AbstractItemAttribute* createPrototypeAttribute() const = 0;
+        virtual void declareOutputItemAttributeModels(CT_MetricOutModelStructureManager& manager) = 0;
+
+        virtual void addItemAttributeInItem(CT_AbstractSingularItemDrawable* item) = 0;
 
         /**
          * @brief Returns a copy of this object
@@ -102,7 +106,6 @@ protected:
 
         QString                                 _displayableName;
         QString                                 _categoryName;
-        CT_AutoRenameModels*                    _autoRenameModel;
         CT_AbstractItemAttribute*               _attributeInstance;
     };
 
@@ -113,23 +116,39 @@ protected:
     class AttributeObject : public AbstractAttributeObject
     {
     public:
-        AttributeObject() : AbstractAttributeObject() {}
-        AttributeObject(const AttributeObject &other) : AbstractAttributeObject(other) {}
-        AttributeObject(QString displayableName,
-                        QString category,
-                        CT_AutoRenameModels* autoRenameModel)  : AbstractAttributeObject(displayableName, category, autoRenameModel) {}
+        AttributeObject() : AbstractAttributeObject(), mHOutItemAttribute(nullptr) {}
+        AttributeObject(QString displayableName, QString category) : AbstractAttributeObject(displayableName, category), mHOutItemAttribute(nullptr) {}
+        AttributeObject(const AttributeObject &other) : AbstractAttributeObject(other), mHOutItemAttribute(nullptr) {}
+        ~AttributeObject() override {
+            delete mHOutItemAttribute;
+        }
 
-        CT_AbstractCategory::ValueType valueType() const {
+        CT_AbstractCategory::ValueType valueType() const final
+        {
             return CT_AbstractCategory::staticValueTypeToCategoryType<VType>();
         }
 
-        CT_AbstractItemAttribute* createPrototypeAttribute() const {
-            return new CT_StdItemAttributeT<VType>(NULL, PS_CATEGORY_MANAGER->findByUniqueName(_categoryName), NULL, VType());
+        void declareOutputItemAttributeModels(CT_MetricOutModelStructureManager& manager) final
+        {
+            delete mHOutItemAttribute;
+            mHOutItemAttribute = new CT_HandleOutStdItemAttribute<VType>();
+
+            manager.addItemAttributeAndFindCategory(*mHOutItemAttribute, _categoryName, _displayableName);
+        }
+
+        void addItemAttributeInItem(CT_AbstractSingularItemDrawable* item) final
+        {
+            if(_attributeInstance != nullptr) {
+                item->addItemAttribute(*mHOutItemAttribute, _attributeInstance);
+                _attributeInstance = nullptr;
+            }
         }
 
         AbstractAttributeObject* copy() const {
             return new AttributeObject<VType>(*this);
         }
+
+        CT_HandleOutStdItemAttribute<VType>* mHOutItemAttribute;
     };
 
     typedef QMap<void*, CT_AbstractMetric::AbstractAttributeObject*>                    AttributesContainer;
@@ -155,8 +174,8 @@ protected:
      */
     template<typename VType>
     void addAttribute(VType &classMember, const QString &categoryName, const QString &displayableName) {
-        if(!m_attributes.contains((void*)&classMember))
-            m_attributes.insert((void*)&classMember, new CT_AbstractMetric::AttributeObject<VType>(displayableName, categoryName, new CT_AutoRenameModels()));
+        if(!m_attributes.contains(static_cast<void*>(&classMember)))
+            m_attributes.insert(static_cast<void*>(&classMember), new CT_AbstractMetric::AttributeObject<VType>(displayableName, categoryName));
     }
 
     /**
@@ -165,35 +184,27 @@ protected:
      */
     template<typename VType>
     void setAttributeValue(VType &classMemberAndValue) {
-        AbstractAttributeObject *attributeObject = getAttributeObject((void*)&classMemberAndValue, CT_AbstractCategory::staticValueTypeToCategoryType<VType>());
+        AbstractAttributeObject* attributeObject = getAttributeObject(static_cast<void*>(&classMemberAndValue), CT_AbstractCategory::staticValueTypeToCategoryType<VType>());
 
-        if (attributeObject != NULL)
+        if(attributeObject != nullptr)
         {
             delete attributeObject->_attributeInstance;
-            attributeObject->_attributeInstance = new CT_StdItemAttributeT<VType>(attributeObject->_autoRenameModel->completeName(),
-                                                                         attributeObject->_categoryName,
-                                                                         m_result,
-                                                                         classMemberAndValue);
+            attributeObject->_attributeInstance = new CT_StdItemAttributeT<VType>(PS_CATEGORY_MANAGER->findByUniqueName(attributeObject->_categoryName), classMemberAndValue);
         }
     }
 
     /**
      * @brief Clear all attributes declared
      */
-    virtual void clearAttributes();
+    virtual void clearAttributesRegistered();
 
     /**
      * @brief Find and returns the attribute object  with a unique name and a type
      * @param classMember : the variable member of your class declared with method "addAttribute"
      * @param type : the type of the attribute (must be the same that when it was declared with method "addAttribute"
-     * @return NULL if attribute was not found or type is different
+     * @return nullptr if attribute was not found or type is different
      */
     AbstractAttributeObject* getAttributeObject(void* classMember, CT_AbstractCategory::ValueType type);
-
-    /**
-     * @brief Returns the result used to add attributes (only available in "computeMetrics" method)
-     */
-    CT_ResultGroup* result() const;
 
     /**
      * @brief Returns attributes added in "createAttributes" method
@@ -201,7 +212,6 @@ protected:
     const AttributesContainer& attributes() const;
 
 private:
-    CT_ResultGroup*                     m_result;
     AttributesContainer                 m_attributes;
 
 protected:
