@@ -3,7 +3,7 @@
 #include "ct_step/tools/menu/ct_menulevel.h"
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 
-#include "src/cdm_pluginmanager.h"
+#include "cdm_pluginmanager.h"
 
 #include <QtXml>
 

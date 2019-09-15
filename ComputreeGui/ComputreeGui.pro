@@ -7,7 +7,7 @@ CT_PREFIX_INSTALL = ../..
 CT_LIB_PREFIX = ../library
 DEFAULT_EIGEN_INC_PATH = "$$CT_LIB_PREFIX/3rdparty/eigen"
 
-COMPUTREE = ctlibplugin
+COMPUTREE = ctlibcore
 
 include($${CT_PREFIX}/destdir.pri)
 include($${CT_PREFIX}/include_ct_library.pri)
@@ -17,9 +17,7 @@ include(../qglviewer_default_path.pri)
 
 INCLUDEPATH += .
 INCLUDEPATH += $$CT_LIB_PREFIX
-INCLUDEPATH += $${CT_PREFIX}/ComputreeCore
-INCLUDEPATH += $${CT_PREFIX}/ComputreeCore/src
-TR_EXCLUDE  += $${CT_PREFIX}/ComputreeCore/*
+#TR_EXCLUDE  += $${CT_PREFIX}/ComputreeCore/*
 
 CONFIG -= plugin
 
@@ -49,10 +47,10 @@ HEADERS += dm_graphicsviewsynchronizedgroup.h \
     dm_stepsfrompluginsmodelconstructor.h \
     dm_domutils.h \
     dm_itemdrawableconfigurationmanagerview.h \
-    ../library/documentinterface.h \
-    ../library/graphicsviewinterface.h \
-    ../library/indocumentviewinterface.h \
-    ../library/treeviewinterface.h
+    $${CT_LIB_PREFIX}/documentinterface.h \
+    $${CT_LIB_PREFIX}/graphicsviewinterface.h \
+    $${CT_LIB_PREFIX}/indocumentviewinterface.h \
+    $${CT_LIB_PREFIX}/treeviewinterface.h
 
 # OTHER
 SOURCES += main.cpp \

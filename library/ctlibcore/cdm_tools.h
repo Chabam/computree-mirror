@@ -3,7 +3,7 @@
 
 #include <QMenu>
 
-#include "src/cdm_pluginmanager.h"
+#include "cdm_pluginmanager.h"
 #include "ct_exporter/abstract/ct_abstractexporter.h"
 
 class COMPUTREECORESHARED_EXPORT CDM_Tools

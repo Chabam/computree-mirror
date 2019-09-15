@@ -2,6 +2,7 @@
 #define CDM_STEPMANAGER_H
 
 #include "computreeCore_global.h"
+
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 #include "cdm_stepmanageroptions.h"
 
@@ -13,8 +14,8 @@ class CDM_ScriptManagerAbstract;
 class CDM_ActionsManager;
 
 /**
-  * \brief Classe permettant de gerer l'arbre des etapes, l'execution des etapes.
-  */
+ * @brief This is the class that can manage a tree of steps and their execution
+ */
 class COMPUTREECORESHARED_EXPORT CDM_StepManager : public QThread
 {
     Q_OBJECT

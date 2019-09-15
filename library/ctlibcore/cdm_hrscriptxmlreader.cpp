@@ -21,17 +21,17 @@ CDM_HRScriptXmlReader::CDM_HRScriptXmlReader()
 
 void CDM_HRScriptXmlReader::setPluginManager(const CDM_PluginManager *pm)
 {
-    m_pluginManager = (CDM_PluginManager*)pm;
+    m_pluginManager = const_cast<CDM_PluginManager*>(pm);
 }
 
 void CDM_HRScriptXmlReader::setStepManager(const CDM_StepManager *stepManager)
 {
-    m_stepManager = (CDM_StepManager*)stepManager;
+    m_stepManager = const_cast<CDM_StepManager*>(stepManager);
 }
 
 void CDM_HRScriptXmlReader::setScriptLoadCallBack(const CDM_ScriptManagerAbstract::IScriptLoadCallBack *c)
 {
-    m_scriptLoadCallBack = (CDM_ScriptManagerAbstract::IScriptLoadCallBack*)c;
+    m_scriptLoadCallBack = const_cast<CDM_ScriptManagerAbstract::IScriptLoadCallBack*>(c);
 }
 
 CDM_ScriptManagerAbstract::IScriptLoadCallBack *CDM_HRScriptXmlReader::scriptLoadCallBack() const
@@ -449,8 +449,8 @@ bool CDM_HRScriptXmlReader::extractInformationsToCreateStep(QDomElement currentS
     stepID = currentStepEL.attribute("id", "-1").toInt(&ok);
     *plugin = nullptr;
 
-    if((stepID == -1) || !ok) {
-
+    if((stepID == -1) || !ok)
+    {
         const QString err = QObject::tr("Erreur lors de la lecture du paramètre \"id\" de l'étape \"%1\".").arg(stepKey);
 
         m_errors += err + QObject::tr("\r\n");
@@ -461,7 +461,7 @@ bool CDM_HRScriptXmlReader::extractInformationsToCreateStep(QDomElement currentS
             scriptLoadCallBack()->loadScriptError(problem);
 
         loadErrorStrategy = (problem.getSolutionKeepSteps() ? LES_StopAndKeep : LES_StopAndClear);
-        return nullptr;
+        return false;
     }
 
     *plugin = findPlugin(pluginName, stepKey, loadErrorStrategy);
@@ -597,7 +597,7 @@ CDM_HRScriptXmlReader::DomElementCallerInfo* CDM_HRScriptXmlReader::findDomEleme
     if(!m_parametersStack.isEmpty() && dynamic_cast<const CT_VirtualAbstractStep*>(caller) != nullptr)
         return m_parametersStack.first();
 
-    DomElementCallerInfo* elInfo = m_callerDomElements.value((QObject*)caller, nullptr);
+    DomElementCallerInfo* elInfo = m_callerDomElements.value(const_cast<QObject*>(caller), nullptr);
 
     if(elInfo == nullptr) {
 
@@ -622,7 +622,7 @@ CDM_HRScriptXmlReader::DomElementCallerInfo* CDM_HRScriptXmlReader::findDomEleme
                 parent->currentChilds.insert(className, elInfo->element);
             }
 
-            m_callerDomElements.insert((QObject*)caller, elInfo);
+            m_callerDomElements.insert(const_cast<QObject*>(caller), elInfo);
         }
     }
 

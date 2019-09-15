@@ -6,20 +6,21 @@
 #include <QString>
 
 /**
-  * \brief Classe representant les options du manageur d'etapes.
-  */
+ * @brief Options of the CDM_StepManager
+ */
 class COMPUTREECORESHARED_EXPORT CDM_StepManagerOptions
 {
 public:
     CDM_StepManagerOptions();
 
-    /*!
-     *  \brief Defini si il faut ou non supprimer les resultats automatiquement a la fin des traitements
+    /**
+     * @brief Set to true if you want that after the last step has do his process all results must be cleared from memory
+     * @param enable : to true to clear all results from memory, false to keep it.
      */
     void setAutoClearResultFromMemory(bool enable);
 
-    /*!
-     *  \brief Determine la QLocale utilisée
+    /**
+     * @brief Set the local to use
      */
     void setQLocale(QString locale);
 
@@ -28,8 +29,8 @@ public:
      */
     QString getQLocale();
 
-    /*!
-     *  \brief Change le nombre de pas a sauter lors du mode debug
+    /**
+     * @brief Change the number of jump to next valid waitForAckIfInDebugMode() in fast debug mode
      */
     bool changeFastJumpInDebugMode(int nJump);
 
@@ -39,17 +40,17 @@ public:
     void setTimeToSleepInAutoDebugMode(int timeInMs);
 
     /**
-     * @brief Number of jump to next valid waitForAckIfInDebugMode()
+     * @brief Change the number of jump to next valid waitForAckIfInDebugMode() in auto debug mode
      */
     void setNJumpInAutoDebugMode(int n);
 
-    /*!
-     *  \brief Faut-il supprimer les resultats automatiquement a la fin des traitements
+    /**
+     * @brief Returns true if after the last step has do his process all results must be cleared from memory
      */
     bool isAutoClearResultFromMemoryEnable() const;
 
-    /*!
-     *  \brief Valeur a utiliser lors de grand saut en mode debug
+    /**
+     * @brief Number of jump to next valid waitForAckIfInDebugMode() in fast debug mode
      */
     int getFastJumpValueInDebugMode() const;
 
@@ -63,13 +64,13 @@ public:
      */
     int getNJumpInAutoDebugMode() const;
 
-    /*!
-     *  \brief Charge les parametres par defaut
+    /**
+     * @brief Load parameters from configuration file
      */
     void load();
 
-    /*!
-     *  \brief Sauvegarde les parametres
+    /**
+     * @brief Save parameters to configuration file
      */
     bool save() const;
 

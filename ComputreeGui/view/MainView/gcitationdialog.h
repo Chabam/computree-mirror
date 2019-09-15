@@ -1,7 +1,7 @@
 #ifndef GCITATIONDIALOG_H
 #define GCITATIONDIALOG_H
 
-#include "src/cdm_citationinfo.h"
+#include "cdm_citationinfo.h"
 #include <QDialog>
 
 namespace Ui {

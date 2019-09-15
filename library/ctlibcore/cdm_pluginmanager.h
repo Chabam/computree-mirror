@@ -7,8 +7,8 @@
 
 #include <QPluginLoader>
 
-#include "src/cdm_log.h"
-#include "src/cdm_stepsmenumanager.h"
+#include "cdm_log.h"
+#include "cdm_stepsmenumanager.h"
 
 #include "ct_step/tools/menu/ct_stepsmenu.h"
 
