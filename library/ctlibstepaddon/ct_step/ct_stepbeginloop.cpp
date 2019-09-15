@@ -20,6 +20,16 @@ QString CT_StepBeginLoop::detailledDescription() const
     return tr("Nécessite une CT_StepEndLoop pour terminer la boucle");
 }
 
+bool CT_StepBeginLoop::isSettingsModified() const
+{
+    if(SuperClass::isSettingsModified())
+        return true;
+
+    return !recursiveVisitChildrens([](const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep* child) -> bool {
+        return !child->isSettingsModified();
+    });
+}
+
 CT_VirtualAbstractStep* CT_StepBeginLoop::createNewInstance() const
 {
     // cree une copie de cette etape

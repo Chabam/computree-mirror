@@ -18,6 +18,8 @@ public:
 
     QString detailledDescription() const override;
 
+    bool isSettingsModified() const override;
+
     CT_VirtualAbstractStep* createNewInstance() const override;
 
     void addToLogCurrentTurnInformation();

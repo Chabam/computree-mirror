@@ -31,7 +31,7 @@ CT_VirtualAbstractStep* CT_StepEndLoop::restartComputeFromStep() const
 
 void CT_StepEndLoop::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    manager.addResult(m_hInResultCopy);
+    manager.addResult(m_hInResultCopy, tr("In Result"), QString(), true);
     manager.setRootGroup(m_hInResultCopy, m_hInRootGroup);
     manager.addItem(m_hInRootGroup, m_hInLoopCounter);
 }
