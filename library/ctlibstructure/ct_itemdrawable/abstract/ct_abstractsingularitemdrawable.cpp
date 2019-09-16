@@ -70,8 +70,6 @@ CT_AbstractItemAttribute* CT_AbstractSingularItemDrawable::itemAttributeWithOutM
     if(outModel->isADefaultItemAttributeModel())
         return PS_DIAM->itemAttributeFromOutModel(outModel, type());
 
-    Q_ASSERT(outModel->parentModel() == model());
-
     return m_itemAttributes.itemAttributeFromOutModel(outModel);
 }
 

@@ -302,8 +302,8 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->resizeColumnToContents(0);
     mOutTreeWidget->resizeColumnToContents(0);
 
-    mInTreeWidget->resize(static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 80, inItems.size() * TREE_WIDGET_ITEM_SPACING);
-    mOutTreeWidget->resize(static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 80, outItems.size() * TREE_WIDGET_ITEM_SPACING);
+    mInTreeWidget->resize(static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 100, inItems.size() * TREE_WIDGET_ITEM_SPACING);
+    mOutTreeWidget->resize(static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 100, outItems.size() * TREE_WIDGET_ITEM_SPACING);
 
     connect(mInTreeWidget, &QTreeWidget::clicked, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
     connect(mOutTreeWidget, &QTreeWidget::clicked, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);

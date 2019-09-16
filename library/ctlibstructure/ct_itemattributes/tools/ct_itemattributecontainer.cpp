@@ -91,10 +91,10 @@ bool CT_ItemAttributeContainer::visitItemAttributesOfResult(const CT_AbstractRes
 
 bool CT_ItemAttributeContainer::visitItemAttributesOfOutModel(const CT_OutAbstractItemAttributeModel* outModel, const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const
 {
-    const QList<CT_AbstractItemAttribute*>* l = m_attributes.value(static_cast<CT_AbstractResult*>(outModel->result()), nullptr);
+    const QList<CT_AbstractItemAttribute*>* l = m_attributes.value(static_cast<CT_AbstractResult*>(outModel->recursiveOriginalModel()->result()), nullptr);
 
     if(l != nullptr) {
-        const QString uIndex = outModel->uniqueIndex();
+        const CT_OutAbstractModel::UniqueIndexType uIndex = outModel->uniqueIndex();
 
         for(const CT_AbstractItemAttribute* att : *l) {
 
@@ -113,10 +113,10 @@ bool CT_ItemAttributeContainer::visitItemAttributesOfInModel(const CT_InAbstract
 {
     const auto visitorAdapter = [this, &visitor](const CT_InStdModelPossibility* possibility) -> bool {
 
-        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), nullptr);
+        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->recursiveOriginalModel()->result()), nullptr);
 
         if(collection != nullptr) {
-            const QString uIndex = possibility->outModel()->uniqueIndex();
+            const CT_OutAbstractModel::UniqueIndexType uIndex = possibility->outModel()->uniqueIndex();
 
             for(CT_AbstractItemAttribute* att : *collection)
             {
@@ -170,10 +170,10 @@ QList<CT_AbstractItemAttribute *> CT_ItemAttributeContainer::itemAttributesFromR
 
 CT_AbstractItemAttribute* CT_ItemAttributeContainer::itemAttributeFromOutModel(const CT_OutAbstractItemAttributeModel* outModel) const
 {
-    const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(outModel->result()), nullptr);
+    const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(outModel->recursiveOriginalModel()->result()), nullptr);
 
     if(collection != nullptr) {
-        const QString uIndex = outModel->uniqueIndex();
+        const CT_OutAbstractModel::UniqueIndexType uIndex = outModel->uniqueIndex();
 
         for(CT_AbstractItemAttribute* att : *collection)
         {
@@ -192,10 +192,10 @@ QList<CT_AbstractItemAttribute*> CT_ItemAttributeContainer::itemAttributesFromIn
 
     const auto visitor = [this, &l](const CT_InStdModelPossibility* possibility) -> bool {
 
-        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), nullptr);
+        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->recursiveOriginalModel()->result()), nullptr);
 
         if(collection != nullptr) {
-            const QString uIndex = possibility->outModel()->uniqueIndex();
+            const CT_OutAbstractModel::UniqueIndexType uIndex = possibility->outModel()->uniqueIndex();
 
             for(CT_AbstractItemAttribute* att : *collection)
             {
@@ -219,10 +219,10 @@ CT_AbstractItemAttribute* CT_ItemAttributeContainer::firstItemAttributeFromInMod
 
     const auto visitor = [this, &found](const CT_InStdModelPossibility* possibility) -> bool {
 
-        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->result()), nullptr);
+        const QList<CT_AbstractItemAttribute*>* collection = m_attributes.value(static_cast<CT_AbstractResult*>(possibility->outModel()->recursiveOriginalModel()->result()), nullptr);
 
         if(collection != nullptr) {
-            const QString uIndex = possibility->outModel()->uniqueIndex();
+            const CT_OutAbstractModel::UniqueIndexType uIndex = possibility->outModel()->uniqueIndex();
 
             for(CT_AbstractItemAttribute* att : *collection)
             {

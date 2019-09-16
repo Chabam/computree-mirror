@@ -305,6 +305,10 @@ void CTG_InResultModelPossibilities::on_treeView_clicked(const QModelIndex &inde
                 showResultPossibility(possibility);
             }
         }
+        else if(possibility->isSelected())
+        {
+            showResultPossibility(possibility);
+        }
     } else if(index.column() == HELP_COLUMN) { // index has no parent and the column is the help column
 
         // get the item on the first column
