@@ -349,6 +349,11 @@ public:
 
     inline QColor getColorForValue(DataT value) const {return _colorMap.value(value, _defaultColor);}
 
+    inline int xdim() const {return SuperClass::xdim();}
+    inline int ydim() const {return SuperClass::ydim();}
+    inline int zdim() const {return SuperClass::zdim();}
+    inline double resolution() const {return SuperClass::resolution();}
+
 protected:
     DataT       _NAdata;            /*!< Valeur codant NA */
 

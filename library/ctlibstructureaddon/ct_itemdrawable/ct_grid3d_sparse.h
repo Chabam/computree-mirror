@@ -350,9 +350,17 @@ public:
     inline cv::SparseMatConstIterator_<DataT> endIterator() const { return _data.end(); }
     inline int countNonZeroCells() const { return _data.nzcount(); }
 
+    inline int xdim() const {return SuperClass::xdim();}
+    inline int ydim() const {return SuperClass::ydim();}
+    inline int zdim() const {return SuperClass::zdim();}
+    inline double minX() const {return SuperClass::minX();}
+    inline double minY() const {return SuperClass::minY();}
+    inline double minZ() const {return SuperClass::minZ();}
+    inline double resolution() const {return SuperClass::resolution();}
+
     CT_ITEM_COPY_IMP(CT_Grid3D_Sparse<DataT>)
 
-    protected:
+protected:
     DataT       _NAdata;            /*!< Valeur codant NA */
     DataT       _initData;            /*!< Valeur par defaut */
 

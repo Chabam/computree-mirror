@@ -324,6 +324,16 @@ public:
      */
     virtual void computeMinMax();
 
+    inline size_t wdim() const {return SuperClass::wdim();}
+    inline size_t xdim() const {return SuperClass::xdim();}
+    inline size_t ydim() const {return SuperClass::ydim();}
+    inline size_t zdim() const {return SuperClass::zdim();}
+    inline double minW() const {return SuperClass::minW();}
+    inline double wres() const {return SuperClass::wres();}
+    inline double xres() const {return SuperClass::xres();}
+    inline double yres() const {return SuperClass::yres();}
+    inline double zres() const {return SuperClass::zres();}
+
 protected:
 
     const static    CT_StandardGrid4DDrawManager<DataT> ABSGRID4D_DRAW_MANAGER;

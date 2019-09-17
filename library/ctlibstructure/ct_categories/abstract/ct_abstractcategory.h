@@ -180,7 +180,7 @@ public:
     template <typename VType>
     constexpr static CT_AbstractCategory::ValueType staticValueTypeToCategoryType()
     {
-        qFatal(qPrintable(QString("staticValueTypeToCategoryType unknown data type (") + CT_TypeInfo::name<VType>() + ") ===>" + QString(__FILE__) + QString(__LINE__)));
+        //qFatal(qPrintable(QString("staticValueTypeToCategoryType unknown data type (") + CT_TypeInfo::name<VType>() + ") ===>" + QString(__FILE__) + QString(__LINE__)));
 
         return CT_AbstractCategory::UNKNOWN;
     }

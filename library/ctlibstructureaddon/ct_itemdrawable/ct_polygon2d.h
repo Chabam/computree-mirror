@@ -56,7 +56,9 @@ public:
     const QVector<Eigen::Vector2d>& getVertices() const;
 
     inline int getNumberOfVertices() const {return getVertices().size();}
-    inline void computeCentroid() const {((CT_Polygon2DData*) getDataNotConst())->computeCentroid();}
+    inline void computeCentroid() const { static_cast<CT_Polygon2DData*>(getDataNotConst())->computeCentroid(); }
+
+    double getArea() const override { return SuperClass::getArea(); }
 
     CT_ITEM_COPY_IMP(CT_Polygon2D)
 

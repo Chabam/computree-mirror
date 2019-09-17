@@ -336,6 +336,10 @@ public:
 
     const static CT_StandardImage2DDrawManager<DataT> IMAGE2D_DRAW_MANAGER;
 
+    inline int xdim() const {return SuperClass::xdim();}
+    inline int ydim() const {return SuperClass::ydim();}
+    inline double resolution() const {return SuperClass::resolution();}
+
     CT_ITEM_COPY_IMP(CT_Image2D<DataT>)
 
 protected:
