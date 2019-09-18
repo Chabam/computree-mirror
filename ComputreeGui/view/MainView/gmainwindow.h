@@ -65,13 +65,14 @@ protected:
 
 public:
 
-    DocumentManagerInterface* documentManager() const;
+    DocumentManagerInterface* documentManager() const final;
+    QString stepDisplayableNameLikeInGui(CT_VirtualAbstractStep* step, bool showExtended = false);
 
     DM_DocumentManagerView* getDocumentManagerView() const;
     DM_MultipleItemDrawableModelManager* getItemDrawableModelManager() const;
     GItemDrawableConfigurationManagerView* getItemDrawableConfigurationManager() const;
 
-    GMainProgressDialog* createWaitProgressDialog();
+    GMainProgressDialog* createWaitProgressDialog() final;
 
     void loadConfiguration();
     void writeConfiguration();

@@ -4,6 +4,7 @@
 #include "tools/ct_modelflowdatamodel.h"
 #include "tools/ct_modelflowdata.h"
 #include "tools/ct_indatatypetooutdatatypeconverter.h"
+#include "tools/ct_helpgraphicsitem.h"
 
 #include "ct_model/inModel/ct_inresultmodelgroup.h"
 #include "ct_model/outModel/abstract/ct_outabstractmodel.h"
@@ -42,10 +43,11 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
     mOutNode(nullptr),
     mInTreeWidget(nullptr),
     mOutTreeWidget(nullptr),
-    mRestoreConnectionOrCreatePreviewInProgress(true),
-    mModelOfLastIndexClicked(nullptr)
+    mRestoreConnectionOrCreatePreviewInProgress(true)
 {
     ui->setupUi(this);
+
+    mModelOfLastIndexClicked.fill(nullptr, 2);
 
     std::shared_ptr<DataModelRegistry> ret = std::make_shared<DataModelRegistry>();
     ret->registerModel<CT_ModelFlowDataModel>();
@@ -53,7 +55,13 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
     mFlowScene = new FlowScene(ret);
     mFlowView = new FlowView(mFlowScene, this);
 
+    auto hgi = new CT_HelpGraphicsItem();
+    hgi->setPos(-100, -100);
+    hgi->setToolTip(tr("Tooltip à modifier par Alexandre Piboule. Il suffit de faire rechercher dans Qt Creator pour me trouver !"));
+    mFlowScene->addItem(hgi);
+
     connect(mFlowScene, &FlowScene::connectionSelected, this, &CTG_ModelsLinkConfigurationFlowView::connectionSelected);
+    connect(mFlowScene, &FlowScene::connectionDoubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::connectionDoubleClicked);
     connect(mFlowScene, &FlowScene::nodeSelected, this, &CTG_ModelsLinkConfigurationFlowView::nodeSelected);
 
     connect(mFlowView, &FlowView::rubberBandChanged, this, &CTG_ModelsLinkConfigurationFlowView::rubberBandChanged);
@@ -139,7 +147,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
             setInputDataForNodeDataModel(inNodeDataModel, connection, outNodeData, inPortIndex);
         };
 
-        std::unique_ptr<NodeDataModel> inType = std::make_unique<CT_ModelFlowDataModel>(mInResultModelGroup->displayableName(), mInTreeWidget->model(), PortType(mInModelPortType), mInTreeWidget);
+        std::unique_ptr<NodeDataModel> inType = std::make_unique<CT_ModelFlowDataModel>(tr("Données recherchées"), mInTreeWidget->model(), PortType(mInModelPortType), mInTreeWidget);
 
         if(mInModelPortType == PT_IN)
         {
@@ -151,7 +159,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
         mInNode->nodeGraphicsObject().setPos(mInModelPortType == PT_OUT ? 0 : 400, 0);
         mFlowScene->nodePlaced(*mInNode);
 
-        std::unique_ptr<NodeDataModel> outType = std::make_unique<CT_ModelFlowDataModel>(mOutResultModelGroup->displayableName(), mOutTreeWidget->model(), oppositePort(PortType(mInModelPortType)), mOutTreeWidget);
+        std::unique_ptr<NodeDataModel> outType = std::make_unique<CT_ModelFlowDataModel>(tr("Données disponibles"), mOutTreeWidget->model(), oppositePort(PortType(mInModelPortType)), mOutTreeWidget);
 
         if(mInModelPortType == PT_OUT)
         {
@@ -176,7 +184,7 @@ CTG_ModelsLinkConfigurationFlowView::CTG_PortType CTG_ModelsLinkConfigurationFlo
 
 void CTG_ModelsLinkConfigurationFlowView::reset()
 {
-    mModelOfLastIndexClicked = nullptr;
+    mModelOfLastIndexClicked.fill(nullptr);
 
     mConnectionByPossibility.clear();
     mInModelByPossibility.clear();
@@ -206,7 +214,7 @@ void CTG_ModelsLinkConfigurationFlowView::reset()
 
 void CTG_ModelsLinkConfigurationFlowView::construct()
 {
-    mModelOfLastIndexClicked = nullptr;
+    mModelOfLastIndexClicked.fill(nullptr);
 
     mInTreeWidget = new QTreeWidget;
     mInTreeWidget->setColumnCount(1);
@@ -307,6 +315,9 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
 
     connect(mInTreeWidget, &QTreeWidget::clicked, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
     connect(mOutTreeWidget, &QTreeWidget::clicked, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
+
+    connect(mInTreeWidget, &QTreeWidget::doubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection);
+    connect(mOutTreeWidget, &QTreeWidget::doubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection);
 }
 
 QTreeWidgetItem* CTG_ModelsLinkConfigurationFlowView::createOrGetOutTreeItemForModel(CT_AbstractModel* model, QHash<const CT_AbstractModel*, QTreeWidgetItem*>& outItems)
@@ -407,7 +418,7 @@ void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionsSelectedToCon
         const_cast<CT_InStdModelPossibility*>(p)->setSelected(true);
     }
 
-    displayPreviewConnectionsForModel(mModelOfLastIndexClicked);
+    displayPreviewConnectionsForModel(mModelOfLastIndexClicked[0]);
 }
 
 void CTG_ModelsLinkConfigurationFlowView::deletePreviewConnections()
@@ -652,7 +663,7 @@ void CTG_ModelsLinkConfigurationFlowView::unselectPossibilityWhenConnectionIsDel
         return true;
     });
 
-    displayPreviewConnectionsForModel(mModelOfLastIndexClicked);
+    displayPreviewConnectionsForModel(mModelOfLastIndexClicked[0]);
 }
 
 void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked(const QModelIndex& index)
@@ -666,8 +677,32 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClick
         mInTreeWidget->setCurrentIndex(QModelIndex());
 
     CT_AbstractModel* model = static_cast<CT_AbstractModel*>(index.data(Qt::UserRole).value<void*>());
-    mModelOfLastIndexClicked = model;
+    mModelOfLastIndexClicked[1] = mModelOfLastIndexClicked[0];
+    mModelOfLastIndexClicked[0] = model;
 
+    displayPreviewConnectionsForModel(model);
+}
+
+void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection(const QModelIndex& index)
+{
+    if(isReadOnly() || (mModelOfLastIndexClicked[1] == nullptr))
+        return;
+
+    CT_AbstractModel* model = static_cast<CT_AbstractModel*>(index.data(Qt::UserRole).value<void*>());
+
+    if(model == mModelOfLastIndexClicked[1])
+        return;
+
+    const QList<const CT_InStdModelPossibility*> p1 = mPossibilitiesByModel.values(model);
+    const QList<const CT_InStdModelPossibility*> p2 = mPossibilitiesByModel.values(mModelOfLastIndexClicked[1]);
+
+    const QSet<const CT_InStdModelPossibility*> pI = p1.toSet().intersect(p2.toSet());
+
+    if(!pI.isEmpty())
+        const_cast<CT_InStdModelPossibility*>(*pI.begin())->setSelected(true);
+
+    mModelOfLastIndexClicked[1] = mModelOfLastIndexClicked[0];
+    mModelOfLastIndexClicked[0] = model;
     displayPreviewConnectionsForModel(model);
 }
 
@@ -678,8 +713,14 @@ void CTG_ModelsLinkConfigurationFlowView::connectionSelected(QtNodes::Connection
         const CT_InStdModelPossibility* possibility = mPreviewConnections.take(&c);
         const_cast<CT_InStdModelPossibility*>(possibility)->setSelected(true);
 
-        displayPreviewConnectionsForModel(mModelOfLastIndexClicked);
+        displayPreviewConnectionsForModel(mModelOfLastIndexClicked[0]);
     }
+}
+
+void CTG_ModelsLinkConfigurationFlowView::connectionDoubleClicked(QtNodes::Connection& c)
+{
+    if(!c.connectionState().isAPreview())
+        mFlowScene->deleteConnection(c);
 }
 
 void CTG_ModelsLinkConfigurationFlowView::nodeSelected(QtNodes::Node& /*n*/)
@@ -692,7 +733,7 @@ void CTG_ModelsLinkConfigurationFlowView::nodeSelected(QtNodes::Node& /*n*/)
 
     deletePreviewConnections();
 
-    mModelOfLastIndexClicked = nullptr;
+    mModelOfLastIndexClicked.fill(nullptr);
 }
 
 void CTG_ModelsLinkConfigurationFlowView::rubberBandChanged(QRect rubberBandRect, QPointF fromScenePoint, QPointF toScenePoint)

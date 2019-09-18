@@ -134,6 +134,7 @@ Q_SIGNALS:
 
   void connectionHovered(Connection& c, QPoint screenPos);
   void connectionSelected(Connection& c);
+  void connectionDoubleClicked(Connection& c);
 
   void nodeHovered(Node& n, QPoint screenPos);
 

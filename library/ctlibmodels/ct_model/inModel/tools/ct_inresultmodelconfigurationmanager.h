@@ -38,7 +38,7 @@ public:
      * @warning Call it in GUI thread
      */
     template<typename InModelPossibilitiesWidgetType>
-    CT_InResultModelConfigurationManager::CreateDialogReturn createInResultModelConfigurationDialog()
+    CT_InResultModelConfigurationManager::CreateDialogReturn createInResultModelConfigurationDialog(const QString& extraTitle = QString())
     {
         CT_InResultModelConfigurationManager::CreateDialogReturn returnVal = CT_InResultModelConfigurationManager::CreateSuccess;
 
@@ -49,11 +49,12 @@ public:
         if(m_inputModelsConfigurationDialog == nullptr)
         {
             m_inputModelsConfigurationDialog = new CTG_InResultModelConfiguration(new InModelPossibilitiesWidgetType());
-            m_inputModelsConfigurationDialog->setWindowTitle(m_inputModelsConfigurationDialog->windowTitle());
             m_inputModelsConfigurationDialog->setWindowState(m_inputModelsConfigurationDialog->windowState() | Qt::WindowMaximized);
             m_inputModelsConfigurationDialog->setInResultModelManager(&m_inModelsStructureManager);
             m_inputModelsConfigurationDialog->setWindowFlags(m_inputModelsConfigurationDialog->windowFlags() | Qt::WindowMaximizeButtonHint);
         }
+
+        m_inputModelsConfigurationDialog->setWindowTitle(m_inputModelsConfigurationDialog->windowTitle() + extraTitle);
 
         return returnVal;
     }

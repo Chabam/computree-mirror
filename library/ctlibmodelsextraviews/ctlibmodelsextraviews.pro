@@ -62,7 +62,8 @@ HEADERS += \
     nodeeditor/src/StyleCollection.hpp \
     tools/ct_modelflowdata.h \
     tools/ct_modelflowdatamodel.h \
-    tools/ct_indatatypetooutdatatypeconverter.h
+    tools/ct_indatatypetooutdatatypeconverter.h \
+    tools/ct_helpgraphicsitem.h
 
 FORMS += \
     ctg_modelslinkconfigurationflowview.ui
@@ -92,7 +93,8 @@ SOURCES += \
     nodeeditor/src/StyleCollection.cpp \
     tools/ct_modelflowdata.cpp \
     tools/ct_modelflowdatamodel.cpp \
-    tools/ct_indatatypetooutdatatypeconverter.cpp
+    tools/ct_indatatypetooutdatatypeconverter.cpp \
+    tools/ct_helpgraphicsitem.cpp
 
 INCLUDEPATH += nodeeditor/include
 INCLUDEPATH += nodeeditor/include/nodes/internal

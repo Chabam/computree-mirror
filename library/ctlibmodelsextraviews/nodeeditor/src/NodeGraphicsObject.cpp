@@ -42,18 +42,18 @@ NodeGraphicsObject(FlowScene &scene,
 
   auto const &nodeStyle = node.nodeDataModel()->nodeStyle();
 
-  {
+  /*{
     auto effect = new QGraphicsDropShadowEffect;
     effect->setOffset(4, 4);
     effect->setBlurRadius(20);
     effect->setColor(nodeStyle.ShadowColor);
 
     setGraphicsEffect(effect);
-  }
+  }*/
 
   setOpacity(nodeStyle.Opacity);
 
-  setAcceptHoverEvents(true);
+  //setAcceptHoverEvents(true);
 
   setZValue(0);
 

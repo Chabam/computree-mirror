@@ -66,8 +66,11 @@ Connection(Node& nodeIn,
 Connection::
 ~Connection()
 {
-  if (complete()) connectionMadeIncomplete(*this);
-  propagateEmptyData();
+  if (complete())
+      connectionMadeIncomplete(*this);
+
+  if(!connectionState().isAPreview())
+      propagateEmptyData();
 
   if (_inNode)
   {

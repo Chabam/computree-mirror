@@ -31,6 +31,8 @@ bool CT_InManager::createInputModels(CT_VirtualAbstractStep& step)
     if(step.hasChildrens())
         return false;
 
+    m_stepName = step.description();
+
     // clear all previously result models added
     m_inModelsStructureManager.clearResults();
 
@@ -90,7 +92,8 @@ bool CT_InManager::findInputsInOutputsOfThisStepOrRecursively(const CT_VirtualAb
 
 CT_InManager::ConfigureReturn CT_InManager::configureInputs(bool forceReadOnly)
 {
-    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = m_inModelConfigurationManager->createInResultModelConfigurationDialog<InModelPossibilitiesChoiceWidgetType>();
+    const QString extraTitle = QObject::tr(" de l'étape \"%1\"").arg(m_stepName);
+    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = m_inModelConfigurationManager->createInResultModelConfigurationDialog<InModelPossibilitiesChoiceWidgetType>(extraTitle);
 
     // If it was an error (does not happen)
     if(crReturn == CT_InResultModelConfigurationManager::CreateError) {
@@ -99,20 +102,14 @@ CT_InManager::ConfigureReturn CT_InManager::configureInputs(bool forceReadOnly)
     }
 
     if(forceReadOnly) {
-
         m_inModelConfigurationManager->showReadOnlyInResultModel();
         return ConfigureReturn::NoModification;
     }
 
     CT_InResultModelConfigurationManager::ConfigureReturn cReturn = m_inModelConfigurationManager->configureInResultModel();
 
-    if(cReturn == CT_InResultModelConfigurationManager::ConfigureSuccess) {     // If modification has been made by the user (user click the "Ok" button)
-
-        // TODO ?
-        //m_inputManager->getResultModelManager()->createSearchModelCollection();
-
+    if(cReturn == CT_InResultModelConfigurationManager::ConfigureSuccess)    // If modification has been made by the user (user click the "Ok" button)
         return ConfigureReturn::HasModification;
-    }
 
     if(cReturn == CT_InResultModelConfigurationManager::ConfigureError) {    // If it was an error (does not happen)
         qFatal("Erreur lors de la définition des modèles d'entrées");

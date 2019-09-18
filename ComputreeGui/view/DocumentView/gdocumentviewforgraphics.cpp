@@ -685,7 +685,6 @@ void GDocumentViewForGraphics::pluginExporterManagerReloaded()
 
 void GDocumentViewForGraphics::exporterActionTriggered()
 {
-    // TODO : export with gui
     if(m_graphics == nullptr)
         return;
 

@@ -49,7 +49,8 @@ FlowView(QWidget *parent)
 
   setCacheMode(QGraphicsView::CacheBackground);
 
-  //setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
+  if(QGLFormat::hasOpenGL())
+    setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers)));
 }
 
 

@@ -125,6 +125,7 @@ private:
 
     CT_InModelStructureManager              m_inModelsStructureManager;
     CT_InResultModelConfigurationManager*   m_inModelConfigurationManager;
+    QString                                 m_stepName;
 
     /**
      * @brief Start from this step and go up recursively to find necessary input

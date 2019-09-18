@@ -2,6 +2,7 @@
 #define INTERFACESFORSTEP_H
 
 #include <QString>
+#include <QObject>
 
 class IPluginToolForStep {
 public:
@@ -18,6 +19,7 @@ public:
 
 class DocumentManagerInterface;
 class ActionsManagerInterface;
+class CT_VirtualAbstractStep;
 
 /**
  * @brief Represent a gui context

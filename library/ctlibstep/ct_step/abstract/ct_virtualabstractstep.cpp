@@ -487,13 +487,7 @@ bool CT_VirtualAbstractStep::restoreInputSettings(SettingsReaderInterface &reade
     if(!internalDeclareInputModels())
         return false;
 
-    const bool ok = m_inputManager.restoreSettings(reader);
-
-    // TODO ?
-    /*if(ok)
-        m_inputManager->getResultModelManager()->createSearchModelCollection();*/
-
-    return ok;
+    return m_inputManager.restoreSettings(reader);
 }
 
 bool CT_VirtualAbstractStep::restorePostSettings(SettingsReaderInterface &reader)
@@ -926,43 +920,34 @@ void CT_VirtualAbstractStep::runProcessing(bool modificationMode)
 
     if(canCompute)
     {
-        // crée la liste de recherche des modèles d'entrée pour le tour courant
-        //m_inputManager->getResultModelManager()->createSearchModelCollection();
+        setErrorCode(0);
 
-        // crée la liste de recherche des modèles de sortie pour le tour courant
-        //m_outputManager->getResultModelManager()->createSearchModelCollection();
+        m_inputManager.setResultsBusy(true);
 
-        /*if(canCompute)
-        {*/
-            setErrorCode(0);
+        // le traitement lui-meme
+        if(modificationMode)
+            modify();
+        else
+            compute();
 
-            m_inputManager.setResultsBusy(true);
+        m_inputManager.setResultsBusy(false);
 
-            // le traitement lui-meme
-            if(modificationMode)
-                modify();
-            else
-                compute();
+        // si l'utilisateur a stopper le traitement
+        if(isStopped())
+        {
+            // on supprime tous les resultats genere
+            setProgress(0);
+            clearOutResult();
+        }
+        else if(errorCode() == 0)
+        {
+            // on peut dire au ResultManager que les résultats du tour courant sont OK
+            if(!modificationMode)
+                m_outputManager.finalizeResults();
 
-            m_inputManager.setResultsBusy(false);
-
-            // si l'utilisateur a stopper le traitement
-            if(isStopped())
-            {
-                // on supprime tous les resultats genere
-                setProgress(0);
-                clearOutResult();
-            }
-            else if(errorCode() == 0)
-            {
-                // on peut dire au ResultManager que les résultats du tour courant sont OK
-                if(!modificationMode)
-                    m_outputManager.finalizeResults();
-
-                setSettingsModified(false);
-                setProgress(100);
-            }
-        //}
+            setSettingsModified(false);
+            setProgress(100);
+        }
     }
 
     if(!canCompute)

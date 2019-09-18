@@ -141,7 +141,7 @@ private:
 
     bool                                        mRestoreConnectionOrCreatePreviewInProgress;
 
-    CT_AbstractModel*                           mModelOfLastIndexClicked;
+    QVector<CT_AbstractModel*>                  mModelOfLastIndexClicked;
 
     /**
      * @brief Reset (clear all) before construct
@@ -257,10 +257,24 @@ private slots:
     void displayPreviewConnectionsForIndexClicked(const QModelIndex& index);
 
     /**
+     * @brief Connected to the signal "QTreeWidget::doubleClicked" to convert the preview connection between the double clicked index
+     *        and the previous index clicked (if exist).
+     *
+     * @param index : the index that is double clicked
+     */
+    void convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection(const QModelIndex& index);
+
+    /**
      * @brief Connected to signal "FlowScene::connectionSelected" to convert the connection to a real connection if it is a preview.
-     * @param c : the connection to check if it is a preview
+     * @param c : the connection to convert if it is a preview
      */
     void connectionSelected(QtNodes::Connection& c);
+
+    /**
+     * @brief Connected to signal "FlowScene::connectionDoubleClicked" to delete the connection if it is not a preview.
+     * @param c : the connection to delete if it is not a preview
+     */
+    void connectionDoubleClicked(QtNodes::Connection& c);
 
     /**
      * @brief Connected to signal "FlowScene::nodeSelected" to clear preview connections and selection in tree view of the two nodes.

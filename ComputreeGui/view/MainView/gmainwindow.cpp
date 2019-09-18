@@ -118,6 +118,11 @@ DocumentManagerInterface* GMainWindow::documentManager() const
     return getDocumentManagerView();
 }
 
+QString GMainWindow::stepDisplayableNameLikeInGui(CT_VirtualAbstractStep* step, bool showExtended)
+{
+    return GStepViewDefault::staticGetStepNameFromConfiguration(step, m_stepChooserDialog->stepsChooserWidget()->stepNameConfiguration(), showExtended);
+}
+
 DM_DocumentManagerView* GMainWindow::getDocumentManagerView() const
 {
     return _docManagerView;

@@ -286,8 +286,9 @@ bool CT_AbstractExporter::findInputsInOutputsOfThisManager(const CT_OutModelStru
 
 bool CT_AbstractExporter::showInputsConfigurationDialog()
 {
+    const QString extraTitle = QObject::tr(" de l'exporteur %1").arg(displayableName());
     CT_InResultModelConfigurationManager inModelConfigurationManager(mInModelSManager);
-    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = inModelConfigurationManager.createInResultModelConfigurationDialog<InModelPossibilitiesChoiceWidgetType>();
+    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = inModelConfigurationManager.createInResultModelConfigurationDialog<InModelPossibilitiesChoiceWidgetType>(extraTitle);
 
     // If it was an error (does not happen)
     if(crReturn == CT_InResultModelConfigurationManager::CreateError) {
