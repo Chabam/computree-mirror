@@ -147,6 +147,12 @@ void GTreeStepContextMenu::configureStepRequired()
 {
     if(selectedStep() != nullptr && !m_stepManager.isRunning())
     {
+        QString why;
+        if(!selectedStep()->canFinalizeConfiguration(&why)) {
+            QMessageBox::critical(nullptr, tr("Action impossible"), tr("L'étape ne peut être configurée pour la raison suivante :\r\n\r\n%1").arg(why));
+            return;
+        }
+
         if(selectedStep()->showPostConfigurationDialog())
             selectedStep()->finalizeConfiguration();
     }

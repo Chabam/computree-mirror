@@ -22,9 +22,37 @@ bool CT_OutManager::visitResultModels(const CT_OutManager::OutResultModelVisitor
     return m_outModelsStructureManager.visitResults(visitor);
 }
 
-bool CT_OutManager::createOutputModels(CT_VirtualAbstractStep& step)
+bool CT_OutManager::canCreateOutputModels(const CT_VirtualAbstractStep& step, QString* why) const
 {
     if(step.hasChildrens())
+    {
+        if(why != nullptr)
+            *why = tr("Des étapes filles utilise les modèles de sortie de cette étape.");
+
+        return false;
+    }
+
+    // can not create new output result model if the result is visible in a document
+    const bool continueCreate = step.visitOutResultModels([](const CT_OutAbstractResultModel* rModel) -> bool {
+        return !rModel->isVisible() && rModel->recursiveVisitOutChildrens([](const CT_OutAbstractModel* model) -> bool {
+            return !model->isVisible();
+        });
+    });
+
+    if(!continueCreate)
+    {
+        if(why != nullptr)
+            *why = tr("Un des résultats de l'étape est affiché dans un document.");
+
+        return false;
+    }
+
+    return true;
+}
+
+bool CT_OutManager::createOutputModels(CT_VirtualAbstractStep& step)
+{
+    if(!canCreateOutputModels(step))
         return false;
 
     CT_VirtualAbstractStep::UniqueIndexGeneratorPtr uig = step.uniqueIndexGenerator();

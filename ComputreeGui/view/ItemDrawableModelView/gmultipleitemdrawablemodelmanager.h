@@ -22,9 +22,11 @@ public:
 
     void setDocumentManagerView(const GDocumentManagerView *docManagerView);
     
+public slots:
     void addResult(const CT_AbstractResult *res);
     bool removeResult(const CT_AbstractResult *res);
 
+public:
     CT_AbstractResult* currentResult() const;
 
     void reconstruct();
@@ -42,8 +44,12 @@ private slots:
 
     void on_comboBoxResult_currentIndexChanged(int index);
     void on_pushButtonChooseColor_clicked();
+    void resultModelDestroyedDirect(QObject *o);
     void resultDestroyedDirect(QObject *o);
     void resultDestroyedQueued(QObject *o);
+
+signals:
+    void internalRemoveResult(const CT_AbstractResult* r);
 };
 
 #endif // GMULTIPLEITEMDRAWABLEMODELMANAGER_H

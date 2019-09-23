@@ -40,12 +40,17 @@ void GMultipleItemDrawableModelManager::addResult(const CT_AbstractResult *res)
 
     if(indexOf == -1)
     {
+        if(res->model() == nullptr)
+            return;
+
         if(ui->comboBoxResult->itemData(0).value<void*>() == nullptr)
         {
             ui->comboBoxResult->clear();
             ui->comboBoxResult->setEditable(false);
         }
 
+        connect(res->model(), SIGNAL(destroyed(QObject*)), this, SLOT(resultModelDestroyedDirect(QObject*)), Qt::DirectConnection);
+        connect(this, SIGNAL(internalRemoveResult(const CT_AbstractResult*)), this, SLOT(removeResult(const CT_AbstractResult*)), Qt::QueuedConnection);
         connect((CT_AbstractResult*)res, SIGNAL(destroyed(QObject*)), this, SLOT(resultDestroyedDirect(QObject*)), Qt::DirectConnection);
         connect((CT_AbstractResult*)res, SIGNAL(destroyed(QObject*)), this, SLOT(resultDestroyedQueued(QObject*)), Qt::QueuedConnection);
 
@@ -65,6 +70,9 @@ bool GMultipleItemDrawableModelManager::removeResult(const CT_AbstractResult *re
 
     if(index != -1)
     {
+        if(res->model() != nullptr)
+            disconnect(res->model(), nullptr, this, nullptr);
+
         disconnect((CT_AbstractResult*)res, nullptr, this, nullptr);
 
         _results.removeOne((CT_AbstractResult*)res);
@@ -132,6 +140,15 @@ void GMultipleItemDrawableModelManager::on_pushButtonChooseColor_clicked()
 
         ui->widgetModelManager->setColorOptions(_options);
     }
+}
+
+void GMultipleItemDrawableModelManager::resultModelDestroyedDirect(QObject* o)
+{
+    CT_AbstractResult* r = static_cast<CT_OutAbstractResultModel*>(o)->resultStaticCastT<CT_AbstractResult>();
+
+    _results.removeOne(r);
+
+    emit internalRemoveResult(r);
 }
 
 void GMultipleItemDrawableModelManager::resultDestroyedDirect(QObject *o)

@@ -165,7 +165,7 @@ private:
      * @brief Call to extract information of a result in the current thread (gui or not).
      * @return false if the step was removed. true if all information was extracted.
      */
-    bool extractResultInformationFromTree(QTreeWidgetItem *child, QString &name, bool &isClearedFromMemory, bool& isBusy);
+    bool extractResultInformationFromTree(QTreeWidgetItem *child, QString &name, bool &isClearedFromMemory, bool& isBusy, bool& hasModel);
 
     /**
      * @brief Call to update all columns of a treewidget that contains a step

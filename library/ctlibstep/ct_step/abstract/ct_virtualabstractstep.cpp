@@ -222,11 +222,13 @@ bool CT_VirtualAbstractStep::showPostConfigurationDialog()
     return false;
 }
 
+bool CT_VirtualAbstractStep::canFinalizeConfiguration(QString* why) const
+{
+    return m_outputManager.canCreateOutputModels(*this, why);
+}
+
 bool CT_VirtualAbstractStep::finalizeConfiguration()
 {
-    // TODO ?
-    //PS_MODELS->clearCache();
-
     // now
     //     * settings of step has been restored
     //  or * showPostConfigurationDialog has been called

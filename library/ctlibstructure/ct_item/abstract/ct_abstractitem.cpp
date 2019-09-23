@@ -63,4 +63,7 @@ void CT_AbstractItem::willBeRemovedFromResult(const CT_AbstractResult*)
 void CT_AbstractItem::setModel(const CT_OutAbstractModel* model)
 {
     m_model = const_cast<CT_OutAbstractModel*>(model);
+
+    if(m_model != nullptr)
+        connect(m_model, &CT_OutAbstractModel::destroyed, [this] { m_model = nullptr; });
 }

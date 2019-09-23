@@ -37,6 +37,13 @@ public:
     bool visitResultModels(const OutResultModelVisitor& visitor) const;
 
     /**
+     * @brief Returns true if we can create output models.
+     * @param why : The reason why we can not create output models if this method returns false. Empty otherwise.
+     * @return If the step has at least one children or if the step has a result model visible in a document this method returns false. True otherwise.
+     */
+    bool canCreateOutputModels(const CT_VirtualAbstractStep& step, QString* why = nullptr) const;
+
+    /**
      * @brief Call all necessary methods to declare output models.
      * @return If the step has at least one children this method returns false. True otherwise.
      */
