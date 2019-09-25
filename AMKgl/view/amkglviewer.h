@@ -103,6 +103,11 @@ public:
      */
     QOpenGLContext* getNewOpenGlContext() const;
 
+    /**
+     * @brief Call it to take a screenshot
+     */
+    void takeScreenshot();
+
 public slots:
     /**
      * @brief Call to redraw all
@@ -175,6 +180,8 @@ private:
     QPainter*                   m_painter;
     ActionPickAnyElements*      m_pickingAction;
     bool                        m_debugModeEnabled;
+    QGLFramebufferObject*       m_glBuffer;
+    bool                        m_takeScreenshot;
 
     /**
      * @brief Check if opengl has send errors and add it to log if true

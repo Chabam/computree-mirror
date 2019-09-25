@@ -29,6 +29,9 @@ AMKglViewer::AMKglViewer(const IGraphicsDocument* doc, QWidget *parent) :
 
     //camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
 
+    m_takeScreenshot = false;
+    m_glBuffer = nullptr;
+
     m_inFastDraw = false;
     m_permanentItemScene = nullptr;
     m_newOpenglContext = nullptr;
@@ -52,6 +55,7 @@ AMKglViewer::~AMKglViewer()
 {
     setPermanentSceneToRender(nullptr);
 
+    delete m_glBuffer;
 	delete m_pickingAction;
     delete m_drawInfo;
     delete m_painter;
@@ -160,6 +164,25 @@ QOpenGLContext* AMKglViewer::getNewOpenGlContext() const
     return m_newOpenglContext;
 }
 
+void AMKglViewer::takeScreenshot()
+{
+    QHash<QString, QString> formats;
+    formats.insert("JPEG", "JPEG (*.jpg)");
+    formats.insert("PNG", "PNG (*.png)");
+    QString selected = formats.value(snapshotFormat(), formats.value("JPEG"));
+
+    const QString fn = QFileDialog::getSaveFileName(nullptr, tr("Choisissez un nom de fichier"), snapshotFileName(), formats.values().join(";;"), &selected);
+
+    if(fn.isEmpty())
+        return;
+
+    setSnapshotFileName(fn);
+    setSnapshotFormat(formats.key(selected));
+
+    m_takeScreenshot = true;
+    update();
+}
+
 void AMKglViewer::init()
 {
     initializeOpenGLFunctions();
@@ -193,13 +216,25 @@ void AMKglViewer::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
 
+    if(m_takeScreenshot) {
+        delete m_glBuffer;
+        m_glBuffer = new QGLFramebufferObject(size());
+    }
+
     QGLViewer::paintGL();
     checkOpenglError();
 }
 
 void AMKglViewer::preDraw()
 {
-    m_painter->begin(this);
+    if(context() != QOpenGLContext::currentContext())
+        return;
+
+    if(m_glBuffer != nullptr)
+        m_painter->begin(m_glBuffer);
+    else
+        m_painter->begin(this);
+
     m_painter->beginNativePainting();
     m_painter->setRenderHint(QPainter::Antialiasing);
     m_painter->setPen(Qt::white);
@@ -238,6 +273,9 @@ void AMKglViewer::preDraw()
 
 void AMKglViewer::draw()
 {
+    if(context() != QOpenGLContext::currentContext())
+        return;
+
     m_inFastDraw = false;
 
     if(m_params.fastDraw) {
@@ -257,6 +295,9 @@ void AMKglViewer::draw()
 
 void AMKglViewer::fastDraw()
 {
+    if(context() != QOpenGLContext::currentContext())
+        return;
+
     m_inFastDraw = false;
 
     if(getPermanentSceneToRender() != nullptr) {
@@ -279,6 +320,9 @@ void AMKglViewer::fastDraw()
 
 void AMKglViewer::postDraw()
 {
+    if(context() != QOpenGLContext::currentContext())
+        return;
+
     /*if(isFastDrawModeCurrentlyUsed())
         m_drawInfo->drawText("FAST MODE");
     else
@@ -323,6 +367,16 @@ void AMKglViewer::postDraw()
         m_permanentScene->postDraw(*m_drawInfo);*/
 
     m_painter->end();
+
+    if(m_takeScreenshot) {
+        m_takeScreenshot = false;
+
+        const QImage img = m_glBuffer->toImage();
+        img.save(snapshotFileName());
+
+        delete m_glBuffer;
+        m_glBuffer = nullptr;
+    }
 }
 
 void AMKglViewer::drawOverlay(QPainter &painter, DrawInfo &info)

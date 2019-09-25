@@ -50,7 +50,7 @@ uint GGraphicsViewImp::NUMBER_OF_VIEWS = 0;
 
 GGraphicsViewImp::GGraphicsViewImp(const GDocumentViewForGraphics* parentDocument, QWidget* parent) : AMKglViewer(parentDocument, parent), GGraphicsView()
 {
-    m_document = (GDocumentViewForGraphics*)parentDocument;
+    m_document = const_cast<GDocumentViewForGraphics*>(parentDocument);
 
     m_camController = new G3DCameraController();
     m_camController->setRealCameraManipulator(amkglCamera());
@@ -189,7 +189,7 @@ DM_GraphicsViewCamera* GGraphicsViewImp::getCamera() const
 
 void GGraphicsViewImp::takeAndSaveScreenshot()
 {
-    saveSnapshot(false, false);
+    takeScreenshot();
 }
 
 void GGraphicsViewImp::updateDrawing3DOfItemDrawables(const QList<CT_AbstractItemDrawable *> &list)
