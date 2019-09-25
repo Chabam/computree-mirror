@@ -9,6 +9,8 @@
 #include <QWidget>
 #include <QStyledItemDelegate>
 
+#include <memory>
+
 namespace QtNodes {
     class FlowView;
     class FlowScene;

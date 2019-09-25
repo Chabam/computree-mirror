@@ -2,6 +2,7 @@
 #define CT_INDATATYPETOOUTDATATYPECONVERTER_H
 
 #include <nodes/NodeData>
+#include <memory>
 
 using QtNodes::NodeData;
 
