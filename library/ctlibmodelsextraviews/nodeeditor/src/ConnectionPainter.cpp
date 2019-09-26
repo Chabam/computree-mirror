@@ -252,7 +252,7 @@ drawNormalLine(QPainter * painter,
                         cubic.pointAtPercent(ratio));
     }
 
-    {
+    /*{
       QIcon icon(":convert.png");
 
       QPixmap pixmap = icon.pixmap(QSize(22, 22));
@@ -260,7 +260,7 @@ drawNormalLine(QPainter * painter,
                                                               pixmap.height()/2),
                           pixmap);
 
-    }
+    }*/
   }
   else
   {
