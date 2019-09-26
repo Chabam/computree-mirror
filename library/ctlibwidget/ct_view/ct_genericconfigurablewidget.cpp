@@ -12,6 +12,8 @@
 #include "ct_groupbox.h"
 
 #include <QScrollArea>
+#include <QGuiApplication>
+#include <QScreen>
 
 CT_GenericConfigurableWidget::CT_GenericConfigurableWidget(QWidget *parent) : CT_GenericConfigurableWidget(true, parent)
 {
@@ -504,7 +506,7 @@ void CT_GenericConfigurableWidget::endEdit()
         ((QVBoxLayout*)m_centralWidget->layout())->addStretch();
         m_centralWidget->adjustSize();
 
-        setMinimumSize(m_centralWidget->width()+20, m_centralWidget->height()+100);
+        setMinimumSize(m_centralWidget->width()+20, qMin(m_centralWidget->height()+40, QGuiApplication::primaryScreen()->size().height()/2));
     }
 }
 
