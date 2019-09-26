@@ -22,6 +22,7 @@
 #include <QScrollBar>
 #include <QAction>
 #include <QTimer>
+#include <QMenu>
 
 using QtNodes::FlowView;
 using QtNodes::FlowScene;
@@ -304,6 +305,9 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
         return true;
     });
 
+    mInTreeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    mOutTreeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+
     mInTreeWidget->expandAll();
     mOutTreeWidget->expandAll();
 
@@ -318,6 +322,9 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
 
     connect(mInTreeWidget, &QTreeWidget::doubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection);
     connect(mOutTreeWidget, &QTreeWidget::doubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection);
+
+    connect(mInTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
+    connect(mOutTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
 }
 
 QTreeWidgetItem* CTG_ModelsLinkConfigurationFlowView::createOrGetOutTreeItemForModel(CT_AbstractModel* model, QHash<const CT_AbstractModel*, QTreeWidgetItem*>& outItems)
@@ -741,6 +748,38 @@ void CTG_ModelsLinkConfigurationFlowView::rubberBandChanged(QRect rubberBandRect
     // all is null when rubberband selection ends
     if(rubberBandRect.isNull() && fromScenePoint.isNull() && toScenePoint.isNull())
         convertPreviewConnectionsSelectedToConnections();
+}
+
+void CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested(const QPoint& p)
+{
+    if(isReadOnly())
+        return;
+
+    QTreeWidget* tw = static_cast<QTreeWidget*>(sender());
+
+    QTreeWidgetItem* it = tw->itemAt(p);
+
+    if(it == nullptr)
+        return;
+
+    displayPreviewConnectionsForIndexClicked(tw->currentIndex());
+
+    QMenu menu(this);
+    menu.addAction(tr("Tout sélectionner"), this, &CTG_ModelsLinkConfigurationFlowView::convertAllPreviewConnectionsToConnections);
+    menu.exec(tw->mapToGlobal(p));
+}
+
+void CTG_ModelsLinkConfigurationFlowView::convertAllPreviewConnectionsToConnections()
+{
+    QHashIterator<QtNodes::Connection*, const CT_InStdModelPossibility*> it(mPreviewConnections);
+
+    while(it.hasNext())
+    {
+        it.next();
+        it.key()->getConnectionGraphicsObject().setSelected(true);
+    }
+
+    convertPreviewConnectionsSelectedToConnections();
 }
 
 QSize RowDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const

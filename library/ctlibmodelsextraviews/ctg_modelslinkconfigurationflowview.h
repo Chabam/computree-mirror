@@ -289,6 +289,16 @@ private slots:
      *        rubberband selection ends.
      */
     void rubberBandChanged(QRect rubberBandRect, QPointF fromScenePoint, QPointF toScenePoint);
+
+    /**
+     * @brief Connected to signal "QTreeWidget::customContextMenuRequested" to display a context menu
+     */
+    void treeWidgetContextMenuRequested(const QPoint& p);
+
+    /**
+     * @brief Convert all preview connections displayed to real connections (select possibilities)
+     */
+    void convertAllPreviewConnectionsToConnections();
 };
 
 /**
