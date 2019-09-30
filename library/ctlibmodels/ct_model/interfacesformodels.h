@@ -41,6 +41,7 @@ public:
     virtual ~IItemAttributeToolForModel() {}
     virtual ICategoryForModel* category() const = 0;
     virtual int valueType() const = 0;
+    virtual QString valueTypeToString() const = 0;
     virtual IItemAttributeForModel* copyItemAttribute() const = 0;
 };
 
@@ -55,6 +56,7 @@ public:
 
     virtual ~IItemDrawableToolForModel() {}
     virtual QString displayableName() const = 0;
+    virtual QString nameFromType() const = 0;
     virtual QString itemInheritPath() const = 0;
     virtual bool visitItemHisDefaultAttributes(const ItemAttributesVisitor& visitor) const = 0;
     virtual IItemDrawableForModel* copyItem() const = 0;

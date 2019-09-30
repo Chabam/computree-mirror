@@ -1,7 +1,7 @@
 #ifndef CT_CATEGORYMANAGER_H
 #define CT_CATEGORYMANAGER_H
 
-#include "ctlibstructure_global.h"
+#include "ctlibmodels_global.h"
 #include <QHash>
 
 class CT_AbstractCategory;
@@ -9,7 +9,7 @@ class CT_AbstractCategory;
 /**
  * @brief The manager of categories. A category must be registered to be used with item attributes.
  */
-class CTLIBSTRUCTURE_EXPORT CT_CategoryManager
+class CTLIBMODELS_EXPORT CT_CategoryManager
 {
 public:
     /**

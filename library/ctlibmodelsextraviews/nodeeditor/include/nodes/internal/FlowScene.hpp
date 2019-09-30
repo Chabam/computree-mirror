@@ -44,7 +44,8 @@ public:
   createConnection(PortType connectedPort,
                    Node& node,
                    PortIndex portIndex,
-                   bool isAPreview = false);
+                   bool isAPreview = false,
+                   void* data = nullptr);
 
   std::shared_ptr<Connection>
   createConnection(Node& nodeIn,
@@ -52,7 +53,8 @@ public:
                    Node& nodeOut,
                    PortIndex portIndexOut,
                    TypeConverter const & converter = TypeConverter{},
-                   bool isAPreview = false);
+                   bool isAPreview = false,
+                   void* data = nullptr);
 
   std::shared_ptr<Connection> restoreConnection(QJsonObject const &connectionJson);
 

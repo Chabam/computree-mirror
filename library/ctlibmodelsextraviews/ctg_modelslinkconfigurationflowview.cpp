@@ -7,7 +7,10 @@
 #include "tools/ct_helpgraphicsitem.h"
 
 #include "ct_model/inModel/ct_inresultmodelgroup.h"
-#include "ct_model/outModel/abstract/ct_outabstractmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractsingularitemmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractitemattributemodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractsingularitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 
 #include <nodes/DataModelRegistry>
 #include <nodes/Node>
@@ -44,7 +47,8 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
     mOutNode(nullptr),
     mInTreeWidget(nullptr),
     mOutTreeWidget(nullptr),
-    mRestoreConnectionOrCreatePreviewInProgress(true)
+    mRestoreConnectionOrCreatePreviewInProgress(true),
+    mKeyboardShiftModifierEnabled(false)
 {
     ui->setupUi(this);
 
@@ -157,7 +161,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
         }
 
         mInNode = &mFlowScene->createNode(std::move(inType));
-        mInNode->nodeGraphicsObject().setPos(mInModelPortType == PT_OUT ? 0 : 400, 0);
+        mInNode->nodeGraphicsObject().setPos(mInModelPortType == PT_OUT ? -100 : 400, 0);
         mFlowScene->nodePlaced(*mInNode);
 
         std::unique_ptr<NodeDataModel> outType = std::make_unique<CT_ModelFlowDataModel>(tr("Données disponibles"), mOutTreeWidget->model(), oppositePort(PortType(mInModelPortType)), mOutTreeWidget);
@@ -169,7 +173,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
         }
 
         mOutNode = &mFlowScene->createNode(std::move(outType));
-        mOutNode->nodeGraphicsObject().setPos(mInModelPortType == PT_IN ? 0 : 400, 0);
+        mOutNode->nodeGraphicsObject().setPos(mInModelPortType == PT_IN ? -100 : 400, 0);
         mFlowScene->nodePlaced(*mOutNode);
 
         createConnectionForSelectedPossibilies();
@@ -251,12 +255,16 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     QHash<const CT_AbstractModel*, QTreeWidgetItem*> outItems;
 
     mInResultModelGroup->recursiveVisitInChildrens([this, &inItems, &outItems] (const CT_InAbstractModel* child)-> bool {
+        const CT_InAbstractSingularItemModel* inItemModel = dynamic_cast<const CT_InAbstractSingularItemModel*>(child);
+        const CT_InAbstractItemAttributeModel* inItemAttributeModel = dynamic_cast<const CT_InAbstractItemAttributeModel*>(child);
+        const QString extraName = (inItemModel != nullptr) ? inItemModel->itemNameFromType() : ((inItemAttributeModel != nullptr) ? inItemAttributeModel->valueTypeToString() : QString());
+        const QString displayableName = child->displayableName() + (extraName.isEmpty() ? QString() : tr(" (%1)").arg(extraName));
 
-        QTreeWidgetItem* inTreeitem = new QTreeWidgetItem(inItems.value(child->parentModel(), nullptr), QStringList(child->displayableName()));
+        QTreeWidgetItem* inTreeitem = new QTreeWidgetItem(inItems.value(child->parentModel(), nullptr), QStringList(displayableName));
         inTreeitem->setForeground(0, Qt::white);
         inTreeitem->setData(0, Qt::UserRole, qVariantFromValue(static_cast<void*>(const_cast<CT_InAbstractModel*>(child))));
         inTreeitem->setData(0, Qt::UserRole+1, QString().setNum(inItems.size()*100));
-        inTreeitem->setToolTip(0, child->detailledDescription());
+        inTreeitem->setToolTip(0, tr("%1 : %2").arg(displayableName).arg(child->detailledDescription()));
 
         const bool obligatory = child->parentModel() == nullptr ? child->isObligatory() : child->recursiveAtLeastOneChildrenOrThisIsObligatory();
 
@@ -317,11 +325,11 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->resize(static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 100, inItems.size() * TREE_WIDGET_ITEM_SPACING);
     mOutTreeWidget->resize(static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 100, outItems.size() * TREE_WIDGET_ITEM_SPACING);
 
-    connect(mInTreeWidget, &QTreeWidget::clicked, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
-    connect(mOutTreeWidget, &QTreeWidget::clicked, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
+    connect(mInTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
+    connect(mOutTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
 
-    connect(mInTreeWidget, &QTreeWidget::doubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection);
-    connect(mOutTreeWidget, &QTreeWidget::doubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection);
+    connect(mInTreeWidget, &QTreeWidget::entered, this, &CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection);
+    connect(mOutTreeWidget, &QTreeWidget::entered, this, &CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection);
 
     connect(mInTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
     connect(mOutTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
@@ -347,11 +355,17 @@ QTreeWidgetItem* CTG_ModelsLinkConfigurationFlowView::createOrGetOutTreeItemForM
             parentOutTreeItem = createOrGetOutTreeItemForModel(model->parentModel(), outItems);
     }
 
-    outTreeItem = new QTreeWidgetItem(parentOutTreeItem, QStringList(model->displayableName()));
+
+    const CT_OutAbstractSingularItemModel* outItemModel = dynamic_cast<const CT_OutAbstractSingularItemModel*>(model);
+    const CT_OutAbstractItemAttributeModel* outItemAttributeModel = dynamic_cast<const CT_OutAbstractItemAttributeModel*>(model);
+    const QString extraName = ((outItemModel != nullptr) && (outItemModel->itemDrawable() != nullptr)) ? outItemModel->itemDrawable()->itemToolForModel()->nameFromType() : (((outItemAttributeModel != nullptr) && (outItemAttributeModel->itemAttribute() != nullptr)) ? outItemAttributeModel->itemAttribute()->itemAttributeToolForModel()->valueTypeToString() : QString());
+    const QString displayableName = model->displayableName() + (extraName.isEmpty() ? QString() : tr(" (%1)").arg(extraName));
+
+    outTreeItem = new QTreeWidgetItem(parentOutTreeItem, QStringList(displayableName));
     outTreeItem->setForeground(0, Qt::white);
     outTreeItem->setData(0, Qt::UserRole, qVariantFromValue(static_cast<void*>(model)));
     outTreeItem->setData(0, Qt::UserRole+1, QString());
-    outTreeItem->setToolTip(0, model->detailledDescription());
+    outTreeItem->setToolTip(0, tr("%1 : %2").arg(displayableName).arg(model->detailledDescription()));
 
     if((mOutTreeWidget->topLevelItem(0) == nullptr) || (parentOutTreeItem == nullptr))
         mOutTreeWidget->addTopLevelItem(outTreeItem);
@@ -380,9 +394,9 @@ void CTG_ModelsLinkConfigurationFlowView::createConnectionForSelectedPossibilies
     mRestoreConnectionOrCreatePreviewInProgress = false;
 }
 
-std::shared_ptr<QtNodes::Connection> CTG_ModelsLinkConfigurationFlowView::createConnection(const int& inPortIndex, const int& outPortIndex, const bool& isAPreview)
+std::shared_ptr<QtNodes::Connection> CTG_ModelsLinkConfigurationFlowView::createConnection(const int& inPortIndex, const int& outPortIndex, const bool& isAPreview, void* data)
 {
-    return (mInModelPortType == PT_IN) ? mFlowScene->createConnection(*mInNode, inPortIndex, *mOutNode, outPortIndex, TypeConverter{CT_InDataTypeToOutDataTypeConverter()}, isAPreview) : mFlowScene->createConnection(*mOutNode, outPortIndex, *mInNode, inPortIndex, TypeConverter{CT_InDataTypeToOutDataTypeConverter()}, isAPreview);
+    return (mInModelPortType == PT_IN) ? mFlowScene->createConnection(*mInNode, inPortIndex, *mOutNode, outPortIndex, TypeConverter{CT_InDataTypeToOutDataTypeConverter()}, isAPreview, data) : mFlowScene->createConnection(*mOutNode, outPortIndex, *mInNode, inPortIndex, TypeConverter{CT_InDataTypeToOutDataTypeConverter()}, isAPreview, data);
 }
 
 void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionsSelectedToConnections()
@@ -467,6 +481,35 @@ void CTG_ModelsLinkConfigurationFlowView::setInputDataForNodeDataModel(QtNodes::
                                                                        std::shared_ptr<QtNodes::NodeData> outNodeData,
                                                                        int inPortIndex)
 {
+    static auto selectPossibilityAndParentFunc = [](const CT_InAbstractModel* inModel, const CT_OutAbstractModel* outModel, const CT_InStdModelPossibility* possibility) {
+
+        // select the possibility
+        const_cast<CT_InStdModelPossibility*>(possibility)->setSelected(true);
+
+        // go up (recursively) to select parents
+        CT_InAbstractModel* parentInModel = static_cast<CT_InAbstractModel*>(inModel->parentModel());
+
+        int nP = 0;
+
+        // if the current model has a parent model and the parent model has at least one possibility saved
+        if(parentInModel != nullptr
+                && (nP = parentInModel->nPossibilitySaved()) > 0)
+        {
+            for(int i=0; i<nP; ++i)
+            {
+                CT_InStdModelPossibility* parentPossibility = parentInModel->possibilitySavedAt(i);
+
+                // if the out model used by the possibility if the parent of the current out model
+                if(parentPossibility->outModel() == outModel->parentModel()) {
+                    // we select it (this will call the method "createOrDeleteConnectionWhenPossibilitySelectionStateHasChanged"
+                    // that will create a connection and this method will be called again until the out model has no parent)
+                    parentPossibility->setSelected(true);
+                    break;
+                }
+            }
+        }
+    };
+
     // if the connection is a preview we don't select the possibility
     if(connection->connectionState().isAPreview() || mRestoreConnectionOrCreatePreviewInProgress)
         return;
@@ -487,6 +530,13 @@ void CTG_ModelsLinkConfigurationFlowView::setInputDataForNodeDataModel(QtNodes::
                               inPortIndex,
                               inModel,
                               outModel);
+
+    if(connection->data() != nullptr)
+    {
+        CT_InStdModelPossibility* possibility = static_cast<CT_InStdModelPossibility*>(connection->data());
+        selectPossibilityAndParentFunc(mInModelByPossibility.value(possibility), outModel, possibility);
+        return;
+    }
 
     // visit possibilities to find the possibility that use the out model
     inModel->visitPossibilities([this, &outModel, &connection](const CT_InAbstractModel* inModel, const CT_InStdModelPossibility* possibility) -> bool
@@ -539,7 +589,7 @@ void CTG_ModelsLinkConfigurationFlowView::createOrDeleteConnectionWhenPossibilit
         PortIndex inPortIndex = static_cast<CT_ModelFlowDataModel*>(mInNode->nodeDataModel())->portIndexOfModel(mInModelByPossibility.value(possibility, nullptr));
         PortIndex outPortIndex = static_cast<CT_ModelFlowDataModel*>(mOutNode->nodeDataModel())->portIndexOfModel(possibility->outModel());
 
-        auto sharedC = createConnection(inPortIndex, outPortIndex, false);
+        auto sharedC = createConnection(inPortIndex, outPortIndex, false, static_cast<void*>(const_cast<CT_InStdModelPossibility*>(possibility)));
         mConnectionByPossibility.insert(possibility, sharedC.get());
     }
     else if((c != nullptr) && (state == false))
@@ -591,11 +641,23 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForModel(CT_A
             const PortIndex outPortIndex = static_cast<CT_ModelFlowDataModel*>(mOutNode->nodeDataModel())->portIndexOfModel(possibility->outModel());
 
             if(inPortIndex != -1 && outPortIndex != -1)
-                mPreviewConnections.insert(createConnection(inPortIndex, outPortIndex, true).get(), possibility);
+                mPreviewConnections.insert(createConnection(inPortIndex, outPortIndex, true, static_cast<void*>(const_cast<CT_InStdModelPossibility*>(possibility))).get(), possibility);
         }
     }
 
     mRestoreConnectionOrCreatePreviewInProgress = false;
+}
+
+void CTG_ModelsLinkConfigurationFlowView::keyPressEvent(QKeyEvent* event)
+{
+    mKeyboardShiftModifierEnabled = event->modifiers().testFlag(Qt::ShiftModifier);
+    SuperClass::keyPressEvent(event);
+}
+
+void CTG_ModelsLinkConfigurationFlowView::keyReleaseEvent(QKeyEvent* event)
+{
+    mKeyboardShiftModifierEnabled = event->modifiers().testFlag(Qt::ShiftModifier);
+    SuperClass::keyReleaseEvent(event);
 }
 
 void CTG_ModelsLinkConfigurationFlowView::createOrDeleteConnectionWhenPossibilitySelectionStateHasChanged(bool state)
@@ -678,6 +740,11 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClick
     if(isReadOnly())
         return;
 
+    if(mKeyboardShiftModifierEnabled) {
+        convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(index);
+        return;
+    }
+
     if(index.model() == mInTreeWidget->model())
         mOutTreeWidget->setCurrentIndex(QModelIndex());
     else
@@ -690,27 +757,20 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClick
     displayPreviewConnectionsForModel(model);
 }
 
-void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection(const QModelIndex& index)
+void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(const QModelIndex& index)
 {
-    if(isReadOnly() || (mModelOfLastIndexClicked[1] == nullptr))
+    if(isReadOnly() || (mModelOfLastIndexClicked[0] == nullptr) || !mKeyboardShiftModifierEnabled)
         return;
 
     CT_AbstractModel* model = static_cast<CT_AbstractModel*>(index.data(Qt::UserRole).value<void*>());
 
-    if(model == mModelOfLastIndexClicked[1])
-        return;
-
     const QList<const CT_InStdModelPossibility*> p1 = mPossibilitiesByModel.values(model);
-    const QList<const CT_InStdModelPossibility*> p2 = mPossibilitiesByModel.values(mModelOfLastIndexClicked[1]);
+    const QList<const CT_InStdModelPossibility*> p2 = mPossibilitiesByModel.values(mModelOfLastIndexClicked[0]);
 
     const QSet<const CT_InStdModelPossibility*> pI = p1.toSet().intersect(p2.toSet());
 
     if(!pI.isEmpty())
         const_cast<CT_InStdModelPossibility*>(*pI.begin())->setSelected(true);
-
-    mModelOfLastIndexClicked[1] = mModelOfLastIndexClicked[0];
-    mModelOfLastIndexClicked[0] = model;
-    displayPreviewConnectionsForModel(model);
 }
 
 void CTG_ModelsLinkConfigurationFlowView::connectionSelected(QtNodes::Connection& c)

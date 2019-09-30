@@ -59,6 +59,7 @@ public:
     using ItemAttributesVisitor = std::function<bool(const IItemAttributeForModel*)>;
 
     QString displayableName() const { return itemInheritPath(); }
+    QString nameFromType() const { return itemInheritPath(); }
     QString itemInheritPath() const { return ConcreteClass::staticType(); }
     bool visitItemHisDefaultAttributes(const ItemAttributesVisitor&) const { return true; }
     IItemDrawableForModel* copyItem() const { return new ConcreteClass(); }
@@ -355,6 +356,7 @@ int main(int argc, char *argv[])
     CT_HandleOutItem<ItemForTest>                   handleItemOut2_1;
     CT_HandleOutItem<ItemForTest>                   handleItemOut2_2;
     CT_HandleOutItem<ItemForTest>                   handleItemOut2_3;
+    QList<CT_HandleOutItem<ItemForTest>*>           handleItemsOut2_x;
 
     outManager1.addResult(handleResultOut1);
     outManager1.setRootGroup(handleResultOut1, handleRootGroupOut1);
@@ -364,6 +366,11 @@ int main(int argc, char *argv[])
     outManager1.addItem(handleGroupOut1_2, handleItemOut2_1, "Item 2_1");
     outManager1.addItem(handleGroupOut1_2, handleItemOut2_2, "Item 2_2");
     outManager1.addItem(handleGroupOut1_2, handleItemOut2_3, "Item 2_3");
+    for(int i=0;i<100;++i)
+    {
+        handleItemsOut2_x.append(new CT_HandleOutItem<ItemForTest>());
+        outManager1.addItem(handleGroupOut1_2, *handleItemsOut2_x.last(), QString("Item 2_%1").arg(i+4));
+    }
     auto indexGenerator = [&currentUniqueIndexForOut]()->int { return currentUniqueIndexForOut++; };
     outManager1.finalize(indexGenerator);
 
@@ -399,7 +406,6 @@ int main(int argc, char *argv[])
     view.setWindowTitle("Node-based flow editor");
     view.resize(800, 600);
     view.show();
-
     /*QTimer tmp;
     tmp.setInterval(3000);
     tmp.setSingleShot(false);

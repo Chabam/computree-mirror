@@ -20,9 +20,6 @@ HEADERS += \
     ct_itemdrawable/abstract/ct_abstractitemdrawable.h \
     ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h \
     ct_result/abstract/ct_abstractresult.h \
-    ct_categories/abstract/ct_abstractcategory.h \
-    ct_categories/tools/ct_categorymanager.h \
-    ct_tools/ct_typeinfo.h \
     ct_itemattributes/tools/ct_defaultitemattributemanager.h \
     ct_itemattributes/tools/ct_iacreator.h \
     ct_itemattributes/tools/ct_itemattributecontainer.h \
@@ -66,8 +63,6 @@ SOURCES += \
     ct_itemdrawable/abstract/ct_abstractitemdrawable.cpp \
     ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.cpp \
     ct_result/abstract/ct_abstractresult.cpp \
-    ct_categories/abstract/ct_abstractcategory.cpp \
-    ct_categories/tools/ct_categorymanager.cpp \
     ct_itemattributes/tools/ct_defaultitemattributemanager.cpp \
     ct_itemattributes/tools/ct_itemattributecontainer.cpp \
     ct_itemdrawable/tools/drawmanager/abstract/ct_abstractitemdrawabledrawmanager.cpp \

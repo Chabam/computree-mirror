@@ -23,7 +23,7 @@ inline QString CT_AbstractCategory::staticValueTypeToCategoryTypeString<SCALARTY
  *        value (boolean or string or number or real number, etc....). You can test if a category
  *        is equivalent to another by use the method "isEquivalentTo(...)".
  */
-class CTLIBSTRUCTURE_EXPORT CT_AbstractCategory : public QObject, public ICategoryForModel
+class CTLIBMODELS_EXPORT CT_AbstractCategory : public QObject, public ICategoryForModel
 {
     Q_OBJECT
 
@@ -167,12 +167,7 @@ public:
     /**
      * @brief Returns true if this category is equivalent to category passed in parameter
      */
-    bool isEquivalentTo(const CT_AbstractCategory* c) const;
-
-    /**
-     * @brief Returns true if this category is equivalent to category passed in parameter
-     */
-    bool isEquivalentTo(const QString& categoryUniqueName) const override;
+    virtual bool isEquivalentTo(const CT_AbstractCategory* c) const = 0;
 
     /**
      * @brief Convert a type of data to a type of data of a category
@@ -231,7 +226,7 @@ public:
     static QString staticInitDataZResolution() { return "CT_Z_RESOLUTION"; }
     static QString staticInitDataNa() { return "CT_NA"; }
 
-private:
+protected:
     QString         m_uName;
     ValueType       m_vType;
     QString         m_dName;

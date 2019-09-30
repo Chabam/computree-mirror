@@ -32,11 +32,13 @@ using QtNodes::TypeConverter;
 Connection::
 Connection(PortType portType,
            Node& node,
-           PortIndex portIndex)
+           PortIndex portIndex,
+           void* data)
   : _uid(QUuid::createUuid())
   , _outPortIndex(INVALID)
   , _inPortIndex(INVALID)
-  , _connectionState()
+  , _connectionState(),
+    mData(data)
 {
   setNodeToPort(node, portType, portIndex);
 
@@ -49,14 +51,16 @@ Connection(Node& nodeIn,
            PortIndex portIndexIn,
            Node& nodeOut,
            PortIndex portIndexOut,
-           TypeConverter typeConverter)
+           TypeConverter typeConverter,
+           void* data)
   : _uid(QUuid::createUuid())
   , _outNode(&nodeOut)
   , _inNode(&nodeIn)
   , _outPortIndex(portIndexOut)
   , _inPortIndex(portIndexIn)
   , _connectionState()
-  , _converter(std::move(typeConverter))
+  , _converter(std::move(typeConverter)),
+    mData(data)
 {
   setNodeToPort(nodeIn, PortType::In, portIndexIn);
   setNodeToPort(nodeOut, PortType::Out, portIndexOut);
@@ -268,6 +272,13 @@ removeFromNodes() const
 
   if (_outNode)
     _outNode->nodeState().eraseConnection(PortType::Out, _outPortIndex, id());
+}
+
+void*
+Connection::
+data() const
+{
+    return mData;
 }
 
 

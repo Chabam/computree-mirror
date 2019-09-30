@@ -207,6 +207,7 @@ private:
 
         ICategoryForModel* category() const override { return m_pointer->category(); }
         int valueType() const override { return static_cast<int>(m_pointer->valueType()); }
+        QString valueTypeToString() const override { return m_pointer->valueTypeToString(); }
         IItemAttributeForModel* copyItemAttribute() const override { return m_pointer->copy(nullptr, nullptr); }
     };
 

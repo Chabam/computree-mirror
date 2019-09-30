@@ -39,14 +39,16 @@ public:
   /// The opposite connection end will require anothre port.
   Connection(PortType portType,
              Node& node,
-             PortIndex portIndex);
+             PortIndex portIndex,
+             void* data);
 
   Connection(Node& nodeIn,
              PortIndex portIndexIn,
              Node& nodeOut,
              PortIndex portIndexOut,
              TypeConverter converter =
-               TypeConverter{});
+               TypeConverter{},
+             void* data = nullptr);
 
   Connection(const Connection&) = delete;
   Connection operator=(const Connection&) = delete;
@@ -83,6 +85,8 @@ public:
 
   void
   removeFromNodes() const;
+
+  void* data() const;
 
 public:
 
@@ -157,6 +161,8 @@ private:
   std::unique_ptr<ConnectionGraphicsObject>_connectionGraphicsObject;
 
   TypeConverter _converter;
+
+  void* mData;
 
 Q_SIGNALS:
 

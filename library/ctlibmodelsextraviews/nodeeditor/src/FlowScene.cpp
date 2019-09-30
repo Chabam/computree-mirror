@@ -74,9 +74,10 @@ FlowScene::
 createConnection(PortType connectedPort,
                  Node& node,
                  PortIndex portIndex,
-                 bool isAPreview)
+                 bool isAPreview,
+                 void* data)
 {
-  auto connection = std::make_shared<Connection>(connectedPort, node, portIndex);
+  auto connection = std::make_shared<Connection>(connectedPort, node, portIndex, data);
   connection->connectionState().setIsAPreview(isAPreview);
 
   auto cgo = detail::make_unique<ConnectionGraphicsObject>(*this, *connection);
@@ -107,14 +108,16 @@ createConnection(Node& nodeIn,
                  Node& nodeOut,
                  PortIndex portIndexOut,
                  TypeConverter const &converter,
-                 bool isAPreview)
+                 bool isAPreview,
+                 void* data)
 {
   auto connection =
     std::make_shared<Connection>(nodeIn,
                                  portIndexIn,
                                  nodeOut,
                                  portIndexOut,
-                                 converter);
+                                 converter,
+                                 data);
 
   connection->connectionState().setIsAPreview(isAPreview);
 
@@ -127,8 +130,12 @@ createConnection(Node& nodeIn,
   connection->setGraphicsObject(std::move(cgo));
 
   // trigger data propagation
-  if(!isAPreview)
-    nodeOut.onDataUpdated(portIndexOut);
+  if(!isAPreview) {
+      //nodeOut.onDataUpdated(portIndexOut);
+      // replaced by :
+      auto nodeData = nodeOut.nodeDataModel()->outData(portIndexOut);
+      connection->propagateData(nodeData);
+  }
 
   _connections[connection->id()] = connection;
 

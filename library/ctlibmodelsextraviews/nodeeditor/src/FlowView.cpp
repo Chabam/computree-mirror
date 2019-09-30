@@ -306,7 +306,8 @@ void
 FlowView::
 keyPressEvent(QKeyEvent *event)
 {
-  switch (event->key())
+    // remove rubberBand
+  /*switch (event->key())
   {
     case Qt::Key_Shift:
       setDragMode(QGraphicsView::RubberBandDrag);
@@ -314,7 +315,7 @@ keyPressEvent(QKeyEvent *event)
 
     default:
       break;
-  }
+  }*/
 
   QGraphicsView::keyPressEvent(event);
 }
@@ -324,7 +325,7 @@ void
 FlowView::
 keyReleaseEvent(QKeyEvent *event)
 {
-  switch (event->key())
+  /*switch (event->key())
   {
     case Qt::Key_Shift:
       setDragMode(QGraphicsView::ScrollHandDrag);
@@ -332,7 +333,7 @@ keyReleaseEvent(QKeyEvent *event)
 
     default:
       break;
-  }
+  }*/
   QGraphicsView::keyReleaseEvent(event);
 }
 

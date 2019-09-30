@@ -445,6 +445,8 @@ private:
 
         QString displayableName() const override { return m_pointer->displayableName(); }
 
+        QString nameFromType() const override { return m_pointer->nameFromType(m_pointer->type()); }
+
         QString itemInheritPath() const override { return m_pointer->type(); }
 
         bool visitItemHisDefaultAttributes(const ItemAttributesVisitor& visitor) const override {

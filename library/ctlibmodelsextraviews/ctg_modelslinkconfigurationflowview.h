@@ -145,6 +145,8 @@ private:
 
     QVector<CT_AbstractModel*>                  mModelOfLastIndexClicked;
 
+    bool                                        mKeyboardShiftModifierEnabled;
+
     /**
      * @brief Reset (clear all) before construct
      */
@@ -177,9 +179,10 @@ private:
      * @param inPortIndex : the input port index
      * @param outPortIndex : the output port index
      * @param isAPreview ; true if the connection must be a preview connection.
+     * @param data : a data if you want
      * @return The created connection.
      */
-    std::shared_ptr<QtNodes::Connection> createConnection(const int& inPortIndex, const int& outPortIndex, const bool& isAPreview);
+    std::shared_ptr<QtNodes::Connection> createConnection(const int& inPortIndex, const int& outPortIndex, const bool& isAPreview, void* data = nullptr);
 
     /**
      * @brief Get the input model for the first connection in the collection "mPreviewConnections". Iterate over all connections in the collection
@@ -233,6 +236,11 @@ private:
      */
     void displayPreviewConnectionsForModel(CT_AbstractModel* model);
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
+    void keyReleaseEvent(QKeyEvent *event) override;
+
 private slots:
     /**
      * @brief Connected to the signal "selectStateChange" of a possibility to create or delete a connection. Call the method
@@ -259,12 +267,12 @@ private slots:
     void displayPreviewConnectionsForIndexClicked(const QModelIndex& index);
 
     /**
-     * @brief Connected to the signal "QTreeWidget::doubleClicked" to convert the preview connection between the double clicked index
-     *        and the previous index clicked (if exist).
+     * @brief Connected to the signal "QTreeWidget::entered" to convert the preview connection between the first clicked index
+     *        and the index entered (if exist) if shift modifier is pressed.
      *
-     * @param index : the index that is double clicked
+     * @param index : the index that is entered
      */
-    void convertPreviewConnectionBetweenIndexAndPreviewIndexClickedToConnection(const QModelIndex& index);
+    void convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(const QModelIndex& index);
 
     /**
      * @brief Connected to signal "FlowScene::connectionSelected" to convert the connection to a real connection if it is a preview.

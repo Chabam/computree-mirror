@@ -1,6 +1,7 @@
 #include "ct_inabstractitemattributemodel.h"
 
 #include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
+#include "ct_categories/abstract/ct_abstractcategory.h"
 
 CT_InAbstractItemAttributeModel::CT_InAbstractItemAttributeModel(const QString &displayableName) : SuperClass(displayableName),
     m_vType(0)
@@ -31,6 +32,11 @@ QList<QString> CT_InAbstractItemAttributeModel::categoriesType() const
 int CT_InAbstractItemAttributeModel::valueType() const
 {
     return m_vType;
+}
+
+QString CT_InAbstractItemAttributeModel::valueTypeToString() const
+{
+    return CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(m_vType));
 }
 
 bool CT_InAbstractItemAttributeModel::canBeComparedWith(const CT_OutAbstractModel& model) const

@@ -1,6 +1,5 @@
 #include "ct_abstractcategory.h"
 
-#include "ct_global/ct_structurecontext.h"
 #include "ct_categories/tools/ct_categorymanager.h"
 
 #include <math.h>
@@ -91,17 +90,17 @@ QString CT_AbstractCategory::uniqueName() const
 
 QString CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType v)
 {
-    int index = CT_AbstractCategory::staticMetaObject.indexOfEnumerator("ValueType");
-    QMetaEnum metaEnum = CT_AbstractCategory::staticMetaObject.enumerator(index);
+    const int index = CT_AbstractCategory::staticMetaObject.indexOfEnumerator("ValueType");
+    const QMetaEnum metaEnum = CT_AbstractCategory::staticMetaObject.enumerator(index);
     return metaEnum.valueToKey(v);
 }
 
 CT_AbstractCategory::ValueType CT_AbstractCategory::stringToValueType(const QString &s, bool *ok)
 {
-    int index = CT_AbstractCategory::staticMetaObject.indexOfEnumerator("ValueType");
-    QMetaEnum metaEnum = CT_AbstractCategory::staticMetaObject.enumerator(index);
-    std::string d = s.toStdString();
-    return (CT_AbstractCategory::ValueType)metaEnum.keyToValue(d.data(), ok);
+    const int index = CT_AbstractCategory::staticMetaObject.indexOfEnumerator("ValueType");
+    const QMetaEnum metaEnum = CT_AbstractCategory::staticMetaObject.enumerator(index);
+    const std::string d = s.toStdString();
+    return static_cast<CT_AbstractCategory::ValueType>(metaEnum.keyToValue(d.data(), ok));
 }
 
 QString CT_AbstractCategory::displayableName() const
@@ -112,32 +111,6 @@ QString CT_AbstractCategory::displayableName() const
 QString CT_AbstractCategory::description() const
 {
     return m_description;
-}
-
-bool CT_AbstractCategory::isEquivalentTo(const CT_AbstractCategory* c) const
-{
-    if(m_eCategories.contains(c->uniqueName()))
-        return true;
-
-    foreach (const QString &v, m_eCategories) {
-        if(PS_CATEGORY_MANAGER->findByUniqueName(v)->isEquivalentTo(c))
-            return true;
-    }
-
-    return false;
-}
-
-bool CT_AbstractCategory::isEquivalentTo(const QString &categoryUniqueName) const
-{
-    if(m_eCategories.contains(categoryUniqueName))
-        return true;
-
-    foreach (const QString &v, m_eCategories) {
-        if(PS_CATEGORY_MANAGER->findByUniqueName(v)->isEquivalentTo(categoryUniqueName))
-            return true;
-    }
-
-    return false;
 }
 
 void CT_AbstractCategory::internalTestAttributes(const QString &where)

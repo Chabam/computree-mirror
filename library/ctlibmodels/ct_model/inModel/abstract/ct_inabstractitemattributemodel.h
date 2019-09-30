@@ -46,6 +46,11 @@ public:
     int valueType() const;
 
     /**
+     * @brief Returns value type of categories to string
+     */
+    QString valueTypeToString() const;
+
+    /**
      * @brief Redefined to returns true if the output model can be dynamic_cast to a CT_OutAbstractItemAttributeModel
      */
     bool canBeComparedWith(const CT_OutAbstractModel& model) const override;

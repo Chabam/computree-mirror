@@ -89,7 +89,10 @@ HEADERS += ct_model/abstract/ct_abstractgroupmodelt.h \
     ct_model/handle/ct_handlewithmultipleabstractmodel.h \
     ct_model/inModel/handle/abstract/ct_abstractinhandlewithmodelt.h \
     ct_model/inModel/handle/ct_inhandleminmaxwithmodelt.h \
-    ct_model/inModel/views/iinmodelpossibilitieschoice.h
+    ct_model/inModel/views/iinmodelpossibilitieschoice.h \
+    ct_categories/abstract/ct_abstractcategory.h \
+    ct_categories/tools/ct_categorymanager.h \
+    ct_tools/ct_typeinfo.h
 
 SOURCES += \ 
     ct_model/inModel/ct_inresultmodelgroup.cpp \
@@ -124,7 +127,9 @@ SOURCES += \
     ct_model/inModel/views/ctg_inmodelpossibilitieschoice.cpp \
     ct_model/inModel/views/ctg_inresultmodelconfiguration.cpp \
     ct_model/inModel/views/ctg_inresultmodelpossibilities.cpp \
-    ct_model/inModel/tools/ct_modelselectionhelper.cpp
+    ct_model/inModel/tools/ct_modelselectionhelper.cpp \
+    ct_categories/abstract/ct_abstractcategory.cpp \
+    ct_categories/tools/ct_categorymanager.cpp
 
 FORMS += \
     ct_model/inModel/views/ctg_inmodelpossibilitieschoice.ui \

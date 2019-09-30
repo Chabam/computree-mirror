@@ -2,6 +2,7 @@
 #define CT_STDCATEGORY_H
 
 #include "ct_categories/abstract/ct_abstractcategory.h"
+#include "ctlibstructure_global.h"
 
 /**
  * @brief A standard category. See \def CT_AbstractCategoryClass class for more information
@@ -35,6 +36,9 @@ public:
                    const QList<QString> &categoryEquivalentUniqueNameCollection,
                    const QString &displayableName = "",
                    const QString &description = "");
+
+    bool isEquivalentTo(const CT_AbstractCategory* c) const final;
+    bool isEquivalentTo(const QString &categoryUniqueName) const final;
 };
 
 #endif // CT_STDCATEGORY_H

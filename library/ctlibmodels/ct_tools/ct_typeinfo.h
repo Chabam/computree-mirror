@@ -1,7 +1,7 @@
 #ifndef CT_TYPEINFO_H
 #define CT_TYPEINFO_H
 
-#include "ctlibstructure_global.h"
+#include "ctlibmodels_global.h"
 
 #include <typeinfo>
 #include <QString>
@@ -10,7 +10,7 @@
 template<>\
 inline QString CT_TypeInfo::name<SCALARTYPE>() { return QString(#SCALARTYPENAME); }
 
-class CTLIBSTRUCTURE_EXPORT CT_TypeInfo
+class CTLIBMODELS_EXPORT CT_TypeInfo
 {
 public:
     template<typename TT>
