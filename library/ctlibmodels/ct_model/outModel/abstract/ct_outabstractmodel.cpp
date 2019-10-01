@@ -170,6 +170,9 @@ void CT_OutAbstractModel::setPrototype(IPrototypeForModel* item)
 
 void CT_OutAbstractModel::deleteAndClearItem()
 {
+    if(m_item != nullptr)
+        m_item->prototypeToolForModel()->setModel(nullptr);
+
     delete m_item;
     m_item = nullptr;
 }
