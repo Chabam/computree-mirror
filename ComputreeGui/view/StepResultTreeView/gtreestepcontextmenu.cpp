@@ -159,7 +159,7 @@ void GTreeStepContextMenu::configureStepRequired()
                 return;
             }
 
-            const int ret = QMessageBox::critical(nullptr, title, reason, tr("Supprimer les résultats de la vue"), tr("Annuler"), QString(), 0, 1);
+            const int ret = QMessageBox::critical(nullptr, title, reason, tr("Supprimer les résultats des documents"), tr("Annuler"), QString(), 0, 1);
 
             if(ret != 0)
                 return;
