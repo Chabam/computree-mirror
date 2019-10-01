@@ -238,6 +238,7 @@ public:
       * \return false si une demande a dj t formul et n'est pas termine
       */
     virtual bool asyncRemoveAllItemDrawableOfResultFromView(CT_AbstractResult &res, DM_Context *context);
+    virtual bool syncRemoveAllItemDrawableOfResultFromView(CT_AbstractResult &res);
 
     /**
       * \brief Gere la suppression des CT_AbstractItemDrawable, en fonction d'un modele, des differentes

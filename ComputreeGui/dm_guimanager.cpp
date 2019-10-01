@@ -290,6 +290,19 @@ bool DM_GuiManager::asyncRemoveAllItemDrawableOfResultFromView(CT_AbstractResult
     return false;
 }
 
+bool DM_GuiManager::syncRemoveAllItemDrawableOfResultFromView(CT_AbstractResult& res)
+{
+    ActionItemDrawable infoActionID = ActionItemDrawable(nullptr,
+                                                         &res,
+                                                         nullptr,
+                                                         ".",
+                                                         getDocumentManagerView(),
+                                                         &_asyncProgress);
+
+    staticRemoveAllItemDrawableOfResultFromView(infoActionID);
+    return true;
+}
+
 bool DM_GuiManager::asyncRemoveAllItemDrawableOfModelFromAllViews(CT_OutAbstractItemModel &model, DM_Context *context)
 {
     if(model.result() == nullptr)

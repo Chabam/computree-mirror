@@ -34,6 +34,11 @@ void GMultipleItemDrawableModelManager::setDocumentManagerView(const GDocumentMa
     ui->widgetModelManager->setDocumentManagerView(docManagerView);
 }
 
+bool GMultipleItemDrawableModelManager::containsResult(const CT_AbstractResult* res) const
+{
+    return (indexOfResultInComboBox(res) != -1);
+}
+
 void GMultipleItemDrawableModelManager::addResult(const CT_AbstractResult *res)
 {
     int indexOf = indexOfResultInComboBox(res);
@@ -95,7 +100,7 @@ void GMultipleItemDrawableModelManager::reconstruct()
     ui->widgetModelManager->reconstruct();
 }
 
-int GMultipleItemDrawableModelManager::indexOfResultInComboBox(const CT_AbstractResult *res)
+int GMultipleItemDrawableModelManager::indexOfResultInComboBox(const CT_AbstractResult *res) const
 {
     int count = ui->comboBoxResult->count();
 

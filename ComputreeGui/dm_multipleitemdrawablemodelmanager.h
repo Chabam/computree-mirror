@@ -13,6 +13,7 @@ public:
 
     virtual void addResult(const CT_AbstractResult *res) = 0;
     virtual bool removeResult(const CT_AbstractResult *res) = 0;
+    virtual bool containsResult(const CT_AbstractResult *res) const = 0;
 
     virtual CT_AbstractResult* currentResult() const = 0;
 

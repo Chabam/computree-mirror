@@ -569,11 +569,12 @@ bool GStepManager2::updateResultInTree(QTreeWidgetItem* child)
     bool isClearedFromMemory;
     bool isBusy;
     bool hasModel;
+    bool isVisibleInItemModelView;
 
-    if(extractResultInformationFromTree(child, name, isClearedFromMemory, isBusy, hasModel)) {
+    if(extractResultInformationFromTree(child, name, isClearedFromMemory, isBusy, hasModel, isVisibleInItemModelView)) {
         child->setDisabled(isBusy || !hasModel);
         child->setText(0, name);
-        if(!hasModel && (child->checkState(0) == Qt::Checked))
+        if((!hasModel || !isVisibleInItemModelView) && (child->checkState(0) == Qt::Checked))
             child->setCheckState(0, Qt::Unchecked);
 
         for(int i=0; i<ui->treeWidget->columnCount(); ++i) {
@@ -593,7 +594,7 @@ bool GStepManager2::updateResultInTree(QTreeWidgetItem* child)
     return false;
 }
 
-bool GStepManager2::extractResultInformationFromTree(QTreeWidgetItem *child, QString &name, bool& isClearedFromMemory, bool &isBusy, bool& hasModel)
+bool GStepManager2::extractResultInformationFromTree(QTreeWidgetItem *child, QString &name, bool& isClearedFromMemory, bool &isBusy, bool& hasModel, bool& isVisibleInItemModelView)
 {
     QMutexLocker locker(m_protectTreeMutex);
 
@@ -604,6 +605,7 @@ bool GStepManager2::extractResultInformationFromTree(QTreeWidgetItem *child, QSt
         isClearedFromMemory = result->isClearedFromMemory();
         isBusy = result->isBusy();
         hasModel = (result->model() != nullptr);
+        isVisibleInItemModelView = GUI_MANAGER->getItemDrawableModelManager()->containsResult(result);
     }
 
     return (result != nullptr);

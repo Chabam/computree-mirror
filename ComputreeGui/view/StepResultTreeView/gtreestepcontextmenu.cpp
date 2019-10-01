@@ -28,6 +28,7 @@
 #include "gtreestepcontextmenu.h"
 
 #include <QMessageBox>
+#include <QEventLoop>
 
 #include "cdm_stepmanager.h"
 #include "dm_guimanager.h"
@@ -149,8 +150,37 @@ void GTreeStepContextMenu::configureStepRequired()
     {
         QString why;
         if(!selectedStep()->canFinalizeConfiguration(&why)) {
-            QMessageBox::critical(nullptr, tr("Action impossible"), tr("L'étape ne peut être configurée pour la raison suivante :\r\n\r\n%1").arg(why));
-            return;
+
+            const QString title = tr("Action impossible");
+            const QString reason = tr("L'étape ne peut être configurée pour la raison suivante :\r\n\r\n%1").arg(why);
+
+            if(!why.contains(tr("document"))) {
+                QMessageBox::critical(nullptr, title, reason);
+                return;
+            }
+
+            const int ret = QMessageBox::critical(nullptr, title, reason, tr("Supprimer les résultats de la vue"), tr("Annuler"), QString(), 0, 1);
+
+            if(ret != 0)
+                return;
+
+            selectedStep()->visitOutResults([](const CT_AbstractResult* result) -> bool {
+                CT_AbstractResult* r = const_cast<CT_AbstractResult*>(result);
+
+                if(GUI_MANAGER->removeEditItemDrawableModelOfResult(*r)) {
+                    DM_Context c;
+                    QEventLoop el;
+
+                    QObject::connect(&c, &DM_Context::actionFinished, &el, &QEventLoop::quit, Qt::QueuedConnection);
+                    GUI_MANAGER->asyncRemoveAllItemDrawableOfResultFromView(*r, &c);
+                    el.exec();
+                }
+
+                return true;
+            });
+
+            if(!selectedStep()->canFinalizeConfiguration())
+                return;
         }
 
         if(selectedStep()->showPostConfigurationDialog())

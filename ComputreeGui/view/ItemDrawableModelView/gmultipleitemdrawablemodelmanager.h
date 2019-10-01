@@ -22,6 +22,8 @@ public:
 
     void setDocumentManagerView(const GDocumentManagerView *docManagerView);
     
+    bool containsResult(const CT_AbstractResult *res) const final;
+
 public slots:
     void addResult(const CT_AbstractResult *res);
     bool removeResult(const CT_AbstractResult *res);
@@ -37,7 +39,7 @@ private:
     QList<CT_AbstractResult*>                          _results;
     DM_ItemDrawableManagerOptions           _options;
 
-    int indexOfResultInComboBox(const CT_AbstractResult *res);
+    int indexOfResultInComboBox(const CT_AbstractResult *res) const;
     void setEmptyComboBoxText();
 
 private slots:
