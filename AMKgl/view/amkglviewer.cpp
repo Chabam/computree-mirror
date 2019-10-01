@@ -1,6 +1,7 @@
 #include "amkglviewer.h"
 
 #include <QOpenGLContext>
+#include <QInputDialog>
 
 #include "amkglapp.h"
 #include "manipulatedCameraFrame.h"
@@ -30,6 +31,7 @@ AMKglViewer::AMKglViewer(const IGraphicsDocument* doc, QWidget *parent) :
     //camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
 
     m_takeScreenshot = false;
+    m_screenshotMultiplicationFactor = 1.0;
     m_glBuffer = nullptr;
 
     m_inFastDraw = false;
@@ -63,7 +65,7 @@ AMKglViewer::~AMKglViewer()
 
 void AMKglViewer::setDocument(const IGraphicsDocument *doc)
 {
-    m_document = (IGraphicsDocument*)doc;
+    m_document = const_cast<IGraphicsDocument*>(doc);
 }
 
 IGraphicsDocument *AMKglViewer::getDocument() const
@@ -81,7 +83,7 @@ void AMKglViewer::setPermanentSceneToRender(const PermanentSceneToRender *scene)
         m_permanentItemScene->removedFrom(getDocument(), getNewOpenGlContext());
     }
 
-    m_permanentItemScene = (PermanentSceneToRender*)scene;
+    m_permanentItemScene = const_cast<PermanentSceneToRender*>(scene);
 
     if(m_permanentItemScene != nullptr) {
 
@@ -176,6 +178,14 @@ void AMKglViewer::takeScreenshot()
     if(fn.isEmpty())
         return;
 
+    bool ok;
+    const double factor = QInputDialog::getDouble(nullptr, tr("Resolution [%1 x %2]").arg(size().width()).arg(size().height()), tr("Facteur de multiplication"), m_screenshotMultiplicationFactor, 1, 4, 1, &ok);
+
+    if(!ok)
+        return;
+
+    m_screenshotMultiplicationFactor = factor;
+
     setSnapshotFileName(fn);
     setSnapshotFormat(formats.key(selected));
 
@@ -218,7 +228,7 @@ void AMKglViewer::paintEvent(QPaintEvent *e)
 
     if(m_takeScreenshot) {
         delete m_glBuffer;
-        m_glBuffer = new QGLFramebufferObject(size());
+        m_glBuffer = new QGLFramebufferObject(size()*m_screenshotMultiplicationFactor);
     }
 
     QGLViewer::paintGL();

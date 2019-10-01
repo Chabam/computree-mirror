@@ -182,6 +182,7 @@ private:
     bool                        m_debugModeEnabled;
     QGLFramebufferObject*       m_glBuffer;
     bool                        m_takeScreenshot;
+    double                      m_screenshotMultiplicationFactor;
 
     /**
      * @brief Check if opengl has send errors and add it to log if true
