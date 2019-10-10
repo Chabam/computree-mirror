@@ -15,6 +15,12 @@ class CTLIBSTEP_EXPORT CT_OutManager : public QObject
     Q_OBJECT
 
 public:
+    enum CreateOutputModelsErrorType {
+        CreationOK,
+        StepHasChildrens,
+        AtLeastOneResultOfStepIsVisibleInDocument
+    };
+
     CT_OutManager();
     ~CT_OutManager();
 
@@ -41,7 +47,7 @@ public:
      * @param why : The reason why we can not create output models if this method returns false. Empty otherwise.
      * @return If the step has at least one children or if the step has a result model visible in a document this method returns false. True otherwise.
      */
-    bool canCreateOutputModels(const CT_VirtualAbstractStep& step, QString* why = nullptr) const;
+    bool canCreateOutputModels(const CT_VirtualAbstractStep& step, CreateOutputModelsErrorType* errorType = nullptr, QString* why = nullptr) const;
 
     /**
      * @brief Call all necessary methods to declare output models.

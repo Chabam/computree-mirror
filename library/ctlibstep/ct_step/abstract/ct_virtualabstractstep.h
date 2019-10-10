@@ -257,7 +257,7 @@ public:
      * @param why : The reason why we can not finalize the configuration if this method returns false. Empty otherwise.
      * @return true if you can call "finalizeConfiguration", false otherwise.
      */
-    bool canFinalizeConfiguration(QString* why = nullptr) const;
+    bool canFinalizeConfiguration(CT_OutManager::CreateOutputModelsErrorType* errorType = nullptr, QString* why = nullptr) const;
 
     /**
      * @brief Called from GUI before step was added to the steps tree and after method "showPostConfigurationDialog()" or after "restoreOthersSettings()"

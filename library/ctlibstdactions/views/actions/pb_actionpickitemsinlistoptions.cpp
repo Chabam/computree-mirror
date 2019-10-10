@@ -1,12 +1,10 @@
 #include "pb_actionpickitemsinlistoptions.h"
 #include "ui_pb_actionpickitemsinlistoptions.h"
 
-#include "actions/pb_actionpickitemsinlist.h"
-
 #include <QColorDialog>
 
-PB_ActionPickItemsInListOptions::PB_ActionPickItemsInListOptions(const PB_ActionPickItemsInList *action) :
-    CT_GAbstractActionOptions(action),
+PB_ActionPickItemsInListOptions::PB_ActionPickItemsInListOptions(const CT_AbstractAction* action) :
+    SuperClass(action),
     ui(new Ui::PB_ActionPickItemsInListOptions())
 {
     ui->setupUi(this);
@@ -19,17 +17,17 @@ PB_ActionPickItemsInListOptions::~PB_ActionPickItemsInListOptions()
     delete ui;
 }
 
-QColor PB_ActionPickItemsInListOptions::getColor()
+QColor PB_ActionPickItemsInListOptions::getColor() const
 {
     return _itemColor;
 }
 
-float PB_ActionPickItemsInListOptions::getMaxDist()
+float PB_ActionPickItemsInListOptions::getMaxDist() const
 {
-    return (float) ui->dsb_maxDist->value();
+    return float(ui->dsb_maxDist->value());
 }
 
-bool PB_ActionPickItemsInListOptions::souldAutoCenterCamera()
+bool PB_ActionPickItemsInListOptions::shouldAutoCenterCamera() const
 {
     return ui->cb_centerCamera->isChecked();
 }

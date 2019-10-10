@@ -22,12 +22,18 @@ bool CT_OutManager::visitResultModels(const CT_OutManager::OutResultModelVisitor
     return m_outModelsStructureManager.visitResults(visitor);
 }
 
-bool CT_OutManager::canCreateOutputModels(const CT_VirtualAbstractStep& step, QString* why) const
+bool CT_OutManager::canCreateOutputModels(const CT_VirtualAbstractStep& step, CreateOutputModelsErrorType* errorType, QString* why) const
 {
+    if(errorType != nullptr)
+        (*errorType) = CreationOK;
+
     if(step.hasChildrens())
     {
         if(why != nullptr)
             *why = tr("Des étapes filles utilise les modèles de sortie de cette étape.");
+
+        if(errorType != nullptr)
+            (*errorType) = StepHasChildrens;
 
         return false;
     }
@@ -43,6 +49,9 @@ bool CT_OutManager::canCreateOutputModels(const CT_VirtualAbstractStep& step, QS
     {
         if(why != nullptr)
             *why = tr("Un des résultats de l'étape est affiché dans un document.");
+
+        if(errorType != nullptr)
+            (*errorType) = AtLeastOneResultOfStepIsVisibleInDocument;
 
         return false;
     }

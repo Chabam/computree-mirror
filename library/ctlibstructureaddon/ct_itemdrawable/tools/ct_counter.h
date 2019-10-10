@@ -8,7 +8,7 @@
 class CTLIBSTRUCTUREADDON_EXPORT CT_Counter
 {
 public:
-    CT_Counter(const int &nTurns);
+    CT_Counter(int &nTurns);
 
     inline void setNTurns(int n) {_nTurns = n;}
     inline void setCurrentTurn(int n) {_currentTurn = n;}
@@ -23,8 +23,8 @@ public:
     inline void beginNextTurn() {++_currentTurn;}
 
 private:
+    int&        _nTurns;
     int         _currentTurn;
-    int         _nTurns;
     QString     _turnName;
 
 };

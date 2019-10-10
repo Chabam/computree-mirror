@@ -1,14 +1,14 @@
 #include "pb_actionshowitemdatagv.h"
-#include "views/actions/pb_actionselectitemdrawablegvoptions.h"
 
-#include "ct_global/ct_context.h"
+#include "views/actions/ct_actionselectitemdrawablegvoptions.h"
+
+#include "ct_log/ct_logmanager.h"
 
 #include "ct_mesh/ct_face.h"
 #include "ct_mesh/ct_edge.h"
 
 #include "ct_cloudindex/registered/abstract/ct_abstractmodifiablecloudindexregistered.h"
 #include "ct_cloudindex/abstract/ct_abstractmodifiablecloudindex.h"
-
 
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_iterator/ct_faceiterator.h"
@@ -20,43 +20,10 @@
 #include <QIcon>
 #include <QPainter>
 #include <QMouseEvent>
-#include <QTimer>
 
-PB_ActionShowItemDataGV::PB_ActionShowItemDataGV() : CT_AbstractActionForGraphicsView()
+PB_ActionShowItemDataGV::PB_ActionShowItemDataGV() : SuperClass()
 {
-    m_selectAction = new PB_ActionSelectItemDrawableGV();
-    _previousSelectedItem = NULL;
-}
-
-PB_ActionShowItemDataGV::~PB_ActionShowItemDataGV()
-{
-    delete m_selectAction;
-}
-
-void PB_ActionShowItemDataGV::init()
-{
-    CT_AbstractActionForGraphicsView::init();
-
-    m_selectAction->setGraphicsView(graphicsView());
-    m_selectAction->setDocument(document());
-
-    if(nOptions() == 0)
-    {
-        // create the option widget if it was not already created
-        PB_ActionSelectItemDrawableGVOptions *option = new PB_ActionSelectItemDrawableGVOptions(m_selectAction);
-
-        // add the options to the graphics view
-        graphicsView()->addActionOptions(option);
-
-        // register the option to the superclass, so the hideOptions and showOptions
-        // is managed automatically
-        registerOption(option);
-    }
-}
-
-QString PB_ActionShowItemDataGV::uniqueName() const
-{
-    return "PB_ActionShowItemDataGV";
+    _previousSelectedItem = nullptr;
 }
 
 QString PB_ActionShowItemDataGV::title() const
@@ -79,23 +46,9 @@ QString PB_ActionShowItemDataGV::type() const
     return CT_AbstractAction::TYPE_INFORMATION;
 }
 
-bool PB_ActionShowItemDataGV::mousePressEvent(QMouseEvent *e)
-{
-    Q_UNUSED(e)
-
-    return m_selectAction->mousePressEvent(e);
-}
-
-bool PB_ActionShowItemDataGV::mouseMoveEvent(QMouseEvent *e)
-{
-    Q_UNUSED(e)
-
-    return m_selectAction->mouseMoveEvent(e);
-}
-
 bool PB_ActionShowItemDataGV::mouseReleaseEvent(QMouseEvent *e)
 {
-    bool result = m_selectAction->mouseReleaseEvent(e);
+    const bool result = SuperClass::mouseReleaseEvent(e);
 
     CT_CIR pcir = graphicsView()->getSelectedPoints();
     CT_PointIterator it(pcir);
@@ -111,21 +64,9 @@ bool PB_ActionShowItemDataGV::mouseReleaseEvent(QMouseEvent *e)
     return result;
 }
 
-bool PB_ActionShowItemDataGV::keyPressEvent(QKeyEvent *e)
-{
-    return m_selectAction->keyPressEvent(e);
-}
-
-bool PB_ActionShowItemDataGV::keyReleaseEvent(QKeyEvent *e)
-{
-    return m_selectAction->keyReleaseEvent(e);
-}
-
 void PB_ActionShowItemDataGV::drawOverlay(GraphicsViewInterface &view, QPainter &painter)
 {
-    Q_UNUSED(view)
-
-    m_selectAction->drawOverlay(view, painter);
+    SuperClass::drawOverlay(view, painter);
 
     // draw information about the first item selected
     QList<CT_AbstractItemDrawable*> selected = graphicsView()->getSelectedItems();
@@ -134,13 +75,13 @@ void PB_ActionShowItemDataGV::drawOverlay(GraphicsViewInterface &view, QPainter 
     int add = painter.fontMetrics().height()+2;
     int y = add;
 
-    CT_AbstractSingularItemDrawable *sItem = NULL;
+    CT_AbstractSingularItemDrawable *sItem = nullptr;
 
-    while(itS.hasNext() && (sItem == NULL))
+    while(itS.hasNext() && (sItem == nullptr))
         sItem = dynamic_cast<CT_AbstractSingularItemDrawable*>(itS.next());
 
 
-    if(sItem != NULL)
+    if(sItem != nullptr)
     {
         bool showLog = (sItem != _previousSelectedItem);
         QString logMessage = "";
@@ -163,7 +104,7 @@ void PB_ActionShowItemDataGV::drawOverlay(GraphicsViewInterface &view, QPainter 
                 CT_AbstractItemAttribute *att = itAtt.next();
 
 
-                QString txt = att->displayableName() + " = " + att->toString(sItem, NULL);
+                QString txt = att->displayableName() + " = " + att->toString(sItem, nullptr);
                 painter.drawText(2, y, txt);
                 y += add;
 
@@ -276,10 +217,5 @@ void PB_ActionShowItemDataGV::drawOverlay(GraphicsViewInterface &view, QPainter 
         painter.restore();
         y += (add*2);
     }
-}
-
-CT_AbstractAction *PB_ActionShowItemDataGV::copy() const
-{
-    return new PB_ActionShowItemDataGV();
 }
 

@@ -222,9 +222,9 @@ bool CT_VirtualAbstractStep::showPostConfigurationDialog()
     return false;
 }
 
-bool CT_VirtualAbstractStep::canFinalizeConfiguration(QString* why) const
+bool CT_VirtualAbstractStep::canFinalizeConfiguration(CT_OutManager::CreateOutputModelsErrorType* errorType, QString* why) const
 {
-    return m_outputManager.canCreateOutputModels(*this, why);
+    return m_outputManager.canCreateOutputModels(*this, errorType, why);
 }
 
 bool CT_VirtualAbstractStep::finalizeConfiguration()

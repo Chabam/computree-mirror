@@ -46,6 +46,11 @@ void CT_StepBeginLoop::fillPostInputConfigurationDialog(CT_StepConfigurableDialo
     configDialog->addInt(tr("Nombre d'itérations"), "", 1, std::numeric_limits<int>::max(), m_nTurns);
 }
 
+void CT_StepBeginLoop::finalizePostSettings()
+{
+    _counter->setCurrentTurn(1);
+}
+
 void CT_StepBeginLoop::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
     manager.addResult(m_hOutResult);
@@ -74,6 +79,6 @@ void CT_StepBeginLoop::addToLogCurrentTurnInformation()
 {
     STEP_LOG->addInfoMessage("________________________________________");
     STEP_LOG->addInfoMessage(QString(tr("Début de boucle, tour %1 sur %2")).arg(_counter->currentTurn()).arg(_counter->nTurns()));
-    STEP_LOG->addInfoMessage(_counter->turnName());
+    //STEP_LOG->addInfoMessage(_counter->turnName());
 }
 

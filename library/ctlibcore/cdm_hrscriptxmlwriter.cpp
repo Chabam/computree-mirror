@@ -174,9 +174,10 @@ int CDM_HRScriptXMLWriter::addParameterPath(const QObject *caller,
                                             const int &uniqueID)
 {
     int prePathID = -1;
-    QString relativePath = convertPathToRelativePathAndAddToPrePath(fileOrDirectoryPath, prePathID);
+    bool isAFolder = true;
+    QString relativePath = convertPathToRelativePathAndAddToPrePath(fileOrDirectoryPath, prePathID, isAFolder);
 
-    if(relativePath.isEmpty())
+    if(relativePath.isEmpty() && !isAFolder)
         return -1;
 
     const int id = genericAddParameter(caller, parameterName, "", "", description, uniqueID);
@@ -394,19 +395,23 @@ void CDM_HRScriptXMLWriter::processStepOthersSettings(CT_VirtualAbstractStep *st
         m_domOthersParameters.appendChild(stepEL);
 }
 
-QString CDM_HRScriptXMLWriter::convertPathToRelativePathAndAddToPrePath(QString absolutePath, int& prePathID)
+QString CDM_HRScriptXMLWriter::convertPathToRelativePathAndAddToPrePath(QString absolutePath, int& prePathID, bool& isAFolder)
 {
+    isAFolder = true;
+
     if(absolutePath.isEmpty())
         return QString();
 
     QString relativePath;
 
     QFileInfo f(absolutePath);
+    relativePath = f.fileName();
+    absolutePath = f.absolutePath();
 
-    if(f.isFile()) {
-        relativePath = f.fileName();
-        absolutePath = f.absolutePath();
-    }
+    isAFolder = !f.isFile();
+
+    if(isAFolder && relativePath.isEmpty())
+        relativePath = ".";
 
     prePathID = m_prePath.indexOf(absolutePath);
 

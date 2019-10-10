@@ -93,7 +93,7 @@ private:
     void processStepPostSettings(CT_VirtualAbstractStep* step, const int& stepID);
     void processStepOthersSettings(CT_VirtualAbstractStep* step, const int& stepID);
 
-    QString convertPathToRelativePathAndAddToPrePath(QString absolutePath, int& prePathID);
+    QString convertPathToRelativePathAndAddToPrePath(QString absolutePath, int& prePathID, bool& isAFolder);
     QDomElement getOrCreateDomElementForCaller(const QObject* caller);
     QDomElement getOrCreateExtraDomElementForCaller(const QObject* caller);
     QDomElement createDomElementForStep(CT_VirtualAbstractStep* step, int stepID);

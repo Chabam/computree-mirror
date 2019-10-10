@@ -176,7 +176,7 @@ void CT_FileChoiceButton::chooseFile()
 
     } else if (_data._fileType == CT_FileChoiceButton::OneExistingFolder)
     {
-        QString s = QFileDialog::getExistingDirectory(_widgetCreated, tr("Choisir un répertoire"), "");
+        QString s = QFileDialog::getExistingDirectory(_widgetCreated, tr("Choisir un répertoire"), _data._value->isEmpty() ? QString() : _data._value->first());
         if (QDir(s).exists())
         {
             _labelCreated->setText(s);
@@ -192,6 +192,6 @@ void CT_FileChoiceButton::chooseFile()
 
 void CT_FileChoiceButton::setFormat(QString format)
 {
-        _data._fileFilter = format;
+    _data._fileFilter = format;
 }
 

@@ -156,8 +156,12 @@ int CDM_HRScriptXmlReader::parameterPath(const QObject *caller, const QString &p
         if(ok) {
             const QString prePath = m_prePath.value(prePathID, "");
 
-            if(!prePath.isEmpty())
-                fileOrDirectoryPathRestored = QDir::toNativeSeparators(prePath + QDir::separator() + fileOrDirectoryPathRestored);
+            if(!prePath.isEmpty()) {
+                if(prePath.endsWith('/') || prePath.endsWith('\\'))
+                    fileOrDirectoryPathRestored = QDir::toNativeSeparators(prePath + fileOrDirectoryPathRestored);
+                else
+                    fileOrDirectoryPathRestored = QDir::toNativeSeparators(prePath + QDir::separator() + fileOrDirectoryPathRestored);
+            }
         } else {
             m_allParametersFounded = false;
         }

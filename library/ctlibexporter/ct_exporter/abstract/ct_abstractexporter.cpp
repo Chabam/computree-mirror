@@ -160,6 +160,11 @@ bool CT_AbstractExporter::setFilePath(const QString &filepath)
     return true;
 }
 
+void CT_AbstractExporter::setFileNamePrefix(const QString& fileNamePrefix)
+{
+    mFileNamePrefix = fileNamePrefix;
+}
+
 QString CT_AbstractExporter::filePath() const
 {
     return _filepath;
@@ -343,7 +348,7 @@ bool CT_AbstractExporter::exportToFile()
                 path.append("_");
             }
 
-            path.append(fileName);
+            path.append(mFileNamePrefix + fileName);
 
             pathByItem.append(path);
 

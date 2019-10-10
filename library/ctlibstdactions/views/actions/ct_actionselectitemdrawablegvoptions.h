@@ -1,7 +1,6 @@
 #ifndef CT_ACTIONSELECTITEMDRAWABLEGVOPTIONS_H
 #define CT_ACTIONSELECTITEMDRAWABLEGVOPTIONS_H
 
-
 #include "ct_actions/view/abstract/ct_gabstractactionoptions.h"
 
 #include "ctlibstdactions/ctlibstdactions_global.h"

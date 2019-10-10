@@ -70,10 +70,15 @@ public:
     int subMenuLevel() const;
 
     /**
-     * @brief Set the export filepath. You can overload this method if you want ot verify something in the filepath.
+     * @brief Set the export filepath. You can overload this method if you want to verify something in the filepath.
      *        return false if you don't accept the filepath.
      */
     virtual bool setFilePath(const QString &filepath);
+
+    /**
+     * @brief Set the prefix of the filename.
+     */
+    void setFileNamePrefix(const QString& fileNamePrefix);
 
     /**
      * @brief export filepath getter
@@ -403,6 +408,7 @@ private:
     QList<CT_AbstractCloudIndex*>       _faces;
     QList<CT_AbstractCloudIndex*>       _edges;
     QString                             _filepath;
+    QString                             mFileNamePrefix;
     int                                 _progress;
     bool                                _ePoints;
     bool                                _eFaces;

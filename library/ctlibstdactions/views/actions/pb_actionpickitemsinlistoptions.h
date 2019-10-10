@@ -1,26 +1,27 @@
 #ifndef PB_ACTIONPICKITEMSINLISTOPTIONS_H
 #define PB_ACTIONPICKITEMSINLISTOPTIONS_H
 
-#include "ct_view/actions/abstract/ct_gabstractactionoptions.h"
+#include "ct_actions/view/abstract/ct_gabstractactionoptions.h"
 
-class PB_ActionPickItemsInList;
+#include "ctlibstdactions/ctlibstdactions_global.h"
 
 namespace Ui {
 class PB_ActionPickItemsInListOptions;
 }
 
-class PB_ActionPickItemsInListOptions : public CT_GAbstractActionOptions
+class CTLIBSTDACTIONS_EXPORT PB_ActionPickItemsInListOptions : public CT_GAbstractActionOptions
 {
     Q_OBJECT
+    using SuperClass = CT_GAbstractActionOptions;
 
 public:
 
-    explicit PB_ActionPickItemsInListOptions(const PB_ActionPickItemsInList *action);
+    explicit PB_ActionPickItemsInListOptions(const CT_AbstractAction* action);
     ~PB_ActionPickItemsInListOptions();
 
-    QColor getColor();
-    float getMaxDist();
-    bool souldAutoCenterCamera();
+    QColor getColor() const;
+    float getMaxDist() const;
+    bool shouldAutoCenterCamera() const;
 
 private:
     Ui::PB_ActionPickItemsInListOptions *ui;
@@ -32,11 +33,8 @@ signals:
 
 private slots:
     void on_pb_color_clicked();
-
     void on_dsb_maxDist_valueChanged(double arg1);
-
     void on_pb_all_clicked();
-
     void on_pb_none_clicked();
 
 private:

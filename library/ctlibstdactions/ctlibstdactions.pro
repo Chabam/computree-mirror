@@ -16,7 +16,10 @@ HEADERS += action/tools/math.h \
     action/tools/rectangleforpicking.h \
     action/tools/ct_actionselecttool.h \
     views/actions/ct_actionselectitemdrawablegvoptions.h \
-    action/ct_actionselectitemdrawablegv.h
+    action/ct_actionselectitemdrawablegv.h \
+    action/pb_actionpickitemsinlist.h \
+    views/actions/pb_actionpickitemsinlistoptions.h \
+    action/pb_actionshowitemdatagv.h
 
 SOURCES += \ 
     action/tools/math.cpp \
@@ -24,10 +27,14 @@ SOURCES += \
     action/tools/rectangleforpicking.cpp \
     action/tools/ct_actionselecttool.cpp \
     views/actions/ct_actionselectitemdrawablegvoptions.cpp \
-    action/ct_actionselectitemdrawablegv.cpp
+    action/ct_actionselectitemdrawablegv.cpp \
+    action/pb_actionpickitemsinlist.cpp \
+    views/actions/pb_actionpickitemsinlistoptions.cpp \
+    action/pb_actionshowitemdatagv.cpp
 
 FORMS += \
-    views/actions/ct_actionselectitemdrawablegvoptions.ui
+    views/actions/ct_actionselectitemdrawablegvoptions.ui \
+    views/actions/pb_actionpickitemsinlistoptions.ui
 
 RESOURCES += \
     icons.qrc

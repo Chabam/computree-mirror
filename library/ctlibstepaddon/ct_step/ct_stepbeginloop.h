@@ -31,6 +31,8 @@ protected:
 
     void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* configDialog) override;
 
+    void finalizePostSettings() override;
+
     void declareOutputModels(CT_StepOutModelStructureManager& manager) override;
 
     void compute() override;
