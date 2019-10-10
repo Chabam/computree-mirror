@@ -1,16 +1,5 @@
 #include "pb_stepexportattributesinloop.h"
 
-#include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
-
-#include "ct_itemdrawable/tools/iterator/ct_itemiterator.h"
-
-#include "ct_abstractstepplugin.h"
-#include "ct_exporter/ct_standardexporterseparator.h"
-#include "ct_itemdrawable/ct_plotlistingrid.h"
-#include "ct_itemdrawable/ct_loopcounter.h"
-
-#include "ct_model/tools/ct_modelsearchhelper.h"
-
 #ifdef USE_OPENCV
 #include "ct_itemdrawable/ct_image2d.h"
 #include "exporters/grid2d/pb_grid2dexporter.h"
@@ -41,11 +30,11 @@ PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop() : SuperClass()
 
 #ifdef USE_GDAL
     //GDALAllRegister();
-    GDALDriverManager *driverManager = GetGDALDriverManager();
+    GDALDriverManager* const driverManager = GetGDALDriverManager();
 
     //CPLSetConfigOption("GDAL_DATA", "C:/xDONNEES/Programmation/computree64/computreeDependencies/gdal_bin/data");
 
-    int count = driverManager->GetDriverCount();
+    const int count = driverManager->GetDriverCount();
 
     for(int i = 0 ; i < count ; ++i)
     {
@@ -63,27 +52,12 @@ PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop() : SuperClass()
 #endif
 }
 
-PB_StepExportAttributesInLoop::~PB_StepExportAttributesInLoop()
-{
-}
-
 QString PB_StepExportAttributesInLoop::description() const
 {
     return tr("Export d'attributs dans une boucle");
 }
 
-QString PB_StepExportAttributesInLoop::detailledDescription() const
-{
-    return tr("");
-}
-
-QString PB_StepExportAttributesInLoop::getStepURL() const
-{
-    //return tr("STEP URL HERE");
-    return CT_AbstractStep::getStepURL(); //by default URL of the plugin
-}
-
-CT_VirtualAbstractStep* PB_StepExportAttributesInLoop::createNewInstance()
+CT_VirtualAbstractStep* PB_StepExportAttributesInLoop::createNewInstance() const
 {
     return new PB_StepExportAttributesInLoop();
 }
@@ -128,29 +102,26 @@ void PB_StepExportAttributesInLoop::declareOutputModels(CT_StepOutModelStructure
 
 void PB_StepExportAttributesInLoop::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    CT_StepConfigurableDialog* configDialog = newStandardPreConfigurationDialog();
-    postInputConfigDialog->addBool(tr("Activer export ASCII tabulaire (1 fichier en tout)"), "", tr("Activer"), _asciiExport);
+    preInputConfigDialog->addBool(tr("Activer export ASCII tabulaire (1 fichier en tout)"), "", tr("Activer"), _asciiExport);
 
 #ifdef USE_OPENCV
-    postInputConfigDialog->addEmpty();
-    postInputConfigDialog->addBool(tr("Activer export raster (1 fichier / tour / métrique)"), "", tr("Activer"), _rasterExport);
-    postInputConfigDialog->addTitle(tr("L'export raster nécessite une grille de placettes (désactiver si pas de résultat valide)"));
+    preInputConfigDialog->addEmpty();
+    preInputConfigDialog->addBool(tr("Activer export raster (1 fichier / tour / métrique)"), "", tr("Activer"), _rasterExport);
+    preInputConfigDialog->addTitle(tr("L'export raster nécessite une grille de placettes (désactiver si pas de résultat valide)"));
 #endif
 
 #ifdef USE_GDAL
-    postInputConfigDialog->addEmpty();
-    postInputConfigDialog->addBool(tr("Activer export vectoriel (1 fichier / tour)"), "", tr("Activer"), _vectorExport);
+    preInputConfigDialog->addEmpty();
+    preInputConfigDialog->addBool(tr("Activer export vectoriel (1 fichier / tour)"), "", tr("Activer"), _vectorExport);
 #endif
 
-    postInputConfigDialog->addEmpty();
-    postInputConfigDialog->addBool(tr("Export dans une boucle (cas normal)"), "", tr("Activer"), _exportInLoop);
+    preInputConfigDialog->addEmpty();
+    preInputConfigDialog->addBool(tr("Export dans une boucle (cas normal)"), "", tr("Activer"), _exportInLoop);
 
 }
 
 void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
-    CT_StepConfigurableDialog* configDialog = newStandardPostConfigurationDialog();
-
     if (_asciiExport)
     {
         postInputConfigDialog->addTitle(tr("Export ASCII tabulaire (1 fichier en tout)"));

@@ -58,7 +58,9 @@ void PB_StepBeginLoopThroughGroups02::compute()
         _counter->setNTurns(_ids.isEmpty() ? 1 : _ids.size());
     }
 
-    if((currentTurn - 1) < _ids.size())
+    addToLogCurrentTurnInformation();
+
+    if((currentTurn >= 0) && ((currentTurn - 1) < _ids.size()))
     {
         const CT_AbstractSingularItemDrawable* currentItem = _ids.at(currentTurn - 1);
 
@@ -74,8 +76,6 @@ void PB_StepBeginLoopThroughGroups02::compute()
                 group->removeFromParent(true);
         }
     }
-
-    addToLogCurrentTurnInformation();
 
     setProgress( 100 );
 }

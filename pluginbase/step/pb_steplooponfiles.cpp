@@ -1,29 +1,23 @@
 #include "pb_steplooponfiles.h"
 
 #include "pb_steppluginmanager.h"
-
-#include "ct_view/ct_genericconfigurablewidget.h"
-#include "ct_abstractstepplugin.h"
-#include "ct_reader/ct_standardreaderseparator.h"
-
-#include "ct_view/ct_combobox.h"
-
-#include "ct_model/tools/ct_modelsearchhelper.h"
-#include "ct_itemdrawable/ct_readeritem.h"
-
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
-
 #include "tools/pb_readerstools.h"
+#include "ct_log/ct_logmanager.h"
 
-#include <QDebug>
+#include <QMessageBox>
+#include <QProgressDialog>
+#include <QApplication>
 
-PB_StepLoopOnFiles::PB_StepLoopOnFiles() : CT_StepBeginLoop()
+PB_StepLoopOnFiles::PB_StepLoopOnFiles() : SuperClass(),
+    mReader(nullptr),
+    m_folderIterator(nullptr)
 {
-    m_folderIterator = nullptr;
 }
 
 PB_StepLoopOnFiles::~PB_StepLoopOnFiles()
 {
+    delete mReader;
     delete m_folderIterator;
 }
 
@@ -32,20 +26,189 @@ QString PB_StepLoopOnFiles::description() const
     return tr("5- Loops on files in selected directory");
 }
 
-QString PB_StepLoopOnFiles::detailledDescription() const
-{
-    return tr("");
-}
-
-QString PB_StepLoopOnFiles::getStepURL() const
-{
-    //return tr("STEP URL HERE");
-    return CT_AbstractStepCanBeAddedFirst::getStepURL(); //by default URL of the plugin
-}
-
-CT_VirtualAbstractStep* PB_StepLoopOnFiles::createNewInstance()
+CT_VirtualAbstractStep* PB_StepLoopOnFiles::createNewInstance() const
 {
     return new PB_StepLoopOnFiles();
+}
+
+void PB_StepLoopOnFiles::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
+{
+    const QStringList list_readersList = PB_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
+
+    preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedUniqueName);
+}
+
+void PB_StepLoopOnFiles::finalizePreSettings()
+{
+    SuperClass::finalizePreSettings();
+
+    CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
+
+    if(reader == nullptr) {
+        delete mReader;
+        mReader = nullptr;
+        return;
+    }
+
+    if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
+    {
+        delete mReader;
+        mReader = reader->createInstance();
+    }
+}
+
+bool PB_StepLoopOnFiles::postInputConfigure()
+{
+    if(mReader == nullptr) {
+        QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun reader sélectionné"));
+        return false;
+    }
+
+    QStringList folders;
+    folders.append(m_folderPath);
+    CT_GenericConfigurableWidget configDialog;
+    configDialog.addFileChoice(tr("Choose directory containing files"), CT_FileChoiceButton::OneExistingFolder, "", folders);
+
+    if(CT_ConfigurableWidgetToDialog::exec(&configDialog) == QDialog::Accepted)
+    {
+        if(folders.isEmpty()) {
+            QMessageBox::critical(nullptr, tr("Erreur"), tr("Dossier vide"));
+            return false;
+        }
+
+        const QString folderPath = folders.first();
+        QDirIterator* filesIterator = createFilesIterator(folderPath);
+
+        if(!filesIterator->hasNext()) {
+            QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun fichier compatible dans le dossier"));
+            return false;
+        }
+
+        const QString firstFilePath = filesIterator->next();
+        QString fp = firstFilePath;
+
+        int progress = 0;
+        QProgressDialog progressD(tr("Vérification des fichiers en cours..."), tr("Annuler"), 0, countFiles());
+        progressD.setValue(progress);
+        progressD.show();
+
+        while(!fp.isEmpty() && !progressD.wasCanceled())
+        {
+            if(!mReader->setFilePath(fp)) {
+                delete filesIterator;
+                QMessageBox::critical(nullptr, tr("Erreur"), tr("Fichier \"%1\" non accepté par le reader").arg(fp));
+                return false;
+            }
+
+            if(filesIterator->hasNext())
+                fp = filesIterator->next();
+            else
+                fp.clear();
+
+            progressD.setValue(++progress);
+            qApp->processEvents();
+        }
+
+        delete filesIterator;
+
+        if(progressD.wasCanceled())
+            return false;
+
+        progressD.close();
+
+        mReader->setFilePath(firstFilePath);
+        mReader->setFilePathCanBeModified(false);
+        const bool ok = mReader->configure();
+        mReader->setFilePathCanBeModified(true);
+
+        if(!ok)
+            return false;
+
+        m_folderPath = folderPath;
+        setSettingsModified(true);
+
+        return true;
+    }
+
+    return false;
+}
+
+void PB_StepLoopOnFiles::declareOutputModels(CT_StepOutModelStructureManager& manager)
+{
+    SuperClass::declareOutputModels(manager);
+
+    manager.addResult(m_hOutResultLOF, tr("Liste de readers"));
+    manager.setRootGroup(m_hOutResultLOF, m_hOutRootGroupLOF);
+    manager.addGroup(m_hOutRootGroupLOF, m_hOutFileGroupLOF, tr("Fichiers"));
+
+    // if one reader was selected
+    if(mReader != nullptr)
+    {
+        manager.addItem(m_hOutFileGroupLOF, m_hOutReaderItemLOF, tr("Reader"), "", "", new CT_ReaderItem(mReader, false));
+
+        // get the header
+        CT_FileHeader* rHeader = mReader->createHeaderPrototype();
+
+        if(rHeader != nullptr)
+            manager.addItem(m_hOutFileGroupLOF, m_hOutFileHeaderLOF, tr("Entête"), "", "", rHeader);
+    }
+}
+
+void PB_StepLoopOnFiles::compute()
+{
+    SuperClass::compute();
+
+    if(_counter->currentTurn() == 1)
+    {
+        m_folderIterator = createFilesIterator(m_folderPath);
+        _counter->setNTurns(countFiles());
+    }
+
+    addToLogCurrentTurnInformation();
+
+    for(CT_ResultGroup* result : m_hOutResultLOF.iterateOutputs())
+    {
+        if(m_folderIterator->hasNext())
+        {
+            CT_StandardItemGroup* rootGroup = m_hOutRootGroupLOF.createInstance();
+            result->addRootGroup(m_hOutRootGroupLOF, rootGroup);
+
+            // for each current file in the list
+            // copy the reader (copyFull = with configuration and models)
+            CT_AbstractReader* readerCpy = mReader->copyFull();
+
+            const QString filepath = m_folderIterator->next();
+
+            // set the new filepath and check if it is valid
+            if(readerCpy->setFilePath(filepath))
+            {
+                PS_LOG->addMessage(LogInterface::info, LogInterface::step, tr("Ajout du fichier %1").arg(filepath));
+
+                // create the group that will contains header and reader (represent a File)
+                CT_StandardItemGroup* grpHeader = new CT_StandardItemGroup();
+                rootGroup->addGroup(m_hOutFileGroupLOF, grpHeader);
+
+                // add the header
+                if(m_hOutFileHeaderLOF.isValid()) {
+                    CT_FileHeader* header = readerCpy->readHeader();
+                    Q_ASSERT(header != nullptr);
+                    grpHeader->addSingularItem(m_hOutFileHeaderLOF, header);
+                }
+
+                // add the reader item
+                CT_ReaderItem* rItem = new CT_ReaderItem(readerCpy, true);
+                grpHeader->addSingularItem(m_hOutReaderItemLOF, rItem);
+            }
+            else
+            {
+                PS_LOG->addMessage(LogInterface::warning, LogInterface::step, tr("Fichier %1 non valide").arg(filepath));
+                delete readerCpy;
+            }
+        }
+
+        if(isStopped())
+            return;
+    }
 }
 
 void PB_StepLoopOnFiles::savePostSettings(SettingsWriterInterface &writer) const
@@ -54,10 +217,7 @@ void PB_StepLoopOnFiles::savePostSettings(SettingsWriterInterface &writer) const
 
     writer.addParameterPath(this, "Directory", m_folderPath, tr("Chemin du dossier contenant les fichiers à traiter."));
 
-    const CT_AbstractReader* reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
-
-    if(reader != nullptr)
-        reader->saveSettings(writer);
+    mReader->saveSettings(writer);
 }
 
 bool PB_StepLoopOnFiles::restorePostSettings(SettingsReaderInterface &reader)
@@ -72,165 +232,42 @@ bool PB_StepLoopOnFiles::restorePostSettings(SettingsReaderInterface &reader)
 
     m_folderPath = path;
 
-    CT_AbstractReader* aReader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
-
-    if(aReader == nullptr)
+    if(mReader == nullptr)
         return false;
 
-    if((aReader == nullptr) || !aReader->restoreSettings(reader))
-        return false;
+    /*QDirIterator* filesIterator = createFilesIterator(m_folderPath);
 
-    return true;
-}
-
-//////////////////// PROTECTED METHODS //////////////////
-
-void PB_StepLoopOnFiles::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
-{
-    CT_StepConfigurableDialog *configDialog = newStandardPreConfigurationDialog();
-
-    const QStringList list_readersList = PB_ReadersTools::constructReadersClassNameList(getPluginAs<PB_StepPluginManager>()->readersAvailable());
-
-    postInputConfigDialog->addStringChoice(tr("Choose file type"), "", list_readersList, m_readerSelectedClassName);
-}
-
-bool PB_StepLoopOnFiles::postConfigure()
-{
-    m_folderPath.clear();
-
-    QStringList folders;
-    CT_GenericConfigurableWidget configDialog;
-    configDialog.addFileChoice(tr("Choose directory containing files"), CT_FileChoiceButton::OneExistingFolder, "", folders);
-
-    if(CT_ConfigurableWidgetToDialog::exec(&configDialog) == QDialog::Accepted)
+    while(filesIterator->hasNext())
     {
-        if(folders.isEmpty())
+        const QString& fp = filesIterator->next();
+
+        if(!mReader->setFilePath(fp)) {
+            delete filesIterator;
             return false;
-
-        m_folderPath = folders.first();
-
-        setSettingsModified(true);
-        return true;
+        }
     }
 
-    return false;
+    delete filesIterator;*/
+
+    return mReader->restoreSettings(reader);
 }
 
-void PB_StepLoopOnFiles::createOutResultModelListProtected(CT_OutResultModelGroup *firstResultModel)
+int PB_StepLoopOnFiles::countFiles() const
 {
-    Q_UNUSED(firstResultModel);
+    int nFiles = 0;
+    QDirIterator* it = createFilesIterator(m_folderPath);
 
-    // create a new result
-    CT_OutResultModelGroup *outRes = createNewOutResultModel(DEFout_res, tr("Liste de readers"));
+    while (it->hasNext()) { it->next(); ++nFiles;}
+    delete it;
 
-    // add a root group
-    outRes->setRootGroup(DEFout_grp, new CT_StandardItemGroup(), tr("Groupe"));
-
-    // get the reader selected
-    CT_AbstractReader *reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
-
-    // if one reader was selected and at least one file is defined
-    if (reader != nullptr && !m_folderPath.isEmpty())
-    {
-        // get the header
-        CT_FileHeader *rHeader = reader->createHeaderPrototype();
-
-        if(rHeader != nullptr) {
-            // copy the reader (copyFull = with configuration and models)
-            CT_AbstractReader* readerCpy = reader->copyFull();
-
-            outRes->addGroupModel(DEFout_grp, DEFout_grpHeader, new CT_StandardItemGroup(), tr("File"));
-            outRes->addItemModel(DEFout_grpHeader, DEFout_reader, new CT_ReaderItem(nullptr, nullptr, readerCpy), tr("Reader"));
-            outRes->addItemModel(DEFout_grpHeader, DEFout_header, rHeader, tr("Header"));
-        }
-    }
+    return nFiles;
 }
 
-void PB_StepLoopOnFiles::compute(CT_ResultGroup *outRes, CT_StandardItemGroup* group)
+QDirIterator* PB_StepLoopOnFiles::createFilesIterator(const QString& dirPath) const
 {
-    Q_UNUSED(outRes);
-    Q_UNUSED(group);
+    if(mReader == nullptr)
+        return nullptr;
 
-    QList<CT_ResultGroup*> outResultList = getOutResultList();
-
-    // get the out result
-    CT_ResultGroup* resultOut = outResultList.at(1);
-
-    int currentTurn = (int) _counter->getCurrentTurn();
-
-    const CT_AbstractReader* reader = getPluginAs<PB_StepPluginManager>()->readerAvailableByClassName(m_readerSelectedClassName);
-
-    if (currentTurn == 1)
-    {
-        if(m_folderPath.isEmpty()) {_counter->setNTurns(1); return;}
-
-        const QStringList fileFilters = PB_ReadersTools::constructStringListToFilterFiles(reader);
-
-        int nturns = 0;
-        if(reader != nullptr)
-        {
-            m_folderIterator = new QDirIterator(m_folderPath, fileFilters ,QDir::Files | QDir::NoSymLinks, QDirIterator::NoIteratorFlags);
-
-            while (m_folderIterator->hasNext()) {m_folderIterator->next(); ++nturns;}
-            delete m_folderIterator;
-            m_folderIterator = new QDirIterator(m_folderPath, fileFilters ,QDir::Files | QDir::NoSymLinks, QDirIterator::NoIteratorFlags);
-        }
-
-        _counter->setNTurns(nturns);
-    }
-
-    // search the model for headers
-    CT_OutAbstractItemModel* headerModel = (CT_OutAbstractItemModel*)PS_MODELS->searchModelForCreation(DEFout_header, resultOut);
-
-    // create the root group and add it to result
-    CT_StandardItemGroup* grp = new CT_StandardItemGroup(DEFout_grp, resultOut);
-    resultOut->addGroup(grp);
-
-    if(reader != nullptr)
-    {
-        // for each current file in the list
-        // copy the reader (copyFull = with configuration and models)
-        CT_AbstractReader* readerCpy = reader->copyFull();
-
-        if (m_folderIterator->hasNext())
-        {
-            QString filepath = m_folderIterator->next();
-            PS_LOG->addMessage(LogInterface::info, LogInterface::step, tr("Chargement du fichier %1").arg(filepath));
-
-            // set the new filepath and check if it is valid
-            if (readerCpy->setFilePath(filepath))
-            {
-                if (readerCpy->configure())
-                {
-
-                    // create models of this reader
-                    if(readerCpy->outItemDrawableModels().isEmpty() && reader->outGroupsModel().isEmpty())
-                    {
-                        readerCpy->createOutItemDrawableModelList();
-                    }
-
-                    // create the group that will contains header and reader (represent a File)
-                    CT_StandardItemGroup* grpHeader = new CT_StandardItemGroup(DEFout_grpHeader, resultOut);
-
-                    CT_FileHeader *header = readerCpy->readHeader();
-                    header->changeResult(resultOut);
-                    header->setModel(headerModel);
-
-                    // add the header
-                    grpHeader->addItemDrawable(header);
-
-                    // add the reader
-                    grpHeader->addItemDrawable(new CT_ReaderItem(DEFout_reader, resultOut, readerCpy));
-
-                    // add the group to the root
-                    grp->addGroup(grpHeader);
-                }
-            }
-            else
-            {
-                PS_LOG->addMessage(LogInterface::warning, LogInterface::step, tr("Fichier %1 inexistant ou non valide").arg(filepath));
-                delete readerCpy;
-            }
-        }
-    }
+    const QStringList fileFilters = PB_ReadersTools::constructStringListToFilterFiles(mReader);
+    return new QDirIterator(dirPath, fileFilters, QDir::Files | QDir::NoSymLinks, QDirIterator::NoIteratorFlags);
 }

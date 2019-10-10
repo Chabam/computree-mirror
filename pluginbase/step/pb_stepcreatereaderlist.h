@@ -14,15 +14,12 @@ class PB_StepCreateReaderList: public CT_AbstractStepCanBeAddedFirst
     using SuperClass = CT_AbstractStepCanBeAddedFirst;
 
 public:
-
     PB_StepCreateReaderList();
+    ~PB_StepCreateReaderList() final;
 
     QString description() const final;
 
     QString detailledDescription() const final;
-
-    void savePreSettings(SettingsWriterInterface& writer) const final;
-    bool restorePreSettings(SettingsReaderInterface &reader) final;
 
     void savePostSettings(SettingsWriterInterface& writer) const final;
     bool restorePostSettings(SettingsReaderInterface &reader) final;
@@ -31,6 +28,8 @@ public:
 
 protected:
     void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
+
+    void finalizePreSettings() final;
 
     void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
@@ -46,6 +45,8 @@ private:
     CT_HandleOutStdGroup                    m_hOutFileGroup;
     CT_HandleOutSingularItem<CT_ReaderItem> m_hOutReaderItem;
     CT_HandleOutSingularItem<CT_FileHeader> m_hOutFileHeader;
+
+    CT_AbstractReader*                      mReader;
 
     /**
      * @brief Contains the classname of the selected reader

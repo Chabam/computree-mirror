@@ -3,6 +3,7 @@
 
 #include "ct_step/abstract/ct_abstractstep.h"
 #include "ct_exporter/abstract/ct_abstractexporter.h"
+#include "ct_itemdrawable/ct_loopcounter.h"
 
 /*!
  * \class PB_StepExportItemList
@@ -23,22 +24,22 @@ public:
 
     PB_StepExportItemList();
 
-    QString description() const;
+    QString description() const final;
 
-    QString detailledDescription() const;
+    QString detailledDescription() const final;
 
-    QString getStepURL() const;
+    void saveInputSettings(SettingsWriterInterface& writer) const final;
+    bool restoreInputSettings(SettingsReaderInterface &reader) final;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
 
-    void declareInputModels(CT_StepInModelStructureManager& manager) final;
+    void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
 
-    // CT_AbstractStep non obligatoire :
-//    bool configureInputResult();
-//    bool configureExporter();
-//    void configureExporterFromModel();
+    void finalizePreSettings();
+
+    void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
     void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog) final;
 
@@ -56,6 +57,8 @@ private:
      * @brief Contains the key of the selected exporter
      */
     QString m_exporterSelectedKey;
+
+    CT_AbstractExporter*    mExporter;
 };
 
 #endif // PB_STEPEXPORTITEMLIST_H

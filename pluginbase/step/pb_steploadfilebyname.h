@@ -3,27 +3,22 @@
 
 #include "ct_step/abstract/ct_abstractstep.h"
 #include "ct_reader/abstract/ct_abstractreader.h"
-#include "ct_itemdrawable/ct_loopcounter.h"
-#include "ct_itemdrawable/ct_standarditemgroup.h"
 
-#include <QDirIterator>
-#include <QFileInfo>
+#include "ct_itemdrawable/ct_readeritem.h"
+#include "ct_itemdrawable/ct_fileheader.h"
 
-class PB_StepLoadFileByName: public CT_AbstractStep
+class PB_StepLoadFileByName : public CT_AbstractStep
 {
     Q_OBJECT
     using SuperClass = CT_AbstractStep;
-    typedef CT_AbstractStep SuperClass;
 
 public:
-
     PB_StepLoadFileByName();
+    ~PB_StepLoadFileByName() final;
 
-    QString description() const;
+    QString description() const final;
 
-    QString detailledDescription() const;
-
-    QString getStepURL() const;
+    QString detailledDescription() const final;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 
@@ -34,17 +29,25 @@ protected:
 
     void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
 
-//    void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog) final;
-
-    bool postConfigure();
-
     void declareInputModels(CT_StepInModelStructureManager& manager) final;
+
+    bool postInputConfigure() final;
 
     void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
     void compute() final;
 
 private:
+    CT_HandleInResultGroupCopy<>                            m_hInResult;
+    CT_HandleInStdZeroOrMoreGroup                           m_hInRootGroup;
+    CT_HandleInStdGroup<>                                   m_hInGroup;
+    CT_HandleInSingularItem<>                               m_hInItem;
+    CT_HandleInStdItemAttribute<CT_AbstractCategory::ANY>   m_hInItemAttribute;
+
+    CT_HandleOutSingularItem<CT_ReaderItem>                 m_hOutReaderItem;
+    CT_HandleOutSingularItem<CT_FileHeader>                 m_hOutFileHeader;
+
+    CT_AbstractReader*                                      mReader;
 
     /**
      * @brief Contains the classname of the selected reader

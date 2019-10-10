@@ -2,28 +2,22 @@
 #define PB_STEPLOOPONFILES_H
 
 #include "ct_step/ct_stepbeginloop.h"
-#include "ct_reader/abstract/ct_abstractreader.h"
-#include "ct_itemdrawable/ct_loopcounter.h"
-#include "ct_itemdrawable/ct_standarditemgroup.h"
+#include "ct_itemdrawable/ct_readeritem.h"
+#include "ct_itemdrawable/ct_fileheader.h"
 
 #include <QDirIterator>
 
-class PB_StepLoopOnFiles: public CT_StepBeginLoop
+class PB_StepLoopOnFiles : public CT_StepBeginLoop
 {
     Q_OBJECT
-    using SuperClass = CT_AbstractStep;
-    typedef CT_StepBeginLoop SuperClass;
+    using SuperClass = CT_StepBeginLoop;
 
 public:
 
     PB_StepLoopOnFiles();
-    ~PB_StepLoopOnFiles();
+    ~PB_StepLoopOnFiles() final;
 
-    QString description() const;
-
-    QString detailledDescription() const;
-
-    QString getStepURL() const;
+    QString description() const final;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 
@@ -34,18 +28,27 @@ protected:
 
     void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
 
-    bool postConfigure();
+    void finalizePreSettings() final;
 
-    void createOutResultModelListProtected(CT_OutResultModelGroup *firstResultModel);
+    bool postInputConfigure() final;
 
-    void compute(CT_ResultGroup *outRes, CT_StandardItemGroup *group);
+    void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
+
+    void compute() final;
 
 private:
+    CT_HandleOutResultGroup                         m_hOutResultLOF;
+    CT_HandleOutStdGroup                            m_hOutRootGroupLOF;
+    CT_HandleOutStdGroup                            m_hOutFileGroupLOF;
+    CT_HandleOutSingularItem<CT_ReaderItem>         m_hOutReaderItemLOF;
+    CT_HandleOutSingularItem<CT_FileHeader>         m_hOutFileHeaderLOF;
+
+    CT_AbstractReader*                              mReader;
 
     /**
      * @brief Contains the classname of the selected reader
      */
-    QString                                         m_readerSelectedClassName;
+    QString                                         m_readerSelectedUniqueName;
 
     /**
      * @brief Contains the path of the selected folder
@@ -56,6 +59,10 @@ private:
      * @brief Iterator to iterate over files in the compute methods
      */
     QDirIterator*                                   m_folderIterator;
+
+    int countFiles() const;
+
+    QDirIterator* createFilesIterator(const QString& dirPath) const;
 };
 
 #endif // PB_STEPLOOPONFILES_H

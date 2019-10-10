@@ -16,16 +16,14 @@ public:
 
     PB_StepExportPointsByXYArea();
 
-    ~PB_StepExportPointsByXYArea();
+    ~PB_StepExportPointsByXYArea() final;
 
-    QString description() const;
+    QString description() const final;
 
-    QString detailledDescription() const;
+    QString detailledDescription() const final;
 
-    QString getStepURL() const;
-
-    void savePostSettings(SettingsWriterInterface& writer) const override;
-    bool restorePostSettings(SettingsReaderInterface &reader) override;
+    void savePostSettings(SettingsWriterInterface& writer) const final;
+    bool restorePostSettings(SettingsReaderInterface &reader) final;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 

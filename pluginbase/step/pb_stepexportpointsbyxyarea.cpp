@@ -40,12 +40,6 @@ QString PB_StepExportPointsByXYArea::detailledDescription() const
               "Cet étape fonctionne dans une boucle, gardant le même fichier de sortie pour chaque emprise, pour toutes les scènes d'entrée (une par tour de boucle).");
 }
 
-QString PB_StepExportPointsByXYArea::getStepURL() const
-{
-    //return tr("STEP URL HERE");
-    return SuperClass::getStepURL(); //by default URL of the plugin
-}
-
 void PB_StepExportPointsByXYArea::savePostSettings(SettingsWriterInterface &writer) const
 {
     SuperClass::savePostSettings(writer);
@@ -64,7 +58,7 @@ bool PB_StepExportPointsByXYArea::restorePostSettings(SettingsReaderInterface &r
     return (m_exporter != nullptr) ? m_exporter->restoreSettings(reader) : true;
 }
 
-CT_VirtualAbstractStep* PB_StepExportPointsByXYArea::createNewInstance()
+CT_VirtualAbstractStep* PB_StepExportPointsByXYArea::createNewInstance() const
 {
     return new PB_StepExportPointsByXYArea();
 }
@@ -125,7 +119,7 @@ void PB_StepExportPointsByXYArea::refreshExporterToUse()
 {
     if(m_lastExporterSelectedClassName != m_exporterSelectedClassName) {
         delete m_exporter;
-        m_exporter = getPluginAs<PB_StepPluginManager>()->exportersForPointsWithPieceByPieceAvailable().value(m_exporterSelectedClassName);
+        m_exporter = pluginStaticCastT<PB_StepPluginManager>()->exportersForPointsWithPieceByPieceAvailable().value(m_exporterSelectedClassName);
 
         m_lastExporterSelectedClassName = m_exporterSelectedClassName;
 

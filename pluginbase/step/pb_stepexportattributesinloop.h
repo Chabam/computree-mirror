@@ -2,7 +2,9 @@
 #define PB_STEPEXPORTATTRIBUTESINLOOP_H
 
 #include "ct_step/abstract/ct_abstractstep.h"
-#include "ct_exporter/abstract/ct_abstractexporter.h"
+
+#include "ct_itemdrawable/ct_plotlistingrid.h"
+#include "ct_itemdrawable/ct_loopcounter.h"
 
 #ifdef USE_GDAL
 #include "exporters/gdal/pb_gdalexporter.h"
@@ -11,7 +13,7 @@
 #include "ogrsf_frmts.h"
 #include "cpl_conv.h"
 
-#include "ct_tools/ct_gdaltools.h"
+#include "readers/tools/gdal/ct_gdaltools.h"
 #endif
 
 class PB_StepExportAttributesInLoop: public CT_AbstractStep
@@ -23,13 +25,7 @@ public:
 
     PB_StepExportAttributesInLoop();
 
-    ~PB_StepExportAttributesInLoop();
-
-    QString description() const;
-
-    QString detailledDescription() const;
-
-    QString getStepURL() const;
+    QString description() const final;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 

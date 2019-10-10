@@ -34,13 +34,12 @@
 #include "ct_reader/ct_standardreaderseparator.h"
 
 #include "step/pb_stepgenericexporter.h"
-//#include "step/pb_stepuseritemselection.h"
+#include "step/pb_stepuseritemselection.h"
 #include "step/pb_stepgenericloadfile.h"
 #include "step/pb_stepcreatereaderlist.h"
-/*#include "step/pb_steplooponfiles.h"
+#include "step/pb_steplooponfiles.h"
 #include "step/pb_steplooponfilesets.h"
 #include "step/pb_steploadfilebyname.h"
-*/
 
 #include "step/pb_stepusereadertoloadfiles.h"
 #include "step/pb_stepcomputepointmetrics.h"
@@ -50,14 +49,13 @@
 #include "step/pb_stepbeginloopthroughgroups02.h"
 
 #include "step/pb_stepapplypointfilters.h"
-/*
 #include "step/pb_stepexportitemlist.h"
+/*
 #include "step/pb_stepexportpointsbyxyarea.h"
 #include "step/pb_stepexportattributesinloop.h"
-#include "actions/pb_actionselectitemdrawablegv.h"
-#include "actions/pb_actionshowitemdatagv.h"
 */
 #include "ctlibstdactions/action/ct_actionselectitemdrawablegv.h"
+#include "ctlibstdactions/action/pb_actionshowitemdatagv.h"
 /*
 #include "exporters/csv/pb_csvexporter.h"
 #include "exporters/profile/pb_profileexporter.h"
@@ -213,18 +211,18 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewWorkflowStep<PB_StepBeginLoopThroughGroups02>(CT_StepsMenu::LP_Loops);
     addNewWorkflowStep<CT_StepEndLoop>(CT_StepsMenu::LP_Loops);
     addNewPointsStep<PB_StepApplyPointFilters>(CT_StepsMenu::LP_Filter);
-    //addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter);
+    addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter);
     addNewMetricStep<PB_StepComputePointMetrics>();
     addNewMetricStep<PB_StepComputeRasterMetrics>();
 
     addNewLoadStep<PB_StepCreateReaderList>();
     addNewLoadStep<PB_StepUseReaderToLoadFiles>();
-    /*addNewLoadStep<PB_StepLoadFileByName>();
+    addNewLoadStep<PB_StepLoadFileByName>();
     addNewLoadStep<PB_StepLoopOnFileSets>();
     addNewLoadStep<PB_StepLoopOnFiles>();
 
-    //addNewExportStep<PB_StepExportItemList>();
-    addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
+    addNewExportStep<PB_StepExportItemList>();
+    /*addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
     addNewExportStep<PB_StepExportAttributesInLoop>();*/
 
     return true;
@@ -247,8 +245,9 @@ bool PB_StepPluginManager::loadActions()
     CT_ActionsSeparator *sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_SELECTION));
     sep->addAction(new CT_ActionSelectItemDrawableGV());
 
-    /*sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_INFORMATION));
-    sep->addAction(new PB_ActionShowItemDataGV());*/
+    sep = addNewSeparator(new CT_ActionsSeparator(CT_AbstractAction::TYPE_INFORMATION));
+    sep->addAction(new PB_ActionShowItemDataGV());
+
     return true;
 }
 
