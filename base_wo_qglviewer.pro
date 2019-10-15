@@ -2,7 +2,11 @@ include(all_check_dependencies.pri) # Just verify if there is problems with depe
 
 TEMPLATE      = subdirs
 SUBDIRS       = library AMKgl pluginbase ComputreeGui
-CONFIG       += console ordered
+CONFIG       += console
+
+AMKgl.depends  = library
+ComputreeGui.depends  = AMKgl library
+pluginbase.depends  = library
 
 win32-msvc2013 {
     message( "msvc 2013 detected" )

@@ -4,18 +4,16 @@
 #include "ct_step/abstract/ct_abstractstep.h"
 
 #include "ct_exporter/abstract/ct_abstractexporter.h"
+#include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
 #include "ct_itemdrawable/abstract/ct_abstractareashape2d.h"
 
 class PB_StepExportPointsByXYArea: public CT_AbstractStep
 {
     Q_OBJECT
     using SuperClass = CT_AbstractStep;
-    typedef CT_AbstractStep SuperClass;
 
 public:
-
     PB_StepExportPointsByXYArea();
-
     ~PB_StepExportPointsByXYArea() final;
 
     QString description() const final;
@@ -31,11 +29,11 @@ protected:
 
     void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
-    bool postConfigure();
+    void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog) final;
+
+    bool postInputConfigure();
     void refreshExporterToUse();
     bool configureExporter();
-
-    void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog) final;
 
     void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
@@ -77,6 +75,19 @@ private:
         CT_AbstractExporter* _exporter;
         CT_PointCloudIndexVector* _cloudIndex;
     };
+
+    CT_HandleInResultGroup<>                                        m_hInCounterResult;
+    CT_HandleInStdGroup<>                                           m_hInCounterRootGroup;
+    CT_HandleInSingularItem<CT_LoopCounter>                         m_hInLoopCounter;
+
+    CT_HandleInResultGroup<>                                        m_hInSceneResult;
+    CT_HandleInStdGroup<>                                           m_hInSceneRootGroup;
+    CT_HandleInSingularItem<CT_AbstractItemDrawableWithPointCloud>  m_hInScene;
+
+    CT_HandleInResultGroup<>                                        m_hInAreaResult;
+    CT_HandleInStdGroup<>                                           m_hInAreaRootGroup;
+    CT_HandleInSingularItem<CT_AbstractAreaShape2D>                 m_hInArea;
+    CT_HandleInStdItemAttribute<CT_AbstractCategory::ANY, 0>        m_hInAreaAttribute; // optionnal
 
     // Step parameters
     QStringList _dir;

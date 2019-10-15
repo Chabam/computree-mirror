@@ -28,13 +28,11 @@ protected:
 
     void compute() override;
 
-private:
     CT_VirtualAbstractStep*                 m_mustRestartFromStep;
 
     CT_HandleInResultGroupCopy<>            m_hInResultCopy;
     CT_HandleInStdGroup<>                   m_hInRootGroup;
     CT_HandleInSingularItem<CT_LoopCounter> m_hInLoopCounter;
-
 };
 
 #endif // CT_STEPENDLOOP_H

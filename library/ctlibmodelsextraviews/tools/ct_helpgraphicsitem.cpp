@@ -13,7 +13,7 @@ QRectF CT_HelpGraphicsItem::boundingRect() const
     return mHelpIcon.rect();
 }
 
-void CT_HelpGraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void CT_HelpGraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
     painter->drawPixmap(0, 0, mHelpIcon);
 }

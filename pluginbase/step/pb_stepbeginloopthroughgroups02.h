@@ -3,9 +3,6 @@
 
 #include "ct_step/ct_stepbeginloop.h"
 #include "ct_itemdrawable/ct_loopcounter.h"
-#include "ct_itemdrawable/ct_standarditemgroup.h"
-#include "ct_result/ct_resultgroup.h"
-
 
 class PB_StepBeginLoopThroughGroups02 : public CT_StepBeginLoop
 {
