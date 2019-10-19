@@ -271,7 +271,7 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
             wpdiV = new CT_StandardCloudStdVectorT<quint8>(nPoints);
             botwdV = new CT_StandardCloudStdVectorT<quint64>(nPoints);
             wpsibV = new CT_StandardCloudStdVectorT<quint32>(nPoints);
-            rpwlV = new CT_StandardCloudStdVectorT<float>();
+            rpwlV = new CT_StandardCloudStdVectorT<float>(nPoints);
         }
         CT_MutablePointIterator it(pcir);
 
