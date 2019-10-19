@@ -47,21 +47,19 @@ private:
         {
             _area = area;
             _exporter = exporter;
-            _cloudIndex = nullptr;
+            _cloudIndex = new CT_PointCloudIndexVector();
         }
 
         ~AreaData()
         {
             delete _area;
             delete _exporter;
+            delete _cloudIndex;
         }
 
         void setPointCloudIndex(CT_PointCloudIndexVector* cloudIndex)
         {
-            if (_cloudIndex != nullptr)
-            {
-                delete _cloudIndex;
-            }
+            delete _cloudIndex;
             _cloudIndex = cloudIndex;
         }
 
@@ -69,6 +67,11 @@ private:
         {
             delete _cloudIndex;
             _cloudIndex = nullptr;
+        }
+
+        void clearPointCloudIndex()
+        {
+            _cloudIndex->clear();
         }
 
         CT_AreaShape2DData* _area;

@@ -94,10 +94,6 @@ void PB_StepExportPointsByXYArea::refreshExporterToUse()
 
         if(m_exporter != nullptr) {
             m_exporter = m_exporter->createInstance();
-
-            /*CT_AbstractExporterAttributesSelection* exp = dynamic_cast<CT_AbstractExporterAttributesSelection*>(m_exporter);
-            if (exp != nullptr)
-                exp->setSearchOnlyModels(true);*/
         }
     }
 }
@@ -117,6 +113,7 @@ bool PB_StepExportPointsByXYArea::configureExporter()
 
 void PB_StepExportPointsByXYArea::compute()
 {
+    // if no exporter : return
     if(m_exporter == nullptr)
     {
         qDeleteAll(_areas);
@@ -128,11 +125,11 @@ void PB_StepExportPointsByXYArea::compute()
     auto beginCounter = itCounter.begin();
     auto endCounter = itCounter.end();
 
+    // if no counter founded : return
     if(beginCounter == endCounter)
     {
         qDeleteAll(_areas);
         _areas.clear();
-
         return;
     }
 
@@ -140,11 +137,14 @@ void PB_StepExportPointsByXYArea::compute()
 
     const CT_LoopCounter* counter = (*beginCounter);
 
+    // if first turn
     if(counter->currentTurn() == 1)
     {
         qDeleteAll(_areas);
         _areas.clear();
 
+        // for each area : compute a special filepath, create an exporter, set it the filepath
+        // and create the file for piece by piece export
         for(const CT_AbstractAreaShape2D* area : m_hInArea.iterateInputs(m_hInAreaResult))
         {
             CT_AbstractExporter* exporterCpy = m_exporter->copy();
@@ -188,16 +188,17 @@ void PB_StepExportPointsByXYArea::compute()
 
     const int nAreas = _areas.size();
 
-    for (int i = 0 ; i < nAreas; ++i)
+    // for each area reset the point cloud index
+    for(int i = 0 ; i < nAreas; ++i)
     {
-        AreaData* areaData = _areas.at(i);
-        areaData->setPointCloudIndex(new CT_PointCloudIndexVector());
+        _areas.at(i)->clearPointCloudIndex();
     }
 
     setProgress(10);
 
     QList<AreaData*> allSelectedAreas;
 
+    // for each item with point cloud
     for(const CT_AbstractItemDrawableWithPointCloud* scene : m_hInScene.iterateInputs(m_hInSceneResult))
     {
         Eigen::Vector3d minSc, maxSc;
@@ -205,6 +206,7 @@ void PB_StepExportPointsByXYArea::compute()
 
         QList<AreaData*> selectedAreas;
 
+        // keep only areas that was in the bounding box of the item
         for (int i = 0 ; i < nAreas; ++i)
         {
             AreaData* areaData = _areas.at(i);
@@ -224,35 +226,39 @@ void PB_StepExportPointsByXYArea::compute()
 
         CT_PointIterator itP(inCloudIndex);
         const size_t nPoints = itP.size();
+        const int nSelectedAreas = selectedAreas.size();
         size_t currentPointIndex = 0;
 
+        // for each point
         while(itP.hasNext() && (!isStopped()))
         {
             const CT_Point &point = itP.next().currentPoint();
             size_t index = itP.currentGlobalIndex();
 
-            for (int i = 0 ; i < selectedAreas.size() ; i++)
+            // add it to the area that contains this point
+            for (int i = 0; i < nSelectedAreas; ++i)
             {
                 AreaData* areaData = selectedAreas.at(i);
 
                 CT_AreaShape2DData* area = areaData->_area;
 
                 if (area->contains(point(0), point(1)))
-                {
-                    CT_PointCloudIndexVector* outCloudIndex = areaData->_cloudIndex;
-                    outCloudIndex->addIndex(index);
-                }
+                    areaData->_cloudIndex->addIndex(index);
             }
 
             ++currentPointIndex;
             setProgress(10 + (currentPointIndex*10)/nPoints);
         }
+
+        if(isStopped())
+            return;
     }
 
     setProgress(20);
 
     m_progressRangeForExporter = 70.0/double(_areas.size());
 
+    // for each selected areas
     for (m_currentAreaIndex = 0 ; m_currentAreaIndex < allSelectedAreas.size() ; ++m_currentAreaIndex)
     {
         AreaData* areaData = allSelectedAreas.at(m_currentAreaIndex);
@@ -263,21 +269,31 @@ void PB_StepExportPointsByXYArea::compute()
         QList<CT_AbstractCloudIndex *> list;
         list.append(outCloudIndex);
 
-        connect(exporter, SIGNAL(exportInProgress(int)), this, SLOT(exporterProgressChanged(int)), Qt::DirectConnection);
+        QMetaObject::Connection con1 = connect(exporter, SIGNAL(exportInProgress(int)), this, SLOT(exporterProgressChanged(int)), Qt::DirectConnection);
+        QMetaObject::Connection con2 = connect(this, SIGNAL(stopped()), exporter, SLOT(cancel()), Qt::DirectConnection);
 
+        // export points in file of the area
         exporter->setPointsToExport(list);
         exporter->exportOnePieceOfDataToFile();
 
         if(!exporter->errorMessage().isEmpty())
             PS_LOG->addMessage(LogInterface::error, LogInterface::step, tr("Erreur lors de l'exportation : %1").arg(exporter->errorMessage()));
 
-        areaData->deletePointCloudIndex();
+        areaData->clearPointCloudIndex();
+
+        disconnect(con1);
+        disconnect(con2);
+
+        if(isStopped())
+            return;
     }
 
     setProgress(90);
 
+    // if last turn
     if(counter->currentTurn() == counter->nTurns())
     {
+        // finalize the file of each areas
         for (int i = 0 ; i < _areas.size() ; i++)
         {
             CT_AbstractExporter* exporter = _areas.at(i)->_exporter;
