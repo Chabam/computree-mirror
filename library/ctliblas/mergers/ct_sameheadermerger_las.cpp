@@ -35,7 +35,7 @@ void CT_SameHeaderMerger_LAS::process()
         QList<InFileInfo> inFilesInfo;
 
         CT_LASHeader fHeader;
-        fHeader.setFile(m_filesPath.first());
+        fHeader.setFilePath(m_filesPath.first());
 
         if(!readHeaderAndSetError(fHeader))
             return;
@@ -46,7 +46,7 @@ void CT_SameHeaderMerger_LAS::process()
             const QString filepath = m_filesPath.at(i);
 
             CT_LASHeader header;
-            header.setFile(filepath);
+            header.setFilePath(filepath);
 
             if(!readHeaderAndSetError(header)
                     || !checkHeadersAndSetError(fHeader, header))
@@ -109,7 +109,7 @@ QString CT_SameHeaderMerger_LAS::errorMessage() const
 
 bool CT_SameHeaderMerger_LAS::readHeaderAndSetError(CT_LASHeader &header)
 {
-    QFile file(header.getFileInfo().absoluteFilePath());
+    QFile file(header.fileInfo().absoluteFilePath());
 
     if(file.open(QFile::ReadOnly)) {
         QDataStream stream(&file);
@@ -118,7 +118,7 @@ bool CT_SameHeaderMerger_LAS::readHeaderAndSetError(CT_LASHeader &header)
         QString error;
 
         if(!header.read(stream, error)) {
-            m_error = QObject::tr("Impossible de lire l'en-tête du fichier \"%1\". %2").arg(header.getFileInfo().absoluteFilePath()).arg(error);
+            m_error = QObject::tr("Impossible de lire l'en-tête du fichier \"%1\". %2").arg(header.fileInfo().absoluteFilePath()).arg(error);
             return false;
         }
 
@@ -126,14 +126,14 @@ bool CT_SameHeaderMerger_LAS::readHeaderAndSetError(CT_LASHeader &header)
         return true;
     }
 
-    m_error = QObject::tr("Impossible d'ouvrir le fichier \"%1\"").arg(header.getFileInfo().absoluteFilePath());
+    m_error = QObject::tr("Impossible d'ouvrir le fichier \"%1\"").arg(header.fileInfo().absoluteFilePath());
     return false;
 }
 
 bool CT_SameHeaderMerger_LAS::checkHeadersAndSetError(const CT_LASHeader &h1, const CT_LASHeader &h2)
 {
     if(!h1.isHeaderAlmostSimilar(h2)) {
-        m_error = QObject::tr("L'en-tête du fichier \"%1\" n'est pas compatible avec l'en-tête du fichier \"%2\"").arg(((CT_LASHeader &)h2).getFileInfo().absoluteFilePath()).arg(((CT_LASHeader &)h1).getFileInfo().absoluteFilePath());
+        m_error = QObject::tr("L'en-tête du fichier \"%1\" n'est pas compatible avec l'en-tête du fichier \"%2\"").arg(((CT_LASHeader &)h2).fileInfo().absoluteFilePath()).arg(((CT_LASHeader &)h1).fileInfo().absoluteFilePath());
         return false;
     }
 

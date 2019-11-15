@@ -3,9 +3,9 @@
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_pointcloud/ct_internalpointcloud.h"
 
-CT_AbstractLASPointFormat::CT_AbstractLASPointFormat()
+CT_AbstractLASPointFormat::CT_AbstractLASPointFormat() :
+    mInitialized(false)
 {
-    m_lasHeader = nullptr;
 }
 
 CT_AbstractLASPointFormat::~CT_AbstractLASPointFormat()
@@ -13,23 +13,13 @@ CT_AbstractLASPointFormat::~CT_AbstractLASPointFormat()
     clearInfos();
 }
 
-void CT_AbstractLASPointFormat::setHeader(const CT_LASHeader *header)
+bool CT_AbstractLASPointFormat::initWrite(const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *>& attributes, bool fastButConsumeMoreMemory)
 {
-    m_lasHeader = const_cast<CT_LASHeader*>(header);
-}
+    QMutexLocker locker(&mMutexInitialization);
 
-void CT_AbstractLASPointFormat::setAttributes(const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> &attributes)
-{
-    m_attributes = attributes;
-}
+    if(mInitialized)
+        return true;
 
-const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> &CT_AbstractLASPointFormat::attributes() const
-{
-    return m_attributes;
-}
-
-bool CT_AbstractLASPointFormat::initWrite(bool fastButConsumeMoreMemory)
-{
     // get type of attribute to search for point format X (from derivated class)
     QList<CT_LasDefine::LASPointAttributesType> types = typesToSearch();
 
@@ -46,7 +36,7 @@ bool CT_AbstractLASPointFormat::initWrite(bool fastButConsumeMoreMemory)
             CT_LasDefine::LASPointAttributesType type = itT.next();
 
             // get it in the attributes map
-            CT_AbstractPointAttributesScalar *scalar = m_attributes.value(type, nullptr);
+            CT_AbstractPointAttributesScalar *scalar = attributes.value(type, nullptr);
 
             // if exist
             if(scalar != nullptr)
@@ -92,14 +82,20 @@ bool CT_AbstractLASPointFormat::initWrite(bool fastButConsumeMoreMemory)
         }
     }
 
+    mInitialized = true;
+
     return true;
 }
 
 void CT_AbstractLASPointFormat::clearInfos()
 {
+    QMutexLocker locker(&mMutexInitialization);
+
     qDeleteAll(m_infos.begin(), m_infos.end());
     m_infos.clear();
 
     m_infosFaster.resize(0);
     m_infosFaster.shrink_to_fit();
+
+    mInitialized = false;
 }

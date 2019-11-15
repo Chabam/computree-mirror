@@ -22,7 +22,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASColorPacket::colorPacketTypesN
     return l;
 }
 
-void CT_LASColorPacket::writeColorPacket(QDataStream &stream, CT_LasPointInfo *info)
+void CT_LASColorPacket::writeColorPacket(QDataStream &stream, CT_LasPointInfo *info) const
 {
     if(info != nullptr)
     {

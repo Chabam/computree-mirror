@@ -69,7 +69,7 @@ CT_VirtualAbstractStep::CT_VirtualAbstractStep() :
 
 CT_VirtualAbstractStep::~CT_VirtualAbstractStep()
 {
-    CT_UniqueIndexGenerator* uig = uniqueIndexGenerator();
+    UniqueIndexGeneratorPtr uig = uniqueIndexGenerator();
 
     if(uig != nullptr)
         uig->objectWillBeDeleted(this);

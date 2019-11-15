@@ -46,6 +46,7 @@ QString CT_AbstractReader::displayableName() const
 
 QString CT_AbstractReader::uniqueName() const
 {
+    // must not be translatable
     return metaObject()->className();
 }
 

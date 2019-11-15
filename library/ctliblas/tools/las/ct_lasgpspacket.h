@@ -24,7 +24,7 @@ public:
     /**
      * @brief Write the information for the gps packet
      */
-    void writeGpsPacket(QDataStream &stream, CT_LasPointInfo *info);
+    void writeGpsPacket(QDataStream &stream, CT_LasPointInfo *info) const;
 
 private:
     char  m_emptyData[8];

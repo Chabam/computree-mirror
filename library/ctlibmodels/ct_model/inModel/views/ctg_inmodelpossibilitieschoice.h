@@ -239,7 +239,7 @@ private slots:
  *        and let the user choose which item, group, etc... use for each child possibility of
  *        the "input result model possibility".
  */
-class CTG_InModelPossibilitiesChoice : public IInModelPossibilitiesChoice
+class CTLIBMODELS_EXPORT CTG_InModelPossibilitiesChoice : public IInModelPossibilitiesChoice
 {
     Q_OBJECT
     

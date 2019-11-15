@@ -11,6 +11,11 @@ CT_AbstractPointsAttributes* CT_AbstractPointsAttributesContainer::pointsAttribu
     return m_att.value(key, nullptr);
 }
 
+void CT_AbstractPointsAttributesContainer::clearPointsAttributesCollection()
+{
+    m_att.clear();
+}
+
 void CT_AbstractPointsAttributesContainer::internalInsertAttributes(const int &key, const CT_AbstractPointsAttributes *att)
 {
     m_att.insert(key, const_cast<CT_AbstractPointsAttributes*>(att));

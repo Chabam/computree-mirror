@@ -214,12 +214,30 @@ bool CT_ModelSelectionHelper::selectOneGraphForPossibilityOfRootModel(const CT_I
         // if it is a leaf
         if(inModel->isEmpty())
         {
-            if(inModel->nPossibilitySaved() > 0)
-            {
-                CT_InStdModelPossibility* p = inModel->possibilitySavedAt(0);
-                p->setSelected(true);
+            const int nP = inModel->nPossibilitySaved();
 
-                CT_OutAbstractModel* outModel = p->outModel();
+            if(nP > 0)
+            {
+                const QString inDN = inModel->displayableName();
+                const QString inDNlc = inDN.toLower();
+
+                QMultiMap<double, CT_InStdModelPossibility*> bestPossibilities;
+
+                for(int ip=0; ip<nP; ++ip)
+                {
+                    CT_InStdModelPossibility* p = inModel->possibilitySavedAt(ip);
+
+                    if(inDN == p->outModel()->displayableName())
+                        bestPossibilities.insert(1, p);
+                    else if(inDNlc == p->outModel()->displayableName().toLower())
+                        bestPossibilities.insert(0.8, p);
+                    else
+                        bestPossibilities.insert(0.5, p);
+                }
+
+                CT_InStdModelPossibility* bestPossibility = bestPossibilities.last();
+                bestPossibility->setSelected(true);
+                CT_OutAbstractModel* outModel = bestPossibility->outModel();
 
                 // go up (recursively) to select parents
                 CT_InAbstractModel* parentInModel = static_cast<CT_InAbstractModel*>(inModel->parentModel());

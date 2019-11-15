@@ -24,7 +24,7 @@ public:
     /**
      * @brief Write the information for the color packet
      */
-    void writeColorPacket(QDataStream &stream, CT_LasPointInfo *info);
+    void writeColorPacket(QDataStream &stream, CT_LasPointInfo *info) const;
 
 private:
     char  m_emptyData[6];

@@ -5,96 +5,101 @@
 #include "ctliblas/itemdrawable/las/ct_stdlaspointsattributescontainer.h"
 #include "ctliblas/tools/las/abstract/ct_abstractlaspointformat.h"
 
-// from pluginshared
-#include "ct_exporter/abstract/ct_abstractexporterattributesselection.h"
-#include "ct_tools/itemdrawable/ct_itemdrawablecollectionbuildert.h"
+#include "ct_exporter/abstract/ct_abstractexporter.h"
+#include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
+#include "ct_itemdrawable/ct_pointsattributescolor.h"
 
-class CTLIBLAS_EXPORT CT_Exporter_LAS : public CT_AbstractExporterAttributesSelection
+class CTLIBLAS_EXPORT CT_Exporter_LAS : public CT_AbstractExporter
 {
     Q_OBJECT
-    typedef CT_AbstractExporterAttributesSelection SuperClass;
+    using SuperClass = CT_AbstractExporter;
 
 public:
-    CT_Exporter_LAS();
+    CT_Exporter_LAS(int subMenuLevel = 0);
     CT_Exporter_LAS(const CT_Exporter_LAS& other);
-    ~CT_Exporter_LAS();
 
-    QString getExporterCustomName() const override;
+    QString displayableName() const final;
 
-    CT_StepsMenu::LevelPredefined getExporterSubMenuName() const override;
-
-    void init() override;
-
-    bool setItemDrawableToExport(const QList<CT_AbstractItemDrawable*> &list) override;
     bool setPointsToExport(const QList<CT_AbstractCloudIndex*> &list) override;
 
-    void saveSettings(SettingsWriterInterface& writer) const override;
-    bool restoreSettings(SettingsReaderInterface& reader) override;
+    void setItemsToExport(const QList<const CT_AbstractItemDrawableWithPointCloud*>& items,
+                          const CT_StdLASPointsAttributesContainer* lasAttributesContainer = nullptr);
 
-    bool canExportPieceByPiece() const override;
-    bool createExportFileForPieceByPieceExport() override;
-    bool exportOnePieceOfDataToFile() override;
-    bool finalizePieceByPieceExport() override;
+    bool canExportPieceByPiece() const final;
+    CT_AbstractPieceByPieceExporter* createPieceByPieceExporter(const QString& outputFilepath) override;
 
     CT_EXPORTER_DECL_COPY(CT_Exporter_LAS)
 
 protected:
-    QList< QPair<QString, CT_AbstractItemDrawableCollectionBuilder*> > createBuilders() const override;
-    bool useSelection(const CT_ItemDrawableHierarchyCollectionWidget *selectorWidget) override;
+    void internalDeclareInputModels(CT_ExporterInModelStructureManager& manager) override;
 
-    bool protectedExportToFile() override;
+    bool internalExportToFile() override;
+
+    bool internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters) override;
+
+    void clearIterators() override;
 
 private:
-    typedef CT_ItemDrawableCollectionBuilderT<CT_StdLASPointsAttributesContainer> LasAttributesBuilder;
+    friend class CT_LASPieceByPiecePrivateExporter;
 
-    struct HeaderBackup {
-        HeaderBackup() : header(NULL), nFiles(0), toolsFormat(NULL) {}
-        ~HeaderBackup() { delete header; delete toolsFormat; }
+    using HandleItemType = CT_HandleInSingularItem<CT_AbstractItemDrawableWithPointCloud>;
 
-        bool isHeaderSameForExport(const CT_LASHeader* header) const;
-        QString previousFilePath() const;
-        QString currentFilePath() const;
-        QString generateFilePath(int n) const;
+    CT_HandleInStdGroup<>                                           m_hInGroup;
+    HandleItemType                                                  m_hInItem;
+    CT_HandleInSingularItem<CT_StdLASPointsAttributesContainer, 0>  m_hInLASAttributesContainer; // optionnal
 
-        CT_LASHeader*               header;
-        QString                     dirPath;
-        int                         nFiles;
-        CT_AbstractLASPointFormat*  toolsFormat;
-    };
+    // TODO :
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInReturnNumber; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInNumberOfReturn; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInClassificationFlag; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInScannerChannel; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInScanDirectionFlag; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInEdgeOfFlightLine; // optionnal
 
-    CT_StdLASPointsAttributesContainer*                                     m_lasContainer;
-    CT_OutAbstractSingularItemModel*                                        m_lasContainerModel;
-    QList<HeaderBackup*>                                                    m_headers;
-    QString                                                                 m_baseFilePath;
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInIntensity; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInClassification; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInUserData; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInPointSourceID; // optionnal
+
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInScanAngle; // optionnal
+
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInGPSTime; // optionnal
+
+    CT_HandleInSingularItem<CT_PointsAttributesColor, 0>            m_hInColor; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInRed; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInGreen; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInBlue; // optionnal
+
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInWavePacketDescriptorIndex; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInByteOffsetToWaveformData; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInWaveformPacketSizeInBytes; // optionnal
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInReturnPointWaveformLocation; // optionnal
+
+    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInNIR; // optionnal
+
+    HandleItemType::const_iterator                                  mIteratorItemBegin;
+    HandleItemType::const_iterator                                  mIteratorItemEnd;
+
+    QList<const CT_AbstractItemDrawableWithPointCloud*>             mItems;
+    const CT_StdLASPointsAttributesContainer*                       mLasContainer;
+    CT_StdLASPointsAttributesContainer                              mLasContainerIfModelNotFound;
+
+    double                                                          mCurrentPieceByPieceProgress;
+    double                                                          mPieceByPieceProgressMultiplicator;
+
+    template<typename HandleType>
+    void findAttributeAndAddToContainer(CT_LasDefine::LASPointAttributesType key, CT_StdLASPointsAttributesContainer* container, HandleType& t) const
+    {
+        for(const CT_AbstractPointAttributesScalar* attribute : t.iterateInputs(m_handleResultExport)) {
+            container->insertPointsAttributesAt(key, attribute);
+            break;
+        }
+    }
 
     /**
-     * @brief Set NULL to m_lasContainer and m_lasContainerModel
+     * @brief Return the point data format to use (check mLasContainer to know where attributes is in the container and select the appropriate format)
      */
-    void clearSelection();
-
-    /**
-     * @brief Create the header
-     * @param rn : the points attributes that represent for each point the "return number"
-     * @param indexes : the list of all indexes that will be exported
-     * @param nPoints : will be filled with the total number of points to write (sum of size of index in indexes)
-     * @return NULL if it was an error otherwiser the header created (don't forget to delete it from memory)
-     */
-    CT_LASHeader* createHeader(const CT_AbstractPointAttributesScalar *rn,
-                               const QList<CT_AbstractPointCloudIndex *> &indexes,
-                               size_t &nPoints) const;
-
-    /**
-     * @brief Write the header of the file
-     * @param stream : the data stream of the file (it will be seek to 0 automatically and set to LittleEndian)
-     * @param header : the header to write
-     */
-    bool writeHeader(QDataStream& stream,
-                     CT_LASHeader *header);
-
-    /**
-     * @brief Return the point data format to use (check m_lasContainer to know where attributes is in the container and select the appropriate format)
-     */
-    int getPointDataFormat() const;
+    quint8 getPointDataFormat() const;
 
     /**
      * @brief Return the length of a point in bytes (use the method "getPointDataFormat" if optFormat == -1, otherwise pass the format to this method)
@@ -106,20 +111,8 @@ private:
      */
     CT_AbstractLASPointFormat* createPointDataFormat(const int &optFormat = -1) const;
 
-    /**
-     * @brief Search an header in the list of header backuped and if has found one return the backup that match with it
-     */
-    HeaderBackup* createOrGetHeaderBackupForHeader(const CT_LASHeader* header) const;
-
-    /**
-     * @brief When you have finished to write the file call this method to save or delete the header backup
-     */
-    void saveOrDeleteHeaderBackup(HeaderBackup* backup, CT_LASHeader* header, bool writeOfFileIsOk);
-
-    /**
-     * @brief Clear all backuped headers
-     */
-    void clearAllBackupedHeaders();
+private slots:
+    void setPieceByPieceProgress(int progress);
 };
 
 #endif // CT_EXPORTER_LAS_H

@@ -281,6 +281,10 @@ data() const
     return mData;
 }
 
+void Connection::setData(void* newData)
+{
+    mData = newData;
+}
 
 ConnectionGraphicsObject&
 Connection::

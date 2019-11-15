@@ -4,6 +4,8 @@
 #include "ct_step/abstract/ct_abstractstep.h"
 
 #include "ct_exporter/abstract/ct_abstractexporter.h"
+#include "ct_exporter/abstract/ct_abstractpiecebypieceexporter.h"
+
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
 #include "ct_itemdrawable/abstract/ct_abstractareashape2d.h"
 
@@ -26,68 +28,47 @@ public:
     CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
+    void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
+    void finalizePreSettings() final;
 
     void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
     void fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog) final;
 
     bool postInputConfigure();
-    void refreshExporterToUse();
+
     bool configureExporter();
 
     void declareOutputModels(CT_StepOutModelStructureManager& manager) final;
 
     void compute() final;
-
 private:
 
     struct AreaData
     {
-        AreaData(CT_AreaShape2DData* area, CT_AbstractExporter* exporter)
+        AreaData(CT_AreaShape2DData* area, CT_AbstractPieceByPieceExporter* exporter)
         {
             _area = area;
             _exporter = exporter;
-            _cloudIndex = new CT_PointCloudIndexVector();
         }
 
         ~AreaData()
         {
             delete _area;
             delete _exporter;
-            delete _cloudIndex;
         }
 
-        void setPointCloudIndex(CT_PointCloudIndexVector* cloudIndex)
-        {
-            delete _cloudIndex;
-            _cloudIndex = cloudIndex;
-        }
-
-        void deletePointCloudIndex()
-        {
-            delete _cloudIndex;
-            _cloudIndex = nullptr;
-        }
-
-        void clearPointCloudIndex()
-        {
-            _cloudIndex->clear();
-        }
-
-        CT_AreaShape2DData* _area;
-        CT_AbstractExporter* _exporter;
-        CT_PointCloudIndexVector* _cloudIndex;
+        CT_AreaShape2DData*                 _area;
+        CT_AbstractPieceByPieceExporter*    _exporter;
     };
 
     CT_HandleInResultGroup<>                                        m_hInCounterResult;
+    CT_HandleInStdZeroOrMoreGroup                                   m_hInZeroOrMoreGroupCounter;
     CT_HandleInStdGroup<>                                           m_hInCounterRootGroup;
     CT_HandleInSingularItem<CT_LoopCounter>                         m_hInLoopCounter;
 
-    CT_HandleInResultGroup<>                                        m_hInSceneResult;
-    CT_HandleInStdGroup<>                                           m_hInSceneRootGroup;
-    CT_HandleInSingularItem<CT_AbstractItemDrawableWithPointCloud>  m_hInScene;
-
     CT_HandleInResultGroup<>                                        m_hInAreaResult;
+    CT_HandleInStdZeroOrMoreGroup                                   m_hInZeroOrMoreGroupArea;
     CT_HandleInStdGroup<>                                           m_hInAreaRootGroup;
     CT_HandleInSingularItem<CT_AbstractAreaShape2D>                 m_hInArea;
     CT_HandleInStdItemAttribute<CT_AbstractCategory::ANY, 0>        m_hInAreaAttribute; // optionnal

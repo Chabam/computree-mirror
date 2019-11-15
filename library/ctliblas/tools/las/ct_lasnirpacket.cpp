@@ -20,7 +20,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASNirPacket::nirPacketTypesNeede
     return l;
 }
 
-void CT_LASNirPacket::writeNirPacket(QDataStream &stream, CT_LasPointInfo *info)
+void CT_LASNirPacket::writeNirPacket(QDataStream &stream, CT_LasPointInfo *info) const
 {
     if(info != nullptr)
     {

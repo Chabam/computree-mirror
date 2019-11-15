@@ -147,6 +147,8 @@ private:
 
     bool                                        mKeyboardShiftModifierEnabled;
 
+    bool                                        mInDestructor;
+
     /**
      * @brief Reset (clear all) before construct
      */
@@ -171,7 +173,7 @@ private:
      * @brief Iterate over all possibilities in the collection "mInModelByPossibility" and create a connection if the possibility is selected. Call
      *        this method after you have constructed nodes to restore existing connections.
      */
-    void createConnectionForSelectedPossibilies();
+    void createConnectionForSelectedPossibilities();
 
     /**
      * @brief Create a connection between an input port and an output port.
@@ -236,6 +238,8 @@ private:
      */
     void displayPreviewConnectionsForModel(CT_AbstractModel* model);
 
+    CT_InStdModelPossibility* findPossibilityBetweenInAndOutModels(const CT_AbstractModel* inOrOutModel1, const CT_AbstractModel* inOrOutModel2) const;
+
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
@@ -272,7 +276,7 @@ private slots:
      *
      * @param index : the index that is entered
      */
-    void convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(const QModelIndex& index);
+    void convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(const QModelIndex& index, bool mouseButtonPressed = false);
 
     /**
      * @brief Connected to signal "FlowScene::connectionSelected" to convert the connection to a real connection if it is a preview.
@@ -307,6 +311,11 @@ private slots:
      * @brief Convert all preview connections displayed to real connections (select possibilities)
      */
     void convertAllPreviewConnectionsToConnections();
+
+    /**
+     * @brief Remove all connections really linked
+     */
+    void removeAllConnections();
 };
 
 /**

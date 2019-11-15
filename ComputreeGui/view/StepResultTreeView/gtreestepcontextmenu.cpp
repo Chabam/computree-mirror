@@ -34,9 +34,10 @@
 #include "dm_guimanager.h"
 #include "view/MainView/gaboutstepdialog.h"
 
-GTreeStepContextMenu::GTreeStepContextMenu(CDM_StepManager &stepManager, QWidget *parent) : m_stepManager(stepManager), QMenu(parent)
+GTreeStepContextMenu::GTreeStepContextMenu(CDM_StepManager &stepManager, QWidget *parent) : QMenu(parent),
+    m_stepManager(stepManager),
+    _selectedStep(nullptr)
 {
-    _selectedStep = nullptr;
 }
 
 void GTreeStepContextMenu::setSelectedStep(CT_VirtualAbstractStep *step)

@@ -11,11 +11,12 @@ size_t CT_LASPointFormat0::sizeInBytes() const
     return sizeof(m_emptyData);
 }
 
-CT_LasPointInfo* CT_LASPointFormat0::write(QDataStream &stream, const CT_Point &p, const size_t &globalIndex)
+CT_LasPointInfo* CT_LASPointFormat0::write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const
 {
     CT_LasPointInfo *info = infoOfPoint(globalIndex);
 
-    header()->inverseTransformPoint(p(CT_Point::X), p(CT_Point::Y), p(CT_Point::Z), m_x, m_y, m_z);
+    qint32                                  m_x, m_y, m_z;
+    header->inverseTransformPoint(p(CT_Point::X), p(CT_Point::Y), p(CT_Point::Z), m_x, m_y, m_z);
 
     // x / y / z
     stream << m_x << m_y << m_z;

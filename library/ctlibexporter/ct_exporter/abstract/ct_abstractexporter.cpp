@@ -7,6 +7,8 @@
 #include "ct_model/inModel/views/ctg_inmodelpossibilitieschoice.h"
 #include "ctlibmodelsextraviews/ctg_modelslinkconfigurationflowview.h"
 
+#include "ct_abstractpiecebypieceexporter.h"
+
 //#define InModelPossibilitiesChoiceWidgetType CTG_InModelPossibilitiesChoice
 #define InModelPossibilitiesChoiceWidgetType CTG_ModelsLinkConfigurationFlowView
 
@@ -199,7 +201,7 @@ void CT_AbstractExporter::declareInputModels(CT_InModelStructureManager& manager
     delete m_inModelsStructureManager;
     m_inModelsStructureManager = nullptr;
 
-    manager.addResult(m_handleResultExport, tr("Résultat"), QString(), true);
+    manager.addResult(m_handleResultExport, tr("Résultat (Exporter : %1)").arg(displayableName()), QString(), true);
     manager.setZeroOrMoreRootGroup(m_handleResultExport, m_handleZeroOrMoreGroupExport);
 
     CT_ExporterInModelStructureManager exporterManager(manager,
@@ -435,19 +437,46 @@ bool CT_AbstractExporter::canExportPieceByPiece() const
     return false;
 }
 
-bool CT_AbstractExporter::createExportFileForPieceByPieceExport()
+CT_AbstractPieceByPieceExporter* CT_AbstractExporter::createPieceByPieceExporter(const QString&)
 {
-    return false;
+    return nullptr;
 }
 
-bool CT_AbstractExporter::exportOnePieceOfDataToFile()
+bool CT_AbstractExporter::exportOnePieceOfDataToFiles(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
 {
-    return false;
+    if(pieceByPieceExporters.isEmpty())
+        return true;
+
+    for(CT_AbstractPieceByPieceExporter* ex : pieceByPieceExporters)
+    {
+        if(!ex->createOrOpenFile())
+            return false;
+    }
+
+    bool ok = internalExportOnePiece(pieceByPieceExporters);
+
+    for(CT_AbstractPieceByPieceExporter* ex : pieceByPieceExporters)
+    {
+        ex->closeFile();
+    }
+
+    return ok;
 }
 
-bool CT_AbstractExporter::finalizePieceByPieceExport()
+bool CT_AbstractExporter::finalizePieceByPieceExport(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters, bool deleteItFromMemory)
 {
-    return false;
+    bool ok = true;
+
+    for(CT_AbstractPieceByPieceExporter* ex : pieceByPieceExporters)
+    {
+        if(!ex->finalizeFile())
+            ok = false;
+
+        if(deleteItFromMemory)
+            delete ex;
+    }
+
+    return ok;
 }
 
 void CT_AbstractExporter::addNewExportFormat(const FileFormat &format)
@@ -502,6 +531,11 @@ int CT_AbstractExporter::maximumItemToExportInFile(const int nToExport) const
     return mustUseModels() ? (mExportEachItemInSeparateFile ? 1 : nToExport) : nToExport;
 }
 
+bool CT_AbstractExporter::internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>&)
+{
+    return false;
+}
+
 bool CT_AbstractExporter::findInputsInOutputsOfThisManagerWithSpecifiedResultModels(const CT_OutModelStructureManager& manager,
                                                                                     QVector<CT_InAbstractResultModel*>::iterator begin,
                                                                                     QVector<CT_InAbstractResultModel*>::iterator end) const
@@ -538,5 +572,7 @@ bool CT_AbstractExporter::findInputsInOutputsOfThisManagerWithSpecifiedResultMod
 void CT_AbstractExporter::cancel()
 {
     m_stop = true;
+
+    emit mustCancel();
 }
 

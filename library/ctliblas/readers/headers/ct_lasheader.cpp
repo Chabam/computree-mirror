@@ -493,6 +493,18 @@ QString CT_LASHeader::toString() const
     return str;
 }
 
+void CT_LASHeader::boundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const
+{
+    min = m_minCoordinates;
+    max = m_maxCoordinates;
+}
+
+void CT_LASHeader::setBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max)
+{
+    m_minCoordinates = min;
+    m_maxCoordinates = max;
+}
+
 QString CT_LASHeader::m_legacyNumberOfPointsByReturn_ToString() const
 {
     QString str = "";

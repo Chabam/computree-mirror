@@ -464,7 +464,7 @@ bool CTG_InModelPossibilitiesChoice::isReadOnly() const
 
 void CTG_InModelPossibilitiesChoice::setInResultModelPossibility(const CT_InStdResultModelPossibility *possibility)
 {
-    _possibility = (CT_InStdResultModelPossibility*)possibility;
+    _possibility = const_cast<CT_InStdResultModelPossibility*>(possibility);
 
     constructModel();
 }

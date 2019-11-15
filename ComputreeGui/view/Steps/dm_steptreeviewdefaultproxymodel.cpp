@@ -155,6 +155,11 @@ void DM_StepTreeViewDefaultProxyModel::setParentStep(CT_VirtualAbstractStep *par
     invalidate();
 }
 
+CT_VirtualAbstractStep* DM_StepTreeViewDefaultProxyModel::parentStep() const
+{
+    return m_parentStep;
+}
+
 QVariant DM_StepTreeViewDefaultProxyModel::data(const QModelIndex &index, int role) const
 {
     if(role == Qt::BackgroundRole) {

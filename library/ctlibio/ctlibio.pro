@@ -77,7 +77,8 @@ HEADERS +=  \
 #    exporters/topology/pb_opfexporter.h \
 #    exporters/xyb/pb_multixybexporter.h \
     exporters/xyb/pb_xybexporter.h \
-    readers/tools/gdal/ct_gdaltools.h
+    readers/tools/gdal/ct_gdaltools.h \
+    exporters/xyb/private/pb_xybpiecebypieceprivateexporter.h
 
 SOURCES += \ 
     readers/ct_reader_ascrgb.cpp \
@@ -121,7 +122,8 @@ SOURCES += \
 #    exporters/profile/pb_profileexporter.cpp \
 #    exporters/topology/pb_opfexporter.cpp \
 #    exporters/xyb/pb_multixybexporter.cpp \
-    exporters/xyb/pb_xybexporter.cpp
+    exporters/xyb/pb_xybexporter.cpp \
+    exporters/xyb/private/pb_xybpiecebypieceprivateexporter.cpp
 
 FORMS += \
     readers/tools/ply/views/gplyreadconfiguration.ui \

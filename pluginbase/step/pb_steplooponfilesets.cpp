@@ -52,7 +52,7 @@ void PB_StepLoopOnFileSets::finalizePreSettings()
     if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
     {
         delete mReader;
-        mReader = reader->createInstance();
+        mReader = reader->copyFull();
     }
 }
 
@@ -175,14 +175,14 @@ void PB_StepLoopOnFileSets::compute()
         _counter->setNTurns(_sets.size());
     }
 
-    addToLogCurrentTurnInformation();
-
     const int index = _counter->currentTurn() - 1;
 
     if((index >= 0) && (index < _sets.size()))
     {
         const Set& set = _sets.at(index);
         _counter->setTurnName(set.mName);
+
+        addToLogCurrentTurnInformation();
 
         for(CT_ResultGroup* result : m_hOutResultLOFS.iterateOutputs()) {
 

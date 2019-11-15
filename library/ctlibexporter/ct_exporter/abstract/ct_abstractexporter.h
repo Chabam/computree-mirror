@@ -21,6 +21,7 @@
 #include "ct_itemdrawable/ct_loopcounter.h"
 
 class CT_AbstractCloudIndex;
+class CT_AbstractPieceByPieceExporter;
 
 #define CT_EXPORTER_DECL_COPY(CLASSNAME) \
 CT_AbstractExporter* createInstance() const override { return new CLASSNAME(); } \
@@ -267,42 +268,46 @@ public:
     const QList<CT_AbstractCloudIndex*>& edgesToExport() const;
 
     /**
-     * @brief return true if the exporter can export data piece by piece
+     * @brief Returns true if the exporter can export datas piece by piece
      *
-     * If it is :
-     * 1) First method createExportFileForPieceByPieceExport() is called to create an empty file
-     * 2) exportOnePieceOfDataToFile() method is called multiple times (for example in a loop)
-     * 3) A the end, finalizePieceByPieceExport() method is called to correctly finish the export (for example by updating the header)
+     * If yes you must do :
+     * 1) First call the method createPieceByPieceExporter() to create an exporter that can export piece by piece (you can
+     *    call it has many times you want if you want to export to multiple file, with different filepath of course)
+     * 2) Configure all piece by piece exporters (set filters).
+     * 3) Call the method exportOnePieceOfDataToFiles() and pass it all configured piece by piece exporters
+     * 3) And finally call the method finalizePieceByPieceExport() to correctly finish the
+     *    export (for example to update the header and merge all temporary files created)
      *
      * Return false by default
      */
     virtual bool canExportPieceByPiece() const;
 
     /**
-     * @brief Create the file, prepared for piece by piece export
+     * @brief Create a special exporter that you can configured (set some filters per example). When you have configured all piece
+     *        by piece exporters that you have created with this method you can pass it to the method exportOnePieceOfDataToFiles()
+     *        to export one piece and to method finalizePieceByPiece() to finalize all files.
      *
-     * @return true is creation was a success
+     *        For developpers you must redefine this method to return your specific piece by piece exporter
+     *        and redefine the method internalExportOnePiece() to really export the piece.
+     *
+     * @param outputFilepath : the filepath used for the file to create
+     * @return nullptr if the filepath is not accepted or if another error happens. Otherwise an object that you
+     *         must delete from memory when you have finished with it.
      */
-    virtual bool createExportFileForPieceByPieceExport();
+    virtual CT_AbstractPieceByPieceExporter* createPieceByPieceExporter(const QString& outputFilepath);
 
     /**
-     * @brief Export one piece of data to the file
-     *
-     * @return true is the export was a success
+     * @brief Pass all configured piece by piece exporters to export one piece
      */
-    virtual bool exportOnePieceOfDataToFile();
+    bool exportOnePieceOfDataToFiles(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters);
 
     /**
-     * @brief Finalize the piece by piece export
-     *
-     * This method is called to correctly finish the export (for example by updating the header)
-     *
-     * @return true is the finalization process was a success
+     * @brief Pass all piece by piece exporters to finalize all files exported piece by piece.
      */
-    virtual bool finalizePieceByPieceExport();
+    bool finalizePieceByPieceExport(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters, bool deleteItFromMemory = true);
 
     /**
-     * @brief Calle it to export to the file (not piece by piece !)
+     * @brief Call it to export to the file (not piece by piece !)
      */
     bool exportToFile();
 
@@ -364,6 +369,15 @@ protected:
       */
     virtual bool internalExportToFile() = 0;
 
+    /**
+     * @brief You must redefine it to export one piece. Before this method is called this class has called the method
+     *        createOrOpenFile() of each piece by piece exporters and when this method is finished the class will call the
+     *        method closeFile() of each piece by piece exporters. You must pass to your specific exporters the element to export
+     *        per example the point, his attributes, etc... and the piece by piece exporter must call his filters to know if
+     *        the element can be exported or not in his file.
+     */
+    virtual bool internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters);
+
     void setMustUseModels(bool useModels);
 
     bool mustUseModels() const;
@@ -377,6 +391,7 @@ protected:
      * @return N items maximum to export in the current file or "nToExport" if no limit.
      */
     int maximumItemToExportInFile(const int nToExport) const;
+
 
 private:
     CT_InModelStructureManager                                  mInModelSManager;
@@ -443,6 +458,8 @@ signals:
      * @brief signal to know the progress of export
      */
     void exportInProgress(int progress);
+
+    void mustCancel();
 };
 
 #endif // CT_ABSTRACTEXPORTER_H

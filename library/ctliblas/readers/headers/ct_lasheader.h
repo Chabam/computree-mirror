@@ -28,7 +28,6 @@ public:
 
     CT_ITEM_COPY_IMP(CT_LASHeader)
 
-
     char        m_fileSignature[4];
     quint16     m_fileSourceID;
     quint16     m_globalEncoding;
@@ -124,6 +123,9 @@ public:
      */
     QString toString() const;
 
+    bool hasBoundingBox() const final {return true;}
+    void boundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const final;
+    void setBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max);
 
     inline QString get_fileSignature() const {return QString(m_fileSignature);} //
     inline quint16 get_fileSourceID() const {return m_fileSourceID;}

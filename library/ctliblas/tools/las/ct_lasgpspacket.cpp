@@ -20,7 +20,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASGpsPacket::gpsPacketTypesNeede
     return l;
 }
 
-void CT_LASGpsPacket::writeGpsPacket(QDataStream &stream, CT_LasPointInfo *info)
+void CT_LASGpsPacket::writeGpsPacket(QDataStream &stream, CT_LasPointInfo *info) const
 {
     if(info != nullptr)
     {

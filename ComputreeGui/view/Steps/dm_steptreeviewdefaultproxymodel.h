@@ -109,6 +109,11 @@ public slots:
      */
     void setParentStep(CT_VirtualAbstractStep *parent);
 
+    /**
+     * @brief Returns the current parent step
+     */
+    CT_VirtualAbstractStep* parentStep() const;
+
 protected:
     /**
      * @brief Check if the row is accepted or not

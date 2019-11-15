@@ -272,7 +272,15 @@ bool CT_StandardItemGroup::removeSingularItem(const CT_AbstractSingularItemDrawa
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
-    return removeSingularItemWithOutModel(static_cast<DEF_CT_AbstractItemDrawableModelOut*>(item->model()));
+    ItemContainerType* ct = itemContainerWithOutModel(item->model());
+
+    if(ct != nullptr && ct->item() == item)
+    {
+        ct->setWillBeRemovedLater();
+        return true;
+    }
+
+    return false;
 }
 
 bool CT_StandardItemGroup::containsSingularItemInSelectedPossibilitiesOfInModel(const DEF_CT_AbstractItemDrawableModelIn* inModel) const
@@ -298,24 +306,16 @@ bool CT_StandardItemGroup::containsSingularItemWithOutModel(const DEF_CT_Abstrac
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
-    if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() != model()->uniqueIndex())
-        return false;
-
-    ItemContainerType* ct = itemContainerWithOutModel(outModel);
-
-    if(ct == nullptr)
-        return false;
-
-    return !ct->willBeRemovedLater();
+    return singularItemWithOutModel(outModel) != nullptr;
 }
 
 bool CT_StandardItemGroup::containsSingularItem(const CT_AbstractSingularItemDrawable* item) const
 {
     Q_ASSERT(item != nullptr);
 
-    QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
+    QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
-    return containsSingularItemWithOutModel(static_cast<DEF_CT_AbstractItemDrawableModelOut*>(item->model()));
+    return item == internalSingularItemWithOutModel(item->model());
 }
 
 int CT_StandardItemGroup::nSingularItem() const
@@ -493,14 +493,7 @@ CT_StandardItemGroup::SingularItemIterator CT_StandardItemGroup::backupSingularI
 
 CT_AbstractSingularItemDrawable* CT_StandardItemGroup::singularItemWithOutModel(const DEF_CT_AbstractItemDrawableModelOut* outModel) const
 {
-    Q_ASSERT(outModel != nullptr);
-    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
-
-    QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
-
-    const ItemContainerType* ct = itemContainerWithOutModel(outModel);
-
-    return ((ct == nullptr) || ct->willBeRemovedLater()) ? nullptr : ct->item();
+    return internalSingularItemWithOutModel(outModel);
 }
 
 bool CT_StandardItemGroup::visitSingularItemsInSelectedPossibilitiesOfInModel(const DEF_CT_AbstractItemDrawableModelIn* inModel,
@@ -512,7 +505,7 @@ bool CT_StandardItemGroup::visitSingularItemsInSelectedPossibilitiesOfInModel(co
 
     const auto visitorAdapter = [this, &visitor](const CT_InStdModelPossibility* possibility) -> bool {
 
-        const CT_AbstractSingularItemDrawable* item = this->singularItemWithOutModel(static_cast<DEF_CT_AbstractItemDrawableModelOut*>(possibility->outModel()));
+        const CT_AbstractSingularItemDrawable* item = this->internalSingularItemWithOutModel(possibility->outModel());
 
         if(item != nullptr) {
             if(!visitor(item))
@@ -1113,15 +1106,24 @@ CT_StandardItemGroup::IChildrensIteratorQtStylePtr CT_StandardItemGroup::createQ
 
     QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
 
-    ItemContainerType* ct = itemContainerWithOutModel(outModel);
+    CT_AbstractSingularItemDrawable* item = internalSingularItemWithOutModel(outModel);
 
-    if(ct != nullptr)
-    {
-        if(!ct->willBeRemovedLater())
-            return IChildrensIteratorQtStylePtr(new ItemQtIterator(ct->item()));
-    }
+    if(item != nullptr)
+        return IChildrensIteratorQtStylePtr(new ItemQtIterator(item));
 
     return IChildrensIteratorQtStylePtr(nullptr);
+}
+
+CT_AbstractSingularItemDrawable*CT_StandardItemGroup::internalSingularItemWithOutModel(const CT_OutAbstractModel* outModel) const
+{
+    Q_ASSERT(outModel != nullptr);
+    Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == model()->uniqueIndex());
+
+    QMutexLocker locker(const_cast<QMutex*>(m_lockAccessTool.m_mutexAccessItem));
+
+    const ItemContainerType* ct = itemContainerWithOutModel(outModel);
+
+    return ((ct == nullptr) || ct->willBeRemovedLater()) ? nullptr : ct->item();
 }
 
 CT_StandardItemGroup::ItemContainerType* CT_StandardItemGroup::itemContainerWithOutModel(const CT_OutAbstractModel* outModel) const

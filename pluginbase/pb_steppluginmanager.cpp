@@ -65,6 +65,7 @@
 #include "exporters/grid3d/pb_grid3dastableexporter.h"
 */
 #include "exporters/xyb/pb_xybexporter.h"
+#include "ctliblas/exporters/ct_exporter_las.h"
 /*
 #include "exporters/xyb/pb_multixybexporter.h"
 #include "exporters/ascrgb/pb_ascrgbexporter.h"
@@ -74,7 +75,6 @@
 #include "exporters/pbm/pb_pbmexporter.h"
 #include "exporters/pgm/pb_pgmexporter.h"
 #include "exporters/polygon2d/pb_polygon2dexporter.h"
-#include "ctliblas/exporters/ct_exporter_las.h"
 #include "exporters/gdal/pb_gdalexporter.h"
 #include "exporters/ascid/pb_ascidexporter.h"
 
@@ -283,8 +283,8 @@ bool PB_StepPluginManager::loadExporters()
     sep->addExporter(new PB_MeshObjExporter());
     sep->addExporter(new PB_OPFExporter());
     sep->addExporter(new PB_PbmExporter());
-    sep->addExporter(new PB_PgmExporter());
-    sep->addExporter(new CT_Exporter_LAS());*/
+    sep->addExporter(new PB_PgmExporter());*/
+    sep->addExporter(new CT_Exporter_LAS(CT_StepsMenu::LP_Points));
 
 #ifdef USE_GDAL
     GDALDriverManager *driverManager = GetGDALDriverManager();

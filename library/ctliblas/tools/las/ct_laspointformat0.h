@@ -21,12 +21,10 @@ public:
     /**
      * @brief Write the point 'globalIndex' (index in the global pointCloud)
      */
-    virtual CT_LasPointInfo* write(QDataStream &stream, const CT_Point &p, const size_t &globalIndex);
+    virtual CT_LasPointInfo* write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const;
 
 private:
     char                                    m_emptyData[20];
-    qint32                                  m_x, m_y, m_z;
-    CT_AbstractCoordinateSystem::realEx     m_xc, m_yc, m_zc;
 
 protected:
     /**

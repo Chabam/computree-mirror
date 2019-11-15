@@ -24,7 +24,7 @@ public:
     /**
      * @brief Write the information for the wave packet
      */
-    void writeWavePacket(QDataStream &stream, CT_LasPointInfo *info);
+    void writeWavePacket(QDataStream &stream, CT_LasPointInfo *info) const;
 
 private:
     char  m_emptyData[29];

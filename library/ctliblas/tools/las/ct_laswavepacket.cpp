@@ -23,7 +23,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASWavePacket::wavePacketTypesNee
     return l;
 }
 
-void CT_LASWavePacket::writeWavePacket(QDataStream &stream, CT_LasPointInfo *info)
+void CT_LASWavePacket::writeWavePacket(QDataStream &stream, CT_LasPointInfo *info) const
 {
     if(info != nullptr)
     {

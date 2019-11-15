@@ -87,6 +87,7 @@ public:
   removeFromNodes() const;
 
   void* data() const;
+  void setData(void* newData);
 
 public:
 

@@ -155,11 +155,13 @@ bool PB_StepGenericExporter::postInputConfigure()
     if(exportFileName.isEmpty())
         return false;
 
+    if (_adaptative || _multipleExport)
+        exportFileName = QDir::toNativeSeparators(exportFileName + "/");
+
     if(!_exporter->configure())
         return false;
 
     QFileInfo info(exportFileName);
-    //setDefaultExportPath(info.absoluteDir().absolutePath());
     _exportFilename = exportFileName;
     _exporter->setFilePath(_exportFilename);
 

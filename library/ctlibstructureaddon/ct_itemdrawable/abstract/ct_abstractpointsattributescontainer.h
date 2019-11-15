@@ -22,6 +22,8 @@ public:
      */
     virtual CT_AbstractPointsAttributes* pointsAttributesAt(const int &key) const;
 
+    virtual void clearPointsAttributesCollection();
+
 private:
     QHash<int, CT_AbstractPointsAttributes*>   m_att;
 

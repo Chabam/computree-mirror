@@ -1,7 +1,7 @@
 #include "ct_sameheaderformatmerger_las.h"
 
 #include "ct_sameheadermerger_las.h"
-#include "readers/ct_reader_las.h"
+#include "readers/ct_reader_lasv2.h"
 
 #include <QSharedPointer>
 
@@ -35,7 +35,7 @@ void CT_SameHeaderFormatMerger_LAS::process()
             HeaderInfo() {}
             HeaderInfo(const QString& filepath) {
                 headerPtr = QSharedPointer<CT_LASHeader>(new CT_LASHeader());
-                headerPtr->setFile(filepath);
+                headerPtr->setFilePath(filepath);
                 filePathOfFiles.append(filepath);
             }
 
@@ -152,7 +152,7 @@ void CT_SameHeaderFormatMerger_LAS::process()
         }
 
         // Merge complex
-        CT_LASHeader* finalHeaderPtr = (CT_LASHeader*)filesInfo.first().header().copy(NULL, NULL, CT_ResultCopyModeList());
+        CT_LASHeader* finalHeaderPtr = (CT_LASHeader*)filesInfo.first().header().copy(nullptr, nullptr);
         CT_LASHeader& finalHeader = *finalHeaderPtr;
 
         for(int i=1; i<nFilesInfo; ++i) {
@@ -203,8 +203,11 @@ void CT_SameHeaderFormatMerger_LAS::process()
                             qint32 x, y, z;
                             double xc, yc, zc;
 
-                            for(size_t i=0; i<nPoints; ++i) {
-                                CT_Reader_LAS::staticReadCurrentPointCoordinateAndArraysOfDatas(inStream, inInfo.header(), x, y, z, datas);
+                            for(size_t i=0; i<nPoints; ++i)
+                            {
+                                inStream >> x >> y >> z;
+                                datas.resize(inInfo.header().get_pointDataRecordLength() - 12); // 12 = (3 * qint32) [x, y, z]
+                                inStream.readRawData(&datas[0], int(datas.size()));
 
                                 inInfo.header().transformPoint(x, y, z, xc, yc, zc);
 
@@ -252,7 +255,7 @@ QString CT_SameHeaderFormatMerger_LAS::errorMessage() const
 
 bool CT_SameHeaderFormatMerger_LAS::readHeaderAndSetError(CT_LASHeader &header)
 {
-    QFile file(header.getFileInfo().absoluteFilePath());
+    QFile file(header.fileInfo().absoluteFilePath());
 
     if(file.open(QFile::ReadOnly)) {
         QDataStream stream(&file);
@@ -261,7 +264,7 @@ bool CT_SameHeaderFormatMerger_LAS::readHeaderAndSetError(CT_LASHeader &header)
         QString error;
 
         if(!header.read(stream, error)) {
-            m_error = QObject::tr("(Impossible de lire l'en-tête du fichier \"%1\". %2").arg(header.getFileInfo().absoluteFilePath()).arg(error);
+            m_error = QObject::tr("(Impossible de lire l'en-tête du fichier \"%1\". %2").arg(header.fileInfo().absoluteFilePath()).arg(error);
             return false;
         }
 
@@ -269,14 +272,14 @@ bool CT_SameHeaderFormatMerger_LAS::readHeaderAndSetError(CT_LASHeader &header)
         return true;
     }
 
-    m_error = QObject::tr("Impossible d'ouvrir le fichier \"%1\"").arg(header.getFileInfo().absoluteFilePath());
+    m_error = QObject::tr("Impossible d'ouvrir le fichier \"%1\"").arg(header.fileInfo().absoluteFilePath());
     return false;
 }
 
 bool CT_SameHeaderFormatMerger_LAS::checkHeadersAndSetError(const CT_LASHeader &h1, const CT_LASHeader &h2)
 {
     if(!h1.isHeaderAlmostSimilar(h2, CT_LASHeader::CO_Format | CT_LASHeader::CO_Version)) {
-        m_error = QObject::tr("L'en-tête du fichier \"%1\" n'est pas compatible avec l'en-tête du fichier \"%2\"").arg(((CT_LASHeader &)h2).getFileInfo().absoluteFilePath()).arg(((CT_LASHeader &)h1).getFileInfo().absoluteFilePath());
+        m_error = QObject::tr("L'en-tête du fichier \"%1\" n'est pas compatible avec l'en-tête du fichier \"%2\"").arg(((CT_LASHeader &)h2).fileInfo().absoluteFilePath()).arg(((CT_LASHeader &)h1).fileInfo().absoluteFilePath());
         return false;
     }
 

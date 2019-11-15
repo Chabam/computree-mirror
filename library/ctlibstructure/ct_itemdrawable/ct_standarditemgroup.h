@@ -764,6 +764,13 @@ protected:
      */
     IChildrensIteratorQtStylePtr createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const override;
 
+    /**
+     * @brief Returns the singular item that use the specified output model
+     * @param outModel : the model of the item to find. The model of the item will be used to find it in the collection.
+     * @return nullptr if no item that use this model has been found or if it must be removed later
+     */
+    CT_AbstractSingularItemDrawable* internalSingularItemWithOutModel(const CT_OutAbstractModel* outModel) const;
+
 protected:
     template<typename CollectionType>
     class CollectionQtIterator : public IChildrensIteratorQtStyle {

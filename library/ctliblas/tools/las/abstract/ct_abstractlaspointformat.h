@@ -22,26 +22,6 @@ public:
     virtual size_t sizeInBytes() const = 0;
 
     /**
-     * @brief Set LAS Header
-     */
-    void setHeader(const CT_LASHeader *header);
-
-    /**
-     * @brief LAS Header used
-     */
-    inline CT_LASHeader* header() const { return m_lasHeader; }
-
-    /**
-     * @brief Set attributes available to export a point
-     */
-    void setAttributes(const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar*> &attributes);
-
-    /**
-     * @brief Return attributes used to write the point
-     */
-    const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar*>& attributes() const;
-
-    /**
      * @brief Clear infos of all points
      */
     void clearInfos();
@@ -52,7 +32,7 @@ public:
      * @param fastButConsumeMoreMemory : if true the init will be faster but it will consume more memory than if the parameter is false. This is
      *                                   because to be faster you must use an array and to consume less memory you must use a hashtable.
      */
-    bool initWrite(bool fastButConsumeMoreMemory = false);
+    bool initWrite(const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> &attributes, bool fastButConsumeMoreMemory = false);
 
     /**
      * @brief Return the info for point at globalIndex
@@ -67,18 +47,16 @@ public:
     /**
      * @brief Write the point 'globalIndex' (index in the global pointCloud)
      */
-    virtual CT_LasPointInfo* write(QDataStream &stream, const CT_Point &p, const size_t &globalIndex) = 0;
+    virtual CT_LasPointInfo* write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const = 0;
 
 private:
-    // attributes to be used to write points
-    QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar*>  m_attributes;
-
     // key = globalIndex of the point, value = information of the point
     QHash<size_t, CT_LasPointInfo*>     m_infos;
     // index = globalIndex, value = information of the point
     std::vector<CT_LasPointInfo>        m_infosFaster;
 
-    CT_LASHeader                        *m_lasHeader;
+    QMutex                              mMutexInitialization;
+    bool                                mInitialized;
 
 protected:
 

@@ -81,7 +81,7 @@ bool PB_StepLoadFileByName::postInputConfigure()
         if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
         {
             delete mReader;
-            mReader = reader->createInstance();
+            mReader = reader->copyFull();
         }
 
         if(mReader->setFilePath(fileList.first())) {
@@ -191,7 +191,7 @@ bool PB_StepLoadFileByName::restorePostSettings(SettingsReaderInterface &reader)
         return false;
 
     delete mReader;
-    mReader = fReader->createInstance();
+    mReader = fReader->copyFull();
 
     return mReader->restoreSettings(reader);
 }

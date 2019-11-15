@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
     outManager1.addItem(handleGroupOut1_2, handleItemOut2_1, "Item 2_1");
     outManager1.addItem(handleGroupOut1_2, handleItemOut2_2, "Item 2_2");
     outManager1.addItem(handleGroupOut1_2, handleItemOut2_3, "Item 2_3");
-    for(int i=0;i<100;++i)
+    for(int i=0;i<10;++i)
     {
         handleItemsOut2_x.append(new CT_HandleOutItem<ItemForTest>());
         outManager1.addItem(handleGroupOut1_2, *handleItemsOut2_x.last(), QString("Item 2_%1").arg(i+4));

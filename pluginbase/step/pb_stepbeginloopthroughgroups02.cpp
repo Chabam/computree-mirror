@@ -58,8 +58,6 @@ void PB_StepBeginLoopThroughGroups02::compute()
         _counter->setNTurns(_ids.isEmpty() ? 1 : _ids.size());
     }
 
-    addToLogCurrentTurnInformation();
-
     if((currentTurn >= 0) && ((currentTurn - 1) < _ids.size()))
     {
         const CT_AbstractSingularItemDrawable* currentItem = _ids.at(currentTurn - 1);
@@ -69,6 +67,8 @@ void PB_StepBeginLoopThroughGroups02::compute()
         const QString turnName = (att != nullptr) ? att->toString(currentItem, nullptr) : QString("Turn%1").arg(currentTurn);
 
         _counter->setTurnName(turnName);
+
+        addToLogCurrentTurnInformation();
 
         for(CT_StandardItemGroup* group : m_hInGroup.iterateOutputs(m_hInResultCopy))
         {

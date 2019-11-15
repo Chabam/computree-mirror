@@ -55,7 +55,7 @@ void PB_StepCreateReaderList::finalizePreSettings()
     if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
     {
         delete mReader;
-        mReader = reader->createInstance();
+        mReader = reader->copyFull();
     }
 }
 

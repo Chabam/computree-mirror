@@ -24,7 +24,7 @@ public:
     /**
      * @brief Write the information for the nir packet
      */
-    void writeNirPacket(QDataStream &stream, CT_LasPointInfo *info);
+    void writeNirPacket(QDataStream &stream, CT_LasPointInfo *info) const;
 
 private:
     char  m_emptyData[2];
