@@ -9,9 +9,9 @@ size_t CT_LASPointFormat4::sizeInBytes() const
     return CT_LASPointFormat1::sizeInBytes() + wavePacketSizeInBytes();
 }
 
-CT_LasPointInfo* CT_LASPointFormat4::write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const
+const CT_LasPointInfo& CT_LASPointFormat4::write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const
 {
-    CT_LasPointInfo *info = CT_LASPointFormat1::write(stream, header, p, globalIndex);
+    const CT_LasPointInfo& info = CT_LASPointFormat1::write(stream, header, p, globalIndex);
 
     writeInfoFormat4(stream, info);
 
@@ -26,7 +26,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASPointFormat4::typesToSearch()
     return l;
 }
 
-void CT_LASPointFormat4::writeInfoFormat4(QDataStream &stream, CT_LasPointInfo *info) const
+void CT_LASPointFormat4::writeInfoFormat4(QDataStream &stream, const CT_LasPointInfo& info) const
 {
     writeWavePacket(stream, info);
 }

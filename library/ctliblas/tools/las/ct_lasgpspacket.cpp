@@ -20,15 +20,8 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASGpsPacket::gpsPacketTypesNeede
     return l;
 }
 
-void CT_LASGpsPacket::writeGpsPacket(QDataStream &stream, CT_LasPointInfo *info) const
+void CT_LASGpsPacket::writeGpsPacket(QDataStream &stream, const CT_LasPointInfo& info) const
 {
-    if(info != nullptr)
-    {
-        CT_WRITE_LAS_SCALAR(info->m_gpsT, double) // gps time
-    }
-    else
-    {
-        stream.writeRawData(&m_emptyData[0], sizeof(m_emptyData));
-    }
+    CT_WRITE_LAS_SCALAR(info.m_gpsT, double) // gps time
 }
 

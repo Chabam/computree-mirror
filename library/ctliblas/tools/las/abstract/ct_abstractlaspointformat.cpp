@@ -4,7 +4,8 @@
 #include "ct_pointcloud/ct_internalpointcloud.h"
 
 CT_AbstractLASPointFormat::CT_AbstractLASPointFormat() :
-    mInitialized(false)
+    mInitialized(false),
+    mReturnNumberInitialized(false)
 {
 }
 
@@ -13,7 +14,7 @@ CT_AbstractLASPointFormat::~CT_AbstractLASPointFormat()
     clearInfos();
 }
 
-bool CT_AbstractLASPointFormat::initWrite(const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *>& attributes, bool fastButConsumeMoreMemory)
+bool CT_AbstractLASPointFormat::initWrite(const AllAttributesCollection& attributes, const QList<const CT_PointsAttributesColor*>& colors)
 {
     QMutexLocker locker(&mMutexInitialization);
 
@@ -23,62 +24,48 @@ bool CT_AbstractLASPointFormat::initWrite(const QHash<CT_LasDefine::LASPointAttr
     // get type of attribute to search for point format X (from derivated class)
     QList<CT_LasDefine::LASPointAttributesType> types = typesToSearch();
 
-    QListIterator<CT_LasDefine::LASPointAttributesType> itT(types);
-
-    if(itT.hasNext()) {
-
-        if(fastButConsumeMoreMemory)
+    if(!types.isEmpty())
+    {
+        if(!mReturnNumberInitialized)
             m_infosFaster.resize(PS_REPOSITORY->internalConstPointCloud()->size());
+        else
+            types.removeOne(CT_LasDefine::Return_Number);
 
-        // for each type of attribute
-        while(itT.hasNext())
+        if(!colors.isEmpty())
         {
-            CT_LasDefine::LASPointAttributesType type = itT.next();
+            bool removed = types.removeOne(CT_LasDefine::Red);
+            removed |= types.removeOne(CT_LasDefine::Green);
+            removed |= types.removeOne(CT_LasDefine::Blue);
 
-            // get it in the attributes map
-            CT_AbstractPointAttributesScalar *scalar = attributes.value(type, nullptr);
-
-            // if exist
-            if(scalar != nullptr)
+            if(removed)
             {
-                // get the point cloud index
-                const CT_AbstractPointCloudIndex *indexes = scalar->pointCloudIndex();
-
-                if(indexes != nullptr)
+                for(const CT_PointsAttributesColor* color : colors)
                 {
-                    size_t pIndex = 0;
+                    // get the point cloud index
+                    const CT_AbstractPointCloudIndex* indexes = color->pointCloudIndex();
 
-                    CT_PointIterator it(indexes);
+                    if(indexes != nullptr)
+                    {
+                        size_t pIndex = 0;
 
-                    // for each index
-                    while(it.hasNext()) {
+                        CT_PointIterator it(indexes);
 
-                        // get info for this global point index
-                        CT_LasPointInfo *info = nullptr;
-
-                        if(fastButConsumeMoreMemory) {
-                            info = &m_infosFaster[it.next().cIndex()];
-                        } else {
-                            info = m_infos.value(it.next().cIndex(), nullptr);
-
-                            // if info doesn't already exist
-                            if(info == nullptr)
-                            {
-                                // create it
-                                info = new CT_LasPointInfo();
-
-                                // insert in the info map
-                                m_infos.insert(it.cIndex(), info);
-                            }
+                        // for each index
+                        while(it.hasNext())
+                        {
+                            // get info for this global point index and set it the attribute
+                            m_infosFaster[it.next().cIndex()].setColorAttribute(color, pIndex);
+                            ++pIndex;
                         }
-
-                        // and set it the attribute
-                        info->setAttribute(type, scalar, pIndex);
-
-                        ++pIndex;
                     }
                 }
             }
+        }
+
+        // for each type of attribute
+        for(CT_LasDefine::LASPointAttributesType type : types)
+        {
+            initType(type, attributes);
         }
     }
 
@@ -87,15 +74,53 @@ bool CT_AbstractLASPointFormat::initWrite(const QHash<CT_LasDefine::LASPointAttr
     return true;
 }
 
+void CT_AbstractLASPointFormat::initType(const CT_LasDefine::LASPointAttributesType& type, const AllAttributesCollection& attributes)
+{
+    const QList<const CT_AbstractPointAttributesScalar*> scalarsForType = attributes.values(type);
+
+    for(const CT_AbstractPointAttributesScalar* scalar : scalarsForType)
+    {
+        // get the point cloud index
+        const CT_AbstractPointCloudIndex* indexes = scalar->pointCloudIndex();
+
+        if(indexes != nullptr)
+        {
+            size_t pIndex = 0;
+
+            CT_PointIterator it(indexes);
+
+            // for each index
+            while(it.hasNext())
+            {
+                // get info for this global point index and set it the attribute
+                m_infosFaster[it.next().cIndex()].setAttribute(type, scalar, pIndex);
+                ++pIndex;
+            }
+        }
+    }
+}
+
 void CT_AbstractLASPointFormat::clearInfos()
 {
     QMutexLocker locker(&mMutexInitialization);
-
-    qDeleteAll(m_infos.begin(), m_infos.end());
-    m_infos.clear();
 
     m_infosFaster.resize(0);
     m_infosFaster.shrink_to_fit();
 
     mInitialized = false;
+    mReturnNumberInitialized = false;
+}
+
+bool CT_AbstractLASPointFormat::initReturnNumber(const CT_AbstractLASPointFormat::AllAttributesCollection& attributes)
+{
+    QMutexLocker locker(&mMutexInitialization);
+
+    if(mInitialized || mReturnNumberInitialized)
+        return true;
+
+    m_infosFaster.resize(PS_REPOSITORY->internalConstPointCloud()->size());
+    initType(CT_LasDefine::Return_Number, attributes);
+
+    mReturnNumberInitialized = true;
+    return true;
 }

@@ -485,7 +485,7 @@ DocumentInterface *GDocumentManagerView::new3DDocument(bool fromGui, bool inLoad
     }
 
     connect(doc, SIGNAL(syncEnabled(const GDocumentViewForGraphics*)), m_syncMan, SLOT(addAllGraphicsFromDocumentView(const GDocumentViewForGraphics*)));
-    connect(doc, SIGNAL(syncDisabled(const GDocumentViewForGraphics*)), m_syncMan, SLOT(removeDocumentView(const GDocumentViewForGraphics*)));
+    connect(doc, SIGNAL(syncDisabled(const GDocumentViewForGraphics*)), m_syncMan, SLOT(removeDocumentView(const GDocumentViewForGraphics*)), Qt::DirectConnection);
 
     addDocumentView(*doc, fromGui, inLoadConfigurationFromMainWindow);
 

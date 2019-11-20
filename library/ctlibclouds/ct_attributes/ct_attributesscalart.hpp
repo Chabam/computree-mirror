@@ -111,12 +111,7 @@ size_t CT_AttributesScalarT<SCALAR>::attributesSize() const
 template<typename SCALAR>
 void CT_AttributesScalarT<SCALAR>::initMinMax()
 {
-    m_min = std::numeric_limits<SCALAR>::max();
-
-    if(std::numeric_limits<SCALAR>::is_signed)
-        m_max = -std::numeric_limits<SCALAR>::max();
-    else
-        m_max = std::numeric_limits<SCALAR>::min();
+    internalInitMinMax(std::integral_constant<bool, std::numeric_limits<SCALAR>::is_signed>());
 }
 
 template<typename SCALAR>

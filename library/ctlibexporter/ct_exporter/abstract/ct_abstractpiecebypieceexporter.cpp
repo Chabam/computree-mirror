@@ -13,22 +13,33 @@ CT_AbstractPieceByPieceExporter::CT_AbstractPieceByPieceExporter() :
     setFaceFilter(nullptr);
 }
 
-bool CT_AbstractPieceByPieceExporter::createOrOpenFile()
+bool CT_AbstractPieceByPieceExporter::isFileCreated() const
 {
+    return mFileCreated;
+}
+
+bool CT_AbstractPieceByPieceExporter::createFile()
+{
+    if(mFileCreated)
+        return false;
+
     mMustCancel = false;
     setProgress(0);
     setErrorMessage(QString());
 
-    if(mFileCreated)
-        return internalOpenFileInAppendMode();
+    return (mFileCreated = internalCreateFile());
+}
 
-    if(internalCreateFile())
-    {
-        mFileCreated = true;
-        return internalOpenFileInAppendMode();
-    }
+bool CT_AbstractPieceByPieceExporter::openFile()
+{
+    if(!mFileCreated)
+        return false;
 
-    return false;
+    mMustCancel = false;
+    setProgress(0);
+    setErrorMessage(QString());
+
+    return internalOpenFileInAppendMode();
 }
 
 void CT_AbstractPieceByPieceExporter::closeFile()
@@ -38,11 +49,12 @@ void CT_AbstractPieceByPieceExporter::closeFile()
 
 bool CT_AbstractPieceByPieceExporter::finalizeFile()
 {
+    mFileCreated = false;
+
     if(mMustCancel)
         return true;
 
     const bool ok = internalFinalizeFile();
-    mFileCreated = false;
 
     return ok;
 }

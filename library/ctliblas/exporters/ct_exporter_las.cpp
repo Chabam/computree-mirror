@@ -15,7 +15,7 @@
 #include "ctliblas/tools/las/ct_laspointformat10.h"
 
 CT_Exporter_LAS::CT_Exporter_LAS(int subMenuLevel) : SuperClass(subMenuLevel),
-    mLasContainer(nullptr)
+    mToolsFormat(nullptr)
 {
     setCanExportPoints(true);
     addNewExportFormat(FileFormat("las", tr("Fichiers LAS .las")));
@@ -24,7 +24,6 @@ CT_Exporter_LAS::CT_Exporter_LAS(int subMenuLevel) : SuperClass(subMenuLevel),
 
 CT_Exporter_LAS::CT_Exporter_LAS(const CT_Exporter_LAS &other) : SuperClass(other)
 {
-    mLasContainer = nullptr;
 }
 
 QString CT_Exporter_LAS::displayableName() const
@@ -55,11 +54,17 @@ bool CT_Exporter_LAS::setPointsToExport(const QList<CT_AbstractCloudIndex*> &lis
 }
 
 void CT_Exporter_LAS::setItemsToExport(const QList<const CT_AbstractItemDrawableWithPointCloud*>& items,
-                                       const CT_StdLASPointsAttributesContainer* lasAttributesContainer)
+                                       const QList<const CT_StdLASPointsAttributesContainer*>& lasAttributesContainers)
 {
     setMustUseModels(false);
+    clearIterators();
+    clearAttributesClouds();
     mItems = items;
-    mLasContainer = lasAttributesContainer;
+
+    for(const CT_StdLASPointsAttributesContainer* container : lasAttributesContainers)
+    {
+        findAttributesInContainerAndAddItToCollection(container);
+    }
 }
 
 bool CT_Exporter_LAS::canExportPieceByPiece() const
@@ -123,41 +128,50 @@ bool CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPiece
 {
     if(mustUseModels())
     {
-        mLasContainer = nullptr;
-
-        for(const CT_StdLASPointsAttributesContainer* container : m_hInLASAttributesContainer.iterateInputs(m_handleResultExport)) {
-            mLasContainer = container;
-            break;
-        }
-
-        if(mLasContainer == nullptr)
+        if(mToolsFormat.isNull())
         {
-            mLasContainerIfModelNotFound.clearPointsAttributesCollection();
-            CT_StdLASPointsAttributesContainer* container = &mLasContainerIfModelNotFound;
+            bool atLeastOneContainer = false;
 
-            findAttributeAndAddToContainer(CT_LasDefine::Return_Number, container, m_hInReturnNumber);
-            findAttributeAndAddToContainer(CT_LasDefine::Number_of_Returns, container, m_hInNumberOfReturn);
-            findAttributeAndAddToContainer(CT_LasDefine::Classification_Flags, container, m_hInClassificationFlag);
-            findAttributeAndAddToContainer(CT_LasDefine::Scanner_Channel, container, m_hInScannerChannel);
-            findAttributeAndAddToContainer(CT_LasDefine::Scan_Direction_Flag, container, m_hInScanDirectionFlag);
-            findAttributeAndAddToContainer(CT_LasDefine::Edge_of_Flight_Line, container, m_hInEdgeOfFlightLine);
-            findAttributeAndAddToContainer(CT_LasDefine::Intensity, container, m_hInIntensity);
-            findAttributeAndAddToContainer(CT_LasDefine::Classification, container, m_hInClassification);
-            findAttributeAndAddToContainer(CT_LasDefine::User_Data, container, m_hInUserData);
-            findAttributeAndAddToContainer(CT_LasDefine::Point_Source_ID, container, m_hInPointSourceID);
-            findAttributeAndAddToContainer(CT_LasDefine::Scan_Angle_Rank, container, m_hInScanAngle);
-            findAttributeAndAddToContainer(CT_LasDefine::GPS_Time, container, m_hInGPSTime);
-            findAttributeAndAddToContainer(CT_LasDefine::Red, container, m_hInRed);
-            findAttributeAndAddToContainer(CT_LasDefine::Green, container, m_hInGreen);
-            findAttributeAndAddToContainer(CT_LasDefine::Blue, container, m_hInBlue);
-            findAttributeAndAddToContainer(CT_LasDefine::Wave_Packet_Descriptor_Index, container, m_hInWavePacketDescriptorIndex);
-            findAttributeAndAddToContainer(CT_LasDefine::Byte_offset_to_waveform_data, container, m_hInByteOffsetToWaveformData);
-            findAttributeAndAddToContainer(CT_LasDefine::Waveform_packet_size_in_bytes, container, m_hInWaveformPacketSizeInBytes);
-            findAttributeAndAddToContainer(CT_LasDefine::Return_Point_Waveform_Location, container, m_hInReturnPointWaveformLocation);
-            findAttributeAndAddToContainer(CT_LasDefine::NIR, container, m_hInNIR);
+            for(const CT_StdLASPointsAttributesContainer* container : m_hInLASAttributesContainer.iterateInputs(m_handleResultExport))
+            {
+                findAttributesInContainerAndAddItToCollection(container);
+                atLeastOneContainer = true;
+            }
 
-            mLasContainer = container;
+            if(!atLeastOneContainer)
+            {
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Return_Number, m_hInReturnNumber, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Number_of_Returns, m_hInNumberOfReturn, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Classification_Flags, m_hInClassificationFlag, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scanner_Channel, m_hInScannerChannel, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scan_Direction_Flag, m_hInScanDirectionFlag, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Edge_of_Flight_Line, m_hInEdgeOfFlightLine, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Intensity, m_hInIntensity, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Classification, m_hInClassification, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::User_Data, m_hInUserData, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Point_Source_ID, m_hInPointSourceID, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scan_Angle_Rank, m_hInScanAngle, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::GPS_Time, m_hInGPSTime, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Red, m_hInRed, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Green, m_hInGreen, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Blue, m_hInBlue, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Wave_Packet_Descriptor_Index, m_hInWavePacketDescriptorIndex, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Byte_offset_to_waveform_data, m_hInByteOffsetToWaveformData, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Waveform_packet_size_in_bytes, m_hInWaveformPacketSizeInBytes, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Return_Point_Waveform_Location, m_hInReturnPointWaveformLocation, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::NIR, m_hInNIR, mAllLasAttributes);
+
+                for(const CT_PointsAttributesColor* attribute : m_hInColor.iterateInputs(m_handleResultExport)) {
+                    mColorsAttribute.append(attribute);
+                }
+            }
+
+            mToolsFormat.reset(createPointDataFormat());
         }
+    }
+    else if(mToolsFormat.isNull())
+    {
+        mToolsFormat.reset(createPointDataFormat());
     }
 
     QList<const CT_AbstractPointCloudIndex*> indexes;
@@ -201,8 +215,6 @@ bool CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPiece
         }
     }
 
-    CT_AbstractPointAttributesScalar* returnNumber = (mLasContainer == nullptr ? nullptr : static_cast<CT_AbstractPointAttributesScalar*>(mLasContainer->pointsAttributesAt(CT_LasDefine::Return_Number)));
-
     QList<CT_LASPieceByPiecePrivateExporter*> finalPieceByPieceExporters;
 
     const quint8 pointDataFormat = getPointDataFormat();
@@ -212,7 +224,7 @@ bool CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPiece
     {
         CT_LASPieceByPiecePrivateExporter* lasEx = static_cast<CT_LASPieceByPiecePrivateExporter*>(ex);
 
-        if(lasEx->initializeHeader(returnNumber, pointDataFormat, pointDataLength))
+        if(lasEx->initializeHeader(pointDataFormat, pointDataLength))
             finalPieceByPieceExporters.append(lasEx);
     }
 
@@ -234,7 +246,6 @@ bool CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPiece
             }
         }
 
-        QSharedPointer<CT_AbstractLASPointFormat> toolsFormat(createPointDataFormat());
         mCurrentPieceByPieceProgress = 0;
         mPieceByPieceProgressMultiplicator = 1.0 / double(finalPieceByPieceExporters.size());
 
@@ -243,7 +254,7 @@ bool CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPiece
             connect(lasEx, &CT_LASPieceByPiecePrivateExporter::progressChanged, this, &CT_Exporter_LAS::setPieceByPieceProgress);
             connect(this, &CT_Exporter_LAS::mustCancel, lasEx, &CT_LASPieceByPiecePrivateExporter::cancel);
 
-            lasEx->finalizeHeaderAndWritePoints(toolsFormat);
+            lasEx->finalizeHeaderAndWritePoints();
 
             disconnect(lasEx, nullptr, this, nullptr);
             disconnect(this, nullptr, lasEx, nullptr);
@@ -253,9 +264,6 @@ bool CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPiece
             if(isStopped())
                 break;
         }
-
-        if(!toolsFormat.isNull())
-            toolsFormat->clearInfos();
     }
 
     return true;
@@ -267,12 +275,43 @@ void CT_Exporter_LAS::clearIterators()
     mIteratorItemEnd = mIteratorItemBegin;
 }
 
+void CT_Exporter_LAS::clearAttributesClouds()
+{
+    mAllLasAttributes.clear();
+    mColorsAttribute.clear();
+    mToolsFormat.reset(nullptr);
+}
+
+void CT_Exporter_LAS::findAttributesInContainerAndAddItToCollection(const CT_StdLASPointsAttributesContainer* container)
+{
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Return_Number, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Number_of_Returns, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Classification_Flags, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scanner_Channel, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scan_Direction_Flag, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Edge_of_Flight_Line, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Intensity, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Classification, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::User_Data, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Point_Source_ID, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scan_Angle_Rank, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::GPS_Time, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Red, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Green, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Blue, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Wave_Packet_Descriptor_Index, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Byte_offset_to_waveform_data, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Waveform_packet_size_in_bytes, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Return_Point_Waveform_Location, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::NIR, container, mAllLasAttributes);
+}
+
 quint8 CT_Exporter_LAS::getPointDataFormat() const
 {
-    if(mLasContainer == nullptr)
+    if(mAllLasAttributes.isEmpty() && mColorsAttribute.isEmpty())
         return 1;
 
-    QList<CT_LasDefine::LASPointAttributesType> list = mLasContainer->lasPointAttributesTypes();
+    const QList<CT_LasDefine::LASPointAttributesType> list = mAllLasAttributes.uniqueKeys();
 
     bool wavePacket = true;
     bool nir = true;
@@ -289,7 +328,8 @@ quint8 CT_Exporter_LAS::getPointDataFormat() const
 
     if(!list.contains(CT_LasDefine::Red)
             && !list.contains(CT_LasDefine::Green)
-            && !list.contains(CT_LasDefine::Blue))
+            && !list.contains(CT_LasDefine::Blue)
+            && mColorsAttribute.isEmpty())
         colors = false;
 
     if(wavePacket)

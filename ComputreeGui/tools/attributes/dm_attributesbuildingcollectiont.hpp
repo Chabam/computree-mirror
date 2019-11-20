@@ -34,11 +34,14 @@ void DM_AttributesBuildingCollectionT<Type>::recursiveBuildAttributesFromStep(co
     // build attributes from models
     step->visitOutResultModels([&collection](const CT_OutAbstractResultModel* resModel) -> bool {
 
+        if(resModel->result() == nullptr)
+            return true;
+
         resModel->recursiveVisitOutChildrens([&collection](const CT_OutAbstractModel* child) -> bool {
 
             Type* proto = dynamic_cast<Type*>(child->prototype());
 
-            if(proto != nullptr) {
+            if((proto != nullptr) && (child->result() != nullptr)) {
                 auto iterator = CT_SingleModelIteratorStdStyleForResultGroup<Type>::createCompleteIterator(child);
 
                 for(Type* tt : iterator) {

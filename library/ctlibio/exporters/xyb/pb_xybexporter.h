@@ -43,6 +43,8 @@ protected:
 
     void clearIterators() override;
 
+    void clearAttributesClouds() override;
+
 private:
     friend class PB_XYBPieceByPiecePrivateExporter;
 

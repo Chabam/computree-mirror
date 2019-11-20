@@ -61,9 +61,19 @@ protected:
     bool        mMustCancel;
 
     /**
-     * @brief Call it to create the file or open it if it is already created. Returns false if it was an error.
+     * @brief Returns true if file has been already created
      */
-    bool createOrOpenFile();
+    bool isFileCreated() const;
+
+    /**
+     * @brief Call it to create the file. Returns false if it was an error.
+     */
+    bool createFile();
+
+    /**
+     * @brief Call it open the file if it is already created. Returns false if it was an error.
+     */
+    bool openFile();
 
     /**
      * @brief Close the file

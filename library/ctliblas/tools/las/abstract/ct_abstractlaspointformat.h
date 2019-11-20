@@ -4,6 +4,7 @@
 #include "ctliblas/tools/las/ct_laspointinfo.h"
 #include "ctliblas/readers/headers/ct_lasheader.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
+#include "ct_itemdrawable/ct_pointsattributescolor.h"
 
 #define CT_WRITE_LAS_SCALAR(information, type) if(information.first == nullptr) { stream << type(0); } else { stream << type(information.first->dValueAt(information.second)); }
 
@@ -13,6 +14,8 @@
 class CTLIBLAS_EXPORT CT_AbstractLASPointFormat
 {
 public:
+    using AllAttributesCollection = QMultiHash<CT_LasDefine::LASPointAttributesType, const CT_AbstractPointAttributesScalar*>;
+
     CT_AbstractLASPointFormat();
     virtual ~CT_AbstractLASPointFormat();
 
@@ -28,35 +31,37 @@ public:
 
     /**
      * @brief Call this method before use the method "write" and after "setAttributes". This will create the
-     *        informations necessary for each points to write.
-     * @param fastButConsumeMoreMemory : if true the init will be faster but it will consume more memory than if the parameter is false. This is
-     *                                   because to be faster you must use an array and to consume less memory you must use a hashtable.
+     *        ReturnNumber informations for each points to write.
      */
-    bool initWrite(const QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> &attributes, bool fastButConsumeMoreMemory = false);
+    bool initReturnNumber(const AllAttributesCollection& attributes);
+
+    /**
+     * @brief Call this method before use the method "write" and after "setAttributes". This will create all
+     *        informations necessary for each points to write.
+     */
+    bool initWrite(const AllAttributesCollection& attributes, const QList<const CT_PointsAttributesColor*>& colors);
 
     /**
      * @brief Return the info for point at globalIndex
      */
-    inline CT_LasPointInfo* infoOfPoint(const size_t &globalIndex) const {
-        if(m_infosFaster.empty())
-            return m_infos.value(globalIndex, nullptr);
-
-        return &const_cast<CT_AbstractLASPointFormat*>(this)->m_infosFaster[globalIndex];
+    inline const CT_LasPointInfo& infoOfPoint(const size_t &globalIndex) const {
+        return m_infosFaster[globalIndex];
     }
 
     /**
      * @brief Write the point 'globalIndex' (index in the global pointCloud)
      */
-    virtual CT_LasPointInfo* write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const = 0;
+    virtual const CT_LasPointInfo& write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const = 0;
 
 private:
-    // key = globalIndex of the point, value = information of the point
-    QHash<size_t, CT_LasPointInfo*>     m_infos;
     // index = globalIndex, value = information of the point
     std::vector<CT_LasPointInfo>        m_infosFaster;
 
     QMutex                              mMutexInitialization;
     bool                                mInitialized;
+    bool                                mReturnNumberInitialized;
+
+    void initType(const CT_LasDefine::LASPointAttributesType& type, const AllAttributesCollection& attributes);
 
 protected:
 

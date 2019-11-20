@@ -23,7 +23,7 @@ public:
     bool setPointsToExport(const QList<CT_AbstractCloudIndex*> &list) override;
 
     void setItemsToExport(const QList<const CT_AbstractItemDrawableWithPointCloud*>& items,
-                          const CT_StdLASPointsAttributesContainer* lasAttributesContainer = nullptr);
+                          const QList<const CT_StdLASPointsAttributesContainer*>& lasAttributesContainers = QList<const CT_StdLASPointsAttributesContainer*>());
 
     bool canExportPieceByPiece() const final;
     CT_AbstractPieceByPieceExporter* createPieceByPieceExporter(const QString& outputFilepath) override;
@@ -39,10 +39,13 @@ protected:
 
     void clearIterators() override;
 
+    void clearAttributesClouds() override;
+
 private:
     friend class CT_LASPieceByPiecePrivateExporter;
 
     using HandleItemType = CT_HandleInSingularItem<CT_AbstractItemDrawableWithPointCloud>;
+    using AllAttributesCollection = CT_AbstractLASPointFormat::AllAttributesCollection;
 
     CT_HandleInStdGroup<>                                           m_hInGroup;
     HandleItemType                                                  m_hInItem;
@@ -81,20 +84,31 @@ private:
     HandleItemType::const_iterator                                  mIteratorItemEnd;
 
     QList<const CT_AbstractItemDrawableWithPointCloud*>             mItems;
-    const CT_StdLASPointsAttributesContainer*                       mLasContainer;
-    CT_StdLASPointsAttributesContainer                              mLasContainerIfModelNotFound;
+
+    AllAttributesCollection                                         mAllLasAttributes;
+    QList<const CT_PointsAttributesColor*>                          mColorsAttribute;
+    QSharedPointer<CT_AbstractLASPointFormat>                       mToolsFormat;
 
     double                                                          mCurrentPieceByPieceProgress;
     double                                                          mPieceByPieceProgressMultiplicator;
 
+    void findAttributeInContainerAndAddItToCollection(CT_LasDefine::LASPointAttributesType key, const CT_StdLASPointsAttributesContainer* container, AllAttributesCollection& allAttributes) const
+    {
+        CT_AbstractPointAttributesScalar* attribute = static_cast<CT_AbstractPointAttributesScalar*>(container->pointsAttributesAt(key));
+
+        if(attribute != nullptr)
+            allAttributes.insert(key, attribute);
+    }
+
     template<typename HandleType>
-    void findAttributeAndAddToContainer(CT_LasDefine::LASPointAttributesType key, CT_StdLASPointsAttributesContainer* container, HandleType& t) const
+    void findAttributeWithHandleAndAddItToCollection(CT_LasDefine::LASPointAttributesType key, HandleType& t, AllAttributesCollection& allAttributes) const
     {
         for(const CT_AbstractPointAttributesScalar* attribute : t.iterateInputs(m_handleResultExport)) {
-            container->insertPointsAttributesAt(key, attribute);
-            break;
+            allAttributes.insert(key, attribute);
         }
     }
+
+    void findAttributesInContainerAndAddItToCollection(const CT_StdLASPointsAttributesContainer* container);
 
     /**
      * @brief Return the point data format to use (check mLasContainer to know where attributes is in the container and select the appropriate format)

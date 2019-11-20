@@ -14,7 +14,7 @@ public:
     using SingleModelIt = SingleModelIteratorStdStyleT;
     using self_type = CT_MultiModelIteratorStdStyle<SingleModelIteratorStdStyleT, ValueT>;
 
-    CT_MultiModelIteratorStdStyle() : m_currentValue(nullptr), m_currentOutModelIndex(-1) {}
+    CT_MultiModelIteratorStdStyle() : m_currentValue(nullptr), mCurrentParent(nullptr), m_currentOutModelIndex(-1) {}
 
     template<class OutModelCollectionIt>
     static CT_MultiModelIteratorStdStyle create(OutModelCollectionIt first, OutModelCollectionIt last) {
@@ -44,6 +44,7 @@ public:
                 it.m_currentValue = (*it.m_currentSingleModelIt);
             }
 
+            it.mCurrentParent = it.m_currentSingleModelIt.currentParent();
             ++it.m_currentSingleModelIt;
         }
 
@@ -67,6 +68,7 @@ public:
             m_currentValue = (*m_currentSingleModelIt);
         };
 
+        mCurrentParent = m_currentSingleModelIt.currentParent();
         ++m_currentSingleModelIt;
 
         return *this;
@@ -77,13 +79,14 @@ public:
     bool operator==(const self_type& rhs) { return m_currentValue == rhs.m_currentValue; }
     bool operator!=(const self_type& rhs) { return m_currentValue != rhs.m_currentValue; }
 
-    typename SingleModelIteratorStdStyleT::ParentType* currentParent() { return m_currentSingleModelIt.currentParent(); }
+    typename SingleModelIteratorStdStyleT::ParentType* currentParent() { return mCurrentParent; }
 
 private:
-    ValueT*                 m_currentValue;
-    SingleModelIt           m_currentSingleModelIt;
-    int                     m_currentOutModelIndex;
-    QVector<OutModelType*>  m_outModels;
+    ValueT*                                             m_currentValue;
+    typename SingleModelIteratorStdStyleT::ParentType*  mCurrentParent;
+    SingleModelIt                                       m_currentSingleModelIt;
+    int                                                 m_currentOutModelIndex;
+    QVector<OutModelType*>                              m_outModels;
 };
 
 #endif // CT_MULTIMODELITERATORSTDSTYLE_H

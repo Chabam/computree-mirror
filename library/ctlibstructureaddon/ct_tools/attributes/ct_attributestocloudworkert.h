@@ -22,7 +22,7 @@ public:
         m_attributes = attr;
     }
 
-    const QList<TypeAttribute*>& attributes() const
+    const QList<const TypeAttribute*>& attributes() const
     {
         return m_attributes;
     }

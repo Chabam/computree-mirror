@@ -365,24 +365,105 @@ protected:
     void setCanExportFaces(bool e);
 
     /**
-      * \brief A redéfinir dans votre exporter. Export dans le fichier les éléments sélectionnés lors de la configuration.
-      */
+     * @brief You must redefine this method in your class to export all elements that you mmust export.
+     *
+     *        If your exporter can export piece by piece you just have to write this lines of code :
+     *
+     *        {
+     *          QList<CT_AbstractPieceByPieceExporter*> exporters;
+     *          exporters << createPieceByPieceExporter(filePath());
+     *
+     *          if(exportOnePieceOfDataToFiles(exporters))
+     *              return finalizePieceByPieceExport(exporters);
+     *
+     *          return false;
+     *        }
+     *
+     * @return
+     */
     virtual bool internalExportToFile() = 0;
 
     /**
-     * @brief You must redefine it to export one piece. Before this method is called this class has called the method
-     *        createOrOpenFile() of each piece by piece exporters and when this method is finished the class will call the
+     * @brief You must redefine this method to export one piece. Before this method is called this class has called the method
+     *        createFile() and/or openFile() of each piece by piece exporters and when this method is finished the class will call the
      *        method closeFile() of each piece by piece exporters. You must pass to your specific exporters the element to export
      *        per example the point, his attributes, etc... and the piece by piece exporter must call his filters to know if
      *        the element can be exported or not in his file.
      */
     virtual bool internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters);
 
+    /**
+     * @brief Call this method with false in methods declared in your exporter that use elements not from models. This method
+     *        is called automatically with "true" when the method declareInputModels() has been called or with "false" if the method
+     *        "setXXXToExport" has been called.
+     *
+     * @param useModels : true if can use models, false otherwise
+     */
     void setMustUseModels(bool useModels);
 
+    /**
+     * @brief Call this method in your exporter to know if you can use models or if you must use elements that
+     *        has been set directly by a developper.
+     */
     bool mustUseModels() const;
 
+    /**
+     * @brief This method will be called when a complete export begin so you must clear your
+     *        iterators :
+     *
+     *        mIteratorBegin = HandleXXX::const_iterator();
+     *        mIteratorItemEnd = mIteratorItemBegin;
+     *
+     *        Per example if the user has choosed to export each item in a file the method
+     *        internalExportToFile() will be called for each item but this method will be called
+     *        only one time :
+     *
+     *        {
+     *              ...
+     *              clearIterators();
+     *              ...
+     *
+     *              for(ItemType* item : items)
+     *              {
+     *                  setFilePath(...);
+     *                  internalExportToFile();
+     *              }
+     *        }
+     */
     virtual void clearIterators() = 0;
+
+    /**
+     * @brief This method will be called when a complete export begin OR when a new piece must be
+     *        exported, so you must clear your attributes clouds that you have made before.
+     *
+     *        Per example if the user has choosed to export each item in a file the method
+     *        internalExportToFile() will be called for each item but this method will be called
+     *        only one time :
+     *
+     *        {
+     *              ...
+     *              clearAttributesClouds();
+     *              ...
+     *
+     *              for(ItemType* item : items)
+     *              {
+     *                  setFilePath(...);
+     *                  internalExportToFile();
+     *              }
+     *        }
+     *
+     *        Per example if a new piece will be exported attributes has changed and you must
+     *        recreate clouds that you use so this method is called automatically before export
+     *        a new piece.
+     *
+     *        {
+     *              ...
+     *              clearAttributesClouds();
+     *              bool ok = internalExportOnePiece(pieceByPieceExporters);
+     *              ...
+     *        }
+     */
+    virtual void clearAttributesClouds() = 0;
 
     /**
      * @brief You must call this method when you export items in file to know how many
@@ -416,6 +497,8 @@ private:
     bool                                mFileNameUsedFromAttributeOfAnotherItem;
 
     bool                                mMaximumItemToExportCalled;
+
+    bool                                mExportOfOneItemByFileInProgress;
 
     QList<FileFormat>                   _formats;
     QString                             _errMsg;
@@ -453,12 +536,15 @@ public slots:
     void cancel();
 
 signals:
-
     /**
-     * @brief signal to know the progress of export
+     * @brief Emitted to know the progress of export
      */
     void exportInProgress(int progress);
 
+    /**
+     * @brief Emitted when the method cancel() has been called so you can redirect it to
+     *        your piece by piece exporters per example
+     */
     void mustCancel();
 };
 

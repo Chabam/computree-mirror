@@ -27,7 +27,6 @@ bool CT_LASPieceByPiecePrivateExporter::internalCreateFile()
     delete mHeader;
     mHeader = nullptr;
     clearAllBackupedHeaders();
-    mExporter.clearIterators();
 
     const QFileInfo exportPathInfo = QFileInfo(mFilePath);
     const QString path = exportPathInfo.path();
@@ -48,14 +47,12 @@ bool CT_LASPieceByPiecePrivateExporter::internalOpenFileInAppendMode()
     return true;
 }
 
-bool CT_LASPieceByPiecePrivateExporter::initializeHeader(CT_AbstractPointAttributesScalar* returnNumber, const quint8 format, const quint16 pointDataLength)
+bool CT_LASPieceByPiecePrivateExporter::initializeHeader(const quint8 format, const quint16 pointDataLength)
 {
     delete mHeader;
     mHeader = nullptr;
 
-    mReturnNumberAttribute = returnNumber;
-    mReturnNumberPointCloudIndex = nullptr;
-    mReturnNumberSize = 0;
+    mReturnNumberSet = false;
 
     if(format < 11)
     {
@@ -82,13 +79,7 @@ bool CT_LASPieceByPiecePrivateExporter::initializeHeader(CT_AbstractPointAttribu
         for(int i=0; i<15; ++i)
             mHeader->m_numberOfPointsByReturn[i] = 0;
 
-        if(mReturnNumberAttribute != nullptr)
-        {
-            mReturnNumberPointCloudIndex = returnNumber->pointCloudIndex();
-
-            if(mReturnNumberPointCloudIndex != nullptr)
-                mReturnNumberSize = mReturnNumberPointCloudIndex->size();
-        }
+        mExporter.mToolsFormat->initReturnNumber(mExporter.mAllLasAttributes);
 
         return true;
     }
@@ -100,7 +91,7 @@ void CT_LASPieceByPiecePrivateExporter::computePointForHeader(const size_t& gi, 
 {
     if(mPointFilter(gi, p))
     {
-        // TODO : save point index in a list so it will be used in finalizeHeaderAndWritePoints()
+        // save point index in a list so it will be used in finalizeHeaderAndWritePoints()
         mPointsToWrite.addIndex(gi);
 
         if(p(0) > mHeader->m_maxCoordinates(0))
@@ -121,22 +112,20 @@ void CT_LASPieceByPiecePrivateExporter::computePointForHeader(const size_t& gi, 
         if(p(2) < mHeader->m_minCoordinates(2))
             mHeader->m_minCoordinates(2) = p(2);
 
-        if(mReturnNumberPointCloudIndex != nullptr)
+        const CT_LasPointInfo& info = mExporter.mToolsFormat->infoOfPoint(gi);
+
+        if(info.m_rn.first != nullptr)
         {
-            const size_t i = mReturnNumberPointCloudIndex->indexOf(gi);
+            mReturnNumberSet = true;
+            const int indexInTab = qMax(0, int(info.m_rn.first->dValueAt(info.m_rn.second))-1);
 
-            if(i < mReturnNumberSize)
+            quint64 &val = mHeader->m_numberOfPointsByReturn[indexInTab];
+            ++val;
+
+            if(indexInTab < 5)
             {
-                const int indexInTab = int(mReturnNumberAttribute->dValueAt(i))-1;
-
-                quint64 &val = mHeader->m_numberOfPointsByReturn[indexInTab];
-                ++val;
-
-                if(indexInTab < 5)
-                {
-                    quint32 &legacyVal = mHeader->m_legacyNumberOfPointsByReturn[indexInTab];
-                    ++legacyVal;
-                }
+                quint32 &legacyVal = mHeader->m_legacyNumberOfPointsByReturn[indexInTab];
+                ++legacyVal;
             }
         }
 
@@ -144,15 +133,15 @@ void CT_LASPieceByPiecePrivateExporter::computePointForHeader(const size_t& gi, 
     }
 }
 
-bool CT_LASPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints(QSharedPointer<CT_AbstractLASPointFormat> pointDataFormat)
+bool CT_LASPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints()
 {
-    if((mHeader->m_numberOfPointRecords == 0) || pointDataFormat.isNull()) {
+    if((mHeader->m_numberOfPointRecords == 0) || mExporter.mToolsFormat.isNull()) {
         delete mHeader;
         mHeader = nullptr;
         return false;
     }
 
-    if(mReturnNumberPointCloudIndex == nullptr)
+    if(!mReturnNumberSet)
     {
         mHeader->m_numberOfPointsByReturn[0] = mHeader->m_numberOfPointRecords;
         mHeader->m_legacyNumberOfPointsByReturn[0] = quint32(mHeader->m_numberOfPointRecords);
@@ -195,7 +184,7 @@ bool CT_LASPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints(QSharedPoin
     mHeader->m_numberOfExtendedVariableLengthRecords = 0; // TODO : write the good value
 
     // find the backup or create a new backup for this header
-    HeaderBackup* hBackup = createOrGetHeaderBackupForHeader(mHeader, pointDataFormat);
+    HeaderBackup* hBackup = createOrGetHeaderBackupForHeader(mHeader);
 
     bool ok = false;
 
@@ -227,11 +216,7 @@ bool CT_LASPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints(QSharedPoin
         }
         else
         {
-            if((mExporter.mLasContainer != nullptr) && !pointDataFormat.isNull())
-            {
-                // pass "true" if you want to be fastest but consume more memory, false to be slower but consume less memory !
-                pointDataFormat->initWrite(mExporter.mLasContainer->lasPointsAttributes(), true);
-            }
+            mExporter.mToolsFormat->initWrite(mExporter.mAllLasAttributes, mExporter.mColorsAttribute);
 
             // write points
             const double progressValue = 100.0 / double(mPointsToWrite.size());
@@ -244,7 +229,7 @@ bool CT_LASPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints(QSharedPoin
             {
                 itI.next();
 
-                hBackup->toolsFormat->write(stream, mHeader, itI.currentPoint(), itI.cIndex());
+                mExporter.mToolsFormat->write(stream, mHeader, itI.currentPoint(), itI.cIndex());
 
                 progress += progressValue;
 
@@ -335,8 +320,7 @@ bool CT_LASPieceByPiecePrivateExporter::writeHeader(QDataStream& stream,
     return ok;
 }
 
-CT_LASPieceByPiecePrivateExporter::HeaderBackup* CT_LASPieceByPiecePrivateExporter::createOrGetHeaderBackupForHeader(const CT_LASHeader* header,
-                                                                                                                     QSharedPointer<CT_AbstractLASPointFormat> pointDataFormat) const
+CT_LASPieceByPiecePrivateExporter::HeaderBackup* CT_LASPieceByPiecePrivateExporter::createOrGetHeaderBackupForHeader(const CT_LASHeader* header) const
 {
     for(HeaderBackup* b : mHeaders)
     {
@@ -348,7 +332,6 @@ CT_LASPieceByPiecePrivateExporter::HeaderBackup* CT_LASPieceByPiecePrivateExport
     b->header = header;
     b->nFiles = 0;
     b->dirPath = QDir::toNativeSeparators(mBaseFilePath + QString().setNum(mHeaders.size()) + QDir::separator());
-    b->toolsFormat = pointDataFormat;
 
     return b;
 }

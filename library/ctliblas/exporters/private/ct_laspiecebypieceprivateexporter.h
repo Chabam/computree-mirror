@@ -14,11 +14,11 @@ protected:
 
     bool internalOpenFileInAppendMode() final;
 
-    bool initializeHeader(CT_AbstractPointAttributesScalar* returnNumber, const quint8 format, const quint16 pointDataLength);
+    bool initializeHeader(const quint8 format, const quint16 pointDataLength);
 
     void computePointForHeader(const size_t& gi, const CT_Point& point);
 
-    bool finalizeHeaderAndWritePoints(QSharedPointer<CT_AbstractLASPointFormat> pointDataFormat);
+    bool finalizeHeaderAndWritePoints();
 
     void internalCloseFile() final;
 
@@ -29,7 +29,7 @@ private:
     using HandleItemType = CT_Exporter_LAS::HandleItemType;
 
     struct HeaderBackup {
-        HeaderBackup() : header(nullptr), nFiles(0), toolsFormat(nullptr) {}
+        HeaderBackup() : header(nullptr), nFiles(0) {}
         ~HeaderBackup() { delete header; }
 
         bool isHeaderSameForExport(const CT_LASHeader* header) const;
@@ -40,7 +40,6 @@ private:
         const CT_LASHeader*         header;
         QString                     dirPath;
         int                         nFiles;
-        QSharedPointer<CT_AbstractLASPointFormat>  toolsFormat;
     };
 
     CT_Exporter_LAS&                            mExporter;
@@ -48,10 +47,8 @@ private:
     QString                                     mBaseFilePath;
     QList<HeaderBackup*>                        mHeaders;
 
+    bool                                        mReturnNumberSet;
     CT_LASHeader*                               mHeader;
-    const CT_AbstractPointCloudIndex*           mReturnNumberPointCloudIndex;
-    size_t                                      mReturnNumberSize;
-    CT_AbstractPointAttributesScalar*           mReturnNumberAttribute;
 
     CT_PointCloudIndexVector                    mPointsToWrite;
 
@@ -68,8 +65,7 @@ private:
     /**
      * @brief Search an header in the list of header backuped and if has found one return the backup that match with it
      */
-    HeaderBackup* createOrGetHeaderBackupForHeader(const CT_LASHeader* header,
-                                                   QSharedPointer<CT_AbstractLASPointFormat> pointDataFormat) const;
+    HeaderBackup* createOrGetHeaderBackupForHeader(const CT_LASHeader* header) const;
 
     /**
      * @brief When you have finished to write the file call this method to save or delete the header backup

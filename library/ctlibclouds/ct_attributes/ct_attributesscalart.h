@@ -65,6 +65,19 @@ private:
 protected:
 
     void initMinMax();
+
+    void internalInitMinMax(std::true_type)
+    {
+        m_min = std::numeric_limits<SCALAR>::max();
+        m_max = -std::numeric_limits<SCALAR>::max();
+    }
+
+    void internalInitMinMax(std::false_type)
+    {
+        m_min = std::numeric_limits<SCALAR>::max();
+        m_max = std::numeric_limits<SCALAR>::min();
+    }
+
     CT_StandardCloudStdVectorT<SCALAR>* collection() const { return m_collection; }
 
     static bool staticCompareScalar(const SCALAR &a, const SCALAR &b);

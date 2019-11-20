@@ -168,7 +168,7 @@ void PB_XYBExporter::exportPoints(const QList<CT_AbstractPieceByPieceExporter*>&
     std::function<quint16 ()> vCCNotNull = [&cc, &it]()
     {
         const CT_Color &col = cc->constColorAt(it.cIndex());
-        return static_cast<quint16>(col.r());
+        return static_cast<quint16>((col.r() + col.g() + col.b()) / 3.0);
     };
 
     // final function to use to return the intensity
@@ -201,14 +201,19 @@ void PB_XYBExporter::clearIterators()
     mIteratorItemEnd = mIteratorItemBegin;
 }
 
+void PB_XYBExporter::clearAttributesClouds()
+{
+    m_attributsColorPointWorker.setColorCloud(nullptr);
+}
+
 CT_AbstractColorCloud* PB_XYBExporter::createColorCloud()
 {
     // Use a mutex here because this method is called by PB_XYBPieceByPiecePrivateExporter and each
     // object can potentially export in different threads !
     QMutexLocker locker(&mMutexColorCloud);
 
-    // TODO : find when we must clear it !
-    if(m_attributsColorPointWorker.colorCloud().data() != nullptr)
+    // cleared in clearAttributesClouds()
+    if(!m_attributsColorPointWorker.colorCloud().isNull())
         return m_attributsColorPointWorker.colorCloud()->abstractColorCloud();
 
     QList<const CT_AbstractPointsAttributes*> attributesColor;

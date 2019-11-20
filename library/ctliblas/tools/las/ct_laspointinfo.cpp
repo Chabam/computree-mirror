@@ -17,6 +17,7 @@ CT_LasPointInfo::CT_LasPointInfo()
     m_red = qMakePair((const CT_AbstractPointAttributesScalar*)nullptr, (size_t)0);
     m_green = qMakePair((const CT_AbstractPointAttributesScalar*)nullptr, (size_t)0);
     m_blue = qMakePair((const CT_AbstractPointAttributesScalar*)nullptr, (size_t)0);
+    m_color = qMakePair((const CT_PointsAttributesColor*)nullptr, (size_t)0);
     m_nir = qMakePair((const CT_AbstractPointAttributesScalar*)nullptr, (size_t)0);
     m_wpdi = qMakePair((const CT_AbstractPointAttributesScalar*)nullptr, (size_t)0);
     m_bowd = qMakePair((const CT_AbstractPointAttributesScalar*)nullptr, (size_t)0);
@@ -93,4 +94,9 @@ bool CT_LasPointInfo::setAttribute(CT_LasDefine::LASPointAttributesType type, co
     }
 
     return true;
+}
+
+void CT_LasPointInfo::setColorAttribute(const CT_PointsAttributesColor* color, const size_t& index)
+{
+    m_color = qMakePair(color, index);
 }

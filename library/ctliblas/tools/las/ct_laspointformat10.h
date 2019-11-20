@@ -18,7 +18,7 @@ public:
     /**
      * @brief Write the point 'globalIndex' (index in the global pointCloud)
      */
-    virtual CT_LasPointInfo* write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const;
+    virtual const CT_LasPointInfo& write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const;
 
 protected:
     /**
@@ -29,7 +29,7 @@ protected:
     /**
      * @brief Write only the information of the point format 10
      */
-    void writeInfoFormat10(QDataStream &stream, CT_LasPointInfo *info) const;
+    void writeInfoFormat10(QDataStream &stream, const CT_LasPointInfo& info) const;
 };
 
 #endif // CT_LASPOINTFORMAT10_H

@@ -23,31 +23,26 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASWavePacket::wavePacketTypesNee
     return l;
 }
 
-void CT_LASWavePacket::writeWavePacket(QDataStream &stream, CT_LasPointInfo *info) const
+void CT_LASWavePacket::writeWavePacket(QDataStream &stream, const CT_LasPointInfo& info) const
 {
-    if(info != nullptr)
-    {
-        // wave packet descriptor index
-        CT_WRITE_LAS_SCALAR(info->m_wpdi, quint8);
+    // wave packet descriptor index
+    CT_WRITE_LAS_SCALAR(info.m_wpdi, quint8);
 
-        // byte offset to waveform data
-        CT_WRITE_LAS_SCALAR(info->m_bowd, quint64);
+    // byte offset to waveform data
+    CT_WRITE_LAS_SCALAR(info.m_bowd, quint64);
 
-        // waveform packet size in bytes
-        CT_WRITE_LAS_SCALAR(info->m_wpsb, quint32);
+    // waveform packet size in bytes
+    CT_WRITE_LAS_SCALAR(info.m_wpsb, quint32);
 
-        // return point waveform location
-        CT_WRITE_LAS_SCALAR(info->m_rpwl, float);
+    // return point waveform location
+    CT_WRITE_LAS_SCALAR(info.m_rpwl, float);
 
-        // xt
-        stream << (float)0;
+    // xt
+    stream << float(0);
 
-        // yt
-        stream << (float)0;
+    // yt
+    stream << float(0);
 
-        // zt
-        stream << (float)0;
-    }
-    else
-        stream.writeRawData(&m_emptyData[0], sizeof(m_emptyData));
+    // zt
+    stream << float(0);
 }

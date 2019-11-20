@@ -22,19 +22,23 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASColorPacket::colorPacketTypesN
     return l;
 }
 
-void CT_LASColorPacket::writeColorPacket(QDataStream &stream, CT_LasPointInfo *info) const
+void CT_LASColorPacket::writeColorPacket(QDataStream &stream, const CT_LasPointInfo& info) const
 {
-    if(info != nullptr)
+    if(info.m_color.first != nullptr)
     {
-        // red
-        CT_WRITE_LAS_SCALAR(info->m_red, quint16);
-
-        // green
-        CT_WRITE_LAS_SCALAR(info->m_green, quint16);
-
-        // blue
-        CT_WRITE_LAS_SCALAR(info->m_blue, quint16);
+        const CT_Color& color = info.m_color.first->constColorAt(info.m_color.second);
+        stream << quint16(color.r()*257);
+        stream << quint16(color.g()*257);
+        stream << quint16(color.b()*257);
+        return;
     }
-    else
-        stream.writeRawData(&m_emptyData[0], sizeof(m_emptyData));
+
+    // red
+    CT_WRITE_LAS_SCALAR(info.m_red, quint16);
+
+    // green
+    CT_WRITE_LAS_SCALAR(info.m_green, quint16);
+
+    // blue
+    CT_WRITE_LAS_SCALAR(info.m_blue, quint16);
 }

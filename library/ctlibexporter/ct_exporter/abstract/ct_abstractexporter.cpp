@@ -26,6 +26,7 @@ CT_AbstractExporter::CT_AbstractExporter(int subMenuLevel)
     mNameOfTheFileContainsTurnNameFromACounter = false;
     mExportEachItemInSeparateFile = false;
     mFileNameUsedFromAttributeOfAnotherItem = false;
+    mExportOfOneItemByFileInProgress = false;
 }
 
 CT_AbstractExporter::CT_AbstractExporter(const CT_AbstractExporter &other) : QObject()
@@ -48,6 +49,7 @@ CT_AbstractExporter::CT_AbstractExporter(const CT_AbstractExporter &other) : QOb
     mNameOfTheFileContainsTurnNameFromACounter = false;
     mExportEachItemInSeparateFile = false;
     mFileNameUsedFromAttributeOfAnotherItem = false;
+    mExportOfOneItemByFileInProgress = false;
 }
 
 CT_AbstractExporter::~CT_AbstractExporter()
@@ -312,6 +314,7 @@ bool CT_AbstractExporter::exportToFile()
 {
     clearErrorMessage();
     clearIterators();
+    clearAttributesClouds();
 
     _progress = 0;
     m_stop = false;
@@ -358,6 +361,7 @@ bool CT_AbstractExporter::exportToFile()
         }
 
         mMaximumItemToExportCalled = false;
+        mExportOfOneItemByFileInProgress = true;
         const QString backupFilepath = filePath();
 
         for(const QString& path : pathByItem)
@@ -366,15 +370,17 @@ bool CT_AbstractExporter::exportToFile()
 
             if(!internalExportToFile()) {
                 setFilePath(backupFilepath);
+                mExportOfOneItemByFileInProgress = false;
                 return false;
             }
 
             #define QT_FORCE_ASSERTS
-            Q_ASSERT_X(mMaximumItemToExportCalled, "CT_AbstractExporter::exportToFile", "Developper of exporter doesn't call the method \"maximumItemToExportInFile\" !");
+            Q_ASSERT_X(mMaximumItemToExportCalled, "CT_AbstractExporter::exportToFile", "The developper of the exporter has not called the method \"maximumItemToExportInFile\" but he must !");
             #undef QT_FORCE_ASSERTS
         }
 
         setFilePath(backupFilepath);
+        mExportOfOneItemByFileInProgress = false;
     }
     else
     {
@@ -444,13 +450,30 @@ CT_AbstractPieceByPieceExporter* CT_AbstractExporter::createPieceByPieceExporter
 
 bool CT_AbstractExporter::exportOnePieceOfDataToFiles(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
 {
+    if(!mExportOfOneItemByFileInProgress)
+    {
+        clearIterators();
+        clearAttributesClouds();
+    }
+
     if(pieceByPieceExporters.isEmpty())
         return true;
 
     for(CT_AbstractPieceByPieceExporter* ex : pieceByPieceExporters)
     {
-        if(!ex->createOrOpenFile())
-            return false;
+        if(ex->isFileCreated())
+        {
+            if(!ex->openFile())
+                return false;
+        }
+        else
+        {
+            if(!ex->createFile())
+                return false;
+
+            if(!ex->openFile())
+                return false;
+        }
     }
 
     bool ok = internalExportOnePiece(pieceByPieceExporters);
@@ -543,7 +566,7 @@ bool CT_AbstractExporter::findInputsInOutputsOfThisManagerWithSpecifiedResultMod
     if(!needInputs())
         return true;
 
-    const int nResults = std::distance(begin, end);
+    const int nResults = int(std::distance(begin, end));
 
     QSet<CT_InAbstractResultModel*> modelsThatHaveFound;
 

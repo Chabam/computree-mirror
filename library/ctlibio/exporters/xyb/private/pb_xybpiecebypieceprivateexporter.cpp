@@ -23,8 +23,6 @@ PB_XYBPieceByPiecePrivateExporter::~PB_XYBPieceByPiecePrivateExporter()
 
 bool PB_XYBPieceByPiecePrivateExporter::internalCreateFile()
 {
-    mExporter.clearIterators();
-
     const QFileInfo exportPathInfo = QFileInfo(mFilePath);
     const QString path = exportPathInfo.path();
     const QString baseName = exportPathInfo.baseName();

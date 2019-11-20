@@ -9,9 +9,9 @@ size_t CT_LASPointFormat8::sizeInBytes() const
     return CT_LASPointFormat7::sizeInBytes() + nirPacketSizeInBytes();
 }
 
-CT_LasPointInfo* CT_LASPointFormat8::write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const
+const CT_LasPointInfo& CT_LASPointFormat8::write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const
 {
-    CT_LasPointInfo *info = CT_LASPointFormat7::write(stream, header, p, globalIndex);
+    const CT_LasPointInfo& info = CT_LASPointFormat7::write(stream, header, p, globalIndex);
 
     writeInfoFormat8(stream, info);
 
@@ -26,7 +26,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASPointFormat8::typesToSearch()
     return l;
 }
 
-void CT_LASPointFormat8::writeInfoFormat8(QDataStream &stream, CT_LasPointInfo *info) const
+void CT_LASPointFormat8::writeInfoFormat8(QDataStream &stream, const CT_LasPointInfo& info) const
 {
     writeNirPacket(stream, info);
 }

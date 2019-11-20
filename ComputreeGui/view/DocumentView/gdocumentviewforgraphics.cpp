@@ -853,6 +853,8 @@ void GDocumentViewForGraphics::closeEvent(QCloseEvent *closeEvent)
 {
     if(canClose())
     {
+        emit syncDisabled(this);
+
         delete m_graphics;
         m_graphics = nullptr;
     }
