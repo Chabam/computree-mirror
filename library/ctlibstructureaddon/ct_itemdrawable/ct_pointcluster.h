@@ -60,6 +60,21 @@ public:
         _notComputed = false;
     }
 
+    void initFromOther(CT_PointClusterBarycenter &other)
+    {
+        _backupSum[0] = other._backupSum[0];
+        _backupSum[1] = other._backupSum[1];
+        _backupSum[2] = other._backupSum[2];
+
+        _barycenter[0] = other._barycenter[0];
+        _barycenter[1] = other._barycenter[1];
+        _barycenter[2] = other._barycenter[2];
+
+        _size = other._size;
+
+        _notComputed = other._notComputed;;
+    }
+
     void addPoint(double x, double y, double z)
     {
         _backupSum[0] += x;
@@ -125,7 +140,7 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_PointCluster : public CT_AbstractItemDrawabl
 
 public:
     CT_PointCluster();
-    CT_PointCluster(const CT_PointCluster& other) = default;
+    CT_PointCluster(const CT_PointCluster& other);
 
     /**
       * \brief Ajoute un point au groupe  partir de son index dans le nuage de point (PointCloud)

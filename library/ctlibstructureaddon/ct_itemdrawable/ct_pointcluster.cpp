@@ -48,6 +48,27 @@ CT_PointCluster::CT_PointCluster() : SuperClass()
     setBaseDrawManager(&POINTCLUSTER_DRAW_MANAGER);
 }
 
+CT_PointCluster::CT_PointCluster(const CT_PointCluster &other) : SuperClass()
+{
+    m_pIndex = nullptr;
+    _barycenter.initFromOther(const_cast<CT_PointCluster&>(other)._barycenter);
+
+    if (other.pointCloudIndexSize() > 0)
+    {
+        createCloudIndex();
+
+        CT_PointCloudIndexVector* otherCloudIndex = other.m_pIndex;
+        m_pIndex->reserve(otherCloudIndex->size());
+
+        for (size_t i = 0 ; i < otherCloudIndex->size() ; i++)
+        {
+            m_pIndex->addIndex(otherCloudIndex->indexAt(i));
+        }
+    }
+
+    setBaseDrawManager(&POINTCLUSTER_DRAW_MANAGER);
+}
+
 void CT_PointCluster::createCloudIndex()
 {
     CT_PointCloudIndexVector* cloudIndex = new CT_PointCloudIndexVector();
