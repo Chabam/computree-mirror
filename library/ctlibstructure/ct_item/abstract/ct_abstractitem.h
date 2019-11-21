@@ -329,17 +329,6 @@ private:
      * @brief The output model that declare create this type of item
      */
     CT_OutAbstractModel*    m_model;
-
-    /**
-     * @brief Connection to destroyed signal of the model
-     */
-    QMetaObject::Connection mModelDestroyedConnection;
-
-private slots:
-    /**
-     * @brief Called when the model is destroyed
-     */
-    void modelDestroyed();
 };
 
 #endif // CT_ABSTRACTITEM_H
