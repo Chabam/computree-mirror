@@ -81,18 +81,15 @@ void CT_AbstractGeometricalItem::bufferedBoundingBox(double xMeters, double yMet
 
 void CT_AbstractGeometricalItem::setBoundingBox(double minx, double miny, double minz, double maxx, double maxy, double maxz)
 {
-    Eigen::Vector3d     minCoordinates;
-    Eigen::Vector3d     maxCoordinates;
+    m_minCoordinates(0) = minx;
+    m_minCoordinates(1) = miny;
+    m_minCoordinates(2) = minz;
 
-    minCoordinates(0) = minx;
-    minCoordinates(1) = miny;
-    minCoordinates(2) = minz;
+    m_maxCoordinates(0) = maxx;
+    m_maxCoordinates(1) = maxy;
+    m_maxCoordinates(2) = maxz;
 
-    maxCoordinates(0) = maxx;
-    maxCoordinates(1) = maxy;
-    maxCoordinates(2) = maxz;
-
-    setBoundingBox(minCoordinates, maxCoordinates);
+    updateCenterFromBoundingBox();
 }
 
 void CT_AbstractGeometricalItem::setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max)
@@ -105,7 +102,7 @@ void CT_AbstractGeometricalItem::setBoundingBox(const Eigen::Vector3d& min, cons
 
 void CT_AbstractGeometricalItem::updateCenterFromBoundingBox()
 {
-    setCenterCoordinate((m_maxCoordinates + m_minCoordinates) / 2.0);
+    m_centerCoordinates = (m_maxCoordinates + m_minCoordinates) / 2.0;
 }
 
 Eigen::Vector3d CT_AbstractGeometricalItem::minCoordinates() const

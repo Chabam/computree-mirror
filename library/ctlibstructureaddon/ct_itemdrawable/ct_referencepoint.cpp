@@ -46,6 +46,7 @@ CT_ReferencePoint::CT_ReferencePoint(double x, double y, double z, double buffer
     SuperClass::setCenterY(y);
     SuperClass::setCenterZ(z);
     SuperClass::setBoundingBox(x, y, z, x, y, z);
+
     setXYBuffer(buffer);
 
     setBaseDrawManager(&REFERENCEPOINT_DRAW_MANAGER);
