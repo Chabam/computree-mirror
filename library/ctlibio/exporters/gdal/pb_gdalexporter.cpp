@@ -5,170 +5,192 @@
 #include "ogrsf_frmts.h"
 #endif
 
-#include "ct_tools/ct_gdaltools.h"
+#include "readers/tools/gdal/ct_gdaltools.h"
 
 #include <QFileInfo>
 #include <QDebug>
 
+#define VECTOR_DRIVER_TYPE "Vector"
+#define RASTER_DRIVER_TYPE "Raster"
+
 // TODO : choose raster type (what is R, G or B, etc...) and export it in multiple bands
 // TODO : Group raster by dimension and resolution
 
-PB_GDALExporter::PB_GDALExporter() : SuperClass()
+PB_GDALExporter::PB_GDALExporter(int subMenuLevelRaster, int subMenuLevelVector, int subMenuLevelDefault) : SuperClass(subMenuLevelDefault),
+    mSubMenuLevelRaster(subMenuLevelRaster),
+    mSubMenuLevelVector(subMenuLevelVector)
+{
+}
+
+PB_GDALExporter::PB_GDALExporter(const PB_GDALExporter& other) : SuperClass(other),
+    #ifdef USE_GDAL
+    m_driver(other.m_driver),
+    #endif
+    mSubMenuLevelRaster(other.mSubMenuLevelRaster),
+    mSubMenuLevelVector(other.mSubMenuLevelVector),
+    mVectors(other.mVectors),
+    mRasters(other.mRasters)
 {
 }
 
 #ifdef USE_GDAL
-PB_GDALExporter::PB_GDALExporter(const GDALDriver *driver) : SuperClass()
+PB_GDALExporter::PB_GDALExporter(const GDALDriver *driver, int subMenuLevelRaster, int subMenuLevelVector, int subMenuLevelDefault) : SuperClass(subMenuLevelDefault),
+    m_driver(const_cast<GDALDriver*>(driver)),
+    mSubMenuLevelRaster(subMenuLevelRaster),
+    mSubMenuLevelVector(subMenuLevelVector)
 {
-    m_driver = (GDALDriver*)driver;
+    QStringList ext = CT_GdalTools::staticGdalDriverExtension(m_driver);
 
-    setCanExportItems(true);
-}
-#endif
+    if(ext.isEmpty())
+        ext.append("gdal");
 
-void PB_GDALExporter::init()
-{
-#ifdef USE_GDAL
-    if(m_driver != NULL) {
-        QStringList ext = CT_GdalTools::staticGdalDriverExtension(m_driver);
+    addNewExportFormat(FileFormat(ext, CT_GdalTools::staticGdalDriverName((m_driver))));
 
-        if(ext.isEmpty())
-            ext.append("gdal");
+    const QString driverType = typeOfDriver();
 
-        addNewExportFormat(FileFormat(ext, CT_GdalTools::staticGdalDriverName((m_driver))));
+    QString toolTip = tr("Exporter GDAL de type : %1").arg(driverType.isEmpty()?tr("Inconnu"):driverType);
 
-        QString driverType = getTypeOfDriver();
-
-        QString toolTip = tr("Exporter GDAL de type : %1").arg(driverType.isEmpty()?tr("Inconnu"):driverType);
-        if (driverType == "Raster")
-        {
-            toolTip.append("<br>");
-            toolTip.append("<br>");
-            toolTip.append(tr("Pour plus de détails voir : http://www.gdal.org/formats_list.html"));
-        } else if (driverType == "Vector")
-        {
-            toolTip.append("<br>");
-            toolTip.append("<br>");
-            toolTip.append(tr("Pour plus de détails voir : http://www.gdal.org/ogr_formats.html"));
-        }
-        toolTip.append("<br>");
-        toolTip.append("<br>");
-        toolTip.append(tr("Extension : "));
-        for (int i = 0 ; i < ext.size() ; i++)
-        {
-            toolTip.append("*.");
-            toolTip.append(ext.at(i));
-            if ((i + 1) < ext.size()) {toolTip.append(" ");}
-        }
-        setToolTip(toolTip);
-
-    }
-#endif
-}
-
-QString PB_GDALExporter::getExporterCustomName() const
-{
-#ifdef USE_GDAL
-    if(m_driver != NULL) {
-        return CT_GdalTools::staticGdalDriverName(m_driver);
-    }
-#endif
-
-    return SuperClass::getExporterCustomName();
-}
-
-QString PB_GDALExporter::getExporterName() const
-{
-#ifdef USE_GDAL
-    if(m_driver != NULL) {
-        return CT_GdalTools::staticGdalDriverName(m_driver);
-    }
-#endif
-    return SuperClass::getExporterName();
-}
-
-CT_StepsMenu::LevelPredefined PB_GDALExporter::getExporterSubMenuName() const
-{
-    QString driverType = getTypeOfDriver();
-    if (driverType == "Raster") {return CT_StepsMenu::LP_Raster;}
-    if (driverType == "Vector") {return CT_StepsMenu::LP_Vector;}
-    return CT_StepsMenu::LP_Others;
-}
-
-QString PB_GDALExporter::getTypeOfDriver() const
-{
-#ifdef USE_GDAL
-    if (m_driver->GetMetadataItem(GDAL_DCAP_RASTER) != NULL && m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) == NULL) {return "Raster";}
-    if (m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) != NULL && m_driver->GetMetadataItem(GDAL_DCAP_RASTER) == NULL) {return "Vector";}
-#endif
-
-    return "";
-}
-
-
-bool PB_GDALExporter::setItemDrawableToExport(const QList<CT_AbstractItemDrawable *> &list)
-{
-    clearErrorMessage();
-
-#ifdef USE_GDAL
-    m_exportRaster = false;
-
-    QList<CT_AbstractItemDrawable*> myVectorList;
-    QList<CT_AbstractItemDrawable*> myRasterList;
-    QListIterator<CT_AbstractItemDrawable*> it(list);
-
-    while(it.hasNext())
+    if (driverType == RASTER_DRIVER_TYPE)
     {
-        CT_AbstractItemDrawable *item = it.next();
+        toolTip.append("<br>");
+        toolTip.append("<br>");
+        toolTip.append(tr("Pour plus de détails voir : http://www.gdal.org/formats_list.html"));
+    }
+    else if (driverType == VECTOR_DRIVER_TYPE)
+    {
+        toolTip.append("<br>");
+        toolTip.append("<br>");
+        toolTip.append(tr("Pour plus de détails voir : http://www.gdal.org/ogr_formats.html"));
+    }
 
-        CT_AbstractShape2D* shape2d = dynamic_cast<CT_AbstractShape2D*>(item);
-        if(shape2d != NULL)
+    toolTip.append("<br>");
+    toolTip.append("<br>");
+    toolTip.append(tr("Extension : "));
+
+    for (int i = 0 ; i < ext.size() ; i++)
+    {
+        toolTip.append("*.");
+        toolTip.append(ext.at(i));
+        if ((i + 1) < ext.size()) {toolTip.append(" ");}
+    }
+
+    setToolTip(toolTip);
+}
+#endif
+
+QString PB_GDALExporter::displayableName() const
+{
+#ifdef USE_GDAL
+    if(m_driver != nullptr)
+        return CT_GdalTools::staticGdalDriverName(m_driver);
+#endif
+
+    return SuperClass::displayableName();
+}
+
+bool PB_GDALExporter::isExportEachItemInSeparateFileOptionnal() const
+{
+#ifdef USE_GDAL
+    const QString driverType = typeOfDriver();
+
+    if (driverType == RASTER_DRIVER_TYPE) // raster can only be exported one per file
+        return false;
+
+    // multiple vectors or one vector per file is allowed
+    return true;
+#else
+    return SuperClass::isExportEachItemInSeparateFileOptionnal();
+#endif
+}
+
+QString PB_GDALExporter::uniqueName() const
+{
+#ifdef USE_GDAL
+    if(m_driver != nullptr)
+        return CT_GdalTools::staticGdalDriverName(m_driver);
+#endif
+    return SuperClass::uniqueName();
+}
+
+int PB_GDALExporter::subMenuLevel() const
+{
+    const QString driverType = typeOfDriver();
+
+    if (driverType == RASTER_DRIVER_TYPE)
+        return mSubMenuLevelRaster;
+
+    if (driverType == VECTOR_DRIVER_TYPE)
+        return mSubMenuLevelVector;
+
+    return SuperClass::subMenuLevel();
+}
+
+QString PB_GDALExporter::typeOfDriver() const
+{
+#ifdef USE_GDAL
+    if (m_driver->GetMetadataItem(GDAL_DCAP_RASTER) != nullptr && m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) == nullptr)
+        return RASTER_DRIVER_TYPE;
+
+    if (m_driver->GetMetadataItem(GDAL_DCAP_VECTOR) != nullptr && m_driver->GetMetadataItem(GDAL_DCAP_RASTER) == nullptr)
+        return VECTOR_DRIVER_TYPE;
+#endif
+
+    return QString();
+}
+
+void PB_GDALExporter::setVectorsToExport(const QList<const CT_AbstractShape2D*>& vectorList)
+{
+    setMustUseModels(false);
+    mRasters.clear();
+    mVectors = vectorList;
+}
+
+void PB_GDALExporter::setRastersToExport(const QList<const CT_AbstractImage2D*>& rasterList)
+{
+    setMustUseModels(false);
+    mVectors.clear();
+    mRasters = rasterList;
+}
+
+#ifdef USE_GDAL2
+
+    QList<CT_AbstractItemAttribute *> attributes = shape2d->itemAttributes();
+    for (int i = 0 ; i < attributes.size() ; i++)
+    {
+        CT_AbstractItemAttribute* att = attributes.at(i);
+
+        CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) shape2d->model();
+        CT_OutAbstractItemAttributeModel *attrModel = att->model();
+
+        //QString itemDN = itemModel->displayableName();
+        QString itemUN = itemModel->uniqueName();
+
+        QString attrDN = attrModel->displayableName();
+        QString attrUN = attrModel->uniqueName();
+
+        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != nullptr) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
+
+        QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
+
+        if (!_modelsKeys.contains(key))
         {
-            myVectorList.append(item);
+            _modelsKeys.append(key);
+            _names.insert(key, attrDN);
 
-            QList<CT_AbstractItemAttribute *> attributes = shape2d->itemAttributes();
-            for (int i = 0 ; i < attributes.size() ; i++)
-            {
-                CT_AbstractItemAttribute* att = attributes.at(i);
+            CT_AbstractCategory::ValueType type = attrModel->itemAttribute()->type();
 
-                CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) shape2d->model();
-                CT_OutAbstractItemAttributeModel *attrModel = att->model();
-
-                //QString itemDN = itemModel->displayableName();
-                QString itemUN = itemModel->uniqueName();
-
-                QString attrDN = attrModel->displayableName();
-                QString attrUN = attrModel->uniqueName();
-
-                if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
-
-                QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
-
-                if (!_modelsKeys.contains(key))
-                {
-                    _modelsKeys.append(key);
-                    _names.insert(key, attrDN);
-
-                    CT_AbstractCategory::ValueType type = attrModel->itemAttribute()->type();
-
-                    if      (type == CT_AbstractCategory::BOOLEAN) {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
-                    else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
-                    else if (type == CT_AbstractCategory::INT8)    {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::UINT8)   {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::INT16)   {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::UINT16)  {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger);}
-                    //                else if (type == CT_AbstractCategory::UINT32)  {_ogrTypes.insert(key, OFTInteger64);}
-                    //                else if (type == CT_AbstractCategory::INT64)   {_ogrTypes.insert(key, OFTInteger64);}
-                    //                else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger64);}
-                    else                                           {_ogrTypes.insert(key, OFTReal);}
-                }
-            }
-        }
-        else if(dynamic_cast<CT_AbstractImage2D*>(item) != NULL)
-        {
-            myRasterList.append(item);
+            if      (type == CT_AbstractCategory::BOOLEAN) {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
+            else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
+            else if (type == CT_AbstractCategory::INT8)    {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::UINT8)   {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::INT16)   {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::UINT16)  {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger);}
+            //                else if (type == CT_AbstractCategory::UINT32)  {_ogrTypes.insert(key, OFTInteger64);}
+            //                else if (type == CT_AbstractCategory::INT64)   {_ogrTypes.insert(key, OFTInteger64);}
+            //                else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger64);}
+            else                                           {_ogrTypes.insert(key, OFTReal);}
         }
     }
 
@@ -199,66 +221,182 @@ bool PB_GDALExporter::setItemDrawableToExport(const QList<CT_AbstractItemDrawabl
         }
 
     }
-
-    if(myVectorList.isEmpty() && myRasterList.isEmpty())
-    {
-        setErrorMessage(tr("Aucun ItemDrawable exportable"));
-        return false;
-    }
-    else if(!myVectorList.isEmpty() && !myRasterList.isEmpty())
-    {
-        setErrorMessage(tr("Vous ne pouvez pas exporter des rasters ET des éléments 2D dans un seul et même fichier, veuillez recommencer votre sélection."));
-        return false;
-    }
-
-    if(!myVectorList.isEmpty())
-        return SuperClass::setItemDrawableToExport(myVectorList);
-    else {
-        m_exportRaster = true;
-        return SuperClass::setItemDrawableToExport(myRasterList);
-    }
-#else
-    Q_UNUSED(list)
-#endif
-    return false;
-}
-
-bool PB_GDALExporter::protectedExportToFile()
-{
-#ifdef USE_GDAL
-    QFileInfo exportPathInfo = QFileInfo(exportFilePath());
-    QString path = exportPathInfo.path();
-    QString baseName = exportPathInfo.baseName();
-    QString suffix = exportFormats().first().suffixes().first();
-
-    QString filePath = QString("%1/%2.%3").arg(path).arg(baseName).arg(suffix);
-
-    if(m_exportRaster)
-        return exportRaster(filePath);
-
-    return exportVector(filePath);
 #endif
 
-    return false;
+
+void PB_GDALExporter::internalDeclareInputModels(CT_ExporterInModelStructureManager& manager)
+{
+    manager.addGroupToRootGroup(m_hInGroup);
+
+    const QString driverType = typeOfDriver();
+
+    if(driverType == RASTER_DRIVER_TYPE)
+        manager.addItemToGroup(m_hInGroup, m_hInRaster, tr("Rasters"));
+    else if(driverType == VECTOR_DRIVER_TYPE)
+        manager.addItemToGroup(m_hInGroup, m_hInVector, tr("Vectors"));
 }
 
-#ifdef USE_GDAL
-bool PB_GDALExporter::exportRaster(const QString &filepath)
+CT_AbstractExporter::ExportReturn PB_GDALExporter::internalExportToFile()
 {
-    CT_AbstractImage2D *grid = dynamic_cast<CT_AbstractImage2D*>(itemDrawableToExport().first());
+    const QFileInfo exportPathInfo = QFileInfo(filePath());
+    const QString prePath = exportPathInfo.path() + "/" + exportPathInfo.baseName();
+    const QString suffix = exportFormats().first().suffixes().first();
 
-    size_t nXSize = grid->colDim();
-    size_t nYSize = grid->linDim();
+    if(mustUseModels())
+    {
+        if(m_hInVector.isValid())
+        {
+            if(mIteratorVectorBegin == mIteratorVectorEnd)
+            {
+                auto iterator = m_hInVector.iterateInputs(m_handleResultExport);
+                mIteratorVectorBegin = iterator.begin();
+                mIteratorVectorEnd = iterator.end();
+            }
 
-    GDALDataset *dataset = m_driver->Create(filepath.toLatin1(), nXSize, nYSize, 1, GDT_Float32, NULL);
+            int nExported = 0;
+            const int totalToExport = maximumItemToExportInFile(std::numeric_limits<int>::max());
+            const QString noIndice;
 
-    if( dataset == NULL )
+            QList<const CT_AbstractShape2D*> vectors;
+
+            while((mIteratorVectorBegin != mIteratorVectorEnd)
+                  && (nExported < totalToExport))
+            {
+                vectors.append(*mIteratorVectorBegin);
+
+                ++nExported;
+                ++mIteratorVectorBegin;
+            }
+
+            // write data
+            if(!exportVectors(vectors, prePath + "." + suffix))
+                return ErrorWhenExport;
+
+            return (mIteratorVectorBegin == mIteratorVectorEnd) ? NoMoreItemToExport : ExportCanContinue;
+        }
+        else if(m_hInRaster.isValid())
+        {
+            if(mIteratorRasterBegin == mIteratorRasterEnd)
+            {
+                auto iterator = m_hInRaster.iterateInputs(m_handleResultExport);
+                mIteratorRasterBegin = iterator.begin();
+                mIteratorRasterEnd = iterator.end();
+            }
+
+            if(mIteratorRasterBegin != mIteratorRasterEnd)
+            {
+                if(!exportRaster(*mIteratorRasterBegin, prePath + "." + suffix))
+                    return ErrorWhenExport;
+
+                ++mIteratorRasterBegin;
+            }
+
+            return (mIteratorRasterBegin == mIteratorRasterEnd) ? NoMoreItemToExport : ExportCanContinue;
+        }
+    }
+    else if(!mVectors.isEmpty())
+    {
+        if(!exportVectors(mVectors, prePath + "." + suffix))
+            return ErrorWhenExport;
+    }
+    else if(!mRasters.isEmpty())
+    {
+        int cpt = 0;
+        for(auto raster : mRasters)
+        {
+            if(!exportRaster(raster, prePath + QString("_%1").arg(cpt) + "." + suffix))
+                return ErrorWhenExport;
+
+            ++cpt;
+        }
+    }
+
+    return NoMoreItemToExport;
+}
+
+void PB_GDALExporter::clearIterators()
+{
+    mIteratorVectorBegin = HandleVectorType::const_iterator();
+    mIteratorVectorEnd = mIteratorVectorBegin;
+
+    mIteratorRasterBegin = HandleRasterType::const_iterator();
+    mIteratorRasterEnd = mIteratorRasterBegin;
+}
+
+void PB_GDALExporter::clearAttributesClouds()
+{
+}
+
+// (multiple vector per file)
+bool PB_GDALExporter::exportVectors(const QList<const CT_AbstractShape2D*> vectors, const QString& filePath)
+{
+#ifdef USE_GDAL
+    const std::string fp = filePath.toStdString();
+    GDALDataset* dataset = m_driver->Create(fp.data(), 0, 0, 0, GDT_Unknown, nullptr);
+
+    if( dataset == nullptr )
     {
         setErrorMessage(tr("Creation of output file failed."));
         return false;
     }
 
-    if( dataset->GetRasterBand(1) == NULL )
+    OGRLayer *layer = dataset->CreateLayer("layer", nullptr, wkbUnknown, nullptr);
+
+    // TODO : models ???!
+    for (int i = 0 ; layer != nullptr && i < _modelsKeys.size() ; i++)
+    {
+        QString key = _modelsKeys.at(i);
+        if (_ogrTypes.contains(key))
+        {
+            OGRFieldType ogrType = _ogrTypes.value(key);
+
+            QByteArray fieldNameBA = _shortNames.value(key).toLatin1();
+            const char* fieldName = fieldNameBA;
+
+            OGRFieldDefn oField(fieldName, ogrType );
+
+            if (layer->CreateField( &oField ) != OGRERR_NONE)
+            {
+                //  erreur
+            }
+        }
+    }
+
+    if( layer == nullptr )
+    {
+        GDALClose(dataset);
+        setErrorMessage(tr("Layer creation failed."));
+        return false;
+    }
+
+    for(const CT_AbstractShape2D* vector : vectors)
+        exportVector(vector, dataset, layer);
+
+    GDALClose(dataset);
+
+    return true;
+#else
+    return false;
+#endif
+}
+
+// RASTER (one raster per file)
+bool PB_GDALExporter::exportRaster(const CT_AbstractImage2D* grid, const QString& filePath)
+{
+#ifdef USE_GDAL
+    const int nXSize = grid->xdim();
+    const int nYSize = grid->ydim();
+
+    const std::string fp = filePath.toStdString();
+    GDALDataset* dataset = m_driver->Create(fp.data(), nXSize, nYSize, 1, GDT_Float32, nullptr);
+
+    if( dataset == nullptr )
+    {
+        setErrorMessage(tr("Creation of output file failed."));
+        return false;
+    }
+
+    if( dataset->GetRasterBand(1) == nullptr )
     {
         GDALClose(dataset);
         setErrorMessage(tr("Creation of output file failed."));
@@ -278,8 +416,7 @@ bool PB_GDALExporter::exportRaster(const QString &filepath)
 
     poBand->SetNoDataValue(grid->NAAsDouble());
 
-
-    float *pafScanline = (float *) CPLMalloc(sizeof(float)*nXSize);
+    float* pafScanline = static_cast<float*>(CPLMalloc(sizeof(float)*size_t(nXSize)));
 
     size_t index = 0;
 
@@ -288,7 +425,7 @@ bool PB_GDALExporter::exportRaster(const QString &filepath)
         for(int x = 0 ; x < nXSize ; ++x)
         {
             grid->index(x, y, index);
-            pafScanline[x] = grid->valueAtIndexAsDouble(index);
+            pafScanline[x] = float(grid->valueAtIndexAsDouble(index));
         }
         poBand->RasterIO( GF_Write, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float32, 0, 0);
     }
@@ -297,161 +434,116 @@ bool PB_GDALExporter::exportRaster(const QString &filepath)
 
     double min, max, mean, stdDev;
     poBand->FlushCache();
-    poBand->ComputeStatistics(0, &min, &max, &mean, &stdDev, NULL, NULL);
+    poBand->ComputeStatistics(0, &min, &max, &mean, &stdDev, nullptr, nullptr);
     poBand->SetStatistics(min, max, mean, stdDev);
     poBand->FlushCache();
 
     GDALClose(dataset);
 
     return true;
+#else
+    return false;
+#endif
 }
 
-bool PB_GDALExporter::exportVector(const QString &filepath)
-{
-    GDALDataset *dataset = m_driver->Create(filepath.toLatin1(), 0, 0, 0, GDT_Unknown, NULL);
+#ifdef USE_GDAL
 
-    if( dataset == NULL )
-    {
-        setErrorMessage(tr("Creation of output file failed."));
-        return false;
-    }
-
-    OGRLayer *layer = dataset->CreateLayer("layer", NULL, wkbUnknown, NULL);
-
-    for (int i = 0 ; layer != NULL && i < _modelsKeys.size() ; i++)
-    {
-        QString key = _modelsKeys.at(i);
-        if (_ogrTypes.contains(key))
-        {
-            OGRFieldType ogrType = _ogrTypes.value(key);
-
-            QByteArray fieldNameBA = _shortNames.value(key).toLatin1();
-            const char* fieldName = fieldNameBA;
-
-            OGRFieldDefn oField(fieldName, ogrType );
-
-            if (layer->CreateField( &oField ) != OGRERR_NONE)
-            {
-                //  erreur
-            }
-        }
-    }
-
-
-    if( layer == NULL )
-    {
-        GDALClose(dataset);
-        setErrorMessage(tr("Layer creation failed."));
-        return false;
-    }
-
-    QListIterator<CT_AbstractItemDrawable*> it(itemDrawableToExport());
-
-    while(it.hasNext())
-        exportItemDrawable(it.next(), dataset, layer);
-
-    GDALClose(dataset);
-
-    return true;
-}
-
-bool PB_GDALExporter::exportItemDrawable(CT_AbstractItemDrawable *item, GDALDataset *dataset, OGRLayer *layer)
+bool PB_GDALExporter::exportVector(const CT_AbstractShape2D* shape2d, GDALDataset *dataset, OGRLayer *layer)
 {
     OGRFeature *poFeature;
     poFeature = OGRFeature::CreateFeature( layer->GetLayerDefn() );
 
-    CT_AbstractShape2D* shape2d = dynamic_cast<CT_AbstractShape2D*>(item);
-    if(shape2d != NULL)
+    /*QList<CT_AbstractItemAttribute *> attributes = shape2d->itemAttributes();
+    for (int i = 0 ; i < attributes.size() ; i++)
     {
-        QList<CT_AbstractItemAttribute *> attributes = shape2d->itemAttributes();
-        for (int i = 0 ; i < attributes.size() ; i++)
+        CT_AbstractItemAttribute* att = attributes.at(i);
+
+        CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) shape2d->model();
+        CT_OutAbstractItemAttributeModel *attrModel = att->model();
+
+        QString itemUN = itemModel->uniqueName();
+        QString attrUN = attrModel->uniqueName();
+
+        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != nullptr) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
+
+        QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
+
+
+        QByteArray fieldNameBA = _shortNames.value(key).toLatin1();
+        const char* fieldName = fieldNameBA;
+
+        if      (_ogrTypes.value(key) == OFTBinary)
         {
-            CT_AbstractItemAttribute* att = attributes.at(i);
-
-            CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) shape2d->model();
-            CT_OutAbstractItemAttributeModel *attrModel = att->model();
-
-            QString itemUN = itemModel->uniqueName();
-            QString attrUN = attrModel->uniqueName();
-
-            if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != NULL) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
-
-            QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
-
-
-            QByteArray fieldNameBA = _shortNames.value(key).toLatin1();
-            const char* fieldName = fieldNameBA;
-
-            if      (_ogrTypes.value(key) == OFTBinary)
-            {
-                poFeature->SetField(fieldName, att->toInt(shape2d, NULL));
-            } else if (_ogrTypes.value(key) == OFTString)
-            {
-                //QString text = replaceAccentCharacters(att->toString(shape2d, NULL));
-                QString text = att->toString(shape2d, NULL);
-                QByteArray textBA = text.toLatin1();
-                const char* textChar = textBA;
-                poFeature->SetField(fieldName, textChar);
-            } else if (_ogrTypes.value(key) == OFTInteger)
-            {
-                poFeature->SetField(fieldName, att->toInt(shape2d, NULL));
-            } else
-            {
-                poFeature->SetField(fieldName, att->toDouble(shape2d, NULL));
-            }
+            poFeature->SetField(fieldName, att->toInt(shape2d, nullptr));
+        } else if (_ogrTypes.value(key) == OFTString)
+        {
+            //QString text = replaceAccentCharacters(att->toString(shape2d, nullptr));
+            QString text = att->toString(shape2d, nullptr);
+            QByteArray textBA = text.toLatin1();
+            const char* textChar = textBA;
+            poFeature->SetField(fieldName, textChar);
+        } else if (_ogrTypes.value(key) == OFTInteger)
+        {
+            poFeature->SetField(fieldName, att->toInt(shape2d, nullptr));
+        } else
+        {
+            poFeature->SetField(fieldName, att->toDouble(shape2d, nullptr));
         }
-    }
+    }*/
 
+    shape2d->visitItemAttributes([shape2d, &poFeature](const CT_AbstractItemAttribute* att) -> bool
+    {
+        const CT_AbstractCategory::ValueType vt = att->valueType();
 
-    CT_Box2D *box = dynamic_cast<CT_Box2D*>(item);
-    if(box != NULL)
-    {
-        return exportBox2D(box, dataset, layer, poFeature);
-    }
-    else
-    {
-        CT_Circle2D *circle = dynamic_cast<CT_Circle2D*>(item);
-        if(circle != NULL)
+        /*if(_ogrTypes.value(key) == OFTBinary)
         {
-            return exportCircle2D(circle, dataset, layer, poFeature);
+            poFeature->SetField(fieldName, att->toInt(shape2d, nullptr));
+        }
+        else if (vt == CT_AbstractCategory::STRING) // OFTString
+        {
+            //QString text = replaceAccentCharacters(att->toString(shape2d, nullptr));
+            const std::string text = att->toString(shape2d, nullptr).toStdString();
+            poFeature->SetField(fieldName, text.data());
+        }
+        else if((vt & CT_AbstractCategory::NUMBER_INT)
+                && (vt != CT_AbstractCategory::INT64)
+                && (vt != CT_AbstractCategory::UINT64)
+                && (vt != CT_AbstractCategory::UINT32)) // OFTInteger
+        {
+            poFeature->SetField(fieldName, att->toInt(shape2d, nullptr));
         }
         else
         {
-            CT_Line2D *line = dynamic_cast<CT_Line2D*>(item);
-            if(line != NULL)
-            {
-                return exportLine2D(line, dataset, layer, poFeature);
-            }
-            else
-            {
-                CT_Point2D *point = dynamic_cast<CT_Point2D*>(item);
-                if(point != NULL)
-                {
-                    return exportPoint2D(point, dataset, layer, poFeature);
-                }
-                else
-                {
-                    CT_Polygon2D *polyg = dynamic_cast<CT_Polygon2D*>(item);
-                    if(polyg != NULL)
-                    {
-                        return exportPolygon2D(polyg, dataset, layer, poFeature);
-                    }
-                    else
-                    {
-                        CT_Polyline2D *polyl = dynamic_cast<CT_Polyline2D*>(item);
-                        if(polyl != NULL)
-                        {
-                            return exportPolyline2D(polyl, dataset, layer, poFeature);
-                        }
-                        else
-                        {
-                            OGRFeature::DestroyFeature( poFeature );
-                        }
-                    }
-                }
-            }
-        }
-    }
+            poFeature->SetField(fieldName, att->toDouble(shape2d, nullptr));
+        }*/
+        return true;
+    });
+
+    const CT_Box2D *box = dynamic_cast<const CT_Box2D*>(shape2d);
+    if(box != nullptr)
+        return exportBox2D(box, dataset, layer, poFeature);
+
+    const CT_Circle2D *circle = dynamic_cast<const CT_Circle2D*>(shape2d);
+    if(circle != nullptr)
+        return exportCircle2D(circle, dataset, layer, poFeature);
+
+    const CT_Line2D *line = dynamic_cast<const CT_Line2D*>(shape2d);
+    if(line != nullptr)
+        return exportLine2D(line, dataset, layer, poFeature);
+
+    const CT_Point2D *point = dynamic_cast<const CT_Point2D*>(shape2d);
+    if(point != nullptr)
+        return exportPoint2D(point, dataset, layer, poFeature);
+
+    const CT_Polygon2D *polyg = dynamic_cast<const CT_Polygon2D*>(shape2d);
+    if(polyg != nullptr)
+        return exportPolygon2D(polyg, dataset, layer, poFeature);
+
+    const CT_Polyline2D *polyl = dynamic_cast<const CT_Polyline2D*>(shape2d);
+    if(polyl != nullptr)
+        return exportPolyline2D(polyl, dataset, layer, poFeature);
+
+    OGRFeature::DestroyFeature( poFeature );
 
     return false;
 }
@@ -461,7 +553,7 @@ bool PB_GDALExporter::exportBox2D(const CT_Box2D *box, GDALDataset *dataset, OGR
     OGRPolygon po;
 
     Eigen::Vector3d min, max;
-    box->getBoundingBox(min, max);
+    box->boundingBox(min, max);
 
     OGRLinearRing extRing;
     extRing.addPoint(min[0], min[1], 0);
@@ -483,7 +575,7 @@ bool PB_GDALExporter::exportCircle2D(const CT_Circle2D *circle, GDALDataset *dat
     Eigen::Vector2d c2 = circle->getCenter();
     c2[0] += circle->getRadius();
 
-    OGRLineString *ogrl = OGRGeometryFactory::curveToLineString(c[0], c[1], 0, c2[0], c2[1], 0, c[0], c[1], 0, false, 0, NULL);
+    OGRLineString *ogrl = OGRGeometryFactory::curveToLineString(c[0], c[1], 0, c2[0], c2[1], 0, c[0], c[1], 0, false, 0, nullptr);
 
     bool r = exportOGRGeometry(ogrl, dataset, layer, poFeature);
 
@@ -518,19 +610,19 @@ bool PB_GDALExporter::exportPolygon2D(const CT_Polygon2D *polygon, GDALDataset *
     OGRPolygon po;
     OGRLinearRing extRing;
 
-    QVectorIterator<Eigen::Vector2d*> it(polygon->getVertices());
+    QVectorIterator<Eigen::Vector2d> it(polygon->getVertices());
 
     while(it.hasNext())
     {
-        Eigen::Vector2d *v = it.next();
-        extRing.addPoint((*v)[0], (*v)[1], 0);
+        const Eigen::Vector2d& v = it.next();
+        extRing.addPoint(v[0], v[1], 0);
     }
 
     it.toFront();
     if (it.hasNext())
     {
-        Eigen::Vector2d *v = it.next();
-        extRing.addPoint((*v)[0], (*v)[1], 0);
+        const Eigen::Vector2d& v = it.next();
+        extRing.addPoint(v[0], v[1], 0);
     }
 
     po.addRing(&extRing);
@@ -542,12 +634,12 @@ bool PB_GDALExporter::exportPolyline2D(const CT_Polyline2D *polyline, GDALDatase
 {
     OGRLineString ogrl;
 
-    QVectorIterator<Eigen::Vector2d*> it(polyline->getVertices());
+    QVectorIterator<Eigen::Vector2d> it(polyline->getVertices());
 
     while(it.hasNext())
     {
-        Eigen::Vector2d *v = it.next();
-        ogrl.addPoint((*v)[0], (*v)[1], 0);
+        const Eigen::Vector2d& v = it.next();
+        ogrl.addPoint(v[0], v[1], 0);
     }
 
     return exportOGRGeometry(&ogrl, dataset, layer, poFeature);

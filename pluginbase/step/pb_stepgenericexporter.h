@@ -75,13 +75,7 @@ private:
 
     bool                _adaptative;
     bool                _multipleExport;
-    bool                _otherItem;
-
-
-
-    //void setDefaultExportPath(const QString &path);
-
-    QString replaceBadCharacters(const QString &name) const;
+    int                 _multipleExportChoice;
 
 private slots:
     void exportProgressChanged(int progress);

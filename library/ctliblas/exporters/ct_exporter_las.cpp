@@ -113,18 +113,22 @@ void CT_Exporter_LAS::internalDeclareInputModels(CT_ExporterInModelStructureMana
     manager.addItemToGroup(m_hInGroup, m_hInColor, tr("Color"));
 }
 
-bool CT_Exporter_LAS::internalExportToFile()
+CT_AbstractExporter::ExportReturn CT_Exporter_LAS::internalExportToFile()
 {
     QList<CT_AbstractPieceByPieceExporter*> exporters;
     exporters << createPieceByPieceExporter(filePath());
 
-    if(exportOnePieceOfDataToFiles(exporters))
-        return finalizePieceByPieceExport(exporters);
+    CT_AbstractExporter::ExportReturn ret = ErrorWhenExport;
+    if((ret = exportOnePieceOfDataToFiles(exporters)) != ErrorWhenExport)
+    {
+        if(!finalizePieceByPieceExport(exporters))
+            return ErrorWhenExport;
+    }
 
-    return false;
+    return ret;
 }
 
-bool CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
+CT_AbstractExporter::ExportReturn CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
 {
     if(mustUseModels())
     {
@@ -266,7 +270,10 @@ bool CT_Exporter_LAS::internalExportOnePiece(const QList<CT_AbstractPieceByPiece
         }
     }
 
-    return true;
+    if(mustUseModels())
+        return (mIteratorItemBegin == mIteratorItemEnd) ? NoMoreItemToExport : ExportCanContinue;
+
+    return NoMoreItemToExport;
 }
 
 void CT_Exporter_LAS::clearIterators()

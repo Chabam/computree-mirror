@@ -37,9 +37,9 @@ public:
 protected:
     void internalDeclareInputModels(CT_ExporterInModelStructureManager& manager) override;
 
-    bool internalExportToFile() override;
+    ExportReturn internalExportToFile() override;
 
-    bool internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters) override;
+    ExportReturn internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters) override;
 
     void clearIterators() override;
 

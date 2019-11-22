@@ -71,7 +71,7 @@ bool CT_AbstractReader::setFilePath(const QString& filepath)
         allSuffixes.append(suffixes);
     }
 
-    if(!allSuffixes.contains("*") && !allSuffixes.contains(QFileInfo(filepath).completeSuffix()))
+    if(!allSuffixes.contains("*") && !allSuffixes.contains(QFileInfo(filepath).completeSuffix().toLower()))
         return false;
 
     // Verify that the file exist and can be opened

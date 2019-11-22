@@ -64,10 +64,12 @@ public:
         if(inResultSelectedPossibilityIndex >= inResult.model()->nPossibilitySelected())
             return nullptr;
 
-        if(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel() == nullptr)
+        CT_InAbstractResultModel* resultModel = static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel();
+
+        if(resultModel == nullptr)
             return nullptr;
 
-        ModelType* inModelForPossibilities = inModelForSelectedPossibilities(inResult, 0);
+        ModelType* inModelForPossibilities = static_cast<ModelType*>(resultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(model()));
 
         if(inModelForPossibilities == nullptr)
             return nullptr;
@@ -76,6 +78,32 @@ public:
             return nullptr;
 
         return inModelForPossibilities->possibilitySelectedAt(inModelSelectedPossibilityIndex)->outModel();
+    }
+
+    template<class HandleInResult>
+    bool hasAtLeastOnePossibilitySelected(const HandleInResult& inResult)
+    {
+        MODELS_ASSERT(model() != nullptr);
+        MODELS_ASSERT(inResult.model() != nullptr);
+
+        const int nP = inResult.model()->nPossibilitySelected();
+
+        for(int inResultSelectedPossibilityIndex=0; inResultSelectedPossibilityIndex<nP; ++inResultSelectedPossibilityIndex)
+        {
+            CT_InAbstractResultModel* resultModel = static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel();
+
+            if(resultModel == nullptr)
+                continue;
+
+            ModelType* inModelForPossibilities = static_cast<ModelType*>(resultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(model()));
+
+            if((inModelForPossibilities == nullptr) || (inModelForPossibilities->nPossibilitySelected() == 0))
+                continue;
+
+            return true;
+        }
+
+        return false;
     }
 };
 

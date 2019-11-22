@@ -78,18 +78,22 @@ void PB_XYBExporter::internalDeclareInputModels(CT_ExporterInModelStructureManag
     manager.addItemToGroup(m_hInGroup, m_hInPointsAttribute, tr("Couleurs"));
 }
 
-bool PB_XYBExporter::internalExportToFile()
+CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportToFile()
 {
     QList<CT_AbstractPieceByPieceExporter*> exporters;
     exporters << createPieceByPieceExporter(filePath());
 
-    if(exportOnePieceOfDataToFiles(exporters))
-        return finalizePieceByPieceExport(exporters);
+    CT_AbstractExporter::ExportReturn ret = ErrorWhenExport;
+    if((ret = exportOnePieceOfDataToFiles(exporters)) != ErrorWhenExport)
+    {
+        if(!finalizePieceByPieceExport(exporters))
+            return ErrorWhenExport;
+    }
 
-    return false;
+    return ret;
 }
 
-bool PB_XYBExporter::internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
+CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
 {
     CT_AbstractColorCloud *cc = createColorCloud();
 
@@ -118,6 +122,8 @@ bool PB_XYBExporter::internalExportOnePiece(const QList<CT_AbstractPieceByPieceE
             ++nExported;
             ++mIteratorItemBegin;
         }
+
+        return (mIteratorItemBegin == mIteratorItemEnd) ? NoMoreItemToExport : ExportCanContinue;
     }
     else
     {
@@ -139,7 +145,7 @@ bool PB_XYBExporter::internalExportOnePiece(const QList<CT_AbstractPieceByPieceE
         }
     }
 
-    return true;
+    return NoMoreItemToExport;
 }
 
 void PB_XYBExporter::exportPoints(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters,

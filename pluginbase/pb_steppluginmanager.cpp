@@ -60,7 +60,9 @@
 /*
 #include "exporters/csv/pb_csvexporter.h"
 #include "exporters/profile/pb_profileexporter.h"
+*/
 #include "exporters/grid2d/pb_grid2dexporter.h"
+/*
 #include "exporters/grid3d/pb_grid3dexporter.h"
 #include "exporters/grid3d/pb_grid3dastableexporter.h"
 */
@@ -75,7 +77,9 @@
 #include "exporters/pbm/pb_pbmexporter.h"
 #include "exporters/pgm/pb_pgmexporter.h"
 #include "exporters/polygon2d/pb_polygon2dexporter.h"
+*/
 #include "exporters/gdal/pb_gdalexporter.h"
+/*
 #include "exporters/ascid/pb_ascidexporter.h"
 
 */
@@ -130,6 +134,7 @@ PB_StepPluginManager::PB_StepPluginManager() : CT_AbstractStepPlugin()
 */
     #ifdef USE_GDAL
     CPLSetErrorHandler(PB_StepPluginManager::staticGdalErrorHandler);
+    GDALAllRegister();
     #endif
 }
 
@@ -253,10 +258,10 @@ bool PB_StepPluginManager::loadActions()
 }
 
 #ifdef USE_GDAL
-/*bool GDALExporterLessThan(const PB_GDALExporter *s1, const PB_GDALExporter *s2)
+bool GDALExporterLessThan(const PB_GDALExporter *s1, const PB_GDALExporter *s2)
 {
     return s1->uniqueName() < s2->uniqueName();
-}*/
+}
 
 bool GDALReaderLessThan(const CT_Reader_GDAL *s1, const CT_Reader_GDAL *s2)
 {
@@ -276,7 +281,9 @@ bool PB_StepPluginManager::loadExporters()
     sep->addExporter(new PB_ASCRGBExporter());
     sep->addExporter(new PB_ASCIDExporter());
     sep->addExporter(new PB_ProfileExporter());
+    */
     sep->addExporter(new PB_Grid2DExporter());
+    /*
     sep->addExporter(new PB_Grid3DExporter());
     sep->addExporter(new PB_Grid3DAsTableExporter());
     sep->addExporter(new PB_Polygon2DExporter());
@@ -293,7 +300,7 @@ bool PB_StepPluginManager::loadExporters()
 
     if(count > 0) {
 
-        //QList<PB_GDALExporter*> gdalExpoC;
+        QList<PB_GDALExporter*> gdalExpoC;
 
         for(int i=0; i<count; ++i) {
             GDALDriver *driver = driverManager->GetDriver(i);
@@ -303,12 +310,12 @@ bool PB_StepPluginManager::loadExporters()
             {
                 if (driver->GetMetadataItem(GDAL_DCAP_CREATE) != nullptr)
                 {
-                    //gdalExpoC.append(new PB_GDALExporter(driver));
+                    gdalExpoC.append(new PB_GDALExporter(driver, CT_StepsMenu::LP_Raster, CT_StepsMenu::LP_Vector, CT_StepsMenu::LP_Others));
                 }
             }
         }
 
-        /*if(!gdalExpoC.isEmpty()) {
+        if(!gdalExpoC.isEmpty()) {
             sep = addNewSeparator(new CT_StandardExporterSeparator("GDAL"));
 
             qSort(gdalExpoC.begin(), gdalExpoC.end(), GDALExporterLessThan);
@@ -317,7 +324,7 @@ bool PB_StepPluginManager::loadExporters()
 
             while(itGD.hasNext())
                 sep->addExporter(itGD.next());
-        }*/
+        }
     }
 #endif
 
@@ -348,7 +355,6 @@ bool PB_StepPluginManager::loadReaders()
     // load gdal drivers and create readers and exporters
 
 #ifdef USE_GDAL
-    GDALAllRegister();
     GDALDriverManager *driverManager = GetGDALDriverManager();
 
     const int count = driverManager->GetDriverCount();

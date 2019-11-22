@@ -83,8 +83,11 @@ QVariant CT_CheckBox::getValue() const
 
 bool CT_CheckBox::setWidgetValue(QVariant val)
 {
-    _checkBoxCreated->setChecked(val.toBool());
-    emit valueChanged(_checkBoxCreated->isChecked());
+    if(val.toBool() != _checkBoxCreated->isChecked())
+    {
+        _checkBoxCreated->setChecked(val.toBool());
+        emit valueChanged(_checkBoxCreated->isChecked());
+    }
 
     return true;
 }

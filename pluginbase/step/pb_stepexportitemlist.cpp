@@ -68,7 +68,7 @@ void PB_StepExportItemList::finalizePreSettings()
 void PB_StepExportItemList::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     if(mExporter != nullptr)
-        mExporter->declareInputModels(manager, true, true, true);
+        mExporter->declareInputModels(manager, CT_AbstractExporter::EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName, true);
 }
 
 void PB_StepExportItemList::declareOutputModels(CT_StepOutModelStructureManager& /*manager*/)

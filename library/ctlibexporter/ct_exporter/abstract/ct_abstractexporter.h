@@ -68,7 +68,7 @@ public:
     /**
      * @brief Returns the sub menu level where we can store this reader
      */
-    int subMenuLevel() const;
+    virtual int subMenuLevel() const;
 
     /**
      * @brief Set the export filepath. You can overload this method if you want to verify something in the filepath.
@@ -106,27 +106,49 @@ public:
     virtual bool restoreSettings(SettingsReaderInterface& reader);
 
     /**
+     * @brief Returns true if the user can choose to export each item
+     *        in a separate file or false if each item must be in a single
+     *        file obligatory.
+     */
+    virtual bool isExportEachItemInSeparateFileOptionnal() const;
+
+    enum ExportWithModelsOption
+    {
+        // Each item is exported in a separated file. Only the directory of the filepath set is used for the base.
+        // The filename is the original filename + an internal counter (0, 1, 2).
+        EachItemInSeparateFile_OriginalName_InternalCounter = 0,
+
+        // Each item is exported in a separated file. Only the directory of the filepath set is used for the base.
+        // The filename is the value converted to string of an attribute of
+        // the item to export + an internal counter (0, 1, 2) if the previous value of
+        // the attribute is the same as the current.
+        EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName,
+
+        // Each item is exported in a separated file. Only the directory of the filepath set is used for the base.
+        // The filename is the value converted to string of an attribute of
+        // another item + an internal counter (0, 1, 2) if the previous value of
+        // the attribute is the same as the current.
+        EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName,
+
+        // All items are exported in one file. The filepath is the original set.
+        // If you use this option and the method isExportEachItemInSeparateFileOptionnal() return false
+        // the option will be forced to EachItemInSeparateFile_OriginalName_InternalCounterIfSameFileName
+        AllItemsInSameFile_OriginalName,
+    };
+
+    /**
      * @brief Call it to declare all input models in a specified manager. If you call this method you
      *        will not be able to call method "wereAllInputsFoundInOutputsOfThisManager" and
      *        "findInputsInOutputsOfThisManager" because you use your own manager. But this method
      *        must be used in a step that use an exporter !
      * @param manager : the manager to use to declare input models
-     * @param nameOfTheFileContainsTurnNameFromACounter : If false the name of the file will be the name set in the method "setFilePath".
-     *                                                    If true only the directory of the filepath set in method "setFilePath" will be
-     *                                                    used and the filename will be the turn name returned by a CT_LoopCounter.
-     * @param exportEachItemInSeperateFile : If false all items or groups will be exported in the same file.
-     *                                       If true each item or each group (if the exporter export only groups) will be exported in a seperate file. Only the directory
-     *                                       of the filepath set in method "setFilePath" will be used. The name of the file will be a value of an attribute of the item (if
-     *                                       the parameter "nameOfTheFileContainsTurnNameFromACounter" is set to true the file will contains the turn name returned by a CT_LoopCounter too.
-     * @param fileNameUsedFromAttributeOfAnotherItem : If false the filename depends on previous parameter.
-     *                                                   If true (can only be true if "exportEachItemInSeperateFile" is true otherwise it will be ignored) the name of the file
-     *                                                   will be a value of an attribute of another item it the same group as as the item to export (if the parameter "nameOfTheFileContainsTurnNameFromACounter"
-     *                                                   is set to true the file will contains the turn name returned by a CT_LoopCounter too.
+     * @param option : options are detailled in the enum.
+     * @param addCounterTurnNameToFilename : true if you want to add the turn name of a counter
+     *                                       to the filename, example : /bla/bli/TurnName_FileName.suffix
      */
     void declareInputModels(CT_InModelStructureManager& manager,
-                            bool nameOfTheFileContainsTurnNameFromACounter = false,
-                            bool exportEachItemInSeperateFile = false,
-                            bool fileNameUsedFromAttributeOfAnotherItem = false);
+                            ExportWithModelsOption option = AllItemsInSameFile_OriginalName,
+                            bool addCounterTurnNameToFilename = false);
 
     /**
      * @brief Call it to declare all input models in manager of this class. If you call this method you
@@ -296,10 +318,22 @@ public:
      */
     virtual CT_AbstractPieceByPieceExporter* createPieceByPieceExporter(const QString& outputFilepath);
 
+    enum ExportReturn
+    {
+        // Returns this if an error occured when export
+        ErrorWhenExport,
+
+        // Returns this when your iterators are not at the end
+        ExportCanContinue,
+
+        // Returns this when your iterators are at the end
+        NoMoreItemToExport
+    };
+
     /**
      * @brief Pass all configured piece by piece exporters to export one piece
      */
-    bool exportOnePieceOfDataToFiles(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters);
+    ExportReturn exportOnePieceOfDataToFiles(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters);
 
     /**
      * @brief Pass all piece by piece exporters to finalize all files exported piece by piece.
@@ -363,7 +397,6 @@ protected:
      * @brief Define if you can export faces
      */
     void setCanExportFaces(bool e);
-
     /**
      * @brief You must redefine this method in your class to export all elements that you mmust export.
      *
@@ -381,7 +414,7 @@ protected:
      *
      * @return
      */
-    virtual bool internalExportToFile() = 0;
+    virtual ExportReturn internalExportToFile() = 0;
 
     /**
      * @brief You must redefine this method to export one piece. Before this method is called this class has called the method
@@ -390,7 +423,7 @@ protected:
      *        per example the point, his attributes, etc... and the piece by piece exporter must call his filters to know if
      *        the element can be exported or not in his file.
      */
-    virtual bool internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters);
+    virtual ExportReturn internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters);
 
     /**
      * @brief Call this method with false in methods declared in your exporter that use elements not from models. This method
@@ -492,9 +525,7 @@ private:
 
 
     bool                                mMustUseModels;
-    bool                                mNameOfTheFileContainsTurnNameFromACounter;
-    bool                                mExportEachItemInSeparateFile;
-    bool                                mFileNameUsedFromAttributeOfAnotherItem;
+    ExportWithModelsOption              mExportWithModelsOption;
 
     bool                                mMaximumItemToExportCalled;
 

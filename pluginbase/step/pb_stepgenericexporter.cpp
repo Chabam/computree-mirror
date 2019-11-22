@@ -10,7 +10,7 @@ PB_StepGenericExporter::PB_StepGenericExporter(CT_AbstractExporter *exporter) : 
 {
     _adaptative = false;
     _multipleExport = false;
-    _otherItem = false;
+    _multipleExportChoice = CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter;
     _exporter = exporter;
     _exportPath = ".";
 
@@ -24,7 +24,7 @@ PB_StepGenericExporter::~PB_StepGenericExporter()
     _exporter = nullptr;
 }
 
-const CT_AbstractExporter *PB_StepGenericExporter::exporter() const
+const CT_AbstractExporter* PB_StepGenericExporter::exporter() const
 {
     return _exporter;
 }
@@ -53,22 +53,6 @@ QString PB_StepGenericExporter::detailledDescription() const
 
     return tr("Exporte un(des) fichier(s) de type :") + createExportExtensionString();
 }
-
-/*void PB_StepGenericExporter::init()
-{
-    QSettings *settings = _data->getSettingsFile();
-
-    if(settings != nullptr)
-    {
-        settings->beginGroup(getStepName());
-
-        _exportPath = settings->value("DefaultExportPath", ".").toString();
-
-        settings->endGroup();
-    }
-
-    SuperClass::init();
-}*/
 
 void PB_StepGenericExporter::saveInputSettings(SettingsWriterInterface &writer) const
 {
@@ -131,23 +115,42 @@ QString PB_StepGenericExporter::createExportExtensionString() const
 
 void PB_StepGenericExporter::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    preInputConfigDialog->addBool(tr("Nom du fichier = nom du compteur de boucle"), "", "", _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
-    CT_CheckBox* cbEM = preInputConfigDialog->addBool(tr("Un item par fichier"), "", "", _multipleExport, tr("Si coché : \r- vous devrez choisir un attribut d'item contenant une chaine de caractère\r- chaque item sera exporté dans un fichier différent\r - le nom du fichier utilisera la chaine de caractère contenue dans l'attribut."));
-    CT_CheckBox* cbOI = preInputConfigDialog->addBool(tr("Nom du fichier contenu dans un attribut d'un autre item"), "", "", _otherItem, tr("Si coché : \r- L'attribut correspondra à l'item que vous devrez coché et non pas à l'item exporté"));
+    preInputConfigDialog->addBool(tr("Nom du fichier = nom du tour courant + nom du fichier"), "", "", _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
 
-    connect(cbEM, &CT_CheckBox::valueChanged, cbOI, &CT_CheckBox::setEnabled);
+    const QString multiExportDesc = tr("Chaque item sera exporté dans un fichier différent\r - le nom du fichier à utiliser sera fonction du choix que vous allez faire ci-dessous.");
+
+    if(_exporter->isExportEachItemInSeparateFileOptionnal())
+    {
+        preInputConfigDialog->addBool(tr("Un item par fichier"), "", "", _multipleExport, tr("Si coché : \r%1").arg(multiExportDesc));
+    }
+    else
+    {
+        preInputConfigDialog->addText(tr("Un item par fichier obligatoire (l'exportateur ne peut pas faire autrement) :"), "", "", multiExportDesc);
+        _multipleExport = true;
+    }
+
+    CT_ButtonGroup& bg = preInputConfigDialog->addButtonGroup(_multipleExportChoice);
+    preInputConfigDialog->addExcludeValue(tr("Nom du fichier original"), "", "", bg, CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter);
+    preInputConfigDialog->addExcludeValue(tr("Nom du fichier contenu dans un attribut"), "", "", bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName, tr("Si coché : \r- L'attribut à relier sera un fils de l'item à exporter"));
+    preInputConfigDialog->addExcludeValue(tr("Nom du fichier contenu dans un attribut d'un autre item"), "", "", bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName, tr("Si coché : \r- L'attribut à relier sera un fils d'un autre item que celui à exporter"));
 }
 
 void PB_StepGenericExporter::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    _exporter->declareInputModels(manager, _adaptative, _multipleExport, _otherItem);
+    CT_AbstractExporter::ExportWithModelsOption option = CT_AbstractExporter::AllItemsInSameFile_OriginalName;
+
+    if(_multipleExport)
+        option = CT_AbstractExporter::ExportWithModelsOption(_multipleExportChoice);
+
+    _exporter->declareInputModels(manager, option, _adaptative);
 }
 
 bool PB_StepGenericExporter::postInputConfigure()
 {
     QString exportFileName;
+    const bool isDir = (_multipleExport && (_multipleExportChoice != CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter));
 
-    if (_adaptative || _multipleExport)
+    if(isDir)
         exportFileName = QFileDialog::getExistingDirectory(nullptr, tr("Exporter dans..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename);
     else
         exportFileName = QFileDialog::getSaveFileName(nullptr, tr("Exporter sous..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename, PB_ExporterTools::constructStringForFileDialog(_exporter));
@@ -155,7 +158,7 @@ bool PB_StepGenericExporter::postInputConfigure()
     if(exportFileName.isEmpty())
         return false;
 
-    if (_adaptative || _multipleExport)
+    if(isDir)
         exportFileName = QDir::toNativeSeparators(exportFileName + "/");
 
     if(!_exporter->configure())
@@ -183,238 +186,10 @@ void PB_StepGenericExporter::compute()
         setErrorMessage(1, _exporter->errorMessage());
         setErrorCode(1);
     }
-    /*CT_ResultGroup* resIn_Counter = nullptr;
-    QString baseName = "";
-
-    if (_adaptative)
-    {
-        QList<CT_ResultGroup*> inResultList = getInputResults();
-
-        resIn_Counter = inResultList.at(1);
-        CT_ResultItemIterator it(resIn_Counter, this, DEF_inCounter);
-        if (it.hasNext())
-        {
-            CT_LoopCounter* counter = (CT_LoopCounter*) it.next();
-            baseName = counter->getTurnName();
-            baseName = QFileInfo(baseName).baseName();
-        }
-    }
-
-    QList<CT_AbstractItemDrawable*> itemsToExport;
-    QList<CT_AbstractSingularItemDrawable*> itemsWithNames;
-
-    CT_ResultGroup *inResult = getInputResults().first();
-    CT_ResultGroupIterator it(inResult, this, DEF_SearchInGroup);
-    while(!isStopped() && it.hasNext())
-    {
-        CT_StandardItemGroup *group = (CT_StandardItemGroup*) it.next();
-
-        if (group != nullptr)
-        {
-            if (_exporter->exportOnlyGroup())
-            {
-                itemsToExport.append(group);
-            } else
-            {
-                CT_AbstractItemDrawable *item = (CT_AbstractItemDrawable*) group->firstItemByINModelName(this, DEF_SearchInItemDrawable);
-
-                CT_AbstractSingularItemDrawable *itemWithName = nullptr;
-                if (_multipleExport && _otherItem)
-                {
-                    itemWithName = (CT_AbstractSingularItemDrawable*) group->firstItemByINModelName(this, DEF_SearchInItemWithName);
-                }
-
-                if (item != nullptr)
-                {
-                    itemsToExport.append(item);
-
-                    if (_multipleExport)
-                    {
-                        if (_otherItem)
-                        {
-                            itemsWithNames.append(itemWithName);
-                        } else {
-                            itemsWithNames.append((CT_AbstractSingularItemDrawable*)item);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
-    // une fois la liste constituée
-    if(!itemsToExport.isEmpty())
-    {
-        _exporter->clearErrorMessage();
-
-        if (_multipleExport)
-        {
-            for (int i = 0 ; i < itemsToExport.size() ; i++)
-            {
-                CT_AbstractItemDrawable* item = (CT_AbstractItemDrawable*) itemsToExport.at(i);
-                CT_AbstractSingularItemDrawable* itemWithName = (CT_AbstractSingularItemDrawable*) itemsWithNames.at(i);
-                CT_AbstractItemAttribute* att = nullptr;
-                if (itemWithName != nullptr)
-                {
-                    att = itemWithName->firstItemAttributeByINModelName(inResult, this, DEF_SearchInItemDrawableAtt);
-                }
-
-                QString fileName = item->displayableName();
-
-                if (att != nullptr)
-                {
-                    fileName = att->toString(itemWithName, nullptr);
-                    fileName = QFileInfo(fileName).baseName();
-                }
-
-                QString path = _exportFilename;
-                path.append("/");
-
-                if (_adaptative)
-                {
-                    path.append(baseName);
-                    path.append("_");
-                }
-
-                path.append(fileName);
-                _exporter->setExportFilePath(path);
-
-                QList<CT_AbstractItemDrawable*> listTmp;
-                listTmp.append(item);
-
-                // on la donne à l'exportateur
-                if(!_exporter->setItemDrawableToExport(listTmp))
-                {
-                    PS_LOG->addErrorMessage(this, _exporter->errorMessage());
-                    setErrorMessage(1, _exporter->errorMessage());
-                    setErrorCode(1);
-                } else
-                {
-                    //if(_exporterConfiguration != nullptr)
-                    //_exporter->loadExportConfiguration(_exporterConfiguration);
-
-                    // et on exporte....
-                    if(!_exporter->exportToFile()) {
-                        PS_LOG->addErrorMessage(this, _exporter->errorMessage());
-                        setErrorMessage(1, _exporter->errorMessage());
-                        setErrorCode(1);
-                    }
-                }
-            }
-
-
-        } else {
-
-            if (_adaptative)
-            {
-                QString path = _exportFilename;
-                path.append("/");
-                path.append(baseName);
-                _exporter->setExportFilePath(path);
-
-            } else {
-                _exporter->setExportFilePath(_exportFilename);
-            }
-
-            // on la donne à l'exportateur
-            if(!_exporter->setItemDrawableToExport(itemsToExport))
-            {
-                PS_LOG->addErrorMessage(this, _exporter->errorMessage());
-                setErrorMessage(1, _exporter->errorMessage());
-                setErrorCode(1);
-            } else
-            {
-                //if(_exporterConfiguration != nullptr)
-                //_exporter->loadExportConfiguration(_exporterConfiguration);
-
-                // et on exporte....
-                if(!_exporter->exportToFile()) {
-                    PS_LOG->addErrorMessage(this, _exporter->errorMessage());
-                    setErrorMessage(1, _exporter->errorMessage());
-                    setErrorCode(1);
-                }
-            }
-        }
-
-
-    }*/
 }
-
-/*void PB_StepGenericExporter::setItemsToExportFromModelsToExporter()
-{
-    // on récupère le modèle d'entrée qu'on avait défini
-    CT_InResultModelGroup *resModel = (CT_InResultModelGroup*)getInResultModel(DEF_SearchInResultToExport);
-
-    // on récupère les possibilités pour ce résultat (il n'y en a qu'une puisque un résultat d'entrée = un résultat de sortie)
-    QList<CT_InStdModelPossibility*> possibilities = resModel->getPossibilitiesSelected();
-
-    QListIterator<CT_InStdModelPossibility*> it(possibilities);
-
-    QList<CT_AbstractItemDrawable*> eItems;
-
-    while(it.hasNext())
-    {
-        // on récupère le modèle d'entrée qu'on avait défini (celui à exporter)
-        CT_InAbstractItemModel *inItemModelToExport = nullptr;
-
-        if(_exporter->exportOnlyGroup())
-            inItemModelToExport = (CT_InAbstractItemModel*)PS_MODELS->searchModel(DEF_SearchInGroup, (CT_OutAbstractResultModel*)it.next()->outModel(), this);
-        else
-            inItemModelToExport = (CT_InAbstractItemModel*)PS_MODELS->searchModel(DEF_SearchInItemDrawable, (CT_OutAbstractResultModel*)it.next()->outModel(), this);
-
-        // on récupère sa possibilité (il n'y en a qu'une puisqu'on a mis CT_InStandardItemDrawableModel::C_ChooseOneIfMultiple)
-        CT_InStdModelPossibility *possibility = inItemModelToExport->getPossibilitiesSelected().first();
-
-        // on récupère l'ItemDrawable choisi
-        eItems.append(((CT_OutAbstractItemModel*)possibility->outModel())->itemDrawable());
-    }
-
-    _exporter->clearErrorMessage();
-
-    // on les donne à l'exporter
-    _exporter->setItemDrawableToExport(eItems);
-}
-
-void PB_StepGenericExporter::setDefaultExportPath(const QString &path)
-{
-    _exportPath = path;
-
-    QSettings *settings = _data->getSettingsFile();
-
-    if(settings != nullptr)
-    {
-        settings->beginGroup(getStepName());
-
-        settings->setValue("DefaultExportPath", _exportPath);
-
-        settings->endGroup();
-    }
-}*/
 
 void PB_StepGenericExporter::exportProgressChanged(int progress)
 {
     setProgress(progress);
-}
-
-QString PB_StepGenericExporter::replaceBadCharacters(const QString &name) const
-{
-    QString value = name;
-    value.replace(QRegExp("[àáâãäå]"), "a");
-    value.replace(QRegExp("[ÀÁÂÃÄÅ]"), "A");
-    value.replace(QRegExp("[éèëê]"), "e");
-    value.replace(QRegExp("[ÈÉÊË]"), "E");
-    value.replace(QRegExp("[ìíîï]"), "i");
-    value.replace(QRegExp("[ÌÍÎÏ]"), "I");
-    value.replace(QRegExp("[òóôõöø]"), "o");
-    value.replace(QRegExp("[ÒÓÔÕÖØ]"), "O");
-    value.replace(QRegExp("[ùúûü]"), "u");
-    value.replace(QRegExp("[ÙÚÛÜ]"), "U");
-    value.replace(QRegExp("[ñ]"), "n");
-    value.replace(QRegExp("[Ñ]"), "N");
-    value.replace(QRegExp("[ç]"), "c");
-    value.replace(QRegExp("[Ç]"), "C");
-    value.replace(QRegExp("[\\W]"), "_");
-    return value;
 }
 

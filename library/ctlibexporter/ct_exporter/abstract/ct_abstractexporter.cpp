@@ -23,9 +23,6 @@ CT_AbstractExporter::CT_AbstractExporter(int subMenuLevel)
     m_subMenuLevel = subMenuLevel;
 
     m_inModelsStructureManager = nullptr;
-    mNameOfTheFileContainsTurnNameFromACounter = false;
-    mExportEachItemInSeparateFile = false;
-    mFileNameUsedFromAttributeOfAnotherItem = false;
     mExportOfOneItemByFileInProgress = false;
 }
 
@@ -46,9 +43,6 @@ CT_AbstractExporter::CT_AbstractExporter(const CT_AbstractExporter &other) : QOb
     m_subMenuLevel = other.m_subMenuLevel;
 
     m_inModelsStructureManager = nullptr;
-    mNameOfTheFileContainsTurnNameFromACounter = false;
-    mExportEachItemInSeparateFile = false;
-    mFileNameUsedFromAttributeOfAnotherItem = false;
     mExportOfOneItemByFileInProgress = false;
 }
 
@@ -188,16 +182,21 @@ bool CT_AbstractExporter::restoreSettings(SettingsReaderInterface &reader)
     return setFilePath(path);
 }
 
+bool CT_AbstractExporter::isExportEachItemInSeparateFileOptionnal() const
+{
+    return true;
+}
+
 void CT_AbstractExporter::declareInputModels(CT_InModelStructureManager& manager,
-                                             bool nameOfTheFileContainsTurnNameFromACounter,
-                                             bool exportEachItemInSeperateFile,
-                                             bool fileNameUsedFromAttributeOfAnotherItem)
+                                             ExportWithModelsOption option,
+                                             bool addCounterTurnNameToFilename)
 {
     setMustUseModels(true);
 
-    mNameOfTheFileContainsTurnNameFromACounter = nameOfTheFileContainsTurnNameFromACounter;
-    mExportEachItemInSeparateFile = exportEachItemInSeperateFile;
-    mFileNameUsedFromAttributeOfAnotherItem = fileNameUsedFromAttributeOfAnotherItem;
+    mExportWithModelsOption = option;
+
+    if(!isExportEachItemInSeparateFileOptionnal() && (mExportWithModelsOption == AllItemsInSameFile_OriginalName))
+        mExportWithModelsOption = EachItemInSeparateFile_OriginalName_InternalCounter;
 
     mInModelSManager.clearResults();
     delete m_inModelsStructureManager;
@@ -211,9 +210,11 @@ void CT_AbstractExporter::declareInputModels(CT_InModelStructureManager& manager
 
     internalDeclareInputModels(exporterManager);
 
-    if(mExportEachItemInSeparateFile)
+    if((mExportWithModelsOption == EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName)
+            || (mExportWithModelsOption == EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName))
     {
-        if(mFileNameUsedFromAttributeOfAnotherItem || (exporterManager.m_hAbstractInItem == nullptr))
+        if((mExportWithModelsOption == EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName)
+                || (exporterManager.m_hAbstractInItem == nullptr))
         {
             if(exporterManager.m_hAbstractInGroup != nullptr)
             {
@@ -227,7 +228,7 @@ void CT_AbstractExporter::declareInputModels(CT_InModelStructureManager& manager
         }
     }
 
-    if(mNameOfTheFileContainsTurnNameFromACounter)
+    if(addCounterTurnNameToFilename)
     {
         manager.addResult(m_handleResultCounter, tr("Résultat compteur"), QString(), true);
         manager.setRootGroup(m_handleResultCounter, m_handleGroupCounter);
@@ -239,9 +240,7 @@ void CT_AbstractExporter::declareInputModels()
 {
     setMustUseModels(true);
 
-    mNameOfTheFileContainsTurnNameFromACounter = false;
-    mExportEachItemInSeparateFile = false;
-    mFileNameUsedFromAttributeOfAnotherItem = false;
+    mExportWithModelsOption = isExportEachItemInSeparateFileOptionnal() ? AllItemsInSameFile_OriginalName : EachItemInSeparateFile_OriginalName_InternalCounter;
 
     mInModelSManager.clearResults();
     mInModelSManager.addResult(m_handleResultExport);
@@ -319,83 +318,167 @@ bool CT_AbstractExporter::exportToFile()
     _progress = 0;
     m_stop = false;
 
-    QString baseName;
+    QString counterTurnName;
 
     if(mustUseModels())
     {
         for(const CT_LoopCounter* counter : m_handleLoopCounter.iterateInputs(m_handleResultCounter)) {
-            baseName = counter->turnName();
-            baseName = QFileInfo(baseName).baseName();
+            counterTurnName = counter->turnName();
+            counterTurnName = QFileInfo(counterTurnName).baseName();
         }
     }
 
-    if(mustUseModels() && mExportEachItemInSeparateFile)
+    if(mustUseModels()
+            && ((mExportWithModelsOption == EachItemInSeparateFile_OriginalName_InternalCounter)
+                || (mExportWithModelsOption == EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName)
+                || (mExportWithModelsOption == EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName)))
     {
-        QStringList pathByItem;
-
-        auto iterator = m_handleItemAttributeExport.iterateInputs(m_handleResultExport);
-        auto begin = iterator.begin();
-        auto end = iterator.end();
-
-        while(begin != end)
+        if(mExportWithModelsOption == EachItemInSeparateFile_OriginalName_InternalCounter)
         {
-            const CT_AbstractItemAttributeT<QString>* itemAttribute = *begin;
+            mMaximumItemToExportCalled = false;
+            mExportOfOneItemByFileInProgress = true;
+            const QString backupFilepath = filePath();
+            const QFileInfo fileInfo(filePath());
 
-            CT_AbstractItem* itemWithName = begin.currentParent();
-            const QString fileName = QFileInfo(itemAttribute->toString(itemWithName, nullptr)).baseName();
+            QString path = fileInfo.path() + "/";
 
-            QString path = QFileInfo(filePath()).path();
-            path.append("/");
+            if(!counterTurnName.isEmpty())
+                path.append(counterTurnName + "_");
 
-            if(mNameOfTheFileContainsTurnNameFromACounter)
+            if(!fileInfo.isDir())
+                path.append(fileInfo.baseName());
+
+            path.append(mFileNamePrefix);
+
+            ExportReturn ret;
+            int internalCounter = 0;
+
+            do
             {
-                path.append(baseName);
-                path.append("_");
-            }
+                setFilePath(path + QString("_%1").arg(internalCounter++));
 
-            path.append(mFileNamePrefix + fileName);
+                if((ret = internalExportToFile()) == ErrorWhenExport)
+                {
+                    setFilePath(backupFilepath);
+                    mExportOfOneItemByFileInProgress = false;
+                    return false;
+                }
 
-            pathByItem.append(path);
+                if(isExportEachItemInSeparateFileOptionnal())
+                {
+                    #define QT_FORCE_ASSERTS
+                    Q_ASSERT_X(mMaximumItemToExportCalled, "CT_AbstractExporter::exportToFile", "The developper of the exporter has not called the method \"maximumItemToExportInFile\" but he must !");
+                    #undef QT_FORCE_ASSERTS
+                }
 
-            ++begin;
+            } while(ret != NoMoreItemToExport);
+
+            setFilePath(backupFilepath);
+            mExportOfOneItemByFileInProgress = false;
         }
-
-        mMaximumItemToExportCalled = false;
-        mExportOfOneItemByFileInProgress = true;
-        const QString backupFilepath = filePath();
-
-        for(const QString& path : pathByItem)
+        else
         {
-            setFilePath(path);
+            QStringList pathByItem;
+            QString previousPath;
+            int internalCounter = 0;
 
-            if(!internalExportToFile()) {
-                setFilePath(backupFilepath);
-                mExportOfOneItemByFileInProgress = false;
-                return false;
+            auto iterator = m_handleItemAttributeExport.iterateInputs(m_handleResultExport);
+            auto begin = iterator.begin();
+            auto end = iterator.end();
+
+            while(begin != end)
+            {
+                const CT_AbstractItemAttributeT<QString>* itemAttribute = *begin;
+
+                CT_AbstractItem* itemWithName = begin.currentParent();
+                const QString fileName = QFileInfo(itemAttribute->toString(itemWithName, nullptr)).baseName();
+
+                QString path = QFileInfo(filePath()).path() + "/";
+
+                if(!counterTurnName.isEmpty())
+                    path.append(counterTurnName + "_");
+
+                path.append(mFileNamePrefix);
+                path.append(fileName);
+
+                if((path == previousPath) || (internalCounter != 0))
+                {
+                    if(internalCounter == 0)
+                    {
+                        QMutableListIterator<QString> it(pathByItem);
+
+                        while(it.hasNext())
+                        {
+                            const QString& pPath = it.next();
+                            it.setValue(pPath + QString("_%1").arg(internalCounter++));
+                        }
+                    }
+
+                    pathByItem.append(path + QString("_%1").arg(internalCounter++));
+                }
+                else
+                {
+                    pathByItem.append(path);
+                    previousPath = path;
+                }
+
+                ++begin;
             }
 
-            #define QT_FORCE_ASSERTS
-            Q_ASSERT_X(mMaximumItemToExportCalled, "CT_AbstractExporter::exportToFile", "The developper of the exporter has not called the method \"maximumItemToExportInFile\" but he must !");
-            #undef QT_FORCE_ASSERTS
-        }
+            mMaximumItemToExportCalled = false;
+            mExportOfOneItemByFileInProgress = true;
+            const QString backupFilepath = filePath();
+            ExportReturn ret;
 
-        setFilePath(backupFilepath);
-        mExportOfOneItemByFileInProgress = false;
+            for(const QString& path : pathByItem)
+            {
+                setFilePath(path);
+
+                if((ret = internalExportToFile()) == ErrorWhenExport)
+                {
+                    setFilePath(backupFilepath);
+                    mExportOfOneItemByFileInProgress = false;
+                    return false;
+                }
+
+                if(isExportEachItemInSeparateFileOptionnal())
+                {
+                    #define QT_FORCE_ASSERTS
+                    Q_ASSERT_X(mMaximumItemToExportCalled, "CT_AbstractExporter::exportToFile", "The developper of the exporter has not called the method \"maximumItemToExportInFile\" but he must !");
+                    #undef QT_FORCE_ASSERTS
+                }
+
+                if(ret == NoMoreItemToExport)
+                    break;
+            }
+
+            setFilePath(backupFilepath);
+            mExportOfOneItemByFileInProgress = false;
+        }
     }
     else
     {
-        QString finalFilepath;
+        QString finalFilepath = filePath();
 
-        if (mNameOfTheFileContainsTurnNameFromACounter && !baseName.isEmpty())
-            finalFilepath = QFileInfo(filePath()).path() + "/" + baseName;
-        else
-            finalFilepath = filePath();
+        if(!counterTurnName.isEmpty())
+        {
+            const QFileInfo fileInfo(filePath());
+
+            finalFilepath = fileInfo.path() + "/";
+
+            if(!counterTurnName.isEmpty())
+                finalFilepath.append(counterTurnName + "_");
+
+            if(!fileInfo.isDir())
+                finalFilepath.append(fileInfo.baseName());
+        }
 
         const QString backupFilepath = filePath();
 
         setFilePath(finalFilepath);
 
-        if(!internalExportToFile()) {
+        if(internalExportToFile() == ErrorWhenExport)
+        {
             setFilePath(backupFilepath);
             return false;
         }
@@ -448,7 +531,7 @@ CT_AbstractPieceByPieceExporter* CT_AbstractExporter::createPieceByPieceExporter
     return nullptr;
 }
 
-bool CT_AbstractExporter::exportOnePieceOfDataToFiles(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
+CT_AbstractExporter::ExportReturn CT_AbstractExporter::exportOnePieceOfDataToFiles(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
 {
     if(!mExportOfOneItemByFileInProgress)
     {
@@ -457,33 +540,33 @@ bool CT_AbstractExporter::exportOnePieceOfDataToFiles(const QList<CT_AbstractPie
     }
 
     if(pieceByPieceExporters.isEmpty())
-        return true;
+        return NoMoreItemToExport;
 
     for(CT_AbstractPieceByPieceExporter* ex : pieceByPieceExporters)
     {
         if(ex->isFileCreated())
         {
             if(!ex->openFile())
-                return false;
+                return ErrorWhenExport;
         }
         else
         {
             if(!ex->createFile())
-                return false;
+                return ErrorWhenExport;
 
             if(!ex->openFile())
-                return false;
+                return ErrorWhenExport;
         }
     }
 
-    bool ok = internalExportOnePiece(pieceByPieceExporters);
+    const CT_AbstractExporter::ExportReturn ret = internalExportOnePiece(pieceByPieceExporters);
 
     for(CT_AbstractPieceByPieceExporter* ex : pieceByPieceExporters)
     {
         ex->closeFile();
     }
 
-    return ok;
+    return ret;
 }
 
 bool CT_AbstractExporter::finalizePieceByPieceExport(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters, bool deleteItFromMemory)
@@ -551,12 +634,12 @@ int CT_AbstractExporter::maximumItemToExportInFile(const int nToExport) const
 {
     const_cast<CT_AbstractExporter*>(this)->mMaximumItemToExportCalled = true;
 
-    return mustUseModels() ? (mExportEachItemInSeparateFile ? 1 : nToExport) : nToExport;
+    return mustUseModels() ? ((mExportWithModelsOption != AllItemsInSameFile_OriginalName) ? 1 : nToExport) : nToExport;
 }
 
-bool CT_AbstractExporter::internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>&)
+CT_AbstractExporter::ExportReturn CT_AbstractExporter::internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>&)
 {
-    return false;
+    return ErrorWhenExport;
 }
 
 bool CT_AbstractExporter::findInputsInOutputsOfThisManagerWithSpecifiedResultModels(const CT_OutModelStructureManager& manager,

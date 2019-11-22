@@ -66,8 +66,8 @@ HEADERS +=  \
 #    exporters/csv/pb_csvexporter.h \
 #    exporters/csv/pb_csvexportercolumn.h \
 #    exporters/csv/pb_csvexporterconfiguration.h \
-#    exporters/gdal/pb_gdalexporter.h \
-#    exporters/grid2d/pb_grid2dexporter.h \
+    exporters/gdal/pb_gdalexporter.h \
+    exporters/grid2d/pb_grid2dexporter.h \
 #    exporters/grid3d/pb_grid3dastableexporter.h \
 #    exporters/grid3d/pb_grid3dexporter.h \
 #    exporters/groupdata/pb_groupdataexporter.h \
@@ -112,8 +112,8 @@ SOURCES += \
 #    exporters/csv/pb_csvexporter.cpp \
 #    exporters/csv/pb_csvexportercolumn.cpp \
 #    exporters/csv/pb_csvexporterconfiguration.cpp \
-#    exporters/gdal/pb_gdalexporter.cpp \
-#    exporters/grid2d/pb_grid2dexporter.cpp \
+    exporters/gdal/pb_gdalexporter.cpp \
+    exporters/grid2d/pb_grid2dexporter.cpp \
 #    exporters/grid3d/pb_grid3dastableexporter.cpp \
 #    exporters/grid3d/pb_grid3dexporter.cpp \
 #    exporters/groupdata/pb_groupdataexporter.cpp \
