@@ -31,7 +31,8 @@ const CT_AbstractExporter* PB_StepGenericExporter::exporter() const
 
 QString PB_StepGenericExporter::name() const
 {
-    return _exporter->uniqueName();
+    // "EXPORT" is important because an exporter can have the same name than a reader !
+    return "EXPORT " + _exporter->uniqueName();
 }
 
 QString PB_StepGenericExporter::displayableName() const

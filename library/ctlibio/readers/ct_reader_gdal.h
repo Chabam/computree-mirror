@@ -118,21 +118,21 @@ private:
             {
             case OFTInteger: {
                 AttributeIntHandleType* itemAttributeHandle = new AttributeIntHandleType();
-                manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE);
+                manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE, QString(poFieldDefn->GetNameRef()));
                 registerHandlePtr(QString("ia%1%2").arg(size_t(&itemHandle)).arg(iField), itemAttributeHandle);
                 break;
             }
 
             case OFTReal:{
                 AttributeDoubleHandleType* itemAttributeHandle = new AttributeDoubleHandleType();
-                manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE);
+                manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE, QString(poFieldDefn->GetNameRef()));
                 registerHandlePtr(QString("ia%1%2").arg(size_t(&itemHandle)).arg(iField), itemAttributeHandle);
                 break;
             }
 
             default:{
                 AttributeStringHandleType* itemAttributeHandle = new AttributeStringHandleType();
-                manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE);
+                manager.addItemAttributeAndFindCategory(itemHandle, *itemAttributeHandle, CT_AbstractCategory::DATA_VALUE, QString(poFieldDefn->GetNameRef()));
                 registerHandlePtr(QString("ia%1%2").arg(size_t(&itemHandle)).arg(iField), itemAttributeHandle);
                 break;
             }

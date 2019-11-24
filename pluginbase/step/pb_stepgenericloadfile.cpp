@@ -19,7 +19,8 @@ PB_StepGenericLoadFile::~PB_StepGenericLoadFile()
 
 QString PB_StepGenericLoadFile::name() const
 {
-    return m_reader->uniqueName();
+    // "IMPORT" is important because an exporter can have the same name than a reader !
+    return "IMPORT " + m_reader->uniqueName();
 }
 
 QString PB_StepGenericLoadFile::displayableName() const
@@ -99,7 +100,7 @@ bool PB_StepGenericLoadFile::setFilePath(const QString& newFilePath)
             return true;
 
         // undo
-        setFilePath(fp);
+        SuperClass::setFilePath(fp);
         setSettingsModified(false);
     }
 

@@ -65,9 +65,9 @@ protected:
 #ifdef USE_GDAL
 private:
     GDALDriver*                                     m_driver;
-    QMap<QString, OGRFieldType>                     _ogrTypes;
+    QString                                         m_nameFromDriver;
 
-    bool exportVector(const CT_AbstractShape2D* shape2d, GDALDataset *dataset, OGRLayer *layer);
+    bool exportVector(const CT_AbstractShape2D* shape2d, GDALDataset *dataset, OGRLayer *layer, const QMap<QString, QString>& shortNames, const QMap<QString, OGRFieldType>& ogrTypes);
 
     bool exportBox2D(const CT_Box2D *box, GDALDataset *dataset, OGRLayer *layer, OGRFeature *poFeature);
     bool exportCircle2D(const CT_Circle2D *circle, GDALDataset *dataset, OGRLayer *layer, OGRFeature *poFeature);
@@ -77,6 +77,11 @@ private:
     bool exportPolyline2D(const CT_Polyline2D *polyline, GDALDataset *dataset, OGRLayer *layer, OGRFeature *poFeature);
 
     bool exportOGRGeometry(OGRGeometry *geo, GDALDataset *dataset, OGRLayer *layer, OGRFeature *poFeature);
+
+    /**
+     * @brief Update the name from the driver
+     */
+    void updateNameFromDriver();
 #endif
 
 private:
@@ -98,44 +103,12 @@ private:
     HandleRasterType::const_iterator                mIteratorRasterBegin;
     HandleRasterType::const_iterator                mIteratorRasterEnd;
 
+    static void replaceBadCharacters(QMap<QString, QString> &names);
+    static QString replaceBadCharacters(const QString &name);
+    static QString replaceAccentCharacters(const QString &name);
+    static QMap<QString, QString> computeShortNames(const QMap<QString, QString> &names);
 
-    QList<QString>          _modelsKeys;
-    QMap<QString, QString>  _names;
-    QMap<QString, QString> _shortNames;
-
-    void replaceBadCharacters(QMap<QString, QString> &names) const;
-    QString replaceBadCharacters(const QString &name) const;
-    QString replaceAccentCharacters(const QString &name) const;
-    QMap<QString, QString> computeShortNames(const QMap<QString, QString> &names) const;
-
-    template<typename HandleT, typename IteratorT>
-    void internalExportToFileWithModelT(HandleT& handle, IteratorT& begin, IteratorT& end, const QString& prePath, const QString& suffix)
-    {
-        if(begin == end)
-        {
-            auto iterator = handle.iterateInputs(m_handleResultExport);
-            begin = iterator.begin();
-            end = iterator.end();
-        }
-
-        int nExported = 0;
-        const int totalToExport = maximumItemToExportInFile(std::numeric_limits<int>::max());
-        const QString noIndice;
-
-        // write data
-        while((begin != end)
-              && (nExported < totalToExport))
-        {
-            const auto item = *begin;
-
-            exportRaster(item, prePath + "." + suffix);
-
-            ++nExported;
-            ++begin;
-        }
-    }
-
-    bool exportVectors(const QList<const CT_AbstractShape2D*> vectors, const QString& filePath);
+    bool exportVectors(const QList<const CT_AbstractShape2D*> vectors, const QString& filePathWithoutSuffix, const QString& suffix);
     bool exportRaster(const CT_AbstractImage2D* grid, const QString& filePath);
 };
 
