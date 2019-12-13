@@ -173,7 +173,18 @@ public:
     const typename HandleType::ItemAttributeType* itemAttribute(const HandleType& itemAttHandle) const {
         Q_ASSERT(model() != nullptr);
 
-        return internalItemAttribute(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+        return internalItemAttribute(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
+    }
+
+    /**
+     * @brief Returns an object to iterate over item attributes that use the specified handle.
+     * @param itemAttHandle : the handle of the item attribute (input or output)
+     */
+    template<typename HandleType>
+    ChildrensCollectionT<const typename HandleType::ItemAttributeType> itemAttributesByHandle(const HandleType& itemAttHandle) const {
+        Q_ASSERT(model() != nullptr);
+
+        return internalItemAttributes(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
     }
 
     /**
@@ -252,6 +263,23 @@ private:
         CT_AbstractItemAttribute* m_current;
     };
 
+    class ItemAttributesIterator : public IChildrensIteratorQtStyle {
+    public:
+        ItemAttributesIterator(const QList<const CT_AbstractItemAttribute*>& itemAtts) : mCollection(itemAtts), mIt(mCollection) {}
+
+        bool hasNext() const override { return mIt.hasNext(); }
+
+        CT_AbstractItem* next() override {
+            return const_cast<CT_AbstractItemAttribute*>(mIt.next());
+        }
+
+        IChildrensIteratorQtStyle* copy() const override { return new ItemAttributesIterator(mCollection); }
+
+    private:
+        QList<const CT_AbstractItemAttribute*> mCollection;
+        QListIterator<const CT_AbstractItemAttribute*> mIt;
+    };
+
     /**
      * @brief The container of attributes added to this item (not default)
      */
@@ -320,6 +348,57 @@ private:
         });
 
         return found;
+    }
+
+    /**
+     * @brief Returns an iterator to iterate over the item attribute that use the model in the specified handle.
+     * @param outItemHandle : the handle of the item (output)
+     */
+    template<typename OutHandleType>
+    ChildrensCollectionT<const typename OutHandleType::ItemAttributeType> internalItemAttributes(const OutHandleType& outItemHandle,
+                                                                 std::true_type) const {
+        // the handle can have multiple models if it was created with a result copy so we must get the model
+        // that his parent match with the model of this group
+        const DEF_CT_OutAbstractIAModel* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
+
+        Q_ASSERT(outModelToUse != nullptr);
+
+        QList<const typename OutHandleType::ItemAttributeType*> founds;
+        founds.append(static_cast<typename OutHandleType::ItemAttributeType*>(itemAttributeWithOutModel(outModelToUse)));
+
+        return ChildrensCollectionT<const typename OutHandleType::ItemAttributeType>(new ItemAttributesIterator(founds));
+    }
+
+    /**
+     * @brief Returns an iterator to iterate over all item attributes that use the model in the specified handle.
+     * @param inItemHandle : the handle of the item (input)
+     */
+    template<typename InHandleType>
+    ChildrensCollectionT<const typename InHandleType::ItemAttributeType> internalItemAttributes(const InHandleType& inHandle,
+                                                                std::false_type) const {
+        QList<const typename InHandleType::ItemAttributeType*> founds;
+
+        const CT_OutAbstractModel::UniqueIndexType myModelUI = model()->uniqueIndex();
+
+        visitInModelWithPossibilitiesFromInHandle(inHandle, [&founds, &myModelUI, this](CT_InAbstractModel* inModelWithPossibilities) -> bool {
+
+            const CT_InStdModelPossibilitySelectionGroup* selectionGroup = inModelWithPossibilities->possibilitiesGroup();
+
+            for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
+                const CT_OutAbstractModel* outModel = possibility->outModel();
+
+                if(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->uniqueIndex() == myModelUI) {
+                    const DEF_CT_OutAbstractIAModel* outModelToUse = dynamic_cast<const DEF_CT_OutAbstractIAModel*>(outModel);
+
+                    if(outModelToUse != nullptr)
+                        founds.append(static_cast<typename InHandleType::ItemAttributeType*>(itemAttributeWithOutModel(outModelToUse)));
+                }
+            }
+
+            return true;
+        });
+
+        return ChildrensCollectionT<const typename InHandleType::ItemAttributeType>(new ItemAttributesIterator(founds));
     }
 
     // declare that we will add default item attributes in this class

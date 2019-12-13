@@ -140,7 +140,7 @@ public:
 
         ChildrensIteratorStdStyleT(IChildrensIteratorQtStylePtr it) : m_iterator(it), m_currentValue(nullptr) {
             if((m_iterator != nullptr) && m_iterator->hasNext())
-                m_currentValue = m_iterator->next();
+                m_currentValue = static_cast<ItemT*>(m_iterator->next());
         }
     };
 

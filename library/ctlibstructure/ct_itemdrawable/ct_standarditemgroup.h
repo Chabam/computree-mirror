@@ -166,8 +166,7 @@ public:
      *          - Childrens was not copied
      */
     CT_StandardItemGroup(const CT_StandardItemGroup& other);
-
-    ~CT_StandardItemGroup();
+    ~CT_StandardItemGroup() override;
 
     /**
      * @brief Visit childrens but only for tree view. By default call the method "visitChildrens"
@@ -377,7 +376,7 @@ public:
         Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
-        return internalSingularItems(itemHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+        return internalSingularItems(itemHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
     }
 
     /**
@@ -417,7 +416,7 @@ public:
         Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
-        return internalSingularItem(itemHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+        return internalSingularItem(itemHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
     }
 
     /**
@@ -545,7 +544,7 @@ public:
         Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        return internalGroups(groupHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+        return internalGroups(groupHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
     }
 
     /**
@@ -600,7 +599,7 @@ public:
         Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        return internalGroup(groupHandle, std::integral_constant<bool, IsAnOutputModel<HandleType::ModelType>::Is>());
+        return internalGroup(groupHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
     }
 
     /**
@@ -915,7 +914,7 @@ private:
 
         const ContainerType* ct = groupContainerWithOutModel(outModelToUse);
 
-        using iterator = ContainerType::const_iterator;
+        using iterator = typename ContainerType::const_iterator;
         using info = QPair<iterator, iterator>;
 
         std::vector<info> infos;
@@ -931,7 +930,7 @@ private:
     template<typename Iterator, typename MultiCollectionIterator, typename ContainerType, typename InHandleType>
     Iterator internalXXXWithInputHandle(const InHandleType& inHandle) const {
 
-        using iterator = ContainerType::const_iterator;
+        using iterator = typename ContainerType::const_iterator;
         using info = QPair<iterator, iterator>;
 
         std::vector<info> infos;

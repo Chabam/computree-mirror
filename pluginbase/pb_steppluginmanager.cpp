@@ -47,14 +47,11 @@
 
 #include "ct_step/ct_stependloop.h"
 #include "step/pb_stepbeginloopthroughgroups02.h"
-
 #include "step/pb_stepapplypointfilters.h"
 #include "step/pb_stepexportitemlist.h"
-
 #include "step/pb_stepexportpointsbyxyarea.h"
-/*
 #include "step/pb_stepexportattributesinloop.h"
-*/
+
 #include "ctlibstdactions/action/ct_actionselectitemdrawablegv.h"
 #include "ctlibstdactions/action/pb_actionshowitemdatagv.h"
 /*
@@ -229,7 +226,7 @@ bool PB_StepPluginManager::loadGenericsStep()
 
     addNewExportStep<PB_StepExportItemList>();
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
-    /*addNewExportStep<PB_StepExportAttributesInLoop>();*/
+    addNewExportStep<PB_StepExportAttributesInLoop>();
 
     return true;
 }

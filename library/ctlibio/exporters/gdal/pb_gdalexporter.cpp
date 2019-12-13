@@ -355,7 +355,6 @@ bool PB_GDALExporter::exportVectors(const QList<const CT_AbstractShape2D*> vecto
     for(const CT_AbstractShape2D* vector : vectors)
     {
         const CT_OutAbstractModel* itemModel = vector->model();
-        const CT_OutAbstractModel::UniqueIndexType itemUN = itemModel->uniqueIndex();
 
         vector->visitItemAttributes([&modelKeys, &names, &ogrTypes, &itemModel](const CT_AbstractItemAttribute* att) -> bool
         {

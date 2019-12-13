@@ -20,7 +20,7 @@ HEADERS += $$CT_LIB_PREFIX/ctlibplugin/pluginentryinterface.h\
     step/pb_stepgenericexporter.h \
     step/pb_stepgenericloadfile.h \
     step/pb_stepuseritemselection.h \
-#    step/pb_stepexportattributesinloop.h \
+    step/pb_stepexportattributesinloop.h \
     step/pb_stepexportpointsbyxyarea.h \
     step/pb_stepbeginloopthroughgroups02.h \
     step/pb_steplooponfiles.h \
@@ -42,7 +42,7 @@ SOURCES += \
     step/pb_stepgenericexporter.cpp \
     step/pb_stepgenericloadfile.cpp \
     step/pb_stepuseritemselection.cpp \
-#    step/pb_stepexportattributesinloop.cpp \
+    step/pb_stepexportattributesinloop.cpp \
     step/pb_stepexportpointsbyxyarea.cpp \
     step/pb_stepbeginloopthroughgroups02.cpp \
     step/pb_steplooponfiles.cpp \

@@ -5,13 +5,18 @@
 #include "exporters/grid2d/pb_grid2dexporter.h"
 #endif
 
+#include "ct_log/ct_logmanager.h"
+
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
 #include <math.h>
 #include <QDir>
 
+#define DEF_ESRI_SHP "GDAL ESRI Shapefile"
+
 #define EPSILON_LIMITS 0.0000001
+#define DEF_NA -9999999
 
 PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop() : SuperClass()
 {
@@ -25,14 +30,14 @@ PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop() : SuperClass()
 
     _subFolders = true;
 
-    _rasterDriverName = DEF_ESRI_ASCII_Grid;
-    _vectorDriverName = DEF_ESRI_SHP;
+#ifdef USE_OPENCV
+    mGrid2DExporterUniqueName = PB_Grid2DExporter().uniqueName();
+    _rasterDriverName = mGrid2DExporterUniqueName;
+#endif
 
 #ifdef USE_GDAL
-    //GDALAllRegister();
+    _vectorDriverName = DEF_ESRI_SHP;
     GDALDriverManager* const driverManager = GetGDALDriverManager();
-
-    //CPLSetConfigOption("GDAL_DATA", "C:/xDONNEES/Programmation/computree64/computreeDependencies/gdal_bin/data");
 
     const int count = driverManager->GetDriverCount();
 
@@ -64,42 +69,6 @@ CT_VirtualAbstractStep* PB_StepExportAttributesInLoop::createNewInstance() const
 
 //////////////////// PROTECTED METHODS //////////////////
 
-void PB_StepExportAttributesInLoop::declareInputModels(CT_StepInModelStructureManager& manager)
-{
-    CT_InResultModelGroup *resIn = createNewInResultModel(DEFin_res, tr("Résultat"));
-    resIn->setZeroOrMoreRootGroup();
-    resIn->addStdGroupModel("", DEFin_grpMain, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
-
-#ifdef USE_OPENCV
-    if (_rasterExport)
-    {
-        resIn->addStdItemModel(DEFin_grpMain, DEFin_plotListInGrid, CT_PlotListInGrid::staticGetType(), tr("Grille de placettes"), "", CT_InAbstractModel::C_ChooseOneIfMultiple, CT_InAbstractModel::F_IsObligatory);
-    }
-#endif
-
-    resIn->addStdGroupModel(DEFin_grpMain, DEFin_grp, CT_StandardItemGroup::staticGetType(), tr("Groupe"));
-    resIn->addStdItemModel(DEFin_grp, DEFin_itemWithXY, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item (avec XY)"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
-    resIn->addStdItemAttributeModel(DEFin_itemWithXY, DEFin_Xattribute, QList<QString>() << CT_AbstractCategory::DATA_X, CT_AbstractCategory::DOUBLE, tr("X"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
-    resIn->addStdItemAttributeModel(DEFin_itemWithXY, DEFin_Yattribute, QList<QString>() << CT_AbstractCategory::DATA_Y, CT_AbstractCategory::DOUBLE, tr("Y"), "", CT_InAbstractModel::C_ChooseOneIfMultiple);
-    resIn->addStdItemAttributeModel(DEFin_itemWithXY, DEFin_attributeInItemXY, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Attribut Item (avec XY)"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
-
-    resIn->addStdItemModel(DEFin_grp, DEFin_itemWithAttribute, CT_AbstractSingularItemDrawable::staticGetType(), tr("Item"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
-    resIn->addStdItemAttributeModel(DEFin_itemWithAttribute, DEFin_attribute, QList<QString>() << CT_AbstractCategory::DATA_VALUE, CT_AbstractCategory::ANY, tr("Attribut Item"), "", CT_InAbstractModel::C_ChooseMultipleIfMultiple, CT_InAbstractModel::F_IsOptional);
-
-    if (_exportInLoop)
-    {
-        CT_InResultModelGroup* res_counter = createNewInResultModel(DEF_inResultCounter, tr("Résultat compteur"), "", true);
-        res_counter->setStdRootGroup(DEF_inGroupCounter);
-        res_counter->addStdItemModel(DEF_inGroupCounter, DEF_inCounter, CT_LoopCounter::staticGetType(), tr("Compteur"));
-        res_counter->setMinimumNumberOfPossibilityThatMustBeSelectedForOneTurn(0);
-    }
-}
-
-void PB_StepExportAttributesInLoop::declareOutputModels(CT_StepOutModelStructureManager& manager)
-{
-    //createNewOutResultModel(DEFout_res, tr("Resultat vide"));
-}
-
 void PB_StepExportAttributesInLoop::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
     preInputConfigDialog->addBool(tr("Activer export ASCII tabulaire (1 fichier en tout)"), "", tr("Activer"), _asciiExport);
@@ -120,6 +89,39 @@ void PB_StepExportAttributesInLoop::fillPreInputConfigurationDialog(CT_StepConfi
 
 }
 
+void PB_StepExportAttributesInLoop::declareInputModels(CT_StepInModelStructureManager& manager)
+{
+    manager.addResult(mInResult, tr("Résultat"));
+    manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
+    manager.addGroup(mInRootGroup, mInGroupMain);
+
+#ifdef USE_OPENCV
+    if (_rasterExport)
+        manager.addItem(mInGroupMain, mInPlotListInGrid, tr("Grille de placettes"));
+#endif
+
+    manager.addGroup(mInGroupMain, mInGroupChild);
+
+    manager.addItem(mInGroupChild, mInItemWithXY, tr("Item (avec XY)"));
+    manager.addItemAttribute(mInItemWithXY, mInItemAttributeX, CT_AbstractCategory::DATA_X, tr("X"));
+    manager.addItemAttribute(mInItemWithXY, mInItemAttributeY, CT_AbstractCategory::DATA_Y, tr("Y"));
+    manager.addItemAttribute(mInItemWithXY, mInItemAttributeXY, CT_AbstractCategory::DATA_VALUE, tr("Attribut Item (avec XY)"));
+
+    manager.addItem(mInGroupChild, mInItemWithAttribute, tr("Item"));
+    manager.addItemAttribute(mInItemWithAttribute, mInItemAttribute, CT_AbstractCategory::DATA_VALUE, tr("Attribut Item"));
+
+    if(_exportInLoop)
+    {
+        manager.addResult(mInResultCounter, tr("Résultat compteur"), QString(), true);
+        manager.setRootGroup(mInResultCounter, mInGroupCounter);
+        manager.addItem(mInGroupCounter, mInLoopCounter, tr("Compteur"));
+    }
+}
+
+void PB_StepExportAttributesInLoop::declareOutputModels(CT_StepOutModelStructureManager&)
+{
+}
+
 void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
     if (_asciiExport)
@@ -132,7 +134,7 @@ void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConf
     if (_rasterExport)
     {
         QStringList driversR;
-        driversR.append(DEF_ESRI_ASCII_Grid);
+        driversR.append(mGrid2DExporterUniqueName);
 
 #ifdef USE_GDAL
         driversR.append(_gdalRasterDrivers.keys());
@@ -168,338 +170,112 @@ void PB_StepExportAttributesInLoop::compute()
     _modelsKeys.clear();
     _names.clear();
 
-    QFile* fileASCII = nullptr;
-    QTextStream* streamASCII = nullptr;
-    bool first = true;
+    QScopedPointer<QFile> fileASCII;
+    QScopedPointer<QTextStream> streamASCII;
+    bool firstTurnFromCounter = true;
 
-    QList<CT_ResultGroup*> inResultList = getInputResults();
-    CT_ResultGroup* resIn = inResultList.at(0);
+    const QString exportBaseName = createExportBaseName(firstTurnFromCounter);
 
-    QString exportBaseName = "noName";
-    if (_exportInLoop && inResultList.size() > 1)
+    if (firstTurn) // TODO : always true ????!!! may be replace it by firstTurnFromCounter
     {
-        CT_ResultGroup* resCounter = inResultList.at(1);
-        CT_ResultItemIterator itCounter(resCounter, this, DEF_inCounter);
-        if (itCounter.hasNext())
-        {
-            const CT_LoopCounter* counter = (const CT_LoopCounter*) itCounter.next();
+        computeModelsKeysAndNamesAndOgrTypes();
 
-            if (counter != nullptr)
-            {
-                QFileInfo fileinfo(counter->getTurnName());
-                if (fileinfo.exists())
-                {
-                    exportBaseName = fileinfo.baseName();
-                } else {
-                    exportBaseName = counter->getTurnName();
-                }
-
-                if (counter->getCurrentTurn() > 1)
-                {
-                    first = false;
-                }
-            }
-        }
+        if(!isStopped())
+            createFieldsNamesFileForVectorsIfNecessary(); // TODO : each turn same file replaced but with a different content ?!!! because firstTurn
     }
 
-    CT_ModelSearchHelper::SplitHash hash;
-    QString xKey = "";
-    QString yKey = "";
-
-    CT_ModelSearchHelper::SplitHash hash1 = PS_MODELS->splitSelectedAttributesModelBySelectedSingularItemModel(DEFin_attribute, DEFin_itemWithAttribute, resIn->model(), this);
-    QHashIterator<CT_OutAbstractSingularItemModel *, CT_OutAbstractItemAttributeModel *> ith1(hash1);
-    while (ith1.hasNext())
-    {
-        ith1.next();
-        hash.insert((CT_OutAbstractSingularItemModel*) (ith1.key()->rootOriginalModel()), ith1.value());
-    }
-
-    CT_ModelSearchHelper::SplitHash hash2 = PS_MODELS->splitSelectedAttributesModelBySelectedSingularItemModel(DEFin_attributeInItemXY, DEFin_itemWithXY, resIn->model(), this);
-    QHashIterator<CT_OutAbstractSingularItemModel *, CT_OutAbstractItemAttributeModel *> ith2(hash2);
-    while (ith2.hasNext())
-    {
-        ith2.next();
-        hash.insert((CT_OutAbstractSingularItemModel*) (ith2.key()->rootOriginalModel()), ith2.value());
-    }
-
-    CT_ModelSearchHelper::SplitHash hashX = PS_MODELS->splitSelectedAttributesModelBySelectedSingularItemModel(DEFin_Xattribute, DEFin_itemWithXY, resIn->model(), this);
-    QHashIterator<CT_OutAbstractSingularItemModel *, CT_OutAbstractItemAttributeModel *> ithX(hashX);
-    while (ithX.hasNext())
-    {
-        ithX.next();
-        hash.insert((CT_OutAbstractSingularItemModel*) (ithX.key()->rootOriginalModel()), ithX.value());
-
-        CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) (ithX.key()->rootOriginalModel());
-        CT_OutAbstractItemAttributeModel *attrModel = ithX.value();
-        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != nullptr) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->rootOriginalModel());}
-        xKey = QString("ITEM_%1_ATTR_%2").arg(itemModel->uniqueName()).arg(attrModel->uniqueName());
-    }
-
-    CT_ModelSearchHelper::SplitHash hashY = PS_MODELS->splitSelectedAttributesModelBySelectedSingularItemModel(DEFin_Yattribute, DEFin_itemWithXY, resIn->model(), this);
-    QHashIterator<CT_OutAbstractSingularItemModel *, CT_OutAbstractItemAttributeModel *> ithY(hashY);
-    while (ithY.hasNext())
-    {
-        ithY.next();
-        hash.insert((CT_OutAbstractSingularItemModel*) (ithY.key()->rootOriginalModel()), ithY.value());
-
-        CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*) (ithY.key()->rootOriginalModel());
-        CT_OutAbstractItemAttributeModel *attrModel = ithY.value();
-        if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != nullptr) {attrModel = (CT_OutAbstractItemAttributeModel*) (attrModel->rootOriginalModel());}
-        yKey = QString("ITEM_%1_ATTR_%2").arg(itemModel->uniqueName()).arg(attrModel->uniqueName());
-    }
-
-    if (firstTurn)
-    {
-        QHashIterator<CT_OutAbstractSingularItemModel *, CT_OutAbstractItemAttributeModel *> itModels(hash);
-        while (itModels.hasNext())
-        {
-            itModels.next();
-
-            CT_OutAbstractSingularItemModel  *itemModel = itModels.key();
-            CT_OutAbstractItemAttributeModel *attrModel = itModels.value();
-
-            QString itemDN = itemModel->displayableName();
-            QString itemUN = itemModel->uniqueName();
-
-            QString attrDN = attrModel->displayableName();
-            QString attrUN = attrModel->uniqueName();
-
-            if (attrModel->isADefaultItemAttributeModel() && attrModel->rootOriginalModel() != nullptr) {attrUN = attrModel->rootOriginalModel()->uniqueName();}
-
-            QString key = QString("ITEM_%1_ATTR_%2").arg(itemUN).arg(attrUN);
-            _modelsKeys.append(key);
-
-            _names.insert(key, QString("%2_%1").arg(itemDN).arg(attrDN));
+    if(isStopped() || !exportInAsciiIfNecessary(fileASCII, streamASCII, firstTurnFromCounter))
+        return;
 
 #ifdef USE_GDAL
-            if (_vectorExport && _outVectorFolder.size() > 0)
-            {
-                CT_AbstractCategory::ValueType type = attrModel->itemAttribute()->type();
+    QScopedPointer<GDALDataset, GDalDatasetScopedPointerCustomDeleter> vectorDataSet;
+    OGRLayer* vectorLayer;
 
-                if      (type == CT_AbstractCategory::BOOLEAN) {_ogrTypes.insert(key, OFTInteger);}
-                else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
-                else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
-                else if (type == CT_AbstractCategory::INT8)    {_ogrTypes.insert(key, OFTInteger);}
-                else if (type == CT_AbstractCategory::UINT8)   {_ogrTypes.insert(key, OFTInteger);}
-                else if (type == CT_AbstractCategory::INT16)   {_ogrTypes.insert(key, OFTInteger);}
-                else if (type == CT_AbstractCategory::UINT16)  {_ogrTypes.insert(key, OFTInteger);}
-                else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger);}
-                //                else if (type == CT_AbstractCategory::UINT32)  {_ogrTypes.insert(key, OFTInteger64);}
-                //                else if (type == CT_AbstractCategory::INT64)   {_ogrTypes.insert(key, OFTInteger64);}
-                //                else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger64);}
-                else                                           {_ogrTypes.insert(key, OFTReal);}
+    if(isStopped())
+        return;
 
-            }
-#endif
-        }
-        replaceBadCharacters(_names);
-        qSort(_modelsKeys.begin(), _modelsKeys.end());
-
-        if (_vectorExport && _outVectorFolder.size() > 0)
-        {
-            _shortNames = computeShortNames(_names);
-
-            QFile ffields(QString("%1/fields_names.txt").arg(_outVectorFolder.first()));
-            QTextStream fstream(&ffields);
-            if (ffields.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                QMapIterator<QString, QString> itF(_shortNames);
-                while (itF.hasNext())
-                {
-                    itF.next();
-                    QString key = itF.key();
-                    QString shortName = itF.value();
-                    QString longName = _names.value(key);
-                    fstream << shortName << "\t";
-                    fstream << longName << "\n";
-                }
-                ffields.close();
-            }
-        }
-
-        if (_asciiExport && _outASCIIFileName.size() > 0)
-        {
-            fileASCII = new QFile(_outASCIIFileName.first());
-            streamASCII = new QTextStream(fileASCII);
-
-            if (first)
-            {
-                if (fileASCII->open(QIODevice::WriteOnly | QIODevice::Text))
-                {
-                    (*streamASCII) << "Name\t";
-
-                    for (int i = 0 ; i < _modelsKeys.size() ; i++)
-                    {
-                        (*streamASCII) << _names.value(_modelsKeys.at(i));
-                        if (i < _modelsKeys.size() - 1) {(*streamASCII) << "\t";} else {(*streamASCII) << "\n";}
-                    }
-
-                } else {
-                    delete streamASCII; streamASCII = nullptr;
-                    delete fileASCII; fileASCII = nullptr;
-                    PS_LOG->addMessage(LogInterface::error, LogInterface::step, getStepCustomName() + tr("Impossible de créer le fichier d'export ASCII. Arrêt des traitements."));
-                    stop();
-                    return;
-                }
-            } else {
-                if (!fileASCII->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
-                {
-                    delete streamASCII; streamASCII = nullptr;
-                    delete fileASCII; fileASCII = nullptr;
-                    PS_LOG->addMessage(LogInterface::error, LogInterface::step, getStepCustomName() + tr("Impossible d'ouvrir le fichier d'export ASCII. Arrêt des traitements."));
-                    stop();
-                    return;
-                }
-            }
-        }
-    }
-
-#ifdef USE_GDAL
-        GDALDataset *vectorDataSet = nullptr;
-        OGRLayer *vectorLayer = nullptr;
-
-        GDALDriver* driverVector = _gdalVectorDrivers.value(_vectorDriverName, nullptr);
-
-        if (_vectorExport && driverVector != nullptr && _outVectorFolder.size() > 0)
-        {
-            QString outFileName = (QString("%1/%2").arg(_outVectorFolder.first()).arg(exportBaseName));
-            QStringList ext = CT_GdalTools::staticGdalDriverExtension(driverVector);
-            if (ext.size() > 0)
-            {
-                outFileName.append(".");
-                outFileName.append(ext.first());
-            }
-
-            vectorDataSet = driverVector->Create(outFileName.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr );
-
-            if (vectorDataSet != nullptr)
-            {
-                vectorLayer = vectorDataSet->CreateLayer( "point", nullptr, wkbPoint, nullptr );
-            } else {
-                PS_LOG->addMessage(LogInterface::error, LogInterface::step, getStepCustomName() + tr("Impossible d'utiliser le format d'export Vectoriel choisi."));
-            }
-
-            for (int i = 0 ; vectorLayer != nullptr && i < _modelsKeys.size() ; i++)
-            {
-                QString key = _modelsKeys.at(i);
-                if (_ogrTypes.contains(key))
-                {
-                    OGRFieldType ogrType = _ogrTypes.value(key);
-
-                    QByteArray fieldNameBA = _shortNames.value(key).toLatin1();
-                    const char* fieldName = fieldNameBA;
-
-                    OGRFieldDefn oField(fieldName, ogrType );
-
-                    if (vectorLayer->CreateField( &oField ) != OGRERR_NONE)
-                    {
-                        //  erreur
-                    }
-                }
-            }
-        }
+    preExportVectorIfNecessary(exportBaseName, vectorDataSet, vectorLayer);
 #endif
 
     // IN results browsing
-    CT_ResultGroupIterator itIn_grpMain(resIn, this, DEFin_grpMain);
-    while (itIn_grpMain.hasNext() && !isStopped())
+    for(const CT_StandardItemGroup* grpMain : mInGroupMain.iterateInputs(mInResult))
     {
-        const CT_StandardItemGroup* grpMain = (CT_StandardItemGroup*) itIn_grpMain.next();
+        if(isStopped())
+            return;
 
 #ifdef USE_OPENCV
-        QMap<QString, CT_Image2D<double>*> rasters;
+        RastersMap rasters;
         if (_rasterExport)
         {
-            CT_PlotListInGrid* plotListInGrid = (CT_PlotListInGrid*) grpMain->firstItemByINModelName(this, DEFin_plotListInGrid);
-
-            Eigen::Vector2d min, max;
-            plotListInGrid->boundingBox2D(min, max);
-            double resolution = plotListInGrid->getSpacing();
+            const CT_PlotListInGrid* plotListInGrid = grpMain->singularItem(mInPlotListInGrid);
 
             if (plotListInGrid != nullptr)
             {
+                Eigen::Vector2d min, max;
+                plotListInGrid->getBoundingBox2D(min, max);
+                const double resolution = plotListInGrid->getSpacing();
+
                 for (int i = 0 ; i < _modelsKeys.size() ; i++)
                 {
                     QString key = _modelsKeys.at(i);
 
-                    if (key != xKey && key != yKey)
-                    {
-                        rasters.insert(key, CT_Image2D<double>::createImage2DFromXYCoords(nullptr, nullptr, min(0), min(1), max(0) - EPSILON_LIMITS, max(1) - EPSILON_LIMITS, resolution, 0, DEF_NA, DEF_NA));
-                    }
+                    // TODO : this can never happen because mInItemWithXY is not in the same group as mInPlotListInGrid
+                    //        so we will always create a new CT_Image2D
+                    //if (key != xKey && key != yKey)
+                    //{
+                    rasters.insert(key, CT_Image2D<double>::createImage2DFromXYCoords(min(0), min(1), max(0) - EPSILON_LIMITS, max(1) - EPSILON_LIMITS, resolution, 0, DEF_NA, DEF_NA));
+                    //}
                 }
             }
         }
 #endif
+        auto iteratorGroupsChild = grpMain->groups(mInGroupChild);
 
-        CT_GroupIterator itIn_grp(grpMain, this, DEFin_grp);
-        while (itIn_grp.hasNext() && !isStopped())
+        for(const CT_StandardItemGroup* grp : iteratorGroupsChild)
         {
-            const CT_StandardItemGroup* grp = (CT_StandardItemGroup*) itIn_grp.next();
+            if(isStopped())
+                return;
 
-            QMap<QString, QPair<CT_AbstractSingularItemDrawable*, CT_AbstractItemAttribute*> > indexedAttributes;
+            QMap<QString, QPair<const CT_AbstractSingularItemDrawable*, const CT_AbstractItemAttribute*> > indexedAttributes;
 
             double x = std::numeric_limits<double>::max();
             double y = std::numeric_limits<double>::max();
 
-            CT_AbstractSingularItemDrawable* itemXY = (CT_AbstractSingularItemDrawable*) grp->firstItemByINModelName(this, DEFin_itemWithXY);
+            const CT_AbstractSingularItemDrawable* itemXY = grp->singularItem(mInItemWithXY);
+
             if (itemXY != nullptr)
             {
-                CT_AbstractItemAttribute* attX = itemXY->firstItemAttributeByINModelName(resIn, this, DEFin_Xattribute);
-                CT_AbstractItemAttribute* attY = itemXY->firstItemAttributeByINModelName(resIn, this, DEFin_Yattribute);
+                const CT_AbstractItemAttribute* attX = itemXY->itemAttribute(mInItemAttributeX);
+                const CT_AbstractItemAttribute* attY = itemXY->itemAttribute(mInItemAttributeY);
 
-                if (attX != nullptr) {x = attX->toDouble(itemXY, nullptr);}
-                if (attY != nullptr) {y = attY->toDouble(itemXY, nullptr);}
+                if (attX != nullptr) {x = attX->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attX, indexedAttributes); }
+                if (attY != nullptr) {y = attY->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attY, indexedAttributes);}
 
-                CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*)itemXY->model();
+                auto iteratorAttributesXY = itemXY->itemAttributesByHandle(mInItemAttributeXY);
 
-                QList<CT_OutAbstractItemAttributeModel *> attributesModel = hash.values(itemModel);
-                QList<CT_AbstractItemAttribute *> attributes = itemXY->itemAttributes(attributesModel);
-
-                for (int i = 0 ; i < attributes.size() ; i++)
+                for(const CT_AbstractItemAttribute* attr : iteratorAttributesXY)
                 {
-                    CT_AbstractItemAttribute* attribute = attributes.at(i);
-                    if (attribute != nullptr)
-                    {
-                        CT_OutAbstractItemAttributeModel* attrModel = (CT_OutAbstractItemAttributeModel*) attribute->model();
-
-                        QString attrUN = attrModel->uniqueName();
-
-                        indexedAttributes.insert(QString("ITEM_%1_ATTR_%2").arg(itemModel->uniqueName()).arg(attrUN), QPair<CT_AbstractSingularItemDrawable*, CT_AbstractItemAttribute*>(itemXY, attribute));
-                    }
+                    addToIndexedAttributesCollection(itemXY, attr, indexedAttributes);
                 }
             }
 
-            CT_ItemIterator itItem(grp, this, DEFin_itemWithAttribute);
-            while (itItem.hasNext())
+            auto iteratorItemWithAttribute = grp->singularItems(mInItemWithAttribute);
+
+            for(const CT_AbstractSingularItemDrawable* item : iteratorItemWithAttribute)
             {
-                CT_AbstractSingularItemDrawable* item = (CT_AbstractSingularItemDrawable*) itItem.next();
+                auto iteratorAttributes = item->itemAttributesByHandle(mInItemAttribute);
 
-                if (item != nullptr)
+                for(const CT_AbstractItemAttribute* attr : iteratorAttributes)
                 {
-                    CT_OutAbstractSingularItemModel  *itemModel = (CT_OutAbstractSingularItemModel*)item->model();
-                    QList<CT_OutAbstractItemAttributeModel *> attributesModel = hash.values(itemModel);
-                    QList<CT_AbstractItemAttribute *> attributes = item->itemAttributes(attributesModel);
-
-                    for (int i = 0 ; i < attributes.size() ; i++)
-                    {
-                        CT_AbstractItemAttribute* attribute = attributes.at(i);
-                        if (attribute != nullptr)
-                        {
-                            CT_OutAbstractItemAttributeModel* attrModel = (CT_OutAbstractItemAttributeModel*) attribute->model();
-
-                            QString attrUN = attrModel->uniqueName();
-
-                            indexedAttributes.insert(QString("ITEM_%1_ATTR_%2").arg(itemModel->uniqueName()).arg(attrUN), QPair<CT_AbstractSingularItemDrawable*, CT_AbstractItemAttribute*>(item, attribute));
-                        }
-                    }
+                    addToIndexedAttributesCollection(item, attr, indexedAttributes);
                 }
             }
 
-            bool hasMetricsToExport = !(indexedAttributes.isEmpty());
+            const bool hasMetricsToExport = !(indexedAttributes.isEmpty());
 
 #ifdef USE_GDAL
             OGRFeature *vectorFeature = nullptr;
-            if (_vectorExport && hasMetricsToExport && vectorLayer != nullptr)
+            if (hasMetricsToExport && (vectorLayer != nullptr))
             {
                 vectorFeature = OGRFeature::CreateFeature(vectorLayer->GetLayerDefn());
                 OGRPoint pt;
@@ -508,85 +284,79 @@ void PB_StepExportAttributesInLoop::compute()
                 vectorFeature->SetGeometry(&pt);
             }
 #endif
-            if (_asciiExport && streamASCII != nullptr)
+            if (!streamASCII.isNull())
             {
-                (*streamASCII) << exportBaseName << "\t";
+                (*streamASCII.get()) << exportBaseName << "\t";
             }
 
             for (int i = 0 ; i < _modelsKeys.size() ; i++)
             {
-                QString key = _modelsKeys.at(i);
+                const QString key = _modelsKeys.at(i);
 
-                const QPair<CT_AbstractSingularItemDrawable*, CT_AbstractItemAttribute*> &pair = indexedAttributes.value(key);
+                const auto pair = indexedAttributes.value(key);
+
+                if (hasMetricsToExport && !streamASCII.isNull())
+                {
+                    (*streamASCII.get()) << pair.second->toString(pair.first, nullptr);
+                }
+#ifdef USE_GDAL
+                if (vectorLayer != nullptr)
+                {
+                    const std::string fieldName = _shortNames.value(key).toStdString();
+
+                    if (_ogrTypes.value(key) == OFTBinary)
+                    {
+                        vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
+                    }
+                    else if (_ogrTypes.value(key) == OFTString)
+                    {
+                        const std::string text = replaceAccentCharacters(pair.second->toString(pair.first, nullptr)).toStdString();
+                        vectorFeature->SetField(fieldName.data(), text.data());
+                    }
+                    else if (_ogrTypes.value(key) == OFTInteger)
+                    {
+                        vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
+//                        }
+//                        else if (_ogrTypes.value(key) == OFTInteger64)
+//                        {
+//                            vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
+                    }
+                    else
+                    {
+                        vectorFeature->SetField(fieldName.data(), pair.second->toDouble(pair.first, nullptr));
+                    }
+                }
+#endif
 
 #ifdef USE_OPENCV
                 CT_Image2D<double>* raster = rasters.value(key, nullptr);
-#endif
 
-                if (pair.first != nullptr && pair.second != nullptr)
+                if (_rasterExport && raster != nullptr)
                 {
-                    if (hasMetricsToExport && _asciiExport && streamASCII != nullptr)
-                    {
-                        (*streamASCII) << pair.second->toString(pair.first, nullptr);
-                    }
-#ifdef USE_GDAL
-                    if (_vectorExport && vectorLayer != nullptr)
-                    {
+                    const double val = pair.second->toDouble(pair.first, nullptr);
 
-                        QByteArray fieldNameBA = _shortNames.value(key).toLatin1();
-                        const char* fieldName = fieldNameBA;
-
-                        if      (_ogrTypes.value(key) == OFTBinary)
-                        {
-                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, nullptr));
-                        } else if (_ogrTypes.value(key) == OFTString)
-                        {
-                            //QString text = replaceAccentCharacters(pair.second->toString(pair.first, nullptr));
-                            QString text = pair.second->toString(pair.first, nullptr);
-                            QByteArray textBA = text.toLatin1();
-                            const char* textChar = textBA;
-                            vectorFeature->SetField(fieldName, textChar);
-                        } else if (_ogrTypes.value(key) == OFTInteger)
-                        {
-                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, nullptr));
-//                        } else if (_ogrTypes.value(key) == OFTInteger64)
-//                        {
-//                            vectorFeature->SetField(fieldName, pair.second->toInt(pair.first, nullptr));
-                        } else
-                        {
-                            vectorFeature->SetField(fieldName, pair.second->toDouble(pair.first, nullptr));
-                        }
-
-                    }
-#endif
-
-#ifdef USE_OPENCV
-                    if (_rasterExport && raster != nullptr)
-                    {
-                        double val = pair.second->toDouble(pair.first, nullptr);
-                        if (std::isnan(val)) {val = DEF_NA;}
+                    if (std::isnan(val))
+                        raster->setValueAtCoords(x, y, DEF_NA);
+                    else
                         raster->setValueAtCoords(x, y, val);
-                    }
+                }
 #endif
-                }
-
-                if (hasMetricsToExport && _asciiExport && streamASCII != nullptr)
+                if (hasMetricsToExport && !streamASCII.isNull())
                 {
-                    if(i < _modelsKeys.size() - 1) {(*streamASCII) << "\t";} else {(*streamASCII) << "\n";}
+                    if(i < _modelsKeys.size() - 1) {(*streamASCII.get()) << "\t";} else {(*streamASCII.get()) << "\n";}
                 }
-
             }
 
 #ifdef USE_GDAL
-            if (_vectorExport && vectorLayer != nullptr)
+            if(vectorLayer != nullptr)
             {
+                // TODO : memory leaks here ?!! vectorFeature previously created never deleted ?
                 if (vectorLayer->CreateFeature(vectorFeature) != OGRERR_NONE)
                 {
                     OGRFeature::DestroyFeature(vectorFeature);
                 }
             }
 #endif
-
         }
 
 #ifdef USE_OPENCV
@@ -597,7 +367,7 @@ void PB_StepExportAttributesInLoop::compute()
             {
                 itRaster.next();
                 QString key = itRaster.key();
-                QList<CT_AbstractItemDrawable* > rasterList;
+                QList<const CT_AbstractImage2D* > rasterList;
                 rasterList.append(itRaster.value());
 
                 QString metricName = _names.value(key);
@@ -610,14 +380,13 @@ void PB_StepExportAttributesInLoop::compute()
                     fileName = QString("%1/%2%3/%2%3_%4").arg(_outRasterFolder.first()).arg(_rasterPrefix).arg(metricName).arg(exportBaseName);
                 }
 
-                if (_rasterDriverName == DEF_ESRI_ASCII_Grid)
+                if (_rasterDriverName == mGrid2DExporterUniqueName)
                 {
                     PB_Grid2DExporter exporter;
-                    exporter.init();
 
-                    if (exporter.setExportFilePath(fileName))
+                    if (exporter.setFilePath(fileName))
                     {
-                        exporter.setItemDrawableToExport(rasterList);
+                        exporter.setItemsToExport(rasterList);
                         exporter.exportToFile();
                     }
 
@@ -628,11 +397,10 @@ void PB_StepExportAttributesInLoop::compute()
                     if (driver != nullptr)
                     {
                         PB_GDALExporter exporter(driver);
-                        exporter.init();
 
-                        if (exporter.setExportFilePath(fileName))
+                        if (exporter.setFilePath(fileName))
                         {
-                            exporter.setItemDrawableToExport(rasterList);
+                            exporter.setRastersToExport(rasterList);
                             exporter.exportToFile();
                         }
                     }
@@ -643,16 +411,202 @@ void PB_StepExportAttributesInLoop::compute()
 #endif
 
     }
+}
 
-    if (fileASCII != nullptr) {fileASCII->close(); delete fileASCII;}
-    if (streamASCII != nullptr) {delete streamASCII;}
-#ifdef USE_GDAL
-    if (_vectorExport && vectorDataSet != nullptr)
+QString PB_StepExportAttributesInLoop::createExportBaseName(bool& first) const
+{
+    if(_exportInLoop)
     {
-        GDALClose(vectorDataSet);
+        for(const CT_LoopCounter* counter : mInLoopCounter.iterateInputs(mInResultCounter))
+        {
+            if (counter->currentTurn() > 1)
+                first = false;
+
+            QFileInfo fileinfo(counter->turnName());
+
+            if (fileinfo.exists())
+                return fileinfo.baseName();
+
+            return counter->turnName();
+        }
     }
+
+    return QString("noName");
+}
+
+void PB_StepExportAttributesInLoop::computeModelsKeysAndNamesAndOgrTypes()
+{
+    for(const CT_AbstractSingularItemDrawable* item : mInItemWithAttribute.iterateInputs(mInResult))
+    {
+        if(isStopped())
+            return;
+
+        const CT_OutAbstractModel* itemModel = item->model();
+
+        item->visitItemAttributes([this, &itemModel](const CT_AbstractItemAttribute* att) -> bool
+        {
+            const CT_OutAbstractItemAttributeModel* attModel = static_cast<CT_OutAbstractItemAttributeModel*>(att->model());
+
+            const QString attrDN = attModel->displayableName();
+
+            const QString key = QString("ITEM_%1_ATTR_%2").arg(size_t(itemModel)).arg(size_t(attModel));
+
+            if(!_modelsKeys.contains(key))
+            {
+                _modelsKeys.append(key);
+                _names.insert(key, attrDN);
+#ifdef USE_GDAL
+                if (_vectorExport && !_outVectorFolder.isEmpty())
+                {
+                    const CT_AbstractCategory::ValueType type = CT_AbstractCategory::ValueType(attModel->itemAttribute()->itemAttributeToolForModel()->valueType());
+
+                    if      (type == CT_AbstractCategory::BOOLEAN) {_ogrTypes.insert(key, OFTInteger);}
+                    else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
+                    else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
+                    else if (type == CT_AbstractCategory::INT8)    {_ogrTypes.insert(key, OFTInteger);}
+                    else if (type == CT_AbstractCategory::UINT8)   {_ogrTypes.insert(key, OFTInteger);}
+                    else if (type == CT_AbstractCategory::INT16)   {_ogrTypes.insert(key, OFTInteger);}
+                    else if (type == CT_AbstractCategory::UINT16)  {_ogrTypes.insert(key, OFTInteger);}
+                    else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger);}
+                    //                else if (type == CT_AbstractCategory::UINT32)  {ogrTypes.insert(key, OFTInteger64);}
+                    //                else if (type == CT_AbstractCategory::INT64)   {ogrTypes.insert(key, OFTInteger64);}
+                    //                else if (type == CT_AbstractCategory::INT32)   {ogrTypes.insert(key, OFTInteger64);}
+                    else                                           {_ogrTypes.insert(key, OFTReal);}
+                }
+#endif
+            }
+
+            return true;
+        });
+    }
+
+    replaceBadCharacters(_names);
+    qSort(_modelsKeys.begin(), _modelsKeys.end());
+}
+
+void PB_StepExportAttributesInLoop::createFieldsNamesFileForVectorsIfNecessary()
+{
+    if (_vectorExport && !_outVectorFolder.isEmpty())
+    {
+        _shortNames = computeShortNames(_names);
+
+        QFile ffields(QString("%1/fields_names.txt").arg(_outVectorFolder.first()));
+        QTextStream fstream(&ffields);
+        if (ffields.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMapIterator<QString, QString> itF(_shortNames);
+            while (itF.hasNext())
+            {
+                itF.next();
+                QString key = itF.key();
+                QString shortName = itF.value();
+                QString longName = _names.value(key);
+                fstream << shortName << "\t";
+                fstream << longName << "\n";
+            }
+            ffields.close();
+        }
+    }
+}
+
+bool PB_StepExportAttributesInLoop::exportInAsciiIfNecessary(QScopedPointer<QFile>& fileASCII, QScopedPointer<QTextStream>& streamASCII, const bool firstTurnFromCounter)
+{
+    if (_asciiExport && !_outASCIIFileName.isEmpty())
+    {
+        fileASCII.reset(new QFile(_outASCIIFileName.first()));
+
+        if (firstTurnFromCounter)
+        {
+            if (fileASCII->open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                streamASCII.reset(new QTextStream(fileASCII.get()));
+                (*streamASCII) << "Name\t";
+
+                for (int i = 0 ; i < _modelsKeys.size() ; i++)
+                {
+                    (*streamASCII) << _names.value(_modelsKeys.at(i));
+                    if (i < _modelsKeys.size() - 1) {(*streamASCII) << "\t";} else {(*streamASCII) << "\n";}
+                }
+
+            } else {
+                fileASCII.reset(nullptr);
+                PS_LOG->addErrorMessage(LogInterface::step, displayableCustomName() + tr(" : Impossible de créer le fichier d'export ASCII. Arrêt des traitements."));
+                stop();
+                return false;
+            }
+        } else {
+            if (!fileASCII->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
+            {
+                fileASCII.reset(nullptr);
+                PS_LOG->addErrorMessage(LogInterface::step, displayableCustomName() + tr(" : Impossible d'ouvrir le fichier d'export ASCII. Arrêt des traitements."));
+                stop();
+                return false;
+            }
+
+            streamASCII.reset(new QTextStream(fileASCII.get()));
+        }
+    }
+
+    return true;
+}
+
+#ifdef USE_GDAL
+void PB_StepExportAttributesInLoop::preExportVectorIfNecessary(const QString& exportBaseName, QScopedPointer<GDALDataset, GDalDatasetScopedPointerCustomDeleter>& vectorDataSet, OGRLayer*& vectorLayer)
+{
+    GDALDriver* driverVector = _gdalVectorDrivers.value(_vectorDriverName, nullptr);
+
+    if (_vectorExport && driverVector != nullptr && _outVectorFolder.size() > 0)
+    {
+        QString outFileName = (QString("%1/%2").arg(_outVectorFolder.first()).arg(exportBaseName));
+        QStringList ext = CT_GdalTools::staticGdalDriverExtension(driverVector);
+        if (ext.size() > 0)
+        {
+            outFileName.append(".");
+            outFileName.append(ext.first());
+        }
+
+        vectorDataSet.reset(driverVector->Create(outFileName.toLatin1(), 0, 0, 0, GDT_Unknown, nullptr));
+
+        if (vectorDataSet.isNull())
+        {
+            PS_LOG->addErrorMessage(LogInterface::step, displayableCustomName() + tr(" : Impossible d'utiliser le format d'export Vectoriel choisi."));
+            return;
+        }
+
+        vectorLayer = vectorDataSet->CreateLayer("point", nullptr, wkbPoint, nullptr);
+
+        if (vectorLayer == nullptr)
+        {
+            vectorDataSet.reset(nullptr);
+            PS_LOG->addErrorMessage(LogInterface::step, displayableCustomName() + tr(" : Impossible de créer la couche \"point\"."));
+            return;
+        }
+
+        for (int i = 0 ; i < _modelsKeys.size() && !isStopped() ; i++)
+        {
+            QString key = _modelsKeys.at(i);
+            if (_ogrTypes.contains(key))
+            {
+                OGRFieldType ogrType = _ogrTypes.value(key);
+
+                const std::string fieldName = _shortNames.value(key).toStdString();
+
+                OGRFieldDefn oField(fieldName.data(), ogrType );
+
+                if (vectorLayer->CreateField( &oField ) != OGRERR_NONE)
+                {
+                    //  erreur
+                }
+            }
+        }
+    }
+}
+
 #endif
 
+void PB_StepExportAttributesInLoop::addToIndexedAttributesCollection(const CT_AbstractSingularItemDrawable* item, const CT_AbstractItemAttribute* attribute, QMap<QString, QPair<const CT_AbstractSingularItemDrawable*, const CT_AbstractItemAttribute*> >& indexedAttributes) const
+{
+    indexedAttributes.insert(QString("ITEM_%1_ATTR_%2").arg(size_t(item->model())).arg(size_t(attribute->model())), qMakePair(item, attribute));
 }
 
 void PB_StepExportAttributesInLoop::replaceBadCharacters(QMap<QString, QString> &names) const
