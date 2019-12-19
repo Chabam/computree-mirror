@@ -102,6 +102,7 @@ private:
     QDomElement                     m_domWorkflow;
 
     mutable QString                 m_errors;
+    QString                         mLastErrorAction;
 
     bool                            m_allParametersFounded;
 

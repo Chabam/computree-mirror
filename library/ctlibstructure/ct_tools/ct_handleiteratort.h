@@ -6,6 +6,8 @@
 template<typename IteratorT>
 class CT_HandleIteratorT {
 public:
+    using IteratorType = IteratorT;
+
     CT_HandleIteratorT(IteratorT begin, IteratorT end) : m_begin(begin), m_end(end) {}
 
     IteratorT begin() { return m_begin; }

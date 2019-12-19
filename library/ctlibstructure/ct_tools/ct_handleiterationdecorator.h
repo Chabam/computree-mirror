@@ -2,6 +2,7 @@
 #define CT_HANDLEITERATIONDECORATOR_H
 
 #include "tools/sfinae.h"
+#include "ct_iterator/ct_singlecollectioniteratorstdstyle.h"
 #include "ct_iterator/ct_multimodeliteratorstdstyle.h"
 #include "ct_iterator/ct_singlemodeliteratorstdstyleforresultgroup.h"
 #include "ct_handleiteratort.h"
@@ -22,13 +23,31 @@ public:
 
     template<class HandleInResult>
     final_const_iterator iterateInputs(const HandleInResult& inResult) const {
-        QVector<CT_OutAbstractModel*> outModels;
+        return iterateModelOrItem<final_const_iterator, CT_OutAbstractModel, HandleInResult>(inResult);
+    }
+
+    template<class HandleInResult>
+    final_iterator iterateOutputs(const HandleInResult& inResult) const {
+        return internalIterateOutputs(inResult, std::integral_constant<bool, IsAResultModelCopy<typename HandleInResult::ModelType>::Is>());
+    }
+
+    template<class OutModelT = CT_OutAbstractModel, class HandleInResult>
+    CT_HandleIteratorT<CT_SingleCollectionIteratorStdStyle<OutModelT>> iterateSelectedOutputModels(const HandleInResult& inResult) const {
+        return iterateModelOrItem<CT_HandleIteratorT<CT_SingleCollectionIteratorStdStyle<OutModelT>>, OutModelT, HandleInResult>(inResult);
+    }
+
+private:
+    template<typename FinalIterator, typename OutModelT, class HandleInResult>
+    FinalIterator iterateModelOrItem(const HandleInResult& inResult) const {
+        using IntermediateIterator = typename FinalIterator::IteratorType;
+
+        QVector<OutModelT*> outModels;
         int currentIndex = 0;
 
         const CT_InAbstractModel* inResultModel = inResult.model();
 
         if(inResultModel == nullptr)
-            return final_const_iterator(const_iterator(), const_iterator());
+            return FinalIterator(IntermediateIterator(), IntermediateIterator());
 
         const int nResultPossibility = inResultModel->nPossibilitySelected();
 
@@ -38,19 +57,13 @@ public:
             outModels.resize(outModels.size() + selectionGroup->nPossibilitySelected());
 
             for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
-                outModels[currentIndex++] = possibility->outModel();
+                outModels[currentIndex++] = static_cast<OutModelT*>(possibility->outModel());
             }
         }
 
-        return final_const_iterator(const_iterator::create(outModels.begin(), outModels.end()), const_iterator());
+        return FinalIterator(IntermediateIterator::create(outModels.begin(), outModels.end()), IntermediateIterator());
     }
 
-    template<class HandleInResult>
-    final_iterator iterateOutputs(const HandleInResult& inResult) const {
-        return internalIterateOutputs(inResult, std::integral_constant<bool, IsAResultModelCopy<HandleInResult::ModelType>::Is>());
-    }
-
-private:
     // iterate with a result that is a copy
     template<class HandleInResultCopy>
     final_iterator internalIterateOutputs(const HandleInResultCopy& inResultCopy, std::true_type) const {
@@ -68,9 +81,9 @@ private:
 
     template<class HandleInResultCopy>
     void findOutModelsFromResultCopy(const HandleInResultCopy& inResultCopy, QVector<DEF_CT_AbstractGroupModelOut*>& outModels) const {
-        using InResultModelType = HandleInResultCopy::ModelType;
-        using InResultToolType = InResultModelType::ToolToModifyResultModelCopiesType;
-        using OutResultModelType = InResultToolType::ModelType;
+        using InResultModelType = typename HandleInResultCopy::ModelType;
+        using InResultToolType = typename InResultModelType::ToolToModifyResultModelCopiesType;
+        using OutResultModelType = typename InResultToolType::ModelType;
 
         int currentIndex = 0;
 

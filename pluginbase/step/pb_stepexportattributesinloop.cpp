@@ -166,7 +166,6 @@ void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConf
 
 void PB_StepExportAttributesInLoop::compute()
 {
-    bool firstTurn = true;
     _modelsKeys.clear();
     _names.clear();
 
@@ -176,12 +175,14 @@ void PB_StepExportAttributesInLoop::compute()
 
     const QString exportBaseName = createExportBaseName(firstTurnFromCounter);
 
-    if (firstTurn) // TODO : always true ????!!! may be replace it by firstTurnFromCounter
+    if (firstTurnFromCounter)
     {
         computeModelsKeysAndNamesAndOgrTypes();
 
-        if(!isStopped())
-            createFieldsNamesFileForVectorsIfNecessary(); // TODO : each turn same file replaced but with a different content ?!!! because firstTurn
+        if(isStopped())
+            return;
+
+        createFieldsNamesFileForVectorsIfNecessary();
     }
 
     if(isStopped() || !exportInAsciiIfNecessary(fileASCII, streamASCII, firstTurnFromCounter))
@@ -189,7 +190,7 @@ void PB_StepExportAttributesInLoop::compute()
 
 #ifdef USE_GDAL
     QScopedPointer<GDALDataset, GDalDatasetScopedPointerCustomDeleter> vectorDataSet;
-    OGRLayer* vectorLayer;
+    OGRLayer* vectorLayer = nullptr;
 
     if(isStopped())
         return;
@@ -215,16 +216,10 @@ void PB_StepExportAttributesInLoop::compute()
                 plotListInGrid->getBoundingBox2D(min, max);
                 const double resolution = plotListInGrid->getSpacing();
 
-                for (int i = 0 ; i < _modelsKeys.size() ; i++)
+                for (int i = 0 ; i < _modelsKeysWithoutXOrYAttribute.size() ; i++)
                 {
-                    QString key = _modelsKeys.at(i);
-
-                    // TODO : this can never happen because mInItemWithXY is not in the same group as mInPlotListInGrid
-                    //        so we will always create a new CT_Image2D
-                    //if (key != xKey && key != yKey)
-                    //{
+                    const QString key = _modelsKeysWithoutXOrYAttribute.at(i);
                     rasters.insert(key, CT_Image2D<double>::createImage2DFromXYCoords(min(0), min(1), max(0) - EPSILON_LIMITS, max(1) - EPSILON_LIMITS, resolution, 0, DEF_NA, DEF_NA));
-                    //}
                 }
             }
         }
@@ -295,6 +290,9 @@ void PB_StepExportAttributesInLoop::compute()
 
                 const auto pair = indexedAttributes.value(key);
 
+                if(pair.first == nullptr)
+                    continue;
+
                 if (hasMetricsToExport && !streamASCII.isNull())
                 {
                     (*streamASCII.get()) << pair.second->toString(pair.first, nullptr);
@@ -349,13 +347,7 @@ void PB_StepExportAttributesInLoop::compute()
 
 #ifdef USE_GDAL
             if(vectorLayer != nullptr)
-            {
-                // TODO : memory leaks here ?!! vectorFeature previously created never deleted ?
-                if (vectorLayer->CreateFeature(vectorFeature) != OGRERR_NONE)
-                {
-                    OGRFeature::DestroyFeature(vectorFeature);
-                }
-            }
+                OGRFeature::DestroyFeature(vectorFeature);
 #endif
         }
 
@@ -436,52 +428,57 @@ QString PB_StepExportAttributesInLoop::createExportBaseName(bool& first) const
 
 void PB_StepExportAttributesInLoop::computeModelsKeysAndNamesAndOgrTypes()
 {
-    for(const CT_AbstractSingularItemDrawable* item : mInItemWithAttribute.iterateInputs(mInResult))
-    {
-        if(isStopped())
-            return;
-
-        const CT_OutAbstractModel* itemModel = item->model();
-
-        item->visitItemAttributes([this, &itemModel](const CT_AbstractItemAttribute* att) -> bool
-        {
-            const CT_OutAbstractItemAttributeModel* attModel = static_cast<CT_OutAbstractItemAttributeModel*>(att->model());
-
-            const QString attrDN = attModel->displayableName();
-
-            const QString key = QString("ITEM_%1_ATTR_%2").arg(size_t(itemModel)).arg(size_t(attModel));
-
-            if(!_modelsKeys.contains(key))
-            {
-                _modelsKeys.append(key);
-                _names.insert(key, attrDN);
-#ifdef USE_GDAL
-                if (_vectorExport && !_outVectorFolder.isEmpty())
-                {
-                    const CT_AbstractCategory::ValueType type = CT_AbstractCategory::ValueType(attModel->itemAttribute()->itemAttributeToolForModel()->valueType());
-
-                    if      (type == CT_AbstractCategory::BOOLEAN) {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
-                    else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
-                    else if (type == CT_AbstractCategory::INT8)    {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::UINT8)   {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::INT16)   {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::UINT16)  {_ogrTypes.insert(key, OFTInteger);}
-                    else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger);}
-                    //                else if (type == CT_AbstractCategory::UINT32)  {ogrTypes.insert(key, OFTInteger64);}
-                    //                else if (type == CT_AbstractCategory::INT64)   {ogrTypes.insert(key, OFTInteger64);}
-                    //                else if (type == CT_AbstractCategory::INT32)   {ogrTypes.insert(key, OFTInteger64);}
-                    else                                           {_ogrTypes.insert(key, OFTReal);}
-                }
-#endif
-            }
-
-            return true;
-        });
-    }
+    // Iterate over models and not over items because it can be possible to have a model that doesn't have
+    // an item at least.
+    computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeXY, true);
+    computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeX, false);
+    computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeY, false);
+    computeModelsKeysAndNamesAndOgrTypes(mInItemAttribute, true);
 
     replaceBadCharacters(_names);
-    qSort(_modelsKeys.begin(), _modelsKeys.end());
+    std::sort(_modelsKeys.begin(), _modelsKeys.end());
+}
+
+void PB_StepExportAttributesInLoop::computeModelsKeysAndNamesAndOgrTypesForModels(const CT_OutAbstractModel* itemModel, const CT_OutAbstractItemAttributeModel* attModel, bool isNotXOrYAttribute)
+{
+    const QString attrDN = attModel->displayableName();
+
+    const QString key = computeKeyForModels(itemModel, attModel);
+
+    if(!_modelsKeys.contains(key))
+    {
+        _modelsKeys.append(key);
+
+        if(isNotXOrYAttribute)
+            _modelsKeysWithoutXOrYAttribute.append(key);
+
+        _names.insert(key, attrDN);
+
+#ifdef USE_GDAL
+        if (_vectorExport && !_outVectorFolder.isEmpty())
+        {
+            const CT_AbstractCategory::ValueType type = CT_AbstractCategory::ValueType(attModel->itemAttribute()->itemAttributeToolForModel()->valueType());
+
+            if      (type == CT_AbstractCategory::BOOLEAN) {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
+            else if (type == CT_AbstractCategory::STRING)  {_ogrTypes.insert(key, OFTString);}
+            else if (type == CT_AbstractCategory::INT8)    {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::UINT8)   {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::INT16)   {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::UINT16)  {_ogrTypes.insert(key, OFTInteger);}
+            else if (type == CT_AbstractCategory::INT32)   {_ogrTypes.insert(key, OFTInteger);}
+            //                else if (type == CT_AbstractCategory::UINT32)  {ogrTypes.insert(key, OFTInteger64);}
+            //                else if (type == CT_AbstractCategory::INT64)   {ogrTypes.insert(key, OFTInteger64);}
+            //                else if (type == CT_AbstractCategory::INT32)   {ogrTypes.insert(key, OFTInteger64);}
+            else                                           {_ogrTypes.insert(key, OFTReal);}
+        }
+#endif
+    }
+}
+
+QString PB_StepExportAttributesInLoop::computeKeyForModels(const CT_OutAbstractModel* itemModel, const CT_OutAbstractModel* attModel) const
+{
+    return QString("ITEM_%1_ATTR_%2").arg(size_t(itemModel->recursiveOriginalModel())).arg(size_t(attModel->recursiveOriginalModel()));
 }
 
 void PB_StepExportAttributesInLoop::createFieldsNamesFileForVectorsIfNecessary()
@@ -606,7 +603,7 @@ void PB_StepExportAttributesInLoop::preExportVectorIfNecessary(const QString& ex
 
 void PB_StepExportAttributesInLoop::addToIndexedAttributesCollection(const CT_AbstractSingularItemDrawable* item, const CT_AbstractItemAttribute* attribute, QMap<QString, QPair<const CT_AbstractSingularItemDrawable*, const CT_AbstractItemAttribute*> >& indexedAttributes) const
 {
-    indexedAttributes.insert(QString("ITEM_%1_ATTR_%2").arg(size_t(item->model())).arg(size_t(attribute->model())), qMakePair(item, attribute));
+    indexedAttributes.insert(computeKeyForModels(item->model(), attribute->model()), qMakePair(item, attribute));
 }
 
 void PB_StepExportAttributesInLoop::replaceBadCharacters(QMap<QString, QString> &names) const

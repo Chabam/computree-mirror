@@ -92,6 +92,7 @@ private:
     CT_HandleInSingularItem<CT_LoopCounter>                         mInLoopCounter;
 
     QList<QString>          _modelsKeys;
+    QList<QString>          _modelsKeysWithoutXOrYAttribute;
     QMap<QString, QString>  _names;
     QMap<QString, QString> _shortNames;
 
@@ -117,6 +118,30 @@ private:
 
     QString createExportBaseName(bool& first) const;
     void computeModelsKeysAndNamesAndOgrTypes();
+
+    template<typename InHandleT>
+    void computeModelsKeysAndNamesAndOgrTypes(InHandleT& handle, bool isNotXOrYAttribute)
+    {
+        auto it = handle.template iterateSelectedOutputModels<CT_OutAbstractItemAttributeModel>(mInResult);
+        auto begin = it.begin();
+        auto end = it.end();
+
+        while(begin != end)
+        {
+            if(isStopped())
+                return;
+
+            const CT_OutAbstractItemAttributeModel* attModel = (*begin);
+            const CT_OutAbstractModel* itemModel = static_cast<const CT_OutAbstractModel*>(attModel->parentModel());
+
+            computeModelsKeysAndNamesAndOgrTypesForModels(itemModel, attModel, isNotXOrYAttribute);
+
+            ++begin;
+        }
+    }
+
+    void computeModelsKeysAndNamesAndOgrTypesForModels(const CT_OutAbstractModel* itemModel, const CT_OutAbstractItemAttributeModel* attModel, bool isNotXOrYAttribute);
+    QString computeKeyForModels(const CT_OutAbstractModel* itemModel, const CT_OutAbstractModel* attModel) const;
     void createFieldsNamesFileForVectorsIfNecessary();
     bool exportInAsciiIfNecessary(QScopedPointer<QFile>& fileASCII, QScopedPointer<QTextStream>& streamASCII, const bool firstTurnFromCounter);
 

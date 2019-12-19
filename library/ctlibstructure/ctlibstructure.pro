@@ -54,7 +54,8 @@ HEADERS += \
     ct_iterator/ct_singlemodeliteratorstdstyleforresultgroup.h \
     ct_tools/ct_handleiterationdecorator.h \
     ct_tools/ct_handleiteratort.h \
-    ct_iterator/ct_multicollectioniteratorstdstyle.h
+    ct_iterator/ct_multicollectioniteratorstdstyle.h \
+    ct_iterator/ct_singlecollectioniteratorstdstyle.h
 
 SOURCES += \
     ct_global/ct_structurecontext.cpp \

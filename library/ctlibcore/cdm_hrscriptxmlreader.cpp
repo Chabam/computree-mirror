@@ -119,8 +119,10 @@ int CDM_HRScriptXmlReader::parameter(const QObject *caller, const QString &param
 
     parameterValueRestored.setValue(v);
 
-    if(id == 0)
+    if(id == 0) {
         m_allParametersFounded = false;
+        mLastErrorAction = QObject::tr("Erreur lors de la lecture du paramètre %1::%2").arg(caller->metaObject()->className()).arg(parameterName);
+    }
 
     return id;
 }
@@ -164,11 +166,14 @@ int CDM_HRScriptXmlReader::parameterPath(const QObject *caller, const QString &p
             }
         } else {
             m_allParametersFounded = false;
+            mLastErrorAction = QObject::tr("Erreur lors de la lecture du chemin %1::%2").arg(caller->metaObject()->className()).arg(parameterName);
         }
     }
 
-    if(id == 0)
+    if(id == 0) {
         m_allParametersFounded = false;
+        mLastErrorAction = QObject::tr("Erreur lors de la lecture du chemin %1::%2").arg(caller->metaObject()->className()).arg(parameterName);
+    }
 
     return id;
 }
@@ -189,6 +194,7 @@ bool CDM_HRScriptXmlReader::parameterInfo(const QObject *caller, const int &para
 
     if(el.isNull() || !el.hasAttribute(extraInfoName)) {
         m_allParametersFounded = false;
+        mLastErrorAction = QObject::tr("Erreur lors de la lecture de l'information %1::%2").arg(caller->metaObject()->className()).arg(extraInfoName);
         return false;
     }
 
@@ -673,6 +679,7 @@ bool CDM_HRScriptXmlReader::processStepPreSettings(CT_VirtualAbstractStep* step,
     bool ok = false;
 
     m_allParametersFounded = true;
+    mLastErrorAction.clear();
 
     if(info != nullptr) {
         m_parametersStack.append(info);
@@ -683,12 +690,12 @@ bool CDM_HRScriptXmlReader::processStepPreSettings(CT_VirtualAbstractStep* step,
         ok = step->restorePreSettings(*this);
     }
 
-    ok = ok & m_allParametersFounded;
+    ok = ok && m_allParametersFounded;
 
     m_callerDomElements.clear();
 
     if(!ok) {
-        const QString err = QObject::tr("Erreur lors de l'affectation des paramètres de pré-configuration à l'étape \"%1\" du plugin \"%2\".").arg(stepKey).arg(pluginName);
+        const QString err = QObject::tr("Erreur lors de l'affectation des paramètres de pré-configuration à l'étape \"%1\" du plugin \"%2\". %3").arg(stepKey).arg(pluginName).arg(mLastErrorAction);
 
         m_errors += err + QObject::tr("\r\n");
 
@@ -716,6 +723,7 @@ bool CDM_HRScriptXmlReader::processStepInputSettings(CT_VirtualAbstractStep *ste
     bool ok = false;
 
     m_allParametersFounded = true;
+    mLastErrorAction.clear();
 
     if(info != nullptr) {
         m_parametersStack.append(info);
@@ -726,12 +734,12 @@ bool CDM_HRScriptXmlReader::processStepInputSettings(CT_VirtualAbstractStep *ste
         ok = step->restoreInputSettings(*this);
     }
 
-    ok = ok & m_allParametersFounded;
+    ok = ok && m_allParametersFounded;
 
     m_callerDomElements.clear();
 
     if(!ok) {
-        const QString err = QObject::tr("Erreur lors de l'affectation des paramètres d'entrée à l'étape \"%1\" du plugin \"%2\".").arg(stepKey).arg(pluginName);
+        const QString err = QObject::tr("Erreur lors de l'affectation des paramètres d'entrée à l'étape \"%1\" du plugin \"%2\". %3").arg(stepKey).arg(pluginName).arg(mLastErrorAction);
 
         m_errors += err + QObject::tr("\r\n");
 
@@ -759,6 +767,7 @@ bool CDM_HRScriptXmlReader::processStepPostSettings(CT_VirtualAbstractStep *step
     bool ok = false;
 
     m_allParametersFounded = true;
+    mLastErrorAction.clear();
 
     if(info != nullptr) {
         m_parametersStack.append(info);
@@ -769,12 +778,12 @@ bool CDM_HRScriptXmlReader::processStepPostSettings(CT_VirtualAbstractStep *step
         ok = step->restorePostSettings(*this);
     }
 
-    ok = ok & m_allParametersFounded;
+    ok = ok && m_allParametersFounded;
 
     m_callerDomElements.clear();
 
     if(!ok) {
-        const QString err = QObject::tr("Erreur lors de l'affectation des paramètres de post-configuration à l'étape \"%1\" du plugin \"%2\".").arg(stepKey).arg(pluginName);
+        const QString err = QObject::tr("Erreur lors de l'affectation des paramètres de post-configuration à l'étape \"%1\" du plugin \"%2\". %3").arg(stepKey).arg(pluginName).arg(mLastErrorAction);
 
         m_errors += err + QObject::tr("\r\n");
 
@@ -801,6 +810,8 @@ bool CDM_HRScriptXmlReader::processStepOthersSettings(CT_VirtualAbstractStep *st
 
     bool ok = false;
 
+    mLastErrorAction.clear();
+
     if(info != nullptr) {
         m_parametersStack.append(info);
         ok = step->restoreOthersSettings(*this);
@@ -813,7 +824,7 @@ bool CDM_HRScriptXmlReader::processStepOthersSettings(CT_VirtualAbstractStep *st
     m_callerDomElements.clear();
 
     if(!ok) {
-        const QString err = QObject::tr("Erreur lors de l'affectation d'autres paramètres à l'étape \"%1\" du plugin \"%2\".").arg(stepKey).arg(pluginName);
+        const QString err = QObject::tr("Erreur lors de l'affectation d'autres paramètres à l'étape \"%1\" du plugin \"%2\". %3").arg(stepKey).arg(pluginName).arg(mLastErrorAction);
 
         m_errors += err + QObject::tr("\r\n");
 

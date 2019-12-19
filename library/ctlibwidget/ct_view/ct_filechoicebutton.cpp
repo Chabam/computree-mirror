@@ -57,8 +57,13 @@ bool CT_FileChoiceButton::restoreSettings(SettingsReaderInterface &reader)
 {
     QString path;
 
-    while(reader.parameterPath(this, "File", path))
+    int n = reader.parameterPathCount(this, "File");
+
+    while((n > 0) && reader.parameterPath(this, "File", path))
+    {
         _data._value->append(path);
+        --n;
+    }
 
     setWidgetValue(*_data._value);
 
