@@ -63,15 +63,15 @@ public:
     // champs
     Eigen::Vector3d*    _p1;        /*!< Point le plus bas */
     Eigen::Vector3d*    _p2;        /*!< Point le plus haut*/
-    float               _phi;       /*!< Angle zénithal (du haut vers le bas)*/
-    float               _theta;     /*!< Angle azimuthal (en sens anti-horaire)*/
-    float               _length;    /*!< Longueur de segment*/
+    double               _phi;       /*!< Angle zénithal (du haut vers le bas)*/
+    double               _theta;     /*!< Angle azimuthal (en sens anti-horaire)*/
+    double               _length;    /*!< Longueur de segment*/
 
 
 
     // Méthodes statiques
 
-    inline static QList<CT_SphericalLine3D*> getLinesFromPoints(const QList<Eigen::Vector3d*> &points, float minZenithalAngle = 0, float maxZenithalAngle = M_PI_2, bool orderByZ = true)
+    inline static QList<CT_SphericalLine3D*> getLinesFromPoints(const QList<Eigen::Vector3d*> &points, double minZenithalAngle = 0, double maxZenithalAngle = M_PI_2, bool orderByZ = true)
     {
         QList<CT_SphericalLine3D*> liste;
         int size = points.size();
@@ -95,16 +95,16 @@ public:
         return liste;
     }
 
-    inline static void convertToSphericalCoordinates(const Eigen::Vector3d* p1, const Eigen::Vector3d* p2, float &phi, float &theta, float &length)
+    inline static void convertToSphericalCoordinates(const Eigen::Vector3d* p1, const Eigen::Vector3d* p2, double &phi, double &theta, double &length)
     {
-        float x = ((*p2)(0) - (*p1)(0));
-        float y = ((*p2)(1) - (*p1)(1));
-        float z = ((*p2)(2) - (*p1)(2));
+        double x = ((*p2)(0) - (*p1)(0));
+        double y = ((*p2)(1) - (*p1)(1));
+        double z = ((*p2)(2) - (*p1)(2));
 
         convertToSphericalCoordinates(x, y, z, phi, theta, length);
     }
 
-    inline static void convertToSphericalCoordinates(float x, float y, float z, float &phi, float &theta, float &length)
+    inline static void convertToSphericalCoordinates(double x, double y, double z, double &phi, double &theta, double &length)
     {
         length = sqrt(x*x + y*y + z*z);
         phi = acos(z/length);
@@ -115,7 +115,7 @@ public:
         }
     }
 
-    inline static void convertToCartesianCoordinates(float phi, float theta, float length, float &x, float &y, float &z)
+    inline static void convertToCartesianCoordinates(double phi, double theta, double length, double &x, double &y, double &z)
     {
         x = length * cos(theta) * sin(phi);
         y = length * sin(theta) * sin(phi);

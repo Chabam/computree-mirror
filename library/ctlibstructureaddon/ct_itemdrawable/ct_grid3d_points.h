@@ -31,6 +31,7 @@
 #include "ct_itemdrawable/abstract/ct_abstractgrid3d.h"
 #include "ct_accessor/ct_pointaccessor.h"
 
+class CT_StandardGrid3D_PointDrawManager;
 
 class CTLIBSTRUCTUREADDON_EXPORT CT_Grid3D_Points : public CT_AbstractGrid3D
 {
@@ -95,8 +96,12 @@ public:
     const QList<size_t>* getConstPointIndexList(size_t cellIndex) const;
 
     QList<size_t> getCellIndicesAtNeighbourhoodN(size_t originIndex, int n) const;
+    void getCellIndicesAtNeighbourhoodN(size_t originIndex, int n, QList<size_t> &indices) const;
 
-    int getPointsIndicesInsideSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const;
+    int getPointsInCellsIntersectingSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const;
+
+    size_t getPointsInCellsIntersectingSphere(Eigen::Vector3d center, double radius, QList<size_t> *indexList) const;
+    size_t getPointsInCellsIntersectingCylinder(Eigen::Vector3d center, double radius, double height, QList<size_t> *indexList) const;
 
     int getPointIndicesIncludingKNearestNeighbours(Eigen::Vector3d position, int k, double maxDist, QList<size_t> &indexList) const;
 
@@ -119,6 +124,7 @@ private:
     QList<size_t>                   _emptyList;
     CT_PointAccessor                _pointAccessor;
 
+    const static CT_StandardGrid3D_PointDrawManager GRID3D_POINT_DRAW_MANAGER;
 
 };
 

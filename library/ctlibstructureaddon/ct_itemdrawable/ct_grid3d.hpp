@@ -150,12 +150,21 @@ CT_Grid3D<DataT>* CT_Grid3D<DataT>::createGrid3DFromXYZCoords(double xmin,
 template< typename DataT>
 void CT_Grid3D<DataT>::initGridWithValue(const DataT val)
 {
-    for (size_t  i = 0 ; i < nCells() ; i++)
-    {
-        _data[i] = val;
-    }
+    std::fill(_data.begin(), _data.end(), val);
+
     _dataMin = val;
     _dataMax = val;
+}
+
+template< typename DataT>
+void CT_Grid3D<DataT>::translateOriginToCoords(double x, double y, double z)
+{
+    _minCoordinates(0) = x;
+    _minCoordinates(1) = y;
+    _minCoordinates(2) = z;
+    _maxCoordinates(0) = (minX() + _res * _dimx);
+    _maxCoordinates(1) = (minY() + _res * _dimy);
+    _maxCoordinates(2) = (minZ() + _res * _dimz);
 }
 
 

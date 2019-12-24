@@ -95,12 +95,12 @@ quint16 CT_LASHeader::sizeInBytes() const
             sizeof(m_maxCoordinates(2)) +
             sizeof(m_minCoordinates(2));
 
-    if((m_versionMinor == 1) && (m_versionMajor <= 2))
+    if((m_versionMajor == 1) && (m_versionMinor <= 2))
         return s;
 
     s += sizeof(m_startOfWaveformDataPacketRecord);
 
-    if((m_versionMinor == 1) && (m_versionMajor <= 3))
+    if((m_versionMajor == 1) && (m_versionMinor <= 3))
         return s;
 
     s += sizeof(m_startOfFirstExtendedVariableLengthRecord) +
@@ -121,21 +121,21 @@ size_t CT_LASHeader::getPointsRecordCount() const
 
 bool CT_LASHeader::mustTransformPoints() const
 {
-    return (m_xOffset != 0) || (m_yOffset != 0) || (m_zOffset != 0) || (m_xScaleFactor != 1) || (m_yScaleFactor != 1) || (m_zScaleFactor != 1);
+    return (!qFuzzyCompare(m_xOffset, 0) || !qFuzzyCompare(m_yOffset, 0) || !qFuzzyCompare(m_zOffset, 0) || !qFuzzyCompare(m_xScaleFactor, 1) || !qFuzzyCompare(m_yScaleFactor, 1) || !qFuzzyCompare(m_zScaleFactor, 1));
 }
 
 void CT_LASHeader::transformPoint(const qint32 &x, const qint32 &y, const qint32 &z, double &xc, double &yc, double &zc) const
 {
-    xc = (((double)x)*m_xScaleFactor) + m_xOffset;
-    yc = (((double)y)*m_yScaleFactor) + m_yOffset;
-    zc = (((double)z)*m_zScaleFactor) + m_zOffset;
+    xc = (double(x)*m_xScaleFactor) + m_xOffset;
+    yc = (double(y)*m_yScaleFactor) + m_yOffset;
+    zc = (double(z)*m_zScaleFactor) + m_zOffset;
 }
 
 void CT_LASHeader::inverseTransformPoint(const double &x, const double &y, const double &z, qint32 &xc, qint32 &yc, qint32 &zc) const
 {
-    xc = (qint32)std::round(((double)(x - m_xOffset)) / (double)m_xScaleFactor);
-    yc = (qint32)std::round(((double)(y - m_yOffset)) / (double)m_yScaleFactor);
-    zc = (qint32)std::round(((double)(z - m_zOffset)) / (double)m_zScaleFactor);
+    xc = qint32(std::round((double(x - m_xOffset)) / double(m_xScaleFactor)));
+    yc = qint32(std::round((double(y - m_yOffset)) / double(m_yScaleFactor)));
+    zc = qint32(std::round((double(z - m_zOffset)) / double(m_zScaleFactor)));
 }
 
 bool CT_LASHeader::read(QDataStream &stream, QString &error)
@@ -156,7 +156,7 @@ bool CT_LASHeader::read(QDataStream &stream, QString &error)
             || (m_fileSignature[2] != 'S')
             || (m_fileSignature[3] != 'F')) {
         error = QObject::tr("Not a LAS File");
-        return nullptr;
+        return false;
     }
 
     // File Source ID
@@ -198,7 +198,7 @@ bool CT_LASHeader::read(QDataStream &stream, QString &error)
     if(m_offsetToPointData < m_headerSize) {
 
         error = QObject::tr("The offset to the start of points data (%1) is smaller than the header size (%2).").arg(m_offsetToPointData).arg(m_headerSize);
-        return nullptr;
+        return false;
     }
 
     // Number of Variable Length Records
@@ -231,12 +231,12 @@ bool CT_LASHeader::read(QDataStream &stream, QString &error)
     readData(m_maxCoordinates(2), QObject::tr("Max Z invalid"));
     readData(m_minCoordinates(2), QObject::tr("Min Z invalid"));
 
-    if((m_versionMinor == 1) && (m_versionMajor <= 2))
+    if((m_versionMajor == 1) && (m_versionMinor <= 2))
         return true;
 
     readDataAndCheckSize(m_startOfWaveformDataPacketRecord, QObject::tr("Start of Waveform Data Packet Record invalid"));
 
-    if((m_versionMinor == 1) && (m_versionMajor <= 3))
+    if((m_versionMajor == 1) && (m_versionMinor <= 3))
         return true;
 
     readDataAndCheckSize(m_startOfFirstExtendedVariableLengthRecord, QObject::tr("Start Of First Extended Variable Length Record invalid"));
@@ -264,15 +264,15 @@ bool CT_LASHeader::isHeaderAlmostSimilar(const CT_LASHeader& header, int compare
         return false;
 
     if((compareOptions & CO_Offset)
-            && ((this->m_xOffset != header.m_xOffset)
-                || (this->m_yOffset != header.m_yOffset)
-                || (this->m_zOffset != header.m_zOffset)))
+            && (!qFuzzyCompare(this->m_xOffset, header.m_xOffset)
+                || !qFuzzyCompare(this->m_yOffset, header.m_yOffset)
+                || !qFuzzyCompare(this->m_zOffset, header.m_zOffset)))
         return false;
 
     if((compareOptions & CO_Scale)
-            && ((this->m_xScaleFactor != header.m_xScaleFactor)
-                || (this->m_yScaleFactor != header.m_yScaleFactor)
-                || (this->m_zScaleFactor != header.m_zScaleFactor)))
+            && (!qFuzzyCompare(this->m_xScaleFactor, header.m_xScaleFactor)
+                || !qFuzzyCompare(this->m_yScaleFactor, header.m_yScaleFactor)
+                || !qFuzzyCompare(this->m_zScaleFactor, header.m_zScaleFactor)))
         return false;
 
     return true;
@@ -365,12 +365,12 @@ bool CT_LASHeader::write(QDataStream &stream, QString &error) const
     stream << get_maxZ();
     stream << get_minZ();
 
-    if((m_versionMinor == 1) && (m_versionMajor <= 2))
+    if((m_versionMajor == 1) && (m_versionMinor <= 2))
         return true;
 
     stream << m_startOfWaveformDataPacketRecord;
 
-    if((m_versionMinor == 1) && (m_versionMajor <= 3))
+    if((m_versionMajor == 1) && (m_versionMinor <= 3))
         return true;
 
     stream << m_startOfFirstExtendedVariableLengthRecord;

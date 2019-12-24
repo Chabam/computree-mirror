@@ -26,11 +26,16 @@
 *****************************************************************************/
 
 #include "ct_grid3d_points.h"
+#include "ct_log/ct_logmanager.h"
+
+#include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_pointdrawmanager.h"
+const CT_StandardGrid3D_PointDrawManager CT_Grid3D_Points::GRID3D_POINT_DRAW_MANAGER;
 
 CT_TYPE_IMPL_INIT_MACRO(CT_Grid3D_Points)
 
 CT_Grid3D_Points::CT_Grid3D_Points() : SuperClass()
 {
+    setBaseDrawManager(&GRID3D_POINT_DRAW_MANAGER);
 }
 
 CT_Grid3D_Points::CT_Grid3D_Points(const CT_Grid3D_Points& other) : SuperClass(other)
@@ -59,6 +64,7 @@ CT_Grid3D_Points::CT_Grid3D_Points(double xmin,
                                    int dimz,
                                    double resolution) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
 {
+    setBaseDrawManager(&GRID3D_POINT_DRAW_MANAGER);
 }
 
 CT_Grid3D_Points* CT_Grid3D_Points::createGrid3DFromXYZCoords(double xmin,
@@ -257,7 +263,7 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
     return indices;
 }
 
-int CT_Grid3D_Points::getPointsIndicesInsideSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const
+int CT_Grid3D_Points::getPointsInCellsIntersectingSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const
 {
     // point number
     int n = 0;
@@ -324,12 +330,126 @@ int CT_Grid3D_Points::getPointIndicesIncludingKNearestNeighbours(Eigen::Vector3d
 
         while (n < k && radius < maxDist)
         {
-            n = this->getPointsIndicesInsideSphere(index, radius, nullptr);
+            n = this->getPointsInCellsIntersectingSphere(index, radius, nullptr);
             radius += this->resolution();
         }
 
-        n = this->getPointsIndicesInsideSphere(index, radius, &indexList);
+        n = this->getPointsInCellsIntersectingSphere(index, radius, &indexList);
     }
 
+    return n;
+}
+
+void CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, int n, QList<size_t> &indices) const
+{
+    if (n == 0)
+    {
+        indices.append(originIndex);
+    } else {
+        int lin, col, levz;
+
+        if (this->indexToGrid(originIndex, col, lin, levz))
+        {
+            int minlin, mincol, minlevz;
+            int maxlin, maxcol, maxlevz;
+
+            if (lin  > n) {minlin  = lin - n;}  else {minlin  = 0;}
+            if (col  > n) {mincol  = col - n;}  else {mincol  = 0;}
+            if (levz > n) {minlevz = levz - n;} else {minlevz = 0;}
+
+            maxlin  = lin  + n; if (maxlin  >= this->_dimx) {maxlin  = this->_dimx - 1;}
+            maxcol  = col  + n; if (maxcol  >= this->_dimy) {maxcol  = this->_dimy - 1;}
+            maxlevz = levz + n; if (maxlevz >= this->_dimz) {maxlevz = this->_dimz - 1;}
+
+            for (int yy = minlin ; yy <= maxlin ; yy++)
+            {
+                for (int xx = mincol ; xx <= maxcol ; xx++)
+                {
+                    for (int zz = minlevz ; zz <= maxlevz ; zz++)
+                    {
+                        size_t neighbIndex;
+                        if (this->index(xx, yy, zz, neighbIndex))
+                        {
+                            indices.append(neighbIndex);
+                        }
+                    }
+                }
+            }
+        } else {
+            PS_LOG->addErrorMessage(LogInterface::itemdrawable, tr("Point grid index does not exist !"));
+        }
+    }
+}
+
+size_t CT_Grid3D_Points::getPointsInCellsIntersectingSphere(Eigen::Vector3d center, double radius, QList<size_t> *indexList) const
+{
+    // point number
+    size_t n = 0;
+    size_t cellIndex;
+
+    // Compute bounding box for search
+    int minXcol, maxXcol, minYlin, maxYlin, minZlev, maxZlev;
+
+    if (!this->colX(center(0) - radius, minXcol)) {minXcol = 0;}
+    if (!this->colX(center(0) + radius, maxXcol)) {maxXcol = this->xdim() - 1;}
+    if (!this->linY(center(1) - radius, minYlin)) {minYlin = 0;}
+    if (!this->linY(center(1) + radius, maxYlin)) {maxYlin = this->ydim() - 1;}
+    if (!this->levelZ(center(2) - radius, minZlev)) {minZlev = 0;}
+    if (!this->levelZ(center(2) + radius, maxZlev)) {maxZlev = this->zdim() - 1;}
+
+    for (int xx = minXcol ; xx <= maxXcol ; xx++)
+    {
+        for (int yy = minYlin ; yy <= maxYlin ; yy++)
+        {
+            for (int zz = minZlev ; zz <= maxZlev ; zz++)
+            {
+                if (this->index(xx, yy, zz, cellIndex))
+                {
+                    const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
+
+                    if (indexList != nullptr)
+                    {
+                        indexList->append(*indices);
+                        n += size_t(indices->size());
+                    }
+                }
+            }
+        }
+    }
+    return n;
+}
+size_t CT_Grid3D_Points::getPointsInCellsIntersectingCylinder(Eigen::Vector3d center, double radius, double height, QList<size_t> *indexList) const
+{
+    // point number
+    size_t n = 0;
+    size_t cellIndex;
+
+    // Compute bounding box for search
+    int minXcol, maxXcol, minYlin, maxYlin, minZlev, maxZlev;
+
+    if (!this->colX(center(0) - radius, minXcol)) {minXcol = 0;}
+    if (!this->colX(center(0) + radius, maxXcol)) {maxXcol = this->xdim() - 1;}
+    if (!this->linY(center(1) - radius, minYlin)) {minYlin = 0;}
+    if (!this->linY(center(1) + radius, maxYlin)) {maxYlin = this->ydim() - 1;}
+    if (!this->levelZ(center(2) - height/2.0, minZlev)) {minZlev = 0;}
+    if (!this->levelZ(center(2) + height/2.0, maxZlev)) {maxZlev = this->zdim() - 1;}
+    for (int xx = minXcol ; xx <= maxXcol ; xx++)
+    {
+        for (int yy = minYlin ; yy <= maxYlin ; yy++)
+        {
+            for (int zz = minZlev ; zz <= maxZlev ; zz++)
+            {
+                if (this->index(xx, yy, zz, cellIndex))
+                {
+                    const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
+                    if (indexList != nullptr)
+                    {
+                        indexList->append(*indices);
+                        n += size_t(indices->size());
+                    }
+                }
+            }
+        }
+    }
     return n;
 }

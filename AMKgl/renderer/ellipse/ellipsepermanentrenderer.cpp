@@ -5,9 +5,11 @@ EllipseGLRenderer EllipsePermanentRenderer::m_basicDrawRenderer = EllipseGLRende
 
 EllipsePermanentRenderer::EllipsePermanentRenderer() : EllipseDefaultInstancedPermanentRendererSuperClass()
 {
-    // 5 points for a simplified version of one ellipse
-    for(int i=0; i<50; i+=10)
+    // 25 points for a simplified version of one ellipse
+    for(GLuint i = 0; i < 50 ; i += 2)
+    {
         m_fastIndicesArray.push_back(i);
+    }
 
     setVertexArray(&m_basicDrawRenderer.getValues());
 
@@ -29,7 +31,9 @@ void EllipsePermanentRenderer::addEllipse(const double& cx, const double& cy, co
     const Chunk &ch = createOrGetChunkForShape(Eigen::AlignedBox3d(minD, maxD));
 
     if(chunk != nullptr)
-        *chunk = (Chunk*)&ch;
+    {
+        *chunk = const_cast<Chunk*>(&ch);
+    }
 
     Chunk::ShaderParamsType params = Chunk::ShaderParamsType::staticConstructFromValues(cx, cy, cz,
                                                                                         majorAxisRadius, minorAxisRadius,

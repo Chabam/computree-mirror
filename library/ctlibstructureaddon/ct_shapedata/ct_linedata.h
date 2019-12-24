@@ -77,9 +77,9 @@ public:
       */
     static CT_LineData* staticCreateLineDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex);
 
-    static CT_LineData* staticCreateLineDataFromPointCloud(const QList<Eigen::Vector3d>& l_gp);
+    static CT_LineData* staticCreateLineDataFromPointCloud(const QList<Eigen::Vector3d>& l_gp, bool computeError = true);
 
-    static CT_LineData* staticCreateLineDataFromItemCenters(const QList<CT_AbstractGeometricalItem*> &items);
+    static CT_LineData* staticCreateLineDataFromItemCenters(const QList<const CT_AbstractGeometricalItem *> &items);
 
 private:
     Eigen::Vector3d     _p1;

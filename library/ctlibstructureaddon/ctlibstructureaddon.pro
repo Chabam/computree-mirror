@@ -14,6 +14,7 @@ TARGET = ctlibstructureaddon
 DEFINES += CTLIBSTRUCTUREADDON_LIBRARY
 
 HEADERS += \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_pointdrawmanager.h \
     ct_itemdrawable/tools/gridtools/ct_abstractgrid3dbeamvisitor.h \
     ct_itemdrawable/tools/gridtools/ct_grid3dbeamvisitor_indexlist.h \
     ct_itemdrawable/tools/gridtools/ct_grid3dwootraversalalgorithm.h \
@@ -192,6 +193,7 @@ SOURCES += \
     ct_itemdrawable/ct_itemattributelist.cpp \
     ct_itemdrawable/ct_pointsattributescolor.cpp \
     ct_itemdrawable/ct_pointsattributesnormal.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_pointdrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardscannerdrawmanager.cpp \
