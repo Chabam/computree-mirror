@@ -1,8 +1,8 @@
 #include "pbg_csvpreviewwidget.h"
 #include "ui_pbg_csvpreviewwidget.h"
 
-#include "ct_itemdrawable/model/outModel/ct_outstdsingularitemmodel.h"
-#include "ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h"
+#include "ct_model/outModel/ct_outstdsingularitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 
 #include "exporters/csv/pb_csvexporterconfiguration.h"
 
@@ -22,7 +22,7 @@ PBG_CSVPreviewWidget::PBG_CSVPreviewWidget(QWidget *parent) :
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectColumns);
     ui->tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    _configuration = NULL;
+    _configuration = nullptr;
     _currentDropPreviewColumnIndex = -9999;
     _headerContextMenu = new QMenu(this);
     QAction *action = _headerContextMenu->addAction("Supprimer");
@@ -41,15 +41,25 @@ PBG_CSVPreviewWidget::~PBG_CSVPreviewWidget()
 
 void PBG_CSVPreviewWidget::setConfiguration(const PB_CSVExporterConfiguration *configuration)
 {
-    _configuration = (PB_CSVExporterConfiguration*)configuration;
+    _configuration = const_cast<PB_CSVExporterConfiguration*>(configuration);
     _list = _configuration->list();
+    mItemAttributesModelsByItemModel.clear();
+
+    for(const CT_OutAbstractSingularItemModel* model : _list)
+    {
+        model->visitAttributes([this, &model](const CT_OutAbstractItemAttributeModel* attModel) -> bool
+        {
+            mItemAttributesModelsByItemModel[model].append(attModel);
+            return true;
+        });
+    }
 
     updateViewFromConfiguration();
 }
 
 bool PBG_CSVPreviewWidget::updateConfiguration()
 {
-    if(_configuration == NULL)
+    if(_configuration == nullptr)
         return false;
 
     _configuration->clearColumns();
@@ -63,8 +73,8 @@ bool PBG_CSVPreviewWidget::updateConfiguration()
         int refListIndex = item->data(Qt::UserRole).toInt();
         int refIndex = item->data(Qt::UserRole+1).toInt();
 
-        CT_OutAbstractSingularItemModel *sItem = _list.at(refListIndex);
-        _configuration->addColumn(sItem, sItem->itemAttributes().at(refIndex));
+        const CT_OutAbstractSingularItemModel *sItem = _list.at(refListIndex);
+        _configuration->addColumn(sItem, mItemAttributesModelsByItemModel[sItem].at(refIndex));
     }
 
     return true;
@@ -74,7 +84,7 @@ bool PBG_CSVPreviewWidget::updateConfiguration()
 
 void PBG_CSVPreviewWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    if((event->source() != NULL)
+    if((event->source() != nullptr)
             && acceptItemAttribute(event->mimeData()->text()))
     {
         event->acceptProposedAction();
@@ -83,7 +93,7 @@ void PBG_CSVPreviewWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void PBG_CSVPreviewWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    if((event->source() != NULL))
+    if((event->source() != nullptr))
     {
         QStringList values = event->mimeData()->text().split(";;");
 
@@ -101,11 +111,13 @@ void PBG_CSVPreviewWidget::dragMoveEvent(QDragMoveEvent *event)
             {
                 if((refListIndex >= 0) && (refListIndex < _list.size()))
                 {
-                    CT_OutAbstractSingularItemModel *sItem = _list.at(refListIndex);
+                    const CT_OutAbstractSingularItemModel *sItem = _list.at(refListIndex);
 
-                    if((refIndex >= 0) && (refIndex < sItem->itemAttributes().size()))
+                    const auto& itemAttributes = mItemAttributesModelsByItemModel[sItem];
+
+                    if((refIndex >= 0) && (refIndex < itemAttributes.size()))
                     {
-                        CT_OutAbstractItemAttributeModel *ref = sItem->itemAttributes().at(refIndex);
+                        const CT_OutAbstractItemAttributeModel *ref = itemAttributes.at(refIndex);
 
                         createColumn(sItem, ref, event->pos(), true);
                     }
@@ -204,8 +216,8 @@ void PBG_CSVPreviewWidget::createColumn(const CT_OutAbstractSingularItemModel *s
 
     item = new QStandardItem();
     item->setData(ia->displayableName(), Qt::DisplayRole);
-    item->setData(_list.indexOf((CT_OutAbstractSingularItemModel*)sItem), Qt::UserRole);
-    item->setData(sItem->itemAttributes().indexOf((CT_OutAbstractItemAttributeModel*)ia), Qt::UserRole+1);
+    item->setData(_list.indexOf(sItem), Qt::UserRole);
+    item->setData(mItemAttributesModelsByItemModel[sItem].indexOf(ia), Qt::UserRole+1);
 
     if(preview)
         item->setData(QColor(Qt::gray), Qt::BackgroundColorRole);
@@ -260,14 +272,13 @@ void PBG_CSVPreviewWidget::updateViewFromConfiguration()
     while(_model.columnCount() > 0)
         _model.removeColumn(0);
 
-    if(_configuration != NULL)
+    if(_configuration != nullptr)
     {
-        QListIterator< QPair<CT_OutAbstractSingularItemModel*, CT_OutAbstractItemAttributeModel*> > it(_configuration->getColumns());
+        const auto& columns = _configuration->getColumns();
 
-        while(it.hasNext())
+        for(const auto& column : columns)
         {
-            const QPair<CT_OutAbstractSingularItemModel*, CT_OutAbstractItemAttributeModel*> &pair = it.next();
-            createColumn(pair.first, pair.second, _model.columnCount(), false);
+            createColumn(column.first, column.second, _model.columnCount(), false);
         }
     }
 }
@@ -293,9 +304,9 @@ bool PBG_CSVPreviewWidget::acceptItemAttribute(const QString &mimeData)
         {
             if((refListIndex >= 0) && (refListIndex < _list.size()))
             {
-                CT_OutAbstractSingularItemModel *refList = _list.at(refListIndex);
+                const CT_OutAbstractSingularItemModel *refList = _list.at(refListIndex);
 
-                if((refIndex >= 0) && (refIndex < refList->itemAttributes().size()))
+                if((refIndex >= 0) && (refIndex < mItemAttributesModelsByItemModel[refList].size()))
                     return true;
             }
         }
@@ -324,7 +335,7 @@ void PBG_CSVPreviewWidget::removeSelectedColumn()
     {
         QStandardItem *item = _model.itemFromIndex(list.first());
 
-        if(item != NULL)
+        if(item != nullptr)
             _model.removeColumn(item->column());
     }
 }
@@ -338,10 +349,10 @@ void PBG_CSVPreviewWidget::setItemAttribute(const QString &mimeData, QDropEvent 
         int refListIndex = values.first().toInt();
         int refIndex = values.at(1).toInt();
 
-        CT_OutAbstractSingularItemModel *refList = _list.at(refListIndex);
-        CT_OutAbstractItemAttributeModel *ref = refList->itemAttributes().at(refIndex);
+        const CT_OutAbstractSingularItemModel *refList = _list.at(refListIndex);
+        const CT_OutAbstractItemAttributeModel *ref = mItemAttributesModelsByItemModel[refList].at(refIndex);
 
-        if(event != NULL)
+        if(event != nullptr)
             createColumn(refList, ref, event->pos(), false);
         else
             createColumn(refList, ref, _model.columnCount(), false);

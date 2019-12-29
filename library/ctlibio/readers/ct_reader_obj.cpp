@@ -90,13 +90,9 @@ bool CT_Reader_OBJ::restoreSettings(SettingsReaderInterface &reader)
 void CT_Reader_OBJ::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
     if(loadAsPointCloud())
-    {
         manager.addItem(_outScene, tr("Scene"));
-    }
     else
-    {
-        manager.addItem(_outScene, tr("Mesh Model"));
-    }
+        manager.addItem(_outMeshModel, tr("Mesh Model"));
 }
 
 bool CT_Reader_OBJ::internalReadFile(CT_StandardItemGroup* group)

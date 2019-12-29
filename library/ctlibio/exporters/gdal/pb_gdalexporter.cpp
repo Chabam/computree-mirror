@@ -261,6 +261,9 @@ CT_AbstractExporter::ExportReturn PB_GDALExporter::internalExportToFile()
             while((mIteratorVectorBegin != mIteratorVectorEnd)
                   && (nExported < totalToExport))
             {
+                if(isStopped())
+                    break;
+
                 vectors.append(*mIteratorVectorBegin);
 
                 ++nExported;
@@ -268,7 +271,7 @@ CT_AbstractExporter::ExportReturn PB_GDALExporter::internalExportToFile()
             }
 
             // write data
-            if(!exportVectors(vectors, prePath, suffix))
+            if(!isStopped() && !exportVectors(vectors, prePath, suffix))
                 return ErrorWhenExport;
 
             return (mIteratorVectorBegin == mIteratorVectorEnd) ? NoMoreItemToExport : ExportCanContinue;
@@ -303,6 +306,9 @@ CT_AbstractExporter::ExportReturn PB_GDALExporter::internalExportToFile()
         int cpt = 0;
         for(auto raster : mRasters)
         {
+            if(isStopped())
+                break;
+
             if(!exportRaster(raster, prePath + QString("_%1").arg(cpt) + "." + suffix))
                 return ErrorWhenExport;
 

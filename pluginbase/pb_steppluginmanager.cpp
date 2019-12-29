@@ -54,10 +54,10 @@
 
 #include "ctlibstdactions/action/ct_actionselectitemdrawablegv.h"
 #include "ctlibstdactions/action/pb_actionshowitemdatagv.h"
-/*
+
 #include "exporters/csv/pb_csvexporter.h"
-#include "exporters/profile/pb_profileexporter.h"
-*/
+//#include "exporters/profile/pb_profileexporter.h"
+
 #include "exporters/grid2d/pb_grid2dexporter.h"
 /*
 #include "exporters/grid3d/pb_grid3dexporter.h"
@@ -65,41 +65,36 @@
 */
 #include "exporters/xyb/pb_xybexporter.h"
 #include "ctliblas/exporters/ct_exporter_las.h"
-/*
-#include "exporters/xyb/pb_multixybexporter.h"
-#include "exporters/ascrgb/pb_ascrgbexporter.h"
+
 #include "exporters/groupdata/pb_groupdataexporter.h"
 #include "exporters/mesh/pb_meshobjexporter.h"
 #include "exporters/topology/pb_opfexporter.h"
+#include "exporters/ascrgb/pb_ascrgbexporter.h"
+/*
+#include "exporters/xyb/pb_multixybexporter.h"
 #include "exporters/pbm/pb_pbmexporter.h"
 #include "exporters/pgm/pb_pgmexporter.h"
 #include "exporters/polygon2d/pb_polygon2dexporter.h"
 */
 #include "exporters/gdal/pb_gdalexporter.h"
-/*
 #include "exporters/ascid/pb_ascidexporter.h"
 
-*/
 #include "ctlibio/readers/ct_reader_xyb.h"
 #include "ctlibio/readers/ct_reader_ascrgb.h"
-/*#include "ctlibio/readers/ct_reader_ptx.h"
 #include "ctlibio/readers/ct_reader_obj.h"
+#include "ctlibio/readers/ct_reader_ptx.h"
 #include "ctlibio/readers/ct_reader_larchitect_grid.h"
-*/
 #include "ctlibio/readers/ct_reader_opf.h"
-
 #include "ctliblas/readers/ct_reader_lasv2.h"
-
 #include "ctlibio/readers/ct_reader_gdal.h"
 #include "ctlibio/readers/ct_reader_idxyz.h"
-/*#include "ctlibio/readers/ct_reader_terrascanprj.h"
+#include "ctlibio/readers/ct_reader_terrascanprj.h"
 #include "ctlibio/readers/ct_reader_asciigrid3d.h"
-#include "ctlibio/readers/ct_reader_pgm.h"
-#include "ctlibio/readers/ct_reader_pbm.h"
+//#include "ctlibio/readers/ct_reader_pgm.h"
+//#include "ctlibio/readers/ct_reader_pbm.h"
 #include "ctlibio/readers/ct_reader_points_ascii.h"
 #include "ctlibio/readers/ct_reader_ply.h"
 #include "ctlibio/readers/ct_reader_trajectory.h"
-*/
 
 #include "ctlibmetrics/ct_metric/points/ct_cloudmetrics.h"
 #include "ctlibmetrics/ct_metric/abstract/ct_abstractmetric_raster.h"
@@ -272,24 +267,24 @@ bool PB_StepPluginManager::loadExporters()
 
     CT_StandardExporterSeparator *sep = addNewSeparator(new CT_StandardExporterSeparator("Exporters"));
     sep->addExporter(new PB_XYBExporter(CT_StepsMenu::LP_Points));
-    /*sep->addExporter(new PB_CSVExporter());
-    sep->addExporter(new PB_GroupDataExporter());
+    sep->addExporter(new PB_CSVExporter(CT_StepsMenu::LP_Items));
+    sep->addExporter(new PB_GroupDataExporter(CT_StepsMenu::LP_Items));
     //sep->addExporter(new PB_MultiXYBExporter());
-    sep->addExporter(new PB_ASCRGBExporter());
-    sep->addExporter(new PB_ASCIDExporter());
-    sep->addExporter(new PB_ProfileExporter());
-    */
-    sep->addExporter(new PB_Grid2DExporter());
+    sep->addExporter(new PB_ASCRGBExporter(CT_StepsMenu::LP_Points));
+    sep->addExporter(new PB_ASCIDExporter(CT_StepsMenu::LP_Points));
+    //sep->addExporter(new PB_ProfileExporter());
+    sep->addExporter(new PB_Grid2DExporter(CT_StepsMenu::LP_Raster));
+    sep->addExporter(new PB_MeshObjExporter(CT_StepsMenu::LP_Meshes));
+    sep->addExporter(new PB_OPFExporter(CT_StepsMenu::LP_Others));
     /*
     sep->addExporter(new PB_Grid3DExporter());
     sep->addExporter(new PB_Grid3DAsTableExporter());
     sep->addExporter(new PB_Polygon2DExporter());
-    sep->addExporter(new PB_MeshObjExporter());
-    sep->addExporter(new PB_OPFExporter());
     sep->addExporter(new PB_PbmExporter());
     sep->addExporter(new PB_PgmExporter());*/
     sep->addExporter(new CT_Exporter_LAS(CT_StepsMenu::LP_Points));
 
+    // create gdal exporters
 #ifdef USE_GDAL
     GDALDriverManager *driverManager = GetGDALDriverManager();
 
@@ -339,17 +334,18 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_IDXYZ(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_LASV2(CT_StepsMenu::LP_Points));
-    /*sep->addReader(new CT_Reader_PTX());
-    sep->addReader(new CT_Reader_OBJ());
-    sep->addReader(new CT_Reader_LArchitect_Grid());
-    sep->addReader(new CT_Reader_TerraScanPrj());
-    sep->addReader(new CT_Reader_AsciiGrid3D());
-    sep->addReader(new CT_Reader_PGM());
-    sep->addReader(new CT_Reader_PBM());
-    sep->addReader(new CT_Reader_Points_ASCII());
-    sep->addReader(new CT_Reader_PLY());
-    sep->addReader(new CT_Reader_Trajectory());*/
-    // load gdal drivers and create readers and exporters
+    sep->addReader(new CT_Reader_PTX(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_OBJ(CT_StepsMenu::LP_Meshes));
+    sep->addReader(new CT_Reader_LArchitect_Grid(CT_StepsMenu::LP_Voxels));
+    sep->addReader(new CT_Reader_TerraScanPrj(CT_StepsMenu::LP_Vector));
+    sep->addReader(new CT_Reader_AsciiGrid3D(CT_StepsMenu::LP_Raster));
+    //sep->addReader(new CT_Reader_PGM());
+    //sep->addReader(new CT_Reader_PBM());
+    sep->addReader(new CT_Reader_Points_ASCII(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_PLY(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_Trajectory(CT_StepsMenu::LP_Points));
+
+    // create gdal readers
 
 #ifdef USE_GDAL
     GDALDriverManager *driverManager = GetGDALDriverManager();

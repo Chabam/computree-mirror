@@ -1,12 +1,12 @@
 #ifndef PB_CSVEXPORTERCOLUMN_H
 #define PB_CSVEXPORTERCOLUMN_H
 
-#include "ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h"
+#include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 
 class PB_CSVExporterColumn
 {
 public:
-    PB_CSVExporterColumn(const QList<CT_AbstractSingularItemDrawable*> &items, const CT_OutAbstractItemAttributeModel *iaModel);
+    PB_CSVExporterColumn(const QList<const CT_AbstractSingularItemDrawable*>& items, const CT_OutAbstractItemAttributeModel *iaModel);
     ~PB_CSVExporterColumn();
 
     int currentItemIndex() const;
@@ -17,12 +17,12 @@ public:
     size_t size() const;
 
 private:
-    QList<CT_AbstractSingularItemDrawable*>         _items;
-    CT_OutAbstractItemAttributeModel                *_ref;
+    QList<const CT_AbstractSingularItemDrawable*>   _items;
+    const CT_OutAbstractItemAttributeModel          *_ref;
 
-    QListIterator<CT_AbstractSingularItemDrawable*> *_iterator;
+    QListIterator<const CT_AbstractSingularItemDrawable*> *_iterator;
 
-    CT_AbstractSingularItemDrawable         *_currentItem;
+    const CT_AbstractSingularItemDrawable         *_currentItem;
     CT_AbstractItemAttribute                *m_currentItemAttribut;
 
     int                                     _currentItemIndex;

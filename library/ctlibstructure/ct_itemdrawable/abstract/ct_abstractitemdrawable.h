@@ -202,12 +202,12 @@ public:
      * @brief Set the id, per example if you want that the copy has the same id than the original
      * @warning Not intended for direct use by plugin developper
      */
-    void setId(quint64 id);
+    void setId(quint32 id);
 
     /**
      * @brief Returns the unique ID of this item
      */
-    quint64 id() const {return m_id;}
+    quint32 id() const {return m_id;}
 
     /**
      * @brief Returns the name of this item (the name of the class). By default call "metaObject()->className()". You can
@@ -503,8 +503,9 @@ private:
      */
     CT_AbstractItemDrawableDrawManager* m_alternativeDrawManager;
 
+    static quint32  NEXTID;
+
     // TODO : MK 21.11.18 refactor this and check with Alexandre Piboule what it means
-    static quint64  NEXTID;
     static QMap<QString, QString> NAMEMAP;
     static QMutex NAMEMAP_Mutex;
 

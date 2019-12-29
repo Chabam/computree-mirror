@@ -1,35 +1,13 @@
 #include "pb_ascidexporter.h"
 
-#include <math.h>
-#include <QMessageBox>
+#include <QFileInfo>
 #include <QFile>
 #include <QTextStream>
-#include <QEventLoop>
-#include <QApplication>
-#include <QProgressDialog>
-#include <QFileInfo>
 
-#include "ct_global/ct_context.h"
 #include "ct_tools/ct_numerictostringconversiont.h"
 #include "ct_iterator/ct_pointiterator.h"
-#include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
 
-
-PB_ASCIDExporter::PB_ASCIDExporter() : SuperClass()
-{
-}
-
-QString PB_ASCIDExporter::getExporterCustomName() const
-{
-    return tr("Points + ID item, ASCII(X,Y,Z)");
-}
-
-CT_StepsMenu::LevelPredefined PB_ASCIDExporter::getExporterSubMenuName() const
-{
-    return CT_StepsMenu::LP_Points;
-}
-
-void PB_ASCIDExporter::init()
+PB_ASCIDExporter::PB_ASCIDExporter(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     addNewExportFormat(FileFormat("asc", tr("Fichier asc")));
 
@@ -40,83 +18,123 @@ void PB_ASCIDExporter::init()
                   "- Z  : Coordonnée Z<br>"));
 }
 
-
-bool PB_ASCIDExporter::setItemDrawableToExport(const QList<CT_AbstractItemDrawable*> &list)
+PB_ASCIDExporter::PB_ASCIDExporter(const PB_ASCIDExporter& other) : SuperClass(other),
+    mItems(other.mItems)
 {
-    clearErrorMessage();
-
-    QList<CT_AbstractItemDrawable*> myList;
-    QListIterator<CT_AbstractItemDrawable*> it(list);
-
-    while(it.hasNext())
-    {
-        CT_AbstractItemDrawable *item = it.next();
-
-        if (dynamic_cast<CT_AbstractItemDrawableWithPointCloud*>(item) != NULL)
-            myList.append(item);
-    }
-
-    if(myList.isEmpty())
-    {
-        setErrorMessage(tr("Aucun ItemDrawable du type CT_AbstractItemDrawableWithPointCloud"));
-        return false;
-    }
-
-    return SuperClass::setItemDrawableToExport(myList);
 }
 
-bool PB_ASCIDExporter::protectedExportToFile()
+QString PB_ASCIDExporter::displayableName() const
 {
-    QFileInfo exportPathInfo = QFileInfo(exportFilePath());
-    QString path = exportPathInfo.path();
-    QString baseName = exportPathInfo.baseName();
-    QString suffix = "asc";
-    QString filePath = QString("%1/%2.%4").arg(path).arg(baseName).arg(suffix);
+    return tr("Points + ID item, ASCII(X,Y,Z)");
+}
 
-    QFile file(filePath);
+void PB_ASCIDExporter::setItemsToExport(const QList<const CT_AbstractItemDrawableWithPointCloud*>& items)
+{
+    setMustUseModels(false);
+    mItems = items;
+}
 
-    if(file.open(QFile::WriteOnly | QFile::Text))
+void PB_ASCIDExporter::internalDeclareInputModels(CT_ExporterInModelStructureManager& manager)
+{
+    manager.addGroupToRootGroup(m_hInGroup);
+    manager.addItemToGroup(m_hInGroup, m_hInItem, tr("Item à exporter"));
+    manager.addItemAttribute(m_hInItem, m_hInItemAttribute, QStringList() << CT_AbstractCategory::DATA_ID << CT_AbstractCategory::DATA_VALUE, tr("ID"));
+}
+
+CT_AbstractExporter::ExportReturn PB_ASCIDExporter::internalExportToFile()
+{
+    const QFileInfo exportPathInfo = QFileInfo(filePath());
+    const QString path = exportPathInfo.path();
+    const QString baseName = exportPathInfo.baseName();
+    const QString suffix = "asc";
+
+    const QString currentFilePath = QString("%1/%2.%4").arg(path).arg(baseName).arg(suffix);
+
+    QFile file(currentFilePath);
+
+    if(!file.open(QFile::WriteOnly | QFile::Text))
+        return ErrorWhenExport;
+
+    QTextStream txtStream(&file);
+
+    txtStream << "ID\tX\tY\tZ\n";
+
+    if(mustUseModels())
     {
-        QTextStream txtStream(&file);
+        if(mIteratorItemBegin == mIteratorItemEnd)
+        {
+            auto iterator = m_hInItem.iterateInputs(m_handleResultExport);
+            mIteratorItemBegin = iterator.begin();
+            mIteratorItemEnd = iterator.end();
+        }
 
-        txtStream << "ID\tX\tY\tZ\n";
-
-        int totalToExport = itemDrawableToExport().size();
         int nExported = 0;
+        const int totalToExport = maximumItemToExportInFile(int(std::distance(mIteratorItemBegin, mIteratorItemEnd)));
+        const int end = totalToExport*100;
 
         // write data
-        QListIterator<CT_AbstractItemDrawable*> it(itemDrawableToExport());
-
-        while(it.hasNext())
+        while((mIteratorItemBegin != mIteratorItemEnd)
+              && (nExported < end))
         {
-            CT_AbstractItemDrawable *item = it.next();
-            size_t id = item->id();
+            const CT_AbstractItemDrawableWithPointCloud* item = *mIteratorItemBegin;
 
-            CT_PointIterator itP(dynamic_cast<CT_AbstractItemDrawableWithPointCloud*>(item)->getPointCloudIndex());
-
-            size_t totalSize = itP.size();
-            size_t i = 0;
-
-            while(itP.hasNext())
-            {
-                const CT_Point &point = itP.next().currentPoint();
-
-                txtStream << id << "\t";
-                txtStream << CT_NumericToStringConversionT<double>::toString(point(0)) << "\t";
-                txtStream << CT_NumericToStringConversionT<double>::toString(point(1)) << "\t";
-                txtStream << CT_NumericToStringConversionT<double>::toString(point(2)) << "\n";
-
-                ++i;
-
-                setExportProgress(int((((i*100)/totalSize)+nExported)/totalToExport));
-            }
+            exportItem(item, txtStream, nExported, totalToExport);
 
             nExported += 100;
+            ++mIteratorItemBegin;
         }
 
         file.close();
-        return true;
+        return (mIteratorItemBegin == mIteratorItemEnd) ? NoMoreItemToExport : ExportCanContinue;
+    }
+    else
+    {
+        const int totalToExport = mItems.size();
+        int nExported = 0;
+
+        for(const CT_AbstractItemDrawableWithPointCloud* item : mItems)
+        {
+            exportItem(item, txtStream, nExported, totalToExport);
+            nExported += 100;
+        }
     }
 
-    return false;
+    file.close();
+
+    return NoMoreItemToExport;
+}
+
+void PB_ASCIDExporter::clearIterators()
+{
+    mIteratorItemBegin = HandleItemType::const_iterator();
+    mIteratorItemEnd = mIteratorItemBegin;
+}
+
+void PB_ASCIDExporter::clearAttributesClouds()
+{
+}
+
+void PB_ASCIDExporter::exportItem(const CT_AbstractItemDrawableWithPointCloud* item, QTextStream& stream, const int& nExported, const int& totalToExport)
+{
+    auto itemAttribute = item->itemAttribute(m_hInItemAttribute);
+    const QString id = (itemAttribute != nullptr) ? itemAttribute->toString(item, nullptr) : QString().setNum(item->id());
+
+    CT_PointIterator itP(item->pointCloudIndex());
+
+    const size_t totalSize = itP.size();
+    size_t i = 0;
+
+    while(itP.hasNext())
+    {
+        const CT_Point& point = itP.next().currentPoint();
+
+        stream << id << "\t";
+        stream << CT_NumericToStringConversionT<double>::toString(point(0)) << "\t";
+        stream << CT_NumericToStringConversionT<double>::toString(point(1)) << "\t";
+        stream << CT_NumericToStringConversionT<double>::toString(point(2)) << "\n";
+
+        ++i;
+
+        setExportProgress(int((((i*100)/totalSize)+size_t(nExported))/size_t(totalToExport)));
+    }
 }

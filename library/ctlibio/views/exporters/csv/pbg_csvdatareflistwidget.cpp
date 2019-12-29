@@ -1,8 +1,8 @@
 #include "pbg_csvdatareflistwidget.h"
 #include "ui_pbg_csvdatareflistwidget.h"
 
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractsingularitemmodel.h"
-#include "ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractsingularitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 
 #include <QMimeData>
 #include <QModelIndex>
@@ -36,7 +36,7 @@ PBG_CSVDataRefListWidget::~PBG_CSVDataRefListWidget()
     delete ui;
 }
 
-void PBG_CSVDataRefListWidget::setList(const QList<CT_OutAbstractSingularItemModel*> &list)
+void PBG_CSVDataRefListWidget::setList(const QList<const CT_OutAbstractSingularItemModel*>& list)
 {
     _list = list;
 
@@ -66,26 +66,27 @@ void PBG_CSVDataRefListWidget::initView()
 {
     _model.invisibleRootItem()->removeRows(0, _model.invisibleRootItem()->rowCount());
 
-    QListIterator<CT_OutAbstractSingularItemModel*> it(_list);
-
-    while(it.hasNext())
+    int itemModelIndex = 0;
+    for(const CT_OutAbstractSingularItemModel* sItem : _list)
     {
-        CT_OutAbstractSingularItemModel *sItem = it.next();
-
         QList<QStandardItem*> items = createItemsForSingularItem(sItem);
 
         _model.invisibleRootItem()->appendRow(items);
 
         QStandardItem *item = items.first();
 
-        QListIterator<CT_OutAbstractItemAttributeModel*> itR(sItem->itemAttributes());
-
-        while(itR.hasNext())
+        int attModelIndex = 0;
+        sItem->visitAttributes([this, &item, &itemModelIndex, &attModelIndex](const CT_OutAbstractItemAttributeModel* attModel) -> bool
         {
-            QList<QStandardItem*> items = createItemsForItemAttribute(sItem, itR.next());
+            QList<QStandardItem*> items = createItemsForItemAttribute(itemModelIndex, attModel, attModelIndex);
 
             item->appendRow(items);
-        }
+            ++attModelIndex;
+
+            return true;
+        });
+
+        ++itemModelIndex;
     }
 
     ui->treeView->expandAll();
@@ -103,13 +104,14 @@ QList<QStandardItem*> PBG_CSVDataRefListWidget::createItemsForSingularItem(const
     return items;
 }
 
-QList<QStandardItem*> PBG_CSVDataRefListWidget::createItemsForItemAttribute(const CT_OutAbstractSingularItemModel *sModel,
-                                                                            const CT_OutAbstractItemAttributeModel *iaModel) const
+QList<QStandardItem*> PBG_CSVDataRefListWidget::createItemsForItemAttribute(const int& itemModelIndex,
+                                                                            const CT_OutAbstractItemAttributeModel *iaModel,
+                                                                            const int& iaModelIndex) const
 {
     QList<QStandardItem*> items;
 
     // drag data = index du modèle de l'item dans la liste ;; index du modèle de l'attribute dans la liste des attributs d'item
-    QString dragText = QString("%1;;%2").arg(_list.indexOf((CT_OutAbstractSingularItemModel*)sModel)).arg(sModel->itemAttributes().indexOf((CT_OutAbstractItemAttributeModel*)iaModel));
+    QString dragText = QString("%1;;%2").arg(itemModelIndex).arg(iaModelIndex);
 
     QStandardItem *item = new QStandardItem(iaModel->displayableName());
     item->setEditable(false);
@@ -118,7 +120,7 @@ QList<QStandardItem*> PBG_CSVDataRefListWidget::createItemsForItemAttribute(cons
 
     items.append(item);
 
-    item = new QStandardItem(iaModel->itemAttribute()->typeToString());
+    item = new QStandardItem(iaModel->itemAttribute()->itemAttributeToolForModel()->valueTypeToString());
     item->setEditable(false);
     item->setDragEnabled(true);
     item->setData(dragText, Qt::UserRole+1);

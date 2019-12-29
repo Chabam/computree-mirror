@@ -4,141 +4,166 @@
 #include <QFileInfo>
 #include <QTextStream>
 
-#include "ct_itemdrawable/ct_meshmodel.h"
 #include "ct_mesh/ct_face.h"
-#include "ct_mesh/ct_edge.h"
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_iterator/ct_faceiterator.h"
 
-PB_MeshObjExporter::PB_MeshObjExporter() : SuperClass()
-{
-}
-
-QString PB_MeshObjExporter::getExporterCustomName() const
-{
-    return tr("Meshs, format OBJ");
-}
-
-CT_StepsMenu::LevelPredefined PB_MeshObjExporter::getExporterSubMenuName() const
-{
-    return CT_StepsMenu::LP_Meshes;
-}
-
-void PB_MeshObjExporter::init()
+PB_MeshObjExporter::PB_MeshObjExporter(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     addNewExportFormat(FileFormat("obj", tr("Fichiers .obj")));
 
     setToolTip(tr("Exporte un maillage dans un fichier au format OBJ (Objet 3D)"));
 }
 
-bool PB_MeshObjExporter::configureExport()
+PB_MeshObjExporter::PB_MeshObjExporter(const PB_MeshObjExporter& other) : SuperClass(other),
+    mMeshes(other.mMeshes)
 {
-    return true;
 }
 
-bool PB_MeshObjExporter::setItemDrawableToExport(const QList<CT_AbstractItemDrawable *> &list)
+QString PB_MeshObjExporter::displayableName() const
 {
-    clearErrorMessage();
-
-    QList<CT_AbstractItemDrawable*> myList;
-    QListIterator<CT_AbstractItemDrawable*> it(list);
-
-    while(it.hasNext())
-    {
-        CT_AbstractItemDrawable *item = it.next();
-
-        if(dynamic_cast<CT_MeshModel*>(item) != NULL)
-            myList.append(item);
-    }
-
-    if(myList.isEmpty())
-    {
-        setErrorMessage(tr("Aucun ItemDrawable du type CT_MeshModel"));
-        return false;
-    }
-
-    return SuperClass::setItemDrawableToExport(myList);
+    return tr("Maillage 3D (Mesh), format OBJ");
 }
 
-bool PB_MeshObjExporter::protectedExportToFile()
+void PB_MeshObjExporter::setMeshesToExport(const QList<const CT_MeshModel*>& list)
 {
-    QFileInfo exportPathInfo = QFileInfo(exportFilePath());
-    QString path = exportPathInfo.path();
-    QString baseName = exportPathInfo.baseName();
-    QString suffix = "obj";
-    QString filePath = QString("%1/%2.%4").arg(path).arg(baseName).arg(suffix);
+    setMustUseModels(false);
+    mMeshes = list;
+}
 
-    QFile file(filePath);
+void PB_MeshObjExporter::internalDeclareInputModels(CT_ExporterInModelStructureManager& manager)
+{
+    manager.addGroupToRootGroup(m_hInGroup);
+    manager.addItemToGroup(m_hInGroup, m_hInItem, tr("Maillage à exporter"));
+}
+
+CT_AbstractExporter::ExportReturn PB_MeshObjExporter::internalExportToFile()
+{
+    const QFileInfo exportPathInfo = QFileInfo(filePath());
+    const QString path = exportPathInfo.path();
+    const QString baseName = exportPathInfo.baseName();
+    const QString suffix = "obj";
+
+    const QString currentFilePath = QString("%1/%2.%4").arg(path).arg(baseName).arg(suffix);
+
+    QFile file(currentFilePath);
 
     if(file.open(QFile::WriteOnly | QFile::Text))
     {
-        QTextStream stream(&file);
-        stream << "# " << QFileInfo(filePath).fileName() << endl << endl;
+        QTextStream txtStream(&file);
 
-        int totalToExport = itemDrawableToExport().size();
-        int nExported = 0;
+        txtStream << "# " << QFileInfo(currentFilePath).fileName() << endl << endl;
 
-        // write data
-        QListIterator<CT_AbstractItemDrawable*> it(itemDrawableToExport());
-
-        int lastPointCount = 0;
-        int ptNb = 0;
-        while(it.hasNext())
+        if(mustUseModels())
         {
-            CT_AbstractItemDrawable *item = it.next();
-
-            stream << "o " << item->id() << endl << endl;
-
-            CT_Mesh *mesh = dynamic_cast<CT_MeshModel*>(item)->mesh();
-
-            if(mesh != NULL)
+            if(mIteratorItemBegin == mIteratorItemEnd)
             {
-                CT_PointIterator itP(mesh->abstractVert());
-                CT_FaceIterator itF(mesh->abstractFace());
-
-                QHash<size_t, size_t> hashTablePoint;
-
-                size_t totalSize = itP.size();
-                size_t i = 0;
-
-                while(itP.hasNext())
-                {
-                    const CT_Point &point = itP.next().currentPoint();
-                    hashTablePoint.insert(itP.cIndex(), i+1);
-
-                    stream << "v " << ((double)point(0)) << " " << ((double)point(1)) << " " << ((double)point(2)) << endl;
-
-                    ++i;++ptNb;
-
-                    setExportProgress(int((((i*50)/totalSize)+nExported)/totalToExport));
-                }
-
-                stream << endl;
-
-                totalSize = itF.size();
-                i = 0;
-
-                while(itF.hasNext())
-                {
-                    const CT_Face &face = itF.next().cT();
-
-                    stream << "f " << (hashTablePoint.value(face.iPointAt(0)) + lastPointCount) << " " << (hashTablePoint.value(face.iPointAt(1)) + lastPointCount) << " " << (hashTablePoint.value(face.iPointAt(2)) + lastPointCount) << endl;
-
-                    ++i;
-
-                    setExportProgress(int(((50+((i*50)/totalSize))+nExported)/totalToExport));
-                }
+                auto iterator = m_hInItem.iterateInputs(m_handleResultExport);
+                mIteratorItemBegin = iterator.begin();
+                mIteratorItemEnd = iterator.end();
             }
 
-            nExported += 100;
-            stream << endl;
-            lastPointCount = ptNb;
+            int nExported = 0;
+            const int totalToExport = maximumItemToExportInFile(int(std::distance(mIteratorItemBegin, mIteratorItemEnd)));
+            const int end = totalToExport*100;
 
+            // write data
+            size_t lastPointCount = 0;
+            size_t ptNb = 0;
+
+            while((mIteratorItemBegin != mIteratorItemEnd)
+                  && (nExported < end))
+            {
+                const CT_MeshModel* item = *mIteratorItemBegin;
+
+                exportMesh(item, txtStream, nExported, totalToExport, ptNb, lastPointCount);
+
+                nExported += 100;
+                ++mIteratorItemBegin;
+            }
+
+            file.close();
+            return (mIteratorItemBegin == mIteratorItemEnd) ? NoMoreItemToExport : ExportCanContinue;
+        }
+        else
+        {
+            const int totalToExport = mMeshes.size();
+            int nExported = 0;
+
+            size_t lastPointCount = 0;
+            size_t ptNb = 0;
+
+            for(const CT_MeshModel* item : mMeshes)
+            {
+                exportMesh(item, txtStream, nExported, totalToExport, ptNb, lastPointCount);
+                nExported += 100;
+            }
         }
 
         file.close();
-        return true;
     }
 
-    return false;
+    return NoMoreItemToExport;
+}
+
+void PB_MeshObjExporter::clearIterators()
+{
+    mIteratorItemBegin = HandleItemType::const_iterator();
+    mIteratorItemEnd = mIteratorItemBegin;
+}
+
+void PB_MeshObjExporter::clearAttributesClouds()
+{
+}
+
+bool PB_MeshObjExporter::exportMesh(const CT_MeshModel* item, QTextStream& stream, const int& nExported, const int& totalToExport, size_t& ptNb, size_t& lastPointCount)
+{
+    stream << "o " << item->id() << endl << endl;
+
+    CT_Mesh* mesh = item->mesh();
+
+    if(mesh != nullptr)
+    {
+        CT_PointIterator itP(mesh->abstractVert());
+        CT_FaceIterator itF(mesh->abstractFace());
+
+        QHash<size_t, size_t> hashTablePoint;
+
+        size_t totalSize = itP.size();
+        size_t i = 0;
+
+        while(itP.hasNext())
+        {
+            const CT_Point &point = itP.next().currentPoint();
+            hashTablePoint.insert(itP.cIndex(), i+1);
+
+            stream << "v " << double(point(0)) << " " << double(point(1)) << " " << double(point(2)) << endl;
+
+            ++i;
+            ++ptNb;
+
+            setExportProgress((((int(i)*50)/int(totalSize))+nExported)/totalToExport);
+        }
+
+        stream << endl;
+
+        totalSize = itF.size();
+        i = 0;
+
+        while(itF.hasNext())
+        {
+            const CT_Face &face = itF.next().cT();
+
+            stream << "f " << (hashTablePoint.value(face.iPointAt(0)) + lastPointCount) << " " << (hashTablePoint.value(face.iPointAt(1)) + lastPointCount) << " " << (hashTablePoint.value(face.iPointAt(2)) + lastPointCount) << endl;
+
+            ++i;
+
+            setExportProgress(((50+((int(i)*50)/int(totalSize)))+nExported)/totalToExport);
+        }
+    }
+
+    stream << endl;
+    lastPointCount = ptNb;
+
+    return true;
 }

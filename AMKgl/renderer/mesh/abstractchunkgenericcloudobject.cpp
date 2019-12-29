@@ -241,6 +241,25 @@ Basic::AbstractInfoCloud* AbstractChunkGenericCloudObject::createOrGetObjectInfo
     return m_objectInfoCloud;
 }
 
+void AbstractChunkGenericCloudObject::updateInfoInCurrentContext()
+{
+    updateColorInCurrentContext();
+}
+
+void AbstractChunkGenericCloudObject::updateColorInCurrentContext()
+{
+    if((getNormalDrawModeUsed() == DM_DISPLAY_LIST)
+                || (getFastDrawModeUsed() == DM_DISPLAY_LIST)) {
+
+        GenericCloudRendererContext* context = getCurrentContext();
+
+        if(context == nullptr)
+            return;
+
+        context->destroyAllDisplayList(this);
+    }
+}
+
 void AbstractChunkGenericCloudObject::updateOnlyVAO()
 {
     if((getNormalDrawModeUsed() == DM_VAO) && mustUseVAO()) {

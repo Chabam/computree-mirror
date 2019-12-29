@@ -67,7 +67,7 @@ void CT_Reader_OPF::recursiveReadTopologyForModel(rapidxml::xml_node<> *node,
     if(type.m_indexCreation > nTypesCreated)
         nTypesCreated = type.m_indexCreation;
 
-    bool addAttributes = (type.m_attributes.size() != attributes.size());
+    const bool addAttributes = (type.m_attributes.size() != attributes.size());
 
     rapidxml::xml_node<> *nextNode = node->first_node();
 
@@ -186,7 +186,7 @@ bool CT_Reader_OPF::postVerifyFile(const QString& filepath)
 
                 while(child  != nullptr)
                 {
-                    QString name = child->first_attribute("name", 0, false)->value();
+                    const QString name = child->first_attribute("name", 0, false)->value();
 
                     attributes.insert(name, CT_OPF_Attribute(name, child->first_attribute("class", 0, false)->value(), attributes.size()));
 
@@ -251,7 +251,11 @@ void CT_Reader_OPF::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
         // Node Group
         NodeGroupHandleType* nodeHandle = new NodeGroupHandleType();
         manager.addGroup(m_topologyHandle, *nodeHandle, type.m_name);
-        //nodeHandle->firstModel()->setOPFLevel(type.m_level);
+        nodeHandle->visitModels([&type](const CT_OutOPFNodeGroupModel<CT_TOPFNodeGroup>* model) -> bool
+        {
+            const_cast<CT_OutOPFNodeGroupModel<CT_TOPFNodeGroup>*>(model)->setOPFLevel(type.m_level);
+            return true;
+        });
         registerHandlePtr(type.m_name, nodeHandle);
 
         // Mesh model

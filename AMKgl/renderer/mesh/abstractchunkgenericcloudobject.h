@@ -152,6 +152,16 @@ public:
     Basic::AbstractInfoCloud* createOrGetObjectInfoCloud();
 
     /**
+     * @brief Redefined to re-create display list
+     */
+    void updateInfoInCurrentContext() override;
+
+    /**
+     * @brief Redefined to re-create display list
+     */
+    void updateColorInCurrentContext() override;
+
+    /**
      * @brief Call it to re-create VAO or display list
      */
     void updateOnlyVAO() override;

@@ -26,22 +26,22 @@ class PBG_CSVDataRefListWidget : public QWidget
     Q_OBJECT
     
 public:
-    explicit PBG_CSVDataRefListWidget(QWidget *parent = 0);
+    explicit PBG_CSVDataRefListWidget(QWidget *parent = nullptr);
     ~PBG_CSVDataRefListWidget();
     
-    void setList(const QList<CT_OutAbstractSingularItemModel*> &list);
+    void setList(const QList<const CT_OutAbstractSingularItemModel*> &list);
 
 private:
     Ui::PBG_CSVDataRefListWidget *ui;
 
-    QList<CT_OutAbstractSingularItemModel*> _list;
+    QList<const CT_OutAbstractSingularItemModel*> _list;
     PBG_CSVDataRefListWidgetDragModel       _model;
 
     void createHeader();
     void initView();
 
     QList<QStandardItem*> createItemsForSingularItem(const CT_OutAbstractSingularItemModel *sModel) const;
-    QList<QStandardItem*> createItemsForItemAttribute(const CT_OutAbstractSingularItemModel *sModel, const CT_OutAbstractItemAttributeModel *iaModel) const;
+    QList<QStandardItem*> createItemsForItemAttribute(const int& itemModelIndex, const CT_OutAbstractItemAttributeModel *iaModel, const int& iaModelIndex) const;
 
 signals:
     void attributeChoosed(const QString &data);

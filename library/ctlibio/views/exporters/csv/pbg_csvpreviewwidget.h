@@ -19,7 +19,7 @@ class PBG_CSVPreviewWidget : public QWidget
     Q_PROPERTY(int currentDropPreviewColumnWidth READ currentDropPreviewColumnWidth WRITE setCurrentDropPreviewColumnWidth)
 
 public:
-    explicit PBG_CSVPreviewWidget(QWidget *parent = 0);
+    explicit PBG_CSVPreviewWidget(QWidget *parent = nullptr);
     ~PBG_CSVPreviewWidget();
 
     void setConfiguration(const PB_CSVExporterConfiguration *configuration);
@@ -54,7 +54,9 @@ private:
     Ui::PBG_CSVPreviewWidget *ui;
 
     PB_CSVExporterConfiguration             *_configuration;
-    QList<CT_OutAbstractSingularItemModel*> _list;
+    QList<const CT_OutAbstractSingularItemModel*> _list;
+    QHash<const CT_OutAbstractSingularItemModel*, QList<const CT_OutAbstractItemAttributeModel*>> mItemAttributesModelsByItemModel;
+
     QStandardItemModel                      _model;
     QMenu                                   *_headerContextMenu;
     int                                     _currentDropPreviewColumnIndex;

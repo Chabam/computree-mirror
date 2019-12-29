@@ -15,7 +15,7 @@ class PBG_CSVConfigurationDialog : public QDialog
     
 public:
     explicit PBG_CSVConfigurationDialog(PB_CSVExporterConfiguration &configuration,
-                                        QWidget *parent = 0);
+                                        QWidget *parent = nullptr);
     ~PBG_CSVConfigurationDialog();
 
 private:

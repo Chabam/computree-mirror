@@ -222,17 +222,20 @@ CT_AbstractColorCloud* PB_XYBExporter::createColorCloud()
     if(!m_attributsColorPointWorker.colorCloud().isNull())
         return m_attributsColorPointWorker.colorCloud()->abstractColorCloud();
 
-    QList<const CT_AbstractPointsAttributes*> attributesColor;
+    if(mustUseModels())
+    {
+        QList<const CT_AbstractPointsAttributes*> attributesColor;
 
-    for(const CT_AbstractPointsAttributes* pA : m_hInPointsAttribute.iterateInputs(m_handleResultExport)) {
-        if((dynamic_cast<const CT_PointsAttributesColor*>(pA) != nullptr)
-                || (dynamic_cast<const CT_AbstractPointAttributesScalar*>(pA)))
-            attributesColor.append(pA);
+        for(const CT_AbstractPointsAttributes* pA : m_hInPointsAttribute.iterateInputs(m_handleResultExport)) {
+            if((dynamic_cast<const CT_PointsAttributesColor*>(pA) != nullptr)
+                    || (dynamic_cast<const CT_AbstractPointAttributesScalar*>(pA)))
+                attributesColor.append(pA);
+        }
+
+        m_attributsColorPointWorker.setAttributes(attributesColor);
     }
 
-    m_attributsColorPointWorker.setAttributes(attributesColor);
-
-    if(!attributesColor.isEmpty())
+    if(!m_attributsColorPointWorker.attributes().isEmpty())
     {
         m_attributsColorPointWorker.setColorCloud(PS_REPOSITORY->createNewColorCloud(CT_Repository::SyncWithPointCloud));
         m_attributsColorPointWorker.apply();

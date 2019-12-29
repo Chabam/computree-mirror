@@ -371,7 +371,7 @@ bool CT_AbstractExporter::exportToFile()
                     #undef QT_FORCE_ASSERTS
                 }
 
-            } while(ret != NoMoreItemToExport);
+            } while((ret != NoMoreItemToExport) && !m_stop);
 
             setFilePath(backupFilepath);
             mExportOfOneItemByFileInProgress = false;

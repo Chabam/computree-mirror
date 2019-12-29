@@ -1,38 +1,12 @@
 #include "pb_groupdataexporter.h"
 
-#include <math.h>
-#include <QMessageBox>
+#include "ct_model/outModel/abstract/def_ct_abstractitemdrawablemodelout.h"
+
 #include <QFile>
 #include <QTextStream>
-#include <QEventLoop>
-#include <QApplication>
-#include <QProgressDialog>
 #include <QFileInfo>
 
-#include <QDebug>
-
-#include "ct_global/ct_context.h"
-#include "ct_itemdrawable/abstract/CT_StandardItemGroup.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractsingularitemmodel.h"
-#include "ct_itemdrawable/model/outModel/abstract/ct_outabstractgroupmodel.h"
-#include "ct_attributes/model/outModel/abstract/ct_outabstractitemattributemodel.h"
-
-PB_GroupDataExporter::PB_GroupDataExporter() : SuperClass()
-{
-    setExportOnlyGroup(true);
-}
-
-QString PB_GroupDataExporter::getExporterCustomName() const
-{
-    return tr("Attributs/Items d'un groupe");
-}
-
-CT_StepsMenu::LevelPredefined PB_GroupDataExporter::getExporterSubMenuName() const
-{
-    return CT_StepsMenu::LP_Items;
-}
-
-void PB_GroupDataExporter::init()
+PB_GroupDataExporter::PB_GroupDataExporter(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     addNewExportFormat(FileFormat("txt", tr("Fichier txt")));
 
@@ -47,119 +21,129 @@ void PB_GroupDataExporter::init()
                   "- ParentID : identifiant Computree des groupes parents, contenant les groupes de la table."));
 }
 
-bool PB_GroupDataExporter::configureExport()
+PB_GroupDataExporter::PB_GroupDataExporter(const PB_GroupDataExporter& other) : SuperClass(other),
+    mGroups(other.mGroups)
 {
-    return true;
 }
 
-bool PB_GroupDataExporter::setItemDrawableToExport(const QList<CT_AbstractItemDrawable*> &list)
+QString PB_GroupDataExporter::displayableName() const
 {
-    clearErrorMessage();
-
-    QList<CT_AbstractItemDrawable*> myList;
-    QListIterator<CT_AbstractItemDrawable*> it(list);
-
-    while(it.hasNext())
-    {
-        CT_AbstractItemDrawable *item = it.next();
-
-        if(dynamic_cast<CT_StandardItemGroup*>(item) != NULL)
-            myList.append(item);
-    }
-
-    if(myList.isEmpty())
-    {
-        setErrorMessage(tr("Aucun Groupe"));
-        return false;
-    }
-
-    return SuperClass::setItemDrawableToExport(myList);
+    return tr("Attributs/Items d'un groupe");
 }
 
-bool PB_GroupDataExporter::protectedExportToFile()
+void PB_GroupDataExporter::setGroupsToExport(const QList<const CT_StandardItemGroup*>& list)
 {
-    bool exportCompleted = true;
+    setMustUseModels(false);
+
+    mGroups = list;
+}
+
+void PB_GroupDataExporter::internalDeclareInputModels(CT_ExporterInModelStructureManager& manager)
+{
+    manager.addGroupToRootGroup(m_hInGroup, tr("Groupe à exporter"));
+}
+
+CT_AbstractExporter::ExportReturn PB_GroupDataExporter::internalExportToFile()
+{
 
     // Création d'une map de référence des modèles de groupes / modèles d'items / dataRéférences
     // QMap<Modèle de groupe, QMapMultiMap<Modèle d'item, dataRéférence> >
     // + une map listant les groupes par modèle
     // + une map pour les headers de fichiers (un par modèle de groupe)
-    QMap<CT_OutAbstractGroupModel*, QMultiMap<CT_OutAbstractSingularItemModel*, CT_OutAbstractItemAttributeModel*>* > itemAttModelIndex;
-    QMultiMap<CT_OutAbstractGroupModel*, CT_StandardItemGroup*> groupMap;
+    QMap<const CT_OutAbstractGroupModel*, QMultiMap<const CT_OutAbstractSingularItemModel*, const CT_OutAbstractItemAttributeModel*> > itemAttModelIndex;
+    QMultiMap<const CT_OutAbstractGroupModel*, const CT_StandardItemGroup*> groupMap;
 
-    // Parcours des groupes
-    QListIterator<CT_AbstractItemDrawable*> it_itemsToExport(itemDrawableToExport());
-    while(it_itemsToExport.hasNext())
+    const auto addToMap = [&itemAttModelIndex, &groupMap](const CT_StandardItemGroup* group)
     {
-        CT_StandardItemGroup* group = dynamic_cast<CT_StandardItemGroup*>(it_itemsToExport.next());
+        const DEF_CT_AbstractGroupModelOut* model = group->modelStaticT<DEF_CT_AbstractGroupModelOut>();
 
-        CT_OutAbstractGroupModel *groupModel = (CT_OutAbstractGroupModel*)group->model();
-        groupMap.insert(groupModel, group);
+        groupMap.insert(model, group);
+        auto& itemMap = itemAttModelIndex[model];
 
-        QMultiMap<CT_OutAbstractSingularItemModel*, CT_OutAbstractItemAttributeModel*> *itemMap = itemAttModelIndex.value(groupModel, NULL);
-
-        // Si ce modèle de groupe n'a pas encore été rencontré : on l'ajoute
-        if (itemMap == NULL)
+        if(itemMap.isEmpty())
         {
-            itemMap = new QMultiMap<CT_OutAbstractSingularItemModel*, CT_OutAbstractItemAttributeModel*>();
-            itemAttModelIndex.insert(groupModel, itemMap);
-
-            // Liste des modèles d'items contenus dans le modèle de groupe
-            QList<CT_AbstractModel*> itemModels = groupModel->childrens();
-
-            QListIterator<CT_AbstractModel*> it_itemsModels(itemModels);
-            while (it_itemsModels.hasNext())
+            model->visitItems([&itemMap](const CT_OutAbstractSingularItemModel* itemModel) -> bool
             {
-                CT_OutAbstractSingularItemModel* itemModel = dynamic_cast<CT_OutAbstractSingularItemModel*>(it_itemsModels.next());
-
-                // Si le modèle contient un SingularItemDrawable
-                if(itemModel != NULL)
+                itemModel->visitAttributes([&itemMap, &itemModel](const CT_OutAbstractItemAttributeModel* attModel) -> bool
                 {
-                    // On récupère la liste des attributs
-                    const QList<CT_OutAbstractItemAttributeModel*> &itemAttributeList = itemModel->itemAttributes();
+                    itemMap.insert(itemModel, attModel);
+                    return true;
+                });
 
-                    QListIterator<CT_OutAbstractItemAttributeModel*> it_itemAttributeList(itemAttributeList);
-                    it_itemAttributeList.toBack();
+                return true;
+            });
+        }
+    };
 
-                    // et on les ajoute à la map
-                    while (it_itemAttributeList.hasPrevious())
-                        itemMap->insert(itemModel, it_itemAttributeList.previous());
-                }
-            }
+    if(mustUseModels())
+    {
+        if(mIteratorGroupBegin == mIteratorGroupEnd)
+        {
+            auto iterator = m_hInGroup.iterateInputs(m_handleResultExport);
+            mIteratorGroupBegin = iterator.begin();
+            mIteratorGroupEnd = iterator.end();
+        }
+
+        int nExported = 0;
+        const int totalToExport = maximumItemToExportInFile(int(std::distance(mIteratorGroupBegin, mIteratorGroupEnd)));
+
+        // write data
+        while((mIteratorGroupBegin != mIteratorGroupEnd)
+              && (nExported < totalToExport))
+        {
+            const CT_StandardItemGroup* group = *mIteratorGroupBegin;
+
+            addToMap(group);
+
+            ++nExported;
+            ++mIteratorGroupBegin;
+        }
+    }
+    else
+    {
+        for(const CT_StandardItemGroup* group : mGroups)
+        {
+            addToMap(group);
         }
     }
 
-
-
     // Variables recyclées
     bool ok;
+    bool exportCompleted = true;
 
-    QFileInfo fileInfo = QFileInfo(exportFilePath());
+    QFileInfo fileInfo = QFileInfo(filePath());
     QString basePath = QString("%1/%2").arg(fileInfo.absolutePath()).arg(fileInfo.baseName());
     QString suffix = ".txt";
 
-    bool multiFiles = (itemAttModelIndex.keys().size() > 1);
+    const bool multiFiles = (itemAttModelIndex.keys().size() > 1);
 
     int groupModelRank = 1;
 
+    const int nGroupModel = itemAttModelIndex.size();
+    int currentModelIndex = 0;
+
     // Parcours des modèles de groupes : pour chacun un fichier de sortie
-    QMapIterator<CT_OutAbstractGroupModel*, QMultiMap<CT_OutAbstractSingularItemModel*, CT_OutAbstractItemAttributeModel*>* > it_itemAttModelIndex(itemAttModelIndex);
+    QMapIterator<const CT_OutAbstractGroupModel*, QMultiMap<const CT_OutAbstractSingularItemModel*, const CT_OutAbstractItemAttributeModel*> > it_itemAttModelIndex(itemAttModelIndex);
     while (it_itemAttModelIndex.hasNext())
     {
+        if(isStopped())
+            break;
+
         it_itemAttModelIndex.next();
 
         // Modèle de groupe
-        CT_OutAbstractGroupModel *groupModel = it_itemAttModelIndex.key();
-        QMultiMap<CT_OutAbstractSingularItemModel*, CT_OutAbstractItemAttributeModel*> *itemMap = it_itemAttModelIndex.value();
+        const CT_OutAbstractGroupModel *groupModel = it_itemAttModelIndex.key();
+        const QMultiMap<const CT_OutAbstractSingularItemModel*, const CT_OutAbstractItemAttributeModel*> &itemMap = it_itemAttModelIndex.value();
 
-        if (multiFiles) {suffix = QString("_%1_%2.txt").arg(groupModelRank++).arg(groupModel->displayableName());}
+        if (multiFiles)
+            suffix = QString("_%1_%2.txt").arg(groupModelRank++).arg(groupModel->displayableName());
+
         QFile file(QString("%1%2").arg(basePath).arg(suffix));
 
         // Ouverture du fichier d'export correspondant au modèle de groupe en cours
         if(file.open(QFile::WriteOnly | QFile::Text))
         {
             QTextStream txtStream(&file);
-
 
             // Création du header
             QString header_line1, header_line2;
@@ -170,20 +154,15 @@ bool PB_GroupDataExporter::protectedExportToFile()
             header_line2.append("ParentID\t");
 
             // Liste des modèles d'items du modèle de groupe
-            QList<CT_OutAbstractSingularItemModel*> itemModelList = itemMap->uniqueKeys();
+            const QList<const CT_OutAbstractSingularItemModel*> itemModelList = itemMap.uniqueKeys();
 
-            QListIterator<CT_OutAbstractSingularItemModel*> it_itemModelList(itemModelList);
-            while (it_itemModelList.hasNext())
+            for(const CT_OutAbstractSingularItemModel* itemModel : itemModelList)
             {
-                CT_OutAbstractSingularItemModel *itemModel = it_itemModelList.next();
-
                 // Liste des attributs du modèle d'item en cours
-                QList<CT_OutAbstractItemAttributeModel*> itemAttModelList = itemMap->values(itemModel);
+                const QList<const CT_OutAbstractItemAttributeModel*> itemAttModelList = itemMap.values(itemModel);
 
-                QListIterator<CT_OutAbstractItemAttributeModel*> it_itemAttModelList(itemAttModelList);
-                while (it_itemAttModelList.hasNext())
+                for(const CT_OutAbstractItemAttributeModel* itemAttModel : itemAttModelList)
                 {
-                    CT_OutAbstractItemAttributeModel* itemAttModel = it_itemAttModelList.next();
                     header_line1.append(itemModel->displayableName());
                     header_line1.append("\t");
 
@@ -196,52 +175,49 @@ bool PB_GroupDataExporter::protectedExportToFile()
 
 
             // Liste des groupes correspondant au modèle de groupe en cours
-            QList<CT_StandardItemGroup*> groupListForThisModel = groupMap.values(groupModel);
+            const QList<const CT_StandardItemGroup*> groupListForThisModel = groupMap.values(groupModel);
 
-            QListIterator<CT_StandardItemGroup*> it_Groups(groupListForThisModel);
-            while(it_Groups.hasNext())
+            const int nGroupForThisModel = groupListForThisModel.size();
+            int currentGroupIndex = 0;
+
+            for(const CT_StandardItemGroup* group : groupListForThisModel)
             {
-                const CT_StandardItemGroup* group = it_Groups.next();
+                if(isStopped())
+                    break;
 
                 txtStream << group->id() << "\t";
 
                 const CT_StandardItemGroup* parentGroup = group->parentGroup();
-                if (parentGroup != NULL)
-                {
+
+                if (parentGroup != nullptr)
                     txtStream << parentGroup->id() << "\t";
-                } else {
+                else
                     txtStream << "\t";
-                }
 
                 // Liste des modèles d'items du modèle de groupe
-                QList<CT_OutAbstractSingularItemModel*> itemModelList = itemMap->uniqueKeys();
+                const QList<const CT_OutAbstractSingularItemModel*> itemModelList = itemMap.uniqueKeys();
 
-                QListIterator<CT_OutAbstractSingularItemModel*> it_itemModelList(itemModelList);
-                while (it_itemModelList.hasNext())
+                for(const CT_OutAbstractSingularItemModel* itemModel : itemModelList)
                 {
-                    CT_OutAbstractSingularItemModel *itemModel = it_itemModelList.next();
-
                     // Liste des modèles des attributs d'item du modèle d'item en cours
-                    QList<CT_OutAbstractItemAttributeModel*> itemAttModelList = itemMap->values(itemModel);
+                    const QList<const CT_OutAbstractItemAttributeModel*> itemAttModelList = itemMap.values(itemModel);
 
                     // Récupération de l'item correspondant au modèle d'item
-                    CT_AbstractSingularItemDrawable* item = group->item(itemModel);
+                    CT_AbstractSingularItemDrawable* item = group->singularItemWithOutModel(dynamic_cast<const DEF_CT_AbstractItemDrawableModelOut*>(itemModel));
 
-                    QListIterator<CT_OutAbstractItemAttributeModel*> it_itemAttModelList(itemAttModelList);
-                    while (it_itemAttModelList.hasNext())
+                    for(const CT_OutAbstractItemAttributeModel* itemAttModel : itemAttModelList)
                     {
-                        CT_OutAbstractItemAttributeModel* itemAttModel = it_itemAttModelList.next();
-
                         // Si l'item existe, on exporte les attributs
-                        if (item != NULL)
+                        if (item != nullptr)
                         {
-                            CT_AbstractItemAttribute *att = item->itemAttribute(itemAttModel);
+                            CT_AbstractItemAttribute* att = item->itemAttributeWithOutModel(itemAttModel);
                             //if (att == NULL) {att = item->itemAttribute((CT_OutAbstractItemAttributeModel*) itemAttModel->originalModel());}
 
-                            if(att != NULL)
+                            if(att != nullptr)
                             {
-                                QString value = att->toString(item, &ok);
-                                if (ok) {txtStream << value;}
+                                const QString value = att->toString(item, &ok);
+                                if (ok)
+                                    txtStream << value;
                             }
                         }
                         // Dans tous les cas on change de colonne
@@ -251,15 +227,37 @@ bool PB_GroupDataExporter::protectedExportToFile()
 
                 // Après chaque groupe on saute une ligne
                 txtStream << "\n";
+
+                ++currentGroupIndex;
+                setExportProgress(((currentGroupIndex*100)/nGroupForThisModel)/nGroupModel + currentModelIndex);
             }
 
             // On ferme le fichier pour ce modèle de groupe
             file.close();
-        } else {exportCompleted = false;} // Si au moins un fichier a raté => renvoie false
+        }
+        else // Si au moins un fichier a raté => renvoie false
+        {
+            exportCompleted = false;
+        }
+
+        currentModelIndex += 100;
     }
 
-    // Suppression des pointeurs créés
-    qDeleteAll(itemAttModelIndex.values());
+    if(!exportCompleted)
+        return ErrorWhenExport;
 
-    return exportCompleted;
+    if(mustUseModels())
+        return (mIteratorGroupBegin == mIteratorGroupEnd) ? NoMoreItemToExport : ExportCanContinue;
+
+    return NoMoreItemToExport;
+}
+
+void PB_GroupDataExporter::clearIterators()
+{
+    mIteratorGroupBegin = HandleGroupType::const_iterator();
+    mIteratorGroupEnd = mIteratorGroupBegin;
+}
+
+void PB_GroupDataExporter::clearAttributesClouds()
+{
 }

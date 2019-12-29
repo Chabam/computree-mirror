@@ -2,17 +2,17 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 
-PB_CSVExporterColumn::PB_CSVExporterColumn(const QList<CT_AbstractSingularItemDrawable *> &items, const CT_OutAbstractItemAttributeModel *iaModel)
+PB_CSVExporterColumn::PB_CSVExporterColumn(const QList<const CT_AbstractSingularItemDrawable *> &items, const CT_OutAbstractItemAttributeModel *iaModel)
 {
     _items = items;
-    _ref = (CT_OutAbstractItemAttributeModel*)iaModel;
+    _ref = iaModel;
 
-    m_currentItemAttribut = NULL;
-    _currentItem = NULL;
+    m_currentItemAttribut = nullptr;
+    _currentItem = nullptr;
     _hasNext = false;
     _currentItemIndex = -1;
 
-    _iterator = new QListIterator<CT_AbstractSingularItemDrawable*>(_items);
+    _iterator = new QListIterator<const CT_AbstractSingularItemDrawable*>(_items);
 
     nextItem();
 }
@@ -36,7 +36,7 @@ QString PB_CSVExporterColumn::nextValueToString()
 {
     QString next;
 
-    next = m_currentItemAttribut->toString(_currentItem, NULL);
+    next = m_currentItemAttribut->toString(_currentItem, nullptr);
 
     // on passe à l'item suivant
     nextItem();
@@ -52,13 +52,13 @@ size_t PB_CSVExporterColumn::size() const
 
     while(_iterator->hasNext())
     {
-        if(_iterator->next()->itemAttribute(_ref) != NULL)
+        if(_iterator->next()->itemAttributeWithOutModel(_ref) != nullptr)
             ++s;
     }
 
     _iterator->toFront();
 
-    if(_currentItem != NULL)
+    if(_currentItem != nullptr)
         _iterator->findNext(_currentItem);
 
     return s;
@@ -71,19 +71,19 @@ void PB_CSVExporterColumn::nextItem()
         do
         {
             _currentItem = _iterator->next();
-            m_currentItemAttribut = _currentItem->itemAttribute(_ref);
+            m_currentItemAttribut = _currentItem->itemAttributeWithOutModel(_ref);
 
             ++_currentItemIndex;
 
-            _hasNext = (m_currentItemAttribut != NULL);
+            _hasNext = (m_currentItemAttribut != nullptr);
 
         }while(!_hasNext
                && _iterator->hasNext());
     }
     else
     {
-        m_currentItemAttribut = NULL;
-        _currentItem = NULL;
+        m_currentItemAttribut = nullptr;
+        _currentItem = nullptr;
         _hasNext = false;
         ++_currentItemIndex;
     }

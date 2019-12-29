@@ -33,14 +33,14 @@
 
 #include <math.h>
 
-quint64 CT_AbstractItemDrawable::NEXTID = 1;
+quint32 CT_AbstractItemDrawable::NEXTID = 1;
 QMap<QString, QString> CT_AbstractItemDrawable::NAMEMAP;
 QMutex CT_AbstractItemDrawable::NAMEMAP_Mutex;
 
 CT_AbstractItemDrawable::CT_AbstractItemDrawable() : SuperClass()
 {
     m_itemTool.m_pointer = this;
-    m_id = 0;
+    m_id = NEXTID++;
     m_isSelected = false;
     m_isDisplayedInADocument = false;
     m_parentItem = nullptr;
@@ -64,7 +64,7 @@ CT_AbstractItemDrawable::~CT_AbstractItemDrawable()
 {
 }
 
-void CT_AbstractItemDrawable::setId(quint64 id)
+void CT_AbstractItemDrawable::setId(quint32 id)
 {
     m_id = id;
 }
