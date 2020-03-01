@@ -281,7 +281,7 @@ void PB_StepExportAttributesInLoop::compute()
 #endif
             if (!streamASCII.isNull())
             {
-                (*streamASCII.get()) << exportBaseName << "\t";
+                (*streamASCII.data()) << exportBaseName << "\t";
             }
 
             for (int i = 0 ; i < _modelsKeys.size() ; i++)
@@ -295,7 +295,7 @@ void PB_StepExportAttributesInLoop::compute()
 
                 if (hasMetricsToExport && !streamASCII.isNull())
                 {
-                    (*streamASCII.get()) << pair.second->toString(pair.first, nullptr);
+                    (*streamASCII.data()) << pair.second->toString(pair.first, nullptr);
                 }
 #ifdef USE_GDAL
                 if (vectorLayer != nullptr)
@@ -341,7 +341,7 @@ void PB_StepExportAttributesInLoop::compute()
 #endif
                 if (hasMetricsToExport && !streamASCII.isNull())
                 {
-                    if(i < _modelsKeys.size() - 1) {(*streamASCII.get()) << "\t";} else {(*streamASCII.get()) << "\n";}
+                    if(i < _modelsKeys.size() - 1) {(*streamASCII.data()) << "\t";} else {(*streamASCII.data()) << "\n";}
                 }
             }
 
@@ -516,7 +516,7 @@ bool PB_StepExportAttributesInLoop::exportInAsciiIfNecessary(QScopedPointer<QFil
         {
             if (fileASCII->open(QIODevice::WriteOnly | QIODevice::Text))
             {
-                streamASCII.reset(new QTextStream(fileASCII.get()));
+                streamASCII.reset(new QTextStream(fileASCII.data()));
                 (*streamASCII) << "Name\t";
 
                 for (int i = 0 ; i < _modelsKeys.size() ; i++)
@@ -540,7 +540,7 @@ bool PB_StepExportAttributesInLoop::exportInAsciiIfNecessary(QScopedPointer<QFil
                 return false;
             }
 
-            streamASCII.reset(new QTextStream(fileASCII.get()));
+            streamASCII.reset(new QTextStream(fileASCII.data()));
         }
     }
 
