@@ -124,6 +124,9 @@ void CT_AsciiFileChoiceButton::saveSettings(SettingsWriterInterface &writer) con
     writer.addParameter(this, "NbLinesToSkip", *_skip);
 
     QMapIterator<QString, int> it(*_columns);
+    int nbColumns = _columns->size();
+
+    writer.addParameter(this, "NbColumns", nbColumns);
 
     while(it.hasNext()) {
         it.next();
@@ -162,8 +165,14 @@ bool CT_AsciiFileChoiceButton::restoreSettings(SettingsReaderInterface &reader)
     if(reader.parameter(this, "NbLinesToSkip", value))
         (*_skip) = value.toInt();
 
-    int pID;
-    while(pID = reader.parameter(this, "Column", value)) {
+    int nbColumns = 0;
+    if(reader.parameter(this, "NbColumns", value))
+        (nbColumns) = value.toInt();
+
+    for (int i = 0 ; i < nbColumns ; i++)
+    {
+        int pID = reader.parameter(this, "Column", value);
+
         const QString columnName = value.toString();
 
         if(reader.parameterInfo(this, pID, "Position", value, 0))

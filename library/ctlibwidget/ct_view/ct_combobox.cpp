@@ -38,23 +38,42 @@ CT_ComboBox::CT_ComboBox(QStringList valuesList, QString &value, QString descrip
 }
 
 void CT_ComboBox::saveSettings(SettingsWriterInterface &writer) const
-{
-    const int pgID = writer.createExtraParametersGroup(this, "PossibleValue", _description);
+{  
+    int nbColumns = _data._valuesList.size();
+    writer.addParameter(this, "NbColumns", nbColumns);
 
-    writer.linkParameterAndExtraParametersGroup(this, writer.addParameter(this, "CurrentTextIndex", getValue(), _description), pgID);
-
-    foreach (const QString& v, _data._valuesList) {
-        writer.addExtraParametersValueToGroup(this, v, pgID);
+    for (int i = 0 ; i < nbColumns ; i++)
+    {
+        writer.addParameter(this, "PossibleValue", _data._valuesList.at(i));
     }
+
+    writer.addParameter(this, "CurrentTextIndex", getValue(), _description);
 }
 
 bool CT_ComboBox::restoreSettings(SettingsReaderInterface &reader)
 {
     QVariant value;
+
+    int nbColumns = 0;
+    if(reader.parameter(this, "NbColumns", value))
+    {
+        nbColumns = value.toInt();
+    }
+
+    QStringList valuesList;
+    for (int i = 0 ; i < nbColumns ; i++)
+    {
+        if(reader.parameter(this, "PossibleValue", value)) {
+            valuesList.append(value.toString());
+        }
+    }
+    _comboBoxCreated->clear();
+    _comboBoxCreated->addItems(valuesList);
+
     if(reader.parameter(this, "CurrentTextIndex", value)) {
         setWidgetValue(value);
-        updateValue();
     }
+    updateValue();
 
     return true;
 }
