@@ -11,8 +11,8 @@
 
 void CT_PolylinesAlgorithms::createPolyline2D(const CT_PointCluster *baseCluster, CT_PointCluster *polylineCluster)
 {
-    const CT_AbstractPointCloudIndex* baseIndexCloud = baseCluster->getPointCloudIndex();
-    const CT_AbstractPointCloudIndex* polylineIndexCloud = polylineCluster->getPointCloudIndex();
+    const CT_AbstractPointCloudIndex* baseIndexCloud = baseCluster->pointCloudIndex();
+    const CT_AbstractPointCloudIndex* polylineIndexCloud = polylineCluster->pointCloudIndex();
 
     QList<CandidatePoint*> unMarked;
     CandidatePoint* current;
@@ -27,7 +27,7 @@ void CT_PolylinesAlgorithms::createPolyline2D(const CT_PointCluster *baseCluster
     {
         current = new CandidatePoint();
         current->indexInCloud = baseIndexCloud->indexAt(i);
-        current->indexOfMinDistance = -1;
+        current->indexOfMinDistance = std::numeric_limits<size_t>::max();
         current->distanceToLine = std::numeric_limits<double>::max();
         unMarked.push_back(current);
     }
@@ -160,7 +160,7 @@ void CT_PolylinesAlgorithms::createPolyline2D(const CT_PointCluster *baseCluster
 
 Eigen::Vector2d CT_PolylinesAlgorithms::compute2DArcData(const CT_PointCluster *polyline, double &sagitta, double &chord, double &radius)
 {
-    const CT_AbstractPointCloudIndex* indexCloud = polyline->getPointCloudIndex();
+    const CT_AbstractPointCloudIndex* indexCloud = polyline->pointCloudIndex();
 
     CT_PointIterator itP(indexCloud);
 

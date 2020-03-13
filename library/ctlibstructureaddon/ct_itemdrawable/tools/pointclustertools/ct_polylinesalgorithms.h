@@ -1,9 +1,10 @@
 #ifndef CT_POLYLINESALGORITHMS_H
 #define CT_POLYLINESALGORITHMS_H
 
+#include "ctlibstructure_global.h"
 #include "ct_itemdrawable/ct_pointcluster.h"
 
-class PLUGINSHAREDSHARED_EXPORT CT_PolylinesAlgorithms
+class CTLIBSTRUCTUREADDON_EXPORT CT_PolylinesAlgorithms
 {
 public:
 
