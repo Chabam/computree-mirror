@@ -60,7 +60,7 @@ public:
     void addPathPoint(double gpsTime, double x, double y, double z);
     void addPathPoint(double gpsTime, const Eigen::Vector3d &point);
 
-    bool isInScanPath(double gpsTime);
+    bool isInScanPath(double gpsTime) const;
 
     Eigen::Vector3d getPathPointForGPSTime(double gpsTime);
 

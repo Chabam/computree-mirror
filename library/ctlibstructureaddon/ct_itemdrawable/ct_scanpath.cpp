@@ -74,7 +74,7 @@ void CT_ScanPath::addPathPoint(double gpsTime, const Eigen::Vector3d &point)
     addPathPoint(gpsTime, point(0), point(1), point(2));
 }
 
-bool CT_ScanPath::isInScanPath(double gpsTime)
+bool CT_ScanPath::isInScanPath(double gpsTime) const
 {
     if (gpsTime < _minGPSTime) {return false;}
     if (gpsTime > _maxGPSTime) {return false;}
