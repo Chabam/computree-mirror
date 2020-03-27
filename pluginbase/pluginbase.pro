@@ -28,6 +28,7 @@ HEADERS += $$CT_LIB_PREFIX/ctlibplugin/pluginentryinterface.h\
     step/pb_steploadfilebyname.h \
     step/pb_stepusereadertoloadfiles.h \
     step/pb_stepcreatereaderlist.h \
+    step/pb_testbug.h \
     tools/pb_configurableelementtools.h \
     tools/pb_exportertools.h \
     tools/pb_readerstools.h
@@ -49,7 +50,8 @@ SOURCES += \
     step/pb_steplooponfilesets.cpp \
     step/pb_steploadfilebyname.cpp \
     step/pb_stepusereadertoloadfiles.cpp \
-    step/pb_stepcreatereaderlist.cpp
+    step/pb_stepcreatereaderlist.cpp \
+    step/pb_testbug.cpp
 
 RESOURCES += resource.qrc
 

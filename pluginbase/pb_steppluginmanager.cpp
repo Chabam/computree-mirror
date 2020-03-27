@@ -115,6 +115,11 @@
 
 #define DEF_ExporterSeparatorTitle "Exporters"
 
+
+
+#include "step/pb_testbug.h";
+
+
 PB_StepPluginManager::PB_StepPluginManager() : CT_AbstractStepPlugin()
 {
     /*_logListener = new CT_FileLogListener();
@@ -222,6 +227,8 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewExportStep<PB_StepExportItemList>();
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
     addNewExportStep<PB_StepExportAttributesInLoop>();
+
+    addNewBetaStep<PB_TestBug>();
 
     return true;
 }

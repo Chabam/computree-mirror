@@ -357,8 +357,8 @@ void CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, int n,
             if (col  > n) {mincol  = col - n;}  else {mincol  = 0;}
             if (levz > n) {minlevz = levz - n;} else {minlevz = 0;}
 
-            maxlin  = lin  + n; if (maxlin  >= this->_dimx) {maxlin  = this->_dimx - 1;}
-            maxcol  = col  + n; if (maxcol  >= this->_dimy) {maxcol  = this->_dimy - 1;}
+            maxlin  = lin  + n; if (maxlin  >= this->_dimy) {maxlin  = this->_dimy - 1;}
+            maxcol  = col  + n; if (maxcol  >= this->_dimx) {maxcol  = this->_dimx - 1;}
             maxlevz = levz + n; if (maxlevz >= this->_dimz) {maxlevz = this->_dimz - 1;}
 
             for (int yy = minlin ; yy <= maxlin ; yy++)
