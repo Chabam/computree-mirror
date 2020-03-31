@@ -113,11 +113,7 @@
 #include "gdal_priv.h"
 #endif
 
-#define DEF_ExporterSeparatorTitle "Exporters"
-
-
-
-#include "step/pb_testbug.h";
+#include "step/pb_testbug.h"
 
 
 PB_StepPluginManager::PB_StepPluginManager() : CT_AbstractStepPlugin()

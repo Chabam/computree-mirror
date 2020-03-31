@@ -48,16 +48,12 @@ public:
 
             // go down in the hierarchy
             bool haveFoundWhatWeSearch = goDownInHierarchy(begin, end);
-            bool isTheEndOfTheCollection = (m_currentIndexInHierarchy == 0);
 
             // if we have not found what we search we must go up in the hierarchy and go down
             // until we find what we search or until we went through the entire collection
-            if(!haveFoundWhatWeSearch) {
-                while(!isTheEndOfTheCollection) {
-                    isTheEndOfTheCollection = !goToNextInHierarchy();
-                }
-
-                haveFoundWhatWeSearch = !isTheEndOfTheCollection;
+            while(!haveFoundWhatWeSearch
+                  && (m_currentIndexInHierarchy != 0)) {
+                haveFoundWhatWeSearch = goToNextInHierarchy();
             }
 
             if(haveFoundWhatWeSearch) {
@@ -80,8 +76,7 @@ public:
             return *this;
         }
 
-        // if we are here m_currentIndexInHierarchy was always equal to the last column of the hierarchy
-        // to the iterator is what we search
+        // if we are here m_currentIndexInHierarchy is always equal to the last column of the hierarchy
         IteratorInfo& its = m_iteratorHierarchy[m_currentIndexInHierarchy];
         ++its.first;
 
@@ -90,7 +85,7 @@ public:
             // we go up in hierarchy
             --m_currentIndexInHierarchy;
 
-            // and search the next (return true if found, false if we there is no more element that we search in the all hierarchy)
+            // and search the next (return true if found, false if there is no more element that we search in all hierarchy)
             if(goToNextInHierarchy()) {
                 if(m_currentIndexInHierarchy > 0)
                     m_currentParent = static_cast<ParentType*>(*m_iteratorHierarchy[m_currentIndexInHierarchy-1].first);
@@ -148,7 +143,8 @@ private:
 
         bool haveFoundWhatWeSearch = false;
 
-        while(!haveFoundWhatWeSearch && (m_currentIndexInHierarchy != 0)) {
+        while(!haveFoundWhatWeSearch
+                && (m_currentIndexInHierarchy != 0)) {
 
             IteratorInfo& its = m_iteratorHierarchy[m_currentIndexInHierarchy];
             ++its.first;
@@ -165,7 +161,7 @@ private:
             }
         }
 
-        return (m_currentIndexInHierarchy != 0);
+        return haveFoundWhatWeSearch;
     }
 };
 
