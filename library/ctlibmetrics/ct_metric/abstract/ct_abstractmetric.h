@@ -133,7 +133,7 @@ protected:
             delete mHOutItemAttribute;
             mHOutItemAttribute = new CT_HandleOutStdItemAttribute<VType>();
 
-            manager.addItemAttributeAndFindCategory(*mHOutItemAttribute, _categoryName, _displayableName);
+            manager.addItemAttribute(*mHOutItemAttribute, _categoryName, _displayableName);
         }
 
         void addItemAttributeInItem(CT_AbstractSingularItemDrawable* item) final
@@ -189,7 +189,7 @@ protected:
         if(attributeObject != nullptr)
         {
             delete attributeObject->_attributeInstance;
-            attributeObject->_attributeInstance = new CT_StdItemAttributeT<VType>(PS_CATEGORY_MANAGER->findByUniqueName(attributeObject->_categoryName), classMemberAndValue);
+            attributeObject->_attributeInstance = new CT_StdItemAttributeT<VType>(attributeObject->_categoryName, classMemberAndValue);
         }
     }
 

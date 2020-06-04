@@ -473,13 +473,13 @@ CT_AbstractItemAttribute* CT_Reader_GDAL::createAttributeWithGoodType(OGRFeature
     switch( poFieldDefn->GetType() )
     {
     case OFTInteger:
-        return new CT_StdItemAttributeT<int>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), ((poFeature != nullptr) ? poFeature->GetFieldAsInteger(iField) : 0));
+        return new CT_StdItemAttributeT<int>(CT_AbstractCategory::DATA_VALUE, ((poFeature != nullptr) ? poFeature->GetFieldAsInteger(iField) : 0));
 
     case OFTReal:
-        return new CT_StdItemAttributeT<double>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), ((poFeature != nullptr) ? poFeature->GetFieldAsDouble(iField) : 0));
+        return new CT_StdItemAttributeT<double>(CT_AbstractCategory::DATA_VALUE, ((poFeature != nullptr) ? poFeature->GetFieldAsDouble(iField) : 0));
     }
 
-    return new CT_StdItemAttributeT<QString>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), QString((poFeature != nullptr) ? poFeature->GetFieldAsString(iField) : QString()));
+    return new CT_StdItemAttributeT<QString>(CT_AbstractCategory::DATA_VALUE, QString((poFeature != nullptr) ? poFeature->GetFieldAsString(iField) : QString()));
 }
 
 bool CT_Reader_GDAL::canBeOpened(const QString &filepath) const

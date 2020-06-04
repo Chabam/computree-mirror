@@ -189,31 +189,6 @@ public:
     }
 
     /**
-     * @brief Add an item attribute to an item model
-     * @param parentItem : the handle of the input item model to use to add the new item attribute
-     * @param itemAttributeHandle : the handle of the input item attribute model to use to create the new item attribute model and access it later
-     * @param category : a category string from category manager, per example CT_AbstractCategory::DATA_VALUE
-     * @param displayableName : the displayable that must be set to the new item attribute model
-     * @param shortDescription : the short description that must be set to the new item attribute model
-     * @param detailledDescription : the detailled description that must be set to the new item attribute model
-     */
-    template<class HandleInItemParent, class HandleInItemAttribute>
-    void addItemAttributeAndFindCategory(const HandleInItemParent& parentItem,
-                                         HandleInItemAttribute& itemAttributeHandle,
-                                         const QString& category,
-                                         const QString& displayableName = QString{"In Item Attribute"},
-                                         const QString& shortDescription = QString(),
-                                         const QString& detailledDescription = QString()) {
-
-        m_manager.addItemAttribute(parentItem,
-                                   itemAttributeHandle,
-                                   PS_CATEGORY_MANAGER->findByUniqueName(category),
-                                   displayableName,
-                                   shortDescription,
-                                   detailledDescription);
-    }
-
-    /**
      * @brief Visit all input result model added to this manager
      * @param visitor : a lambda expression per example that return a bool (true if must continue the visit) and receive a const pointer to a CT_InAbstractResultModel
      * @return True if no results has been visited, otherwise the returned value of the visitor

@@ -279,7 +279,7 @@ public:
      * @brief Add an item attribute to an item model
      * @param parentItem : the handle of an output item model to use to add the new item attribute
      * @param itemAttributeHandle : the handle of the output item attribute model to use to create the new item attribute model and access it later
-     * @param category : a category, per example PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE)
+     * @param category : a category, per exampleCT_AbstractCategory::DATA_VALUE
      * @param displayableName : the displayable that must be set to the new item attribute model
      * @param shortDescription : the short description that must be set to the new item attribute model
      * @param detailledDescription : the detailled description that must be set to the new item attribute model
@@ -365,33 +365,6 @@ public:
                           typename HandleOutFaceAttribute::ItemType* prototype = nullptr) {
         m_manager.addFaceAttribute(parentGroup,
                                    itemHandle,
-                                   displayableName,
-                                   shortDescription,
-                                   detailledDescription,
-                                   prototype);
-    }
-
-    /**
-     * @brief Add an item attribute to an item model
-     * @param parentItem : the handle of an output item model to use to add the new item attribute
-     * @param itemAttributeHandle : the handle of the output item attribute model to use to create the new item attribute model and access it later
-     * @param category : a category string from category manager, per example CT_AbstractCategory::DATA_VALUE
-     * @param displayableName : the displayable that must be set to the new item attribute model
-     * @param shortDescription : the short description that must be set to the new item attribute model
-     * @param detailledDescription : the detailled description that must be set to the new item attribute model
-     */
-    template<class HandleItemParent, class HandleOutItemAttribute>
-    void addItemAttributeAndFindCategory(const HandleItemParent& parentItem,
-                                         HandleOutItemAttribute& itemAttributeHandle,
-                                         const QString& category,
-                                         const QString& displayableName = QString{"Out Item Attribute"},
-                                         const QString& shortDescription = QString{""},
-                                         const QString& detailledDescription = QString{""},
-                                         typename HandleOutItemAttribute::ItemAttributeType* prototype = nullptr) {
-
-        m_manager.addItemAttribute(parentItem,
-                                   itemAttributeHandle,
-                                   PS_CATEGORY_MANAGER->findByUniqueName(category),
                                    displayableName,
                                    shortDescription,
                                    detailledDescription,

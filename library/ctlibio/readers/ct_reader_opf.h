@@ -136,7 +136,7 @@ private:
     template<typename HandleType>
     void createAndAddItemAttributeHandle(CT_ReaderOutModelStructureManager& manager, AttributeListHandleType& parentHandle, const CT_OPF_Type &type, const CT_OPF_Attribute &attribute) {
         HandleType* attHandle = new HandleType();
-        manager.addItemAttributeAndFindCategory(parentHandle, *attHandle, CT_AbstractCategory::DATA_VALUE, attribute.m_name);
+        manager.addItemAttribute(parentHandle, *attHandle, CT_AbstractCategory::DATA_VALUE, attribute.m_name);
         registerHandlePtr(type.m_name + "_" + attribute.m_name, attHandle);
     }
 

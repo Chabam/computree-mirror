@@ -435,20 +435,20 @@ CT_AbstractReader* CT_Reader_OPF::copy() const
 CT_AbstractItemAttribute* CT_Reader_OPF::staticCreateAttributeForType(const QString &type, const QString &value)
 {
     if((type == "String") || (type == "Color"))
-        return new CT_StdItemAttributeT<QString>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), value);
+        return new CT_StdItemAttributeT<QString>(CT_AbstractCategory::DATA_VALUE, value);
 
     if(type == "Integer")
-        return new CT_StdItemAttributeT<int>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), value.toInt());
+        return new CT_StdItemAttributeT<int>(CT_AbstractCategory::DATA_VALUE, value.toInt());
 
     if((type == "Double")
             || (type == "Metre")
             || (type == "Centimetre")
             || (type == "Millimetre")
             || (type == "10E-5 Metre"))
-        return new CT_StdItemAttributeT<double>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), value.toDouble());
+        return new CT_StdItemAttributeT<double>(CT_AbstractCategory::DATA_VALUE, value.toDouble());
 
     if(type == "Boolean")
-        return new CT_StdItemAttributeT<bool>(PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), value.toLower() == "true");
+        return new CT_StdItemAttributeT<bool>(CT_AbstractCategory::DATA_VALUE, value.toLower() == "true");
 
     return nullptr;
 }
