@@ -1,6 +1,6 @@
 #include "ct_reader_ptx.h"
 
-
+#include "ct_colorcloud/ct_colorcloudstdvector.h"
 #include "ct_view/ct_genericconfigurablewidget.h"
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 
@@ -199,12 +199,11 @@ bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
                 CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPoints);
                 CT_MutablePointIterator it(pcir);
 
-                CT_StandardCloudStdVectorT<double> *collection = new CT_StandardCloudStdVectorT<double>(nPoints);
-                CT_ColorCloudStdVector *cc = nullptr;
+                CT_DensePointScalarManager<double>::Setter intensitySetter = m_outIntensity.createAttributesSetter(pcir);
+                CT_DensePointColorManager::SetterPtr colorSetter;
 
-                if(hasColors) {
-                    cc = new CT_ColorCloudStdVector(nPoints);
-                }
+                if(hasColors)
+                    colorSetter = m_outRGB.createAttributesSetterPtr(pcir);
 
                 double xmin = std::numeric_limits<double>::max();
                 double ymin = std::numeric_limits<double>::max();
@@ -240,7 +239,7 @@ bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
                         color.g() = uchar(g);
                         color.b() = uchar(b);
 
-                        (*cc)[a] = color;
+                        colorSetter->setValueWithLocalIndex(a, color);
                     }
 
                     if(m_applyTransformation) {
@@ -268,7 +267,7 @@ bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
                     it.next();
                     it.replaceCurrentPoint(pReaded);
 
-                    (*collection)[a] = reflectance;
+                    intensitySetter.setValueWithLocalIndex(a, reflectance);
 
                     ++a;
                     setProgress(int(a*100/nPoints));
@@ -280,16 +279,11 @@ bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
                 // add the scene
                 group->addSingularItem(m_outScene, scene);
 
-                CT_PointsAttributesScalarTemplated<double> *pas = new CT_PointsAttributesScalarTemplated<double>(pcir, collection, imin, imax);
-
                 // add attributes
-                group->addSingularItem(m_outIntensity, pas);
+                group->addSingularItem(m_outIntensity, m_outIntensity.createAttributeInstance(pcir, imin, imax));
 
-                if (hasColors) {
-                    CT_PointsAttributesColor *colors = new CT_PointsAttributesColor(pcir, cc);
-
-                    group->addSingularItem(m_outRGB, colors);
-                }
+                if (hasColors)
+                    group->addSingularItem(m_outRGB, m_outRGB.createAttributeInstance(pcir));
 
                 double hres = 150.0 / (double(nRow));
                 double vres = 360.0 / (double(nColumn));

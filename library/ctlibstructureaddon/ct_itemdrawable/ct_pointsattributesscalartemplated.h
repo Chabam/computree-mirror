@@ -2,35 +2,47 @@
 #define CT_POINTSATTRIBUTESSCALARTEMPLATED_H
 
 #include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
+#include "ct_cloudindex/registered/abstract/ct_abstractcloudindexregisteredt.h"
 #include "ct_attributes/ct_attributesscalart.h"
 
 /**
  *  Points attributes of scalar type (int, float, double, etc...)
  */
 template<typename SCALAR>
-class CT_PointsAttributesScalarTemplated : public CT_AbstractPointAttributesScalar, public CT_AttributesScalarT<SCALAR>
+class CT_PointsAttributesScalarTemplated : public CT_AttributesScalarT<SCALAR, CT_AbstractPointAttributesScalar>
 {
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_PointsAttributesScalarTemplated, SCALAR, CT_AbstractPointAttributesScalar, Point %1 attributes)
 
-    using SuperClass1 = CT_AbstractPointAttributesScalar;
-    using SuperClass2 = CT_AttributesScalarT<SCALAR>;
+    using SuperClass = CT_AttributesScalarT<SCALAR, CT_AbstractPointAttributesScalar>;
 
 public:
-    CT_PointsAttributesScalarTemplated();
+    CT_PointsAttributesScalarTemplated() = default;
 
     /**
-     * @brief Create a collection of SCALAR. Attention the size of the collection passed in parameter must be the same that the size of points cloud index.
+     * @brief Create a collection of SCALAR with min and max values processed in constructor.
      */
+    template<class ManagerT>
     CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
-                                       CT_StandardCloudStdVectorT<SCALAR>* collection);
+                                       ManagerT& manager) : CT_PointsAttributesScalarTemplated(pcir,
+                                                                                               manager,
+                                                                                               std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value>())
+    {
+    }
 
     /**
-     * @brief Create a collection of SCALAR. Attention the size of the collection passed in parameter must be the same that the size of points cloud index.
+     * @brief Create a collection of SCALAR with min and max value set.
      */
+    template<class ManagerT>
     CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
-                                       CT_StandardCloudStdVectorT<SCALAR>* collection,
+                                       ManagerT& manager,
                                        const SCALAR& min,
-                                       const SCALAR& max);
+                                       const SCALAR& max) : CT_PointsAttributesScalarTemplated(pcir,
+                                                                                               manager,
+                                                                                               min,
+                                                                                               max,
+                                                                                               std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value>())
+    {
+    }
 
     /**
      * @brief Copy constructor.
@@ -53,14 +65,43 @@ public:
      */
     CT_PointsAttributesScalarTemplated(const CT_PointsAttributesScalarTemplated<SCALAR>& other) = default;
 
-    double dMin() const override { return CT_AttributesScalarT<SCALAR>::dMin(); }
-    double dMax() const override { return CT_AttributesScalarT<SCALAR>::dMax(); }
-
-    double dValueAt(const size_t &index) const override { return CT_AttributesScalarT<SCALAR>::dValueAt(index); }
-
-    size_t attributesSize() const override { return CT_AttributesScalarT<SCALAR>::attributesSize(); }
-
     CT_ITEM_COPY_IMP(CT_PointsAttributesScalarTemplated<SCALAR>)
+
+private:
+    template<class ManagerT>
+    CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
+                                       ManagerT& manager,
+                                       std::true_type) : SuperClass(pcir, manager)
+    {
+    }
+
+    template<class ManagerT>
+    CT_PointsAttributesScalarTemplated(CT_PCIR ,
+                                       ManagerT& ,
+                                       std::false_type)
+    {
+        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
+    }
+
+    template<class ManagerT>
+    CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
+                                       ManagerT& manager,
+                                       const SCALAR& min,
+                                       const SCALAR& max,
+                                       std::true_type) : SuperClass(pcir, manager, min, max)
+    {
+    }
+
+
+    template<class ManagerT>
+    CT_PointsAttributesScalarTemplated(CT_PCIR,
+                                       ManagerT& ,
+                                       const SCALAR& ,
+                                       const SCALAR& ,
+                                       std::false_type)
+    {
+        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
+    }
 };
 
 #include "ct_itemdrawable/ct_pointsattributesscalartemplated.hpp"

@@ -21,8 +21,8 @@ public:
     }
 
     template<typename... Args>
-    ItemAttributeT* createInstance(Args... args) {
-        return new ItemAttributeT(args...);
+    ItemAttributeT* createInstance(Args&&... args) {
+        return new ItemAttributeT(std::forward<Args>(args)...);
     }
 };
 

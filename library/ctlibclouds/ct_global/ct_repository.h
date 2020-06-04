@@ -147,6 +147,32 @@ public:
     }
 
     /**
+     * @brief Create a new index cloud of type IndexCloudT that will be synchronized with the global XXX cloud (defined by PEF template). This
+     *        means that indices of the cloud index will always be sync with the global cloud.
+     *
+     * @param syncWith : define what cloud sync
+     * @example : --- Create a CT_CloudIndexStdVectorT that is synchronized with the global points cloud :
+     *
+     *            CT_MCIR mcir = createNewIndexCloudT< CT_PointData, CT_CloudIndexStdVectorT >();
+     *
+     *            or
+     *
+     *            CT_MCIR mcir = createNewIndexCloudT< CT_Point, CT_CloudIndexStdVectorT >();
+     *
+     *            --- Create a CT_IndexCloudColorStdMapT that is synchronized with the global edge cloud :
+     *
+     *            CT_MCIR mcir = createNewIndexCloudT< CT_Edge, CT_IndexCloudColorStdMapT >();
+     *
+     * @return return the index cloud registered
+     */
+    template< typename PEF, template<typename T> class IndexCloudT >
+    CT_MCIR createNewIndexCloudTSyncWithPEF()
+    {
+        const PEF pef;
+        return internalCreateNewIndexCloudTSyncWithPEF<IndexCloudT>(pef);
+    }
+
+    /**
      * @brief Register the object create with the method "createNewUndefinedSizePointCloud". Convert the points added to a
      *        point cloud index.
      *
@@ -313,6 +339,30 @@ protected:
      */
     template<typename T>
     QSharedPointer< CT_AbstractModifiableCloudIndexRegisteredT<T> > registerCloudIndex(CT_AbstractModifiableCloudIndexT<T> *index);
+
+    template< template<typename T> class IndexCloudT >
+    CT_MCIR internalCreateNewIndexCloudTSyncWithPEF(const CT_PointData&)
+    {
+        return registerCloudIndex<CT_PointData>(new IndexCloudT<CT_PointData>());
+    }
+
+    template< template<typename T> class IndexCloudT >
+    CT_MCIR internalCreateNewIndexCloudTSyncWithPEF(const CT_Point&)
+    {
+        return registerCloudIndex<CT_PointData>(new IndexCloudT<CT_PointData>());
+    }
+
+    template< template<typename T> class IndexCloudT >
+    CT_MCIR internalCreateNewIndexCloudTSyncWithPEF(const CT_Face&)
+    {
+        return registerCloudIndex<CT_Face>(new IndexCloudT<CT_Face>());
+    }
+
+    template< template<typename T> class IndexCloudT >
+    CT_MCIR internalCreateNewIndexCloudTSyncWithPEF(const CT_Edge&)
+    {
+        return registerCloudIndex<CT_Edge>(new IndexCloudT<CT_Edge>());
+    }
 
 private:
 

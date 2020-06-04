@@ -28,7 +28,7 @@ public:
 
     QList<CT_LasDefine::LASPointAttributesType> lasPointAttributesTypes() const override;
 
-    void getLASDataAt(const size_t i, CT_LASData &data) const override;
+    bool getLASDataAt(const size_t i, CT_LASData &data) const override;
 
     QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar*> lasPointsAttributes() const override;
 

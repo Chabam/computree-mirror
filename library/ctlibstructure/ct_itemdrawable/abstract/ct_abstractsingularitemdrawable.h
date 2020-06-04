@@ -173,7 +173,7 @@ public:
     const typename HandleType::ItemAttributeType* itemAttribute(const HandleType& itemAttHandle) const {
         Q_ASSERT(model() != nullptr);
 
-        return internalItemAttribute(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
+        return internalItemAttribute(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::value>());
     }
 
     /**
@@ -184,7 +184,7 @@ public:
     ChildrensCollectionT<const typename HandleType::ItemAttributeType> itemAttributesByHandle(const HandleType& itemAttHandle) const {
         Q_ASSERT(model() != nullptr);
 
-        return internalItemAttributes(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
+        return internalItemAttributes(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::value>());
     }
 
     /**

@@ -18,18 +18,12 @@ public:
 
 private:
     CT_StdLASPointsAttributesContainer  *_lasAttributes;
-    CT_AbstractPointCloudIndex          *m_lasPointCloudIndex;
 
 protected:
     /**
      * @brief Returns las attributes
      */
     CT_StdLASPointsAttributesContainer* lasAttributes() const;
-
-    /**
-     * @brief Returns las point cloud index of the first attribute in the las attributes container
-     */
-    CT_AbstractPointCloudIndex* lasPointCloudIndex() const;
 };
 
 #endif // CT_ABSTRACTMETRIC_LAS_H

@@ -17,7 +17,7 @@ public:
     int size() const;
     void clearInvalid();
 
-    DM_AbstractAttributes* getAttributesFromInterface(const CT_AbstractAttributes *ia) const;
+    DM_AbstractAttributes* getAttributesFromInterface(const CT_AbstractAttributes *ia, bool local = true) const;
 
     const QList<DM_AbstractAttributes*>& attributes() const;
 

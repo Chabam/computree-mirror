@@ -45,7 +45,7 @@ private:
     CT_HandleInStdZeroOrMoreGroup                                   mInRootGroup;
     CT_HandleInStdGroup<>                                           mInGroup;
     CT_HandleInSingularItem<CT_AbstractItemDrawableWithPointCloud>  mInItem;
-    CT_HandleInSingularItem<CT_StdLASPointsAttributesContainer, 0>  mInLasPointsAttributesContainer;
+    CT_HandleInSingularItem<CT_StdLASPointsAttributesContainer, 0>  mInLasPointsAttributesContainer; // optionnal
 
     QList<CT_HandleOutSingularItem<CT_Scene>*>                      mOutHandles;
     /**

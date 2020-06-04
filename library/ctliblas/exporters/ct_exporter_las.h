@@ -45,54 +45,53 @@ private:
     friend class CT_LASPieceByPiecePrivateExporter;
 
     using HandleItemType = CT_HandleInSingularItem<CT_AbstractItemDrawableWithPointCloud>;
-    using AllAttributesCollection = CT_AbstractLASPointFormat::AllAttributesCollection;
+    using AttributeByTypeCollection = CT_AbstractLASPointFormat::AttributeByTypeCollection;
 
     CT_HandleInStdGroup<>                                           m_hInGroup;
     HandleItemType                                                  m_hInItem;
     CT_HandleInSingularItem<CT_StdLASPointsAttributesContainer, 0>  m_hInLASAttributesContainer; // optionnal
 
-    // TODO :
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInReturnNumber; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInNumberOfReturn; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInClassificationFlag; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInScannerChannel; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInScanDirectionFlag; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInEdgeOfFlightLine; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInReturnNumber; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInNumberOfReturn; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInClassificationFlag; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInScannerChannel; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInScanDirectionFlag; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInEdgeOfFlightLine; // optionnal
 
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInIntensity; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInClassification; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInUserData; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInPointSourceID; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInIntensity; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInClassification; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInUserData; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInPointSourceID; // optionnal
 
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInScanAngle; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInScanAngle; // optionnal
 
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInGPSTime; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInGPSTime; // optionnal
 
-    CT_HandleInSingularItem<CT_PointsAttributesColor, 0>            m_hInColor; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInRed; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInGreen; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInBlue; // optionnal
+    CT_HandleInPointColor<0>                                        m_hInColor; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInRed; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInGreen; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInBlue; // optionnal
 
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInWavePacketDescriptorIndex; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInByteOffsetToWaveformData; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInWaveformPacketSizeInBytes; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInReturnPointWaveformLocation; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInWavePacketDescriptorIndex; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInByteOffsetToWaveformData; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInWaveformPacketSizeInBytes; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInReturnPointWaveformLocation; // optionnal
 
-    CT_HandleInSingularItem<CT_AbstractPointAttributesScalar, 0>    m_hInNIR; // optionnal
+    CT_HandleInAbstractPointScalar<0>                               m_hInNIR; // optionnal
 
     HandleItemType::const_iterator                                  mIteratorItemBegin;
     HandleItemType::const_iterator                                  mIteratorItemEnd;
 
     QList<const CT_AbstractItemDrawableWithPointCloud*>             mItems;
 
-    AllAttributesCollection                                         mAllLasAttributes;
-    QList<const CT_PointsAttributesColor*>                          mColorsAttribute;
+    AttributeByTypeCollection                                       mLasAttributeByType;
+    const CT_PointsAttributesColor*                                 mColorAttribute;
     QSharedPointer<CT_AbstractLASPointFormat>                       mToolsFormat;
 
     double                                                          mCurrentPieceByPieceProgress;
     double                                                          mPieceByPieceProgressMultiplicator;
 
-    void findAttributeInContainerAndAddItToCollection(CT_LasDefine::LASPointAttributesType key, const CT_StdLASPointsAttributesContainer* container, AllAttributesCollection& allAttributes) const
+    void findAttributeInContainerAndAddItToCollection(CT_LasDefine::LASPointAttributesType key, const CT_StdLASPointsAttributesContainer* container, AttributeByTypeCollection& allAttributes) const
     {
         CT_AbstractPointAttributesScalar* attribute = static_cast<CT_AbstractPointAttributesScalar*>(container->pointsAttributesAt(key));
 
@@ -101,10 +100,12 @@ private:
     }
 
     template<typename HandleType>
-    void findAttributeWithHandleAndAddItToCollection(CT_LasDefine::LASPointAttributesType key, HandleType& t, AllAttributesCollection& allAttributes) const
+    void findAttributeWithHandleAndAddItToCollection(CT_LasDefine::LASPointAttributesType key, HandleType& t, AttributeByTypeCollection& allAttributes) const
     {
         for(const CT_AbstractPointAttributesScalar* attribute : t.iterateInputs(m_handleResultExport)) {
             allAttributes.insert(key, attribute);
+            // only use the first attribute because all other that use the same model use the same manager of attributes so there is only one cloud !
+            break;
         }
     }
 

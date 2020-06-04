@@ -96,33 +96,33 @@ void CT_Reader_LASV2::internalDeclareOutputModels(CT_ReaderOutModelStructureMana
     manager.addItem(m_hOutScene, tr("Scène"));
     manager.addItem(m_hOutAllAtt, tr("All Attributs"));
 
-    manager.addItem(m_hOutReturnNumber, tr("Return Number"));
-    manager.addItem(m_hOutNumberOfReturn, tr("Number of Returns"));
-    manager.addItem(m_hOutClassificationFlag, tr("Classification Flags"));
-    manager.addItem(m_hOutScannerChannel, tr("Scanner Channel"));
-    manager.addItem(m_hOutScanDirectionFlag, tr("Scan Direction Flag"));
-    manager.addItem(m_hOutEdgeOfFlightLine, tr("Edge of Flight Line"));
+    manager.addPointAttribute(m_hOutReturnNumber, tr("Return Number"));
+    manager.addPointAttribute(m_hOutNumberOfReturn, tr("Number of Returns"));
+    manager.addPointAttribute(m_hOutClassificationFlag, tr("Classification Flags"));
+    manager.addPointAttribute(m_hOutScannerChannel, tr("Scanner Channel"));
+    manager.addPointAttribute(m_hOutScanDirectionFlag, tr("Scan Direction Flag"));
+    manager.addPointAttribute(m_hOutEdgeOfFlightLine, tr("Edge of Flight Line"));
 
-    manager.addItem(m_hOutIntensity, tr("Intensité"));
-    manager.addItem(m_hOutClassification, tr("Classification"));
-    manager.addItem(m_hOutUserData, tr("User Data"));
-    manager.addItem(m_hOutPointSourceID, tr("Point Source "));
+    manager.addPointAttribute(m_hOutIntensity, tr("Intensité"));
+    manager.addPointAttribute(m_hOutClassification, tr("Classification"));
+    manager.addPointAttribute(m_hOutUserData, tr("User Data"));
+    manager.addPointAttribute(m_hOutPointSourceID, tr("Point Source "));
 
-    manager.addItem(m_hOutScanAngle, tr("Scan Angle"));
+    manager.addPointAttribute(m_hOutScanAngle, tr("Scan Angle"));
 
-    manager.addItem(m_hOutGPSTime, tr("GPS Time"));
+    manager.addPointAttribute(m_hOutGPSTime, tr("GPS Time"));
 
-    manager.addItem(m_hOutColor, tr("Color"));
-    manager.addItem(m_hOutRed, tr("Red"));
-    manager.addItem(m_hOutGreen, tr("Green"));
-    manager.addItem(m_hOutBlue, tr("Blue"));
+    manager.addPointAttribute(m_hOutColor, tr("Color"));
+    manager.addPointAttribute(m_hOutRed, tr("Red"));
+    manager.addPointAttribute(m_hOutGreen, tr("Green"));
+    manager.addPointAttribute(m_hOutBlue, tr("Blue"));
 
-    manager.addItem(m_hOutWavePacketDescriptorIndex, tr("Wave Packet Descriptor Index"));
-    manager.addItem(m_hOutByteOffsetToWaveformData, tr("Byte Offset To Waveform Data"));
-    manager.addItem(m_hOutWaveformPacketSizeInBytes, tr("Waveform Packet Size In Bytes"));
-    manager.addItem(m_hOutReturnPointWaveformLocation, tr("Return Point Waveform Location"));
+    manager.addPointAttribute(m_hOutWavePacketDescriptorIndex, tr("Wave Packet Descriptor Index"));
+    manager.addPointAttribute(m_hOutByteOffsetToWaveformData, tr("Byte Offset To Waveform Data"));
+    manager.addPointAttribute(m_hOutWaveformPacketSizeInBytes, tr("Waveform Packet Size In Bytes"));
+    manager.addPointAttribute(m_hOutReturnPointWaveformLocation, tr("Return Point Waveform Location"));
 
-    manager.addItem(m_hOutNIR, tr("NIR"));
+    manager.addPointAttribute(m_hOutNIR, tr("NIR"));
 }
 
 CT_FileHeader *CT_Reader_LASV2::internalReadHeader(const QString &filepath, QString &error) const
@@ -192,56 +192,37 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         QDataStream stream(&f);
         stream.setByteOrder(QDataStream::LittleEndian);
 
-        qint32 x, y, z;
-        double xc = 0;
-        double yc = 0;
-        double zc = 0;
-
-        CT_Point pAdded;
-
         qint64 pos = f.pos();
         bool mustTransformPoint = header->mustTransformPoints();
 
         CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPoints);
 
         // VECTOR
-        CT_StandardCloudStdVectorT<qint16> *scanAngleRankV6_10 = nullptr;
-        CT_StandardCloudStdVectorT<PointCore6_10> *mask6_10V = nullptr;
-
-        mask6_10V = new CT_StandardCloudStdVectorT<PointCore6_10>(nPoints);
-        scanAngleRankV6_10 = new CT_StandardCloudStdVectorT<qint16>(nPoints);
-
-        // ItemDrawable 6_10
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *rn6_10 = nullptr;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *nor6_10 = nullptr;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *sdf6_10 = nullptr;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *efl6_10 =  nullptr;
-        CT_PointsAttributesScalarTemplated<qint16> *scanAngleRank6_10 = nullptr;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *cf = nullptr;
-        CT_PointsAttributesScalarMaskT<PointCore6_10> *sc = nullptr;
+        auto scanAngleSetter = m_hOutScanAngle.createAttributesSetter(pcir);
+        auto core6_10Setter = mCore6_10Manager.createAttributesSetter(pcir);
 
         // Vector in all point data format :
-        CT_StandardCloudStdVectorT<quint16> *intensitiesV = new CT_StandardCloudStdVectorT<quint16>(nPoints);
-        CT_StandardCloudStdVectorT<quint8> *classificationsV = new CT_StandardCloudStdVectorT<quint8>(nPoints);
-        CT_StandardCloudStdVectorT<quint8> *userDataV = new CT_StandardCloudStdVectorT<quint8>(nPoints);
-        CT_StandardCloudStdVectorT<quint16> *pointSourceIDV = new CT_StandardCloudStdVectorT<quint16>(nPoints);
+        auto intensitySetter = m_hOutIntensity.createAttributesSetter(pcir);
+        auto classificationSetter = m_hOutClassification.createAttributesSetter(pcir);
+        auto userDataSetter = m_hOutUserData.createAttributesSetter(pcir);
+        auto pointSourceIDSetter = m_hOutPointSourceID.createAttributesSetter(pcir);
 
         // Vector not in all point data format :
-        CT_StandardCloudStdVectorT<double> *gpsTimeV = nullptr;
-        CT_ColorCloudStdVector *colorsV = nullptr;
-        CT_StandardCloudStdVectorT<quint16> *colorsRV = nullptr;
-        CT_StandardCloudStdVectorT<quint16> *colorsGV = nullptr;
-        CT_StandardCloudStdVectorT<quint16> *colorsBV = nullptr;
-        CT_StandardCloudStdVectorT<quint8> *wpdiV = nullptr;
-        CT_StandardCloudStdVectorT<quint64> *botwdV = nullptr;
-        CT_StandardCloudStdVectorT<quint32> *wpsibV = nullptr;
-        CT_StandardCloudStdVectorT<float> *rpwlV = nullptr;
-        CT_StandardCloudStdVectorT<quint16> *nirV = nullptr;
+        decltype (m_hOutGPSTime)::SetterPtr gpsTimeSetter = nullptr;
+        decltype (m_hOutColor)::SetterPtr colorSetter = nullptr;
+        decltype (m_hOutRed)::SetterPtr redSetter = nullptr;
+        decltype (m_hOutGreen)::SetterPtr greenSetter = nullptr;
+        decltype (m_hOutBlue)::SetterPtr blueSetter = nullptr;
+        decltype (m_hOutWaveformPacketSizeInBytes)::SetterPtr wpsibSetter = nullptr;
+        decltype (m_hOutByteOffsetToWaveformData)::SetterPtr botwdSetter = nullptr;
+        decltype (m_hOutWavePacketDescriptorIndex)::SetterPtr wpdiSetter = nullptr;
+        decltype (m_hOutReturnPointWaveformLocation)::SetterPtr rpwlSetter = nullptr;
+        decltype (m_hOutNIR)::SetterPtr nirSetter = nullptr;
 
         if((m_headerFromConfiguration->m_pointDataRecordFormat == 1)
                 || (m_headerFromConfiguration->m_pointDataRecordFormat > 2))
         {
-            gpsTimeV = new CT_StandardCloudStdVectorT<double>(nPoints);
+            gpsTimeSetter = m_hOutGPSTime.createAttributesSetterPtr(pcir);
         }
 
         if((m_headerFromConfiguration->m_pointDataRecordFormat == 2)
@@ -251,16 +232,16 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
                 || (m_headerFromConfiguration->m_pointDataRecordFormat == 8)
                 || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
         {
-            colorsV = new CT_ColorCloudStdVector(nPoints);
-            colorsRV = new CT_StandardCloudStdVectorT<quint16>(nPoints);
-            colorsGV = new CT_StandardCloudStdVectorT<quint16>(nPoints);
-            colorsBV = new CT_StandardCloudStdVectorT<quint16>(nPoints);
+            colorSetter = m_hOutColor.createAttributesSetterPtr(pcir);
+            redSetter = m_hOutRed.createAttributesSetterPtr(pcir);
+            greenSetter = m_hOutGreen.createAttributesSetterPtr(pcir);
+            blueSetter = m_hOutBlue.createAttributesSetterPtr(pcir);
         }
 
         if((m_headerFromConfiguration->m_pointDataRecordFormat == 8)
                 || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
         {
-            nirV = new CT_StandardCloudStdVectorT<quint16>(nPoints);
+            nirSetter = m_hOutNIR.createAttributesSetterPtr(pcir);
         }
 
         if((m_headerFromConfiguration->m_pointDataRecordFormat == 4)
@@ -268,73 +249,97 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
                 || (m_headerFromConfiguration->m_pointDataRecordFormat == 9)
                 || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
         {
-            wpdiV = new CT_StandardCloudStdVectorT<quint8>(nPoints);
-            botwdV = new CT_StandardCloudStdVectorT<quint64>(nPoints);
-            wpsibV = new CT_StandardCloudStdVectorT<quint32>(nPoints);
-            rpwlV = new CT_StandardCloudStdVectorT<float>(nPoints);
+            wpdiSetter = m_hOutWavePacketDescriptorIndex.createAttributesSetterPtr(pcir);
+            botwdSetter = m_hOutByteOffsetToWaveformData.createAttributesSetterPtr(pcir);
+            wpsibSetter = m_hOutWaveformPacketSizeInBytes.createAttributesSetterPtr(pcir);
+            rpwlSetter = m_hOutReturnPointWaveformLocation.createAttributesSetterPtr(pcir);
         }
+
         CT_MutablePointIterator it(pcir);
+
+        qint32 x, y, z;
+        double xc = 0;
+        double yc = 0;
+        double zc = 0;
+        CT_Point pAdded;
+        quint16 valueUint16;
+        quint8 valueUint8;
+        qint8 valueInt8;
+        PointCore6_10 valuePointCore6_10;
+        CT_Color colRGBA;
+        quint16 colR;
+        quint16 colG;
+        quint16 colB;
 
         for(size_t i=0; i<nPoints; ++i)
         {
             // READ ALL ATTRIBUTES
-            stream >> x >> y >> z >> intensitiesV->tAt(i);
+            stream >> x >> y >> z;
+            intensitySetter.setValueWithStreamWithLocalIndex(i, stream);
 
             if (header->m_pointDataRecordFormat < 6)
             {
-                quint8 mask8;
-                stream >> mask8;
-
-                mask6_10V->tAt(i).entire = mask8;
-            } else {
-                stream >> mask6_10V->tAt(i).entire;
+                stream >> valueUint8;
+                valuePointCore6_10.entire = valueUint8;
+                core6_10Setter.setValueWithLocalIndex(i, valuePointCore6_10);
+            }
+            else
+            {
+                stream >> valueUint16;
+                valuePointCore6_10.entire = valueUint16;
+                core6_10Setter.setValueWithLocalIndex(i, valuePointCore6_10);
             }
 
-            stream >> classificationsV->tAt(i);
+            classificationSetter.setValueWithStreamWithLocalIndex(i, stream);
 
             if(header->m_pointDataRecordFormat < 6)
             {
-                qint8 scan8;
-                stream >> scan8;
-                scanAngleRankV6_10->tAt(i) = scan8;
-                stream >> userDataV->tAt(i);
+                stream >> valueInt8;
+                scanAngleSetter.setValueWithLocalIndex(i, valueInt8);
+                userDataSetter.setValueWithStreamWithLocalIndex(i, stream);
             }
             else
             {
                 // "user data" is before "scan angle" in version 6 to 10
-                stream >> userDataV->tAt(i);
-                stream >> scanAngleRankV6_10->tAt(i);
+                userDataSetter.setValueWithStreamWithLocalIndex(i, stream);
+                scanAngleSetter.setValueWithStreamWithLocalIndex(i, stream);
             }
 
-            stream >> pointSourceIDV->tAt(i);
+            pointSourceIDSetter.setValueWithStreamWithLocalIndex(i, stream);
 
             // gps time is always after pointSourceID
-            if(gpsTimeV != nullptr)
-                stream >> gpsTimeV->tAt(i);
+            if(gpsTimeSetter)
+                gpsTimeSetter->setValueWithStreamWithLocalIndex(i, stream);
 
             // color is always after gpsTime if exist otherwise after pointSourceID
-            if(colorsRV != nullptr)
+            if(colorSetter)
             {
-                CT_Color &colRGBA = colorsV->tAt(i);
-                quint16 &colR = colorsRV->tAt(i);
-                quint16 &colG = colorsGV->tAt(i);
-                quint16 &colB = colorsBV->tAt(i);
-
                 stream >> colR >> colG >> colB;
+
+                redSetter->setValueWithLocalIndex(i, colR);
+                greenSetter->setValueWithLocalIndex(i, colG);
+                blueSetter->setValueWithLocalIndex(i, colB);
 
                 colRGBA.r() = colR/256;
                 colRGBA.g() = colG/256;
                 colRGBA.b() = colB/256;
                 colRGBA.a() = 255;
+
+                colorSetter->setValueWithLocalIndex(i, colRGBA);
             }
 
             // NIR is always after colors if exist
-            if(nirV != nullptr)
-                stream >> nirV->tAt(i);
+            if(nirSetter)
+                nirSetter->setValueWithStreamWithLocalIndex(i, stream);
 
             // wave packet is always after NIR if exist
-            if(wpdiV != nullptr)
-                stream >> wpdiV->tAt(i) >> botwdV->tAt(i) >> wpsibV->tAt(i) >> rpwlV->tAt(i);
+            if(wpdiSetter)
+            {
+                wpdiSetter->setValueWithStreamWithLocalIndex(i, stream);
+                botwdSetter->setValueWithStreamWithLocalIndex(i, stream);
+                wpsibSetter->setValueWithStreamWithLocalIndex(i, stream);
+                rpwlSetter->setValueWithStreamWithLocalIndex(i, stream);
+            }
 
             // CONVERT POINT
 
@@ -362,57 +367,48 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         // add attributes
         CT_StdLASPointsAttributesContainer *container = new CT_StdLASPointsAttributesContainer();
 
+        // ItemDrawable 6_10
+        CT_AbstractPointAttributesScalar* rn6_10 = nullptr;
+        CT_AbstractPointAttributesScalar* nor6_10 = nullptr;
+        CT_AbstractPointAttributesScalar* sdf6_10 = nullptr;
+        CT_AbstractPointAttributesScalar* efl6_10 =  nullptr;
+        CT_AbstractPointAttributesScalar* cf = nullptr;
+        CT_AbstractPointAttributesScalar* sc = nullptr;
+
         if (header->m_pointDataRecordFormat < 6)
         {
-
             // 0b00000111
-            rn6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(7,0,mask6_10V,pcir,true);
+            rn6_10 = m_hOutReturnNumber.createInstance(7, 0, pcir, mCore6_10Manager);
 
             // 0b00111000
-            nor6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(56,3,mask6_10V,pcir,false);
+            nor6_10 = m_hOutNumberOfReturn.createInstance(56, 3, pcir, mCore6_10Manager);
 
             // 0b01000000
-            sdf6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(64,6,mask6_10V,pcir,false);
+            sdf6_10 = m_hOutScanDirectionFlag.createInstance(64, 6, pcir, mCore6_10Manager);
 
             // 0b10000000
-            efl6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(128,7,mask6_10V,pcir,false);
-
-            scanAngleRank6_10 = new CT_PointsAttributesScalarTemplated<qint16>(pcir, scanAngleRankV6_10);
-
+            efl6_10 = m_hOutEdgeOfFlightLine.createInstance(128, 7, pcir, mCore6_10Manager);
         }
         else
         {
             // 0b0000 0000 0000 1111
-            rn6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(15,0,mask6_10V,pcir,true);
+            rn6_10 = m_hOutReturnNumber.createInstance(15, 0, pcir, mCore6_10Manager);
 
             // 0b0000 0000 1111 0000
-            nor6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(240, 4,mask6_10V,pcir,false);
+            nor6_10 = m_hOutNumberOfReturn.createInstance(240, 4, pcir, mCore6_10Manager);
 
             // 0b0000 0111 0000 0000
-            cf = new CT_PointsAttributesScalarMaskT<PointCore6_10>(1792, 8,mask6_10V,pcir,false);
+            cf = m_hOutClassificationFlag.createInstance(1792, 8, pcir, mCore6_10Manager);
 
             // 0b0001 1000 0000 0000
-            sc = new CT_PointsAttributesScalarMaskT<PointCore6_10>(6144, 11,mask6_10V,pcir,false);
+            sc = m_hOutScannerChannel.createInstance(6144, 11, pcir, mCore6_10Manager);
 
             // 0b0100 0000 0000 0000
-            sdf6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(16384, 14,mask6_10V,pcir,false);
+            sdf6_10 = m_hOutScanDirectionFlag.createInstance(16384, 14, pcir, mCore6_10Manager);
 
             // 0b1000 0000 0000 0000
-            efl6_10 = new CT_PointsAttributesScalarMaskT<PointCore6_10>(32768, 15,mask6_10V,pcir,false);
-
-            scanAngleRank6_10 = new CT_PointsAttributesScalarTemplated<qint16>(pcir, scanAngleRankV6_10);
-
-            /*for(int iii=0;iii<10; ++iii)
-            {
-                double tmp1 = nor6_10->dValueAt(iii);
-                double tmp2 = rn6_10->dValueAt(iii);
-                double tmp3 = sdf6_10->dValueAt(iii);
-                double tmp4 = efl6_10->dValueAt(iii);
-                double tmp5 = tmp1;
-            }*/
+            efl6_10 = m_hOutEdgeOfFlightLine.createInstance(32768, 15, pcir, mCore6_10Manager);
         }
-
-
 
         CT_AbstractPointAttributesScalar* attReturnNumber = rn6_10;
         CT_AbstractPointAttributesScalar* attNumberOfReturn = nor6_10;
@@ -420,20 +416,20 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         CT_AbstractPointAttributesScalar* attScannerChannel = sc;
         CT_AbstractPointAttributesScalar* attScanDirectionFlag = sdf6_10;
         CT_AbstractPointAttributesScalar* attEdgeOfFlightLine = efl6_10;
-        CT_AbstractPointAttributesScalar* attIntensity = new CT_PointsAttributesScalarTemplated<quint16>(pcir, intensitiesV);
-        CT_AbstractPointAttributesScalar* attClassification = new CT_PointsAttributesScalarTemplated<quint8>(pcir, classificationsV);
-        CT_AbstractPointAttributesScalar* attUserData = new CT_PointsAttributesScalarTemplated<quint8>(pcir, userDataV);
-        CT_AbstractPointAttributesScalar* attPointSourceID = new CT_PointsAttributesScalarTemplated<quint16>(pcir, pointSourceIDV);
-        CT_AbstractPointAttributesScalar* attScanAngle = scanAngleRank6_10;
-        CT_AbstractPointAttributesScalar* attGPSTime = (gpsTimeV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<double>(pcir, gpsTimeV));
-        CT_AbstractPointAttributesScalar* attRed = (colorsRV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsRV));
-        CT_AbstractPointAttributesScalar* attGreen = (colorsGV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsGV));
-        CT_AbstractPointAttributesScalar* attBlue = (colorsBV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint16>(pcir, colorsBV));
-        CT_AbstractPointAttributesScalar* attWavePacketDescriptorIndex = (wpdiV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint8>(pcir, wpdiV));
-        CT_AbstractPointAttributesScalar* attByteOffsetToWaveformData = (botwdV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint64>(pcir, botwdV));
-        CT_AbstractPointAttributesScalar* attWaveformPacketSizeInBytes = (wpsibV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint32>(pcir, wpsibV));
-        CT_AbstractPointAttributesScalar* attReturnPointWaveformLocation = (rpwlV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<float>(pcir, rpwlV));
-        CT_AbstractPointAttributesScalar* attNIR = (nirV == nullptr ? nullptr : new CT_PointsAttributesScalarTemplated<quint16>(pcir, nirV));
+        CT_AbstractPointAttributesScalar* attIntensity = m_hOutIntensity.createAttributeInstance(pcir);
+        CT_AbstractPointAttributesScalar* attClassification = m_hOutClassification.createAttributeInstance(pcir);
+        CT_AbstractPointAttributesScalar* attUserData = m_hOutUserData.createAttributeInstance(pcir);
+        CT_AbstractPointAttributesScalar* attPointSourceID = m_hOutPointSourceID.createAttributeInstance(pcir);
+        CT_AbstractPointAttributesScalar* attScanAngle = m_hOutScanAngle.createAttributeInstance(pcir);
+        CT_AbstractPointAttributesScalar* attGPSTime = (gpsTimeSetter ? m_hOutGPSTime.createAttributeInstance(pcir) : nullptr);
+        CT_AbstractPointAttributesScalar* attRed = (redSetter ? m_hOutRed.createAttributeInstance(pcir) : nullptr);
+        CT_AbstractPointAttributesScalar* attGreen = (greenSetter ? m_hOutGreen.createAttributeInstance(pcir) : nullptr);
+        CT_AbstractPointAttributesScalar* attBlue = (blueSetter ? m_hOutBlue.createAttributeInstance(pcir) : nullptr);
+        CT_AbstractPointAttributesScalar* attWavePacketDescriptorIndex = (wpdiSetter ? m_hOutWavePacketDescriptorIndex.createAttributeInstance(pcir) : nullptr);
+        CT_AbstractPointAttributesScalar* attByteOffsetToWaveformData = (botwdSetter ? m_hOutByteOffsetToWaveformData.createAttributeInstance(pcir) : nullptr);
+        CT_AbstractPointAttributesScalar* attWaveformPacketSizeInBytes = (wpsibSetter ? m_hOutWaveformPacketSizeInBytes.createAttributeInstance(pcir) : nullptr);
+        CT_AbstractPointAttributesScalar* attReturnPointWaveformLocation = (rpwlSetter ? m_hOutReturnPointWaveformLocation.createAttributeInstance(pcir) : nullptr);
+        CT_AbstractPointAttributesScalar* attNIR = (nirSetter ? m_hOutNIR.createAttributeInstance(pcir) : nullptr);
 
         if (container != nullptr) {group->addSingularItem(m_hOutAllAtt, container);}
         if (attIntensity != nullptr) {group->addSingularItem(m_hOutIntensity, attIntensity);}
@@ -448,7 +444,7 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         if (attUserData != nullptr) {group->addSingularItem(m_hOutUserData, attUserData);}
         if (attPointSourceID != nullptr) {group->addSingularItem(m_hOutPointSourceID, attPointSourceID);}
         if (attGPSTime != nullptr) {group->addSingularItem(m_hOutGPSTime, attGPSTime);}
-        if (colorsV != nullptr) {group->addSingularItem(m_hOutColor, new CT_PointsAttributesColor(pcir, colorsV));}
+        if (colorSetter) {group->addSingularItem(m_hOutColor, m_hOutColor.createAttributeInstance(pcir));}
         if (attRed != nullptr) {group->addSingularItem(m_hOutRed, attRed);}
         if (attGreen != nullptr) {group->addSingularItem(m_hOutGreen, attGreen);}
         if (attBlue != nullptr) {group->addSingularItem(m_hOutBlue, attBlue);}

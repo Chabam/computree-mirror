@@ -22,13 +22,24 @@ public:
     CT_HandleIterationDecorator() = default;
 
     template<class HandleInResult>
+    const ItemT* firstInput(const HandleInResult& inResult) const
+    {
+        for(const ItemT* item : iterateInputs(inResult))
+        {
+            return item;
+        }
+
+        return nullptr;
+    }
+
+    template<class HandleInResult>
     final_const_iterator iterateInputs(const HandleInResult& inResult) const {
         return iterateModelOrItem<final_const_iterator, CT_OutAbstractModel, HandleInResult>(inResult);
     }
 
     template<class HandleInResult>
     final_iterator iterateOutputs(const HandleInResult& inResult) const {
-        return internalIterateOutputs(inResult, std::integral_constant<bool, IsAResultModelCopy<typename HandleInResult::ModelType>::Is>());
+        return internalIterateOutputs(inResult, std::integral_constant<bool, IsAResultModelCopy<typename HandleInResult::ModelType>::value>());
     }
 
     template<class OutModelT = CT_OutAbstractModel, class HandleInResult>

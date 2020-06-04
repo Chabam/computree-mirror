@@ -38,10 +38,7 @@ HEADERS += \
     ct_itemdrawable/abstract/ct_abstractfaceattributesscalar.h \
     ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h \
     ct_itemdrawable/abstract/ct_abstractpointsattributes.h \
-    ct_itemdrawable/tools/drawmanager/ct_standardabstractpointsattributesdrawmanager.h \
     ct_itemdrawable/ct_itemattributelist.h \
-    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.h \
-    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.h \
     ct_itemdrawable/tools/drawmanager/ct_standardscannerdrawmanager.h \
     ct_itemdrawable/ct_scanner.h \
     ct_itemdrawable/ct_beam.h \
@@ -58,12 +55,10 @@ HEADERS += \
     ct_itemdrawable/ct_edgeattributescolor.h \
     ct_itemdrawable/ct_edgeattributesnormal.h \
     ct_itemdrawable/ct_edgeattributesscalart.h \
-    ct_itemdrawable/ct_edgeattributesscalart.hpp \
     ct_itemdrawable/ct_ellipse.h \
     ct_itemdrawable/ct_faceattributescolor.h \
     ct_itemdrawable/ct_faceattributesnormal.h \
     ct_itemdrawable/ct_faceattributesscalart.h \
-    ct_itemdrawable/ct_faceattributesscalart.hpp \
     ct_itemdrawable/ct_grid3d.h \
     ct_itemdrawable/ct_grid3d.hpp \
     ct_itemdrawable/ct_grid3d_points.h \
@@ -169,7 +164,27 @@ HEADERS += \
     ct_itemdrawable/tools/image2dtools/ct_image2dnaturalneighboursinterpolator.h \
     ct_tools/attributes/ct_abstractattributestocloudworker.h \
     ct_tools/attributes/ct_attributestocloudworkert.h \
-    ct_tools/attributes/ct_attributestocloudworkert.hpp
+    ct_tools/attributes/ct_attributestocloudworkert.hpp \
+    ct_handle/ct_handleoutedgecolor.h \
+    ct_handle/ct_handleoutpointcolor.h \
+    ct_handle/ct_handleoutpointnormal.h \
+    ct_handle/ct_handleoutpointscalar.h \
+    ct_handle/ct_handleoutpointscalarmask.h \
+    ct_handle/ct_handleoutedgenormal.h \
+    ct_handle/ct_handleoutedgescalar.h \
+    ct_handle/ct_handleoutfacecolor.h \
+    ct_handle/ct_handleoutfacenormal.h \
+    ct_handle/ct_handleoutfacescalar.h \
+    ct_handle/ct_handleinpointscalar.h \
+    ct_handle/ct_handleinpointcolor.h \
+    ct_handle/ct_handleinpointscalarmask.h \
+    ct_handle/ct_handleinpointnormal.h \
+    ct_handle/ct_handleinedgecolor.h \
+    ct_handle/ct_handleinedgenormal.h \
+    ct_handle/ct_handleinedgescalar.h \
+    ct_handle/ct_handleinfacecolor.h \
+    ct_handle/ct_handleinfacenormal.h \
+    ct_handle/ct_handleinfacescalar.h
 
 SOURCES += \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.cpp \
@@ -190,13 +205,10 @@ SOURCES += \
     ct_itemdrawable/abstract/ct_abstractfaceattributesscalar.cpp \
     ct_itemdrawable/abstract/ct_abstractpointattributesscalar.cpp \
     ct_itemdrawable/abstract/ct_abstractpointsattributes.cpp \
-    ct_itemdrawable/tools/drawmanager/ct_standardabstractpointsattributesdrawmanager.cpp \
     ct_itemdrawable/ct_itemattributelist.cpp \
     ct_itemdrawable/ct_pointsattributescolor.cpp \
     ct_itemdrawable/ct_pointsattributesnormal.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_pointdrawmanager.cpp \
-    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.cpp \
-    ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardscannerdrawmanager.cpp \
     ct_itemdrawable/ct_scanner.cpp \
     ct_itemdrawable/ct_beam.cpp \

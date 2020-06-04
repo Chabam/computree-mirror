@@ -28,8 +28,9 @@ public:
         Wave_Packet_Descriptor_Index,
         Byte_offset_to_waveform_data,
         Waveform_packet_size_in_bytes,
-        Return_Point_Waveform_Location
-    }; // if you add another attributes don't forget to add it in the CT_LasPointInfo class and CT_LasPointFormatX to write it
+        Return_Point_Waveform_Location,
+        NOT_TO_USE_SIZE_OF_ENUM
+    }; // if you add another attributes don't forget to add it in the class CT_LasPointFormatX to write it
 };
 
 #endif // CT_LASDEFINE_H

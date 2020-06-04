@@ -1,6 +1,22 @@
 #ifndef SFINAE_H
 #define SFINAE_H
 
+#include <QtGlobal>
+
+/**
+ * @brief SFINAE tool to check more than one condition in same time. Using it like this :
+ *        std::integral_constant<bool, SFINAE_And_<IsAnInputAbstractHandle<T>, IsAnInputModel<T>>::value>()
+ */
+template<typename... Conds>
+struct SFINAE_And_
+        : std::true_type
+{ };
+
+template<typename Cond, typename... Conds>
+struct SFINAE_And_<Cond, Conds...>
+        : std::conditional<Cond::value, SFINAE_And_<Conds...>, std::false_type>::type
+{ };
+
 /**
  * @brief SFINAE tool to know if the model was an input result model that produce copies
  */
@@ -19,7 +35,7 @@ class IsAResultModelCopy
    static no deduce(U*, Helper<int (BaseMixin::*)() const, &U::nOutResultModelCopiesCreated>* = 0);
    static yes deduce(...);
 public:
-   static const bool Is = sizeof(yes) == sizeof(deduce((Base*)(0)));
+   static const bool value = sizeof(yes) == sizeof(deduce((Base*)(0)));
 };
 
 /**
@@ -40,7 +56,7 @@ class IsAnOutputModel
    static no deduce(U*, Helper<int (BaseMixin::*)() const, &U::uniqueIndex>* = 0);
    static yes deduce(...);
 public:
-   static const bool Is = sizeof(yes) == sizeof(deduce((Base*)(0)));
+   static const bool value = sizeof(yes) == sizeof(deduce((Base*)(0)));
 };
 
 /**
@@ -62,8 +78,27 @@ class IsAnInputModel
    static no deduce(U*, Helper<int (BaseMixin::*)() const, &U::uniqueIndex>* = 0);
    static yes deduce(...);
 public:
-   static const bool Is = sizeof(no) == sizeof(deduce((Base*)(0)));
+   static const bool value = sizeof(no) == sizeof(deduce((Base*)(0)));
 };
+
+
+template <typename T, typename = void>
+struct HasApplicableToPoint : std::false_type{};
+
+template <typename T>
+struct HasApplicableToPoint<T, decltype((void)T::ApplicableToPoint, void())> : std::true_type {};
+
+template <typename T, typename = void>
+struct HasApplicableToEdge : std::false_type{};
+
+template <typename T>
+struct HasApplicableToEdge<T, decltype((void)T::ApplicableToEdge, void())> : std::true_type {};
+
+template <typename T, typename = void>
+struct HasApplicableToFace : std::false_type{};
+
+template <typename T>
+struct HasApplicableToFace<T, decltype((void)T::ApplicableToFace, void())> : std::true_type {};
 
 /**
  * @brief SFINAE tool to know if the handle is an abstract input handle. If the enum "MinValue" is present

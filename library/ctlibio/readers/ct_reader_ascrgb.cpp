@@ -94,9 +94,9 @@ void readColor(QStringList &values, CT_Color &color)
     valueG = qBound(0., valueG, 1.);
     valueB = qBound(0., valueB, 1.);
 
-    color(0) = 255*valueR;
-    color(1) = 255*valueG;
-    color(2) = 255*valueB;
+    color(0) = uchar(255*valueR);
+    color(1) = uchar(255*valueG);
+    color(2) = uchar(255*valueB);
     color(3) = 255;
 }
 
@@ -139,7 +139,7 @@ bool CT_Reader_ASCRGB::preVerifyFile(const QString& filepath, QFile& fileOpenRea
 void CT_Reader_ASCRGB::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
     manager.addItem(m_hOutScene, tr("Scène"));
-    manager.addItem(m_hOutColors, tr("Attribut de points (couleurs)"));
+    manager.addPointAttribute(m_hOutColors, tr("Attribut de points (couleurs)"));
 }
 
 bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
@@ -153,7 +153,7 @@ bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
             QTextStream stream(&f);
 
             CT_AbstractUndefinedSizePointCloud* pointCloud = PS_REPOSITORY->createNewUndefinedSizePointCloud();
-            CT_ColorCloudStdVector *colorCloud = new CT_ColorCloudStdVector(false);
+            auto colorSetter = m_hOutColors.createUndefinedPointCloudSizeAttributesSetter(pointCloud);
 
             double xmin = std::numeric_limits<double>::max();
             double ymin = std::numeric_limits<double>::max();
@@ -177,7 +177,7 @@ bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
             {
                 line = stream.readLine();
                 currentSizeRead += line.size();
-                setProgress((currentSizeRead*100)/fileSize);
+                setProgress(int(currentSizeRead*100)/fileSize);
                 QStringList values = line.split(" ", QString::SkipEmptyParts);
                 bool ok = readPoint(values, point);
 
@@ -187,8 +187,7 @@ bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
 
                 readColor(values, color);
                 pointCloud->addPoint(point);
-                CT_Color &c = colorCloud->addColor();
-                c = color;
+                colorSetter.setLastValue(color);
 
                 /* update bounding box */
                 if (point.x() < xmin) {xmin = point.x();}
@@ -201,24 +200,22 @@ bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
 
             f.close();
 
-            if (colorCloud->size() > 0)
+            if(pointCloud->size() != 0)
             {
                 CT_NMPCIR pcir = PS_REPOSITORY->registerUndefinedSizePointCloud(pointCloud);
 
                 CT_Scene *scene = new CT_Scene(pcir);
                 scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
                 group->addSingularItem(m_hOutScene, scene);
-
-                Colors* colors = new Colors(pcir, colorCloud);
-                group->addSingularItem(m_hOutColors, colors);
+                group->addSingularItem(m_hOutColors, m_hOutColors.createAttributeInstance(pcir));
 
                 return true;
             }
             else
             {
                 delete pointCloud;
-                delete colorCloud;
             }
+
         } else {
             PS_LOG->addMessage(LogInterface::error, LogInterface::reader, QString(tr("Le fichier %1 n'est pas accessible.")).arg(filepath()));
         }

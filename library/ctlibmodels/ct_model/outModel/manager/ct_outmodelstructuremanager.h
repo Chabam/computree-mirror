@@ -107,7 +107,7 @@ public:
                    const QString& shortDescription = QString{""}) {
         // check, at compilation time, if the handle contains an output model
         internalAddResult(handleResult,
-                          std::integral_constant<bool, IsAnOutputModel<HandleOutResult::ModelType>::Is>(),
+                          std::integral_constant<bool, IsAnOutputModel<HandleOutResult::ModelType>::value>(),
                           resultName,
                           displayableName,
                           shortDescription);
@@ -123,7 +123,7 @@ public:
     template<class HandleInResultCopy>
     void addResultCopy(HandleInResultCopy& handleInResultCopy) {
         // check, at compilation time, if the handle contains an input result model that produce copies
-        internalAddResultCopy<HandleInResultCopy>(handleInResultCopy, std::integral_constant<bool, IsAResultModelCopy<HandleInResultCopy::ModelType>::Is>());
+        internalAddResultCopy<HandleInResultCopy>(handleInResultCopy, std::integral_constant<bool, IsAResultModelCopy<HandleInResultCopy::ModelType>::value>());
     }
 
     /**
@@ -142,7 +142,7 @@ public:
                       const QString& detailledDescription = QString{""}) {
         internalSetRootGroup(handleResult,
                              rootGroupHandle,
-                             std::integral_constant<bool, IsAnOutputModel<HandleOutGroup::ModelType>::Is>(),
+                             std::integral_constant<bool, IsAnOutputModel<HandleOutGroup::ModelType>::value>(),
                              displayableName,
                              shortDescription,
                              detailledDescription);
@@ -166,7 +166,7 @@ public:
 
         internalAddGroup(parentGroup,
                          groupHandle,
-                         std::integral_constant<bool, IsAnOutputModel<HandleOutGroup::ModelType>::Is>(),
+                         std::integral_constant<bool, IsAnOutputModel<HandleOutGroup::ModelType>::value>(),
                          displayableName,
                          shortDescription,
                          detailledDescription,
@@ -197,7 +197,7 @@ public:
                  typename HandleOutItem::ItemType* prototype = nullptr) {
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, IsAnOutputModel<HandleOutItem::ModelType>::Is>(),
+                        std::integral_constant<bool, IsAnOutputModel<HandleOutItem::ModelType>::value>(),
                         displayableName,
                         shortDescription,
                         detailledDescription,
@@ -231,12 +231,84 @@ public:
 
         internalAddItemAttribute(parentItem,
                                  itemAttributeHandle,
-                                 std::integral_constant<bool, IsAnOutputModel<HandleOutItemAttribute::ModelType>::Is>(),
+                                 std::integral_constant<bool, IsAnOutputModel<HandleOutItemAttribute::ModelType>::value>(),
                                  category,
                                  displayableName,
                                  shortDescription,
                                  detailledDescription,
                                  prototype);
+    }
+
+    /**
+     * @brief Add a point attribute to a group model
+     * @param parentGroup : the handle of an input or an output group model to use to add the new group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleGroupParent, class HandleOutPointAttribute>
+    void addPointAttribute(const HandleGroupParent& parentGroup,
+                           HandleOutPointAttribute& itemHandle,
+                           const QString& displayableName = QString{"Out Item"},
+                           const QString& shortDescription = QString{""},
+                           const QString& detailledDescription = QString{""},
+                           typename HandleOutPointAttribute::ItemType* prototype = nullptr) {
+        internalAddItem(parentGroup,
+                        itemHandle,
+                        std::integral_constant<bool, SFINAE_And_<IsAnOutputModel<HandleOutPointAttribute::ModelType>, HasApplicableToPoint<HandleOutPointAttribute>>::value>(),
+                        displayableName,
+                        shortDescription,
+                        detailledDescription,
+                        prototype);
+    }
+
+    /**
+     * @brief Add an edge attribute to a group model
+     * @param parentGroup : the handle of an input or an output group model to use to add the new group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleGroupParent, class HandleOutEdgeAttribute>
+    void addEdgeAttribute(const HandleGroupParent& parentGroup,
+                          HandleOutEdgeAttribute& itemHandle,
+                          const QString& displayableName = QString{"Out Item"},
+                          const QString& shortDescription = QString{""},
+                          const QString& detailledDescription = QString{""},
+                          typename HandleOutEdgeAttribute::ItemType* prototype = nullptr) {
+        internalAddItem(parentGroup,
+                        itemHandle,
+                        std::integral_constant<bool, SFINAE_And_<IsAnOutputModel<HandleOutEdgeAttribute::ModelType>, HasApplicableToEdge<HandleOutEdgeAttribute>>::value>(),
+                        displayableName,
+                        shortDescription,
+                        detailledDescription,
+                        prototype);
+    }
+
+    /**
+     * @brief Add a face attribute to a group model
+     * @param parentGroup : the handle of an input or an output group model to use to add the new group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleGroupParent, class HandleOutFaceAttribute>
+    void addFaceAttribute(const HandleGroupParent& parentGroup,
+                          HandleOutFaceAttribute& itemHandle,
+                          const QString& displayableName = QString{"Out Item"},
+                          const QString& shortDescription = QString{""},
+                          const QString& detailledDescription = QString{""},
+                          typename HandleOutFaceAttribute::ItemType* prototype = nullptr) {
+        internalAddItem(parentGroup,
+                        itemHandle,
+                        std::integral_constant<bool, SFINAE_And_<IsAnOutputModel<HandleOutFaceAttribute::ModelType>, HasApplicableToFace<HandleOutFaceAttribute>>::value>(),
+                        displayableName,
+                        shortDescription,
+                        detailledDescription,
+                        prototype);
     }
 
     /**
@@ -363,7 +435,7 @@ private:
                            std::false_type,
                            ConstructorArgs&& ...) {
         internalAddResultIfCopy(handleResult,
-                                std::integral_constant<bool, IsAResultModelCopy<HandleOutResult::ModelType>::Is>());
+                                std::integral_constant<bool, IsAResultModelCopy<HandleOutResult::ModelType>::value>());
     }
 
     template<class HandleOutResult>
@@ -437,7 +509,7 @@ private:
                                 ConstructorArgs&& ...constructorArgs) {
         internalSetRootGroupToCopy(handleResult,
                                    rootGroupHandle,
-                                   std::integral_constant<bool, IsAResultModelCopy<HandleResult::ModelType>::Is>(),
+                                   std::integral_constant<bool, IsAResultModelCopy<HandleResult::ModelType>::value>(),
                                    std::forward<ConstructorArgs>(constructorArgs)...);
     }
 
@@ -465,7 +537,7 @@ private:
                               ConstructorArgs&& ...constructorArgs) {
         internalSetRootGroupTo(handleResult,
                                rootGroupHandle,
-                               std::integral_constant<bool, IsAnInputModel<HandleResult::ModelType>::Is>(),
+                               std::integral_constant<bool, IsAnInputModel<HandleResult::ModelType>::value>(),
                                std::forward<ConstructorArgs>(constructorArgs)...);
     }
 
@@ -486,7 +558,7 @@ private:
                           ConstructorArgs&& ...constructorArgs) {
         internalAddGroupTo(parentGroup,
                            groupHandle,
-                           std::integral_constant<bool, IsAnInputModel<HandleGroupParent::ModelType>::Is>(),
+                           std::integral_constant<bool, IsAnInputModel<HandleGroupParent::ModelType>::value>(),
                            std::forward<ConstructorArgs>(constructorArgs)...);
     }
 
@@ -508,7 +580,7 @@ private:
 
         internalAddItemTo(parentGroup,
                           itemHandle,
-                          std::integral_constant<bool, IsAnInputModel<HandleGroupParent::ModelType>::Is>(),
+                          std::integral_constant<bool, IsAnInputModel<HandleGroupParent::ModelType>::value>(),
                           std::forward<ConstructorArgs>(constructorArgs)...);
     }
 
@@ -531,7 +603,7 @@ private:
 
         internalAddItemAttributeTo(parentItem,
                                    itemAttributeHandle,
-                                   std::integral_constant<bool, IsAnInputModel<HandleItemParent::ModelType>::Is>(),
+                                   std::integral_constant<bool, IsAnInputModel<HandleItemParent::ModelType>::value>(),
                                    std::forward<ConstructorArgs>(constructorArgs)...);
     }
 

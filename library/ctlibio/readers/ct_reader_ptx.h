@@ -4,8 +4,6 @@
 #include "ct_reader/abstract/ct_abstractreader.h"
 #include "ct_itemdrawable/ct_scanner.h"
 #include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
 #include "ct_itemdrawable/ct_transformationmatrix.h"
 
 #include "ctlibio/ctlibio_global.h"
@@ -50,8 +48,8 @@ private:
     bool    m_applyTransformation;
 
     CT_HandleOutSingularItem<CT_Scene>                                      m_outScene;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<double>>    m_outIntensity;
-    CT_HandleOutSingularItem<CT_PointsAttributesColor>                      m_outRGB;
+    CT_HandleOutPointScalarWithDenseManager<double>                         m_outIntensity;
+    CT_HandleOutPointColorWithDenseManager                                  m_outRGB;
     CT_HandleOutSingularItem<CT_TransformationMatrix>                       m_outMatrix;
     CT_HandleOutSingularItem<CT_Scanner>                                    m_outScanner;
 

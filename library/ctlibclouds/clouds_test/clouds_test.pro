@@ -31,7 +31,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        tst_testclouds.cpp 
+        tst_testclouds.cpp
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 

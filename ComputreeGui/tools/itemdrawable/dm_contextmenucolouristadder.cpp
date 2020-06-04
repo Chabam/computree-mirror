@@ -327,7 +327,12 @@ void DM_ContextMenuColouristAdder::colorByPointsCoordinate()
 
     GGraphicsView *view = graphics.first();
 
-    AMKgl::GlobalColorCloud *colorCloud = graphicsDoc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloud();
+    PermanentItemScene* scene = graphicsDoc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
+
+    if(scene == nullptr)
+        return;
+
+    AMKgl::GlobalColorCloud *colorCloud = scene->getPointCloudAttributesProvider()->createOrGetColorCloud();
 
     QList<CT_AbstractItemDrawable*> items = m_itemAccess.getItemDrawableToColorize();
     QListIterator<CT_AbstractItemDrawable*> it(items);

@@ -89,6 +89,81 @@ public:
     }
 
     /**
+     * @brief Add a point attribute to a group
+     * @param itemHandle : the handle of the input item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleInGroupParent, class HandleInPointAttribute>
+    void addPointAttributeToGroup(const HandleInGroupParent& groupHandle,
+                                  HandleInPointAttribute& itemHandle,
+                                  const QString& displayableName = QString(),
+                                  const QString& shortDescription = QString(),
+                                  const QString& detailledDescription = QString()) {
+        m_manager.addPointAttribute(groupHandle,
+                                    itemHandle,
+                                    displayableName,
+                                    shortDescription,
+                                    detailledDescription);
+
+        if(m_hAbstractInItem == nullptr) {
+            m_hAbstractInGroup = &const_cast<HandleInGroupParent&>(groupHandle);
+            m_hAbstractInItem = &itemHandle;
+        }
+    }
+
+    /**
+     * @brief Add a point attribute to a group
+     * @param itemHandle : the handle of the input item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleInGroupParent, class HandleInEdgeAttribute>
+    void addEdgeAttributeToGroup(const HandleInGroupParent& groupHandle,
+                                  HandleInEdgeAttribute& itemHandle,
+                                  const QString& displayableName = QString(),
+                                  const QString& shortDescription = QString(),
+                                  const QString& detailledDescription = QString()) {
+        m_manager.addEdgeAttribute(groupHandle,
+                                   itemHandle,
+                                   displayableName,
+                                   shortDescription,
+                                   detailledDescription);
+
+        if(m_hAbstractInItem == nullptr) {
+            m_hAbstractInGroup = &const_cast<HandleInGroupParent&>(groupHandle);
+            m_hAbstractInItem = &itemHandle;
+        }
+    }
+
+    /**
+     * @brief Add a point attribute to a group
+     * @param itemHandle : the handle of the input item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleInGroupParent, class HandleInFaceAttribute>
+    void addFaceAttributeToGroup(const HandleInGroupParent& groupHandle,
+                                 HandleInFaceAttribute& itemHandle,
+                                 const QString& displayableName = QString(),
+                                 const QString& shortDescription = QString(),
+                                 const QString& detailledDescription = QString()) {
+        m_manager.addFaceAttribute(groupHandle,
+                                   itemHandle,
+                                   displayableName,
+                                   shortDescription,
+                                   detailledDescription);
+
+        if(m_hAbstractInItem == nullptr) {
+            m_hAbstractInGroup = &const_cast<HandleInGroupParent&>(groupHandle);
+            m_hAbstractInItem = &itemHandle;
+        }
+    }
+
+    /**
      * @brief Add an item attribute to an item
      * @param parentItem : the handle of the input item model to use to add the new item attribute
      * @param itemAttributeHandle : the handle of the input item attribute model to use to create the new item attribute model and access it later

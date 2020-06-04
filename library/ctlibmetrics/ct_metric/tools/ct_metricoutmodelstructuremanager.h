@@ -40,7 +40,7 @@ public:
     {
         return internalCreateFromHandle(manager,
                                         hParentItem,
-                                        std::integral_constant<bool, IsAnOutputModel<HandleItem::ModelType>::Is>());
+                                        std::integral_constant<bool, IsAnOutputModel<HandleItem::ModelType>::value>());
     }
 
     template<class HandleInItem>

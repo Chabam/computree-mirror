@@ -23,8 +23,8 @@ public:
     }
 
     template<typename... Args>
-    GroupT* createInstance(Args... args) {
-        return new GroupT(args...);
+    GroupT* createInstance(Args&&... args) {
+        return new GroupT(std::forward<Args>(args)...);
     }
 };
 

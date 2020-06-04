@@ -1,6 +1,6 @@
 #include "dm_abstractattributesnormal.h"
 
-DM_AbstractAttributesNormal::DM_AbstractAttributesNormal() : DM_AbstractAttributes()
+DM_AbstractAttributesNormal::DM_AbstractAttributesNormal(bool local) : DM_AbstractAttributes(local)
 {
     m_syncWith = CT_Repository::SyncWithPointCloud;
 }

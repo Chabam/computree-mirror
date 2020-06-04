@@ -79,7 +79,7 @@ bool CT_LASPieceByPiecePrivateExporter::initializeHeader(const quint8 format, co
         for(int i=0; i<15; ++i)
             mHeader->m_numberOfPointsByReturn[i] = 0;
 
-        mExporter.mToolsFormat->initReturnNumber(mExporter.mAllLasAttributes);
+        mExporter.mToolsFormat->initReturnNumber(mExporter.mLasAttributeByType);
 
         return true;
     }
@@ -87,7 +87,9 @@ bool CT_LASPieceByPiecePrivateExporter::initializeHeader(const quint8 format, co
     return false;
 }
 
-void CT_LASPieceByPiecePrivateExporter::computePointForHeader(const size_t& gi, const CT_Point& p)
+void CT_LASPieceByPiecePrivateExporter::computePointForHeader(const CT_AbstractPointAttributesScalar* returnNumberValues,
+                                                              const size_t& gi,
+                                                              const CT_Point& p)
 {
     if(mPointFilter(gi, p))
     {
@@ -112,12 +114,10 @@ void CT_LASPieceByPiecePrivateExporter::computePointForHeader(const size_t& gi, 
         if(p(2) < mHeader->m_minCoordinates(2))
             mHeader->m_minCoordinates(2) = p(2);
 
-        const CT_LasPointInfo& info = mExporter.mToolsFormat->infoOfPoint(gi);
-
-        if(info.m_rn.first != nullptr)
+        if((returnNumberValues != nullptr) && (returnNumberValues->hasBeenSet(gi)))
         {
             mReturnNumberSet = true;
-            const int indexInTab = qMax(0, int(info.m_rn.first->dValueAt(info.m_rn.second))-1);
+            const int indexInTab = qMax(0, int(returnNumberValues->scalarAsDoubleAt(gi))-1);
 
             quint64 &val = mHeader->m_numberOfPointsByReturn[indexInTab];
             ++val;
@@ -216,7 +216,7 @@ bool CT_LASPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints()
         }
         else
         {
-            mExporter.mToolsFormat->initWrite(mExporter.mAllLasAttributes, mExporter.mColorsAttribute);
+            mExporter.mToolsFormat->initWrite(mExporter.mLasAttributeByType, mExporter.mColorAttribute);
 
             // write points
             const double progressValue = 100.0 / double(mPointsToWrite.size());

@@ -7,7 +7,7 @@
 class DM_AbstractAttributesNormal : public DM_AbstractAttributes
 {
 public:
-    DM_AbstractAttributesNormal();
+    DM_AbstractAttributesNormal(bool local);
 
     void setSyncWithCloud(CT_Repository::SyncCloudWith syncWith);
     CT_Repository::SyncCloudWith syncWithCloud() const;

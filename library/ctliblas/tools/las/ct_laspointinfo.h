@@ -26,6 +26,8 @@ public:
     bool setAttribute(CT_LasDefine::LASPointAttributesType type, const CT_AbstractPointAttributesScalar *scalar, const size_t &index);
     void setColorAttribute(const CT_PointsAttributesColor *color, const size_t &index);
 
+
+private:
     // all attributes (in the same order that in CT_LasDefine::LASPointAttributesType)
     QPair<const CT_AbstractPointAttributesScalar*, size_t>  m_i;
     QPair<const CT_AbstractPointAttributesScalar*, size_t>  m_rn;

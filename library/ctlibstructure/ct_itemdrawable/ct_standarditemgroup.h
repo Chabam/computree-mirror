@@ -376,7 +376,7 @@ public:
         Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
-        return internalSingularItems(itemHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
+        return internalSingularItems(itemHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::value>());
     }
 
     /**
@@ -416,7 +416,7 @@ public:
         Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
-        return internalSingularItem(itemHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
+        return internalSingularItem(itemHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::value>());
     }
 
     /**
@@ -544,7 +544,7 @@ public:
         Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        return internalGroups(groupHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
+        return internalGroups(groupHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::value>());
     }
 
     /**
@@ -599,7 +599,7 @@ public:
         Q_ASSERT(model() != nullptr);
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
-        return internalGroup(groupHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::Is>());
+        return internalGroup(groupHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::value>());
     }
 
     /**

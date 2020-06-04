@@ -13,16 +13,20 @@ template<typename Type>
 class DM_AttributesBuildingCollectionT
 {
 public:
+    using Visitor = std::function<bool (const CT_OutAbstractModel*, Type*)>;
+
     DM_AttributesBuildingCollectionT();
 
-    bool buildFrom(CT_VirtualAbstractStep *step);
+    bool buildFrom(CT_VirtualAbstractStep* step);
+
+    bool visitFrom(CT_VirtualAbstractStep* step, Visitor v) const;
 
     const QList<Type*>& attributesCollection() const;
 
 private:
     QList<Type*>   m_collection;
 
-    void recursiveBuildAttributesFromStep(const CT_VirtualAbstractStep* step);
+    bool recursiveVisitAttributesFromStep(const CT_VirtualAbstractStep* step, const Visitor& v) const;
 };
 
 #include "tools/attributes/dm_attributesbuildingcollectiont.hpp"

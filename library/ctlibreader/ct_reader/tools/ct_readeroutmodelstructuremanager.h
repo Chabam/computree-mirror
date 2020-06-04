@@ -39,7 +39,7 @@ public:
     {
         return internalCreateFromHandle(manager,
                                         hParentGroup,
-                                        std::integral_constant<bool, IsAnOutputModel<HandleGroup::ModelType>::Is>());
+                                        std::integral_constant<bool, IsAnOutputModel<HandleGroup::ModelType>::value>());
     }
 
     template<class HandleInGroup>
@@ -120,7 +120,6 @@ public:
 
     /**
      * @brief Add an item to the root group
-     * @param parentGroup : the handle of an output group model to use to add the new group
      * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
      * @param displayableName : the displayable that must be set to the new item model
      * @param shortDescription : the short description that must be set to the new item model
@@ -141,6 +140,108 @@ public:
                           prototype);
             return;
         }
+
+        m_manager.addItemWithInputTool(m_inParentModel,
+                                       m_inTool,
+                                       itemHandle,
+                                       displayableName,
+                                       shortDescription,
+                                       detailledDescription,
+                                       prototype);
+    }
+
+    /**
+     * @brief Add a point attribute to the root group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleOutPointAttribute>
+    void addPointAttribute(HandleOutPointAttribute& pointAttributeHandle,
+                           const QString& displayableName = QString{"Out Item"},
+                           const QString& shortDescription = QString{""},
+                           const QString& detailledDescription = QString{""},
+                           typename HandleOutPointAttribute::ItemType* prototype = nullptr) {
+        if(m_hOutGroup != nullptr) {
+            this->addPointAttribute(*m_hOutGroup,
+                                    pointAttributeHandle,
+                                    displayableName,
+                                    shortDescription,
+                                    detailledDescription,
+                                    prototype);
+            return;
+        }
+
+        static_assert(HasApplicableToPoint<HandleOutPointAttribute>::value, "addPointAttribute is only compatible with handle that is applicable to point");
+
+        m_manager.addItemWithInputTool(m_inParentModel,
+                                       m_inTool,
+                                       pointAttributeHandle,
+                                       displayableName,
+                                       shortDescription,
+                                       detailledDescription,
+                                       prototype);
+    }
+
+    /**
+     * @brief Add an edge attribute to the root group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleOutEdgeAttribute>
+    void addEdgeAttribute(HandleOutEdgeAttribute& itemHandle,
+                          const QString& displayableName = QString{"Out Item"},
+                          const QString& shortDescription = QString{""},
+                          const QString& detailledDescription = QString{""},
+                          typename HandleOutEdgeAttribute::ItemType* prototype = nullptr) {
+        if(m_hOutGroup != nullptr) {
+            this->addEdgeAttribute(*m_hOutGroup,
+                                    itemHandle,
+                                    displayableName,
+                                    shortDescription,
+                                    detailledDescription,
+                                    prototype);
+            return;
+        }
+
+        static_assert(HasApplicableToEdge<HandleOutEdgeAttribute>::value, "addEdgeAttribute is only compatible with handle that is applicable to edge");
+
+        m_manager.addItemWithInputTool(m_inParentModel,
+                                       m_inTool,
+                                       itemHandle,
+                                       displayableName,
+                                       shortDescription,
+                                       detailledDescription,
+                                       prototype);
+    }
+
+    /**
+     * @brief Add a face attributeto the root group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleOutFaceAttribute>
+    void addFaceAttribute(HandleOutFaceAttribute& itemHandle,
+                          const QString& displayableName = QString{"Out Item"},
+                          const QString& shortDescription = QString{""},
+                          const QString& detailledDescription = QString{""},
+                          typename HandleOutFaceAttribute::ItemType* prototype = nullptr) {
+        if(m_hOutGroup != nullptr) {
+            this->addFaceAttribute(*m_hOutGroup,
+                                    itemHandle,
+                                    displayableName,
+                                    shortDescription,
+                                    detailledDescription,
+                                    prototype);
+            return;
+        }
+
+        static_assert(HasApplicableToFace<HandleOutFaceAttribute>::value, "addFaceAttribute is only compatible with handle that is applicable to face");
 
         m_manager.addItemWithInputTool(m_inParentModel,
                                        m_inTool,
@@ -195,6 +296,75 @@ public:
         m_manager.addItemAttribute(parentItem,
                                    itemAttributeHandle,
                                    category,
+                                   displayableName,
+                                   shortDescription,
+                                   detailledDescription,
+                                   prototype);
+    }
+
+    /**
+     * @brief Add a point attribute to a group model
+     * @param parentGroup : the handle of an input or an output group model to use to add the new group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleGroupParent, class HandleOutPointAttribute>
+    void addPointAttribute(const HandleGroupParent& parentGroup,
+                           HandleOutPointAttribute& itemHandle,
+                           const QString& displayableName = QString{"Out Item"},
+                           const QString& shortDescription = QString{""},
+                           const QString& detailledDescription = QString{""},
+                           typename HandleOutPointAttribute::ItemType* prototype = nullptr) {
+        m_manager.addPointAttribute(parentGroup,
+                                    itemHandle,
+                                    displayableName,
+                                    shortDescription,
+                                    detailledDescription,
+                                    prototype);
+    }
+
+    /**
+     * @brief Add an edge attribute to a group model
+     * @param parentGroup : the handle of an input or an output group model to use to add the new group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleGroupParent, class HandleOutEdgeAttribute>
+    void addEdgeAttribute(const HandleGroupParent& parentGroup,
+                          HandleOutEdgeAttribute& itemHandle,
+                          const QString& displayableName = QString{"Out Item"},
+                          const QString& shortDescription = QString{""},
+                          const QString& detailledDescription = QString{""},
+                          typename HandleOutEdgeAttribute::ItemType* prototype = nullptr) {
+        m_manager.addEdgeAttribute(parentGroup,
+                                   itemHandle,
+                                   displayableName,
+                                   shortDescription,
+                                   detailledDescription,
+                                   prototype);
+    }
+
+    /**
+     * @brief Add a face attribute to a group model
+     * @param parentGroup : the handle of an input or an output group model to use to add the new group
+     * @param itemHandle : the handle of the output item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleGroupParent, class HandleOutFaceAttribute>
+    void addFaceAttribute(const HandleGroupParent& parentGroup,
+                          HandleOutFaceAttribute& itemHandle,
+                          const QString& displayableName = QString{"Out Item"},
+                          const QString& shortDescription = QString{""},
+                          const QString& detailledDescription = QString{""},
+                          typename HandleOutFaceAttribute::ItemType* prototype = nullptr) {
+        m_manager.addFaceAttribute(parentGroup,
+                                   itemHandle,
                                    displayableName,
                                    shortDescription,
                                    detailledDescription,

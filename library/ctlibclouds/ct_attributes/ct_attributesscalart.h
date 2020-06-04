@@ -1,90 +1,149 @@
 #ifndef CT_ATTRIBUTESSCALART_H
 #define CT_ATTRIBUTESSCALART_H
 
-#include "ct_attributes/abstract/ct_abstractattributesscalar.h"
-#include "ct_cloud/ct_standardcloudstdvectort.h"
+#include "ct_attributes/managers/abstract/ct_abstractxattributemanager.h"
+#include "ct_attributes/managers/ct_scalarminmaxmanager.h"
+#include "ct_cloudindex/abstract/ct_abstractcloudindex.h"
+#include "ct_cloudindex/registered/abstract/ct_abstractcloudindexregistered.h"
 
 /**
  *  Attributes of scalar type (int, float, double, etc...)
  */
-template<typename SCALAR>
-class CT_AttributesScalarT : public CT_AbstractAttributesScalar
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR = SCALAR>
+class CT_AttributesScalarT : public InheritFrom
 {
 public:
     /**
-     * @brief Create a collection of SCALAR without valid min and max value.
+     * @brief The visitor receive the global index of the scalar and the scalar as double. The visitor
+     *        must returns true if the visit must continue or false to abort it.
      */
-    CT_AttributesScalarT(const size_t& size = 0);
+    using DVisitor = std::function<bool (const size_t& /*globalIndex*/, double /*value*/)>;
 
     /**
-     * @brief Create a collection of SCALAR and compute the min and max values from the specified collection.
+     * @brief The visitor receive the global index of the attribute and the attribute (SCALAR). The visitor
+     *        must returns true if the visit must continue or false to abort it.
      */
-    CT_AttributesScalarT(CT_StandardCloudStdVectorT<SCALAR>* collection);
+    using SVisitor = std::function<bool (const size_t& /*globalIndex*/, SCALAR /*value*/)>;
+
+    CT_AttributesScalarT();
 
     /**
      * @brief Create a collection of SCALAR and use the specified min and max value.
      */
-    CT_AttributesScalarT(CT_StandardCloudStdVectorT<SCALAR>* collection,
+    CT_AttributesScalarT(CT_CIR cir,
+                         CT_AbstractXAttributeManager<MANAGER_SCALAR>& manager,
                          const SCALAR& min,
                          const SCALAR& max);
+
+    /**
+     * @brief Create a collection of SCALAR and compute the local min and max value.
+     */
+    CT_AttributesScalarT(CT_CIR cir,
+                         CT_AbstractXAttributeManager<MANAGER_SCALAR>& manager);
+    ~CT_AttributesScalarT();
 
     /**
      * @brief Copy constructor.
      *
      *        What is copied :
-     *          - Collection is copied (call "copy()" method) if not nullptr
+     *          - Attributes manager pointer
      *          - Min and max value are copied
      *
      *        What is initialized differently :
      */
-    CT_AttributesScalarT(const CT_AttributesScalarT<SCALAR>& other);
+    CT_AttributesScalarT(const CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>& other) = default;
+    CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>& operator=(const CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>& other) = default;
 
-    ~CT_AttributesScalarT();
+    // GLOBAL //
+    double scalarAsDoubleAt(const size_t& globalIndex) const;
 
-    double dMin() const override;
-    double dMax() const override;
+    bool hasBeenSet(const size_t& globalIndex) const;
 
-    double dValueAt(const size_t &index) const override;
+    size_t numberOfSetValues() const;
 
-    SCALAR min() const;
-    SCALAR max() const;
+    bool visitValuesAsDouble(DVisitor v) const;
 
-    void setMin(const SCALAR &min);
-    void setMax(const SCALAR &max);
+    bool hasValues() const;
 
-    const SCALAR& valueAt(const size_t &index) const;
-    void setValueAt(const size_t &index, const SCALAR& value);
+    double minScalarAsDouble() const;
 
-    size_t attributesSize() const override;
+    double maxScalarAsDouble() const;
+
+    /**
+     * @brief Returns the minimum scalar for the total scalar cloud
+     */
+    SCALAR minScalar() const;
+
+    /**
+     * @brief Returns the maximum scalar for the total scalar cloud
+     */
+    SCALAR maxScalar() const;
+
+    /**
+     * @brief Visit all defined scalars of the total scalar cloud
+     */
+    bool visitValues(SVisitor v) const;
+
+    // LOCAL //
+    double scalarAsDoubleAtLocalIndex(const size_t& localIndex) const;
+
+    size_t numberOfSetLocalValues() const;
+
+    bool hasLocalValues() const;
+
+    bool visitLocalValuesAsDouble(DVisitor v) const;
+
+    double minLocalScalarAsDouble() const;
+
+    double maxLocalScalarAsDouble() const;
+
+    /**
+     * @brief Returns the minimum scalar for the local scalar cloud
+     */
+    SCALAR minLocalScalar() const;
+
+    /**
+     * @brief Returns the maximum scalar for the local scalar cloud
+     */
+    SCALAR maxLocalScalar() const;
+
+    /**
+     * @brief Modify the local min and max value
+     */
+    void setLocalMinMax(const SCALAR& min, const SCALAR& max);
+
+    /**
+     * @brief Visit all defined scalars of the total scalar cloud
+     */
+    bool visitLocalValues(SVisitor v) const;
+
+    /**
+     * @brief Returns the manager of the total scalar cloud
+     */
+    CT_AbstractXAttributeManager<MANAGER_SCALAR>* scalarsManager() const;
 
 private:
-    SCALAR                              m_min;
-    SCALAR                              m_max;
-    CT_StandardCloudStdVectorT<SCALAR>* m_collection;
+    CT_CIR                                          m_cir;
+    SCALAR                                          m_min;
+    SCALAR                                          m_max;
+    CT_AbstractXAttributeManager<MANAGER_SCALAR>*   m_manager;
 
 protected:
-
-    void initMinMax();
-
-    void internalInitMinMax(std::true_type)
+    virtual SCALAR convertScalarOfManagerToScalar(const MANAGER_SCALAR& scalar) const
     {
-        m_min = std::numeric_limits<SCALAR>::max();
-        m_max = -std::numeric_limits<SCALAR>::max();
+        return internalConvertScalarOfManagerToScalar(scalar, std::integral_constant<bool, std::is_convertible<MANAGER_SCALAR, SCALAR>::value>());
     }
 
-    void internalInitMinMax(std::false_type)
+    SCALAR internalConvertScalarOfManagerToScalar(const MANAGER_SCALAR& scalar, std::true_type) const
     {
-        m_min = std::numeric_limits<SCALAR>::max();
-        m_max = std::numeric_limits<SCALAR>::min();
+        return scalar;
     }
 
-    CT_StandardCloudStdVectorT<SCALAR>* collection() const { return m_collection; }
-
-    static bool staticCompareScalar(const SCALAR &a, const SCALAR &b);
+    SCALAR internalConvertScalarOfManagerToScalar(const MANAGER_SCALAR&, std::false_type) const
+    {
+        return SCALAR();
+    }
 };
-
-template<>
-CTLIBCLOUDS_EXPORT void CT_AttributesScalarT<bool>::initMinMax();
 
 #include "ct_attributes/ct_attributesscalart.hpp"
 

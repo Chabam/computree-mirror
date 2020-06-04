@@ -6,9 +6,6 @@
 #include "ctlibio/ctlibio_global.h"
 
 #include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
-#include "ct_itemdrawable/ct_pointsattributesnormal.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
 
 #include "ctlibio/readers/tools/ply/plyreadconfiguration.h"
 #include "ctlibio/readers/tools/ply/iplyreaderlistener.h"
@@ -69,13 +66,11 @@ public:
 private:
     PlyReadConfiguration    m_config;
 
+    CT_HandleOutSingularItem<CT_Scene>                          m_outScene;
 
-    CT_HandleOutSingularItem<CT_Scene>                                             m_outScene;
-
-    // TODOV6 - Erreur de compilation sur les QVector<handle...>
-    QVector<CT_HandleOutSingularItem<CT_PointsAttributesColor>* >                   m_outColorVector;
-    QVector<CT_HandleOutSingularItem<CT_PointsAttributesNormal>* >                  m_outNormalVector;
-    QVector<CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> >* > m_outScalarVector;
+    QVector<CT_HandleOutPointColorWithDenseManager* >           m_outColorVector;
+    QVector<CT_HandleOutPointNormalWithDenseManager* >          m_outNormalVector;
+    QVector<CT_HandleOutPointScalarWithDenseManager<float>* >   m_outScalarVector;
 
 protected:
 

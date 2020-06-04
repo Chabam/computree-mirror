@@ -9,6 +9,9 @@
 
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 
+#include "ct_colorcloud/ct_colorcloudstdvector.h"
+#include "ct_normalcloud/ct_normalcloudstdvector.h"
+
 #include "ct_log/ct_logmanager.h"
 
 #define DEF_Scene "sce"
@@ -141,10 +144,10 @@ bool CT_Reader_PLY::restoreSettings(SettingsReaderInterface &reader)
     bool ok;
     PlyReadConfiguration config;
 
-    readNewConfiguration("elementIndex", m_config.vertex.elementIndex);
-    readNewConfiguration("xPropertyIndex", m_config.vertex.xPropertyIndex);
-    readNewConfiguration("yPropertyIndex", m_config.vertex.yPropertyIndex);
-    readNewConfiguration("zPropertyIndex", m_config.vertex.zPropertyIndex);
+    readNewConfiguration("elementIndex", config.vertex.elementIndex);
+    readNewConfiguration("xPropertyIndex", config.vertex.xPropertyIndex);
+    readNewConfiguration("yPropertyIndex", config.vertex.yPropertyIndex);
+    readNewConfiguration("zPropertyIndex", config.vertex.zPropertyIndex);
 
     const int nColor = reader.parameterCount(this, "Color");
 
@@ -218,39 +221,39 @@ void CT_Reader_PLY::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
     qDeleteAll(m_outNormalVector);
     qDeleteAll(m_outScalarVector);
 
-
-    // TODOV6 - Erreur de compilation sur les QVector<handle...>
     m_outColorVector.resize(size);
 
     for(int i = 0 ; i < size ; ++i)
     {
-        // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        m_outColorVector[i] = new CT_HandleOutSingularItem<CT_PointsAttributesColor>();
+        m_outColorVector[i] = new CT_HandleOutPointColorWithDenseManager();
         manager.addItem(*m_outColorVector[i], tr("Color %1").arg(i+1));
     }
 
     size = m_config.normals.size();
-    // TODOV6 - Erreur de compilation sur les QVector<handle...>
     m_outNormalVector.resize(size);
 
     for(int i = 0 ; i < size ; ++i)
     {
-        // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        m_outNormalVector[i] = new CT_HandleOutSingularItem<CT_PointsAttributesNormal>();
+        m_outNormalVector[i] = new CT_HandleOutPointNormalWithDenseManager();
         manager.addItem(*m_outNormalVector[i], tr("Normal %1").arg(i+1));
     }
 
     size = m_config.scalars.size();
-    // TODOV6 - Erreur de compilation sur les QVector<handle...>
     m_outScalarVector.resize(size);
 
     for(int i = 0 ; i < size ; ++i)
     {
-        // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        m_outScalarVector[i] = new CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> >();
+        m_outScalarVector[i] = new CT_HandleOutPointScalarWithDenseManager<float>();
         manager.addItem(*m_outScalarVector[i], tr("Scalar %1").arg(i+1));
     }
 }
+
+typedef Ply_CT_GenericCloud_Wrapper<CT_DensePointColorManager, CT_Color> Ply_CT_ColorCloud_Wrapper;
+typedef Ply_CT_GenericCloud_Wrapper<CT_DensePointNormalManager, CT_Normal> Ply_CT_NormalCloud_Wrapper;
+
+// c++11
+template<typename ValueInCloud>
+using Ply_CT_ScalarCloud_Wrapper = Ply_CT_GenericCloud_Wrapper<CT_DensePointScalarManager<ValueInCloud>, ValueInCloud>;
 
 bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
 {
@@ -272,15 +275,39 @@ bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
 
     partReader.setListener(this);
 
-    Ply_CT_PointCloud_Wrapper wrapper;
+    QList<Ply_CT_ColorCloud_Wrapper*> colorWrappers;
+    QList<Ply_CT_NormalCloud_Wrapper*> normalWrappers;
+    QList<Ply_CT_ScalarCloud_Wrapper<float>*> scalarWrappers;
+
+    auto f = [&colorWrappers, &normalWrappers, &scalarWrappers](CT_NMPCIR pcir)
+    {
+        for(Ply_CT_ColorCloud_Wrapper* wrapper : colorWrappers)
+        {
+            wrapper->setPCIR(pcir);
+        }
+
+        for(Ply_CT_NormalCloud_Wrapper* wrapper : normalWrappers)
+        {
+            wrapper->setPCIR(pcir);
+        }
+
+        for(Ply_CT_ScalarCloud_Wrapper<float>* wrapper : scalarWrappers)
+        {
+            wrapper->setPCIR(pcir);
+        }
+    };
+
+    Ply_CT_PointCloud_Wrapper wrapper(f);
     partReader.setVertexPart(&wrapper,
                              m_config.vertex.elementIndex,
                              m_config.vertex.xPropertyIndex,
                              m_config.vertex.yPropertyIndex,
                              m_config.vertex.zPropertyIndex);
 
+    int i = 0;
     foreach(const PlyColorConfiguration& cc, m_config.colors) {
-        Ply_CT_ColorCloud_Wrapper* colorCloud = new Ply_CT_ColorCloud_Wrapper();
+        Ply_CT_ColorCloud_Wrapper* colorCloud = new Ply_CT_ColorCloud_Wrapper(*m_outColorVector[i++]);
+        colorWrappers.append(colorCloud);
 
         partReader.addVertexColorPart(colorCloud,
                                       cc.elementIndex,
@@ -292,8 +319,10 @@ bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
         colorsCloud.append(colorCloud);
     }
 
+    i = 0;
     foreach(const PlyNormalConfiguration& cc, m_config.normals) {
-        Ply_CT_NormalCloud_Wrapper* normalCloud = new Ply_CT_NormalCloud_Wrapper();
+        Ply_CT_NormalCloud_Wrapper* normalCloud = new Ply_CT_NormalCloud_Wrapper(*m_outNormalVector[i++]);
+        normalWrappers.append(normalCloud);
 
         partReader.addVertexNormalPart(normalCloud,
                                        cc.elementIndex,
@@ -305,8 +334,10 @@ bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
         normalsCloud.append(normalCloud);
     }
 
+    i = 0;
     foreach(const PlyScalarConfiguration& cc, m_config.scalars) {
-        Ply_CT_ScalarCloud_Wrapper<float>* scalarCloud = new Ply_CT_ScalarCloud_Wrapper<float>();
+        Ply_CT_ScalarCloud_Wrapper<float>* scalarCloud = new Ply_CT_ScalarCloud_Wrapper<float>(*m_outScalarVector[i++]);
+        scalarWrappers.append(scalarCloud);
 
         partReader.addVertexScalarPart(scalarCloud,
                                        cc.elementIndex,
@@ -323,26 +354,19 @@ bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
     // add the scene
     group->addSingularItem(m_outScene, scene);
 
-    int index = 0;
-    foreach(Ply_CT_ColorCloud_Wrapper* cc, colorsCloud)
+    for(CT_HandleOutPointColorWithDenseManager* outColorHandle : m_outColorVector)
     {
-
-        // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        group->addSingularItem(*m_outColorVector[index++], new CT_PointsAttributesColor(wrapper.pcir, cc->cloud));
+        group->addSingularItem(*outColorHandle, outColorHandle->createAttributeInstance(wrapper.pcir));
     }
 
-    index = 0;
-    foreach(Ply_CT_NormalCloud_Wrapper* nc, normalsCloud)
+    for(CT_HandleOutPointNormalWithDenseManager* outNormalHandle : m_outNormalVector)
     {
-        // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        group->addSingularItem(*m_outNormalVector[index++], new CT_PointsAttributesNormal(wrapper.pcir, nc->cloud));
+        group->addSingularItem(*outNormalHandle, outNormalHandle->createAttributeInstance(wrapper.pcir));
     }
 
-    index = 0;
-    foreach(Ply_CT_ScalarCloud_Wrapper<float>* sc, scalarsCloud)
+    for(CT_HandleOutPointScalarWithDenseManager<float>* outScalarHandle : m_outScalarVector)
     {
-        // TODOV6 - Erreur de compilation sur les QVector<handle...>
-        group->addSingularItem(*m_outScalarVector[index++], new CT_PointsAttributesScalarTemplated<float>(wrapper.pcir, sc->cloud));
+        group->addSingularItem(*outScalarHandle, outScalarHandle->createAttributeInstance(wrapper.pcir));
     }
 
     qDeleteAll(colorsCloud.begin(), colorsCloud.end());

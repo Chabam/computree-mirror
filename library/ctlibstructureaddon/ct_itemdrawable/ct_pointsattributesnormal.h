@@ -1,27 +1,27 @@
 #ifndef CT_POINTSATTRIBUTESNORMAL_H
 #define CT_POINTSATTRIBUTESNORMAL_H
 
-#include "ct_itemdrawable/tools/drawmanager/ct_standardpointsattributesnormaldrawmanager.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointsattributes.h"
 #include "ct_attributes/ct_attributesnormal.h"
-#include "ct_normalcloud/ct_normalcloudstdvector.h"
 
-class CTLIBSTRUCTUREADDON_EXPORT CT_PointsAttributesNormal : public CT_AbstractPointsAttributes, public CT_AttributesNormal
+class CTLIBSTRUCTUREADDON_EXPORT CT_PointsAttributesNormal : public CT_AttributesNormal<CT_AbstractPointsAttributes>
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_PointsAttributesNormal, CT_AbstractPointsAttributes, Normal point attributes)
 
-    using SuperClass1 = CT_AbstractPointsAttributes;
-    using SuperClass2 = CT_AttributesNormal;
+    using SuperClass = CT_AttributesNormal<CT_AbstractPointsAttributes>;
 
 public:
-    CT_PointsAttributesNormal();
+    CT_PointsAttributesNormal() = default;
 
-    CT_PointsAttributesNormal(CT_PCIR pcir);
-
+    template<class ManagerT>
     CT_PointsAttributesNormal(CT_PCIR pcir,
-                              CT_AbstractNormalCloud* nc,
-                              bool autoDeleteNormalCloud = true);
+                              ManagerT& manager) :
+        CT_PointsAttributesNormal(pcir,
+                                  manager,
+                                  std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, CT_Normal>>::value>())
+    {
+    }
 
     /**
      * @brief Copy constructor.
@@ -43,12 +43,30 @@ public:
      */
     CT_PointsAttributesNormal(const CT_PointsAttributesNormal& other) = default;
 
-    size_t attributesSize() const override { return CT_AttributesNormal::attributesSize(); }
+    size_t numberOfSetValues() const final { return SuperClass::numberOfSetValues(); }
 
     CT_ITEM_COPY_IMP(CT_PointsAttributesNormal)
 
 private:
-    static CT_StandardPointsAttributesNormalDrawManager PAN_DRAW_MANAGER;
+    CT_DEFAULT_IA_BEGIN(CT_PointsAttributesNormal)
+    CT_DEFAULT_IA_V2(CT_PointsAttributesNormal, CT_AbstractCategory::staticInitDataSize(), &CT_PointsAttributesNormal::numberOfSetValues, QObject::tr("Taille"))
+    CT_DEFAULT_IA_END(CT_PointsAttributesNormal)
+
+    template<class ManagerT>
+    CT_PointsAttributesNormal(CT_PCIR,
+                              ManagerT&,
+                              std::false_type)
+    {
+        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
+    }
+
+    template<class ManagerT>
+    CT_PointsAttributesNormal(CT_PCIR pcir,
+                              ManagerT& manager,
+                              std::true_type) :
+        SuperClass(pcir, manager)
+    {
+    }
 };
 
 #endif // CT_POINTSATTRIBUTESNORMAL_H

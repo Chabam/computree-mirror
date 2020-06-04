@@ -9,7 +9,7 @@
 class DM_AbstractAttributesScalar : public DM_AbstractAttributes
 {
 public:
-    DM_AbstractAttributesScalar();
+    DM_AbstractAttributesScalar(bool local);
 
     // GETTER
     /**

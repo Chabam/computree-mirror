@@ -36,7 +36,7 @@ void DM_AttributesManager::clearInvalid()
     }
 }
 
-DM_AbstractAttributes *DM_AttributesManager::getAttributesFromInterface(const CT_AbstractAttributes *ia) const
+DM_AbstractAttributes *DM_AttributesManager::getAttributesFromInterface(const CT_AbstractAttributes *ia, bool local) const
 {
     QListIterator<DM_AbstractAttributes*> it(m_collection);
 
@@ -44,7 +44,7 @@ DM_AbstractAttributes *DM_AttributesManager::getAttributesFromInterface(const CT
     {
         DM_AbstractAttributes *da = it.next();
 
-        if(da->abstractAttributes() == ia)
+        if((da->abstractAttributes() == ia) && (da->mustApplyToLocalIndex() == local))
             return da;
     }
 

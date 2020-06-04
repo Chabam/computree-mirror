@@ -402,7 +402,7 @@ public:
                                                 double zmax,
                                                 double resolution,
                                                 bool extends,
-                                                OtherArgs... args)
+                                                OtherArgs&&... args)
     {
         int dimx = int(ceil((xmax - xmin)/resolution));
         int dimy = int(ceil((ymax - ymin)/resolution));
@@ -427,7 +427,7 @@ public:
             }
         }
 
-        return new GridType(xmin, ymin, zmin, dimx, dimy, dimz, resolution, args...);
+        return new GridType(xmin, ymin, zmin, dimx, dimy, dimz, resolution, std::forward<OtherArgs>(args)...);
     }
 
 protected:

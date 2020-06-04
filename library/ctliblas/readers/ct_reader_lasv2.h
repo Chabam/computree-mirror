@@ -1,19 +1,13 @@
 #ifndef CT_READER_LASV2_H
 #define CT_READER_LASV2_H
 
-
-
 #include "ct_reader/abstract/ct_abstractreader.h"
 
 #include "ctliblas/ctliblas_global.h"
 #include "ctliblas/readers/headers/ct_lasheader.h"
 
 #include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
-#include "ct_itemdrawable/ct_pointsattributesscalarmaskt.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
 #include "ctliblas/itemdrawable/las/ct_stdlaspointsattributescontainer.h"
-
 
 /**
  * @brief Read LAS File (http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html)
@@ -66,39 +60,39 @@ protected:
     bool internalReadFile(CT_StandardItemGroup* group) override;
 
 private:
-    CT_LASHeader *m_headerFromConfiguration;
+    CT_LASHeader*                                                   m_headerFromConfiguration;
 
-    CT_HandleOutSingularItem<CT_Scene>                                          m_hOutScene;
-    CT_HandleOutSingularItem<CT_StdLASPointsAttributesContainer>                m_hOutAllAtt;
+    CT_HandleOutSingularItem<CT_Scene>                              m_hOutScene;
+    CT_HandleOutSingularItem<CT_StdLASPointsAttributesContainer>    m_hOutAllAtt;
 
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarMaskT<PointCore6_10> >    m_hOutReturnNumber;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarMaskT<PointCore6_10> >    m_hOutNumberOfReturn;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarMaskT<PointCore6_10> >    m_hOutClassificationFlag;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarMaskT<PointCore6_10> >    m_hOutScannerChannel;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarMaskT<PointCore6_10> >    m_hOutScanDirectionFlag;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarMaskT<PointCore6_10> >    m_hOutEdgeOfFlightLine;
+    CT_DensePointScalarManager<PointCore6_10>                       mCore6_10Manager; // only one manager for all attributes that use PointCore6_10 because only one cloud to optimize memory
+    CT_HandleOutPointScalarMask<PointCore6_10>                      m_hOutReturnNumber;
+    CT_HandleOutPointScalarMask<PointCore6_10>                      m_hOutNumberOfReturn;
+    CT_HandleOutPointScalarMask<PointCore6_10>                      m_hOutClassificationFlag;
+    CT_HandleOutPointScalarMask<PointCore6_10>                      m_hOutScannerChannel;
+    CT_HandleOutPointScalarMask<PointCore6_10>                      m_hOutScanDirectionFlag;
+    CT_HandleOutPointScalarMask<PointCore6_10>                      m_hOutEdgeOfFlightLine;
 
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint16> >      m_hOutIntensity;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint8> >       m_hOutClassification;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint8> >       m_hOutUserData;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint16> >      m_hOutPointSourceID;
+    CT_HandleOutPointScalarWithDenseManager<quint16>                m_hOutIntensity;
+    CT_HandleOutPointScalarWithDenseManager<quint8>                 m_hOutClassification;
+    CT_HandleOutPointScalarWithDenseManager<quint8>                 m_hOutUserData;
+    CT_HandleOutPointScalarWithDenseManager<quint16>                m_hOutPointSourceID;
 
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<qint16> >       m_hOutScanAngle;
+    CT_HandleOutPointScalarWithDenseManager<qint16>                 m_hOutScanAngle;
 
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<double> >       m_hOutGPSTime;
+    CT_HandleOutPointScalarWithDenseManager<double>                 m_hOutGPSTime;
 
-    CT_HandleOutSingularItem<CT_PointsAttributesColor>                          m_hOutColor;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint16> >      m_hOutRed;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint16> >      m_hOutGreen;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint16> >      m_hOutBlue;
+    CT_HandleOutPointColorWithDenseManager                          m_hOutColor;
+    CT_HandleOutPointScalarWithDenseManager<quint16>                m_hOutRed;
+    CT_HandleOutPointScalarWithDenseManager<quint16>                m_hOutGreen;
+    CT_HandleOutPointScalarWithDenseManager<quint16>                m_hOutBlue;
 
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint8> >       m_hOutWavePacketDescriptorIndex;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint64> >      m_hOutByteOffsetToWaveformData;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint32> >      m_hOutWaveformPacketSizeInBytes;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> >        m_hOutReturnPointWaveformLocation;
+    CT_HandleOutPointScalarWithDenseManager<quint8>                 m_hOutWavePacketDescriptorIndex;
+    CT_HandleOutPointScalarWithDenseManager<quint64>                m_hOutByteOffsetToWaveformData;
+    CT_HandleOutPointScalarWithDenseManager<quint32>                m_hOutWaveformPacketSizeInBytes;
+    CT_HandleOutPointScalarWithDenseManager<float>                  m_hOutReturnPointWaveformLocation;
 
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<quint16>>       m_hOutNIR;
-
+    CT_HandleOutPointScalarWithDenseManager<quint16>                m_hOutNIR;
 };
 
 CT_TYPEINFO_MACRO(CT_Reader_LASV2::PointCore0_5, CT_Reader_LASV2::PointCore0_5)

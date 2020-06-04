@@ -2,11 +2,12 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractattributes.h"
 
-DM_AbstractAttributes::DM_AbstractAttributes() : DM_AbstractWorker()
+DM_AbstractAttributes::DM_AbstractAttributes(bool local) : DM_AbstractWorker(),
+    m_displayAlone(false),
+    m_doc(nullptr),
+    m_attributes(nullptr),
+    mLocalOnly(local)
 {
-    m_displayAlone = false;
-    m_doc = nullptr;
-    m_attributes = nullptr;
 }
 
 DM_AbstractAttributes::~DM_AbstractAttributes()
@@ -42,9 +43,14 @@ bool DM_AbstractAttributes::isDisplayedAlone() const
     return m_displayAlone;
 }
 
+bool DM_AbstractAttributes::mustApplyToLocalIndex() const
+{
+    return mLocalOnly;
+}
+
 void DM_AbstractAttributes::setDocument(const GDocumentViewForGraphics *doc)
 {
-    m_doc = (GDocumentViewForGraphics*)doc;
+    m_doc = const_cast<GDocumentViewForGraphics*>(doc);
 }
 
 GDocumentViewForGraphics *DM_AbstractAttributes::document() const
@@ -65,7 +71,7 @@ void DM_AbstractAttributes::apply()
 
 void DM_AbstractAttributes::setAttributes(const CT_AbstractAttributes *att)
 {
-    m_attributes = (CT_AbstractAttributes*)att;
+    m_attributes = const_cast<CT_AbstractAttributes*>(att);
 
     if(att != nullptr)
         connect(att, SIGNAL(destroyed()), this, SLOT(slotAttributesDeleted()), Qt::DirectConnection);

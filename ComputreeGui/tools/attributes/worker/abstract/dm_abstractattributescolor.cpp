@@ -1,6 +1,6 @@
 #include "dm_abstractattributescolor.h"
 
-DM_AbstractAttributesColor::DM_AbstractAttributesColor() : DM_AbstractAttributes()
+DM_AbstractAttributesColor::DM_AbstractAttributesColor(bool local) : DM_AbstractAttributes(local)
 {
     m_syncWith = CT_Repository::SyncWithPointCloud;
 }

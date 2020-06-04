@@ -55,7 +55,7 @@ GPointsAttributesManager::~GPointsAttributesManager()
 }
 void GPointsAttributesManager::setManager(const DM_AttributesManager *man)
 {
-    m_manager = (DM_AttributesManager*)man;
+    m_manager = const_cast<DM_AttributesManager*>(man);
 
     if(m_manager != nullptr)
         m_manager->clearInvalid();
@@ -65,7 +65,7 @@ void GPointsAttributesManager::setManager(const DM_AttributesManager *man)
 
 void GPointsAttributesManager::setDocument(const GDocumentViewForGraphics *doc)
 {
-    m_doc = (GDocumentViewForGraphics*)doc;
+    m_doc = const_cast<GDocumentViewForGraphics*>(doc);
 
     if(m_doc != nullptr)
         ui->checkBoxShowNormals->setChecked(m_doc->mustShowNormals());
@@ -126,69 +126,143 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
 {
     DM_AttributesBuildingCollectionT<IAttributesType> builderPoints;
 
-    builderPoints.buildFrom(step);
-
-    QListIterator<IAttributesType*> it(builderPoints.attributesCollection());
-
-    while(it.hasNext())
+    builderPoints.visitFrom(step, [this](const CT_OutAbstractModel* model, IAttributesType* pa) -> bool
     {
-        IAttributesType *pa = it.next();
-
-        CT_AbstractAttributesScalar *pas = dynamic_cast<CT_AbstractAttributesScalar*>(pa);
+        CT_AbstractAttributesScalar* pas = dynamic_cast<CT_AbstractAttributesScalar*>(pa);
 
         if(pas != nullptr)
         {
-            AttributesScalarType *dpas = (AttributesScalarType*)m_manager->getAttributesFromInterface(pa);
+            AttributesScalarType* localDPAS = static_cast<AttributesScalarType*>(m_manager->getAttributesFromInterface(pa));
 
-            if(dpas == nullptr)
+            if(localDPAS == nullptr)
             {
-                dpas = new AttributesScalarType();
-                dpas->setTypeAttributes(pa, pas);
+                localDPAS = new AttributesScalarType(true);
+                localDPAS->setTypeAttributes(pa, pas);
 
-                m_manager->addAttributes(dpas);
+                m_manager->addAttributes(localDPAS);
             }
 
-            addToScalarRoot<IAttributesType>(createAttributesScalarForModel(dpas));
+            QStandardItem* rootItem = rootItemForType<IAttributesType>();
+            QStandardItem* scalarRoot = getOrCreateScalarRootItemForType<IAttributesType>(rootItem);
+
+            QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
+                                                                          [this, pa, pas]() -> QVariant
+            {
+                AttributesScalarType* globalDPAS = static_cast<AttributesScalarType*>(m_manager->getAttributesFromInterface(pa, false));
+
+                if(globalDPAS == nullptr)
+                {
+                    globalDPAS = new AttributesScalarType(false);
+                    globalDPAS->setTypeAttributes(pa, pas);
+
+                    m_manager->addAttributes(globalDPAS);
+                }
+
+                return qVariantFromValue(static_cast<void*>(globalDPAS));
+            },
+            scalarRoot);
+
+            ui->treeView->expand(m_model.indexFromItem(rootItem));
+            ui->treeView->expand(m_model.indexFromItem(scalarRoot));
+
+            QList<QStandardItem*> items = createAttributesScalarForModel(localDPAS);
+            modelRoot->appendRow(items);
+
+            createWidgetForItems(items);
         }
         else
         {
-            CT_AttributesColor *pac = dynamic_cast<CT_AttributesColor*>(pa);
+            CT_AttributesColor<IAttributesType>* pac = dynamic_cast<CT_AttributesColor<IAttributesType>*>(pa);
 
             if(pac != nullptr)
             {
-                AttributesColorType *dpac = dynamic_cast<AttributesColorType*>(m_manager->getAttributesFromInterface(pa));
+                AttributesColorType* localDPAC = static_cast<AttributesColorType*>(m_manager->getAttributesFromInterface(pa));
 
-                if(dpac == nullptr)
+                if(localDPAC == nullptr)
                 {
-                    dpac = new AttributesColorType();
-                    dpac->setTypeAttributes(pa, pac);
+                    localDPAC = new AttributesColorType(true);
+                    localDPAC->setTypeAttributes(pa, pac);
 
-                    m_manager->addAttributes(dpac);
+                    m_manager->addAttributes(localDPAC);
                 }
 
-                addToColorRoot<IAttributesType>(createAttributesColorForModel(dpac));
+                QStandardItem* rootItem = rootItemForType<IAttributesType>();
+                QStandardItem* colorRoot = getOrCreateColorRootItemForType<IAttributesType>(rootItem);
+
+                QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
+                                                                              [this, pa, pac]() -> QVariant
+                {
+                    AttributesColorType* globalDPAC = static_cast<AttributesColorType*>(m_manager->getAttributesFromInterface(pa, false));
+
+                    if(globalDPAC == nullptr)
+                    {
+                        globalDPAC = new AttributesColorType(false);
+                        globalDPAC->setTypeAttributes(pa, pac);
+
+                        m_manager->addAttributes(globalDPAC);
+                    }
+
+                    return qVariantFromValue(static_cast<void*>(globalDPAC));
+                },
+                colorRoot);
+
+                ui->treeView->expand(m_model.indexFromItem(rootItem));
+                ui->treeView->expand(m_model.indexFromItem(colorRoot));
+
+                QList<QStandardItem*> items = createAttributesColorForModel(localDPAC);
+                modelRoot->appendRow(items);
+
+                createWidgetForItems(items);
             }
             else
             {
-                CT_AttributesNormal *pan = dynamic_cast<CT_AttributesNormal*>(pa);
+                CT_AttributesNormal<IAttributesType>* pan = dynamic_cast<CT_AttributesNormal<IAttributesType>*>(pa);
 
                 if(pan != nullptr)
                 {
-                    AttributesNormalType *dpan = dynamic_cast<AttributesNormalType*>(m_manager->getAttributesFromInterface(pa));
+                    AttributesNormalType* localDPAN = static_cast<AttributesNormalType*>(m_manager->getAttributesFromInterface(pa));
 
-                    if(dpan == nullptr)
+                    if(localDPAN == nullptr)
                     {
-                        dpan = new AttributesNormalType();
-                        dpan->setTypeAttributes(pa, pan);
+                        localDPAN = new AttributesNormalType(true);
+                        localDPAN->setTypeAttributes(pa, pan);
 
-                        m_manager->addAttributes(dpan);
+                        m_manager->addAttributes(localDPAN);
                     }
 
-                    addToNormalRoot<IAttributesType>(createAttributesNormalForModel(dpan));
+                    QStandardItem* rootItem = rootItemForType<IAttributesType>();
+                    QStandardItem* normalRoot = getOrCreateNormalRootItemForType<IAttributesType>(rootItem);
+
+                    QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
+                                                                                  [this, pa, pan]() -> QVariant
+                    {
+                        AttributesNormalType* globalDPAN = static_cast<AttributesNormalType*>(m_manager->getAttributesFromInterface(pa, false));
+
+                        if(globalDPAN == nullptr)
+                        {
+                            globalDPAN = new AttributesNormalType(true);
+                            globalDPAN->setTypeAttributes(pa, pan);
+
+                            m_manager->addAttributes(globalDPAN);
+                        }
+
+                        return qVariantFromValue(static_cast<void*>(globalDPAN));
+                    },
+                    normalRoot);
+
+                    ui->treeView->expand(m_model.indexFromItem(rootItem));
+                    ui->treeView->expand(m_model.indexFromItem(modelRoot));
+
+                    QList<QStandardItem*> items = createAttributesNormalForModel(localDPAN);
+                    modelRoot->appendRow(items);
+
+                    createWidgetForItems(items);
                 }
             }
         }
-    }
+
+        return true;
+    });
 }
 
 void GPointsAttributesManager::constructHeader()
@@ -230,13 +304,13 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesScalarForModel(D
     // NOM
     QStandardItem *item = new QStandardItem(pa->displayableName());
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;
 
     // BOUTON APPLIQUER
     item = new QStandardItem(tr("Appliquer"));
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;
 
     // CHECKBOX "UTILISER SEUL ?"
@@ -246,7 +320,7 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesScalarForModel(D
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState(pa->isDisplayedAlone() ? Qt::Checked : Qt::Unchecked);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;*/
 
     // CHECKBOX "UTILISER GRADIENT PARTAGE ?"
@@ -254,13 +328,13 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesScalarForModel(D
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState(pa->isUsedSharedGradient() ? Qt::Checked : Qt::Unchecked);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;
 
     // BOUTON CONFIGURER
     item = new QStandardItem(tr("Configurer"));
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;
 
     return items;
@@ -273,13 +347,13 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesColorForModel(DM
     // NOM
     QStandardItem *item = new QStandardItem(pa->displayableName());
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;
 
     // BOUTON APPLIQUER
     item = new QStandardItem(tr("Appliquer"));
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;
 
     // CHECKBOX "UTILISER SEUL ?"
@@ -289,7 +363,7 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesColorForModel(DM
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState(pa->isDisplayedAlone() ? Qt::Checked : Qt::Unchecked);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;*/
 
     return items;
@@ -302,13 +376,13 @@ QList<QStandardItem *> GPointsAttributesManager::createAttributesNormalForModel(
     // NOM
     QStandardItem *item = new QStandardItem(pa->displayableName());
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;
 
     // BOUTON APPLIQUER
     item = new QStandardItem(tr("Appliquer"));
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;
 
     // CHECKBOX "UTILISER SEUL ?"
@@ -318,118 +392,94 @@ QList<QStandardItem *> GPointsAttributesManager::createAttributesNormalForModel(
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState(pa->isDisplayedAlone() ? Qt::Checked : Qt::Unchecked);
-    item->setData(qVariantFromValue((void*)pa));
+    item->setData(qVariantFromValue(static_cast<void*>(pa)));
     items << item;*/
 
     return items;
 }
 
-template<>
-void GPointsAttributesManager::addToScalarRoot<CT_AbstractPointsAttributes>(const QList<QStandardItem*> &items)
-{
-    addToScalarRoot(items, m_itemPointRootScalar, m_itemPointRoot);
-}
-
-template<>
-void GPointsAttributesManager::addToScalarRoot<CT_AbstractFaceAttributes>(const QList<QStandardItem*> &items)
-{
-    addToScalarRoot(items, m_itemFaceRootScalar, m_itemFaceRoot);
-}
-
-template<>
-void GPointsAttributesManager::addToScalarRoot<CT_AbstractEdgeAttributes>(const QList<QStandardItem*> &items)
-{
-    addToScalarRoot(items, m_itemEdgeRootScalar, m_itemEdgeRoot);
-}
-
-void GPointsAttributesManager::addToScalarRoot(const QList<QStandardItem *> &items, QStandardItem *&root, QStandardItem *model)
+void GPointsAttributesManager::createScalarRootItemIfNull(QStandardItem*& root, QStandardItem* parent) const
 {
     if(root == nullptr)
     {
         root = new QStandardItem(tr("Gradients"));
         root->setEditable(false);
 
-        model->appendRow(root);
+        parent->appendRow(root);
     }
-
-    root->appendRow(items);
-    ui->treeView->expand(m_model.indexFromItem(model));
-    ui->treeView->expand(m_model.indexFromItem(root));
-
-    createWidgetForItems(items);
 }
 
-template<>
-void GPointsAttributesManager::addToColorRoot<CT_AbstractPointsAttributes>(const QList<QStandardItem*> &items)
-{
-    addToColorRoot(items, m_itemPointRootColor, m_itemPointRoot);
-}
-
-template<>
-void GPointsAttributesManager::addToColorRoot<CT_AbstractFaceAttributes>(const QList<QStandardItem*> &items)
-{
-    addToColorRoot(items, m_itemFaceRootColor, m_itemFaceRoot);
-}
-
-template<>
-void GPointsAttributesManager::addToColorRoot<CT_AbstractEdgeAttributes>(const QList<QStandardItem*> &items)
-{
-    addToColorRoot(items, m_itemEdgeRootColor, m_itemEdgeRoot);
-}
-
-void GPointsAttributesManager::addToColorRoot(const QList<QStandardItem *> &items, QStandardItem *&root, QStandardItem *model)
+void GPointsAttributesManager::createColorRootItemIfNull(QStandardItem*& root, QStandardItem* parent) const
 {
     if(root == nullptr)
     {
         root = new QStandardItem(tr("Couleurs"));
         root->setEditable(false);
 
-        model->appendRow(root);
+        parent->appendRow(root);
     }
-
-    root->appendRow(items);
-    ui->treeView->expand(m_model.indexFromItem(model));
-    ui->treeView->expand(m_model.indexFromItem(root));
-
-    createWidgetForItems(items);
 }
 
-template<>
-void GPointsAttributesManager::addToNormalRoot<CT_AbstractPointsAttributes>(const QList<QStandardItem*> &items)
-{
-    addToNormalRoot(items, m_itemPointRootNormal, m_itemPointRoot);
-}
-
-template<>
-void GPointsAttributesManager::addToNormalRoot<CT_AbstractFaceAttributes>(const QList<QStandardItem*> &items)
-{
-    addToNormalRoot(items, m_itemFaceRootNormal, m_itemFaceRoot);
-}
-
-template<>
-void GPointsAttributesManager::addToNormalRoot<CT_AbstractEdgeAttributes>(const QList<QStandardItem*> &items)
-{
-    addToNormalRoot(items, m_itemEdgeRootNormal, m_itemEdgeRoot);
-}
-
-void GPointsAttributesManager::addToNormalRoot(const QList<QStandardItem *> &items, QStandardItem *&root, QStandardItem *model)
+void GPointsAttributesManager::createNormalRootItemIfNull(QStandardItem*& root, QStandardItem* parent) const
 {
     if(root == nullptr)
     {
         root = new QStandardItem(tr("Normales"));
         root->setEditable(false);
 
-        model->appendRow(root);
+        parent->appendRow(root);
     }
-
-    root->appendRow(items);
-    ui->treeView->expand(m_model.indexFromItem(model));
-    ui->treeView->expand(m_model.indexFromItem(root));
-
-    createWidgetForItems(items);
 }
 
-void GPointsAttributesManager::createWidgetForItems(const QList<QStandardItem *> &items)
+QStandardItem* GPointsAttributesManager::findOrCreateChildForAttributeModel(const CT_OutAbstractModel* attModel, std::function<QVariant ()> data, QStandardItem* parent) const
+{
+    QStandardItem* child = nullptr;
+    const int n = parent->rowCount();
+
+    for(int i=0; i<n; ++i)
+    {
+        if(parent->child(i, 0)->data(Qt::UserRole + 2).value<void*>() == attModel)
+        {
+            child = parent->child(i, 0);
+            break;
+        }
+    }
+
+    if(child == nullptr)
+    {
+        QList<QStandardItem*> items;
+
+        child = new QStandardItem(attModel->displayableName());
+        child->setEditable(false);
+        child->setData(data());
+        child->setData(qVariantFromValue(static_cast<void*>(const_cast<CT_OutAbstractModel*>(attModel))), Qt::UserRole + 2);
+        items << child;
+
+        QStandardItem* apply = new QStandardItem(tr("Appliquer"));
+        apply->setEditable(false);
+        apply->setData(child->data());
+        items << apply;
+
+        QStandardItem* item = new QStandardItem();
+        item->setEditable(false);
+        item->setData(child->data());
+        items << item;
+
+        // BOUTON CONFIGURER
+        item = new QStandardItem(tr("Configurer"));
+        item->setEditable(false);
+        item->setData(child->data());
+        items << item;
+
+        parent->appendRow(items);
+
+        createWidgetForItems(items);
+    }
+
+    return child;
+}
+
+void GPointsAttributesManager::createWidgetForItems(const QList<QStandardItem *> &items) const
 {
     QStandardItem *item = items.at(1);
     QPushButton *pushButton = new QPushButton(item->text(), ui->treeView);
@@ -527,7 +577,7 @@ void GPointsAttributesManager::editAttributesNormal(DM_AbstractAttributesNormal 
     GDocumentViewForGraphics::NormalsConfiguration c = m_doc->getNormalsConfiguration();
 
     ui->pushButtonNormalsColorPicker->setCurrentColor(c.normalColor);
-    ui->doubleSpinBoxNormalsLength->setValue(c.normalLength);
+    ui->doubleSpinBoxNormalsLength->setValue(double(c.normalLength));
 
     ui->widgetEditNormals->setVisible(true);
 }
@@ -541,7 +591,7 @@ void GPointsAttributesManager::applyAndSaveNormal()
 {
     GDocumentViewForGraphics::NormalsConfiguration c;
     c.normalColor = ui->pushButtonNormalsColorPicker->currentColor();
-    c.normalLength = ui->doubleSpinBoxNormalsLength->value();
+    c.normalLength = float(ui->doubleSpinBoxNormalsLength->value());
 
     m_doc->applyNormalsConfiguration(c);
 }
@@ -553,7 +603,7 @@ DM_AbstractAttributes *GPointsAttributesManager::attributesSelected() const
     if(list.isEmpty())
         return nullptr;
 
-    return (DM_AbstractAttributes*)m_model.itemFromIndex(list.first())->data().value<void*>();
+    return static_cast<DM_AbstractAttributes*>(m_model.itemFromIndex(list.first())->data().value<void*>());
 }
 
 void GPointsAttributesManager::on_pushButtonAddColor_clicked()
@@ -583,21 +633,20 @@ void GPointsAttributesManager::on_pushButtonSave_clicked()
 
 void GPointsAttributesManager::pushButtonApplyClicked()
 {
-    QPushButton *pushButton = (QPushButton*)sender();
-    DM_AbstractAttributes *dpa = (DM_AbstractAttributes*)pushButton->property("userdata").value<void*>();
-
-    DM_AbstractAttributesScalar *as = dynamic_cast<DM_AbstractAttributesScalar*>(attributesSelected());
+    QPushButton* pushButton = static_cast<QPushButton*>(sender());
+    DM_AbstractAttributes* dpa = static_cast<DM_AbstractAttributes*>(pushButton->property("userdata").value<void*>());
+    DM_AbstractAttributesScalar* as = dynamic_cast<DM_AbstractAttributesScalar*>(attributesSelected());
 
     if(dpa == as)
-        saveCurrentGradientTo((DM_AbstractAttributesScalar*)dpa);
+        saveCurrentGradientTo(static_cast<DM_AbstractAttributesScalar*>(dpa));
 
     m_doc->applyAttributes(dpa);
 }
 
 void GPointsAttributesManager::pushButtonConfigureClicked()
 {
-    QPushButton *pushButton = (QPushButton*)sender();
-    DM_AbstractAttributes *dpa = (DM_AbstractAttributes*)pushButton->property("userdata").value<void*>();
+    QPushButton *pushButton = static_cast<QPushButton*>(sender());
+    DM_AbstractAttributes *dpa = static_cast<DM_AbstractAttributes*>(pushButton->property("userdata").value<void*>());
     DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>(dpa);
 
     if(pas != nullptr)
@@ -611,7 +660,7 @@ void GPointsAttributesManager::pushButtonConfigureClicked()
 
 void GPointsAttributesManager::itemChanged(QStandardItem *item)
 {
-    DM_AbstractAttributes *pa = (DM_AbstractAttributes*)item->data().value<void*>();
+    DM_AbstractAttributes *pa = static_cast<DM_AbstractAttributes*>(item->data().value<void*>());
 
     if(pa != nullptr)
     {
@@ -699,7 +748,7 @@ void GPointsAttributesManager::on_doubleSpinBoxNormalsLength_valueChanged(double
     if(m_doc != nullptr) {
         GDocumentViewForGraphics::NormalsConfiguration c = m_doc->getNormalsConfiguration();
 
-        if(v != c.normalLength)
+        if(!qFuzzyCompare(v, double(c.normalLength)))
             ui->pushButtonApplyEditNormals->setEnabled(true);
     }
 }
@@ -728,9 +777,9 @@ void GPointsAttributesManager::on_doubleSpinBoxGradientArrowValue_editingFinishe
 
     if((pas != nullptr) && (arr.index() != -1)) {
 
-        double range = pas->max() - pas->min();
+        const double range = pas->max() - pas->min();
 
-        if(range != 0)  {
+        if(!qFuzzyCompare(range, 0))  {
             double pos = (ui->doubleSpinBoxGradientArrowValue->value()-pas->min())/range;
 
             if(pos < 0)
@@ -752,7 +801,7 @@ void GPointsAttributesManager::treeView_currentRowChanged(const QModelIndex &cur
     if((pItem != nullptr)
             && !pItem->data().isNull())
     {
-        DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>((DM_AbstractAttributes*)pItem->data().value<void*>());
+        DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>(static_cast<DM_AbstractAttributes*>(pItem->data().value<void*>()));
 
         checkAndSave(pas);
     }
@@ -766,7 +815,7 @@ void GPointsAttributesManager::treeView_currentRowChanged(const QModelIndex &cur
     if((cItem != nullptr)
             && !cItem->data().isNull())
     {
-        DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>((DM_AbstractAttributes*)cItem->data().value<void*>());
+        DM_AbstractAttributesScalar *pas = dynamic_cast<DM_AbstractAttributesScalar*>(static_cast<DM_AbstractAttributes*>(cItem->data().value<void*>()));
 
         if(pas != nullptr)
         {
@@ -774,7 +823,7 @@ void GPointsAttributesManager::treeView_currentRowChanged(const QModelIndex &cur
             return;
         }
 
-        DM_AbstractAttributesNormal *pan = dynamic_cast<DM_AbstractAttributesNormal*>((DM_AbstractAttributes*)cItem->data().value<void*>());
+        DM_AbstractAttributesNormal *pan = dynamic_cast<DM_AbstractAttributesNormal*>(static_cast<DM_AbstractAttributes*>(cItem->data().value<void*>()));
 
         if(pan != nullptr)
         {
@@ -794,9 +843,9 @@ void GPointsAttributesManager::updateArrowValue(qreal val, GradientArrow arr)
 
     if((pas != nullptr) && (arr.index() != -1)) {
 
-        double range = pas->max() - pas->min();
+        const double range = pas->max() - pas->min();
 
-        ok = range != 0;
+        ok = !qFuzzyCompare(range, 0);
 
         if(ok)
             ui->doubleSpinBoxGradientArrowValue->setValue((arr.position()*range)+pas->min());
@@ -804,4 +853,85 @@ void GPointsAttributesManager::updateArrowValue(qreal val, GradientArrow arr)
 
     if(!ok)
         ui->doubleSpinBoxGradientArrowValue->setValue(0);
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::rootItemForType<CT_AbstractPointsAttributes>() const
+{
+    return m_itemPointRoot;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::rootItemForType<CT_AbstractFaceAttributes>() const
+{
+    return m_itemFaceRoot;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::rootItemForType<CT_AbstractEdgeAttributes>() const
+{
+    return m_itemEdgeRoot;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateScalarRootItemForType<CT_AbstractPointsAttributes>(QStandardItem* parent)
+{
+    createScalarRootItemIfNull(m_itemPointRootScalar, parent);
+    return m_itemPointRootScalar;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateScalarRootItemForType<CT_AbstractFaceAttributes>(QStandardItem* parent)
+{
+    createScalarRootItemIfNull(m_itemFaceRootScalar, parent);
+    return m_itemFaceRootScalar;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateScalarRootItemForType<CT_AbstractEdgeAttributes>(QStandardItem* parent)
+{
+    createScalarRootItemIfNull(m_itemEdgeRootScalar, parent);
+    return m_itemEdgeRootScalar;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateColorRootItemForType<CT_AbstractPointsAttributes>(QStandardItem* parent)
+{
+    createColorRootItemIfNull(m_itemPointRootColor, parent);
+    return m_itemPointRootColor;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateColorRootItemForType<CT_AbstractFaceAttributes>(QStandardItem* parent)
+{
+    createColorRootItemIfNull(m_itemFaceRootColor, parent);
+    return m_itemFaceRootColor;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateColorRootItemForType<CT_AbstractEdgeAttributes>(QStandardItem* parent)
+{
+    createColorRootItemIfNull(m_itemEdgeRootColor, parent);
+    return m_itemEdgeRootColor;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_AbstractPointsAttributes>(QStandardItem* parent)
+{
+    createNormalRootItemIfNull(m_itemPointRootNormal, parent);
+    return m_itemPointRootColor;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_AbstractFaceAttributes>(QStandardItem* parent)
+{
+    createNormalRootItemIfNull(m_itemFaceRootNormal, parent);
+    return m_itemFaceRootNormal;
+}
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_AbstractEdgeAttributes>(QStandardItem* parent)
+{
+    createNormalRootItemIfNull(m_itemEdgeRootNormal, parent);
+    return m_itemEdgeRootNormal;
 }

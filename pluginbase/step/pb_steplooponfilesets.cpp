@@ -149,7 +149,7 @@ void PB_StepLoopOnFileSets::declareOutputModels(CT_StepOutModelStructureManager&
     manager.setRootGroup(m_hOutResultLOFS, m_hOutRootGroupLOFS);
     manager.addGroup(m_hOutRootGroupLOFS, m_hOutSetGroupLOFS, tr("Lots"));
     manager.addItem(m_hOutSetGroupLOFS, m_hOutSetItemLOFS, tr("Lot"));
-    manager.addItemAttribute(m_hOutSetItemLOFS, m_hOutSetItemAttributeLOFS, PS_CATEGORY_MANAGER->findByUniqueName(CT_AbstractCategory::DATA_VALUE), tr("Nom du lot"));
+    manager.addItemAttribute(m_hOutSetItemLOFS, m_hOutSetItemAttributeLOFS, CT_AbstractCategory::DATA_VALUE, tr("Nom du lot"));
     manager.addGroup(m_hOutRootGroupLOFS, m_hOutFileGroupLOFS, tr("Fichiers"));
 
     // if one reader was selected

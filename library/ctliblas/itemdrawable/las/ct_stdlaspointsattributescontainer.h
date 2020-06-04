@@ -36,7 +36,13 @@ public:
      */
     virtual QList<CT_LasDefine::LASPointAttributesType> lasPointAttributesTypes() const;
 
-    virtual void getLASDataAt(const size_t i, CT_LASData &data) const;
+    /**
+     * @brief Set in "data" all datas available for the point at specified index
+     * @param i : the global index of the point
+     * @param data (out) : will contains all datas that are available for the specified point
+     * @return Returns true if the point has at least one data set, false otherwise.
+     */
+    virtual bool getLASDataAt(const size_t i, CT_LASData &data) const;
 
     /**
      * @brief Return the hash map of attributes

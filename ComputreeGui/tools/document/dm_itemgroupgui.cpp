@@ -15,12 +15,14 @@ DM_ItemGroupGui::DM_ItemGroupGui() : SuperClass(),
     mEdgesNormalModel(nullptr),
     mFacesColorModel(nullptr),
     mFacesNormalModel(nullptr),
+    mSelectedPointsModel(nullptr),
     mPointAttributesColor(nullptr),
     mPointAttributesNormal(nullptr),
     mEdgeAttributesColor(nullptr),
     mEdgeAttributesNormal(nullptr),
     mFaceAttributesColor(nullptr),
-    mFaceAttributesNormal(nullptr)
+    mFaceAttributesNormal(nullptr),
+    mSelectedPointsScene(nullptr)
 {
 }
 
@@ -36,12 +38,16 @@ DM_ItemGroupGui::DM_ItemGroupGui(const DM_ItemGroupGui& other) : SuperClass(othe
     mFacesColorModel = nullptr;
     mFacesNormalModel = nullptr;
 
+    mSelectedPointsModel = nullptr;
+
     mPointAttributesColor = nullptr;
     mPointAttributesNormal = nullptr;
     mEdgeAttributesColor = nullptr;
     mEdgeAttributesNormal = nullptr;
     mFaceAttributesColor = nullptr;
     mFaceAttributesNormal = nullptr;
+
+    mSelectedPointsScene = nullptr;
 }
 
 DM_ItemGroupGui::~DM_ItemGroupGui()
@@ -55,6 +61,8 @@ DM_ItemGroupGui::~DM_ItemGroupGui()
     delete mEdgeAttributesNormal;
     delete mFaceAttributesColor;
     delete mFaceAttributesNormal;
+
+    delete mSelectedPointsScene;
 }
 
 void DM_ItemGroupGui::addItemDrawable(CT_AbstractItemDrawable& item)
@@ -206,14 +214,18 @@ void DM_ItemGroupGui::setAttributes(const QList<CT_AbstractAttributes*>& attribu
 
 void DM_ItemGroupGui::setGraphicsView(const GraphicsViewInterface* gv)
 {
+    // TODO : somewhere add a model for selected points, selected edges and selected faces
+
     if((mPointsColorModel == nullptr) && (gv != nullptr))
     {
         mPointsColorModel = new PointsColorModel(tr("Couleurs des points (GUI)"));
         mPointsNormalModel = new PointsNormalModel(tr("Normales des points (GUI)"));
-        mEdgesColorModel = new EdgesColorModel(tr("Couleurs des edges (GUI)"));
-        mEdgesNormalModel = new EdgesNormalModel(tr("Normales des edges (GUI)"));
+        mEdgesColorModel = new EdgesColorModel(tr("Couleurs des arêtes (GUI)"));
+        mEdgesNormalModel = new EdgesNormalModel(tr("Normales des arêtes (GUI)"));
         mFacesColorModel = new FacesColorModel(tr("Couleurs des faces (GUI)"));
         mFacesNormalModel = new FacesNormalModel(tr("Normales des faces (GUI)"));
+
+        mSelectedPointsModel = new SelectedPointsModel(tr("Points sélectionnés (GUI)"));
 
         ModelType* myModel = modelStaticT<ModelType>();
         myModel->addItem(mPointsColorModel);
@@ -222,6 +234,7 @@ void DM_ItemGroupGui::setGraphicsView(const GraphicsViewInterface* gv)
         myModel->addItem(mEdgesNormalModel);
         myModel->addItem(mFacesColorModel);
         myModel->addItem(mFacesNormalModel);
+        myModel->addItem(mSelectedPointsModel);
     }
     else if((mPointsColorModel != nullptr) && (gv == nullptr))
     {
@@ -232,6 +245,7 @@ void DM_ItemGroupGui::setGraphicsView(const GraphicsViewInterface* gv)
         myModel->removeItem(mEdgesNormalModel);
         myModel->removeItem(mFacesColorModel);
         myModel->removeItem(mFacesNormalModel);
+        myModel->removeItem(mSelectedPointsModel);
 
         mPointsColorModel = nullptr;
         mPointsNormalModel = nullptr;
@@ -239,6 +253,7 @@ void DM_ItemGroupGui::setGraphicsView(const GraphicsViewInterface* gv)
         mEdgesNormalModel = nullptr;
         mFacesColorModel = nullptr;
         mFacesNormalModel = nullptr;
+        mSelectedPointsModel = nullptr;
     }
 
     mGraphicsView = gv;
@@ -268,33 +283,45 @@ void DM_ItemGroupGui::finalizeBeforeUseIt()
     delete mFaceAttributesColor;
     delete mFaceAttributesNormal;
 
+    delete mSelectedPointsScene;
+
     mPointAttributesColor = nullptr;
     mPointAttributesNormal = nullptr;
     mEdgeAttributesColor = nullptr;
     mEdgeAttributesNormal = nullptr;
     mFaceAttributesColor = nullptr;
     mFaceAttributesNormal = nullptr;
+
+    mSelectedPointsScene = nullptr;
 }
 
 CT_AbstractItem::IChildrensIteratorQtStylePtr DM_ItemGroupGui::createQtStyleIteratorForChildrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
 {
     if(outModel == mPointsColorModel)
-        return createIteratorForColorAttribute(const_cast<DM_ItemGroupGui*>(this)->mPointAttributesColor, mPointsCloudIndex, GraphicsViewInterface::CPointCloud);
+        return createIteratorForColorAttribute(const_cast<DM_ItemGroupGui*>(this)->mPointAttributesColor, mPointsCloudIndex, const_cast<DM_ItemGroupGui*>(this)->mPointsColorAttributeManager, GraphicsViewInterface::CPointCloud);
 
     if(outModel == mPointsNormalModel)
-        return createIteratorForNormalAttribute(const_cast<DM_ItemGroupGui*>(this)->mPointAttributesNormal, mPointsCloudIndex, GraphicsViewInterface::NPointCloud);
+        return createIteratorForNormalAttribute(const_cast<DM_ItemGroupGui*>(this)->mPointAttributesNormal, mPointsCloudIndex, const_cast<DM_ItemGroupGui*>(this)->mPointsNormalAttributeManager, GraphicsViewInterface::NPointCloud);
 
     if(outModel == mEdgesColorModel)
-        return createIteratorForColorAttribute(const_cast<DM_ItemGroupGui*>(this)->mEdgeAttributesColor, mEdgesCloudIndex, GraphicsViewInterface::CEdgeCloud);
+        return createIteratorForColorAttribute(const_cast<DM_ItemGroupGui*>(this)->mEdgeAttributesColor, mEdgesCloudIndex, const_cast<DM_ItemGroupGui*>(this)->mEdgesColorAttributeManager, GraphicsViewInterface::CEdgeCloud);
 
     if(outModel == mEdgesNormalModel)
-        return createIteratorForNormalAttribute(const_cast<DM_ItemGroupGui*>(this)->mEdgeAttributesNormal, mEdgesCloudIndex, GraphicsViewInterface::NEdgeCloud);
+        return createIteratorForNormalAttribute(const_cast<DM_ItemGroupGui*>(this)->mEdgeAttributesNormal, mEdgesCloudIndex, const_cast<DM_ItemGroupGui*>(this)->mEdgesNormalAttributeManager, GraphicsViewInterface::NEdgeCloud);
 
     if(outModel == mFacesColorModel)
-        return createIteratorForColorAttribute(const_cast<DM_ItemGroupGui*>(this)->mFaceAttributesColor, mFacesCloudIndex, GraphicsViewInterface::CFaceCloud);
+        return createIteratorForColorAttribute(const_cast<DM_ItemGroupGui*>(this)->mFaceAttributesColor, mFacesCloudIndex, const_cast<DM_ItemGroupGui*>(this)->mFacesColorAttributeManager, GraphicsViewInterface::CFaceCloud);
 
     if(outModel == mFacesNormalModel)
-        return createIteratorForNormalAttribute(const_cast<DM_ItemGroupGui*>(this)->mFaceAttributesNormal, mFacesCloudIndex, GraphicsViewInterface::NFaceCloud);
+        return createIteratorForNormalAttribute(const_cast<DM_ItemGroupGui*>(this)->mFaceAttributesNormal, mFacesCloudIndex, const_cast<DM_ItemGroupGui*>(this)->mFacesNormalAttributeManager, GraphicsViewInterface::NFaceCloud);
+
+    if(outModel == mSelectedPointsModel)
+    {
+        if(mSelectedPointsScene == nullptr)
+            const_cast<DM_ItemGroupGui*>(this)->mSelectedPointsScene = new CT_Scene(qSharedPointerDynamicCast<CT_AbstractCloudIndexRegisteredT<CT_PointData>>(mGraphicsView->getSelectedPoints()));
+
+        return new ItemQtIterator(mSelectedPointsScene);
+    }
 
     const CT_OutAbstractItemModel* itemModel = dynamic_cast<const CT_OutAbstractItemModel*>(outModel);
 

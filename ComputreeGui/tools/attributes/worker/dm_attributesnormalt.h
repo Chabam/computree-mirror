@@ -13,7 +13,7 @@ template<typename Type>
 class DM_AttributesNormalT : public DM_AbstractAttributesNormal
 {
 public:
-    DM_AttributesNormalT();
+    DM_AttributesNormalT(bool local);
 
     /**
      * @brief Check if the doc has the necessary cloud (normal cloud) or set it if not
@@ -23,12 +23,12 @@ public:
     /**
      * @brief accept only Type (Point, Face, etc...) and normals
      */
-    bool setTypeAttributes(const Type *ta, const CT_AttributesNormal *an);
+    bool setTypeAttributes(const Type *ta, const CT_AttributesNormal<Type> *an);
 
     /**
      * @brief getter of I[Type]Attributes
      */
-    CT_AttributesNormal* normalAttributes() const;
+    CT_AttributesNormal<Type>* normalAttributes() const;
     Type* abstractTypeAttributes() const;
 
 protected:
@@ -37,12 +37,43 @@ protected:
      * @brief Apply the normal to the [Type] of the document. Use [Type] cloud index from I[Type]Attributes.
      * @param doc : document to use
      */
-    bool process(GDocumentViewForGraphics *doc) {  Q_UNUSED(doc) return false; }
+    bool process(GDocumentViewForGraphics* doc) {  Q_UNUSED(doc) return false; }
+
+    void finalProcess(GDocumentViewForGraphics* doc, AMKgl::GlobalNormalCloud* ptrArray)
+    {
+        if(ptrArray == nullptr)
+            return;
+
+        AMKgl::GlobalNormalCloud& refArray = *ptrArray;
+
+        const size_t size = mustApplyToLocalIndex() ? m_an->numberOfSetLocalValues() : m_an->numberOfSetValues();
+
+        if(size == 0)
+            return;
+
+        size_t i = 0;
+        auto visitor = [this, &refArray, &i, &size](const size_t& globalIndex, const CT_Normal& value) -> bool
+        {
+            refArray[globalIndex] = value;
+
+            setProgress(int((i*100)/size));
+            ++i;
+
+            return !isCanceled();
+        };
+
+        if(mustApplyToLocalIndex())
+            m_an->visitLocalValues(visitor);
+        else
+            m_an->visitValues(visitor);
+
+        doc->dirtyNormalsOfPoints();
+    }
 
     void attributesDeleted();
 
 private:
-    CT_AttributesNormal *m_an;
+    CT_AttributesNormal<Type> *m_an;
 };
 
 // specialisation for points

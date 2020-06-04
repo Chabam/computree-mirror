@@ -3,19 +3,19 @@
 #include "ct_global/ct_context.h"
 
 template<typename Type>
-DM_AttributesNormalT<Type>::DM_AttributesNormalT() : DM_AbstractAttributesNormal()
+DM_AttributesNormalT<Type>::DM_AttributesNormalT(bool local) : DM_AbstractAttributesNormal(local)
 {
     m_an = nullptr;
 }
 
 template<typename Type>
-bool DM_AttributesNormalT<Type>::setTypeAttributes(const Type *ta, const CT_AttributesNormal *an)
+bool DM_AttributesNormalT<Type>::setTypeAttributes(const Type *ta, const CT_AttributesNormal<Type> *an)
 {
     if(ta != dynamic_cast<const Type*>(an))
         return false;
 
     setAttributes(ta);
-    m_an = const_cast<CT_AttributesNormal*>(an);
+    m_an = const_cast<CT_AttributesNormal<Type>*>(an);
 
     return true;
 }
@@ -27,7 +27,7 @@ void DM_AttributesNormalT<Type>::attributesDeleted()
 }
 
 template<typename Type>
-CT_AttributesNormal* DM_AttributesNormalT<Type>::normalAttributes() const
+CT_AttributesNormal<Type>* DM_AttributesNormalT<Type>::normalAttributes() const
 {
     return m_an;
 }

@@ -2,7 +2,7 @@
 #define CT_LASGPSPACKET_H
 
 #include "ctliblas/tools/las/ct_lasdefine.h"
-#include "ctliblas/tools/las/ct_laspointinfo.h"
+#include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
 
 #include <QDataStream>
 
@@ -24,7 +24,7 @@ public:
     /**
      * @brief Write the information for the gps packet
      */
-    void writeGpsPacket(QDataStream &stream, const CT_LasPointInfo& info) const;
+    void writeGpsPacket(QDataStream &stream, const size_t& globalIndex, const CT_AbstractPointAttributesScalar* gpsValues) const;
 
 private:
     char  m_emptyData[8];

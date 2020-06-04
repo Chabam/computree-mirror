@@ -210,8 +210,11 @@ void CT_CloudIndexStdVectorTMethodImpl<T>::clear()
 template<typename T>
 void CT_CloudIndexStdVectorTMethodImpl<T>::erase(const size_t &beginIndex, const size_t &sizes)
 {
-    size_t endIndex = (beginIndex+sizes)-1;
-    size_t cpySize = size()-(beginIndex+sizes);
+    if(sizes == 0)
+        return;
+
+    const size_t endIndex = std::min(beginIndex + sizes, size());
+    const size_t cpySize = size() - endIndex;
 
     if(cpySize > 0)
     {
@@ -223,7 +226,7 @@ void CT_CloudIndexStdVectorTMethodImpl<T>::erase(const size_t &beginIndex, const
         memcpy(dst, src, sizeof(T)*cpySize);
     }
 
-    resize(size()-sizes);
+    resize(size() - std::min(sizes, size()));
 }
 
 template<typename T>
@@ -292,35 +295,35 @@ template<typename T>
 void CT_CloudIndexStdVectorTMethodImpl<T>::eraseBetweenAndShiftRest(const size_t &eraseBeginPos, const size_t &eraseSize,
                                                           const size_t &offset, const bool &negativeOffset)
 {
-    size_t isize = size();
-    size_t i = eraseBeginPos;
-    size_t j = i+eraseSize;
+    const size_t endOfCollection = size();
+    size_t currentIndexOfValueToReplace = eraseBeginPos;
+    size_t currentIndexOfValueToShift = eraseBeginPos + eraseSize;
 
     // we copy the shift part to the erase part and shift the index in the same time
     if(negativeOffset)
     {
-        while(j < isize)
+        while(currentIndexOfValueToShift < endOfCollection)
         {
-            _vector.at(i) -= T(offset);
+            _vector.at(currentIndexOfValueToReplace) = _vector.at(currentIndexOfValueToShift) - T(offset);
 
-            ++j;
-            ++i;
+            ++currentIndexOfValueToShift;
+            ++currentIndexOfValueToReplace;
         }
     }
     else
     {
-        while(j < isize)
+        while(currentIndexOfValueToShift < endOfCollection)
         {
-            _vector.at(i) += T(offset);
+            _vector.at(currentIndexOfValueToReplace) = _vector.at(currentIndexOfValueToShift) + T(offset);
 
-            ++j;
-            ++i;
+            ++currentIndexOfValueToShift;
+            ++currentIndexOfValueToReplace;
         }
     }
 
     // we erase the end of the cloud
-    if(i < isize)
-        erase(i, isize-i);
+    if(currentIndexOfValueToReplace < endOfCollection)
+        erase(currentIndexOfValueToReplace, endOfCollection-currentIndexOfValueToReplace);
 }
 
 template<typename T>

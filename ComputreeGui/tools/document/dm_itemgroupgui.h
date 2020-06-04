@@ -11,6 +11,7 @@
 #include "ct_itemdrawable/ct_edgeattributesnormal.h"
 #include "ct_itemdrawable/ct_faceattributescolor.h"
 #include "ct_itemdrawable/ct_faceattributesnormal.h"
+#include "ct_itemdrawable/ct_scene.h"
 
 #include "ct_colorcloud/registered/ct_standardcolorcloudregistered.h"
 #include "ct_normalcloud/registered/ct_standardnormalcloudregistered.h"
@@ -18,11 +19,12 @@
 #include "ct_model/outModel/ct_outstdgroupmodel.h"
 #include "ct_model/outModel/ct_outstdsingularitemmodel.h"
 
+#include "dm_fakeattributemanagert.h"
+
 /**
- * @brief
- * When you add an item it will check if
- *        the type already exist in it and if not it will use a copy of the model of the item
- *        and att it to the model of the root group.
+ * @brief When you add an item it will check if
+ *        the type already exist in it and if not he will use a copy of the model of the item
+ *        and add it to the model of the root group.
  */
 class DM_ItemGroupGui : public CT_StandardItemGroup
 {
@@ -59,6 +61,13 @@ private:
     using EdgesNormalModel = CT_OutStdSingularItemModel<CT_EdgeAttributesNormal>;
     using FacesColorModel = CT_OutStdSingularItemModel<CT_FaceAttributesColor>;
     using FacesNormalModel = CT_OutStdSingularItemModel<CT_FaceAttributesNormal>;
+    using SelectedPointsModel = CT_OutStdSingularItemModel<CT_Scene>;
+
+    template<typename ApplicableToT>
+    using DM_ColorAttributeManager = DM_FakeAttributeManagerT<CT_Color, CT_AbstractColorCloud, ApplicableToT>;
+
+    template<typename ApplicableToT>
+    using DM_NormalAttributeManager = DM_FakeAttributeManagerT<CT_Normal, CT_AbstractNormalCloud, ApplicableToT>;
 
     QHash<QString, QList<CT_AbstractItemDrawable*>*>    mListForType;
     QString                                             mCacheType;
@@ -78,37 +87,54 @@ private:
     FacesColorModel*                                    mFacesColorModel;
     FacesNormalModel*                                   mFacesNormalModel;
 
+    SelectedPointsModel*                                mSelectedPointsModel;
+
     CT_NMPCIR                                           mPointsCloudIndex;
     CT_PointsAttributesColor*                           mPointAttributesColor;
+    DM_ColorAttributeManager<CT_PointData>              mPointsColorAttributeManager;
     CT_PointsAttributesNormal*                          mPointAttributesNormal;
+    DM_NormalAttributeManager<CT_PointData>             mPointsNormalAttributeManager;
 
     CT_NMECIR                                           mEdgesCloudIndex;
     CT_EdgeAttributesColor*                             mEdgeAttributesColor;
+    DM_ColorAttributeManager<CT_Edge>                   mEdgesColorAttributeManager;
     CT_EdgeAttributesNormal*                            mEdgeAttributesNormal;
+    DM_NormalAttributeManager<CT_Edge>                  mEdgesNormalAttributeManager;
 
     CT_NMFCIR                                           mFacesCloudIndex;
     CT_FaceAttributesColor*                             mFaceAttributesColor;
+    DM_ColorAttributeManager<CT_Face>                   mFacesColorAttributeManager;
     CT_FaceAttributesNormal*                            mFaceAttributesNormal;
+    DM_NormalAttributeManager<CT_Face>                  mFacesNormalAttributeManager;
 
-    template<typename AttributeType, typename CloudIndexType>
-    IChildrensIteratorQtStylePtr createIteratorForColorAttribute(AttributeType*& attribute, CloudIndexType cloudIndex, GraphicsViewInterface::ColorCloudType cloudType) const {
+    CT_Scene*                                           mSelectedPointsScene;
+
+
+    template<typename AttributeType, typename CloudIndexType, typename ManagerT>
+    IChildrensIteratorQtStylePtr createIteratorForColorAttribute(AttributeType*& attribute,
+                                                                 CloudIndexType cloudIndex,
+                                                                 ManagerT& manager,
+                                                                 GraphicsViewInterface::ColorCloudType cloudType) const {
         if(attribute == nullptr)
         {
-            attribute = new AttributeType(cloudIndex,
-                                          mGraphicsView->colorCloudOf(cloudType)->abstractColorCloud(),
-                                          false);
+            manager.setAttributesCloud(mGraphicsView->colorCloudOf(cloudType)->abstractColorCloud());
+
+            attribute = new AttributeType(cloudIndex, manager);
         }
 
         return new ItemQtIterator(attribute);
     }
 
-    template<typename AttributeType, typename CloudIndexType>
-    IChildrensIteratorQtStylePtr createIteratorForNormalAttribute(AttributeType*& attribute, CloudIndexType cloudIndex, GraphicsViewInterface::NormalCloudType cloudType) const {
+    template<typename AttributeType, typename CloudIndexType, typename ManagerT>
+    IChildrensIteratorQtStylePtr createIteratorForNormalAttribute(AttributeType*& attribute,
+                                                                  CloudIndexType cloudIndex,
+                                                                  ManagerT& manager,
+                                                                  GraphicsViewInterface::NormalCloudType cloudType) const {
         if(attribute == nullptr)
         {
-            attribute = new AttributeType(cloudIndex,
-                                          mGraphicsView->normalCloudOf(cloudType)->abstractNormalCloud(),
-                                          false);
+            manager.setAttributesCloud(mGraphicsView->normalCloudOf(cloudType)->abstractNormalCloud());
+
+            attribute = new AttributeType(cloudIndex, manager);
         }
 
         return new ItemQtIterator(attribute);

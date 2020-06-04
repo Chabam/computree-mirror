@@ -38,6 +38,16 @@
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_iterator/ct_mutablepointiterator.h"
 
+#include "ct_handle/ct_handleoutpointcolor.h"
+#include "ct_handle/ct_handleoutpointnormal.h"
+#include "ct_handle/ct_handleoutpointscalar.h"
+#include "ct_handle/ct_handleoutpointscalarmask.h"
+
+#include "ct_handle/ct_handleinpointcolor.h"
+#include "ct_handle/ct_handleinpointnormal.h"
+#include "ct_handle/ct_handleinpointscalar.h"
+#include "ct_handle/ct_handleinpointscalarmask.h"
+
 #include <Eigen/Core>
 
 /**

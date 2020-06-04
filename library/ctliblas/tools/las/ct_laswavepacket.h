@@ -2,7 +2,7 @@
 #define CT_LASWAVEPACKET_H
 
 #include "ctliblas/tools/las/ct_lasdefine.h"
-#include "ctliblas/tools/las/ct_laspointinfo.h"
+#include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
 
 #include <QDataStream>
 
@@ -24,7 +24,12 @@ public:
     /**
      * @brief Write the information for the wave packet
      */
-    void writeWavePacket(QDataStream &stream, const CT_LasPointInfo& info) const;
+    void writeWavePacket(QDataStream &stream,
+                         const size_t& globalIndex,
+                         const CT_AbstractPointAttributesScalar* wpdiValues,
+                         const CT_AbstractPointAttributesScalar* bowdValues,
+                         const CT_AbstractPointAttributesScalar* wpsbValues,
+                         const CT_AbstractPointAttributesScalar* rpwlValues) const;
 
 private:
     char  m_emptyData[29];

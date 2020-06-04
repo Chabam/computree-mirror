@@ -8,6 +8,23 @@
 #include "ct_accessibility/ct_iaccesspointcloud.h"
 #include "ct_accessibility/ct_iaccessfacecloud.h"
 #include "ct_accessibility/ct_iaccessedgecloud.h"
+
+#include "ct_handle/ct_handleoutedgecolor.h"
+#include "ct_handle/ct_handleoutedgenormal.h"
+#include "ct_handle/ct_handleoutedgescalar.h"
+
+#include "ct_handle/ct_handleoutfacecolor.h"
+#include "ct_handle/ct_handleoutfacenormal.h"
+#include "ct_handle/ct_handleoutfacescalar.h"
+
+#include "ct_handle/ct_handleinedgecolor.h"
+#include "ct_handle/ct_handleinedgenormal.h"
+#include "ct_handle/ct_handleinedgescalar.h"
+
+#include "ct_handle/ct_handleinfacecolor.h"
+#include "ct_handle/ct_handleinfacenormal.h"
+#include "ct_handle/ct_handleinfacescalar.h"
+
 /**
  * @brief A singular item that can manage a mesh
  */

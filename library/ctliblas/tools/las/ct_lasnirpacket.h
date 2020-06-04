@@ -2,7 +2,7 @@
 #define CT_LASNIRPACKET_H
 
 #include "ctliblas/tools/las/ct_lasdefine.h"
-#include "ctliblas/tools/las/ct_laspointinfo.h"
+#include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
 
 #include <QDataStream>
 
@@ -24,7 +24,7 @@ public:
     /**
      * @brief Write the information for the nir packet
      */
-    void writeNirPacket(QDataStream &stream, const CT_LasPointInfo& info) const;
+    void writeNirPacket(QDataStream &stream, const size_t& globalIndex, const CT_AbstractPointAttributesScalar* nirValues) const;
 
 private:
     char  m_emptyData[2];

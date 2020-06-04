@@ -7,7 +7,7 @@
 class DM_AbstractAttributesColor : public DM_AbstractAttributes
 {
 public:
-    DM_AbstractAttributesColor();
+    DM_AbstractAttributesColor(bool local);
 
     void setSyncWithCloud(CT_Repository::SyncCloudWith syncWith);
     CT_Repository::SyncCloudWith syncWithCloud() const;

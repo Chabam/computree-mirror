@@ -70,18 +70,24 @@ private:
     QList<QStandardItem*> createAttributesNormalForModel(DM_AbstractAttributesNormal *pa);
 
     template<typename IAttributesType>
-    void addToScalarRoot(const QList<QStandardItem*> &items) {}
-    void addToScalarRoot(const QList<QStandardItem*> &items, QStandardItem *&root, QStandardItem *model);
+    QStandardItem* rootItemForType() const { return nullptr; }
 
     template<typename IAttributesType>
-    void addToColorRoot(const QList<QStandardItem*> &items) {}
-    void addToColorRoot(const QList<QStandardItem*> &items, QStandardItem *&root, QStandardItem *model);
+    QStandardItem* getOrCreateScalarRootItemForType(QStandardItem*) { return nullptr; }
 
     template<typename IAttributesType>
-    void addToNormalRoot(const QList<QStandardItem*> &items) {}
-    void addToNormalRoot(const QList<QStandardItem*> &items, QStandardItem *&root, QStandardItem *model);
+    QStandardItem* getOrCreateColorRootItemForType(QStandardItem*) { return nullptr; }
 
-    void createWidgetForItems(const QList<QStandardItem*> &items);
+    template<typename IAttributesType>
+    QStandardItem* getOrCreateNormalRootItemForType(QStandardItem*) { return nullptr; }
+
+    void createScalarRootItemIfNull(QStandardItem*& root, QStandardItem* parent) const;
+    void createColorRootItemIfNull(QStandardItem*& root, QStandardItem* parent) const;
+    void createNormalRootItemIfNull(QStandardItem*& root, QStandardItem* parent) const;
+
+    QStandardItem* findOrCreateChildForAttributeModel(const CT_OutAbstractModel* attModel, std::function<QVariant()> data, QStandardItem* parent) const;
+
+    void createWidgetForItems(const QList<QStandardItem*> &items) const;
 
     void editAttributesScalar(DM_AbstractAttributesScalar *pas);
     void clearEditGradient();
@@ -116,24 +122,31 @@ private slots:
 };
 
 template<>
-void GPointsAttributesManager::addToScalarRoot<CT_AbstractPointsAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::rootItemForType<CT_AbstractPointsAttributes>() const;
 template<>
-void GPointsAttributesManager::addToScalarRoot<CT_AbstractFaceAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::rootItemForType<CT_AbstractFaceAttributes>() const;
 template<>
-void GPointsAttributesManager::addToScalarRoot<CT_AbstractEdgeAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::rootItemForType<CT_AbstractEdgeAttributes>() const;
 
 template<>
-void GPointsAttributesManager::addToColorRoot<CT_AbstractPointsAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::getOrCreateScalarRootItemForType<CT_AbstractPointsAttributes>(QStandardItem* parent);
 template<>
-void GPointsAttributesManager::addToColorRoot<CT_AbstractFaceAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::getOrCreateScalarRootItemForType<CT_AbstractFaceAttributes>(QStandardItem* parent);
 template<>
-void GPointsAttributesManager::addToColorRoot<CT_AbstractEdgeAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::getOrCreateScalarRootItemForType<CT_AbstractEdgeAttributes>(QStandardItem* parent);
 
 template<>
-void GPointsAttributesManager::addToNormalRoot<CT_AbstractPointsAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::getOrCreateColorRootItemForType<CT_AbstractPointsAttributes>(QStandardItem* parent);
 template<>
-void GPointsAttributesManager::addToNormalRoot<CT_AbstractFaceAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::getOrCreateColorRootItemForType<CT_AbstractFaceAttributes>(QStandardItem* parent);
 template<>
-void GPointsAttributesManager::addToNormalRoot<CT_AbstractEdgeAttributes>(const QList<QStandardItem*> &items);
+QStandardItem* GPointsAttributesManager::getOrCreateColorRootItemForType<CT_AbstractEdgeAttributes>(QStandardItem* parent);
+
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_AbstractPointsAttributes>(QStandardItem* parent);
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_AbstractFaceAttributes>(QStandardItem* parent);
+template<>
+QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_AbstractEdgeAttributes>(QStandardItem* parent);
 
 #endif // GPOINTSATTRIBUTESMANAGER_H

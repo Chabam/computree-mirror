@@ -1,19 +1,19 @@
 #include "tools/attributes/worker/dm_attributescolort.h"
 
 template<typename Type>
-DM_AttributesColorT<Type>::DM_AttributesColorT() : DM_AbstractAttributesColor()
+DM_AttributesColorT<Type>::DM_AttributesColorT(bool local) : DM_AbstractAttributesColor(local)
 {
     m_ac = nullptr;
 }
 
 template<typename Type>
-bool DM_AttributesColorT<Type>::setTypeAttributes(const Type *ta, const CT_AttributesColor *ac)
+bool DM_AttributesColorT<Type>::setTypeAttributes(const Type *ta, const CT_AttributesColor<Type>* ac)
 {
     if(ta != dynamic_cast<const Type*>(ac))
         return false;
 
     setAttributes(ta);
-    m_ac = const_cast<CT_AttributesColor*>(ac);
+    m_ac = const_cast<CT_AttributesColor<Type>*>(ac);
 
     return true;
 }
@@ -25,7 +25,7 @@ void DM_AttributesColorT<Type>::attributesDeleted()
 }
 
 template<typename Type>
-CT_AttributesColor* DM_AttributesColorT<Type>::colorAttributes() const
+CT_AttributesColor<Type>* DM_AttributesColorT<Type>::colorAttributes() const
 {
     return m_ac;
 }

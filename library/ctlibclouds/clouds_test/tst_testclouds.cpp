@@ -4,6 +4,8 @@
 #include "ct_cloudindex/registered/abstract/ct_abstractnotmodifiablecloudindexregisteredt.h"
 #include "ct_colorcloud/registered/ct_standardcolorcloudregistered.h"
 #include "ct_colorcloud/abstract/ct_abstractmodifiableindexcloudcolormap.h"
+#include "ct_cloud/ct_bitcloud.h"
+#include "ct_cloudindex/ct_cloudindexstdvectort.h"
 
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_iterator/ct_mutablepointiterator.h"
@@ -18,12 +20,14 @@ public:
     TestClouds();
 
 private Q_SLOTS:
+    void testBitCloud();
     void testPointCloudSimple();
     void testPointIterator();
     void testPointCloudRemoveMiddle();
     void testUndefinedSizePointCloudSimple();
     void testUndefinedSizePointCloudRemoveMiddle();
     void testCloudIndexSyncRemoveMiddle();
+    void testCloudIndexVectorSyncRemoveMiddle();
     void testColorCloudSyncRemoveMiddle();
     void testMapColorCloudSyncRemoveMiddle();
     void benchmarkCloudIndexLoop();
@@ -37,6 +41,225 @@ private:
 
 TestClouds::TestClouds()
 {
+}
+
+void TestClouds::testBitCloud()
+{
+    CT_BitCloud bitCloud;
+
+    QCOMPARE(bitCloud.size(), 0);
+    QCOMPARE(bitCloud.m_numberOfBits, 0);
+    QCOMPARE(bitCloud.m_collection.size(), 0);
+
+    bitCloud.resize(16);
+
+    QCOMPARE(bitCloud.size(), 16);
+    QCOMPARE(bitCloud.m_numberOfBits, 16);
+    QCOMPARE(bitCloud.m_collection.size(), 2);
+
+    bitCloud.set(0, true);
+    QCOMPARE(bitCloud.m_collection[0], 0x01);
+    QCOMPARE(bitCloud.value(0), true);
+
+    bitCloud.set(10, true);
+    QCOMPARE(bitCloud.m_collection[1], 0x04);
+    QCOMPARE(bitCloud.value(10), true);
+
+    bitCloud.erase(0, 8);
+    QCOMPARE(bitCloud.size(), 8);
+    QCOMPARE(bitCloud.m_numberOfBits, 8);
+    QCOMPARE(bitCloud.m_collection.size(), 1);
+    QCOMPARE(bitCloud.value(2), true);
+
+    bitCloud.resize(9);
+    QCOMPARE(bitCloud.m_collection[0], 0x04);
+    QCOMPARE(bitCloud.m_collection[1], 0x00);
+
+    bitCloud.set(8, true);
+    QCOMPARE(bitCloud.m_collection[1], 0x01);
+
+    bitCloud.erase(0, 2);
+    QCOMPARE(bitCloud.size(), 7);
+    QCOMPARE(bitCloud.m_collection[0], 0x41);
+    QCOMPARE(bitCloud.value(0), true);
+    QCOMPARE(bitCloud.value(6), true);
+
+    for(size_t i=1; i<32; ++i)
+    {
+        bitCloud.resize(32);
+        bitCloud.fill(0);
+
+        bitCloud.set(31, true);
+        bitCloud.set(15, true);
+        QVERIFY2(bitCloud.value(31) == true, QString("i == %1").arg(i).toUtf8().data());
+        QVERIFY2(bitCloud.value(15) == true, QString("i == %1").arg(i).toUtf8().data());
+        bitCloud.erase(0, i);
+        QVERIFY2(bitCloud.value(31-i) == true, QString("i == %1").arg(i).toUtf8().data());
+
+        if(i < 16)
+        {
+            QVERIFY2(bitCloud.value(15-i) == true, QString("i == %1").arg(i).toUtf8().data());
+        }
+    }
+
+    for(size_t i=1; i<8; ++i)
+    {
+        bitCloud.resize(8);
+        bitCloud.fill(0);
+        bitCloud.set(7, true);
+        bitCloud.erase(0, i);
+        QVERIFY2(bitCloud.value(7-i) == true, QString("i == %1").arg(i).toUtf8().data());
+    }
+
+    for(size_t i=1; i<10; ++i)
+    {
+        bitCloud.resize(8);
+        bitCloud.fill(0);
+        bitCloud.set(0, true);
+        bitCloud.set(7, true);
+        bitCloud.erase(1, i);
+        QVERIFY2(bitCloud.value(0) == true, QString("i == %1").arg(i).toUtf8().data());
+
+        if(i < 8)
+        {
+            QVERIFY2(bitCloud.value(7-i) == true, QString("i == %1").arg(i).toUtf8().data());
+            QVERIFY2(bitCloud.value(7) == false, QString("i == %1").arg(i).toUtf8().data());
+        }
+    }
+
+    // accordeon
+    // efface du bit 1 au bit i
+    // |   32   |   24  |   16  |   8   |
+    //  0100000000010000000001000000001x1
+    //  100000000010000000001000000001xx1
+    //  00000000010000000001000000001xxx1
+    //  0000000010000000001000000001xxxx1
+    //  000000010000000001000000001xxxxx1
+    //  00000010000000001000000001xxxxxx1
+    //  0000010000000001000000001xxxxxxx1
+    //  000010000000001000000001xxxxxxxx1
+    //  00010000000001000000001xxxxxxxxx1
+    //  0010000000001000000001xxxxxxxxxx1
+    //  ....
+    //  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1
+
+    for(size_t i=1; i<32; ++i)
+    {
+        bitCloud.resize(32);
+        bitCloud.fill(0);
+        bitCloud.set(0, true);
+
+        if(i < 31)
+            bitCloud.set(i+1, true);
+
+        if(i < 22)
+            bitCloud.set(i+10, true);
+
+        if(i < 12)
+            bitCloud.set(i+20, true);
+
+        if(i < 2)
+            bitCloud.set(i+30, true);
+
+        bitCloud.erase(1, i);
+
+        for(size_t k=0; k<(32-i); ++k)
+        {
+            const bool indexMustBeTrue = (k == 0) || (k == 1) || (k == 10) || (k == 20) || (k == 30);
+            QVERIFY2(bitCloud.value(k) == indexMustBeTrue, QString("(must be %1) i == %2 and k == %3").arg(indexMustBeTrue ? "true" : "false").arg(i).arg(k).toUtf8().data());
+        }
+    }
+
+    // fenêtre glissante
+    // efface du bit i au bit i+6
+    // |   32   |   24  |   16  |   8   |
+    //  00000010000000001000000001xxxxxx1
+    //  0000010000000001000000001xxxxxx01
+    //  000010000000001000000001xxxxxx001
+    //  00010000000001000000001xxxxxx0001
+    //  00010000000001000000001xxxxxx0001
+    //  0010000000001000000001xxxxxx00001
+    //  010000000001000000001xxxxxx000001
+    //  ....
+    //  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1
+    for(size_t i=1; i<26; ++i)
+    {
+        bitCloud.resize(32);
+        bitCloud.fill(0);
+        bitCloud.set(0, true);
+
+        if(i < 26)
+            bitCloud.set(i+6, true);
+
+        if(i < 16)
+            bitCloud.set(i+16, true);
+
+        if(i < 6)
+            bitCloud.set(i+26, true);
+
+        bitCloud.erase(i, 6);
+
+        for(size_t k=0; k<26; ++k)
+        {
+            const bool indexMustBeTrue = (k == 0) || (k == i) || (k == (i+20)) || (k == (i+10));
+            QVERIFY2(bitCloud.value(k) == indexMustBeTrue, QString("(must be %1) i == %2 and k == %3").arg(indexMustBeTrue ? "true" : "false").arg(i).arg(k).toUtf8().data());
+        }
+    }
+
+    // accordeon + fenêtre glissante = toutes les possibilités
+    for(size_t j=1; j<32; ++j)
+    {
+        for(size_t i=1; i<(33-j); ++i)
+        {
+            quint32 valA = 1;
+
+            bitCloud.resize(32);
+            bitCloud.fill(0);
+
+            bitCloud.set(0, true);
+
+            bitCloud.set(j-1, true);
+            valA |= (quint32(1) << (j-1));
+
+            if((j+i)<32)
+            {
+                bitCloud.set(j+i, true);
+                valA |= (quint32(1) << j);
+            }
+
+            if((j+i+5)<32)
+            {
+                bitCloud.set(j+i+5, true);
+                valA |= (quint32(1) << (j+5));
+            }
+
+            if((j+i+8)<32)
+            {
+                bitCloud.set(j+i+8, true);
+                valA |= (quint32(1) << (j+8));
+            }
+
+            if((j+i+13)<32)
+            {
+                bitCloud.set(j+i+13, true);
+                valA |= (quint32(1) << (j+13));
+            }
+
+            if((j+i+18)<32)
+            {
+                bitCloud.set(j+i+18, true);
+                valA |= (quint32(1) << (j+18));
+            }
+
+            bitCloud.erase(j, i);
+
+            for(size_t k=0; k<(32-i); ++k)
+            {
+                const bool indexMustBeTrue = (k == 0) || (k == (j-1)) || (k == j) || (k == (j+5)) || (k == (j+8)) || (k == (j+13)) || (k == (j+18));
+                QVERIFY2(bitCloud.value(k) == indexMustBeTrue, QString("(must be %1) i == %2 and j == %3 and k == %4").arg(indexMustBeTrue ? "true" : "false").arg(i).arg(j).arg(k).toUtf8().data());
+            }
+        }
+    }
 }
 
 void TestClouds::testPointCloudSimple()
@@ -217,6 +440,54 @@ void TestClouds::testCloudIndexSyncRemoveMiddle()
     CT_NMPCIR pcir3 = createPointCloud(42, 58);
 
     CT_MCIR cir = PS_REPOSITORY->createNewIndexCloud(CT_Repository::SyncWithPointCloud);
+
+    cir->abstractModifiableCloudIndex()->addIndex(4); // pcir
+    cir->abstractModifiableCloudIndex()->addIndex(5); // pcir
+    cir->abstractModifiableCloudIndex()->addIndex(11); // pcir2
+    cir->abstractModifiableCloudIndex()->addIndex(14); // pcir2
+    cir->abstractModifiableCloudIndex()->addIndex(50); // pcir3
+    cir->abstractModifiableCloudIndex()->addIndex(37); // pcir3
+    cir->abstractModifiableCloudIndex()->addIndex(45); // pcir3
+
+    QCOMPARE(cir->abstractModifiableCloudIndex()->size(), (size_t)7);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(0), (ct_index_type)4);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(1), (ct_index_type)5);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(2), (ct_index_type)11);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(3), (ct_index_type)14);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(4), (ct_index_type)37);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(5), (ct_index_type)45);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(6), (ct_index_type)50);
+
+    pcir2.clear();
+
+    QCOMPARE(cir->abstractModifiableCloudIndex()->size(), (size_t)5);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(0), (ct_index_type)4);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(1), (ct_index_type)5);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(2), (ct_index_type)11);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(3), (ct_index_type)19);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(4), (ct_index_type)24);
+
+    pcir3.clear();
+
+    QCOMPARE(cir->abstractModifiableCloudIndex()->size(), (size_t)2);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(0), (ct_index_type)4);
+    QCOMPARE(cir->abstractModifiableCloudIndex()->constIndexAt(1), (ct_index_type)5);
+
+    pcir.clear();
+
+    QCOMPARE(cir->abstractModifiableCloudIndex()->size(), (size_t)0);
+}
+
+void TestClouds::testCloudIndexVectorSyncRemoveMiddle()
+{
+    CT_PointAccessor pAccess;
+    QCOMPARE(pAccess.size(), (size_t)0);
+
+    CT_NMPCIR pcir = createPointCloud(8, 0);
+    CT_NMPCIR pcir2 = createPointCloud(26, 21);
+    CT_NMPCIR pcir3 = createPointCloud(42, 58);
+
+    CT_MCIR cir = PS_REPOSITORY->createNewIndexCloudT< CT_CloudIndexStdVectorT >(CT_Repository::SyncWithPointCloud);
 
     cir->abstractModifiableCloudIndex()->addIndex(4); // pcir
     cir->abstractModifiableCloudIndex()->addIndex(5); // pcir

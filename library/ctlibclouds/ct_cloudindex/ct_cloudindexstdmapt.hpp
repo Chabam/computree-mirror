@@ -168,9 +168,9 @@ void CT_CloudIndexStdMapT<T, ValueT>::insertIndexAndValue(const size_t &index, c
 }
 
 template<typename T, typename ValueT>
-const ValueT CT_CloudIndexStdMapT<T, ValueT>::valueAtGlobalIndex(const size_t &index, const ValueT & defaultValue) const
+const ValueT& CT_CloudIndexStdMapT<T, ValueT>::valueAtGlobalIndex(const size_t &index, const ValueT & defaultValue) const
 {
-    typename std::map<ct_index_type,ValueT >::const_iterator it = m_collection->find(index);
+    typename std::map<ct_index_type,ValueT >::const_iterator it = m_collection->find(ct_index_type(index));
 
     if(it != m_collection->end())
         return it->second;
@@ -179,7 +179,7 @@ const ValueT CT_CloudIndexStdMapT<T, ValueT>::valueAtGlobalIndex(const size_t &i
 }
 
 template<typename T, typename ValueT>
-const ValueT CT_CloudIndexStdMapT<T, ValueT>::valueAt(const size_t &index, const ValueT & defaultValue) const
+const ValueT& CT_CloudIndexStdMapT<T, ValueT>::valueAt(const size_t &index, const ValueT & defaultValue) const
 {
     typename std::map<ct_index_type,ValueT >::const_iterator it = m_collection->begin();
     std::advance(it, index);
@@ -188,6 +188,33 @@ const ValueT CT_CloudIndexStdMapT<T, ValueT>::valueAt(const size_t &index, const
         return it->second;
 
     return defaultValue;
+}
+
+template<typename T, typename ValueT>
+typename std::map<ct_index_type,ValueT >::const_iterator CT_CloudIndexStdMapT<T, ValueT>::cbegin() const
+{
+    return m_collection->begin();
+}
+
+template<typename T, typename ValueT>
+typename std::map<ct_index_type,ValueT >::const_iterator CT_CloudIndexStdMapT<T, ValueT>::cend() const
+{
+    return m_collection->end();
+}
+
+template<typename T, typename ValueT>
+typename std::map<ct_index_type,ValueT >::const_iterator CT_CloudIndexStdMapT<T, ValueT>::findAtGlobalIndex(const size_t& index) const
+{
+    return m_collection->find(ct_index_type(index));
+}
+
+template<typename T, typename ValueT>
+typename std::map<ct_index_type,ValueT >::const_iterator CT_CloudIndexStdMapT<T, ValueT>::findAtLocalIndex(const size_t& index) const
+{
+    typename std::map<ct_index_type,ValueT >::const_iterator it = m_collection->begin();
+    std::advance(it, index);
+
+    return it;
 }
 
 template<typename T, typename ValueT>

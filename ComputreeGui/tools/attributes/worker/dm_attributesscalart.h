@@ -19,7 +19,7 @@ template<typename Type>
 class DM_AttributesScalarT : public DM_AbstractAttributesScalar
 {
 public:
-    DM_AttributesScalarT();
+    DM_AttributesScalarT(bool local);
     ~DM_AttributesScalarT();
 
     /**
@@ -112,14 +112,15 @@ private:
     public:
         DM_ColorLinearInterpolator      *m_interpolator;
         CT_AbstractAttributesScalar     *m_as;
-        const CT_AbstractCloudIndex     *m_index;
+        //const CT_AbstractCloudIndex     *m_index;
         AMKgl::GlobalColorCloud*        m_cc;
         CT_FaceAccessor                 *m_fAccess;
         CT_EdgeAccessor                 *m_eAccess;
         double                          m_range;
         double                          m_manualMin;
-        size_t                          m_begin;
-        size_t                          m_end;
+        bool                            mApplyLocal;
+        //size_t                          m_begin;
+        //size_t                          m_end;
     };
 
     CT_AbstractAttributesScalar     *m_as;

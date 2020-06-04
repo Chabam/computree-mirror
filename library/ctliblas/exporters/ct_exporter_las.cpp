@@ -15,6 +15,7 @@
 #include "ctliblas/tools/las/ct_laspointformat10.h"
 
 CT_Exporter_LAS::CT_Exporter_LAS(int subMenuLevel) : SuperClass(subMenuLevel),
+    mColorAttribute(nullptr),
     mToolsFormat(nullptr)
 {
     setCanExportPoints(true);
@@ -83,34 +84,34 @@ void CT_Exporter_LAS::internalDeclareInputModels(CT_ExporterInModelStructureMana
     manager.addItemToGroup(m_hInGroup, m_hInItem, tr("Item à exporter"));
     manager.addItemToGroup(m_hInGroup, m_hInLASAttributesContainer, tr("Conteneur d'attributs LAS"));
 
-    manager.addItemToGroup(m_hInGroup, m_hInReturnNumber, tr("Return Number"));
-    manager.addItemToGroup(m_hInGroup, m_hInNumberOfReturn, tr("Number of Returns"));
-    manager.addItemToGroup(m_hInGroup, m_hInClassificationFlag, tr("Classification Flags"));
-    manager.addItemToGroup(m_hInGroup, m_hInScannerChannel, tr("Scanner Channel"));
-    manager.addItemToGroup(m_hInGroup, m_hInScanDirectionFlag, tr("Scan Direction Flag"));
-    manager.addItemToGroup(m_hInGroup, m_hInEdgeOfFlightLine, tr("Edge of Flight Line"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInReturnNumber, tr("Return Number"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInNumberOfReturn, tr("Number of Returns"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInClassificationFlag, tr("Classification Flags"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInScannerChannel, tr("Scanner Channel"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInScanDirectionFlag, tr("Scan Direction Flag"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInEdgeOfFlightLine, tr("Edge of Flight Line"));
 
-    manager.addItemToGroup(m_hInGroup, m_hInIntensity, tr("Intensité"));
-    manager.addItemToGroup(m_hInGroup, m_hInClassification, tr("Classification"));
-    manager.addItemToGroup(m_hInGroup, m_hInUserData, tr("User Data"));
-    manager.addItemToGroup(m_hInGroup, m_hInPointSourceID, tr("Point Source "));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInIntensity, tr("Intensité"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInClassification, tr("Classification"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInUserData, tr("User Data"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInPointSourceID, tr("Point Source "));
 
-    manager.addItemToGroup(m_hInGroup, m_hInScanAngle, tr("Scan Angle"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInScanAngle, tr("Scan Angle"));
 
-    manager.addItemToGroup(m_hInGroup, m_hInGPSTime, tr("GPS Time"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInGPSTime, tr("GPS Time"));
 
-    manager.addItemToGroup(m_hInGroup, m_hInRed, tr("Red"));
-    manager.addItemToGroup(m_hInGroup, m_hInGreen, tr("Green"));
-    manager.addItemToGroup(m_hInGroup, m_hInBlue, tr("Blue"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInRed, tr("Red"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInGreen, tr("Green"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInBlue, tr("Blue"));
 
-    manager.addItemToGroup(m_hInGroup, m_hInWavePacketDescriptorIndex, tr("Wave Packet Descriptor Index"));
-    manager.addItemToGroup(m_hInGroup, m_hInByteOffsetToWaveformData, tr("Byte Offset To Waveform Data"));
-    manager.addItemToGroup(m_hInGroup, m_hInWaveformPacketSizeInBytes, tr("Waveform Packet Size In Bytes"));
-    manager.addItemToGroup(m_hInGroup, m_hInReturnPointWaveformLocation, tr("Return Point Waveform Location"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInWavePacketDescriptorIndex, tr("Wave Packet Descriptor Index"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInByteOffsetToWaveformData, tr("Byte Offset To Waveform Data"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInWaveformPacketSizeInBytes, tr("Waveform Packet Size In Bytes"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInReturnPointWaveformLocation, tr("Return Point Waveform Location"));
 
-    manager.addItemToGroup(m_hInGroup, m_hInNIR, tr("NIR"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInNIR, tr("NIR"));
 
-    manager.addItemToGroup(m_hInGroup, m_hInColor, tr("Color"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInColor, tr("Color"));
 }
 
 CT_AbstractExporter::ExportReturn CT_Exporter_LAS::internalExportToFile()
@@ -144,29 +145,32 @@ CT_AbstractExporter::ExportReturn CT_Exporter_LAS::internalExportOnePiece(const 
 
             if(!atLeastOneContainer)
             {
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Return_Number, m_hInReturnNumber, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Number_of_Returns, m_hInNumberOfReturn, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Classification_Flags, m_hInClassificationFlag, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scanner_Channel, m_hInScannerChannel, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scan_Direction_Flag, m_hInScanDirectionFlag, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Edge_of_Flight_Line, m_hInEdgeOfFlightLine, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Intensity, m_hInIntensity, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Classification, m_hInClassification, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::User_Data, m_hInUserData, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Point_Source_ID, m_hInPointSourceID, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scan_Angle_Rank, m_hInScanAngle, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::GPS_Time, m_hInGPSTime, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Red, m_hInRed, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Green, m_hInGreen, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Blue, m_hInBlue, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Wave_Packet_Descriptor_Index, m_hInWavePacketDescriptorIndex, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Byte_offset_to_waveform_data, m_hInByteOffsetToWaveformData, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Waveform_packet_size_in_bytes, m_hInWaveformPacketSizeInBytes, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Return_Point_Waveform_Location, m_hInReturnPointWaveformLocation, mAllLasAttributes);
-                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::NIR, m_hInNIR, mAllLasAttributes);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Return_Number, m_hInReturnNumber, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Number_of_Returns, m_hInNumberOfReturn, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Classification_Flags, m_hInClassificationFlag, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scanner_Channel, m_hInScannerChannel, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scan_Direction_Flag, m_hInScanDirectionFlag, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Edge_of_Flight_Line, m_hInEdgeOfFlightLine, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Intensity, m_hInIntensity, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Classification, m_hInClassification, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::User_Data, m_hInUserData, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Point_Source_ID, m_hInPointSourceID, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Scan_Angle_Rank, m_hInScanAngle, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::GPS_Time, m_hInGPSTime, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Red, m_hInRed, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Green, m_hInGreen, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Blue, m_hInBlue, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Wave_Packet_Descriptor_Index, m_hInWavePacketDescriptorIndex, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Byte_offset_to_waveform_data, m_hInByteOffsetToWaveformData, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Waveform_packet_size_in_bytes, m_hInWaveformPacketSizeInBytes, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::Return_Point_Waveform_Location, m_hInReturnPointWaveformLocation, mLasAttributeByType);
+                findAttributeWithHandleAndAddItToCollection(CT_LasDefine::NIR, m_hInNIR, mLasAttributeByType);
 
                 for(const CT_PointsAttributesColor* attribute : m_hInColor.iterateInputs(m_handleResultExport)) {
-                    mColorsAttribute.append(attribute);
+
+                    // only use the first attribute because all other that use the same model use the same manager of attributes so there is only one cloud !
+                    mColorAttribute = attribute;
+                    break;
                 }
             }
 
@@ -242,10 +246,11 @@ CT_AbstractExporter::ExportReturn CT_Exporter_LAS::internalExportOnePiece(const 
             {
                 const CT_Point& p = itP.next().currentPoint();
                 const size_t globalIndex = itP.cIndex();
+                auto returnNumberValues = mLasAttributeByType.value(CT_LasDefine::Return_Number);
 
                 for(CT_LASPieceByPiecePrivateExporter* lasEx : finalPieceByPieceExporters)
                 {
-                    lasEx->computePointForHeader(globalIndex, p);
+                    lasEx->computePointForHeader(returnNumberValues, globalIndex, p);
                 }
             }
         }
@@ -284,41 +289,41 @@ void CT_Exporter_LAS::clearIterators()
 
 void CT_Exporter_LAS::clearAttributesClouds()
 {
-    mAllLasAttributes.clear();
-    mColorsAttribute.clear();
+    mLasAttributeByType.clear();
+    mColorAttribute = nullptr;
     mToolsFormat.reset(nullptr);
 }
 
 void CT_Exporter_LAS::findAttributesInContainerAndAddItToCollection(const CT_StdLASPointsAttributesContainer* container)
 {
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Return_Number, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Number_of_Returns, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Classification_Flags, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scanner_Channel, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scan_Direction_Flag, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Edge_of_Flight_Line, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Intensity, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Classification, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::User_Data, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Point_Source_ID, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scan_Angle_Rank, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::GPS_Time, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Red, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Green, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Blue, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Wave_Packet_Descriptor_Index, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Byte_offset_to_waveform_data, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Waveform_packet_size_in_bytes, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Return_Point_Waveform_Location, container, mAllLasAttributes);
-    findAttributeInContainerAndAddItToCollection(CT_LasDefine::NIR, container, mAllLasAttributes);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Return_Number, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Number_of_Returns, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Classification_Flags, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scanner_Channel, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scan_Direction_Flag, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Edge_of_Flight_Line, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Intensity, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Classification, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::User_Data, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Point_Source_ID, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Scan_Angle_Rank, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::GPS_Time, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Red, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Green, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Blue, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Wave_Packet_Descriptor_Index, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Byte_offset_to_waveform_data, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Waveform_packet_size_in_bytes, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::Return_Point_Waveform_Location, container, mLasAttributeByType);
+    findAttributeInContainerAndAddItToCollection(CT_LasDefine::NIR, container, mLasAttributeByType);
 }
 
 quint8 CT_Exporter_LAS::getPointDataFormat() const
 {
-    if(mAllLasAttributes.isEmpty() && mColorsAttribute.isEmpty())
+    if(mLasAttributeByType.isEmpty() && (mColorAttribute == nullptr))
         return 1;
 
-    const QList<CT_LasDefine::LASPointAttributesType> list = mAllLasAttributes.uniqueKeys();
+    const QList<CT_LasDefine::LASPointAttributesType> list = mLasAttributeByType.uniqueKeys();
 
     bool wavePacket = true;
     bool nir = true;
@@ -336,7 +341,7 @@ quint8 CT_Exporter_LAS::getPointDataFormat() const
     if(!list.contains(CT_LasDefine::Red)
             && !list.contains(CT_LasDefine::Green)
             && !list.contains(CT_LasDefine::Blue)
-            && mColorsAttribute.isEmpty())
+            && (mColorAttribute == nullptr))
         colors = false;
 
     if(wavePacket)

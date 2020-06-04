@@ -272,20 +272,21 @@ bool PB_StepPluginManager::loadExporters()
     sep->addExporter(new PB_XYBExporter(CT_StepsMenu::LP_Points));
     sep->addExporter(new PB_CSVExporter(CT_StepsMenu::LP_Items));
     sep->addExporter(new PB_GroupDataExporter(CT_StepsMenu::LP_Items));
-    //sep->addExporter(new PB_MultiXYBExporter());
     sep->addExporter(new PB_ASCRGBExporter(CT_StepsMenu::LP_Points));
     sep->addExporter(new PB_ASCIDExporter(CT_StepsMenu::LP_Points));
-    //sep->addExporter(new PB_ProfileExporter());
     sep->addExporter(new PB_Grid2DExporter(CT_StepsMenu::LP_Raster));
     sep->addExporter(new PB_MeshObjExporter(CT_StepsMenu::LP_Meshes));
     sep->addExporter(new PB_OPFExporter(CT_StepsMenu::LP_Others));
+    sep->addExporter(new CT_Exporter_LAS(CT_StepsMenu::LP_Points));
+
+    //sep->addExporter(new PB_MultiXYBExporter());
+    //sep->addExporter(new PB_ProfileExporter());
     /*
     sep->addExporter(new PB_Grid3DExporter());
     sep->addExporter(new PB_Grid3DAsTableExporter());
     sep->addExporter(new PB_Polygon2DExporter());
     sep->addExporter(new PB_PbmExporter());
     sep->addExporter(new PB_PgmExporter());*/
-    sep->addExporter(new CT_Exporter_LAS(CT_StepsMenu::LP_Points));
 
     // create gdal exporters
 #ifdef USE_GDAL
@@ -335,18 +336,18 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_OPF(CT_StepsMenu::LP_Others));
     sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_IDXYZ(CT_StepsMenu::LP_Points));
-    sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_LASV2(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_PTX(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_OBJ(CT_StepsMenu::LP_Meshes));
     sep->addReader(new CT_Reader_LArchitect_Grid(CT_StepsMenu::LP_Voxels));
     sep->addReader(new CT_Reader_TerraScanPrj(CT_StepsMenu::LP_Vector));
     sep->addReader(new CT_Reader_AsciiGrid3D(CT_StepsMenu::LP_Raster));
-    //sep->addReader(new CT_Reader_PGM());
-    //sep->addReader(new CT_Reader_PBM());
     sep->addReader(new CT_Reader_Points_ASCII(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_PLY(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_Trajectory(CT_StepsMenu::LP_Points));
+    //
+    //sep->addReader(new CT_Reader_PGM());
+    //sep->addReader(new CT_Reader_PBM());
 
     // create gdal readers
 

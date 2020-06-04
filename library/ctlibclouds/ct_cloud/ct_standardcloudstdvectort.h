@@ -47,6 +47,7 @@ protected:
     std::vector<T>   m_collection;
 
     template<typename A, typename CLOUD> friend class CT_GlobalCloudManagerT;
+    template<typename T> friend class CT_UndefinedPointCloudSizeDenseAttributeSetter;
 
     /**
      * @brief delete all elements of the cloud between beginIndex and (beginIndex+size-1) included.

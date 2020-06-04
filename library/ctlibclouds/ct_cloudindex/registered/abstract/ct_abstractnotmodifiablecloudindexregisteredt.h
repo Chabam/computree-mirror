@@ -10,6 +10,8 @@ template<typename T>
 class CT_AbstractNotModifiableCloudIndexRegisteredT : public CT_AbstractCloudIndexRegisteredT<T>
 {
 public:
+    using element_type = T;
+
     ~CT_AbstractNotModifiableCloudIndexRegisteredT();
 
 protected:

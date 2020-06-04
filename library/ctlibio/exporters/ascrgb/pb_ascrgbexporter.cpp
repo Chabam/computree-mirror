@@ -14,7 +14,9 @@
 #include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
 #include "ct_itemdrawable/ct_pointsattributescolor.h"
 
-PB_ASCRGBExporter::PB_ASCRGBExporter(int subMenuLevel) : SuperClass(subMenuLevel)
+PB_ASCRGBExporter::PB_ASCRGBExporter(int subMenuLevel) : SuperClass(subMenuLevel),
+    mPointsAttributeOfTypeColorOrScalar(nullptr),
+    mPointsNormal(nullptr)
 {
     addNewExportFormat(FileFormat("asc", tr("Fichier asc")));
 
@@ -41,29 +43,28 @@ QString PB_ASCRGBExporter::displayableName() const
 }
 
 void PB_ASCRGBExporter::setItemsToExport(const QList<const CT_AbstractItemDrawableWithPointCloud*>& items,
-                                         const QList<const CT_AbstractPointsAttributes*> colorsAttributes,
-                                         const QList<const CT_PointsAttributesNormal*> normalsAttributes)
+                                         const CT_AbstractPointsAttributes* pointsAttributeOfTypeColorOrScalar,
+                                         const CT_PointsAttributesNormal* normalsAttributes)
 {
     setMustUseModels(false);
     mItems = items;
 
-    QList<const CT_AbstractPointsAttributes*> finalAttributes = colorsAttributes;
-    finalAttributes.reserve(finalAttributes.size() + normalsAttributes.size());
-
-    for(const CT_PointsAttributesNormal* normal : normalsAttributes)
-    {
-        finalAttributes.append(normal);
-    }
-
-    m_attributsColorAndNormalPointWorker.setAttributes(finalAttributes);
+    mPointsAttributeOfTypeColorOrScalar = pointsAttributeOfTypeColorOrScalar;
+    mPointsNormal = normalsAttributes;
 }
 
 void PB_ASCRGBExporter::internalDeclareInputModels(CT_ExporterInModelStructureManager& manager)
 {
     manager.addGroupToRootGroup(m_hInGroup);
     manager.addItemToGroup(m_hInGroup, m_hInItem, tr("Item à exporter"));
-    manager.addItemToGroup(m_hInGroup, m_hInColorsAttribute, tr("Couleurs"));
-    manager.addItemToGroup(m_hInGroup, m_hInNormalsAttribute, tr("Normales"));
+
+    // colors can be in an other group than the item or normals
+    manager.addGroupToRootGroup(m_hInColorsGroup);
+    manager.addPointAttributeToGroup(m_hInColorsGroup, m_hInColorsAttribute, tr("Couleurs"));
+
+    // normals can be in an other group than the item or colors
+    manager.addGroupToRootGroup(m_hInNormalsGroup);
+    manager.addPointAttributeToGroup(m_hInNormalsGroup, m_hInNormalsAttribute, tr("Normales"));
 }
 
 CT_AbstractExporter::ExportReturn PB_ASCRGBExporter::internalExportToFile()
@@ -82,20 +83,55 @@ CT_AbstractExporter::ExportReturn PB_ASCRGBExporter::internalExportToFile()
 
     QTextStream txtStream(&file);
 
-    createColorAndNormalCloud();
+    if(mustUseModels())
+    {
+        mPointsAttributeOfTypeColorOrScalar = nullptr;
+        mPointsNormal = nullptr;
 
-    CT_AbstractColorCloud* cc = m_attributsColorAndNormalPointWorker.colorCloud() != nullptr ? m_attributsColorAndNormalPointWorker.colorCloud()->abstractColorCloud() : nullptr;
-    CT_AbstractNormalCloud* nn = m_attributsColorAndNormalPointWorker.normalCloud() != nullptr ? m_attributsColorAndNormalPointWorker.normalCloud()->abstractNormalCloud() : nullptr;
+        const CT_AbstractPointsAttributes* pA = m_hInColorsAttribute.firstInput(m_handleResultExport);
+
+        if((dynamic_cast<const CT_PointsAttributesColor*>(pA) != nullptr)
+                || (dynamic_cast<const CT_AbstractPointAttributesScalar*>(pA)))
+        {
+            mPointsAttributeOfTypeColorOrScalar = pA;
+        }
+
+        mPointsNormal = m_hInNormalsAttribute.firstInput(m_handleResultExport);
+    }
 
     txtStream << "X Y Z";
 
-    if(cc != nullptr)
+    if(mPointsAttributeOfTypeColorOrScalar != nullptr)
         txtStream << " R G B";
 
-    if(nn != nullptr)
+    if(mPointsNormal != nullptr)
         txtStream << " NX NY NZ";
 
     txtStream << "\n";
+
+    const CT_PointsAttributesColor* cc = dynamic_cast<const CT_PointsAttributesColor*>(mPointsAttributeOfTypeColorOrScalar);
+    const CT_AbstractPointAttributesScalar* scalar = dynamic_cast<const CT_AbstractPointAttributesScalar*>(mPointsAttributeOfTypeColorOrScalar);
+
+    const double min = scalar != nullptr ? scalar->minScalarAsDouble() : 0;
+    const double max = scalar != nullptr ? scalar->maxScalarAsDouble() : 0;
+    const double range = qMax(max-min, 1.0);
+
+    // function that assign the color values if variable "scalar" != nullptr
+    std::function<void (const size_t&, quint16&, quint16&, quint16&)> vScalarNotNull = [&scalar, &min, &range](const size_t& globalIndex, quint16& r, quint16& g, quint16& b)
+    {
+        r = g = b = quint16(((scalar->scalarAsDoubleAt(globalIndex)-min)*255)/range);
+    };
+
+    // function that assign the color values if variable "cc" != nullptr
+    std::function<void (const size_t&, quint16&, quint16&, quint16&)> vCCNotNull = [&cc](const size_t& globalIndex, quint16& r, quint16& g, quint16& b)
+    {
+        const CT_Color &col = cc->constColorAt(globalIndex);
+        r = quint16(col.r() / 255.0);
+        g = quint16(col.g() / 255.0);
+        b = quint16(col.b() / 255.0);
+    };
+
+    std::function<void (const size_t&, quint16&, quint16&, quint16&)> finalColorFunc = (cc == nullptr) ? ((scalar == nullptr) ? nullptr : vScalarNotNull) : vCCNotNull;
 
     if(mustUseModels())
     {
@@ -116,7 +152,7 @@ CT_AbstractExporter::ExportReturn PB_ASCRGBExporter::internalExportToFile()
         {
             const CT_AbstractItemDrawableWithPointCloud* item = *mIteratorItemBegin;
 
-            exportItem(item, txtStream, cc, nn, nExported, totalToExport);
+            exportItem(item, txtStream, finalColorFunc, nExported, totalToExport);
 
             nExported += 100;
             ++mIteratorItemBegin;
@@ -132,7 +168,7 @@ CT_AbstractExporter::ExportReturn PB_ASCRGBExporter::internalExportToFile()
 
         for(const CT_AbstractItemDrawableWithPointCloud* item : mItems)
         {
-            exportItem(item, txtStream, cc, nn, nExported, totalToExport);
+            exportItem(item, txtStream, finalColorFunc, nExported, totalToExport);
             nExported += 100;
         }
     }
@@ -150,51 +186,13 @@ void PB_ASCRGBExporter::clearIterators()
 
 void PB_ASCRGBExporter::clearAttributesClouds()
 {
-    m_attributsColorAndNormalPointWorker.setColorCloud(nullptr);
-    m_attributsColorAndNormalPointWorker.setNormalCloud(nullptr);
 }
 
-void PB_ASCRGBExporter::createColorAndNormalCloud()
-{
-    // cleared in clearAttributesClouds()
-    if(!m_attributsColorAndNormalPointWorker.colorCloud().isNull() || !m_attributsColorAndNormalPointWorker.normalCloud().isNull())
-        return;
-
-    if(mustUseModels())
-    {
-        QList<const CT_AbstractPointsAttributes*> attributesColor;
-        QList<const CT_AbstractPointsAttributes*> attributesNormal;
-
-        for(const CT_AbstractPointsAttributes* pA : m_hInColorsAttribute.iterateInputs(m_handleResultExport)) {
-            if((dynamic_cast<const CT_PointsAttributesColor*>(pA) != nullptr)
-                    || (dynamic_cast<const CT_AbstractPointAttributesScalar*>(pA)))
-                attributesColor.append(pA);
-        }
-
-        for(const CT_AbstractPointsAttributes* pA : m_hInNormalsAttribute.iterateInputs(m_handleResultExport)) {
-            if((dynamic_cast<const CT_PointsAttributesNormal*>(pA) != nullptr))
-                attributesNormal.append(pA);
-        }
-
-        m_attributsColorAndNormalPointWorker.setAttributes(attributesColor + attributesNormal);
-
-        if(!attributesColor.isEmpty())
-            m_attributsColorAndNormalPointWorker.setColorCloud(PS_REPOSITORY->createNewColorCloud(CT_Repository::SyncWithPointCloud));
-
-        if(!attributesNormal.isEmpty())
-            m_attributsColorAndNormalPointWorker.setNormalCloud(PS_REPOSITORY->createNewNormalCloud(CT_Repository::SyncWithPointCloud));
-    }
-    else if(!m_attributsColorAndNormalPointWorker.attributes().isEmpty())
-    {
-        m_attributsColorAndNormalPointWorker.setColorCloud(PS_REPOSITORY->createNewColorCloud(CT_Repository::SyncWithPointCloud));
-        m_attributsColorAndNormalPointWorker.setNormalCloud(PS_REPOSITORY->createNewNormalCloud(CT_Repository::SyncWithPointCloud));
-    }
-
-    if(!m_attributsColorAndNormalPointWorker.attributes().isEmpty())
-        m_attributsColorAndNormalPointWorker.apply();
-}
-
-void PB_ASCRGBExporter::exportItem(const CT_AbstractItemDrawableWithPointCloud* item, QTextStream& txtStream, const CT_AbstractColorCloud* cc, const CT_AbstractNormalCloud* nn, const int& nExported, const int& totalToExport)
+void PB_ASCRGBExporter::exportItem(const CT_AbstractItemDrawableWithPointCloud* item,
+                                   QTextStream& txtStream,
+                                   std::function<void (const size_t&, quint16&, quint16&, quint16&)> colorFunc,
+                                   const int& nExported,
+                                   const int& totalToExport)
 {
     CT_PointIterator itP(item->pointCloudIndex());
 
@@ -211,21 +209,18 @@ void PB_ASCRGBExporter::exportItem(const CT_AbstractItemDrawableWithPointCloud* 
         txtStream << CT_NumericToStringConversionT<double>::toString(point(1)) << " ";
         txtStream << CT_NumericToStringConversionT<double>::toString(point(2));
 
-        if(cc != nullptr)
+        if(colorFunc != nullptr)
         {
-            const CT_Color &co = cc->constColorAt(itP.cIndex());
-            r = quint16(co.r() / 255.0);
-            g = quint16(co.g() / 255.0);
-            b = quint16(co.b() / 255.0);
+            colorFunc(itP.currentGlobalIndex(), r, g, b);
 
             txtStream << " " << r << " ";
             txtStream << g << " ";
             txtStream << b;
         }
 
-        if(nn != nullptr)
+        if(mPointsNormal != nullptr)
         {
-            const CT_Normal &no = nn->constNormalAt(itP.cIndex());
+            const CT_Normal &no = mPointsNormal->constNormalAt(itP.currentGlobalIndex());
 
             txtStream << " " << no[0] << " ";
             txtStream << no[1] << " ";

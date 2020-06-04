@@ -2,20 +2,18 @@
 #define CT_ABSTRACTEDGEATTRIBUTESSCALAR_H
 
 #include "ct_itemdrawable/abstract/ct_abstractedgeattributes.h"
+#include "ct_attributes/abstract/ct_abstractattributesscalar.h"
 
 /**
- * @brief Represents a cloud attribute of scalar (int, float, double, etc...) for edge.
+ * @brief Represents a cloud of attributes of scalar type (int, float, double, etc...) for edges.
  */
-class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractEdgeAttributesScalar : public CT_AbstractEdgeAttributes
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractEdgeAttributesScalar : public CT_AbstractEdgeAttributes, public CT_AbstractAttributesScalar
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractEdgeAttributesScalar, CT_AbstractEdgeAttributes, Edge attributes)
 
-    using SuperClass = CT_AbstractEdgeAttributes;
-
 public:
-    CT_AbstractEdgeAttributesScalar();
-    CT_AbstractEdgeAttributesScalar(CT_ECIR cir);
+    CT_AbstractEdgeAttributesScalar() = default;
 
     /**
      * @brief Copy constructor.
@@ -35,22 +33,6 @@ public:
      *          - Document list is not copied
      */
     CT_AbstractEdgeAttributesScalar(const CT_AbstractEdgeAttributesScalar& other) = default;
-
-    /**
-     * @brief Returns the minimum value
-     */
-    virtual double dMin() const = 0;
-
-    /**
-     * @brief Returns the maximum value
-     */
-    virtual double dMax() const = 0;
-
-    /**
-     * @brief Returns the value at the specified index
-     */
-    virtual double dValueAt(const size_t &index) const = 0;
-
 };
 
 #endif // CT_ABSTRACTEDGEATTRIBUTESSCALAR_H

@@ -474,9 +474,10 @@ bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
 
             // create a new point cloud that size was undefined for the moment
             CT_AbstractUndefinedSizePointCloud *uspc = createPointCloud();
-            CT_StandardCloudStdVectorT<float> *intensityCloud = createIntensityArray();
-            CT_ColorCloudStdVector *colorCloud = createColorsArray();
-            CT_NormalCloudStdVector *normalCloud = createNormalsArray();
+
+            CT_DensePointScalarManager<float>::UPCSSetterPtr intensitySetter = createIntensityArray(uspc);
+            CT_DensePointColorManager::UPCSSetterPtr colorSetter = createColorsArray(uspc);
+            CT_DensePointNormalManager::UPCSSetterPtr normalSetter = createNormalsArray(uspc);
 
             Eigen::Vector3d minBB, maxBB;
             initBoundinBox(minBB, maxBB);
@@ -515,9 +516,9 @@ bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
                     continue;
 
                 addPoint(point, uspc, minBB, maxBB);
-                CHK_ERR(readAndAddIntensity(wordsOfLine, locale, intensityCloud, minIntensity, maxIntensity), tr("Error loading intensity at line %1").arg(nLine));
-                CHK_ERR(readAndAddColor(wordsOfLine, locale, colorCloud), tr("Error loading color at line %1").arg(nLine));
-                CHK_ERR(readAndAddNormal(wordsOfLine, locale, normalCloud), tr("Error loading normal at line %1").arg(nLine));
+                CHK_ERR(readAndAddIntensity(wordsOfLine, locale, intensitySetter, minIntensity, maxIntensity), tr("Error loading intensity at line %1").arg(nLine));
+                CHK_ERR(readAndAddColor(wordsOfLine, locale, colorSetter), tr("Error loading color at line %1").arg(nLine));
+                CHK_ERR(readAndAddNormal(wordsOfLine, locale, normalSetter), tr("Error loading normal at line %1").arg(nLine));
 
             }
 
@@ -526,20 +527,14 @@ bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
             CT_PCIR pcir = PS_REPOSITORY->registerUndefinedSizePointCloud(uspc);
             group->addSingularItem(m_outPointCloud, new CT_Scene(pcir));
 
-            if(intensityCloud != nullptr) {
-                CT_PointsAttributesScalarTemplated<float> *item = new CT_PointsAttributesScalarTemplated<float>(pcir, intensityCloud, minIntensity, maxIntensity);
-                group->addSingularItem(m_outIntensity, item);
-            }
+            if(intensitySetter != nullptr)
+                group->addSingularItem(m_outIntensity, m_outIntensity.createAttributeInstance(pcir, minIntensity, maxIntensity));
 
-            if(colorCloud != nullptr) {
-                CT_PointsAttributesColor *item = new CT_PointsAttributesColor(pcir, colorCloud);
-                group->addSingularItem(m_outColors, item);
-            }
+            if(colorSetter != nullptr)
+                group->addSingularItem(m_outColors, m_outColors.createAttributeInstance(pcir));
 
-            if(normalCloud != nullptr) {
-                CT_PointsAttributesNormal *item = new CT_PointsAttributesNormal(pcir, normalCloud);
-                group->addSingularItem(m_outNormals, item);
-            }
+            if(normalSetter != nullptr)
+                group->addSingularItem(m_outNormals, m_outNormals.createAttributeInstance(pcir));
 
             return !error;
         }
@@ -553,26 +548,26 @@ CT_AbstractUndefinedSizePointCloud *CT_Reader_Points_ASCII::createPointCloud() c
     return PS_REPOSITORY->createNewUndefinedSizePointCloud();
 }
 
-CT_StandardCloudStdVectorT<float> *CT_Reader_Points_ASCII::createIntensityArray() const
+CT_DensePointScalarManager<float>::UPCSSetterPtr CT_Reader_Points_ASCII::createIntensityArray(CT_AbstractUndefinedSizePointCloud* uspc)
 {
     if(canLoadIntensity())
-        return new CT_StandardCloudStdVectorT<float>();
+        return m_outIntensity.createUndefinedPointCloudSizeAttributesSetterPtr(uspc);
 
     return nullptr;
 }
 
-CT_ColorCloudStdVector* CT_Reader_Points_ASCII::createColorsArray() const
+CT_DensePointColorManager::UPCSSetterPtr CT_Reader_Points_ASCII::createColorsArray(CT_AbstractUndefinedSizePointCloud* uspc)
 {
     if(canLoadColors())
-        return new CT_ColorCloudStdVector();
+        return m_outColors.createUndefinedPointCloudSizeAttributesSetterPtr(uspc);
 
     return nullptr;
 }
 
-CT_NormalCloudStdVector* CT_Reader_Points_ASCII::createNormalsArray() const
+CT_DensePointNormalManager::UPCSSetterPtr CT_Reader_Points_ASCII::createNormalsArray(CT_AbstractUndefinedSizePointCloud* uspc)
 {
     if(canLoadNormals())
-        return new CT_NormalCloudStdVector();
+        return m_outNormals.createUndefinedPointCloudSizeAttributesSetterPtr(uspc);
 
     return nullptr;
 }
@@ -656,9 +651,9 @@ void CT_Reader_Points_ASCII::addPoint(const CT_Point &point,
     updateBoundingBox(point, minBB, maxBB);
 }
 
-bool CT_Reader_Points_ASCII::readAndAddIntensity(const QStringList &wordsOfLine, const QLocale &locale, CT_StandardCloudStdVectorT<float> *array, float &minI, float &maxI) const
+bool CT_Reader_Points_ASCII::readAndAddIntensity(const QStringList &wordsOfLine, const QLocale &locale, CT_DensePointScalarManager<float>::UPCSSetterPtr& setter, float &minI, float &maxI) const
 {
-    if(array == nullptr)
+    if(setter.get() == nullptr)
         return true;
 
     bool ok;
@@ -668,7 +663,7 @@ bool CT_Reader_Points_ASCII::readAndAddIntensity(const QStringList &wordsOfLine,
     if(!ok)
         return false;
 
-    array->addT(value);
+    setter->setLastValue(value);
 
     minI = qMin(value, minI);
     maxI = qMax(value, maxI);
@@ -676,9 +671,9 @@ bool CT_Reader_Points_ASCII::readAndAddIntensity(const QStringList &wordsOfLine,
     return true;
 }
 
-bool CT_Reader_Points_ASCII::readAndAddColor(const QStringList &wordsOfLine, const QLocale &locale, CT_ColorCloudStdVector *array) const
+bool CT_Reader_Points_ASCII::readAndAddColor(const QStringList &wordsOfLine, const QLocale &locale, CT_DensePointColorManager::UPCSSetterPtr& setter) const
 {
-    if(array == nullptr)
+    if(setter.get() == nullptr)
         return true;
 
     bool ok;
@@ -699,14 +694,14 @@ bool CT_Reader_Points_ASCII::readAndAddColor(const QStringList &wordsOfLine, con
     if(!ok)
         return false;
 
-    array->addColor(color);
+    setter->setLastValue(color);
 
     return true;
 }
 
-bool CT_Reader_Points_ASCII::readAndAddNormal(const QStringList &wordsOfLine, const QLocale &locale, CT_NormalCloudStdVector *array) const
+bool CT_Reader_Points_ASCII::readAndAddNormal(const QStringList &wordsOfLine, const QLocale &locale, CT_DensePointNormalManager::UPCSSetterPtr& setter) const
 {
-    if(array == nullptr)
+    if(setter.get() == nullptr)
         return true;
 
     bool ok;
@@ -733,7 +728,7 @@ bool CT_Reader_Points_ASCII::readAndAddNormal(const QStringList &wordsOfLine, co
             return false;
     }
 
-    array->addNormal(normal);
+    setter->setLastValue(normal);
 
     return true;
 }

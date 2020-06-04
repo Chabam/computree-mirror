@@ -8,7 +8,6 @@
 #include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
 
 #include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
 
 class CTLIBIO_EXPORT CT_Reader_ASCRGB : public CT_AbstractReader, public CT_ReaderPointsFilteringExtension
 {
@@ -31,10 +30,8 @@ private:
     double   _zminFilter;
     double   _zmaxFilter;
 
-    using Colors = CT_PointsAttributesColor;
-
     CT_HandleOutSingularItem<CT_Scene>          m_hOutScene;
-    CT_HandleOutSingularItem<Colors>            m_hOutColors;
+    CT_HandleOutPointColorWithDenseManager      m_hOutColors;
 
     bool isInsideRadius(const CT_Point &point);
 

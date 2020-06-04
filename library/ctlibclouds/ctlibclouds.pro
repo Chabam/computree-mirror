@@ -117,7 +117,34 @@ HEADERS += \
     ct_attributes/ct_attributesscalart.h \
     ct_attributes/ct_attributesscalart.hpp \
     ct_normalcloud/tools/iestimatorobserverandcontroller.h \
-    ct_normalcloud/tools/normalsestimator.h
+    ct_normalcloud/tools/normalsestimator.h \
+    ct_cloud/ct_bitcloud.h \
+    ct_attributes/managers/abstract/ct_abstractxattributemanager.h \
+    ct_attributes/managers/ct_denseattributemanager.h \
+    ct_attributes/managers/ct_sparseattributemanager.h \
+    ct_attributes/managers/ct_denseedgecolormanager.h \
+    ct_attributes/managers/ct_denseedgescalarmanager.h \
+    ct_attributes/managers/ct_denseedgenormalmanager.h \
+    ct_attributes/managers/ct_sparseedgescalarmanager.h \
+    ct_attributes/managers/ct_sparseedgecolormanager.h \
+    ct_attributes/managers/ct_sparseedgenormalmanager.h \
+    ct_attributes/managers/ct_densefacescalarmanager.h \
+    ct_attributes/managers/ct_densefacecolormanager.h \
+    ct_attributes/managers/ct_densefacenormalmanager.h \
+    ct_attributes/managers/ct_sparsefacescalarmanager.h \
+    ct_attributes/managers/ct_sparsefacecolormanager.h \
+    ct_attributes/managers/ct_sparsefacenormalmanager.h \
+    ct_attributes/managers/ct_densepointscalarmanager.h \
+    ct_attributes/managers/ct_densepointcolormanager.h \
+    ct_attributes/managers/ct_densepointnormalmanager.h \
+    ct_attributes/managers/ct_sparsepointscalarmanager.h \
+    ct_attributes/managers/ct_sparsepointcolormanager.h \
+    ct_attributes/managers/ct_sparsepointnormalmanager.h \
+    ct_attributes/setters/ct_denseattributesetter.h \
+    ct_attributes/setters/ct_sparseattributesetter.h \
+    ct_attributes/setters/ct_undefinedpointcloudsizedenseattributesetter.h \
+    ct_attributes/setters/ct_undefinedpointcloudsizesparseattributesetter.h \
+    ct_attributes/managers/ct_scalarminmaxmanager.h
 
 SOURCES += \ 
     ct_normal.cpp \
@@ -161,7 +188,5 @@ SOURCES += \
     ct_global/ct_cloudscontext.cpp \
     ct_accessor/ct_repositoryaccess.cpp \
     ct_attributes/abstract/ct_abstractattributesscalar.cpp \
-    ct_attributes/ct_attributescolor.cpp \
-    ct_attributes/ct_attributesnormal.cpp \
-    ct_attributes/ct_attributesscalart.cpp \
-    ct_normalcloud/tools/normalsestimator.cpp
+    ct_normalcloud/tools/normalsestimator.cpp \
+    ct_cloud/ct_bitcloud.cpp

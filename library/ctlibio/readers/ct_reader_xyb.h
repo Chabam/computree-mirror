@@ -9,11 +9,7 @@
 #include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
 
 #include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
 #include "ct_itemdrawable/ct_scanner.h"
-
-
-
 
 /**
  * @brief Reader that can load a xyb file (*.xyb) that represent a PointCloud
@@ -88,15 +84,13 @@ private:
     };
 
     Params      m_current;
-    double       m_filterRadius;
+    double      m_filterRadius;
     double      m_zMinFilter;
     double      m_zMaxFilter;
 
-    using Intensity = CT_PointsAttributesScalarTemplated<quint16>;
-
-    CT_HandleOutSingularItem<CT_Scene>          m_hOutScene;
-    CT_HandleOutSingularItem<Intensity>         m_hOutIntensity;
-    CT_HandleOutSingularItem<CT_Scanner>        m_hOutScanner;
+    CT_HandleOutSingularItem<CT_Scene>                  m_hOutScene;
+    CT_HandleOutPointScalarWithDenseManager<quint16>    m_hOutIntensity;
+    CT_HandleOutSingularItem<CT_Scanner>                m_hOutScanner;
 
     /**
      * @brief Returns true if the point is filtered (not accepted). Redefined
@@ -113,7 +107,6 @@ private:
                                          double& ymax,
                                          double& zmax,
                                          quint16& imax,
-                                         CT_StandardCloudStdVectorT<quint16>*& collection,
                                          const qint64& nPointToRead);
 
     CT_NMPCIR internalReadFileWithoutFilter(QDataStream& stream,
@@ -125,7 +118,7 @@ private:
                                             double& ymax,
                                             double& zmax,
                                             quint16& imax,
-                                            CT_StandardCloudStdVectorT<quint16>*& collection, const qint64& nPointToRead);
+                                            const qint64& nPointToRead);
 };
 
 #endif // CT_READER_XYB_H

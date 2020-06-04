@@ -2,20 +2,18 @@
 #define CT_ABSTRACTFACEATTRIBUTESSCALAR_H
 
 #include "ct_itemdrawable/abstract/ct_abstractfaceattributes.h"
+#include "ct_attributes/abstract/ct_abstractattributesscalar.h"
 
 /**
- * @brief Represents a cloud attribute of scalar (int, float, double, etc...) for face.
+ * @brief Represents a cloud of attributes of scalar type (int, float, double, etc...) for faces.
  */
-class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractFaceAttributesScalar : public CT_AbstractFaceAttributes
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractFaceAttributesScalar : public CT_AbstractFaceAttributes, public CT_AbstractAttributesScalar
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractFaceAttributesScalar, CT_AbstractFaceAttributes, Face attributes)
 
-    using SuperClass = CT_AbstractFaceAttributes;
-
 public:
-    CT_AbstractFaceAttributesScalar();
-    CT_AbstractFaceAttributesScalar(CT_FCIR cir);
+    CT_AbstractFaceAttributesScalar() = default;
 
     /**
      * @brief Copy constructor.
@@ -35,21 +33,6 @@ public:
      *          - Document list is not copied
      */
     CT_AbstractFaceAttributesScalar(const CT_AbstractFaceAttributesScalar& other) = default;
-
-    /**
-     * @brief Returns the minimum value
-     */
-    virtual double dMin() const = 0;
-
-    /**
-     * @brief Returns the maximum value
-     */
-    virtual double dMax() const = 0;
-
-    /**
-     * @brief Returns the value at the specified index
-     */
-    virtual double dValueAt(const size_t &index) const = 0;
 };
 
 #endif // CT_ABSTRACTFACEATTRIBUTESSCALAR_H

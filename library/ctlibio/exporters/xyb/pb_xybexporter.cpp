@@ -10,7 +10,8 @@
 #include "ct_colorcloud/abstract/ct_abstractcolorcloud.h"
 
 PB_XYBExporter::PB_XYBExporter(int subMenuLevel) : SuperClass(subMenuLevel),
-    mScanner(nullptr)
+    mScanner(nullptr),
+    mPointsAttributeOfTypeColorOrScalar(nullptr)
 {
     setCanExportPoints(true);
     addNewExportFormat(FileFormat("xyb", tr("Fichiers binaire de points .xyb")));
@@ -51,13 +52,13 @@ bool PB_XYBExporter::setPointsToExport(const QList<CT_AbstractCloudIndex*> &list
 
 void PB_XYBExporter::setItemsToExport(const QList<const CT_AbstractItemDrawableWithPointCloud*>& items,
                                       const CT_Scanner* scanner,
-                                      const QList<const CT_AbstractPointsAttributes*> pointsAttributes)
+                                      const CT_AbstractPointsAttributes* pointsAttributeOfTypeColorOrScalar)
 {
     setMustUseModels(false);
 
     m_items = items;
     mScanner = scanner;
-    m_attributsColorPointWorker.setAttributes(pointsAttributes);
+    mPointsAttributeOfTypeColorOrScalar = pointsAttributeOfTypeColorOrScalar;
 }
 
 bool PB_XYBExporter::canExportPieceByPiece() const
@@ -75,7 +76,7 @@ void PB_XYBExporter::internalDeclareInputModels(CT_ExporterInModelStructureManag
     manager.addGroupToRootGroup(m_hInGroup);
     manager.addItemToGroup(m_hInGroup, m_hInItem, tr("Item à exporter"));
     manager.addItemToGroup(m_hInGroup, m_hInScanner, tr("Scanner"));
-    manager.addItemToGroup(m_hInGroup, m_hInPointsAttribute, tr("Couleurs"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInPointsAttribute, tr("Couleurs"));
 }
 
 CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportToFile()
@@ -95,10 +96,18 @@ CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportToFile()
 
 CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportOnePiece(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters)
 {
-    CT_AbstractColorCloud *cc = createColorCloud();
-
     if(mustUseModels())
     {
+        mPointsAttributeOfTypeColorOrScalar = nullptr;
+
+        const CT_AbstractPointsAttributes* pA = m_hInPointsAttribute.firstInput(m_handleResultExport);
+
+        if((dynamic_cast<const CT_PointsAttributesColor*>(pA) != nullptr)
+                || (dynamic_cast<const CT_AbstractPointAttributesScalar*>(pA)))
+        {
+            mPointsAttributeOfTypeColorOrScalar = pA;
+        }
+
         if(mIteratorItemBegin == mIteratorItemEnd)
         {
             auto iterator = m_hInItem.iterateInputs(m_handleResultExport);
@@ -116,8 +125,7 @@ CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportOnePiece(const Q
             const CT_AbstractItemDrawableWithPointCloud *item = *mIteratorItemBegin;
 
             exportPoints(pieceByPieceExporters,
-                         item->pointCloudIndex(),
-                         cc);
+                         item->pointCloudIndex());
 
             ++nExported;
             ++mIteratorItemBegin;
@@ -130,8 +138,7 @@ CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportOnePiece(const Q
         for(const CT_AbstractItemDrawableWithPointCloud* item : m_items)
         {
             exportPoints(pieceByPieceExporters,
-                         item->pointCloudIndex(),
-                         cc);
+                         item->pointCloudIndex());
         }
 
         const QList<CT_AbstractCloudIndex*> &pointsSelected = pointsToExport();
@@ -140,8 +147,7 @@ CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportOnePiece(const Q
         while(itCI.hasNext())
         {
             exportPoints(pieceByPieceExporters,
-                         dynamic_cast<CT_AbstractPointCloudIndex*>(itCI.next()),
-                         cc);
+                         dynamic_cast<CT_AbstractPointCloudIndex*>(itCI.next()));
         }
     }
 
@@ -149,8 +155,7 @@ CT_AbstractExporter::ExportReturn PB_XYBExporter::internalExportOnePiece(const Q
 }
 
 void PB_XYBExporter::exportPoints(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters,
-                                  const CT_AbstractPointCloudIndex* constPCIndex,
-                                  const CT_AbstractColorCloud* cc)
+                                  const CT_AbstractPointCloudIndex* constPCIndex)
 {
     CT_PointIterator it(constPCIndex);
     size_t totalSize = it.size();
@@ -164,23 +169,37 @@ void PB_XYBExporter::exportPoints(const QList<CT_AbstractPieceByPieceExporter*>&
         }
     };
 
-    // function that return the color if variable "cc" == nullptr
-    std::function<quint16 ()> vCCNull = []()
+    const CT_PointsAttributesColor* cc = dynamic_cast<const CT_PointsAttributesColor*>(mPointsAttributeOfTypeColorOrScalar);
+    const CT_AbstractPointAttributesScalar* scalar = dynamic_cast<const CT_AbstractPointAttributesScalar*>(mPointsAttributeOfTypeColorOrScalar);
+
+    const double min = scalar != nullptr ? scalar->minScalarAsDouble() : 0;
+    const double max = scalar != nullptr ? scalar->maxScalarAsDouble() : 0;
+    const double range = qMax(max-min, 1.0);
+
+
+    // function that return the intensity if variable "cc" and "scalar" == nullptr
+    std::function<quint16 ()> vCCAndScalarNull = []()
     {
         return static_cast<quint16>(0);
     };
 
-    // function that return the color if variable "cc" != nullptr
+    // function that return the intensity if variable "scalar" != nullptr
+    std::function<quint16 ()> vScalarNotNull = [&scalar, &min, &range, &it]()
+    {
+        return ((scalar->scalarAsDoubleAt(it.currentGlobalIndex())-min)*255)/range;
+    };
+
+    // function that return the intensity if variable "cc" != nullptr
     std::function<quint16 ()> vCCNotNull = [&cc, &it]()
     {
-        const CT_Color &col = cc->constColorAt(it.cIndex());
+        const CT_Color &col = cc->constColorAt(it.currentGlobalIndex());
         return static_cast<quint16>((col.r() + col.g() + col.b()) / 3.0);
     };
 
     // final function to use to return the intensity
-    std::function<quint16 ()> funcGetIntensity = (cc == nullptr) ? vCCNull : vCCNotNull;
+    std::function<quint16 ()> funcGetIntensity = (cc == nullptr) ? ((scalar == nullptr) ? vCCAndScalarNull : vScalarNotNull) : vCCNotNull;
 
-    // final function that export export the point and his intensity
+    // final function that export the point and his intensity
     std::function<void (const size_t&, const CT_Point&)> funcExportAll = [&funcExportPoint, &funcGetIntensity](const size_t& globalIndex, const CT_Point& point)
     {
         funcExportPoint(globalIndex, point, funcGetIntensity());
@@ -209,39 +228,5 @@ void PB_XYBExporter::clearIterators()
 
 void PB_XYBExporter::clearAttributesClouds()
 {
-    m_attributsColorPointWorker.setColorCloud(nullptr);
-}
-
-CT_AbstractColorCloud* PB_XYBExporter::createColorCloud()
-{
-    // Use a mutex here because this method is called by PB_XYBPieceByPiecePrivateExporter and each
-    // object can potentially export in different threads !
-    QMutexLocker locker(&mMutexColorCloud);
-
-    // cleared in clearAttributesClouds()
-    if(!m_attributsColorPointWorker.colorCloud().isNull())
-        return m_attributsColorPointWorker.colorCloud()->abstractColorCloud();
-
-    if(mustUseModels())
-    {
-        QList<const CT_AbstractPointsAttributes*> attributesColor;
-
-        for(const CT_AbstractPointsAttributes* pA : m_hInPointsAttribute.iterateInputs(m_handleResultExport)) {
-            if((dynamic_cast<const CT_PointsAttributesColor*>(pA) != nullptr)
-                    || (dynamic_cast<const CT_AbstractPointAttributesScalar*>(pA)))
-                attributesColor.append(pA);
-        }
-
-        m_attributsColorPointWorker.setAttributes(attributesColor);
-    }
-
-    if(!m_attributsColorPointWorker.attributes().isEmpty())
-    {
-        m_attributsColorPointWorker.setColorCloud(PS_REPOSITORY->createNewColorCloud(CT_Repository::SyncWithPointCloud));
-        m_attributsColorPointWorker.apply();
-        return m_attributsColorPointWorker.colorCloud()->abstractColorCloud();
-    }
-
-    return nullptr;
 }
 

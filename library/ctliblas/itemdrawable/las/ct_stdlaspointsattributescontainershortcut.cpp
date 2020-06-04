@@ -12,7 +12,6 @@ CT_StdLASPointsAttributesContainerShortcut::CT_StdLASPointsAttributesContainerSh
     _container = container;
 }
 
-
 void CT_StdLASPointsAttributesContainerShortcut::insertPointsAttributesAt(CT_LasDefine::LASPointAttributesType key, const CT_AbstractPointAttributesScalar *att)
 {
     Q_UNUSED(key);
@@ -24,9 +23,7 @@ void CT_StdLASPointsAttributesContainerShortcut::insertPointsAttributesAt(CT_Las
 CT_AbstractPointsAttributes *CT_StdLASPointsAttributesContainerShortcut::pointsAttributesAt(const int &key) const
 {
     if (_container != nullptr)
-    {
         return _container->pointsAttributesAt(key);
-    }
 
     qFatal("CT_StdLASPointsAttributesContainerShortcut class not correctly initialized");
     return nullptr;
@@ -36,30 +33,25 @@ CT_AbstractPointsAttributes *CT_StdLASPointsAttributesContainerShortcut::pointsA
 QList<CT_LasDefine::LASPointAttributesType> CT_StdLASPointsAttributesContainerShortcut::lasPointAttributesTypes() const
 {
     if (_container != nullptr)
-    {
         return _container->lasPointAttributesTypes();
-    }
 
     qFatal("CT_StdLASPointsAttributesContainerShortcut class not correctly initialized");
     return QList<CT_LasDefine::LASPointAttributesType>();
 }
 
-void CT_StdLASPointsAttributesContainerShortcut::getLASDataAt(const size_t i, CT_LASData &data) const
+bool CT_StdLASPointsAttributesContainerShortcut::getLASDataAt(const size_t i, CT_LASData &data) const
 {
     if (_container != nullptr)
-    {
-        _container->getLASDataAt(i, data);
-    } else {
-        qFatal("CT_StdLASPointsAttributesContainerShortcut class not correctly initialized");
-    }
+        return _container->getLASDataAt(i, data);
+
+    qFatal("CT_StdLASPointsAttributesContainerShortcut class not correctly initialized");
+    return false;
 }
 
 QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *> CT_StdLASPointsAttributesContainerShortcut::lasPointsAttributes() const
 {
     if (_container != nullptr)
-    {
         return _container->lasPointsAttributes();
-    }
 
     qFatal("CT_StdLASPointsAttributesContainerShortcut class not correctly initialized");
     return QHash<CT_LasDefine::LASPointAttributesType, CT_AbstractPointAttributesScalar *>();

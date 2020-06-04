@@ -12,7 +12,7 @@
 #endif
 
 template<typename Type>
-DM_AttributesScalarT<Type>::DM_AttributesScalarT() : DM_AbstractAttributesScalar()
+DM_AttributesScalarT<Type>::DM_AttributesScalarT(bool local) : DM_AbstractAttributesScalar(local)
 {
     m_as = nullptr;
     m_autoAdjust = true;
@@ -122,61 +122,39 @@ bool DM_AttributesScalarT<Type>::process(GDocumentViewForGraphics *doc)
     if(m_as == nullptr)
         return false;
 
+    PermanentItemScene* scene = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
+
+    if(scene == nullptr)
+        return false;
+
     double range = m_manualMax-m_manualMin;
 
-    if(range == 0)
+    if(qFuzzyCompare(range, 0))
         range = 1;
 
     DM_ColorLinearInterpolator interpolator;
     interpolator.constructFromQGradient(m_gradient);
 
-    const CT_AbstractCloudIndex *index = abstractTypeAttributes()->abstractCloudIndex();
-    size_t size = index->size();
+    AMKgl::GlobalColorCloud* colorArray = scene->getPointCloudAttributesProvider()->createOrGetColorCloud();
 
-    AMKgl::GlobalColorCloud* colorArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetColorCloud();
+    if(colorArray == nullptr)
+        return false;
 
-    if(colorArray != nullptr)
-    {
-        QList<ConcurrentMapInfo*>   list;
+    ConcurrentMapInfo info;
+    info.m_interpolator = &interpolator;
+    info.m_as = m_as;
+    info.m_cc = colorArray;
+    info.m_fAccess = &m_fAccess;
+    info.m_eAccess = &m_eAccess;
+    info.m_manualMin = m_manualMin;
+    info.m_range = range;
+    info.mApplyLocal = mustApplyToLocalIndex();
 
-        size_t i = 0;
+    staticApply(&info);
 
-        while(i < size)
-        {
-            ConcurrentMapInfo *info = new ConcurrentMapInfo();
-            info->m_as = m_as;
-            info->m_begin = i;
+    doc->dirtyColorsOfPoints();
 
-            i += 100000;
-
-            if(i >= size)
-                i = size;
-
-            info->m_end = i;
-            info->m_cc = colorArray;
-            info->m_index = index;
-            info->m_interpolator = &interpolator;
-            info->m_manualMin = m_manualMin;
-            info->m_range = range;
-            info->m_fAccess = &m_fAccess;
-            info->m_eAccess = &m_eAccess;
-
-            list << info;
-        };
-
-        QFuture<void> future = QtConcurrent::map(list, staticApply);
-        m_watcher.setFuture(future);
-
-        future.waitForFinished();
-
-        qDeleteAll(list.begin(), list.end());
-
-        doc->dirtyColorsOfPoints();
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 template<typename Type>
@@ -200,6 +178,14 @@ Type* DM_AttributesScalarT<Type>::abstractTypeAttributes() const
 template<typename Type>
 void DM_AttributesScalarT<Type>::autoAdjustMinMax()
 {
-    m_manualMin = m_as->dMin();
-    m_manualMax = m_as->dMax();
+    if(mustApplyToLocalIndex())
+    {
+        m_manualMin = m_as->minLocalScalarAsDouble();
+        m_manualMax = m_as->maxLocalScalarAsDouble();
+    }
+    else
+    {
+        m_manualMin = m_as->minScalarAsDouble();
+        m_manualMax = m_as->maxScalarAsDouble();
+    }
 }

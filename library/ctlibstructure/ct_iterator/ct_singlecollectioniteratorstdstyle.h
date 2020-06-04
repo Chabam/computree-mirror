@@ -63,8 +63,8 @@ public:
         return *this;
     }
 
-    reference operator*() { return m_currentValue; }
-    pointer operator->() { return &m_currentValue; }
+    typename std::iterator<std::input_iterator_tag, ItemT*>::reference operator*() { return m_currentValue; }
+    typename std::iterator<std::input_iterator_tag, ItemT*>::pointer operator->() { return &m_currentValue; }
     bool operator==(const self_type& rhs) { return m_currentValue == rhs.m_currentValue; }
     bool operator!=(const self_type& rhs) { return m_currentValue != rhs.m_currentValue; }
 

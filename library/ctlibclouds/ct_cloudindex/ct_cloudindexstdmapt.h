@@ -4,7 +4,8 @@
 #include "ct_cloudindex/abstract/ct_abstractmodifiablecloudindext.h"
 
 /**
- * A cloud of index (size_t) for T (point, face, etc...) that can be modifiabled and use a std::map.
+ * A cloud of index = key (size_t) for T (point, face, etc...) with a value of type ValueT
+ * that can be modified.
  */
 template<typename T, typename ValueT>
 class CT_CloudIndexStdMapT : public CT_AbstractModifiableCloudIndexT<T>
@@ -50,12 +51,20 @@ public:
     /**
      * @brief return the value for the index of point, face or edge in the map
      */
-    const ValueT valueAtGlobalIndex(const size_t &index, const ValueT & defaultValue = ValueT()) const;
+    const ValueT& valueAtGlobalIndex(const size_t &index, const ValueT & defaultValue = ValueT()) const;
 
     /**
      * @brief return the value for the index 'index' in the map
      */
-    const ValueT valueAt(const size_t &index, const ValueT & defaultValue = ValueT()) const;
+    const ValueT& valueAt(const size_t &index, const ValueT & defaultValue = ValueT()) const;
+
+    typename std::map<ct_index_type,ValueT >::const_iterator cbegin() const;
+
+    typename std::map<ct_index_type,ValueT >::const_iterator cend() const;
+
+    typename std::map<ct_index_type,ValueT >::const_iterator findAtGlobalIndex(const size_t& index) const;
+
+    typename std::map<ct_index_type,ValueT >::const_iterator findAtLocalIndex(const size_t& index) const;
 
     /**
      * @warning Don't use this method. show the definition of this method in the superclass

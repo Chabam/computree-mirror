@@ -6,8 +6,8 @@
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 
 /**
- * @brief Represents a cloud attribute. This is a singular item a bit special since
- *        it can also be used to define colors for a cloud of points or normals in a view of a document.
+ * @brief Represents a cloud of attributes likes colors or values. He is a singular item a bit special because
+ *        he will be used by a graphics view to display colors or normals of points, edges or faces.
  */
 class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractAttributes : public CT_AbstractSingularItemDrawable
 {
@@ -38,10 +38,31 @@ public:
     CT_AbstractAttributes(const CT_AbstractAttributes& other) = default;
 
     /**
-     * @brief Returns the size of the cloud of attributes
+     * @brief Returns true if the value at the specified global index has been set in the total attribute cloud, false otherwise
      */
-    virtual size_t attributesSize() const = 0;
+    virtual bool hasBeenSet(const size_t& globalIndex) const = 0;
 
+    /**
+     * @brief Returns the number of values set in the total attribute cloud
+     */
+    virtual size_t numberOfSetValues() const = 0;
+
+    /**
+     * @brief Returns true if at least one value has been set in the total attribute cloud
+     */
+    virtual bool hasValues() const = 0;
+
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        to count how many values has been set.
+     */
+    virtual size_t numberOfSetLocalValues() const = 0;
+
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        to returns true if at least one value has been set.
+     */
+    virtual bool hasLocalValues() const = 0;
 };
 
 #endif // CT_ABSTRACTATTRIBUTES_H

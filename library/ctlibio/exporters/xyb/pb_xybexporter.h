@@ -5,7 +5,6 @@
 
 #include "ct_exporter/abstract/ct_abstractexporter.h"
 
-#include "ct_tools/attributes/ct_attributestocloudworkert.h"
 #include "ct_itemdrawable/ct_scanner.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointsattributes.h"
@@ -27,7 +26,7 @@ public:
 
     void setItemsToExport(const QList<const CT_AbstractItemDrawableWithPointCloud*>& items,
                           const CT_Scanner* scanner = nullptr,
-                          const QList<const CT_AbstractPointsAttributes*> pointsAttributes = QList<const CT_AbstractPointsAttributes*>());
+                          const CT_AbstractPointsAttributes* pointsAttributeOfTypeColorOrScalar = nullptr);
 
     bool canExportPieceByPiece() const override;
     CT_AbstractPieceByPieceExporter* createPieceByPieceExporter(const QString& outputFilepath) override;
@@ -53,22 +52,17 @@ private:
     CT_HandleInStdGroup<>                                           m_hInGroup;
     HandleItemType                                                  m_hInItem;
     CT_HandleInSingularItem<CT_Scanner, 0>                          m_hInScanner; // optionnal
-    CT_HandleInSingularItem<CT_AbstractPointsAttributes, 0>         m_hInPointsAttribute; // optionnal
+    CT_HandleInAbstractPointAttribute<0>                            m_hInPointsAttribute; // optionnal
 
     HandleItemType::const_iterator                                  mIteratorItemBegin;
     HandleItemType::const_iterator                                  mIteratorItemEnd;
 
     QList<const CT_AbstractItemDrawableWithPointCloud*>             m_items;
     const CT_Scanner*                                               mScanner;
-    CT_AttributesToCloudWorkerT<CT_AbstractPointsAttributes>        m_attributsColorPointWorker;
-
-    QMutex                                                          mMutexColorCloud;
+    const CT_AbstractPointsAttributes*                              mPointsAttributeOfTypeColorOrScalar;
 
     void exportPoints(const QList<CT_AbstractPieceByPieceExporter*>& pieceByPieceExporters,
-                      const CT_AbstractPointCloudIndex* constPCIndex,
-                      const CT_AbstractColorCloud* cc);
-
-    CT_AbstractColorCloud* createColorCloud();
+                      const CT_AbstractPointCloudIndex* constPCIndex);
 };
 
 #endif // PB_XYBEXPORTER_H

@@ -1,121 +1,238 @@
 #include "ct_attributes/ct_attributesscalart.h"
 
-#include <limits>
-
-template<typename SCALAR>
-CT_AttributesScalarT<SCALAR>::CT_AttributesScalarT(const size_t& size)
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::CT_AttributesScalarT() :
+    m_manager(nullptr)
 {
-    m_collection = new CT_StandardCloudStdVectorT<SCALAR>(size);
-    initMinMax();
+    CT_ScalarMinMaxManager<SCALAR>::InitMinMax(m_min, m_max);
 }
 
-template<typename SCALAR>
-CT_AttributesScalarT<SCALAR>::CT_AttributesScalarT(CT_StandardCloudStdVectorT<SCALAR>* collection)
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::CT_AttributesScalarT(CT_CIR cir,
+                                                                                CT_AbstractXAttributeManager<MANAGER_SCALAR>& manager,
+                                                                                const SCALAR& min,
+                                                                                const SCALAR& max) :
+    m_cir(cir),
+    m_manager(&manager),
+    m_min(min),
+    m_max(max)
 {
-    m_collection = collection;
-
-    auto res = std::minmax_element(m_collection->begin(), m_collection->end(), CT_AttributesScalarT<SCALAR>::staticCompareScalar);
-
-    m_min = *res.first;
-    m_max = *res.second;
+    dynamic_cast<CT_ScalarMinMaxManager<SCALAR>*>(m_manager)->registerAttribute(this);
 }
 
-template<typename SCALAR>
-CT_AttributesScalarT<SCALAR>::CT_AttributesScalarT(CT_StandardCloudStdVectorT<SCALAR>* collection, const SCALAR& min, const SCALAR& max)
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::CT_AttributesScalarT(CT_CIR cir,
+                                                                                CT_AbstractXAttributeManager<MANAGER_SCALAR>& manager) :
+    m_cir(cir),
+    m_manager(&manager)
 {
-    m_collection = collection;
-    m_min = min;
-    m_max = max;
+    CT_ScalarMinMaxManager<SCALAR>::InitMinMax(m_min, m_max);
+
+    visitLocalValues([this](const size_t&, SCALAR value) -> bool
+    {
+        m_min = qMin(m_min, value);
+        m_max = qMax(m_max, value);
+
+        return true;
+    });
+
+    dynamic_cast<CT_ScalarMinMaxManager<SCALAR>*>(m_manager)->registerAttribute(this);
 }
 
-template<typename SCALAR>
-CT_AttributesScalarT<SCALAR>::CT_AttributesScalarT(const CT_AttributesScalarT<SCALAR>& other) :
-    m_collection((other.m_collection != nullptr) ? dynamic_cast< CT_StandardCloudStdVectorT<SCALAR>*>(other.m_collection->copy()) : nullptr),
-    m_min(other.m_min),
-    m_max(other.m_max)
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::~CT_AttributesScalarT()
 {
+    if(m_manager != nullptr)
+        dynamic_cast<CT_ScalarMinMaxManager<SCALAR>*>(m_manager)->unregisterAttribute(this);
 }
 
-template<typename SCALAR>
-CT_AttributesScalarT<SCALAR>::~CT_AttributesScalarT()
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAsDoubleAt(const size_t& globalIndex) const
 {
-    delete m_collection;
+    return double(convertScalarOfManagerToScalar(m_manager->tAt(globalIndex)));
 }
 
-template<typename SCALAR>
-double CT_AttributesScalarT<SCALAR>::dMin() const
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::hasBeenSet(const size_t& globalIndex) const
 {
-    return min();
+    return m_manager->hasBeenSet(globalIndex);
 }
 
-template<typename SCALAR>
-double CT_AttributesScalarT<SCALAR>::dMax() const
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+size_t CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::numberOfSetValues() const
 {
-    return max();
+    return m_manager->numberOfSetValues();
 }
 
-template<typename SCALAR>
-double CT_AttributesScalarT<SCALAR>::dValueAt(const size_t &index) const
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::visitValuesAsDouble(DVisitor v) const
 {
-    return valueAt(index);
+    return m_manager->visitValues([this, &v](const size_t& globalIndex, const MANAGER_SCALAR& value) -> bool
+    {
+        return v(globalIndex, double(convertScalarOfManagerToScalar(value)));
+    });
 }
 
-template<typename SCALAR>
-SCALAR CT_AttributesScalarT<SCALAR>::min() const
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::hasValues() const
+{
+    return !m_manager->isEmpty();
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::minScalarAsDouble() const
+{
+    return double(minScalar());
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::maxScalarAsDouble() const
+{
+    return double(maxScalar());
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::minScalar() const
+{
+    return convertScalarOfManagerToScalar(dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->min());
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::maxScalar() const
+{
+    return convertScalarOfManagerToScalar(dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->max());
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::visitValues(SVisitor v) const
+{
+    return m_manager->visitValues([this, &v](const size_t& globalIndex, const MANAGER_SCALAR& value) -> bool
+    {
+        return v(globalIndex, convertScalarOfManagerToScalar(value));
+    });
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAsDoubleAtLocalIndex(const size_t& localIndex) const
+{
+    size_t count = 0;
+    double scalarAsDouble = std::numeric_limits<double>::quiet_NaN();
+
+    visitLocalValuesAsDouble([&count, &localIndex, &scalarAsDouble](const size_t&, double value) -> bool
+    {
+        if(count == localIndex)
+        {
+            scalarAsDouble = value;
+            return false;
+        }
+
+        ++count;
+        return true;
+    });
+
+    return scalarAsDouble;
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+size_t CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::numberOfSetLocalValues() const
+{
+    CT_AbstractCloudIndex* ci = m_cir->abstractCloudIndex();
+
+    const size_t size = ci->size();
+    size_t finalSize = 0;
+
+    for(size_t i=0; i<size; ++i)
+    {
+        if(m_manager->hasBeenSet(ci->indexAt(i)))
+            ++finalSize;
+    }
+
+    return finalSize;
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::hasLocalValues() const
+{
+    CT_AbstractCloudIndex* ci = m_cir->abstractCloudIndex();
+
+    const size_t size = ci->size();
+
+    for(size_t i=0; i<size; ++i)
+    {
+        if(m_manager->hasBeenSet(ci->indexAt(i)))
+            return true;
+    }
+
+    return false;
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::visitLocalValuesAsDouble(CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::DVisitor v) const
+{
+    return visitLocalValues([&v](const size_t& globalIndex, SCALAR value) -> bool
+    {
+        return v(globalIndex, double(value));
+    });
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::minLocalScalarAsDouble() const
+{
+    return double(m_min);
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::maxLocalScalarAsDouble() const
+{
+    return double(m_max);
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::minLocalScalar() const
 {
     return m_min;
 }
 
-template<typename SCALAR>
-SCALAR CT_AttributesScalarT<SCALAR>::max() const
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::maxLocalScalar() const
 {
     return m_max;
 }
 
-template<typename SCALAR>
-void CT_AttributesScalarT<SCALAR>::setMin(const SCALAR &min)
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+void CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::setLocalMinMax(const SCALAR& min, const SCALAR& max)
 {
     m_min = min;
-}
-
-template<typename SCALAR>
-void CT_AttributesScalarT<SCALAR>::setMax(const SCALAR &max)
-{
     m_max = max;
+
+    dynamic_cast<CT_ScalarMinMaxManager<SCALAR>*>(m_manager)->updateAttribute(this);
 }
 
-template<typename SCALAR>
-const SCALAR &CT_AttributesScalarT<SCALAR>::valueAt(const size_t &index) const
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::visitLocalValues(CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::SVisitor v) const
 {
-    return (*m_collection)[index];
+    CT_AbstractCloudIndex* ci = m_cir->abstractCloudIndex();
+
+    const size_t size = ci->size();
+    bool hasBeenSet = false;
+
+    for(size_t i=0; i<size; ++i)
+    {
+        const size_t globalIndex = ci->indexAt(i);
+        const MANAGER_SCALAR& value = m_manager->tAt(globalIndex, &hasBeenSet);
+
+        if(hasBeenSet)
+        {
+            if(!v(globalIndex, convertScalarOfManagerToScalar(value)))
+                return false;
+        }
+    }
+
+    return true;
 }
 
-template<typename SCALAR>
-void CT_AttributesScalarT<SCALAR>::setValueAt(const size_t &index, const SCALAR &value)
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+CT_AbstractXAttributeManager<MANAGER_SCALAR>* CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarsManager() const
 {
-    (*m_collection)[index] = value;
-
-    if(value < m_min)
-        m_min = value;
-
-    if(value > m_max)
-        m_max = value;
-}
-
-template<typename SCALAR>
-size_t CT_AttributesScalarT<SCALAR>::attributesSize() const
-{
-    return m_collection->size();
-}
-
-template<typename SCALAR>
-void CT_AttributesScalarT<SCALAR>::initMinMax()
-{
-    internalInitMinMax(std::integral_constant<bool, std::numeric_limits<SCALAR>::is_signed>());
-}
-
-template<typename SCALAR>
-bool CT_AttributesScalarT<SCALAR>::staticCompareScalar(const SCALAR &a, const SCALAR &b)
-{
-    return a < b;
+    return m_manager;
 }

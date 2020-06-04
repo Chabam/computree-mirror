@@ -57,17 +57,17 @@ CT_NMPCIR CT_Repository::registerUndefinedSizePointCloud(CT_AbstractUndefinedSiz
 {
     QMutexLocker locker(&m_mutexUSPC);
 
-    return m_gpcManager->registerUndefinedSizePointCloud(uspc, (CT_GlobalPointCloudManager::IndexOptimization)optim);
+    return m_gpcManager->registerUndefinedSizePointCloud(uspc, CT_GlobalPointCloudManager::IndexOptimization(optim));
 }
 
 CT_NMPCIR CT_Repository::copyPointCloud(CT_PCIR pcir, CloudIndexOptimizationType optim)
 {
-    return m_gpcManager->copyCloud<CT_PointCloudIndexLessMemory, CT_PointCloudIndexVector>(pcir, (CT_GlobalPointCloudManager::IndexOptimization)optim);
+    return m_gpcManager->copyCloud<CT_PointCloudIndexLessMemory, CT_PointCloudIndexVector>(pcir, CT_GlobalPointCloudManager::IndexOptimization(optim));
 }
 
 CT_NMPCIR CT_Repository::copyPointCloud(const CT_AbstractPointCloudIndex *index, CT_Repository::CloudIndexOptimizationType optim)
 {
-    return m_gpcManager->copyCloud<CT_PointCloudIndexLessMemory, CT_PointCloudIndexVector>(index, (CT_GlobalPointCloudManager::IndexOptimization)optim);
+    return m_gpcManager->copyCloud<CT_PointCloudIndexLessMemory, CT_PointCloudIndexVector>(index, CT_GlobalPointCloudManager::IndexOptimization(optim));
 }
 
 CT_NMPCIR CT_Repository::mergePointCloudContiguous(const QList< CT_PCIR > &pcir_collection)
@@ -220,19 +220,19 @@ CT_NMECIR CT_Repository::resizeCloudIndexAndGlobalCloud(CT_NMECIR cir, const siz
 template<>
 CT_NMPCIR CT_Repository::createNewCloud(const size_t &size, CT_Repository::CloudIndexOptimizationType optim)
 {
-    return m_gpcManager->createNewCloud<CT_PointCloudIndexLessMemory, CT_PointCloudIndexVector>(size, (CT_GlobalPointCloudManager::IndexOptimization)optim);
+    return m_gpcManager->createNewCloud<CT_PointCloudIndexLessMemory, CT_PointCloudIndexVector>(size, CT_GlobalPointCloudManager::IndexOptimization(optim));
 }
 
 template<>
 CT_NMFCIR CT_Repository::createNewCloud(const size_t &size, CT_Repository::CloudIndexOptimizationType optim)
 {
-    return m_gfcManager->createNewCloud< CT_FaceCloudIndexLessMemory , CT_FaceCloudIndexVector >(size, (CT_AbstractGlobalCloudManagerT<CT_Face>::IndexOptimization)optim);
+    return m_gfcManager->createNewCloud< CT_FaceCloudIndexLessMemory , CT_FaceCloudIndexVector >(size, CT_AbstractGlobalCloudManagerT<CT_Face>::IndexOptimization(optim));
 }
 
 template<>
 CT_NMECIR CT_Repository::createNewCloud(const size_t &size, CT_Repository::CloudIndexOptimizationType optim)
 {
-    return m_gecManager->createNewCloud< CT_EdgeCloudIndexLessMemory , CT_EdgeCloudIndexVector >(size, (CT_AbstractGlobalCloudManagerT<CT_Edge>::IndexOptimization)optim);
+    return m_gecManager->createNewCloud< CT_EdgeCloudIndexLessMemory , CT_EdgeCloudIndexVector >(size, CT_AbstractGlobalCloudManagerT<CT_Edge>::IndexOptimization(optim));
 }
 
 template<>

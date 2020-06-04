@@ -2,13 +2,10 @@
 #define CT_ABSTRACTEDGEATTRIBUTES_H
 
 #include "ct_defines.h"
-
-#include "ct_cloudindex/tools/abstract/ct_abstractcloudindexregistrationmanagert.h"
-
 #include "ct_itemdrawable/abstract/ct_abstractattributes.h"
 
 /**
- * @brief Represents a cloud attribute for edge.
+ * @brief Represents a cloud of attributes for edges.
  */
 class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractEdgeAttributes : public CT_AbstractAttributes
 {
@@ -19,7 +16,6 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractEdgeAttributes : public CT_AbstractA
 
 public:
     CT_AbstractEdgeAttributes();
-    CT_AbstractEdgeAttributes(CT_ECIR cir);
 
     /**
      * @brief Copy constructor.
@@ -39,28 +35,6 @@ public:
      *          - Document list is not copied
      */
     CT_AbstractEdgeAttributes(const CT_AbstractEdgeAttributes& other) = default;
-
-    /**
-     * @brief Returns the edge cloud index
-     */
-    inline const CT_AbstractEdgeCloudIndex* abstractCloudIndex() const { return edgeCloudIndex(); }
-
-    /**
-     * @brief Returns the edge cloud index
-     */
-    const CT_AbstractEdgeCloudIndex* edgeCloudIndex() const;
-
-    /**
-     * @brief Returns the edge cloud index registered
-     */
-    CT_ECIR edgeCloudIndexRegistered() const;
-
-private:
-    // TODO
-    //static CT_StandardAbstractEdgeAttributesDrawManager AEA_DRAW_MANAGER;
-
-    CT_ECIR                     m_cir;
-    CT_AbstractEdgeCloudIndex*  m_aci;
 };
 
 #endif // CT_ABSTRACTEDGEATTRIBUTES_H

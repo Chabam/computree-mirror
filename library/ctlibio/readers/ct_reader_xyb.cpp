@@ -243,7 +243,7 @@ CT_FileHeader* CT_Reader_XYB::internalReadHeader(const QString& filepath, QStrin
 void CT_Reader_XYB::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
     manager.addItem(m_hOutScene, tr("Scène"));
-    manager.addItem(m_hOutIntensity, tr("Intensité"));
+    manager.addPointAttribute(m_hOutIntensity, tr("Intensité"));
     manager.addItem(m_hOutScanner, tr("Scanner"));
 }
 
@@ -265,7 +265,6 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
             const qint64 nPoints = (filesize - m_current._offset) / 26;
 
             CT_NMPCIR pcir;
-            CT_StandardCloudStdVectorT<quint16>* collection = nullptr;
 
             double xmin = std::numeric_limits<double>::max();
             double ymin = std::numeric_limits<double>::max();
@@ -289,7 +288,6 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
                                                   ymax,
                                                   zmax,
                                                   imax,
-                                                  collection,
                                                   nPoints);
             } else {
                 pcir = internalReadFileWithoutFilter(stream,
@@ -301,7 +299,6 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
                                                      ymax,
                                                      zmax,
                                                      imax,
-                                                     collection,
                                                      nPoints);
             }
 
@@ -311,10 +308,10 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
             group->addSingularItem(m_hOutScene, scene);
 
             // create and add intensity
-            Intensity* pas = new Intensity(pcir,
-                                           collection,
-                                           imin,
-                                           imax);
+            CT_PointsAttributesScalarTemplated<quint16>* pas = m_hOutIntensity.createAttributeInstance(pcir,
+                                                                                                       imin,
+                                                                                                       imax);
+
             group->addSingularItem(m_hOutIntensity, pas);
 
             if ((m_current._rows <= 0) || (m_current._cols <= 0))
@@ -351,11 +348,10 @@ CT_NMPCIR CT_Reader_XYB::internalReadFileWithFilter(QDataStream& stream,
                                                     double& ymax,
                                                     double& zmax,
                                                     quint16& imax,
-                                                    CT_StandardCloudStdVectorT<quint16>*& collection,
                                                     const qint64& nPointToRead) {
 
     CT_AbstractUndefinedSizePointCloud* mpcir = PS_REPOSITORY->createNewUndefinedSizePointCloud();
-    collection = new CT_StandardCloudStdVectorT<quint16>();
+    CT_UndefinedPointCloudSizeDenseAttributeSetter<quint16> setter = m_hOutIntensity.createUndefinedPointCloudSizeAttributesSetter(mpcir);
 
     CT_Point pReaded;
     double x, y, z;
@@ -386,7 +382,7 @@ CT_NMPCIR CT_Reader_XYB::internalReadFileWithFilter(QDataStream& stream,
             if (reflectance>imax) {imax = reflectance;}
 
             mpcir->addPoint(pReaded);
-            collection->addT(reflectance);
+            setter.setLastValue(reflectance);
         }
 
         ++nPointReaded;
@@ -405,18 +401,17 @@ CT_NMPCIR CT_Reader_XYB::internalReadFileWithoutFilter(QDataStream& stream,
                                                        double& ymax,
                                                        double& zmax,
                                                        quint16& imax,
-                                                       CT_StandardCloudStdVectorT<quint16>*& collection,
                                                        const qint64& nPointToRead) {
 
     CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(size_t(nPointToRead));
-    collection = new CT_StandardCloudStdVectorT<quint16>(size_t(nPointToRead));
+    CT_DenseAttributeSetter<quint16> setter = m_hOutIntensity.createAttributesSetter(pcir);
 
     CT_MutablePointIterator it(pcir);
 
     CT_Point pReaded;
     double x, y, z;
     quint16 reflectance;
-    qint64 nPointReaded = 0;
+    quint64 nPointReaded = 0;
 
     while(!stream.atEnd()
           && !isStopped())
@@ -441,7 +436,7 @@ CT_NMPCIR CT_Reader_XYB::internalReadFileWithoutFilter(QDataStream& stream,
 
         it.next();
         it.replaceCurrentPoint(pReaded);
-        (*collection)[size_t(nPointReaded)] = reflectance;
+        setter.setValueWithLocalIndex(nPointReaded, reflectance);
 
         ++nPointReaded;
         setProgress(int(nPointReaded*100.0/nPointToRead));

@@ -11,7 +11,12 @@ class DM_AbstractAttributes : public DM_AbstractWorker
 {
     Q_OBJECT
 public:
-    DM_AbstractAttributes();
+    /**
+     * @brief Create new instance
+     * @param local : Set to true if this attribute must be applied to only
+     *        local points/faces/edges or false to use the complete cloud of attributes
+     */
+    DM_AbstractAttributes(bool local);
     virtual ~DM_AbstractAttributes();
 
     /**
@@ -40,6 +45,12 @@ public:
     bool isDisplayedAlone() const;
 
     /**
+     * @brief Returns true if this attribute must be applied to only
+     *        local points/faces/edges or false to use the complete cloud of attributes
+     */
+    bool mustApplyToLocalIndex() const;
+
+    /**
      * @brief Set the document where apply the attributes
      */
     void setDocument(const GDocumentViewForGraphics *doc);
@@ -66,6 +77,7 @@ private:
     bool                        m_displayAlone;
     GDocumentViewForGraphics    *m_doc;
     CT_AbstractAttributes       *m_attributes;
+    const bool                  mLocalOnly;
 
 protected:
 

@@ -16,39 +16,13 @@ bool DM_AttributesNormalT<CT_AbstractPointsAttributes>::process(GDocumentViewFor
     if(m_an == nullptr)
         return false;
 
-    CT_PointIterator it(abstractTypeAttributes()->abstractCloudIndex());
+    PermanentItemScene* scene = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
 
-    size_t size = it.size();
+    if(scene == nullptr)
+        return false;
 
-    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getPointCloudAttributesProvider()->createOrGetNormalCloud();
-
-    if(normalArray != nullptr)
-    {
-        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
-
-        if(toApplyNormalCloud != nullptr) {
-
-            size_t i = 0;
-            while(it.hasNext() && !isCanceled())
-            {
-                size_t indexP = it.next().cIndex();
-
-                const CT_Normal &nxnynz_pa = toApplyNormalCloud->constNormalAt(i);
-
-                // set the normal of the point at this document
-                (*normalArray)[indexP] = nxnynz_pa;
-
-                setProgress(int((i*100)/size));
-                ++i;
-            }
-
-            doc->dirtyNormalsOfPoints();
-        }
-
-        return true;
-    }
-
-    return false;
+    finalProcess(doc, scene->getPointCloudAttributesProvider()->createOrGetNormalCloud());
+    return true;
 }
 
 template<>
@@ -57,39 +31,13 @@ bool DM_AttributesNormalT<CT_AbstractFaceAttributes>::process(GDocumentViewForGr
     if(m_an == nullptr)
         return false;
 
-    CT_FaceIterator it(abstractTypeAttributes()->abstractCloudIndex());
+    PermanentItemScene* scene = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
 
-    size_t size = it.size();
+    if(scene == nullptr)
+        return false;
 
-    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getFaceCloudAttributesProvider()->createOrGetNormalCloud();
-
-    if(normalArray != nullptr)
-    {
-        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
-
-        if(toApplyNormalCloud != nullptr) {
-
-            size_t i = 0;
-            while(it.hasNext() && !isCanceled())
-            {
-                size_t indexF = it.next().cIndex();
-
-                const CT_Normal &nxnynz_pa = toApplyNormalCloud->constNormalAt(i);
-
-                // set the normal of the face at this document
-                (*normalArray)[indexF] = nxnynz_pa;
-
-                setProgress(int((i*100)/size));
-                ++i;
-            }
-
-            doc->dirtyNormalsOfPoints();
-        }
-
-        return true;
-    }
-
-    return false;
+    finalProcess(doc, scene->getFaceCloudAttributesProvider()->createOrGetNormalCloud());
+    return true;
 }
 
 template<>
@@ -98,39 +46,13 @@ bool DM_AttributesNormalT<CT_AbstractEdgeAttributes>::process(GDocumentViewForGr
     if(m_an == nullptr)
         return false;
 
-    CT_EdgeIterator it(abstractTypeAttributes()->abstractCloudIndex());
+    PermanentItemScene* scene = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr);
 
-    size_t size = it.size();
+    if(scene == nullptr)
+        return false;
 
-    AMKgl::GlobalNormalCloud* normalArray = doc->getPermanentSceneToRender()->getPermanentItemSceneForModel(nullptr)->getEdgeCloudAttributesProvider()->createOrGetNormalCloud();
-
-    if(normalArray != nullptr)
-    {
-        CT_AbstractNormalCloud* toApplyNormalCloud = m_an->normalCloud();
-
-        if(toApplyNormalCloud != nullptr) {
-
-            size_t i = 0;
-            while(it.hasNext() && !isCanceled())
-            {
-                size_t indexE = it.next().cIndex();
-
-                const CT_Normal &nxnynz_pa = toApplyNormalCloud->constNormalAt(i);
-
-                // set the normal of the face at this document
-                (*normalArray)[indexE] = nxnynz_pa;
-
-                setProgress(int((i*100)/size));
-                ++i;
-            }
-
-            doc->dirtyNormalsOfPoints();
-        }
-
-        return true;
-    }
-
-    return false;
+    finalProcess(doc, scene->getEdgeCloudAttributesProvider()->createOrGetNormalCloud());
+    return true;
 }
 
 template class DM_AttributesNormalT<CT_AbstractPointsAttributes>;

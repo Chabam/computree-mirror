@@ -9,14 +9,12 @@ size_t CT_LASPointFormat3::sizeInBytes() const
     return CT_LASPointFormat2::sizeInBytes() + gpsPacketSizeInBytes();
 }
 
-const CT_LasPointInfo& CT_LASPointFormat3::write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const
+void CT_LASPointFormat3::write(QDataStream &stream, CT_LASHeader* header, const CT_Point &p, const size_t &globalIndex) const
 {
-    const CT_LasPointInfo& info = CT_LASPointFormat0::write(stream, header, p, globalIndex);
+    CT_LASPointFormat0::write(stream, header, p, globalIndex);
 
-    writeInfoFormat3(stream, info);
-    CT_LASPointFormat2::writeInfoFormat2(stream, info);
-
-    return info;
+    writeInfoFormat3(stream, globalIndex);
+    CT_LASPointFormat2::writeInfoFormat2(stream, globalIndex);
 }
 
 QList<CT_LasDefine::LASPointAttributesType> CT_LASPointFormat3::typesToSearch()
@@ -27,7 +25,7 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASPointFormat3::typesToSearch()
     return l;
 }
 
-void CT_LASPointFormat3::writeInfoFormat3(QDataStream &stream, const CT_LasPointInfo& info) const
+void CT_LASPointFormat3::writeInfoFormat3(QDataStream &stream, const size_t& globalIndex) const
 {
-    writeGpsPacket(stream, info);
+    writeGpsPacket(stream, globalIndex, scalars(CT_LasDefine::GPS_Time));
 }

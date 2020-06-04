@@ -2,20 +2,18 @@
 #define CT_ABSTRACTPOINTATTRIBUTESSCALAR_H
 
 #include "ct_itemdrawable/abstract/ct_abstractpointsattributes.h"
+#include "ct_attributes/abstract/ct_abstractattributesscalar.h"
 
 /**
- * @brief Represents a cloud attribute of scalar (int, float, double, etc...) for points.
+ * @brief Represents a cloud of attributes of scalar type (int, float, double, etc...) for points.
  */
-class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractPointAttributesScalar : public CT_AbstractPointsAttributes
+class CTLIBSTRUCTUREADDON_EXPORT CT_AbstractPointAttributesScalar : public CT_AbstractPointsAttributes, public CT_AbstractAttributesScalar
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_AbstractPointAttributesScalar, CT_AbstractPointsAttributes, Point attributes)
 
-    using SuperClass = CT_AbstractPointsAttributes;
-
 public:
-    CT_AbstractPointAttributesScalar();
-    CT_AbstractPointAttributesScalar(CT_PCIR pcir);
+    CT_AbstractPointAttributesScalar() = default;
 
     /**
      * @brief Copy constructor.
@@ -37,19 +35,31 @@ public:
     CT_AbstractPointAttributesScalar(const CT_AbstractPointAttributesScalar& other) = default;
 
     /**
-     * @brief Returns the minimum value
+     * @brief Returns true if the value at the specified global index has been set in the total attribute cloud, false otherwise
      */
-    virtual double dMin() const = 0;
+    virtual bool hasBeenSet(const size_t& globalIndex) const = 0;
 
     /**
-     * @brief Returns the maximum value
+     * @brief Returns the number of values set in the total attribute cloud
      */
-    virtual double dMax() const = 0;
+    virtual size_t numberOfSetValues() const = 0;
 
     /**
-     * @brief Returns the value at the specified index
+     * @brief Returns true if at least one value has been set in the total attribute cloud
      */
-    virtual double dValueAt(const size_t &index) const = 0;
+    virtual bool hasValues() const = 0;
+
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        to count how many values has been set.
+     */
+    virtual size_t numberOfSetLocalValues() const = 0;
+
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        to returns true if at least one value has been set.
+     */
+    virtual bool hasLocalValues() const = 0;
 };
 
 #endif // CT_ABSTRACTPOINTATTRIBUTESSCALAR_H

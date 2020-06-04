@@ -2,26 +2,26 @@
 #define CT_POINTSATTRIBUTESCOLOR_H
 
 #include "ct_itemdrawable/abstract/ct_abstractpointsattributes.h"
-#include "ct_itemdrawable/tools/drawmanager/ct_standardpointsattributescolordrawmanager.h"
 #include "ct_attributes/ct_attributescolor.h"
-#include "ct_colorcloud/ct_colorcloudstdvector.h"
 
-class CTLIBSTRUCTUREADDON_EXPORT CT_PointsAttributesColor : public CT_AbstractPointsAttributes, public CT_AttributesColor
+class CTLIBSTRUCTUREADDON_EXPORT CT_PointsAttributesColor : public CT_AttributesColor<CT_AbstractPointsAttributes>
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_PointsAttributesColor, CT_AbstractPointsAttributes, Point color attributes)
 
-    using SuperClass1 = CT_AbstractPointsAttributes;
-    using SuperClass2 = CT_AttributesColor;
+    using SuperClass = CT_AttributesColor<CT_AbstractPointsAttributes>;
 
 public:
-    CT_PointsAttributesColor();
+    CT_PointsAttributesColor() = default;
 
-    CT_PointsAttributesColor(CT_PCIR pcir);
-
+    template<class ManagerT>
     CT_PointsAttributesColor(CT_PCIR pcir,
-                             CT_AbstractColorCloud* cc,
-                             bool autoDeleteColorCloud = true);
+                             ManagerT& manager) :
+        CT_PointsAttributesColor(pcir,
+                                 manager,
+                                 std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, CT_Color>>::value>())
+    {
+    }
 
     /**
      * @brief Copy constructor.
@@ -43,12 +43,30 @@ public:
      */
     CT_PointsAttributesColor(const CT_PointsAttributesColor& other) = default;
 
-    size_t attributesSize() const override { return CT_AttributesColor::attributesSize(); }
+    size_t numberOfSetValues() const final { return SuperClass::numberOfSetValues(); }
 
     CT_ITEM_COPY_IMP(CT_PointsAttributesColor)
 
 private:
-    static CT_StandardPointsAttributesColorDrawManager PAC_DRAW_MANAGER;
+    CT_DEFAULT_IA_BEGIN(CT_PointsAttributesColor)
+    CT_DEFAULT_IA_V2(CT_PointsAttributesColor, CT_AbstractCategory::staticInitDataSize(), &CT_PointsAttributesColor::numberOfSetValues, QObject::tr("Taille"))
+    CT_DEFAULT_IA_END(CT_PointsAttributesColor)
+
+    template<class ManagerT>
+    CT_PointsAttributesColor(CT_PCIR ,
+                             ManagerT&,
+                             std::false_type)
+    {
+        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
+    }
+
+    template<class ManagerT>
+    CT_PointsAttributesColor(CT_PCIR pcir,
+                             ManagerT& manager,
+                             std::true_type) :
+        SuperClass(pcir, manager)
+    {
+    }
 };
 
 #endif // CT_POINTSATTRIBUTESCOLOR_H

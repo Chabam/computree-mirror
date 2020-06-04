@@ -20,7 +20,9 @@ QList<CT_LasDefine::LASPointAttributesType> CT_LASNirPacket::nirPacketTypesNeede
     return l;
 }
 
-void CT_LASNirPacket::writeNirPacket(QDataStream &stream, const CT_LasPointInfo& info) const
+void CT_LASNirPacket::writeNirPacket(QDataStream &stream,
+                                     const size_t& globalIndex,
+                                     const CT_AbstractPointAttributesScalar* nirValues) const
 {
-    CT_WRITE_LAS_SCALAR(info.m_nir, quint16) // nir
+    CT_WRITE_LAS_SCALAR_WITH(nirValues, quint16) // nir
 }

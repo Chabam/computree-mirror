@@ -16,7 +16,7 @@ protected:
 
     bool initializeHeader(const quint8 format, const quint16 pointDataLength);
 
-    void computePointForHeader(const size_t& gi, const CT_Point& point);
+    void computePointForHeader(const CT_AbstractPointAttributesScalar* returnNumberValues, const size_t& gi, const CT_Point& point);
 
     bool finalizeHeaderAndWritePoints();
 

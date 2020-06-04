@@ -4,14 +4,8 @@
 #include "ct_reader/abstract/ct_abstractreader.h"
 #include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
 #include "ct_itemdrawable/ct_scene.h"
-#include "ct_itemdrawable/ct_pointsattributesscalartemplated.h"
-#include "ct_itemdrawable/ct_pointsattributescolor.h"
-#include "ct_itemdrawable/ct_pointsattributesnormal.h"
 
 #include "ctlibio/ctlibio_global.h"
-
-class CT_ColorCloudStdVector;
-class CT_NormalCloudStdVector;
 
 /**
  * @brief Reader that can load a ascii file (*.asc *.xyz *.csv etc...) that contains a point cloud and/or normals and/or colors and/or intensity
@@ -101,10 +95,10 @@ private:
     QString m_localeName;
 
 
-    CT_HandleOutSingularItem<CT_Scene>                                      m_outPointCloud;
-    CT_HandleOutSingularItem<CT_PointsAttributesScalarTemplated<float> >    m_outIntensity;
-    CT_HandleOutSingularItem<CT_PointsAttributesColor>                      m_outColors;
-    CT_HandleOutSingularItem<CT_PointsAttributesNormal>                     m_outNormals;
+    CT_HandleOutSingularItem<CT_Scene>                          m_outPointCloud;
+    CT_HandleOutPointScalarWithDenseManager<float>              m_outIntensity;
+    CT_HandleOutPointColorWithDenseManager                      m_outColors;
+    CT_HandleOutPointNormalWithDenseManager                     m_outNormals;
 
 
 protected:
@@ -113,9 +107,9 @@ protected:
 
 
     CT_AbstractUndefinedSizePointCloud* createPointCloud() const;
-    CT_StandardCloudStdVectorT<float>* createIntensityArray() const;
-    CT_ColorCloudStdVector* createColorsArray() const;
-    CT_NormalCloudStdVector* createNormalsArray() const;
+    CT_DensePointScalarManager<float>::UPCSSetterPtr createIntensityArray(CT_AbstractUndefinedSizePointCloud* uspc);
+    CT_DensePointColorManager::UPCSSetterPtr createColorsArray(CT_AbstractUndefinedSizePointCloud* uspc);
+    CT_DensePointNormalManager::UPCSSetterPtr createNormalsArray(CT_AbstractUndefinedSizePointCloud* uspc);
 
     int maxColumnIndex() const;
 
@@ -126,9 +120,9 @@ protected:
 
     bool readPoint(const QStringList &wordsOfLine, const QLocale &locale, CT_Point &point) const;
     void addPoint(const CT_Point &point, CT_AbstractUndefinedSizePointCloud *array, Eigen::Vector3d &minBB, Eigen::Vector3d &maxBB) const;
-    bool readAndAddIntensity(const QStringList &wordsOfLine, const QLocale &locale, CT_StandardCloudStdVectorT<float> *array, float &minI, float &maxI) const;
-    bool readAndAddColor(const QStringList &wordsOfLine, const QLocale &locale, CT_ColorCloudStdVector *array) const;
-    bool readAndAddNormal(const QStringList &wordsOfLine, const QLocale &locale, CT_NormalCloudStdVector *array) const;
+    bool readAndAddIntensity(const QStringList &wordsOfLine, const QLocale &locale, CT_DensePointScalarManager<float>::UPCSSetterPtr& setter, float &minI, float &maxI) const;
+    bool readAndAddColor(const QStringList &wordsOfLine, const QLocale &locale, CT_DensePointColorManager::UPCSSetterPtr& setter) const;
+    bool readAndAddNormal(const QStringList &wordsOfLine, const QLocale &locale, CT_DensePointNormalManager::UPCSSetterPtr& setter) const;
 };
 
 #endif // CT_READER_POINTS_ASCII_H

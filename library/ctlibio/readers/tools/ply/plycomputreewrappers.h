@@ -13,9 +13,6 @@
 #include "ct_point.h"
 #include "ct_accessor/ct_pointaccessor.h"
 #include "ct_cloudindex/registered/abstract/ct_abstractnotmodifiablecloudindexregisteredt.h"
-#include "ct_colorcloud/ct_colorcloudstdvector.h"
-#include "ct_normalcloud/ct_normalcloudstdvector.h"
-#include "ct_cloud/ct_standardcloudstdvectort.h"
 #include "ct_view/ct_abstractconfigurablewidget.h"
 
 #include "readers/tools/ply/views/gplyreadconfiguration.h"
@@ -90,7 +87,10 @@ struct Ply_CT_Point_Wrapper {
 struct Ply_CT_PointCloud_Wrapper {
     typedef Ply_CT_Point_Wrapper value_type;
 
-    Ply_CT_PointCloud_Wrapper()
+    using CreatePointCloudCallbackFunc = std::function<void(CT_NMPCIR)>;
+
+    Ply_CT_PointCloud_Wrapper(CreatePointCloudCallbackFunc f) :
+        mCallback(f)
     {
         pcir = CT_NMPCIR(nullptr);
         beginIndex = 0;
@@ -106,6 +106,9 @@ struct Ply_CT_PointCloud_Wrapper {
                 && pcir.isNull()) {
             pcir = PS_REPOSITORY->createNewPointCloud(newSize);
             beginIndex = pcir->abstractCloudIndex()->first();
+
+            if(mCallback != nullptr)
+                mCallback(pcir);
         }
     }
 
@@ -126,50 +129,119 @@ struct Ply_CT_PointCloud_Wrapper {
     size_t                  beginIndex;
     CT_PointAccessor        accessor;
     Ply_CT_Point_Wrapper    point;
+    CreatePointCloudCallbackFunc    mCallback;
+};
+
+template<typename SetterPtr, typename ValueInCloud>
+struct Ply_CT_GenericValueInCloud_Wrapper
+{
+    Ply_CT_GenericValueInCloud_Wrapper() :
+        mSetter(nullptr),
+        mUpdateIt(true),
+        mLocalIndex(0)
+    {
+    }
+
+    /**
+     * @brief Called by Ply_CT_PointCloud_Wrapper so this wrapper know which value to modify
+     * @param index : the local index of the value to modify in the cloud
+     */
+    void setCurrentLocalIndex(const size_t& index)
+    {
+        if(mLocalIndex != index) {
+            mUpdateIt = true;
+            mLocalIndex = index;
+        }
+    }
+
+    /**
+     * @brief Called by a ply reader when he want to modify a specific
+     *        member of the value
+     * @param index : index of the member to modify
+     */
+    auto& operator[](const size_t& index)
+    {
+        return mValue[index];
+    }
+
+    /**
+     * @brief Called by a ply reader when he want to modify the value
+     * @param newValue : the new value to set
+     */
+    Ply_CT_GenericValueInCloud_Wrapper& operator=(const double& newValue)
+    {
+        mValue = newValue;
+
+        if(mUpdateIt) {
+            mSetter->setValueWithLocalIndex(mLocalIndex, mValue);
+            mUpdateIt = false;
+        }
+
+        return *this;
+    }
+
+    /**
+     * @brief Called by a ply reader when he want to modify the value
+     * @param other : wrapper that contains readed values
+     */
+    Ply_CT_GenericValueInCloud_Wrapper& operator=(const Ply_CT_GenericValueInCloud_Wrapper& other)
+    {
+        if(mUpdateIt) {
+            mSetter->setValueWithLocalIndex(mLocalIndex, other.mValue);
+            mUpdateIt = false;
+        }
+
+        return *this;
+    }
+
+    SetterPtr       mSetter;
+    ValueInCloud    mValue;
+    bool            mUpdateIt;
+    size_t          mLocalIndex;
 };
 
 /**
- * @brief This is a class that create a cloud of XXX and register it
- *        to the repository of computree. Also it will set the current
- *        global index of the point to modify.
+ * @brief This is a class that use the attributes manager of ValueInCloud to set the value
+ *        for the point at specified index.
  */
-template<typename Cloud, typename ValueInCloud>
+template<typename Manager, typename ValueInCloud>
 struct Ply_CT_GenericCloud_Wrapper {
-    typedef ValueInCloud value_type;
+    typedef Ply_CT_GenericValueInCloud_Wrapper<typename Manager::SetterPtr, ValueInCloud> value_type;
 
-    Ply_CT_GenericCloud_Wrapper()
+    Ply_CT_GenericCloud_Wrapper(Manager& manager) :
+        mManager(manager)
     {
-        cloud = nullptr;
     }
 
     /**
-     * @brief Called by a ply reader when we must create the point cloud
+     * @brief Called the first time the pcir is created
      */
-    void resize(const size_t& newSize)
+    void setPCIR(CT_NMPCIR pcir)
     {
-        if(cloud == nullptr)
-            cloud = new Cloud(newSize);
+        mValueWrapper.mSetter = mManager.createAttributesSetterPtr(pcir);
     }
 
     /**
-     * @brief Called by a ply reader when he want to modify a point
-     * @param index : local index of the point to modify in the "pcir" array
+     * @brief Called by a ply reader when we must create the attribute cloud
+     */
+    void resize(const size_t& /*newSize*/)
+    {
+    }
+
+    /**
+     * @brief Called by a ply reader when he want to modify the attribute
+     * @param index : local index of the point
      * @return Returns a wrapper that can modify the computree point in the global point cloud
      */
     inline value_type& operator[](const size_t& index)
     {
-        return (*cloud)[index];
+        mValueWrapper.setCurrentLocalIndex(index);
+        return mValueWrapper;
     }
 
-    Cloud*                  cloud;
+    Manager&    mManager;
+    value_type  mValueWrapper;
 };
-
-typedef Ply_CT_GenericCloud_Wrapper<CT_ColorCloudStdVector, CT_Color> Ply_CT_ColorCloud_Wrapper;
-typedef Ply_CT_GenericCloud_Wrapper<CT_NormalCloudStdVector, CT_Normal> Ply_CT_NormalCloud_Wrapper;
-
-// c++11
-template<typename ValueInCloud>
-using Ply_CT_ScalarCloud_Wrapper = Ply_CT_GenericCloud_Wrapper<CT_StandardCloudStdVectorT<ValueInCloud>, ValueInCloud>;
 
 /**
  * @brief Wrapper to use the configuration widget of a ply file with computree

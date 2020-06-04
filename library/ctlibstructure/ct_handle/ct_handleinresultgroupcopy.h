@@ -29,7 +29,7 @@ public:
         QVector<CT_OutAbstractResultModel*> outModels;
         int currentIndex = 0;
 
-        const ModelType* inResultModel = model();
+        const CT_HandleInResultGroupCopy<>::ModelType* inResultModel = model();
 
         MODELS_ASSERT(inResultModel != nullptr);
 
@@ -47,13 +47,13 @@ public:
      * @brief Iterate over copies (output results)
      */
     final_iterator iterateOutputs() const {
-        using InResultToolType = ModelType::ToolToModifyResultModelCopiesType;
+        using InResultToolType = CT_HandleInResultGroupCopy<>::ModelType::ToolToModifyResultModelCopiesType;
         using OutResultModelType = InResultToolType::ModelType;
 
         QVector<CT_OutAbstractResultModel*> outModels;
         int currentIndex = 0;
 
-        const ModelType* inResultModel = model();
+        const CT_HandleInResultGroupCopy<>::ModelType* inResultModel = model();
 
         MODELS_ASSERT(inResultModel != nullptr);
 

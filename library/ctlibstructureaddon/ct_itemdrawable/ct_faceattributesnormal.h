@@ -3,25 +3,54 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractfaceattributes.h"
 #include "ct_attributes/ct_attributesnormal.h"
-#include "ct_normalcloud/ct_normalcloudstdvector.h"
 
-
-class CTLIBSTRUCTUREADDON_EXPORT CT_FaceAttributesNormal : public CT_AbstractFaceAttributes, public CT_AttributesNormal
+class CTLIBSTRUCTUREADDON_EXPORT CT_FaceAttributesNormal : public CT_AttributesNormal<CT_AbstractFaceAttributes>
 {
     Q_OBJECT
     CT_TYPE_IMPL_MACRO(CT_FaceAttributesNormal, CT_AbstractFaceAttributes, Face normal attributes)
-    using SuperClass = CT_AbstractFaceAttributes;
+    using SuperClass = CT_AttributesNormal<CT_AbstractFaceAttributes>;
 
 public:
-    CT_FaceAttributesNormal();
-    CT_FaceAttributesNormal(CT_FCIR pcir);
-    CT_FaceAttributesNormal(CT_FCIR pcir,
-                            CT_AbstractNormalCloud *nc, bool autoDeleteNormalCloud = true);
+    CT_FaceAttributesNormal() = default;
+
+    template<class ManagerT>
+    CT_FaceAttributesNormal(CT_FCIR fcir,
+                            ManagerT& manager) :
+        CT_FaceAttributesNormal(fcir,
+                                manager,
+                                std::integral_constant<bool, SFINAE_And_<IsAFaceCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, CT_Normal>>::value>())
+    {
+    }
+
     CT_FaceAttributesNormal(const CT_FaceAttributesNormal& other) = default;
 
-    size_t attributesSize() const override { return CT_AttributesNormal::attributesSize(); }
+    size_t numberOfSetValues() const override { return CT_AttributesNormal::numberOfSetValues(); }
+
+    bool hasBeenSet(const size_t& globalIndex) const override { return CT_AttributesNormal::hasBeenSet(globalIndex); }
 
     CT_ITEM_COPY_IMP(CT_FaceAttributesNormal)
+
+
+private:
+    CT_DEFAULT_IA_BEGIN(CT_FaceAttributesNormal)
+    CT_DEFAULT_IA_V2(CT_FaceAttributesNormal, CT_AbstractCategory::staticInitDataSize(), &CT_FaceAttributesNormal::numberOfSetValues, QObject::tr("Taille"))
+    CT_DEFAULT_IA_END(CT_FaceAttributesNormal)
+
+    template<class ManagerT>
+    CT_FaceAttributesNormal(CT_FCIR,
+                            ManagerT&,
+                            std::false_type)
+    {
+        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to face");
+    }
+
+    template<class ManagerT>
+    CT_FaceAttributesNormal(CT_FCIR fcir,
+                            ManagerT& manager,
+                            std::true_type) :
+        SuperClass(fcir, manager)
+    {
+    }
 };
 
 #endif // CT_FACEATTRIBUTESNORMAL_H

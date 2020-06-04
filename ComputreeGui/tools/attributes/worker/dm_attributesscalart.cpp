@@ -3,75 +3,82 @@
 template<>
 void DM_AttributesScalarT<CT_AbstractPointsAttributes>::staticApply(ConcurrentMapInfo *info)
 {
-    size_t globalPointIndex;
-
-    for(size_t i=info->m_begin; i<info->m_end; ++i)
+    auto visitor = [info](const size_t& globalIndex, double vv) -> bool
     {
-        double vv = info->m_as->dValueAt(i);
         // convert the value to be between 0 and 1
-        double key = (vv-info->m_manualMin)/info->m_range;
+        const double key = (vv-info->m_manualMin)/info->m_range;
 
         // get the intermediate color
-        QColor color = info->m_interpolator->intermediateColor(key);
+        const QColor color = info->m_interpolator->intermediateColor(key);
 
-        info->m_index->indexAt(i, globalPointIndex);
         // set the color of the point at this document
-        CT_Color &colorC = (*info->m_cc)[globalPointIndex];
+        CT_Color &colorC = (*info->m_cc)[globalIndex];
         colorC = color;
-    }
+
+        return true;
+    };
+
+    if(info->mApplyLocal)
+        info->m_as->visitLocalValuesAsDouble(visitor);
+    else
+        info->m_as->visitValuesAsDouble(visitor);
 }
 
 template<>
 void DM_AttributesScalarT<CT_AbstractFaceAttributes>::staticApply(ConcurrentMapInfo *info)
 {
-    size_t globalFaceIndex;
-
-    for(size_t i=info->m_begin; i<info->m_end; ++i)
+    auto visitor = [info](const size_t& globalIndex, double vv) -> bool
     {
-        double vv = info->m_as->dValueAt(i);
         // convert the value to be between 0 and 1
-        double key = (vv-info->m_manualMin)/info->m_range;
+        const double key = (vv-info->m_manualMin)/info->m_range;
 
         // get the intermediate color
-        QColor color = info->m_interpolator->intermediateColor(key);
+        const QColor color = info->m_interpolator->intermediateColor(key);
 
-        info->m_index->indexAt(i, globalFaceIndex);
-
-        const CT_Face &face = info->m_fAccess->constFaceAt(globalFaceIndex);
+        const CT_Face& face = info->m_fAccess->constFaceAt(globalIndex);
 
         // set the color of the face at this document
-        CT_Color &colorA = (*info->m_cc)[face.iPointAt(0)];
+        CT_Color& colorA = (*info->m_cc)[face.iPointAt(0)];
         colorA = color;
 
         (*info->m_cc)[face.iPointAt(1)] = colorA;
         (*info->m_cc)[face.iPointAt(2)] = colorA;
-    }
+
+        return true;
+    };
+
+    if(info->mApplyLocal)
+        info->m_as->visitLocalValuesAsDouble(visitor);
+    else
+        info->m_as->visitValuesAsDouble(visitor);
 }
 
 template<>
 void DM_AttributesScalarT<CT_AbstractEdgeAttributes>::staticApply(ConcurrentMapInfo *info)
 {
-    size_t globalEdgeIndex;
-
-    for(size_t i=info->m_begin; i<info->m_end; ++i)
+    auto visitor = [info](const size_t& globalIndex, double vv) -> bool
     {
-        double vv = info->m_as->dValueAt(i);
         // convert the value to be between 0 and 1
-        double key = (vv-info->m_manualMin)/info->m_range;
+        const double key = (vv-info->m_manualMin)/info->m_range;
 
         // get the intermediate color
-        QColor color = info->m_interpolator->intermediateColor(key);
+        const QColor color = info->m_interpolator->intermediateColor(key);
 
-        info->m_index->indexAt(i, globalEdgeIndex);
+        const CT_Edge &edge = info->m_eAccess->constEdgeAt(globalIndex);
 
-        const CT_Edge &edge = info->m_eAccess->constEdgeAt(globalEdgeIndex);
-
-        // set the color of the face at this document
+        // set the color of the edge at this document
         CT_Color &colorA = (*info->m_cc)[edge.iPointAt(0)];
         colorA = color;
 
         (*info->m_cc)[edge.iPointAt(1)] = colorA;
-    }
+
+        return true;
+    };
+
+    if(info->mApplyLocal)
+        info->m_as->visitLocalValuesAsDouble(visitor);
+    else
+        info->m_as->visitValuesAsDouble(visitor);
 }
 
 template class DM_AttributesScalarT<CT_AbstractPointsAttributes>;

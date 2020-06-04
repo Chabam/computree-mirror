@@ -46,7 +46,7 @@ public:
         checkNotNeedInputResultIsNotPresent();
 
         internalAddResult(handleResult,
-                          std::integral_constant<bool, IsAnInputModel<HandleInResult::ModelType>::Is>(),
+                          std::integral_constant<bool, IsAnInputModel<typename HandleInResult::ModelType>::value>(),
                           displayableName,
                           shortDescription,
                           recursive);
@@ -65,7 +65,7 @@ public:
 
         internalSetZeroOrMoreRootGroup<HandleInResult>(handleResult,
                                                        handleRootGroup,
-                                                       std::integral_constant<bool, IsAnInputModel<HandleInResult::ModelType>::Is>());
+                                                       std::integral_constant<bool, IsAnInputModel<typename HandleInResult::ModelType>::value>());
 
         return handleRootGroup;
     }
@@ -83,7 +83,7 @@ public:
 
         internalSetZeroOrMoreRootGroup<HandleInResult>(handleResult,
                                                        handleRootGroup,
-                                                       std::integral_constant<bool, IsAnInputModel<HandleInResult::ModelType>::Is>());
+                                                       std::integral_constant<bool, IsAnInputModel<typename HandleInResult::ModelType>::value>());
     }
 
     /**
@@ -105,7 +105,7 @@ public:
 
         internalSetRootGroup(handleResult,
                              rootGroupHandle,
-                             std::integral_constant<bool, IsAnInputModel<HandleInResult::ModelType>::Is && IsAnInputModel<HandleInGroup::ModelType>::Is>(),
+                             std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInResult::ModelType>, IsAnInputModel<typename HandleInGroup::ModelType>>::value>(),
                              displayableName.isEmpty() ? HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()) : displayableName,
                              shortDescription,
                              detailledDescription);
@@ -130,7 +130,7 @@ public:
 
         internalAddGroup(parentGroup,
                          groupHandle,
-                         std::integral_constant<bool, IsAnInputModel<HandleInGroupParent::ModelType>::Is && IsAnInputModel<HandleInGroup::ModelType>::Is>(),
+                         std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInGroup::ModelType>>::value>(),
                          displayableName.isEmpty() ? HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()) : displayableName,
                          shortDescription,
                          detailledDescription);
@@ -155,7 +155,7 @@ public:
 
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, IsAnInputModel<HandleInGroupParent::ModelType>::Is && IsAnInputModel<HandleInItem::ModelType>::Is>(),
+                        std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInItem::ModelType>>::value>(),
                         displayableName.isEmpty() ? HandleInItem::ItemType::nameFromType(HandleInItem::ItemType::staticType()) : displayableName,
                         shortDescription,
                         detailledDescription);
@@ -182,11 +182,89 @@ public:
 
         internalAddItemAttribute(parentItem,
                                  itemAttributeHandle,
-                                 std::integral_constant<bool, IsAnInputModel<HandleInItemParent::ModelType>::Is && IsAnInputModel<HandleInItemAttribute::ModelType>::Is>(),
+                                 std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInItemParent::ModelType>, IsAnInputModel<typename HandleInItemAttribute::ModelType>>::value>(),
                                  categories,
                                  displayableName,
                                  shortDescription,
                                  detailledDescription);
+    }
+
+    /**
+     * @brief Add a point attribute to a group model
+     * @param parentGroup : the handle of the input group model to use to add the new group
+     * @param itemHandle : the handle of the input item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleInGroupParent, class HandleInPointAttribute>
+    void addPointAttribute(const HandleInGroupParent& parentGroup,
+                           HandleInPointAttribute& itemHandle,
+                           const QString& displayableName = QString(),
+                           const QString& shortDescription = QString(),
+                           const QString& detailledDescription = QString()) {
+
+
+        checkNotNeedInputResultIsNotPresent();
+
+        internalAddItem(parentGroup,
+                        itemHandle,
+                        std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInPointAttribute::ModelType>, HasApplicableToPoint<HandleInPointAttribute>>::value>(),
+                        displayableName.isEmpty() ? HandleInPointAttribute::ItemType::nameFromType(HandleInPointAttribute::ItemType::staticType()) : displayableName,
+                        shortDescription,
+                        detailledDescription);
+    }
+
+    /**
+     * @brief Add an edge attribute to a group model
+     * @param parentGroup : the handle of the input group model to use to add the new group
+     * @param itemHandle : the handle of the input item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleInGroupParent, class HandleInEdgeAttribute>
+    void addEdgeAttribute(const HandleInGroupParent& parentGroup,
+                          HandleInEdgeAttribute& itemHandle,
+                          const QString& displayableName = QString(),
+                          const QString& shortDescription = QString(),
+                          const QString& detailledDescription = QString()) {
+
+
+        checkNotNeedInputResultIsNotPresent();
+
+        internalAddItem(parentGroup,
+                        itemHandle,
+                        std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInEdgeAttribute::ModelType>, HasApplicableToEdge<HandleInEdgeAttribute>>::value>(),
+                        displayableName.isEmpty() ? HandleInEdgeAttribute::ItemType::nameFromType(HandleInEdgeAttribute::ItemType::staticType()) : displayableName,
+                        shortDescription,
+                        detailledDescription);
+    }
+
+    /**
+     * @brief Add a face attribute to a group model
+     * @param parentGroup : the handle of the input group model to use to add the new group
+     * @param itemHandle : the handle of the input item model to use to create the new item model and access it later
+     * @param displayableName : the displayable that must be set to the new item model
+     * @param shortDescription : the short description that must be set to the new item model
+     * @param detailledDescription : the detailled description that must be set to the new item model
+     */
+    template<class HandleInGroupParent, class HandleInFaceAttribute>
+    void addFaceAttribute(const HandleInGroupParent& parentGroup,
+                          HandleInFaceAttribute& itemHandle,
+                          const QString& displayableName = QString(),
+                          const QString& shortDescription = QString(),
+                          const QString& detailledDescription = QString()) {
+
+
+        checkNotNeedInputResultIsNotPresent();
+
+        internalAddItem(parentGroup,
+                        itemHandle,
+                        std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInFaceAttribute::ModelType>, HasApplicableToFace<HandleInFaceAttribute>>::value>(),
+                        displayableName.isEmpty() ? HandleInFaceAttribute::ItemType::nameFromType(HandleInFaceAttribute::ItemType::staticType()) : displayableName,
+                        shortDescription,
+                        detailledDescription);
     }
 
     /**

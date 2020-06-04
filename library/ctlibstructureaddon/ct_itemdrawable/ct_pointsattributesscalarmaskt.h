@@ -1,9 +1,11 @@
 #ifndef CT_POINTSATTRIBUTESSCALARMASKT_H
 #define CT_POINTSATTRIBUTESSCALARMASKT_H
 
-#include "ct_cloud/ct_standardcloudstdvectort.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
+#include "ct_cloudindex/registered/abstract/ct_abstractcloudindexregisteredt.h"
 #include "ct_attributes/abstract/ct_abstractattributesscalar.h"
+#include "ct_attributes/managers/abstract/ct_abstractxattributemanager.h"
+#include "ct_attributes/ct_attributesscalart.h"
 
 /**
  *  This class is like a CT_PointsAttributesScalarTemplated but the difference is that the cloud of information
@@ -17,50 +19,74 @@
  *              quint8 entire;   // first element is contained in 3 bits and second element in 5 bits // OBLIGATORY in your struct and named 'entire'
  *           };
  *
- *           // This vector use the structure to contains datas for all points
- *           CT_StandardCloudStdVectorT<myStruct> vector(size);
+ *           // This manager use the structure that contains all informations
+ *           CT_DensePointScalarManager<myStruct> manager;
+ *
+ *           // Set 6 for the first element and 4 for the second element
+ *           myStruct tmp;
+ *           tmp.entire = 196; (equal 6 for the first and 4 for the second if use the mask)
+ *
+ *           auto setter = manager.createAttributesSetter(pcir);
+ *           setter.setValueWithGlobalIndex(globalIndex, tmp);
  *
  *           // Create two CT_PointsAttributesScalarMaskT
  *           // The first must contains a pointer to the vector and delete it when it will be destroyed from memory
  *           // The second contains also a pointer to the vector but doesn't delete it when it will be destroyed from memory
- *           CT_PointsAttributesScalarMaskT<myStruct> firstElement(model, result, 224, 5, vector, true);    // the mask is '0b11100000' in binary, and shift right is 5
- *           CT_PointsAttributesScalarMaskT<myStruct> secondElement(model, result, 31, 0, vector, false);     // the mask is '0b00011111' in binary, and shift right is 0
+ *           CT_PointsAttributesScalarMaskT<myStruct> firstElement(224, 5, pcir, manager);    // the mask is '0b11100000' in binary, and shift right is 5
+ *           CT_PointsAttributesScalarMaskT<myStruct> secondElement(31, 0, pcir, manager);     // the mask is '0b00011111' in binary, and shift right is 0
  *
- *           // Set 6 for the first element and 4 for the second element
- *           myStruct tmp;
- *           tmp.entire = 196; (egual 6 for the first and 4 for the second if use the mask)
- *
- *           vector.tAt(0) = tmp;
- *
- *           double first = firstElement.dValueAt(0);       // first == 6
- *           double second = secondElement.dValueAt(0);     // second == 4
+ *           const double first = firstElement.scalarAsDoubleAt(globalIndex);       // first == 6
+ *           const double second = secondElement.scalarAsDoubleAt(globalIndex);     // second == 4
  */
 template<typename StructType>
-class CT_PointsAttributesScalarMaskT : public CT_AbstractPointAttributesScalar, public CT_AbstractAttributesScalar
+class CT_PointsAttributesScalarMaskT : public CT_AttributesScalarT<typename StructType::MASK, CT_AbstractPointAttributesScalar, StructType>
 {
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_PointsAttributesScalarMaskT, StructType, CT_AbstractPointAttributesScalar, Point %1 attributes)
 
-    using SuperClass1 = CT_AbstractPointAttributesScalar;
-    using SuperClass2 = CT_AbstractAttributesScalar;
+    using SuperClass = CT_AttributesScalarT<typename StructType::MASK, CT_AbstractPointAttributesScalar, StructType>;
 
 public:
-
     typedef typename StructType::MASK StructMASK;
 
-    CT_PointsAttributesScalarMaskT();
-    CT_PointsAttributesScalarMaskT(StructMASK mask,
-                                   quint16 shiftRight,
-                                   CT_StandardCloudStdVectorT<StructType> *collection,
-                                   CT_PCIR pcir,
-                                   bool autoDeleteCollection = true);
+    /**
+     * @brief The visitor receive the global index of the attribute and the attribute. The visitor
+     *        must returns true if the visit must continue or false to abort it.
+     */
+    using SVisitor = std::function<bool (const size_t& /*globalIndex*/, StructMASK /*value*/)>;
 
+    CT_PointsAttributesScalarMaskT();
+
+    template<class ManagerT>
     CT_PointsAttributesScalarMaskT(StructMASK mask,
                                    quint16 shiftRight,
-                                   const StructMASK &min,
-                                   const StructMASK &max,
-                                   CT_StandardCloudStdVectorT<StructType> *collection,
                                    CT_PCIR pcir,
-                                   bool autoDeleteCollection = true);
+                                   ManagerT& manager) :
+        CT_PointsAttributesScalarMaskT(mask,
+                                       shiftRight,
+                                       pcir,
+                                       manager,
+                                       std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, StructType>>::value>())
+    {
+
+    }
+
+    template<class ManagerT>
+    CT_PointsAttributesScalarMaskT(StructMASK mask,
+                                   quint16 shiftRight,
+                                   const StructMASK& min,
+                                   const StructMASK& max,
+                                   CT_PCIR pcir,
+                                   ManagerT& manager) :
+        CT_PointsAttributesScalarMaskT(mask,
+                                       shiftRight,
+                                       min,
+                                       max,
+                                       pcir,
+                                       manager,
+                                       std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, StructType>>::value>())
+    {
+
+    }
 
     /**
      * @brief Copy constructor.
@@ -86,30 +112,66 @@ public:
      */
     CT_PointsAttributesScalarMaskT(const CT_PointsAttributesScalarMaskT<StructType>& other);
 
-    ~CT_PointsAttributesScalarMaskT() override;
-
-    double dMin() const;
-
-    double dMax() const;
-
-    double dValueAt(const size_t &index) const;
-
-    size_t attributesSize() const;
-
-    /**
-     * @brief Returns the collection used by this object
-     */
-    CT_StandardCloudStdVectorT<StructType>* collection() const;
-
     CT_ITEM_COPY_IMP(CT_PointsAttributesScalarMaskT<StructType>)
 
 private:
-    CT_StandardCloudStdVectorT<StructType>*             m_collection;
-    bool                                                m_autoDeleteCollection;
     StructMASK                                          m_mask;
     quint16                                             m_shiftRight;
-    StructMASK                                          m_min;
-    StructMASK                                          m_max;
+
+    template<class ManagerT>
+    CT_PointsAttributesScalarMaskT(StructMASK,
+                                   quint16,
+                                   CT_PCIR,
+                                   ManagerT&,
+                                   std::false_type)
+    {
+        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
+    }
+
+    template<class ManagerT>
+    CT_PointsAttributesScalarMaskT(StructMASK mask,
+                                   quint16 shiftRight,
+                                   CT_PCIR pcir,
+                                   ManagerT& manager,
+                                   std::true_type) :
+        m_mask(mask),
+        m_shiftRight(shiftRight),
+        SuperClass(pcir,
+                   manager)
+    {
+    }
+
+    template<class ManagerT>
+    CT_PointsAttributesScalarMaskT(StructMASK,
+                                   quint16,
+                                   const StructMASK&,
+                                   const StructMASK&,
+                                   CT_PCIR,
+                                   ManagerT&,
+                                   std::false_type)
+    {
+        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
+    }
+
+    template<class ManagerT>
+    CT_PointsAttributesScalarMaskT(StructMASK mask,
+                                   quint16 shiftRight,
+                                   const StructMASK& min,
+                                   const StructMASK& max,
+                                   CT_PCIR pcir,
+                                   ManagerT& manager,
+                                   std::true_type) :
+        m_mask(mask),
+        m_shiftRight(shiftRight),
+        SuperClass(pcir,
+                   manager,
+                   min,
+                   max)
+    {
+    }
+
+protected:
+    StructMASK convertScalarOfManagerToScalar(const StructType& value) const final;
 };
 
 #include "ct_itemdrawable/ct_pointsattributesscalarmaskt.hpp"
