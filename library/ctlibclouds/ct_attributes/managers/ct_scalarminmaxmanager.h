@@ -11,77 +11,169 @@ class CT_ScalarMinMaxManager
 public:
     CT_ScalarMinMaxManager()
     {
-        InitMinMax(mMin, mMax);
     }
 
-    template<typename ATT>
-    void registerAttribute(ATT* attribute)
+    ~CT_ScalarMinMaxManager()
     {
-        Backup backup{attribute->minLocalScalar(), attribute->maxLocalScalar()};
-
-        mMin = qMin(mMin, backup.mMin);
-        mMax = qMax(mMax, backup.mMax);
-
-        mMinMaxAttributes.insert(attribute, backup);
-    }
-
-    template<typename ATT>
-    void updateAttribute(ATT* attribute)
-    {
-        Backup& backup = mMinMaxAttributes[attribute];
-        backup.mMin = attribute->minLocalScalar();
-        backup.mMin = attribute->maxLocalScalar();
-
-        InitMinMax(mMin, mMax);
-
-        for(const Backup& backup : mMinMaxAttributes)
+        for(const Backup* backup : mMinMaxByMask)
         {
-            mMin = qMin(mMin, backup.mMin);
-            mMax = qMax(mMax, backup.mMax);
+            qDeleteAll(backup->mMinMaxAttributes.begin(), backup->mMinMaxAttributes.end());
+            delete backup;
         }
     }
 
-    template<typename ATT>
+    template<typename SCALART, typename ATT>
+    void registerAttribute(ATT* attribute, SCALART min, SCALART max)
+    {
+        Backup* globalBackup = mMinMaxByMask.value(attribute->mask(), nullptr);
+
+        if(globalBackup == nullptr)
+        {
+            globalBackup = new BackupT<SCALART>(min, max);
+            mMinMaxByMask.insert(attribute->mask(), globalBackup);
+        }
+        else
+        {
+            BackupT<SCALART>* globalBackupCasted = static_cast<BackupT<SCALART>*>(globalBackup);
+            globalBackupCasted->mMin = qMin(globalBackupCasted->mMin, min);
+            globalBackupCasted->mMax = qMax(globalBackupCasted->mMax, max);
+        }
+
+        globalBackup->mMinMaxAttributes.insert(attribute, new BackupT<SCALART>(min, max));
+    }
+
+    template<typename SCALART, typename ATT>
+    void updateAttribute(ATT* attribute, SCALART min, SCALART max)
+    {
+        Backup* globalBackup = mMinMaxByMask.value(attribute->mask(), nullptr);
+
+        if(globalBackup == nullptr)
+            return;
+
+        Backup* attBackup = globalBackup->mMinMaxAttributes.value(attribute, nullptr);
+
+        if(attBackup == nullptr)
+            return;
+
+        // update the local
+        static_cast<BackupT<SCALART>*>(attBackup)->mMin = min;
+        static_cast<BackupT<SCALART>*>(attBackup)->mMax = max;
+
+        // update the global
+        BackupT<SCALART>* globalBackupCasted = static_cast<BackupT<SCALART>*>(globalBackup);
+        globalBackupCasted->mMin = min;
+        globalBackupCasted->mMax = max;
+
+        for(const Backup* backup : globalBackupCasted->mMinMaxAttributes)
+        {
+            const BackupT<SCALART>* casted = static_cast<const BackupT<SCALART>*>(backup);
+
+            globalBackupCasted->mMin = qMin(globalBackupCasted->mMin, casted->mMin);
+            globalBackupCasted->mMax = qMax(globalBackupCasted->mMax, casted->mMax);
+        }
+    }
+
+    template<typename SCALART, typename ATT>
     void unregisterAttribute(ATT* attribute)
     {
-        mMinMaxAttributes.remove(attribute);
+        Backup* globalBackup = mMinMaxByMask.value(attribute->mask(), nullptr);
 
-        InitMinMax(mMin, mMax);
+        if(globalBackup == nullptr)
+            return;
 
-        for(const Backup& backup : mMinMaxAttributes)
+        delete globalBackup->mMinMaxAttributes.take(attribute);
+
+        if(globalBackup->mMinMaxAttributes.isEmpty())
         {
-            mMin = qMin(mMin, backup.mMin);
-            mMax = qMax(mMax, backup.mMax);
+            delete mMinMaxByMask.take(attribute->mask());
+            return;
+        }
+
+        BackupT<SCALART>* firstAttBackupCasted = static_cast<BackupT<SCALART>*>(globalBackup->mMinMaxAttributes.begin().value());
+
+        // update the global
+        BackupT<SCALART>* globalBackupCasted = static_cast<BackupT<SCALART>*>(globalBackup);
+        globalBackupCasted->mMin = firstAttBackupCasted->mMin;
+        globalBackupCasted->mMax = firstAttBackupCasted->mMax;
+
+        for(const Backup* backup : globalBackupCasted->mMinMaxAttributes)
+        {
+            const BackupT<SCALART>* casted = static_cast<const BackupT<SCALART>*>(backup);
+
+            globalBackupCasted->mMin = qMin(globalBackupCasted->mMin, casted->mMin);
+            globalBackupCasted->mMax = qMax(globalBackupCasted->mMax, casted->mMax);
         }
     }
 
-    SCALAR min() const { return mMin; }
+    template<typename SCALART, typename ATT>
+    SCALART min(const ATT* attribute) const
+    {
+        Backup* globalBackup = mMinMaxByMask.value(attribute->mask(), nullptr);
 
-    SCALAR max() const { return mMax; }
+        if(globalBackup == nullptr)
+            return SCALART();
+
+        Backup* attBackup = globalBackup->mMinMaxAttributes.value(attribute, nullptr);
+
+        if(attBackup == nullptr)
+            return SCALART();
+
+        return static_cast<BackupT<SCALART>*>(attBackup)->mMin;
+    }
+
+    template<typename SCALART, typename ATT>
+    SCALART max(const ATT* attribute) const
+    {
+        Backup* globalBackup = mMinMaxByMask.value(attribute->mask(), nullptr);
+
+        if(globalBackup == nullptr)
+            return SCALART();
+
+        Backup* attBackup = globalBackup->mMinMaxAttributes.value(attribute, nullptr);
+
+        if(attBackup == nullptr)
+            return SCALART();
+
+        return static_cast<BackupT<SCALART>*>(attBackup)->mMax;
+    }
 
     static void InitMinMax(SCALAR& min, SCALAR& max)
     {
-        InternalInitMinMax(min, max, std::integral_constant<bool, std::numeric_limits<SCALAR>::is_signed>());
+        InternalInitMinMaxIfBool(min, max, std::integral_constant<bool, std::is_same<SCALAR, bool>::value>());
     }
 
 private:
-    struct Backup
+
+    class Backup
     {
-        SCALAR  mMin;
-        SCALAR  mMax;
+    public:
+        virtual ~Backup() {}
+
+        QHash<const void*, Backup*> mMinMaxAttributes;
     };
 
-    SCALAR  mMin;
-    SCALAR  mMax;
+    template<typename SCALART>
+    class BackupT : public Backup
+    {
+    public:
+        BackupT(SCALART min, SCALART max) : mMin(min), mMax(max) {}
 
-    QHash<void*, Backup> mMinMaxAttributes;
+        SCALART  mMin;
+        SCALART  mMax;
+    };
 
-    // TODO
-    /*static void InternalInitMinMaxIfBool(SCALAR& min, SCALAR& max, std::true_type)
+    QHash<quint64, Backup*> mMinMaxByMask;
+
+    static void InternalInitMinMaxIfBool(SCALAR& min, SCALAR& max, std::true_type)
     {
         min = true;
         max = false;
-    }*/
+    }
+
+    static void InternalInitMinMaxIfBool(SCALAR& min, SCALAR& max, std::false_type)
+    {
+        InternalInitMinMax(min, max, std::integral_constant<bool, std::numeric_limits<SCALAR>::is_signed>());
+    }
 
     static void InternalInitMinMax(SCALAR& min, SCALAR& max, std::true_type)
     {

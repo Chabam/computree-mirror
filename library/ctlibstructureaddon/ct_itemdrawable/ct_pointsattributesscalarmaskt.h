@@ -114,6 +114,8 @@ public:
 
     CT_ITEM_COPY_IMP(CT_PointsAttributesScalarMaskT<StructType>)
 
+    quint64 mask() const final;
+
 private:
     StructMASK                                          m_mask;
     quint16                                             m_shiftRight;

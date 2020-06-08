@@ -122,6 +122,8 @@ public:
      */
     CT_AbstractXAttributeManager<MANAGER_SCALAR>* scalarsManager() const;
 
+    virtual quint64 mask() const { return 0; }
+
 private:
     CT_CIR                                          m_cir;
     SCALAR                                          m_min;

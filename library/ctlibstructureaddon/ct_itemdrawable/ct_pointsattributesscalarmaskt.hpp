@@ -17,6 +17,12 @@ CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT(const
 }
 
 template<typename StructType>
+quint64 CT_PointsAttributesScalarMaskT<StructType>::mask() const
+{
+    return quint64(m_mask);
+}
+
+template<typename StructType>
 typename CT_PointsAttributesScalarMaskT<StructType>::StructMASK CT_PointsAttributesScalarMaskT<StructType>::convertScalarOfManagerToScalar(const StructType& value) const
 {
     return ((value.entire & m_mask) >> m_shiftRight);

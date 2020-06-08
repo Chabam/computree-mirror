@@ -17,7 +17,7 @@ CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::CT_AttributesScalarT(
     m_min(min),
     m_max(max)
 {
-    dynamic_cast<CT_ScalarMinMaxManager<SCALAR>*>(m_manager)->registerAttribute(this);
+    dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->registerAttribute(this, m_min, m_max);
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
@@ -36,14 +36,14 @@ CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::CT_AttributesScalarT(
         return true;
     });
 
-    dynamic_cast<CT_ScalarMinMaxManager<SCALAR>*>(m_manager)->registerAttribute(this);
+    dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->registerAttribute(this, m_min, m_max);
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
 CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::~CT_AttributesScalarT()
 {
     if(m_manager != nullptr)
-        dynamic_cast<CT_ScalarMinMaxManager<SCALAR>*>(m_manager)->unregisterAttribute(this);
+        dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->template unregisterAttribute<SCALAR>(this);
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
@@ -94,13 +94,13 @@ double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::maxScalarAsDou
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
 SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::minScalar() const
 {
-    return convertScalarOfManagerToScalar(dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->min());
+    return dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->template min<SCALAR>(this);
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
 SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::maxScalar() const
 {
-    return convertScalarOfManagerToScalar(dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->max());
+    return dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->template max<SCALAR>(this);
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
@@ -205,7 +205,7 @@ void CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::setLocalMinMax(c
     m_min = min;
     m_max = max;
 
-    dynamic_cast<CT_ScalarMinMaxManager<SCALAR>*>(m_manager)->updateAttribute(this);
+    dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->updateAttribute(this, m_min, m_max);
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>

@@ -88,13 +88,18 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
 
     QListIterator<CT_AbstractModel*> it(list);
 
+    bool hasPoints = false;
+
     while(it.hasNext())
     {
         CT_OutAbstractSingularItemModel *model = dynamic_cast<CT_OutAbstractSingularItemModel*>(it.next());
 
         if((model != nullptr) && !model->isEmpty())
         {
-            if(!finalModels.contains((CT_OutAbstractSingularItemModel*)model->recursiveOriginalModelWithAStep()))
+            if(!hasPoints && (dynamic_cast<CT_IAccessPointCloud*>(model->prototype()) != nullptr))
+                hasPoints = true;
+
+            if(!finalModels.contains(static_cast<CT_OutAbstractSingularItemModel*>(model->recursiveOriginalModelWithAStep())))
                 finalModels.append(model);
         }
     }
@@ -119,43 +124,46 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
         }
     }
 
-    menu = contextMenu->addMenu(tr("Colorier les points de chaque éléments par"));
-
-    for(int i=0; i<nDocs; ++i)
+    if(hasPoints)
     {
-        GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(i));
+        menu = contextMenu->addMenu(tr("Colorier les points de chaque éléments par"));
 
-        if(graphicsDoc != nullptr) {
-            QMenu *subMenu = menu->addMenu(tr("%1").arg(graphicsDoc->getNumber()));
+        for(int i=0; i<nDocs; ++i)
+        {
+            GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(i));
 
-            QAction *action = subMenu->addAction(tr("X"), this, SLOT(colorByPointsCoordinate()));
-            action->setData(QString("%1;%2;1").arg(i).arg(CT_Point::X));
+            if(graphicsDoc != nullptr) {
+                QMenu *subMenu = menu->addMenu(tr("%1").arg(graphicsDoc->getNumber()));
 
-            action = subMenu->addAction(tr("Y"), this, SLOT(colorByPointsCoordinate()));
-            action->setData(QString("%1;%2;1").arg(i).arg(CT_Point::Y));
+                QAction *action = subMenu->addAction(tr("X"), this, SLOT(colorByPointsCoordinate()));
+                action->setData(QString("%1;%2;1").arg(i).arg(CT_Point::X));
 
-            action = subMenu->addAction(tr("Z"), this, SLOT(colorByPointsCoordinate()));
-            action->setData(QString("%1;%2;1").arg(i).arg(CT_Point::Z));
+                action = subMenu->addAction(tr("Y"), this, SLOT(colorByPointsCoordinate()));
+                action->setData(QString("%1;%2;1").arg(i).arg(CT_Point::Y));
+
+                action = subMenu->addAction(tr("Z"), this, SLOT(colorByPointsCoordinate()));
+                action->setData(QString("%1;%2;1").arg(i).arg(CT_Point::Z));
+            }
         }
-    }
 
-    menu = contextMenu->addMenu(tr("Colorier les points de tous les éléments par"));
+        menu = contextMenu->addMenu(tr("Colorier les points de tous les éléments par"));
 
-    for(int i=0; i<nDocs; ++i)
-    {
-        GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(i));
+        for(int i=0; i<nDocs; ++i)
+        {
+            GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(i));
 
-        if(graphicsDoc != nullptr) {
-            QMenu *subMenu = menu->addMenu(tr("%1").arg(graphicsDoc->getNumber()));
+            if(graphicsDoc != nullptr) {
+                QMenu *subMenu = menu->addMenu(tr("%1").arg(graphicsDoc->getNumber()));
 
-            QAction *action = subMenu->addAction(tr("X"), this, SLOT(colorByPointsCoordinate()));
-            action->setData(QString("%1;%2;0").arg(i).arg(CT_Point::X));
+                QAction *action = subMenu->addAction(tr("X"), this, SLOT(colorByPointsCoordinate()));
+                action->setData(QString("%1;%2;0").arg(i).arg(CT_Point::X));
 
-            action = subMenu->addAction(tr("Y"), this, SLOT(colorByPointsCoordinate()));
-            action->setData(QString("%1;%2;0").arg(i).arg(CT_Point::Y));
+                action = subMenu->addAction(tr("Y"), this, SLOT(colorByPointsCoordinate()));
+                action->setData(QString("%1;%2;0").arg(i).arg(CT_Point::Y));
 
-            action = subMenu->addAction(tr("Z"), this, SLOT(colorByPointsCoordinate()));
-            action->setData(QString("%1;%2;0").arg(i).arg(CT_Point::Z));
+                action = subMenu->addAction(tr("Z"), this, SLOT(colorByPointsCoordinate()));
+                action->setData(QString("%1;%2;0").arg(i).arg(CT_Point::Z));
+            }
         }
     }
 }
