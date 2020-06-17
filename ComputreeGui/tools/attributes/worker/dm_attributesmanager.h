@@ -18,6 +18,7 @@ public:
     void clearInvalid();
 
     DM_AbstractAttributes* getAttributesFromInterface(const CT_AbstractAttributes *ia, bool local = true) const;
+    DM_AbstractAttributes* getAttributesFromModel(const CT_OutAbstractModel* model, bool local = true) const;
 
     const QList<DM_AbstractAttributes*>& attributes() const;
 

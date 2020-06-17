@@ -17,7 +17,8 @@
 
 #include "dm_guimanager.h"
 
-DM_ContextMenuColouristAdder::DM_ContextMenuColouristAdder(IColouristContextMenuAccess &access, QObject *parent) : m_itemAccess(access), QObject(parent)
+DM_ContextMenuColouristAdder::DM_ContextMenuColouristAdder(IColouristContextMenuAccess &access, QObject *parent) : QObject(parent),
+    m_itemAccess(access)
 {
     m_docManager = nullptr;
     m_autoColorProducer = nullptr;
@@ -132,7 +133,8 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
         {
             GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(i));
 
-            if(graphicsDoc != nullptr) {
+            if(graphicsDoc != nullptr)
+            {
                 QMenu *subMenu = menu->addMenu(tr("%1").arg(graphicsDoc->getNumber()));
 
                 QAction *action = subMenu->addAction(tr("X"), this, SLOT(colorByPointsCoordinate()));
@@ -143,6 +145,31 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
 
                 action = subMenu->addAction(tr("Z"), this, SLOT(colorByPointsCoordinate()));
                 action->setData(QString("%1;%2;1").arg(i).arg(CT_Point::Z));
+
+                graphicsDoc->updateAttributesManager();
+                const QList<DM_AbstractAttributes*>& attributes = graphicsDoc->attributesManager().attributes();
+
+                QHash<const CT_OutAbstractModel*, QAction*> actionsByModel;
+
+                int index = 0;
+                for(DM_AbstractAttributes* attribute : attributes)
+                {
+                    if(attribute->mustApplyToLocalIndex())
+                    {
+                        action = actionsByModel.value(attribute->model());
+
+                        if(action == nullptr)
+                        {
+                            action = subMenu->addAction(attribute->displayableName(), this, &DM_ContextMenuColouristAdder::colorByAttributes);
+                            action->setData(QString("%1").arg(i));
+                            actionsByModel.insert(attribute->model(), action);
+                        }
+
+                        action->setData(action->data().toString() + QString(";%1").arg(index));
+                    }
+
+                    ++index;
+                }
             }
         }
 
@@ -152,7 +179,8 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
         {
             GDocumentViewForGraphics *graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(i));
 
-            if(graphicsDoc != nullptr) {
+            if(graphicsDoc != nullptr)
+            {
                 QMenu *subMenu = menu->addMenu(tr("%1").arg(graphicsDoc->getNumber()));
 
                 QAction *action = subMenu->addAction(tr("X"), this, SLOT(colorByPointsCoordinate()));
@@ -163,6 +191,20 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
 
                 action = subMenu->addAction(tr("Z"), this, SLOT(colorByPointsCoordinate()));
                 action->setData(QString("%1;%2;0").arg(i).arg(CT_Point::Z));
+
+                const QList<DM_AbstractAttributes*>& attributes = graphicsDoc->attributesManager().attributes();
+
+                int index = 0;
+                for(DM_AbstractAttributes* attribute : attributes)
+                {
+                    if(!attribute->mustApplyToLocalIndex())
+                    {
+                        action = subMenu->addAction(attribute->displayableName(), this, &DM_ContextMenuColouristAdder::colorByAttributes);
+                        action->setData(QString("%1;%2").arg(i).arg(index));
+                    }
+
+                    ++index;
+                }
             }
         }
     }
@@ -374,4 +416,37 @@ void DM_ContextMenuColouristAdder::colorByPointsCoordinate()
     }
 
     graphicsDoc->dirtyColorsOfPoints();
+}
+
+void DM_ContextMenuColouristAdder::colorByAttributes()
+{
+    const QStringList info = static_cast<QAction*>(sender())->data().toString().split(";");
+    const int size = info.size();
+
+    if(size < 2)
+        return;
+
+    bool ok;
+    int docIndex = info.first().toInt(&ok);
+
+    if(!ok)
+        return;
+
+    GDocumentViewForGraphics* graphicsDoc = dynamic_cast<GDocumentViewForGraphics*>(m_docManager->documentAt(docIndex));
+
+    if(graphicsDoc == nullptr)
+        return;
+
+    const QList<DM_AbstractAttributes*>& attributes = graphicsDoc->attributesManager().attributes();
+
+    for(int i=1; i<size; ++i)
+    {
+        const int attIndex = info.at(i).toInt(&ok);
+
+        if(!ok)
+            continue;
+
+        DM_AbstractAttributes* attribute = attributes.at(attIndex);
+        graphicsDoc->applyAttributes(attribute);
+    }
 }

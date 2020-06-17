@@ -56,7 +56,8 @@ HEADERS += \
     $$PWD/itemdrawable/dm_documentmenugenerator.h \
     $$PWD/document/dm_resultgroupgui.h \
     $$PWD/document/dm_itemgroupgui.h \
-    $$PWD/document/dm_fakeattributemanagert.h
+    $$PWD/document/dm_fakeattributemanagert.h \
+    $$PWD/attributes/worker/dm_attributesmanagerupdater.h
 
 SOURCES += \
     tools/worker/dm_abstractworker.cpp \
@@ -96,5 +97,6 @@ SOURCES += \
     $$PWD/amkgl/dm_multipleobjectsmodifier.cpp \
     $$PWD/itemdrawable/dm_documentmenugenerator.cpp \
     $$PWD/document/dm_resultgroupgui.cpp \
-    $$PWD/document/dm_itemgroupgui.cpp
+    $$PWD/document/dm_itemgroupgui.cpp \
+    $$PWD/attributes/worker/dm_attributesmanagerupdater.cpp
 

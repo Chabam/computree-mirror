@@ -51,6 +51,21 @@ DM_AbstractAttributes *DM_AttributesManager::getAttributesFromInterface(const CT
     return nullptr;
 }
 
+DM_AbstractAttributes* DM_AttributesManager::getAttributesFromModel(const CT_OutAbstractModel* model, bool local) const
+{
+    QListIterator<DM_AbstractAttributes*> it(m_collection);
+
+    while(it.hasNext())
+    {
+        DM_AbstractAttributes *da = it.next();
+
+        if((da->model() == model) && (da->mustApplyToLocalIndex() == local))
+            return da;
+    }
+
+    return nullptr;
+}
+
 const QList<DM_AbstractAttributes *>& DM_AttributesManager::attributes() const
 {
     return m_collection;

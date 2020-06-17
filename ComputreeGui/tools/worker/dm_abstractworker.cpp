@@ -60,8 +60,8 @@ void DM_AbstractWorker::staticConnectWorkerToThread(DM_AbstractWorker *worker, b
 {
     QThread *thread = worker->thread();
 
-    QObject::connect(thread, SIGNAL(started()), worker, SLOT(apply()));
-    QObject::connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+    QObject::connect(thread, SIGNAL(started()), worker, SLOT(apply()), Qt::DirectConnection);
+    QObject::connect(worker, SIGNAL(finished()), thread, SLOT(quit()), Qt::DirectConnection);
 
     if(deleteWorkerWhenFinished)
         QObject::connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));

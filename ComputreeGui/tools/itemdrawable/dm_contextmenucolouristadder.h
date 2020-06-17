@@ -106,6 +106,8 @@ private slots:
      * @brief Called when user want to color points of items by a coordinate
      */
     void colorByPointsCoordinate();
+
+    void colorByAttributes();
 };
 
 Q_DECLARE_METATYPE(DM_ContextMenuColouristAdder::ActionSetColorByAttribute)

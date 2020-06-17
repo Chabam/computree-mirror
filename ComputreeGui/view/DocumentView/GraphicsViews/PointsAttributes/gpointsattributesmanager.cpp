@@ -57,9 +57,6 @@ void GPointsAttributesManager::setManager(const DM_AttributesManager *man)
 {
     m_manager = const_cast<DM_AttributesManager*>(man);
 
-    if(m_manager != nullptr)
-        m_manager->clearInvalid();
-
     initTreeView();
 }
 
@@ -134,41 +131,27 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
         {
             AttributesScalarType* localDPAS = static_cast<AttributesScalarType*>(m_manager->getAttributesFromInterface(pa));
 
-            if(localDPAS == nullptr)
+            if(localDPAS != nullptr)
             {
-                localDPAS = new AttributesScalarType(true);
-                localDPAS->setTypeAttributes(pa, pas);
+                QStandardItem* rootItem = rootItemForType<IAttributesType>();
+                QStandardItem* scalarRoot = getOrCreateScalarRootItemForType<IAttributesType>(rootItem);
 
-                m_manager->addAttributes(localDPAS);
-            }
-
-            QStandardItem* rootItem = rootItemForType<IAttributesType>();
-            QStandardItem* scalarRoot = getOrCreateScalarRootItemForType<IAttributesType>(rootItem);
-
-            QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
-                                                                          [this, pa, pas]() -> QVariant
-            {
-                AttributesScalarType* globalDPAS = static_cast<AttributesScalarType*>(m_manager->getAttributesFromInterface(pa, false));
-
-                if(globalDPAS == nullptr)
+                QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
+                                                                              [this, pa]() -> QVariant
                 {
-                    globalDPAS = new AttributesScalarType(false);
-                    globalDPAS->setTypeAttributes(pa, pas);
+                    AttributesScalarType* globalDPAS = static_cast<AttributesScalarType*>(m_manager->getAttributesFromInterface(pa, false));
+                    return qVariantFromValue(static_cast<void*>(globalDPAS));
+                },
+                scalarRoot);
 
-                    m_manager->addAttributes(globalDPAS);
-                }
+                ui->treeView->expand(m_model.indexFromItem(rootItem));
+                ui->treeView->expand(m_model.indexFromItem(scalarRoot));
 
-                return qVariantFromValue(static_cast<void*>(globalDPAS));
-            },
-            scalarRoot);
+                QList<QStandardItem*> items = createAttributesScalarForModel(localDPAS);
+                modelRoot->appendRow(items);
 
-            ui->treeView->expand(m_model.indexFromItem(rootItem));
-            ui->treeView->expand(m_model.indexFromItem(scalarRoot));
-
-            QList<QStandardItem*> items = createAttributesScalarForModel(localDPAS);
-            modelRoot->appendRow(items);
-
-            createWidgetForItems(items);
+                createWidgetForItems(items);
+            }
         }
         else
         {
@@ -178,41 +161,28 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
             {
                 AttributesColorType* localDPAC = static_cast<AttributesColorType*>(m_manager->getAttributesFromInterface(pa));
 
-                if(localDPAC == nullptr)
+                if(localDPAC != nullptr)
                 {
-                    localDPAC = new AttributesColorType(true);
-                    localDPAC->setTypeAttributes(pa, pac);
+                    QStandardItem* rootItem = rootItemForType<IAttributesType>();
+                    QStandardItem* colorRoot = getOrCreateColorRootItemForType<IAttributesType>(rootItem);
 
-                    m_manager->addAttributes(localDPAC);
-                }
-
-                QStandardItem* rootItem = rootItemForType<IAttributesType>();
-                QStandardItem* colorRoot = getOrCreateColorRootItemForType<IAttributesType>(rootItem);
-
-                QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
-                                                                              [this, pa, pac]() -> QVariant
-                {
-                    AttributesColorType* globalDPAC = static_cast<AttributesColorType*>(m_manager->getAttributesFromInterface(pa, false));
-
-                    if(globalDPAC == nullptr)
+                    QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
+                                                                                  [this, pa]() -> QVariant
                     {
-                        globalDPAC = new AttributesColorType(false);
-                        globalDPAC->setTypeAttributes(pa, pac);
+                        AttributesColorType* globalDPAC = static_cast<AttributesColorType*>(m_manager->getAttributesFromInterface(pa, false));
 
-                        m_manager->addAttributes(globalDPAC);
-                    }
+                        return qVariantFromValue(static_cast<void*>(globalDPAC));
+                    },
+                    colorRoot);
 
-                    return qVariantFromValue(static_cast<void*>(globalDPAC));
-                },
-                colorRoot);
+                    ui->treeView->expand(m_model.indexFromItem(rootItem));
+                    ui->treeView->expand(m_model.indexFromItem(colorRoot));
 
-                ui->treeView->expand(m_model.indexFromItem(rootItem));
-                ui->treeView->expand(m_model.indexFromItem(colorRoot));
+                    QList<QStandardItem*> items = createAttributesColorForModel(localDPAC);
+                    modelRoot->appendRow(items);
 
-                QList<QStandardItem*> items = createAttributesColorForModel(localDPAC);
-                modelRoot->appendRow(items);
-
-                createWidgetForItems(items);
+                    createWidgetForItems(items);
+                }
             }
             else
             {
@@ -224,39 +194,26 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
 
                     if(localDPAN == nullptr)
                     {
-                        localDPAN = new AttributesNormalType(true);
-                        localDPAN->setTypeAttributes(pa, pan);
+                        QStandardItem* rootItem = rootItemForType<IAttributesType>();
+                        QStandardItem* normalRoot = getOrCreateNormalRootItemForType<IAttributesType>(rootItem);
 
-                        m_manager->addAttributes(localDPAN);
-                    }
-
-                    QStandardItem* rootItem = rootItemForType<IAttributesType>();
-                    QStandardItem* normalRoot = getOrCreateNormalRootItemForType<IAttributesType>(rootItem);
-
-                    QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
-                                                                                  [this, pa, pan]() -> QVariant
-                    {
-                        AttributesNormalType* globalDPAN = static_cast<AttributesNormalType*>(m_manager->getAttributesFromInterface(pa, false));
-
-                        if(globalDPAN == nullptr)
+                        QStandardItem* modelRoot = findOrCreateChildForAttributeModel(model,
+                                                                                      [this, pa]() -> QVariant
                         {
-                            globalDPAN = new AttributesNormalType(true);
-                            globalDPAN->setTypeAttributes(pa, pan);
+                            AttributesNormalType* globalDPAN = static_cast<AttributesNormalType*>(m_manager->getAttributesFromInterface(pa, false));
 
-                            m_manager->addAttributes(globalDPAN);
-                        }
+                            return qVariantFromValue(static_cast<void*>(globalDPAN));
+                        },
+                        normalRoot);
 
-                        return qVariantFromValue(static_cast<void*>(globalDPAN));
-                    },
-                    normalRoot);
+                        ui->treeView->expand(m_model.indexFromItem(rootItem));
+                        ui->treeView->expand(m_model.indexFromItem(modelRoot));
 
-                    ui->treeView->expand(m_model.indexFromItem(rootItem));
-                    ui->treeView->expand(m_model.indexFromItem(modelRoot));
+                        QList<QStandardItem*> items = createAttributesNormalForModel(localDPAN);
+                        modelRoot->appendRow(items);
 
-                    QList<QStandardItem*> items = createAttributesNormalForModel(localDPAN);
-                    modelRoot->appendRow(items);
-
-                    createWidgetForItems(items);
+                        createWidgetForItems(items);
+                    }
                 }
             }
         }

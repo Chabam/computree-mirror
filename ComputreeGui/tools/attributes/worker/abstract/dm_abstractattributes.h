@@ -6,6 +6,7 @@
 
 class GDocumentViewForGraphics;
 class CT_AbstractAttributes;
+class CT_OutAbstractModel;
 
 class DM_AbstractAttributes : public DM_AbstractWorker
 {
@@ -18,6 +19,16 @@ public:
      */
     DM_AbstractAttributes(bool local);
     virtual ~DM_AbstractAttributes();
+
+    /**
+     * @brief Set the model that correspond to this attribute
+     */
+    void setModel(const CT_OutAbstractModel* model);
+
+    /**
+     * @brief Returns the model that correspond to this attribute
+     */
+    const CT_OutAbstractModel* model() const;
 
     /**
      * @brief Set a displayable name
@@ -77,6 +88,7 @@ private:
     bool                        m_displayAlone;
     GDocumentViewForGraphics    *m_doc;
     CT_AbstractAttributes       *m_attributes;
+    const CT_OutAbstractModel*  mModel;
     const bool                  mLocalOnly;
 
 protected:

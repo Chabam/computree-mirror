@@ -145,6 +145,16 @@ public:
      */
     DM_GraphicsViewOptions getOptions() const;
 
+    /**
+     * @brief Update the attributes manager to be sync with elements in the view
+     */
+    void updateAttributesManager();
+
+    /**
+     * @brief Returns the attributes manager used in this graphics view
+     */
+    const DM_AttributesManager& attributesManager() const;
+
 private:
     GGraphicsViewOptions        *_graphicsOptionsView;
     GCameraGraphicsOptions      *_cameraOptionsView;

@@ -28,6 +28,7 @@
 
 #include "tools/itemdrawable/dm_documentmenugenerator.h"
 #include "tools/attributes/dm_attributesbuildingcollectiont.h"
+#include "tools/attributes/worker/dm_attributesmanagerupdater.h"
 
 #include <QInputDialog>
 #include <QLineEdit>
@@ -456,6 +457,8 @@ void GDocumentViewForGraphics::applyAttributes(DM_AbstractAttributes *dpa)
 
     dialog.close();
 
+    thread->wait();
+
     disconnect(thread, nullptr, dpa, nullptr);
     disconnect(dpa, nullptr, thread, nullptr);
 }
@@ -476,6 +479,16 @@ DM_GraphicsViewOptions GDocumentViewForGraphics::getOptions() const
         return _graphicsOptionsView->getOptions();
 
     return DM_GraphicsViewOptions();
+}
+
+void GDocumentViewForGraphics::updateAttributesManager()
+{
+    DM_AttributesManagerUpdater::Update(m_attributesManager);
+}
+
+const DM_AttributesManager& GDocumentViewForGraphics::attributesManager() const
+{
+    return m_attributesManager;
 }
 
 void GDocumentViewForGraphics::showOptions()
@@ -568,6 +581,8 @@ void GDocumentViewForGraphics::setPointOfView(DM_PointOfView *pof)
 
 void GDocumentViewForGraphics::showAttributesOptions()
 {
+    updateAttributesManager();
+
     GPointsAttributesManager dialog;
     dialog.setManager(&m_attributesManager);
     dialog.setDocument(this);

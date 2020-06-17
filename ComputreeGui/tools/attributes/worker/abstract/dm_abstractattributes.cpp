@@ -6,12 +6,23 @@ DM_AbstractAttributes::DM_AbstractAttributes(bool local) : DM_AbstractWorker(),
     m_displayAlone(false),
     m_doc(nullptr),
     m_attributes(nullptr),
+    mModel(nullptr),
     mLocalOnly(local)
 {
 }
 
 DM_AbstractAttributes::~DM_AbstractAttributes()
 {
+}
+
+void DM_AbstractAttributes::setModel(const CT_OutAbstractModel* model)
+{
+    mModel = model;
+}
+
+const CT_OutAbstractModel* DM_AbstractAttributes::model() const
+{
+    return mModel;
 }
 
 void DM_AbstractAttributes::setDisplayableName(const QString &name)
