@@ -176,14 +176,14 @@ void GTreeStepContextMenu::configureStepRequired()
                 if(ret != 0)
                     return;
 
-                selectedStep()->visitOutResults([](const CT_AbstractResult* result) -> bool {
+                selectedStep()->visitOutResults([this](const CT_AbstractResult* result) -> bool {
                     CT_AbstractResult* r = const_cast<CT_AbstractResult*>(result);
 
                     if(GUI_MANAGER->removeEditItemDrawableModelOfResult(*r)) {
                         DM_Context c;
                         QEventLoop el;
 
-                        QObject::connect(&c, &DM_Context::actionFinished, &el, &QEventLoop::quit, Qt::QueuedConnection);
+                        this->QObject::connect(&c, &DM_Context::actionFinished, &el, &QEventLoop::quit, Qt::QueuedConnection);
                         GUI_MANAGER->asyncRemoveAllItemDrawableOfResultFromView(*r, &c);
                         el.exec();
                     }

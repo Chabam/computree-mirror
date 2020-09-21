@@ -1,5 +1,3 @@
-#include "ellipseglrenderer.h"
-
 #if !defined (_USE_MATH_DEFINES)
 #define _USE_MATH_DEFINES
 #endif
@@ -7,6 +5,8 @@
 #include <QtMath>
 
 #include <QtOpenGL/QtOpenGL>
+
+#include "ellipseglrenderer.h"
 
 EllipseGLRenderer::EllipseGLRenderer()
 {
@@ -39,7 +39,7 @@ void EllipseGLRenderer::render()
 {
     const size_t& size = m_values.size();
 
-    for(int i=0; i<size; ++i)
+    for(int i=0; i<static_cast<int>(size); ++i)
         glVertex3fv(&m_values[i][0]);
 }
 

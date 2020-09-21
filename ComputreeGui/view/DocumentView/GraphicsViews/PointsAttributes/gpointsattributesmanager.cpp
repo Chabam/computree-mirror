@@ -892,3 +892,24 @@ QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_Abs
     createNormalRootItemIfNull(m_itemEdgeRootNormal, parent);
     return m_itemEdgeRootNormal;
 }
+
+// specialisation for points
+template<>
+void DM_AttributesScalarT<CT_AbstractPointsAttributes>::staticApply(DM_AttributesScalarT<CT_AbstractPointsAttributes>::ConcurrentMapInfo * /*info*/)
+{
+    // TODO
+}
+
+// specialisation for faces
+template<>
+void DM_AttributesScalarT<CT_AbstractFaceAttributes>::staticApply(DM_AttributesScalarT<CT_AbstractFaceAttributes>::ConcurrentMapInfo * /*info*/)
+{
+    // TODO
+}
+
+// specialisation for edges
+template<>
+void DM_AttributesScalarT<CT_AbstractEdgeAttributes>::staticApply(DM_AttributesScalarT<CT_AbstractEdgeAttributes>::ConcurrentMapInfo * /*info*/)
+{
+    // TODO
+}

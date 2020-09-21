@@ -1,10 +1,12 @@
-#include "g3dcameracontroller.h"
-
+#if !defined (_USE_MATH_DEFINES)
+#define _USE_MATH_DEFINES
+#endif
 #include <QtMath>
 
 #include "tools/qglviewer/qglviewertools.h"
 #include "Eigen/LU"
 #include "manipulatedCameraFrame.h"
+#include "g3dcameracontroller.h"
 
 G3DCameraController::G3DCameraController() : DM_GraphicsViewCamera()
 {

@@ -71,7 +71,7 @@ QString CDM_HRScriptManagerXML::loadScriptText(const QString &text,
 }
 
 bool CDM_HRScriptManagerXML::writeScript(const QString &filePath,
-                                         bool saveResult,
+                                         bool /*saveResult*/,
                                          CDM_StepManager &stepManager)
 {
     CDM_HRScriptXMLWriter writer;

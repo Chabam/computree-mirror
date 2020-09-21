@@ -127,7 +127,7 @@ DM_AsyncOperation* DM_GuiManager::requestExclusiveAsyncOperation(const DM_Abstra
     return nullptr;
 }
 
-bool DM_GuiManager::asyncAddAllItemDrawableOfResultOnView(CT_AbstractResult &res, DM_Context *context)
+bool DM_GuiManager::asyncAddAllItemDrawableOfResultOnView(CT_AbstractResult &res, DM_Context * /*context*/)
 {
     if(!getStepManager()->isRunning()
             || !getStepManager()->getOptions().isAutoClearResultFromMemoryEnable())
@@ -170,7 +170,7 @@ bool DM_GuiManager::asyncAddAllItemDrawableOfResultOnView(CT_AbstractResult &res
 bool DM_GuiManager::asyncAddAllItemDrawableOfModelOnView(CT_AbstractResult &res,
                                                          CT_OutAbstractItemModel &model,
                                                          DM_DocumentView &view,
-                                                         DM_Context *context)
+                                                         DM_Context * /*context*/)
 {
     if(model.result() == nullptr)
         return false;
@@ -219,7 +219,7 @@ bool DM_GuiManager::asyncAddAllItemDrawableOfModelOnView(CT_AbstractResult &res,
     return false;
 }
 
-bool DM_GuiManager::asyncAddAllItemDrawableOfListOnView(QList<CT_AbstractItemDrawable*> &itemList, DM_DocumentView *view, DM_Context *context)
+bool DM_GuiManager::asyncAddAllItemDrawableOfListOnView(QList<CT_AbstractItemDrawable*> &itemList, DM_DocumentView *view, DM_Context * /*context*/)
 {
     if((!getStepManager()->isRunning()
             || !getStepManager()->getOptions().isAutoClearResultFromMemoryEnable()))

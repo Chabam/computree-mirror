@@ -165,7 +165,7 @@ public:
             return NA();
         }
 
-        int idx[4] = { levw, levx, levy, levz };
+        int idx[4] = { static_cast<int>(levw), static_cast<int>(levx), static_cast<int>(levy), static_cast<int>(levz) };
 
         return _data.operator ()( idx );
     }
@@ -184,7 +184,7 @@ public:
             return false;
         }
 
-        int idx[4] = { levw, levx, levy, levz };
+        int idx[4] = { static_cast<int>(levw), static_cast<int>(levx), static_cast<int>(levy), static_cast<int>(levz) };
 
         _data.ref( idx ) = value;
 

@@ -11,5 +11,5 @@ windows {
 
     OPENCV_INC_PATH = "$${OPENCV_BASE_PATH}include"
     OPENCV_LIBS_PATH = "$${OPENCV_BASE_PATH}x64/vc14/lib"
-    OPENCV_VERSION = 320
+    OPENCV_VERSION = 440
 }

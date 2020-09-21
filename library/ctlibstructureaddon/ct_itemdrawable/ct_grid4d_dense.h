@@ -195,7 +195,7 @@ public:
             return this->NA();
         }
 
-        return _data(index);
+        return _data(static_cast<int>(index));
     }
 
     /*!
@@ -211,7 +211,7 @@ public:
             return false;
         }
 
-        _data(index) = value;
+        _data(static_cast<int>(index)) = value;
 
         return true;
     }

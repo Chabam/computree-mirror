@@ -113,7 +113,7 @@ size_t CT_CloudIndexStdVectorTMethodImpl<T>::upperBound(const size_t &value) con
     if(m_ci.sortType() == CT_AbstractCloudIndex::SortedInAscendingOrder)
         it = std::upper_bound(_vector.begin(), _vector.end(), value);
     else
-        std::find_if(_vector.begin(), _vector.end(), std::bind2nd(std::greater<T>(), T(value)));
+        it = std::find_if(_vector.begin(), _vector.end(), std::bind2nd(std::greater<T>(), T(value)));
 
     return size() - (itEnd-it);
 }

@@ -25,5 +25,5 @@ CT_OutOPFNodeGroupModel<CT_TOPFNodeGroup>* CT_TOPFNodeGroup::opfModel() const
 
 void CT_TOPFNodeGroup::setOPFID(const size_t &id)
 {
-    setId(id);
+    setId(static_cast<qint32>(id));
 }

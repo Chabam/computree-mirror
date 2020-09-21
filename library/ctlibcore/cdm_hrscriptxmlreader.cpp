@@ -106,7 +106,7 @@ QString CDM_HRScriptXmlReader::errors() const
     return m_errors;
 }
 
-bool CDM_HRScriptXmlReader::findCallerWithUniqueIDAndSetToCurrent(const QObject *caller, const int &uniqueID)
+bool CDM_HRScriptXmlReader::findCallerWithUniqueIDAndSetToCurrent(const QObject * /*caller*/, const int &/*uniqueID*/)
 {
     // TODO !
     return false;

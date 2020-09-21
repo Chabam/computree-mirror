@@ -226,7 +226,7 @@ void GGraphicsViewImp::updateItemDrawablesThatColorWasModified()
     getPermanentSceneToRender()->updateColorInAllContext();
 }
 
-void GGraphicsViewImp::updateColorOfPointsOfItemDrawable(CT_AbstractItemDrawable *item, const QColor &color)
+void GGraphicsViewImp::updateColorOfPointsOfItemDrawable(CT_AbstractItemDrawable * /*item*/, const QColor & /*color*/)
 {
     // TODO
 }

@@ -1,10 +1,13 @@
+#if !defined (_USE_MATH_DEFINES)
+#define _USE_MATH_DEFINES
+#endif
+#include <QtMath>
+
 #include "shapetovolume.h"
 
 #include "poly2tri.h"
 #include "picker/tools/intersectionchecker.h"
 #include "tools/qglviewer/qglviewertools.h"
-
-#include <QtMath>
 
 QVector<QPolygon> ShapeToVolume::staticConvertPolygonToTriangle(const QPolygon &polygon)
 {

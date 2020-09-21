@@ -140,7 +140,7 @@ size_t CT_CloudIndexStdListT<T>::upperBound(const size_t &value) const
     if(this->sortType() == CT_AbstractCloudIndex::SortedInAscendingOrder)
         it = std::upper_bound(m_collection->begin(), m_collection->end(), value);
     else
-        std::find_if(m_collection->begin(), m_collection->end(), std::bind2nd(std::greater<ct_index_type>(), ct_index_type(value)));
+        it = std::find_if(m_collection->begin(), m_collection->end(), std::bind2nd(std::greater<ct_index_type>(), ct_index_type(value)));
 
     return size() - std::distance(it, itEnd);
 }

@@ -1,7 +1,9 @@
-#include "ct_thetaphishootingpattern.h"
-
+#if !defined (_USE_MATH_DEFINES)
+#define _USE_MATH_DEFINES
+#endif
 #include <QtMath>
 
+#include "ct_thetaphishootingpattern.h"
 #include "ct_itemdrawable/ct_scanner.h"
 
 CT_ThetaPhiShootingPattern::CT_ThetaPhiShootingPattern() :

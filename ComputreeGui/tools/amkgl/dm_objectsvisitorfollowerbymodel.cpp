@@ -20,7 +20,7 @@ bool DM_ObjectsVisitorFollowerByModel::mustContinueVisit() const
     return m_visitor.continueVisit();
 }
 
-void DM_ObjectsVisitorFollowerByModel::setModel(const AMKgl::ItemModel *model)
+void DM_ObjectsVisitorFollowerByModel::setModel(const AMKgl::ItemModel * /*model*/)
 {
     // TODO
 }
