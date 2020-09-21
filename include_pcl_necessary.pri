@@ -64,17 +64,17 @@ windows {
 
     for(a, PCL_LIB_ADD) {
         CONFIG(debug, debug|release) {
-            !exists($$PCL_LIBS_PATH/$${a}_debug*) {
-                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a}_debug was not found"
+            !exists($$PCL_LIBS_PATH/$${a}*) {
+                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a} was not found"
             } else {
-                PCL_LIBS_FOUNDED += -l$${a}_debug
+                PCL_LIBS_FOUNDED += -l$${a}
             }
         } else {
 
-            !exists($$PCL_LIBS_PATH/$${a}_release*) {
-                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a}_release was not found"
+            !exists($$PCL_LIBS_PATH/$${a}*) {
+                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a} was not found"
             } else {
-                PCL_LIBS_FOUNDED += -l$${a}_release
+                PCL_LIBS_FOUNDED += -l$${a}
             }
         }
     }

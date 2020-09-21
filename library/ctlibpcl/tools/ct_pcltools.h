@@ -3,7 +3,7 @@
 
 #include "ct_cloudindex/abstract/ct_abstractcloudindex.h"
 #include "ct_point.h"
-#include "ct_itemdrawable/accessibility/ct_iaccesspointcloud.h"
+#include "ct_accessibility/ct_iaccesspointcloud.h"
 
 #include "ctlibpcl/ctlibpcl_global.h"
 #include "ctlibpcl/ct_pcldefines.h"

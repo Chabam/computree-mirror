@@ -1,5 +1,9 @@
 QT = core gui
 
+contains ( QT_VERSION, "^5.*" ) {
+    QT *= widgets
+}
+
 include(../library_shared.pri)
 
 TARGET = ctlibclouds

@@ -1,4 +1,5 @@
 #include "ct_bitcloud.h"
+#include <cmath>
 
 #define TO_NUMBER_OF_BYTES(V) size_t(std::ceil(double(V)/8.0))
 

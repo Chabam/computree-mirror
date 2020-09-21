@@ -1,19 +1,14 @@
-CT_PREFIX = ../..
-CT_PREFIX_INSTALL = ../../..
-
 MUST_USE_PCL = 1
 
-include($${CT_PREFIX}/shared.pri)
-include($${PLUGIN_SHARED_DIR}/include.pri)
+include(../library_shared.pri)
+include(../../include_all.pri)
+include(../../plugin_shared.pri)
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
-
-DESTDIR = $${PLUGINSHARED_DESTDIR}
 TARGET = ctlibpcl
 
 DEFINES += CTLIBPCL_LIBRARY
 
-HEADERS += $${PLUGIN_SHARED_INTERFACE_DIR}/interfaces.h \
+HEADERS += \
     tools/ct_pcltools.h \
     ct_pcldefines.h
 

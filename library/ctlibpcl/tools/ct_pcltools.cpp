@@ -4,6 +4,7 @@
 #include "ct_pointcloudindex/abstract/ct_abstractpointcloudindex.h"
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_pointcloud/ct_internalpointcloud.h"
+#include <boost/shared_ptr.hpp>
 
 CT_PCLTools::CT_PCLTools()
 {
@@ -16,7 +17,7 @@ boost::shared_ptr< CT_PCLCloud > CT_PCLTools::staticConvertToPCLCloud(CT_PCIR pc
 
 boost::shared_ptr< CT_PCLCloud > CT_PCLTools::staticConvertToPCLCloud(const CT_IAccessPointCloud *item)
 {
-    return staticConvertToPCLCloud(item->getPointCloudIndex());
+    return staticConvertToPCLCloud(item->pointCloudIndex());
 }
 
 boost::shared_ptr< CT_PCLCloud > CT_PCLTools::staticConvertToPCLCloud(const CT_AbstractPointCloudIndex *pci)
@@ -96,7 +97,7 @@ ct_index_type CT_PCLTools::staticPCLIndexToGlobalIndex(CT_PCIR pcir, const ct_in
 
 ct_index_type CT_PCLTools::staticPCLIndexToGlobalIndex(const CT_IAccessPointCloud *item, const ct_index_type &index)
 {
-    return staticPCLIndexToGlobalIndex(item->getPointCloudIndex(), index);
+    return staticPCLIndexToGlobalIndex(item->pointCloudIndex(), index);
 }
 
 ct_index_type CT_PCLTools::staticPCLIndexToGlobalIndex(const CT_AbstractPointCloudIndex *pci, const ct_index_type &index)
