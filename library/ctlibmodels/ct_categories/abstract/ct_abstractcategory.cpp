@@ -113,8 +113,8 @@ QString CT_AbstractCategory::description() const
     return m_description;
 }
 
-void CT_AbstractCategory::internalTestAttributes(const QString & /*where*/)
+void CT_AbstractCategory::internalTestAttributes(const QString & where)
 {
+    Q_UNUSED(where);
     Q_ASSERT_X(!m_uName.isEmpty(), qPrintable(where), "uniqueName is empty");
 }
-
