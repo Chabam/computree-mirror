@@ -128,24 +128,3 @@ void DM_AttributesManagerUpdater::UpdateWithStep(DM_AttributesManager& manager, 
         return true;
     });
 }
-
-// specialisation for points
-template<>
-void DM_AttributesScalarT<CT_AbstractPointsAttributes>::staticApply(DM_AttributesScalarT<CT_AbstractPointsAttributes>::ConcurrentMapInfo * /*info*/)
-{
-    // TODO
-}
-
-// specialisation for faces
-template<>
-void DM_AttributesScalarT<CT_AbstractFaceAttributes>::staticApply(DM_AttributesScalarT<CT_AbstractFaceAttributes>::ConcurrentMapInfo * /*info*/)
-{
-    // TODO
-}
-
-// specialisation for edges
-template<>
-void DM_AttributesScalarT<CT_AbstractEdgeAttributes>::staticApply(DM_AttributesScalarT<CT_AbstractEdgeAttributes>::ConcurrentMapInfo * /*info*/)
-{
-    // TODO
-}
