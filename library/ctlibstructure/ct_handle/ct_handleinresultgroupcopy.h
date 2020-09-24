@@ -29,7 +29,7 @@ public:
         QVector<CT_OutAbstractResultModel*> outModels;
         int currentIndex = 0;
 
-        const CT_HandleInResultGroupCopy<>::ModelType* inResultModel = model();
+        const CT_HandleInResultGroupCopy<>::ModelType* inResultModel = this->model();
 
         MODELS_ASSERT(inResultModel != nullptr);
 
@@ -53,7 +53,7 @@ public:
         QVector<CT_OutAbstractResultModel*> outModels;
         int currentIndex = 0;
 
-        const CT_HandleInResultGroupCopy<>::ModelType* inResultModel = model();
+        const CT_HandleInResultGroupCopy<>::ModelType* inResultModel = this->model();
 
         MODELS_ASSERT(inResultModel != nullptr);
 

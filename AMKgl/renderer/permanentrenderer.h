@@ -40,7 +40,7 @@ public:
     /**
      * @brief Returns all contexts
      */
-    const IContextAccessor<RendererContextT>::ContextCollection& getContexts() const
+    const typename IContextAccessor<RendererContextT>::ContextCollection& getContexts() const
     { return IContextAccessor<RendererContextT>::getContexts(); }
 
     /**

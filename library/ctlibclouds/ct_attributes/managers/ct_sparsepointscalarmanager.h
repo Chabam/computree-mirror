@@ -20,7 +20,7 @@ public:
 template<typename T>
 typename CT_SparsePointScalarManager<T>::UPCSSetter CT_SparsePointScalarManager<T>::createUndefinedPointCloudSizeAttributesSetter(CT_AbstractUndefinedSizePointCloud* uspc)
 {
-    createCollectionsIfNotCreated();
+    this->createCollectionsIfNotCreated();
 
     return CT_SparsePointScalarManager<T>::UPCSSetter(*uspc, this->mAttributes);
 }
@@ -28,7 +28,7 @@ typename CT_SparsePointScalarManager<T>::UPCSSetter CT_SparsePointScalarManager<
 template<typename T>
 typename CT_SparsePointScalarManager<T>::UPCSSetterPtr CT_SparsePointScalarManager<T>::createUndefinedPointCloudSizeAttributesSetterPtr(CT_AbstractUndefinedSizePointCloud* uspc)
 {
-    createCollectionsIfNotCreated();
+    this->createCollectionsIfNotCreated();
 
     return std::make_unique<CT_SparsePointScalarManager<T>::UPCSSetter>(*uspc, this->mAttributes);
 }

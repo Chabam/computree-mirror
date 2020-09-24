@@ -33,14 +33,31 @@
 
 #include <math.h>
 
-quint32 CT_AbstractItemDrawable::NEXTID = 1;
-QMap<QString, QString> CT_AbstractItemDrawable::NAMEMAP;
-QMutex CT_AbstractItemDrawable::NAMEMAP_Mutex;
+quint32& CT_AbstractItemDrawable::NEXTID()
+{
+    static quint32 ID = 1;
+
+    return ID;
+}
+
+QMap<QString, QString>& CT_AbstractItemDrawable::NAMEMAP()
+{
+    static QMap<QString, QString> map;
+
+    return map;
+}
+
+QMutex& CT_AbstractItemDrawable::NAMEMAP_Mutex()
+{
+    static QMutex mutex;
+
+    return mutex;
+}
 
 CT_AbstractItemDrawable::CT_AbstractItemDrawable() : SuperClass()
 {
     m_itemTool.m_pointer = this;
-    m_id = NEXTID++;
+    m_id = NEXTID()++;
     m_isSelected = false;
     m_isDisplayedInADocument = false;
     m_parentItem = nullptr;
@@ -283,21 +300,21 @@ QList<CT_ItemDrawableConfiguration*> CT_AbstractItemDrawable::dependantDrawConfi
 
     model()->recursiveVisitOutChildrens(visitor);
 
-    return set.toList();
+    return set.values();
 }
 
 void CT_AbstractItemDrawable::addNameTypeCorresp(QString type, QString name)
 {
-    QMutexLocker locker(&NAMEMAP_Mutex);
+    QMutexLocker locker(&NAMEMAP_Mutex());
 
-    NAMEMAP.insert(type, name);
+    NAMEMAP().insert(type, name);
 }
 
 QString CT_AbstractItemDrawable::nameFromType(QString type)
 {
-    QMutexLocker locker(&NAMEMAP_Mutex);
+    QMutexLocker locker(&NAMEMAP_Mutex());
 
-    return NAMEMAP.value(type);
+    return NAMEMAP().value(type);
 }
 
 bool CT_AbstractItemDrawable::visitDefaultAttributes(const IItemDrawableToolForModel::ItemAttributesVisitor& visitor) const

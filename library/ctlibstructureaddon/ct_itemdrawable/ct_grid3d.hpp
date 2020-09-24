@@ -159,12 +159,12 @@ void CT_Grid3D<DataT>::initGridWithValue(const DataT val)
 template< typename DataT>
 void CT_Grid3D<DataT>::translateOriginToCoords(double x, double y, double z)
 {
-    _minCoordinates(0) = x;
-    _minCoordinates(1) = y;
-    _minCoordinates(2) = z;
-    _maxCoordinates(0) = (minX() + _res * _dimx);
-    _maxCoordinates(1) = (minY() + _res * _dimy);
-    _maxCoordinates(2) = (minZ() + _res * _dimz);
+    this->_minCoordinates(0) = x;
+    this->_minCoordinates(1) = y;
+    this->_minCoordinates(2) = z;
+    this->_maxCoordinates(0) = (minX() + _res * _dimx);
+    this->_maxCoordinates(1) = (minY() + _res * _dimy);
+    this->_maxCoordinates(2) = (minZ() + _res * _dimz);
 }
 
 

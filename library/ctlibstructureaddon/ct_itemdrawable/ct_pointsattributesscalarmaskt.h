@@ -61,13 +61,12 @@ public:
                                    quint16 shiftRight,
                                    CT_PCIR pcir,
                                    ManagerT& manager) :
-        CT_PointsAttributesScalarMaskT(mask,
-                                       shiftRight,
-                                       pcir,
-                                       manager,
-                                       std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, StructType>>::value>())
+        SuperClass(pcir,
+                   manager),
+        m_mask(mask),
+        m_shiftRight(shiftRight)
     {
-
+        static_assert(SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, StructType>>::value, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
     }
 
     template<class ManagerT>
@@ -77,15 +76,14 @@ public:
                                    const StructMASK& max,
                                    CT_PCIR pcir,
                                    ManagerT& manager) :
-        CT_PointsAttributesScalarMaskT(mask,
-                                       shiftRight,
-                                       min,
-                                       max,
-                                       pcir,
-                                       manager,
-                                       std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, StructType>>::value>())
+        SuperClass(pcir,
+                   manager,
+                   min,
+                   max),
+        m_mask(mask),
+        m_shiftRight(shiftRight)
     {
-
+        static_assert(SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, StructType>>::value, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
     }
 
     /**
@@ -119,58 +117,6 @@ public:
 private:
     StructMASK                                          m_mask;
     quint16                                             m_shiftRight;
-
-    template<class ManagerT>
-    CT_PointsAttributesScalarMaskT(StructMASK,
-                                   quint16,
-                                   CT_PCIR,
-                                   ManagerT&,
-                                   std::false_type)
-    {
-        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
-    }
-
-    template<class ManagerT>
-    CT_PointsAttributesScalarMaskT(StructMASK mask,
-                                   quint16 shiftRight,
-                                   CT_PCIR pcir,
-                                   ManagerT& manager,
-                                   std::true_type) :
-        m_mask(mask),
-        m_shiftRight(shiftRight),
-        SuperClass(pcir,
-                   manager)
-    {
-    }
-
-    template<class ManagerT>
-    CT_PointsAttributesScalarMaskT(StructMASK,
-                                   quint16,
-                                   const StructMASK&,
-                                   const StructMASK&,
-                                   CT_PCIR,
-                                   ManagerT&,
-                                   std::false_type)
-    {
-        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
-    }
-
-    template<class ManagerT>
-    CT_PointsAttributesScalarMaskT(StructMASK mask,
-                                   quint16 shiftRight,
-                                   const StructMASK& min,
-                                   const StructMASK& max,
-                                   CT_PCIR pcir,
-                                   ManagerT& manager,
-                                   std::true_type) :
-        m_mask(mask),
-        m_shiftRight(shiftRight),
-        SuperClass(pcir,
-                   manager,
-                   min,
-                   max)
-    {
-    }
 
 protected:
     StructMASK convertScalarOfManagerToScalar(const StructType& value) const final;

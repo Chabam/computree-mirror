@@ -21,7 +21,7 @@ public:
 template<typename T>
 typename CT_DensePointScalarManager<T>::UPCSSetter CT_DensePointScalarManager<T>::createUndefinedPointCloudSizeAttributesSetter(CT_AbstractUndefinedSizePointCloud* uspc)
 {
-    createCollectionsIfNotCreated();
+    this->createCollectionsIfNotCreated();
 
     return CT_DensePointScalarManager<T>::UPCSSetter(*uspc,
                                                      this->mAttributes,
@@ -31,7 +31,7 @@ typename CT_DensePointScalarManager<T>::UPCSSetter CT_DensePointScalarManager<T>
 template<typename T>
 typename CT_DensePointScalarManager<T>::UPCSSetterPtr CT_DensePointScalarManager<T>::createUndefinedPointCloudSizeAttributesSetterPtr(CT_AbstractUndefinedSizePointCloud* uspc)
 {
-    createCollectionsIfNotCreated();
+    this->createCollectionsIfNotCreated();
 
     return std::make_unique<CT_DensePointScalarManager<T>::UPCSSetter>(*uspc,
                                                                        this->mAttributes,

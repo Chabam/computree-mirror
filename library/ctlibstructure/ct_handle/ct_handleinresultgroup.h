@@ -25,7 +25,7 @@ public:
         QVector<CT_OutAbstractResultModel*> outModels;
         int currentIndex = 0;
 
-        const CT_HandleInResultGroup<>::ModelType* inResultModel = model();
+        const CT_HandleInResultGroup<>::ModelType* inResultModel = this->model();
 
         MODELS_ASSERT(inResultModel != nullptr);
 

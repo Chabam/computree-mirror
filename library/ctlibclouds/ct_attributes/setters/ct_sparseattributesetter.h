@@ -16,8 +16,8 @@ template<typename T, typename PEF>
 class CT_SparseAttributeSetter
 {
 public:
-    template<typename PEF>
-    class ParseAttributesCollection : public CT_CloudIndexStdMapT<PEF, T>
+    template<typename PEF2>
+    class ParseAttributesCollection : public CT_CloudIndexStdMapT<PEF2, T>
     {
     public:
         ParseAttributesCollection() = default;
@@ -26,7 +26,7 @@ public:
     using PtrParseAttributesCollectionType = CT_MCIR;
 
     CT_SparseAttributeSetter(CT_CIR cir,
-                                  PtrParseAttributesCollectionType attributes);
+                             PtrParseAttributesCollectionType attributes);
 
     /**
      * @brief Set the value of the attribute with a global index.
@@ -81,7 +81,7 @@ private:
 
 template<typename T, typename PEF>
 CT_SparseAttributeSetter<T, PEF>::CT_SparseAttributeSetter(CT_CIR cir,
-                                                                     PtrParseAttributesCollectionType attributes) :
+                                                           PtrParseAttributesCollectionType attributes) :
     mCloudRegistered(cir),
     mAttributes(attributes)
 {

@@ -862,7 +862,7 @@ private:
     GroupContainerType* groupContainerWithOutModel(const CT_OutAbstractModel* outModel) const;
 
     template<typename ContainerType>
-    ContainerType* containerWithOutModel(const CT_OutAbstractModel*) const { static_assert(false, "You can not call this method with this type of container !"); }
+    ContainerType* containerWithOutModel(const CT_OutAbstractModel*) const { assert("You can not call method \"containerWithOutModel\" with a CT_StandardItemGroup !"); }
 
     /**
      * @brief Returns an object to iterate over items that use the specified handle.

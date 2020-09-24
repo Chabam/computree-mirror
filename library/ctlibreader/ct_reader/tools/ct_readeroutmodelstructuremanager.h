@@ -39,7 +39,7 @@ public:
     {
         return internalCreateFromHandle(manager,
                                         hParentGroup,
-                                        std::integral_constant<bool, IsAnOutputModel<HandleGroup::ModelType>::value>());
+                                        std::integral_constant<bool, IsAnOutputModel<typename HandleGroup::ModelType>::value>());
     }
 
     template<class HandleInGroup>

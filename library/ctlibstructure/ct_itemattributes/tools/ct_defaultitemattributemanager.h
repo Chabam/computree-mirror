@@ -318,7 +318,7 @@ private:
     template <typename ItemClass, typename PrototypeType>
     void internalAddItemAttribute(const QString& displayableName,
                                   PrototypeType* prototype) {
-        const CT_AbstractCategory* cat = prototype->categoryStaticT<CT_AbstractCategory>();
+        const CT_AbstractCategory* cat = prototype->template categoryStaticT<CT_AbstractCategory>();
 
         // create the model
         CT_OutStdItemAttributeModel<PrototypeType>* model = new CT_OutStdItemAttributeModel<PrototypeType>(cat, displayableName.isEmpty() ? cat->displayableName() : displayableName, cat->description(), "", prototype);

@@ -10,7 +10,7 @@
 // not be used with other handle to add a group handle !
 using CT_AbstractHandleOutGroup = CT_HandleWithMultipleAbstractModel<DEF_CT_AbstractGroupModelOut>;
 
-template<class GroupT, template<class GroupT> class ModelT = CT_OutStdGroupModel>
+template<class GroupT, template<class GroupT2> class ModelT = CT_OutStdGroupModel>
 class CT_HandleOutGroup : public CT_HandleWithMultipleModelT<ModelT<GroupT>> {
 
     using SuperClass = CT_HandleWithMultipleModelT<ModelT<GroupT>> ;

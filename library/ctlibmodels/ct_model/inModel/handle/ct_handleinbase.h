@@ -19,12 +19,12 @@ public:
      */
     template<class HandleInResult>
     ModelType* inModelForSavedPossibilities(const HandleInResult& inResult, const int& inResultPossibilityIndex = 0) const {
-        MODELS_ASSERT(model() != nullptr);
+        MODELS_ASSERT(this->model() != nullptr);
         MODELS_ASSERT(inResult.model() != nullptr);
         MODELS_ASSERT(inResult.model()->nPossibilitySaved() > inResultPossibilityIndex);
         MODELS_ASSERT(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel() != nullptr);
 
-        return static_cast<ModelType*>(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(model()));
+        return static_cast<ModelType*>(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(this->model()));
     }
 
     /**
@@ -38,12 +38,12 @@ public:
      */
     template<class HandleInResult>
     ModelType* inModelForSelectedPossibilities(const HandleInResult& inResult, const int& inResultSelectedPossibilityIndex = 0) const {
-        MODELS_ASSERT(model() != nullptr);
+        MODELS_ASSERT(this->model() != nullptr);
         MODELS_ASSERT(inResult.model() != nullptr);
         MODELS_ASSERT(inResult.model()->nPossibilitySelected() > inResultSelectedPossibilityIndex);
         MODELS_ASSERT(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel() != nullptr);
 
-        return static_cast<ModelType*>(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(model()));
+        return static_cast<ModelType*>(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(this->model()));
     }
 
     /**
@@ -58,7 +58,7 @@ public:
      */
     template<class HandleInResult>
     CT_OutAbstractModel* outModelSelected(const HandleInResult& inResult, const int& inResultSelectedPossibilityIndex = 0, const int& inModelSelectedPossibilityIndex = 0) const {
-        MODELS_ASSERT(model() != nullptr);
+        MODELS_ASSERT(this->model() != nullptr);
         MODELS_ASSERT(inResult.model() != nullptr);
 
         if(inResultSelectedPossibilityIndex >= inResult.model()->nPossibilitySelected())
@@ -69,7 +69,7 @@ public:
         if(resultModel == nullptr)
             return nullptr;
 
-        ModelType* inModelForPossibilities = static_cast<ModelType*>(resultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(model()));
+        ModelType* inModelForPossibilities = static_cast<ModelType*>(resultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(this->model()));
 
         if(inModelForPossibilities == nullptr)
             return nullptr;
@@ -83,7 +83,7 @@ public:
     template<class HandleInResult>
     bool hasAtLeastOnePossibilitySelected(const HandleInResult& inResult)
     {
-        MODELS_ASSERT(model() != nullptr);
+        MODELS_ASSERT(this->model() != nullptr);
         MODELS_ASSERT(inResult.model() != nullptr);
 
         const int nP = inResult.model()->nPossibilitySelected();
@@ -95,7 +95,7 @@ public:
             if(resultModel == nullptr)
                 continue;
 
-            ModelType* inModelForPossibilities = static_cast<ModelType*>(resultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(model()));
+            ModelType* inModelForPossibilities = static_cast<ModelType*>(resultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(this->model()));
 
             if((inModelForPossibilities == nullptr) || (inModelForPossibilities->nPossibilitySelected() == 0))
                 continue;

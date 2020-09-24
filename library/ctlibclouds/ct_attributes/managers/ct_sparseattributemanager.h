@@ -35,7 +35,6 @@ public:
     void createCollectionsIfNotCreated();
 
 protected:
-    using Setter = CT_SparseAttributeSetter<T, PEF>;
     using SetterPtrAttributesCollection = typename Setter::PtrParseAttributesCollectionType;
     using SetterAttributesCollection = typename Setter::template ParseAttributesCollection<PEF>;
 
@@ -52,7 +51,7 @@ CT_SparseAttributeManager<T, TCIR>::CT_SparseAttributeManager() :
 template<typename T, typename TCIR>
 typename CT_SparseAttributeManager<T, TCIR>::Setter CT_SparseAttributeManager<T, TCIR>::createAttributesSetter(CT_CIR cir)
 {
-    createCollectionsIfNotCreated();
+    this->createCollectionsIfNotCreated();
 
     return CT_SparseAttributeSetter<T, PEF>(cir, mAttributes);
 }
@@ -60,7 +59,7 @@ typename CT_SparseAttributeManager<T, TCIR>::Setter CT_SparseAttributeManager<T,
 template<typename T, typename TCIR>
 typename CT_SparseAttributeManager<T, TCIR>::SetterPtr CT_SparseAttributeManager<T, TCIR>::createAttributesSetterPtr(CT_CIR cir)
 {
-    createCollectionsIfNotCreated();
+    this->createCollectionsIfNotCreated();
 
     return std::make_unique<CT_SparseAttributeManager<T, TCIR>::SetterPtr>(cir, mAttributes);
 }

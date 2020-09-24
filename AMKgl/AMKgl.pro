@@ -20,11 +20,11 @@ UI_DIR = ui
 MOC_DIR = moc
 OBJECTS_DIR = obj
 
-# c++11
+# c++14
 greaterThan(QT_MAJOR_VERSION, 4) {
-    CONFIG += c++11
+    CONFIG += c++14
 } else {
-    QMAKE_CXXFLAGS += -std=c++11
+    QMAKE_CXXFLAGS += -std=c++14
 }
 
 EIGEN_INC_PATH = "c:/eigen"

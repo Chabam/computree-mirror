@@ -142,7 +142,7 @@ public:
         typename OtherChunkCollection::iterator beginO = others.begin();
         typename OtherChunkCollection::iterator endO = others.end();
 
-        ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
+        typename ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
 
         while(it.hasNext()) {
             it.next();
@@ -229,7 +229,7 @@ public:
         typename OtherChunkCollection::iterator beginO = others.begin();
         typename OtherChunkCollection::iterator endO = others.end();
 
-        ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
+        typename ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
 
         while(it.hasNext()) {
             it.next();
@@ -312,7 +312,7 @@ public:
         typename OtherChunkCollection::iterator beginO = others.begin();
         typename OtherChunkCollection::iterator endO = others.end();
 
-        ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
+        typename ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
 
         while(it.hasNext()) {
             it.next();
@@ -395,7 +395,7 @@ public:
         typename OtherChunkCollection::iterator beginO = others.begin();
         typename OtherChunkCollection::iterator endO = others.end();
 
-        ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
+        typename ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
 
         while(it.hasNext()) {
             it.next();
@@ -477,7 +477,7 @@ public:
         typename OtherChunkCollection::iterator beginO = others.begin();
         typename OtherChunkCollection::iterator endO = others.end();
 
-        ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
+        typename ContextAccessor::ContextCollectionIterator it(m_contextAccessor->getContexts());
 
         while(it.hasNext()) {
             it.next();

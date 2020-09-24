@@ -21,11 +21,11 @@ DESTDIR = $${EXECUTABLE_DESTDIR}
 TEMPLATE = lib
 CONFIG += plugin
 
-# c++11
+# c++14
 greaterThan(QT_MAJOR_VERSION, 4) {
-    CONFIG += c++11
+    CONFIG += c++14
 } else {
-    QMAKE_CXXFLAGS += -std=c++11
+    QMAKE_CXXFLAGS += -std=c++14
 }
 
 LIBRARY_PWD = $$PWD/$$TARGET

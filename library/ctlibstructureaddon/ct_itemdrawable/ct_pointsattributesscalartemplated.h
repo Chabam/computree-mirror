@@ -23,10 +23,10 @@ public:
      */
     template<class ManagerT>
     CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
-                                       ManagerT& manager) : CT_PointsAttributesScalarTemplated(pcir,
-                                                                                               manager,
-                                                                                               std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value>())
+                                       ManagerT& manager) : SuperClass(pcir,
+                                                                       manager)
     {
+        static_assert(SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
     }
 
     /**
@@ -36,12 +36,12 @@ public:
     CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
                                        ManagerT& manager,
                                        const SCALAR& min,
-                                       const SCALAR& max) : CT_PointsAttributesScalarTemplated(pcir,
-                                                                                               manager,
-                                                                                               min,
-                                                                                               max,
-                                                                                               std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value>())
+                                       const SCALAR& max) : SuperClass(pcir,
+                                                                       manager,
+                                                                       min,
+                                                                       max)
     {
+        static_assert(SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
     }
 
     /**
@@ -66,42 +66,6 @@ public:
     CT_PointsAttributesScalarTemplated(const CT_PointsAttributesScalarTemplated<SCALAR>& other) = default;
 
     CT_ITEM_COPY_IMP(CT_PointsAttributesScalarTemplated<SCALAR>)
-
-private:
-    template<class ManagerT>
-    CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
-                                       ManagerT& manager,
-                                       std::true_type) : SuperClass(pcir, manager)
-    {
-    }
-
-    template<class ManagerT>
-    CT_PointsAttributesScalarTemplated(CT_PCIR ,
-                                       ManagerT& ,
-                                       std::false_type)
-    {
-        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
-    }
-
-    template<class ManagerT>
-    CT_PointsAttributesScalarTemplated(CT_PCIR pcir,
-                                       ManagerT& manager,
-                                       const SCALAR& min,
-                                       const SCALAR& max,
-                                       std::true_type) : SuperClass(pcir, manager, min, max)
-    {
-    }
-
-
-    template<class ManagerT>
-    CT_PointsAttributesScalarTemplated(CT_PCIR,
-                                       ManagerT& ,
-                                       const SCALAR& ,
-                                       const SCALAR& ,
-                                       std::false_type)
-    {
-        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
-    }
 };
 
 #include "ct_itemdrawable/ct_pointsattributesscalartemplated.hpp"

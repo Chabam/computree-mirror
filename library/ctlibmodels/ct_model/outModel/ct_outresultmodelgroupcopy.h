@@ -1,6 +1,8 @@
 #ifndef CT_OUTRESULTMODELGROUPCOPY_H
 #define CT_OUTRESULTMODELGROUPCOPY_H
 
+#include <QSet>
+
 #include "ct_model/outModel/abstract/ct_outabstractresultmodelgroup.h"
 #include "ct_model/inModel/abstract/def_ct_abstractgroupmodelin.h"
 #include "ct_model/inModel/abstract/def_ct_abstractitemdrawablemodelin.h"

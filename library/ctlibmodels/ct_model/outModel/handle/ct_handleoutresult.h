@@ -17,7 +17,7 @@ public:
     }
 
     ResultT* createInstance() {
-        return static_cast<ResultT*>(model()->createResult());
+        return static_cast<ResultT*>(this->model()->createResult());
     }
 };
 

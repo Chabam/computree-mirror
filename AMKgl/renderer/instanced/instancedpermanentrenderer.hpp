@@ -83,7 +83,7 @@ void InstancedPermanentRenderer<Chunk>::updateInAllContext()
 {
     QMutexLocker locker(m_mutex);
 
-    ContextCollectionIterator it(this->getContexts());
+    typename IContextAccessor< typename Chunk::RendererContextType >::ContextCollectionIterator it(this->getContexts());
 
     while(it.hasNext()) {
         it.next();
@@ -109,7 +109,7 @@ void InstancedPermanentRenderer<Chunk>::updateInfoInAllContext()
 {
     QMutexLocker locker(m_mutex);
 
-    ContextCollectionIterator it(this->getContexts());
+    typename IContextAccessor< typename Chunk::RendererContextType >::ContextCollectionIterator it(this->getContexts());
 
     while(it.hasNext()) {
         it.next();
@@ -135,7 +135,7 @@ void InstancedPermanentRenderer<Chunk>::updateColorInAllContext()
 {
     QMutexLocker locker(m_mutex);
 
-    ContextCollectionIterator it(this->getContexts());
+    typename IContextAccessor< typename Chunk::RendererContextType >::ContextCollectionIterator it(this->getContexts());
 
     while(it.hasNext()) {
         it.next();
@@ -167,7 +167,7 @@ void InstancedPermanentRenderer<Chunk>::updateOnlyVAOInAllContext()
 {
     QMutexLocker locker(m_mutex);
 
-    ContextCollectionIterator it(this->getContexts());
+    typename IContextAccessor< typename Chunk::RendererContextType >::ContextCollectionIterator it(this->getContexts());
 
     while(it.hasNext()) {
         it.next();

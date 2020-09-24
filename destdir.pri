@@ -24,9 +24,23 @@ contains(QMAKE_TARGET.arch, x86_64) {
         *-64 {
             DEFINES += ENVIRONMENT64
         } else {
-            DEFINES += ENVIRONMENT32
+            win32-g++:contains(QMAKE_HOST.arch, x86_64):{
+                DEFINES += ENVIRONMENT64
+            } else {
+                DEFINES += ENVIRONMENT32
+            }
         }
     } else {
-        DEFINES += ENVIRONMENT32
+        win32-g++:contains(QMAKE_HOST.arch, x86_64):{
+            DEFINES += ENVIRONMENT64
+        } else {
+            DEFINES += ENVIRONMENT32
+        }
     }
+}
+
+contains(DEFINES, ENVIRONMENT64) {
+    message(64 bit compilation type detected)
+} else {
+    message(32 bit compilation type detected)
 }

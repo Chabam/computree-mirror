@@ -39,7 +39,7 @@ public:
 
     template<class HandleInResult>
     final_iterator iterateOutputs(const HandleInResult& inResult) const {
-        return internalIterateOutputs(inResult, std::integral_constant<bool, IsAResultModelCopy<typename HandleInResult::ModelType>::value>());
+        return internalIterateOutputs(inResult);
     }
 
     template<class OutModelT = CT_OutAbstractModel, class HandleInResult>
@@ -77,17 +77,13 @@ private:
 
     // iterate with a result that is a copy
     template<class HandleInResultCopy>
-    final_iterator internalIterateOutputs(const HandleInResultCopy& inResultCopy, std::true_type) const {
+    final_iterator internalIterateOutputs(const HandleInResultCopy& inResultCopy) const {
+        static_assert(IsAResultModelCopy<typename HandleInResultCopy::ModelType>::value, "You can not modify input results, so this iterate method is disabled with an intput handle that is not a copy ! Use method \"iterateInputs(...)\" instead.");
+
         QVector<DEF_CT_AbstractGroupModelOut*> outModels;
         findOutModelsFromResultCopy(inResultCopy, outModels);
 
         return final_iterator(iterator::create(outModels.begin(), outModels.end()), iterator());
-    }
-
-    // iterate with a result that is not a copy
-    template<class HandleInResultCopy>
-    final_iterator internalIterateOutputs(const HandleInResultCopy&, std::false_type) const {
-        static_assert(false, "You can not modify input results, so this iterate method is disabled with an intput handle that is not a copy ! Use method \"iterateInputs(...)\" instead.");
     }
 
     template<class HandleInResultCopy>

@@ -1,6 +1,8 @@
 #ifndef PB_XYBPIECEBYPIECEPRIVATEEXPORTER_H
 #define PB_XYBPIECEBYPIECEPRIVATEEXPORTER_H
 
+#include <QFile>
+
 #include "exporters/xyb/pb_xybexporter.h"
 #include "ct_exporter/abstract/ct_abstractpiecebypieceexporter.h"
 #include "ct_itemdrawable/ct_scanner.h"

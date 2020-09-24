@@ -39,22 +39,22 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
 
     // Getting the configuration values
     GLenum  drawingMode;
-    bool    wireMode = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_WIRE_MODE_ENABLED).toBool();
-    bool    uselowThresh = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_LOW_THRESHOLDS_ENABLED).toBool();
-    bool    usehighThresh = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIGH_THRESHOLDS_ENABLED).toBool();
-    double  lowThresh = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_LOW_THRESHOLDS_VALUE).toDouble();
-    double  highThresh = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIGH_THRESHOLDS_VALUE).toDouble();
-    double  reductionCoef = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_REDUCTION_COEF).toDouble();
-    bool    useTransparency = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_TRANSPARENCY_ENABLED).toBool();
-    int     transparencyValue = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
+    bool    wireMode = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_WIRE_MODE_ENABLED).toBool();
+    bool    uselowThresh = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_LOW_THRESHOLDS_ENABLED).toBool();
+    bool    usehighThresh = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIGH_THRESHOLDS_ENABLED).toBool();
+    double  lowThresh = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_LOW_THRESHOLDS_VALUE).toDouble();
+    double  highThresh = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIGH_THRESHOLDS_VALUE).toDouble();
+    double  reductionCoef = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_REDUCTION_COEF).toDouble();
+    bool    useTransparency = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_TRANSPARENCY_ENABLED).toBool();
+    int     transparencyValue = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
 
-    size_t     ww  = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_W_DISPLAY_VALUE).toInt();
-    size_t     nXinf = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
-    size_t     nXsup = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
-    size_t     nYinf = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
-    size_t     nYsup = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
-    size_t     nZinf = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
-    size_t     nZsup = getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
+    size_t     ww  = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_W_DISPLAY_VALUE).toInt();
+    size_t     nXinf = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
+    size_t     nXsup = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
+    size_t     nYinf = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
+    size_t     nYsup = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
+    size_t     nZinf = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
+    size_t     nZsup = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
 
     if (nXsup > item.xdim()) {nXsup = item.xdim();}
     if (nYsup > item.ydim()) {nXsup = item.ydim();}

@@ -120,7 +120,7 @@ void Chunk<RendererContextT>::setUpdated(bool status)
             setContextUpdated(m_currentContext, status);
 
         if(status == false) {
-            IContextAccessor<RendererContextT>::ContextCollectionIterator it(getContextAccessor()->getContexts());
+            typename IContextAccessor<RendererContextT>::ContextCollectionIterator it(getContextAccessor()->getContexts());
 
             while(it.hasNext())
                 setContextUpdated(it.next().value(), status);

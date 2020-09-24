@@ -40,7 +40,7 @@ public:
     {
         return internalCreateFromHandle(manager,
                                         hParentItem,
-                                        std::integral_constant<bool, IsAnOutputModel<HandleItem::ModelType>::value>());
+                                        std::integral_constant<bool, IsAnOutputModel<typename HandleItem::ModelType>::value>());
     }
 
     template<class HandleInItem>
@@ -60,7 +60,7 @@ public:
 
         Q_ASSERT(inTool != nullptr);
 
-        return CT_ReaderOutModelStructureManager(manager, inParentModel, inTool);
+        return CT_MetricOutModelStructureManager(manager, inParentModel, inTool);
     }
 
     /**

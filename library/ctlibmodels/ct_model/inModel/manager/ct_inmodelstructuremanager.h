@@ -5,7 +5,7 @@
 #include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
 #include "tools/sfinae.h"
 
-#define NO_INPUT_STATIC_ASSERT_MESSAGE static_assert(false, "It seems that one of the specified handle does not contains an INPUT model. Please verify that you pass INPUT handles !")
+#define NO_INPUT_STATIC_ASSERT_MESSAGE "It seems that one of the specified handle does not contains an INPUT model. Please verify that you pass INPUT handles !"
 
 /**
  * @brief Class that you must use to create the structure (tree) of input models and assign each
@@ -45,11 +45,18 @@ public:
 
         checkNotNeedInputResultIsNotPresent();
 
-        internalAddResult(handleResult,
-                          std::integral_constant<bool, IsAnInputModel<typename HandleInResult::ModelType>::value>(),
-                          displayableName,
-                          shortDescription,
-                          recursive);
+        static_assert(IsAnInputModel<typename HandleInResult::ModelType>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
+        MODELS_ASSERT(!handleResult.isValid());
+
+        auto resultModel = new typename HandleInResult::ModelType(displayableName,
+                                                                  shortDescription,
+                                                                  recursive,
+                                                                  HandleInResult::MinValue,
+                                                                  HandleInResult::MaxValue);
+        handleResult.setModel(resultModel);
+
+        m_results.append(resultModel);
     }
 
     /**
@@ -64,8 +71,7 @@ public:
         checkNotNeedInputResultIsNotPresent();
 
         internalSetZeroOrMoreRootGroup<HandleInResult>(handleResult,
-                                                       handleRootGroup,
-                                                       std::integral_constant<bool, IsAnInputModel<typename HandleInResult::ModelType>::value>());
+                                                       handleRootGroup);
 
         return handleRootGroup;
     }
@@ -82,8 +88,7 @@ public:
         checkNotNeedInputResultIsNotPresent();
 
         internalSetZeroOrMoreRootGroup<HandleInResult>(handleResult,
-                                                       handleRootGroup,
-                                                       std::integral_constant<bool, IsAnInputModel<typename HandleInResult::ModelType>::value>());
+                                                       handleRootGroup);
     }
 
     /**
@@ -103,12 +108,20 @@ public:
 
         checkNotNeedInputResultIsNotPresent();
 
-        internalSetRootGroup(handleResult,
-                             rootGroupHandle,
-                             std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInResult::ModelType>, IsAnInputModel<typename HandleInGroup::ModelType>>::value>(),
-                             displayableName.isEmpty() ? HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()) : displayableName,
-                             shortDescription,
-                             detailledDescription);
+        static_assert(SFINAE_And_<IsAnInputModel<typename HandleInResult::ModelType>, IsAnInputModel<typename HandleInGroup::ModelType>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
+        MODELS_ASSERT((handleResult.model()->rootGroup() == nullptr) && !rootGroupHandle.isValid());
+
+        auto rootGroupModel = new typename HandleInGroup::ModelType(HandleInGroup::GroupType::staticType(),
+                                                                    HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()),
+                                                                    displayableName.isEmpty() ? HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()) : displayableName,
+                                                                    shortDescription,
+                                                                    detailledDescription,
+                                                                    HandleInGroup::MinValue,
+                                                                    HandleInGroup::MaxValue);
+
+        handleResult.model()->setRootGroup(rootGroupModel);
+        rootGroupHandle.setModel(rootGroupModel);
     }
 
     /**
@@ -128,12 +141,23 @@ public:
 
         checkNotNeedInputResultIsNotPresent();
 
-        internalAddGroup(parentGroup,
-                         groupHandle,
-                         std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInGroup::ModelType>>::value>(),
-                         displayableName.isEmpty() ? HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()) : displayableName,
-                         shortDescription,
-                         detailledDescription);
+        static_assert(SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInGroup::ModelType>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
+        checkStructureValidity<HandleInGroupParent, HandleInGroup>();
+        checkStructureValidityAtRunTime<HandleInGroupParent, HandleInGroup>(parentGroup, groupHandle);
+
+        MODELS_ASSERT(parentGroup.isValid() && !groupHandle.isValid());
+
+        auto groupModel = new typename HandleInGroup::ModelType(HandleInGroup::GroupType::staticType(),
+                                                                HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()),
+                                                                displayableName.isEmpty() ? HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()) : displayableName,
+                                                                shortDescription,
+                                                                detailledDescription,
+                                                                HandleInGroup::MinValue,
+                                                                HandleInGroup::MaxValue);
+
+        parentGroup.model()->addGroup(groupModel);
+        groupHandle.setModel(groupModel);
     }
 
     /**
@@ -153,9 +177,10 @@ public:
 
         checkNotNeedInputResultIsNotPresent();
 
+        static_assert(SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInItem::ModelType>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInItem::ModelType>>::value>(),
                         displayableName.isEmpty() ? HandleInItem::ItemType::nameFromType(HandleInItem::ItemType::staticType()) : displayableName,
                         shortDescription,
                         detailledDescription);
@@ -180,13 +205,23 @@ public:
 
         checkNotNeedInputResultIsNotPresent();
 
-        internalAddItemAttribute(parentItem,
-                                 itemAttributeHandle,
-                                 std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInItemParent::ModelType>, IsAnInputModel<typename HandleInItemAttribute::ModelType>>::value>(),
-                                 categories,
-                                 displayableName,
-                                 shortDescription,
-                                 detailledDescription);
+        static_assert(SFINAE_And_<IsAnInputModel<typename HandleInItemParent::ModelType>, IsAnInputModel<typename HandleInItemAttribute::ModelType>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
+        checkStructureValidity<HandleInItemParent, HandleInItemAttribute>();
+        checkStructureValidityAtRunTime<HandleInItemParent, HandleInItemAttribute>(parentItem, itemAttributeHandle);
+
+        MODELS_ASSERT(parentItem.isValid() && !itemAttributeHandle.isValid());
+
+        auto itemAttributeModel = HandleInItemAttribute::ModelType::create(HandleInItemAttribute::ValueType,
+                                                                           categories,
+                                                                           displayableName,
+                                                                           shortDescription,
+                                                                           detailledDescription,
+                                                                           HandleInItemAttribute::MinValue,
+                                                                           HandleInItemAttribute::MaxValue);
+
+        parentItem.model()->addItemAttribute(itemAttributeModel);
+        itemAttributeHandle.setModel(itemAttributeModel);
     }
 
     /**
@@ -207,9 +242,10 @@ public:
 
         checkNotNeedInputResultIsNotPresent();
 
+        static_assert(SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInPointAttribute::ModelType>, HasApplicableToPoint<HandleInPointAttribute>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInPointAttribute::ModelType>, HasApplicableToPoint<HandleInPointAttribute>>::value>(),
                         displayableName.isEmpty() ? HandleInPointAttribute::ItemType::nameFromType(HandleInPointAttribute::ItemType::staticType()) : displayableName,
                         shortDescription,
                         detailledDescription);
@@ -233,9 +269,10 @@ public:
 
         checkNotNeedInputResultIsNotPresent();
 
+        static_assert(SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInEdgeAttribute::ModelType>, HasApplicableToEdge<HandleInEdgeAttribute>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInEdgeAttribute::ModelType>, HasApplicableToEdge<HandleInEdgeAttribute>>::value>(),
                         displayableName.isEmpty() ? HandleInEdgeAttribute::ItemType::nameFromType(HandleInEdgeAttribute::ItemType::staticType()) : displayableName,
                         shortDescription,
                         detailledDescription);
@@ -259,9 +296,10 @@ public:
 
         checkNotNeedInputResultIsNotPresent();
 
+        static_assert(SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInFaceAttribute::ModelType>, HasApplicableToFace<HandleInFaceAttribute>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInFaceAttribute::ModelType>, HasApplicableToFace<HandleInFaceAttribute>>::value>(),
                         displayableName.isEmpty() ? HandleInFaceAttribute::ItemType::nameFromType(HandleInFaceAttribute::ItemType::staticType()) : displayableName,
                         shortDescription,
                         detailledDescription);
@@ -304,14 +342,23 @@ private:
     void checkNotNeedInputResultIsNotPresent() const;
 
     template<class Parent, class Child>
-    static constexpr void checkStructureValidity(std::true_type) {
-        static_assert((Parent::MinValue > 0)
-                      || ((Parent::MinValue == 0) && (Child::MinValue == 0)), "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0).");
+    static constexpr bool checkStructureValidity() {
+        return internalCheckStructureValidity<Parent, Child>(std::integral_constant<bool, IsAnInputAbstractHandle<Parent>::value>());
     }
 
     template<class Parent, class Child>
-    static constexpr void checkStructureValidity(std::false_type) {
-        // parent is abstract so we can not check at compilation time
+    static constexpr bool internalCheckStructureValidity(std::true_type) {
+        static_assert(((Parent::MinValue > 0)
+                      || ((Parent::MinValue == 0) && (Child::MinValue == 0))), "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0).");
+
+        return true;
+    }
+
+    template<class Parent, class Child>
+    static constexpr bool internalCheckStructureValidity(std::false_type) {
+        static_assert(!IsAnInputAbstractHandle<Parent>::value, "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0).");
+
+        return true;
     }
 
     template<class Parent, class Child>
@@ -327,105 +374,19 @@ private:
 
     /*****************************************************/
 
-    template<class HandleInResult, typename... ConstructorArgs>
-    void internalAddResult(HandleInResult& handleResult,
-                           std::true_type,
-                           ConstructorArgs&& ...constructorArgs) {
-        MODELS_ASSERT(!handleResult.isValid());
-
-        auto resultModel = new HandleInResult::ModelType(std::forward<ConstructorArgs>(constructorArgs)...,
-                                                         HandleInResult::MinValue,
-                                                         HandleInResult::MaxValue);
-        handleResult.setModel(resultModel);
-
-        m_results.append(resultModel);
-    }
-
-    template<class HandleInResult, typename... ConstructorArgs>
-    void internalAddResult(HandleInResult&,
-                           std::false_type,
-                           ConstructorArgs&& ...) {
-
-        NO_INPUT_STATIC_ASSERT_MESSAGE;
-    }
-
-    /*****************************************************/
-
     template<class HandleInResult, class HandleZeroOrMore>
     void internalSetZeroOrMoreRootGroup(const HandleInResult& handleResult,
-                                        HandleZeroOrMore& handleRootGroup,
-                                        std::true_type) {
+                                        HandleZeroOrMore& handleRootGroup)
+    {
+        static_assert(IsAnInputModel<typename HandleInResult::ModelType>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+
         MODELS_ASSERT((handleResult.model()->rootGroup() == nullptr) && !handleRootGroup.isValid());
 
-        auto rootGroupModel = HandleZeroOrMore::ModelType::create<HandleZeroOrMore::GroupType>();
+        auto rootGroupModel = new typename HandleZeroOrMore::ModelType(HandleZeroOrMore::GroupType::staticType(), HandleZeroOrMore::GroupType::nameFromType(HandleZeroOrMore::GroupType::staticType()));
 
         handleResult.model()->setRootGroup(rootGroupModel);
 
         handleRootGroup.setModel(rootGroupModel);
-    }
-
-    template<class HandleInResult, class HandleZeroOrMore>
-    void internalSetZeroOrMoreRootGroup(const HandleInResult& handleResult,
-                                        HandleZeroOrMore& handleRootGroup,
-                                        std::false_type) {
-
-        NO_INPUT_STATIC_ASSERT_MESSAGE;
-    }
-
-    /*****************************************************/
-
-    template<class HandleInResult, class HandleInGroup, typename... ConstructorArgs>
-    void internalSetRootGroup(const HandleInResult& handleResult,
-                              HandleInGroup& rootGroupHandle,
-                              std::true_type,
-                              ConstructorArgs&& ...constructorArgs) {
-        MODELS_ASSERT((handleResult.model()->rootGroup() == nullptr) && !rootGroupHandle.isValid());
-
-        auto rootGroupModel = HandleInGroup::ModelType::create<HandleInGroup::GroupType>(std::forward<ConstructorArgs>(constructorArgs)...,
-                                                                                         HandleInGroup::MinValue,
-                                                                                         HandleInGroup::MaxValue);
-
-        handleResult.model()->setRootGroup(rootGroupModel);
-        rootGroupHandle.setModel(rootGroupModel);
-    }
-
-    template<class HandleInResult, class HandleInGroup, typename... ConstructorArgs>
-    void internalSetRootGroup(const HandleInResult&,
-                              HandleInGroup&,
-                              std::false_type,
-                              ConstructorArgs&& ...) {
-
-        NO_INPUT_STATIC_ASSERT_MESSAGE;
-    }
-
-    /*****************************************************/
-
-    template<class HandleInGroupParent, class HandleInGroup, typename... ConstructorArgs>
-    void internalAddGroup(const HandleInGroupParent& parentGroup,
-                          HandleInGroup& groupHandle,
-                          std::true_type,
-                          ConstructorArgs&& ...constructorArgs) {
-
-        checkStructureValidity<HandleInGroupParent, HandleInGroup>(std::integral_constant<bool, IsAnInputAbstractHandle<HandleInGroupParent>::value>());
-        checkStructureValidityAtRunTime<HandleInGroupParent, HandleInGroup>(parentGroup, groupHandle);
-
-        MODELS_ASSERT(parentGroup.isValid() && !groupHandle.isValid());
-
-        auto groupModel = HandleInGroup::ModelType::create<HandleInGroup::GroupType>(std::forward<ConstructorArgs>(constructorArgs)...,
-                                                                                     HandleInGroup::MinValue,
-                                                                                     HandleInGroup::MaxValue);
-
-        parentGroup.model()->addGroup(groupModel);
-        groupHandle.setModel(groupModel);
-    }
-
-    template<class HandleInGroupParent, class HandleInGroup, typename... ConstructorArgs>
-    void internalAddGroup(const HandleInGroupParent&,
-                          HandleInGroup&,
-                          std::false_type,
-                          ConstructorArgs&& ...) {
-
-        NO_INPUT_STATIC_ASSERT_MESSAGE;
     }
 
     /*****************************************************/
@@ -433,60 +394,21 @@ private:
     template<class HandleInGroupParent, class HandleInItem, typename... ConstructorArgs>
     void internalAddItem(const HandleInGroupParent& parentGroup,
                          HandleInItem& itemHandle,
-                         std::true_type,
                          ConstructorArgs&& ...constructorArgs) {
 
-        checkStructureValidity<HandleInGroupParent, HandleInItem>(std::integral_constant<bool, IsAnInputAbstractHandle<HandleInGroupParent>::value>());
+        checkStructureValidity<HandleInGroupParent, HandleInItem>();
         checkStructureValidityAtRunTime<HandleInGroupParent, HandleInItem>(parentGroup, itemHandle);
 
         MODELS_ASSERT(parentGroup.isValid() && !itemHandle.isValid());
 
-        auto itemModel = HandleInItem::ModelType::create<HandleInItem::ItemType>(std::forward<ConstructorArgs>(constructorArgs)...,
-                                                                                 HandleInItem::MinValue,
-                                                                                 HandleInItem::MaxValue);
+        auto itemModel = new typename HandleInItem::ModelType(HandleInItem::ItemType::staticType(),
+                                                              HandleInItem::ItemType::nameFromType(HandleInItem::ItemType::staticType()),
+                                                              std::forward<ConstructorArgs>(constructorArgs)...,
+                                                              HandleInItem::MinValue,
+                                                              HandleInItem::MaxValue);
 
         parentGroup.model()->addItem(itemModel);
         itemHandle.setModel(itemModel);
-    }
-
-    template<class HandleInGroupParent, class HandleInItem, typename... ConstructorArgs>
-    void internalAddItem(const HandleInGroupParent&,
-                         HandleInItem&,
-                         std::false_type,
-                         ConstructorArgs&& ...) {
-
-        NO_INPUT_STATIC_ASSERT_MESSAGE;
-    }
-
-    /*****************************************************/
-
-    template<class HandleInItemParent, class HandleInItemAttribute, typename... ConstructorArgs>
-    void internalAddItemAttribute(const HandleInItemParent& parentItem,
-                                  HandleInItemAttribute& itemAttributeHandle,
-                                  std::true_type,
-                                  ConstructorArgs&& ...constructorArgs) {
-
-        checkStructureValidity<HandleInItemParent, HandleInItemAttribute>(std::integral_constant<bool, IsAnInputAbstractHandle<HandleInItemParent>::value>());
-        checkStructureValidityAtRunTime<HandleInItemParent, HandleInItemAttribute>(parentItem, itemAttributeHandle);
-
-        MODELS_ASSERT(parentItem.isValid() && !itemAttributeHandle.isValid());
-
-        auto itemAttributeModel = HandleInItemAttribute::ModelType::create(HandleInItemAttribute::ValueType,
-                                                                           std::forward<ConstructorArgs>(constructorArgs)...,
-                                                                           HandleInItemAttribute::MinValue,
-                                                                           HandleInItemAttribute::MaxValue);
-
-        parentItem.model()->addItemAttribute(itemAttributeModel);
-        itemAttributeHandle.setModel(itemAttributeModel);
-    }
-
-    template<class HandleInItemParent, class HandleInItemAttribute, typename... ConstructorArgs>
-    void internalAddItemAttribute(const HandleInItemParent&,
-                                  HandleInItemAttribute&,
-                                  std::false_type,
-                                  ConstructorArgs&& ...) {
-
-        NO_INPUT_STATIC_ASSERT_MESSAGE;
     }
 };
 

@@ -9,6 +9,31 @@ DEFAULT_EIGEN_INC_PATH = "$$CT_LIB_PREFIX/3rdparty/eigen"
 
 COMPUTREE = ctlibcore
 
+# c++14
+greaterThan(QT_MAJOR_VERSION, 4) {
+    CONFIG += c++14
+} else {
+    QMAKE_CXXFLAGS += -std=c++14
+}
+
+win32 {
+    CONFIG(debug, debug|release) {
+        LIBS += -lQGLViewerd
+    } else {
+        LIBS += -lQGLViewer
+    }
+
+    OTHER_FILES +=
+
+    LIBS += -lopengl32 -lglu32
+}
+
+unix {
+    LIBS += $$QGLVIEWER_DIR/libQGLViewer-qt5.a
+}
+
+LIBS += -lAMKgl
+
 include($${CT_PREFIX}/destdir.pri)
 include($${CT_PREFIX}/include_ct_library.pri)
 include($${CT_LIB_PREFIX}/library_include_eigen.pri)
@@ -107,24 +132,6 @@ TR_EXCLUDE  += ./muParser/*
 
 RESOURCES += resource/icones.qrc
 
-macx {
-    LIBS += $${DESTDIR}/libCompuTreeCore*.dylib
-} else {
-    unix{
-        LIBS += $${DESTDIR}/libCompuTreeCore*.so
-    }
-
-    win32 {
-        win32-g++ {
-        LIBS += $${DESTDIR}/libCompuTreeCore*.a
-        }
-
-        win32-msvc* {
-        LIBS += $${DESTDIR}/CompuTreeCore*.lib
-        }
-    }
-}
-
 unix {
     # add your own with quoting gyrations to make sure $ORIGIN gets to the command line unexpanded
     QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\'"
@@ -142,24 +149,7 @@ INCLUDEPATH += $$QGLVIEWER_DIR
 INCLUDEPATH += ../amkgl_defines_for_use_with_computree
 
 LIBS += -L$$AMKGL_LIB_DIR
-LIBS += -lAMKgl
 LIBS += -L$$QGLVIEWER_DIR
-
-win32 {
-    CONFIG(debug, debug|release) {
-        LIBS += -lQGLViewerd
-    } else {
-        LIBS += -lQGLViewer
-    }
-
-    OTHER_FILES +=
-
-    LIBS += -lopengl32 -lglu32
-}
-
-unix {
-    LIBS += $$QGLVIEWER_DIR/libQGLViewer-qt5.a
-}
 
 !equals(PWD, $${OUT_PWD}) {
     error("Shadow build seems to be activated, please desactivated it !")

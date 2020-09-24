@@ -503,11 +503,11 @@ private:
      */
     CT_AbstractItemDrawableDrawManager* m_alternativeDrawManager;
 
-    static quint32  NEXTID;
+    static quint32&  NEXTID();
 
     // TODO : MK 21.11.18 refactor this and check with Alexandre Piboule what it means
-    static QMap<QString, QString> NAMEMAP;
-    static QMutex NAMEMAP_Mutex;
+    static QMap<QString, QString>& NAMEMAP();
+    static QMutex& NAMEMAP_Mutex();
 
 protected:
 

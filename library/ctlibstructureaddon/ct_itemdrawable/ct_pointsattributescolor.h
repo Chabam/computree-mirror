@@ -16,11 +16,9 @@ public:
 
     template<class ManagerT>
     CT_PointsAttributesColor(CT_PCIR pcir,
-                             ManagerT& manager) :
-        CT_PointsAttributesColor(pcir,
-                                 manager,
-                                 std::integral_constant<bool, SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, CT_Color>>::value>())
+                             ManagerT& manager) : SuperClass(pcir, manager)
     {
+        static_assert(SFINAE_And_<IsAPointCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, CT_Color>>::value, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
     }
 
     /**
@@ -51,22 +49,6 @@ private:
     CT_DEFAULT_IA_BEGIN(CT_PointsAttributesColor)
     CT_DEFAULT_IA_V2(CT_PointsAttributesColor, CT_AbstractCategory::staticInitDataSize(), &CT_PointsAttributesColor::numberOfSetValues, QObject::tr("Taille"))
     CT_DEFAULT_IA_END(CT_PointsAttributesColor)
-
-    template<class ManagerT>
-    CT_PointsAttributesColor(CT_PCIR ,
-                             ManagerT&,
-                             std::false_type)
-    {
-        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to point");
-    }
-
-    template<class ManagerT>
-    CT_PointsAttributesColor(CT_PCIR pcir,
-                             ManagerT& manager,
-                             std::true_type) :
-        SuperClass(pcir, manager)
-    {
-    }
 };
 
 #endif // CT_POINTSATTRIBUTESCOLOR_H

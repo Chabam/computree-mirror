@@ -1,6 +1,8 @@
 #ifndef CT_OUTMODELSTRUCTUREMANAGER_H
 #define CT_OUTMODELSTRUCTUREMANAGER_H
 
+#include <QSet>
+
 #include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
 #include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
 #include "tools/sfinae.h"
@@ -8,8 +10,7 @@
 #include <type_traits>
 #include <functional>
 
-#define NO_INPUT_COPY_STATIC_ASSERT_MESSAGE static_assert(false, "It seems that the specified handle doesn't contains a model that was an input result model COPY. Please verify that you pass an INPUT COPY handle !");
-#define SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE static_assert(false, "It seems that the second handle does not contains an OUTPUT model. Please verify that you pass an OUTPUT handle !")
+#define SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE "It seems that the second handle does not contains an OUTPUT model. Please verify that you pass an OUTPUT handle !"
 
 #define GENERATE_ADD_XXX_TO(FuncName, FuncNameInputTool, FuncToCall) \
                                         private: \
@@ -18,7 +19,7 @@
                                                       HandleOut& outHandle, \
                                                       std::true_type, \
                                                       ConstructorArgs&& ...constructorArgs) { \
-                                            using InResultModelCopyType = HandleParent::InResultModelCopyType; \
+                                            using InResultModelCopyType = typename HandleParent::InResultModelCopyType; \
                                          \
                                             MODELS_ASSERT(inParent.isValid() && !outHandle.isValid()); \
                                          \
@@ -41,9 +42,9 @@
                                                                ToolToModifyResultModelCopiesT* tool, \
                                                                HandleOut& outHandle, \
                                                                ConstructorArgs&& ...constructorArgs) { \
-                                                auto outModelPrototypeToCopy = new HandleOut::ModelType(std::forward<ConstructorArgs>(constructorArgs)...); \
+                                                auto outModelPrototypeToCopy = new typename HandleOut::ModelType(std::forward<ConstructorArgs>(constructorArgs)...); \
                                              \
-                                                HandleOut::ModelsCollectionType allModelsCreated; \
+                                                typename HandleOut::ModelsCollectionType allModelsCreated; \
                                              \
                                                 tool->FuncToCall(inParentModel, outModelPrototypeToCopy, allModelsCreated); \
                                              \
@@ -61,14 +62,14 @@
                                      \
                                             MODELS_ASSERT(m_ignoreInvalidParentHandle || (outParent.isValid() && !outHandle.isValid())); \
                                      \
-                                            auto outModelPrototypeToCopy = new HandleOut::ModelType(std::forward<ConstructorArgs>(constructorArgs)...); \
+                                            auto outModelPrototypeToCopy = new typename HandleOut::ModelType(std::forward<ConstructorArgs>(constructorArgs)...); \
                                      \
-                                            HandleOut::ModelsCollectionType allModelsCreated; \
+                                            typename HandleOut::ModelsCollectionType allModelsCreated; \
                                      \
-                                            const auto visitor = [&outModelPrototypeToCopy, &allModelsCreated](const HandleParent::ModelType* model) -> bool { \
-                                                auto copy = static_cast<HandleOut::ModelType*>(outModelPrototypeToCopy->copy()); \
+                                            const auto visitor = [&outModelPrototypeToCopy, &allModelsCreated](const typename HandleParent::ModelType* model) -> bool { \
+                                                auto copy = static_cast<typename HandleOut::ModelType*>(outModelPrototypeToCopy->copy()); \
                                      \
-                                                const_cast<HandleParent::ModelType*>(model)->FuncToCall(copy); \
+                                                const_cast<typename HandleParent::ModelType*>(model)->FuncToCall(copy); \
                                      \
                                                 allModelsCreated.append(copy); \
                                      \
@@ -107,7 +108,7 @@ public:
                    const QString& shortDescription = QString{""}) {
         // check, at compilation time, if the handle contains an output model
         internalAddResult(handleResult,
-                          std::integral_constant<bool, IsAnOutputModel<HandleOutResult::ModelType>::value>(),
+                          std::integral_constant<bool, IsAnOutputModel<typename HandleOutResult::ModelType>::value>(),
                           resultName,
                           displayableName,
                           shortDescription);
@@ -123,7 +124,7 @@ public:
     template<class HandleInResultCopy>
     void addResultCopy(HandleInResultCopy& handleInResultCopy) {
         // check, at compilation time, if the handle contains an input result model that produce copies
-        internalAddResultCopy<HandleInResultCopy>(handleInResultCopy, std::integral_constant<bool, IsAResultModelCopy<HandleInResultCopy::ModelType>::value>());
+        internalAddResultCopy<HandleInResultCopy>(handleInResultCopy);
     }
 
     /**
@@ -140,12 +141,15 @@ public:
                       const QString& displayableName = QString{"Out Root Group"},
                       const QString& shortDescription = QString{""},
                       const QString& detailledDescription = QString{""}) {
-        internalSetRootGroup(handleResult,
-                             rootGroupHandle,
-                             std::integral_constant<bool, IsAnOutputModel<HandleOutGroup::ModelType>::value>(),
-                             displayableName,
-                             shortDescription,
-                             detailledDescription);
+
+        static_assert(IsAnOutputModel<typename HandleOutGroup::ModelType>::value, SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE);
+
+        internalSetRootGroupTo(handleResult,
+                               rootGroupHandle,
+                               std::integral_constant<bool, IsAnInputModel<typename HandleResult::ModelType>::value>(),
+                               displayableName,
+                               shortDescription,
+                               detailledDescription);
     }
 
     /**
@@ -164,13 +168,15 @@ public:
                   const QString& detailledDescription = QString{""},
                   typename HandleOutGroup::GroupType* prototype = nullptr) {
 
-        internalAddGroup(parentGroup,
-                         groupHandle,
-                         std::integral_constant<bool, IsAnOutputModel<HandleOutGroup::ModelType>::value>(),
-                         displayableName,
-                         shortDescription,
-                         detailledDescription,
-                         prototype);
+        static_assert(IsAnOutputModel<typename HandleOutGroup::ModelType>::value, SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE);
+
+        internalAddGroupTo(parentGroup,
+                           groupHandle,
+                           std::integral_constant<bool, IsAnInputModel<typename HandleGroupParent::ModelType>::value>(),
+                           displayableName,
+                           shortDescription,
+                           detailledDescription,
+                           prototype);
     }
 
     template<class HandleResult, class HandleInGroup>
@@ -195,9 +201,11 @@ public:
                  const QString& shortDescription = QString{""},
                  const QString& detailledDescription = QString{""},
                  typename HandleOutItem::ItemType* prototype = nullptr) {
+
+        static_assert(IsAnOutputModel<typename HandleOutItem::ModelType>::value, SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE);
+
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, IsAnOutputModel<HandleOutItem::ModelType>::value>(),
                         displayableName,
                         shortDescription,
                         detailledDescription,
@@ -229,14 +237,16 @@ public:
                           const QString& detailledDescription = QString{""},
                           typename HandleOutItemAttribute::ItemAttributeType* prototype = nullptr) {
 
-        internalAddItemAttribute(parentItem,
-                                 itemAttributeHandle,
-                                 std::integral_constant<bool, IsAnOutputModel<HandleOutItemAttribute::ModelType>::value>(),
-                                 category,
-                                 displayableName,
-                                 shortDescription,
-                                 detailledDescription,
-                                 prototype);
+        static_assert(IsAnOutputModel<typename HandleOutItemAttribute::ModelType>::value, SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE);
+
+        internalAddItemAttributeTo(parentItem,
+                                   itemAttributeHandle,
+                                   std::integral_constant<bool, IsAnInputModel<typename HandleItemParent::ModelType>::value>(),
+                                   category,
+                                   displayableName,
+                                   shortDescription,
+                                   detailledDescription,
+                                   prototype);
     }
 
     /**
@@ -254,9 +264,11 @@ public:
                            const QString& shortDescription = QString{""},
                            const QString& detailledDescription = QString{""},
                            typename HandleOutPointAttribute::ItemType* prototype = nullptr) {
+
+        static_assert(SFINAE_And_<IsAnOutputModel<typename HandleOutPointAttribute::ModelType>, HasApplicableToPoint<HandleOutPointAttribute>>::value, SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE);
+
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, SFINAE_And_<IsAnOutputModel<HandleOutPointAttribute::ModelType>, HasApplicableToPoint<HandleOutPointAttribute>>::value>(),
                         displayableName,
                         shortDescription,
                         detailledDescription,
@@ -278,9 +290,11 @@ public:
                           const QString& shortDescription = QString{""},
                           const QString& detailledDescription = QString{""},
                           typename HandleOutEdgeAttribute::ItemType* prototype = nullptr) {
+
+        static_assert(SFINAE_And_<IsAnOutputModel<typename HandleOutEdgeAttribute::ModelType>, HasApplicableToEdge<HandleOutEdgeAttribute>>::value, SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE);
+
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, SFINAE_And_<IsAnOutputModel<HandleOutEdgeAttribute::ModelType>, HasApplicableToEdge<HandleOutEdgeAttribute>>::value>(),
                         displayableName,
                         shortDescription,
                         detailledDescription,
@@ -302,9 +316,11 @@ public:
                           const QString& shortDescription = QString{""},
                           const QString& detailledDescription = QString{""},
                           typename HandleOutFaceAttribute::ItemType* prototype = nullptr) {
+
+        static_assert(SFINAE_And_<IsAnOutputModel<typename HandleOutFaceAttribute::ModelType>, HasApplicableToFace<HandleOutFaceAttribute>>::value, SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE);
+
         internalAddItem(parentGroup,
                         itemHandle,
-                        std::integral_constant<bool, SFINAE_And_<IsAnOutputModel<HandleOutFaceAttribute::ModelType>, HasApplicableToFace<HandleOutFaceAttribute>>::value>(),
                         displayableName,
                         shortDescription,
                         detailledDescription,
@@ -419,54 +435,36 @@ private:
 
     template<class HandleOutResult, typename... ConstructorArgs>
     void internalAddResult(HandleOutResult& handleResult,
-                           std::true_type,
+                           std::true_type, // is an output model
                            ConstructorArgs&& ...constructorArgs) {
         MODELS_ASSERT(!handleResult.isValid());
 
         // nullptr = no root group model to pass to the output result model
-        auto resultModel = new HandleOutResult::ModelType(nullptr, std::forward<ConstructorArgs>(constructorArgs)...);
+        auto resultModel = new typename HandleOutResult::ModelType(nullptr, std::forward<ConstructorArgs>(constructorArgs)...);
         handleResult.setModel(resultModel);
 
         internalAddResultModel(resultModel, true);
     }
 
-    template<class HandleOutResult, typename... ConstructorArgs>
-    void internalAddResult(HandleOutResult& handleResult,
-                           std::false_type,
+    template<class HandleInResult, typename... ConstructorArgs>
+    void internalAddResult(HandleInResult& handleResult,
+                           std::false_type, // is an input model
                            ConstructorArgs&& ...) {
-        internalAddResultIfCopy(handleResult,
-                                std::integral_constant<bool, IsAResultModelCopy<HandleOutResult::ModelType>::value>());
-    }
-
-    template<class HandleOutResult>
-    void internalAddResultIfCopy(HandleOutResult& handleResult,
-                                 std::true_type) {
         // TODO : MK 16.11.18 ==> static_warning(message) !!! (doesn't exist yet)
         // "You have called the method addResult(...) with an INPUT COPY handle. Arguments like \"resultName\", etc... will be ignored but the result will be added as a input copy. Prefer call the method \"addResultCopy(...)\"."
-        internalAddResultCopy(handleResult, std::integral_constant<bool, true>());
-    }
-
-    template<class HandleOutResult>
-    void internalAddResultIfCopy(HandleOutResult& handleResult,
-                                 std::false_type) {
-
-        static_assert(false, "It seems that the specified handle does not contains an OUTPUT model. You must pass an OUTPUT handle !");
+        internalAddResultCopy(handleResult);
     }
 
     /*****************************************************/
 
     template<class HandleInResultCopy>
-    void internalAddResultCopy(HandleInResultCopy& handleInResultCopy, std::true_type) {
+    void internalAddResultCopy(HandleInResultCopy& handleInResultCopy) {
+
+        static_assert(IsAResultModelCopy<typename HandleInResultCopy::ModelType>::value, "It seems that the specified handle doesn't contains a model that was an input result model COPY.");
 
         MODELS_ASSERT(handleInResultCopy.isValid());
 
         internalAddResultCopyModel(handleInResultCopy.model());
-    }
-
-    template<class HandleInResultCopy>
-    void internalAddResultCopy(HandleInResultCopy& handleInResultCopy, std::false_type) {
-
-        static_assert(false, "It seems that the specified handle doesn't contains a model that was an input result model COPY.");
     }
 
     /*****************************************************/
@@ -475,8 +473,9 @@ private:
     template<class HandleResult, class HandleOutGroup, typename... ConstructorArgs>
     void internalSetRootGroupToCopy(const HandleResult& handleResult,
                                     HandleOutGroup& rootGroupHandle,
-                                    std::true_type,
                                     ConstructorArgs&& ...constructorArgs) {
+        static_assert(IsAResultModelCopy<typename HandleResult::ModelType>::value, "It seems that the specified handle doesn't contains a model that was an input result model COPY. Please verify that you pass an INPUT COPY handle !");
+
         MODELS_ASSERT((handleResult.model() != nullptr)
                  && !rootGroupHandle.isValid());
 
@@ -484,22 +483,14 @@ private:
 
         MODELS_ASSERT(tool != nullptr);
 
-        auto rootGroupModelPrototypeToCopy = new HandleOutGroup::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);
+        auto rootGroupModelPrototypeToCopy = new typename HandleOutGroup::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);
 
-        HandleOutGroup::ModelsCollectionType allModelsCreated;
+        typename HandleOutGroup::ModelsCollectionType allModelsCreated;
 
         tool->setRootGroup(rootGroupModelPrototypeToCopy, allModelsCreated);
         rootGroupHandle.setModels(allModelsCreated);
 
         delete rootGroupModelPrototypeToCopy;
-    }
-
-    template<class HandleResult, class HandleOutGroup, typename... ConstructorArgs>
-    void internalSetRootGroupToCopy(const HandleResult& handleResult,
-                                    HandleOutGroup& rootGroupHandle,
-                                    std::false_type,
-                                    ConstructorArgs&& ...constructorArgs) {
-        NO_INPUT_COPY_STATIC_ASSERT_MESSAGE;
     }
 
     template<class HandleResult, class HandleOutGroup, typename... ConstructorArgs>
@@ -509,7 +500,6 @@ private:
                                 ConstructorArgs&& ...constructorArgs) {
         internalSetRootGroupToCopy(handleResult,
                                    rootGroupHandle,
-                                   std::integral_constant<bool, IsAResultModelCopy<HandleResult::ModelType>::value>(),
                                    std::forward<ConstructorArgs>(constructorArgs)...);
     }
 
@@ -524,95 +514,23 @@ private:
                  && (handleResult.model()->rootGroup() == nullptr)
                  && !rootGroupHandle.isValid());
 
-        auto rootGroupModel = new HandleOutGroup::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);
+        auto rootGroupModel = new typename HandleOutGroup::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);
 
         handleResult.model()->setRootGroup(rootGroupModel);
         rootGroupHandle.setModels(rootGroupModel);
     }
 
-    template<class HandleResult, class HandleOutGroup, typename... ConstructorArgs>
-    void internalSetRootGroup(const HandleResult& handleResult,
-                              HandleOutGroup& rootGroupHandle,
-                              std::true_type,
-                              ConstructorArgs&& ...constructorArgs) {
-        internalSetRootGroupTo(handleResult,
-                               rootGroupHandle,
-                               std::integral_constant<bool, IsAnInputModel<HandleResult::ModelType>::value>(),
-                               std::forward<ConstructorArgs>(constructorArgs)...);
-    }
-
-    template<class HandleResult, class HandleOutGroup, typename... ConstructorArgs>
-    void internalSetRootGroup(const HandleResult& handleResult,
-                              HandleOutGroup& rootGroupHandle,
-                              std::false_type,
-                              ConstructorArgs&& ...constructorArgs) {
-        SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE;
-    }
-
-    /*****************************************************/
-
-    template<class HandleGroupParent, class HandleOutGroup, typename... ConstructorArgs>
-    void internalAddGroup(const HandleGroupParent& parentGroup,
-                          HandleOutGroup& groupHandle,
-                          std::true_type,
-                          ConstructorArgs&& ...constructorArgs) {
-        internalAddGroupTo(parentGroup,
-                           groupHandle,
-                           std::integral_constant<bool, IsAnInputModel<HandleGroupParent::ModelType>::value>(),
-                           std::forward<ConstructorArgs>(constructorArgs)...);
-    }
-
-    template<class HandleGroupParent, class HandleOutGroup, typename... ConstructorArgs>
-    void internalAddGroup(const HandleGroupParent& parentGroup,
-                          HandleOutGroup& groupHandle,
-                          std::false_type,
-                          ConstructorArgs&& ...constructorArgs) {
-        SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE;
-    }
-
     /*****************************************************/
 
     template<class HandleGroupParent, class HandleOutItem, typename... ConstructorArgs>
     void internalAddItem(const HandleGroupParent& parentGroup,
                          HandleOutItem& itemHandle,
-                         std::true_type,
                          ConstructorArgs&& ...constructorArgs) {
 
         internalAddItemTo(parentGroup,
                           itemHandle,
-                          std::integral_constant<bool, IsAnInputModel<HandleGroupParent::ModelType>::value>(),
+                          std::integral_constant<bool, IsAnInputModel<typename HandleGroupParent::ModelType>::value>(),
                           std::forward<ConstructorArgs>(constructorArgs)...);
-    }
-
-    template<class HandleGroupParent, class HandleOutItem, typename... ConstructorArgs>
-    void internalAddItem(const HandleGroupParent& parentGroup,
-                         HandleOutItem& itemHandle,
-                         std::false_type,
-                         ConstructorArgs&& ...constructorArgs) {
-
-        SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE;
-    }
-
-    /*****************************************************/
-
-    template<class HandleItemParent, class HandleOutItemAttribute, typename... ConstructorArgs>
-    void internalAddItemAttribute(const HandleItemParent& parentItem,
-                                  HandleOutItemAttribute& itemAttributeHandle,
-                                  std::true_type,
-                                  ConstructorArgs&& ...constructorArgs) {
-
-        internalAddItemAttributeTo(parentItem,
-                                   itemAttributeHandle,
-                                   std::integral_constant<bool, IsAnInputModel<HandleItemParent::ModelType>::value>(),
-                                   std::forward<ConstructorArgs>(constructorArgs)...);
-    }
-
-    template<class HandleItemParent, class HandleOutItemAttribute, typename... ConstructorArgs>
-    void internalAddItemAttribute(const HandleItemParent& parentItem,
-                                  HandleOutItemAttribute& itemAttributeHandle,
-                                  std::false_type,
-                                  ConstructorArgs&& ...constructorArgs) {
-        SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE;
     }
 };
 

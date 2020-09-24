@@ -135,7 +135,7 @@ public:
         IChildrensIteratorQtStylePtr        m_iterator;
 
 
-        template<typename ItemT>
+        template<typename ItemY>
         friend class ChildrensCollectionT;
 
         ChildrensIteratorStdStyleT(IChildrensIteratorQtStylePtr it) : m_iterator(it), m_currentValue(nullptr) {

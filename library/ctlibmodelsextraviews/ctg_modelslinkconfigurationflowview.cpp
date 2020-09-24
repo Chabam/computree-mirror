@@ -27,6 +27,7 @@
 #include <QTimer>
 #include <QMenu>
 #include <QApplication>
+#include <QKeyEvent>
 
 using QtNodes::FlowView;
 using QtNodes::FlowScene;

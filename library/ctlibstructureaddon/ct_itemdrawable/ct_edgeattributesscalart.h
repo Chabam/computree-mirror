@@ -18,10 +18,10 @@ public:
     template<class ManagerT>
     CT_EdgeAttributesScalarT(CT_ECIR ecir,
                              ManagerT& manager) :
-        CT_EdgeAttributesScalarT(ecir,
-                                 manager,
-                                 std::integral_constant<bool, SFINAE_And_<IsAEdgeCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value>())
+        SuperClass(ecir,
+                   manager)
     {
+        static_assert (SFINAE_And_<IsAEdgeCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to edge");
     }
 
     template<class ManagerT>
@@ -29,58 +29,17 @@ public:
                              ManagerT& manager,
                              const SCALAR& min,
                              const SCALAR& max) :
-        CT_EdgeAttributesScalarT(ecir,
-                                 manager,
-                                 min,
-                                 max,
-                                 std::integral_constant<bool, SFINAE_And_<IsAEdgeCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value>())
-    {
-    }
-
-    CT_EdgeAttributesScalarT(const CT_EdgeAttributesScalarT<SCALAR>& other) = default;
-
-    CT_ITEM_COPY_IMP(CT_EdgeAttributesScalarT<SCALAR>)
-
-private:
-    template<class ManagerT>
-    CT_EdgeAttributesScalarT(CT_ECIR,
-                             ManagerT&,
-                             std::false_type)
-    {
-        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to edge");
-    }
-
-    template<class ManagerT>
-    CT_EdgeAttributesScalarT(CT_ECIR ecir,
-                             ManagerT& manager,
-                             std::true_type) :
-        SuperClass(ecir,
-                   manager)
-    {
-    }
-
-    template<class ManagerT>
-    CT_EdgeAttributesScalarT(CT_ECIR ecir,
-                             ManagerT& manager,
-                             const SCALAR& min,
-                             const SCALAR& max,
-                             std::true_type) :
         SuperClass(ecir,
                    manager,
                    min,
                    max)
     {
+        static_assert (SFINAE_And_<IsAEdgeCloudManager(ManagerT), IsABaseOfCT_AbstractXAttributeManager<ManagerT, SCALAR>>::value, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to edge");
     }
 
-    template<class ManagerT>
-    CT_EdgeAttributesScalarT(CT_ECIR,
-                             ManagerT& ,
-                             const SCALAR& ,
-                             const SCALAR& ,
-                             std::false_type)
-    {
-        static_assert (false, "The manager you attempt to set in constructor is not a base of CT_AbstractXAttributeManager or is not applicable to edge");
-    }
+    CT_EdgeAttributesScalarT(const CT_EdgeAttributesScalarT<SCALAR>& other) = default;
+
+    CT_ITEM_COPY_IMP(CT_EdgeAttributesScalarT<SCALAR>)
 };
 
 #endif // CT_EDGEATTRIBUTESSCALART_H
