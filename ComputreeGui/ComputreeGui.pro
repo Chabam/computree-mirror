@@ -16,7 +16,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QMAKE_CXXFLAGS += -std=c++14
 }
 
-win32 {
+win32-msvc {
     CONFIG(debug, debug|release) {
         LIBS += -lQGLViewerd
     } else {
@@ -26,10 +26,6 @@ win32 {
     OTHER_FILES +=
 
     LIBS += -lopengl32 -lglu32
-}
-
-unix {
-    LIBS += $$QGLVIEWER_DIR/libQGLViewer-qt5.a
 }
 
 LIBS += -lAMKgl
@@ -150,6 +146,22 @@ INCLUDEPATH += ../amkgl_defines_for_use_with_computree
 
 LIBS += -L$$AMKGL_LIB_DIR
 LIBS += -L$$QGLVIEWER_DIR
+
+win32-g++ {
+    CONFIG(debug, debug|release) {
+        LIBS += -lQGLViewerd
+    } else {
+        LIBS += -lQGLViewer
+    }
+
+    OTHER_FILES +=
+
+    LIBS += -lopengl32 -lglu32
+}
+
+unix {
+    LIBS += $$QGLVIEWER_DIR/libQGLViewer-qt5.a
+}
 
 !equals(PWD, $${OUT_PWD}) {
     error("Shadow build seems to be activated, please desactivated it !")
