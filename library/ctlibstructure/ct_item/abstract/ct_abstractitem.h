@@ -88,6 +88,9 @@ public:
 
     class ChildrensCollection;
 
+    template<typename ItemT>
+    class ChildrensCollectionT;
+
     /**
      * @brief An object that convert a qt style iterator to a std style iterator for item of specified type
      */
