@@ -263,7 +263,7 @@ bool InstancedRendererShaders<ShaderParams>::setParamsAttributeToShader(const Sh
                                         m_glValueType,
                                         GL_FALSE,
                                         sizeof(ShaderParams),
-                            #ifdef ENVIRONMENT64
+                            #if defined(__x86_64__) || _M_X64 // Definition for GCC, Clang, and Intel's compiler or MSVC++
                                         (void *)quint64((m_sizeOfParams * m_rowSize) * i));
                             #else
                                         (void *)quint32((m_sizeOfParams * m_rowSize) * i)); // TODO : check if it's ok ?
