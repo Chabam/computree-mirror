@@ -2,6 +2,14 @@
 #define CT_PCLDEFINES_H
 
 #ifndef Q_MOC_RUN
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     #define PCL_NO_PRECOMPILE
     #include <pcl/point_types.h>
     #include <pcl/point_cloud.h>
@@ -11,6 +19,14 @@
     #include <pcl/filters/impl/voxel_grid.hpp>
     #include <pcl/filters/statistical_outlier_removal.h>
     #include <pcl/filters/impl/statistical_outlier_removal.hpp>
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic warning "-Wunused-parameter"
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#elif defined(__APPLE__)
+#pragma GCC diagnostic warning "-Wunused-parameter"
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
 #endif
 
 typedef pcl::PointXYZ                                                               CT_PCLPoint;

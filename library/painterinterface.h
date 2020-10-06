@@ -4,7 +4,23 @@
 #include <QString>
 #include <QtOpenGL/QGL>
 
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#pragma GCC diagnostic ignored "-Wint-in-bool-context"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#endif
 #include "Eigen/Core"
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic warning "-Wall"
+#pragma GCC diagnostic warning "-Wextra"
+#pragma GCC diagnostic warning "-Wdeprecated-copy"
+#pragma GCC diagnostic warning "-Wint-in-bool-context"
+#elif defined(__APPLE__)
+#endif
 
 class CT_AbstractCloudIndex;
 class CT_AbstractMeshModel;

@@ -212,7 +212,7 @@ inline long double CT_AbstractItemAttributeT<quint64>::toLongDouble(const CT_Abs
 template<>
 inline size_t CT_AbstractItemAttributeT<size_t>::toSizeT(const CT_AbstractItem* item, bool* ok) const { if(ok != nullptr) { *ok = true; } return data(item); }
 
-#ifndef ENVIRONMENT64
+#if !(defined(__x86_64__) || _M_X64) // Definition for GCC, Clang, and Intel's compiler or MSVC++
 // SIZE_T -> FLOAT
 template<>
 inline float CT_AbstractItemAttributeT<size_t>::toFloat(const CT_AbstractItem* item, bool* ok) const { if(ok != nullptr) { *ok = true; } return data(item); }

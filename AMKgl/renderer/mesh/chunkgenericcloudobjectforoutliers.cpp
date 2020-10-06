@@ -248,7 +248,14 @@ void ChunkGenericCloudObjectForOutliers::moveObjectsFromTo(const size_t &from, c
     size_t toM = to*getNumberOfElementPerObject();
 
     std::memcpy(&(*m_objectIndexesCloud)[to], &(*m_objectIndexesCloud)[from], sizeof(GLuint)*size);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ >= 8)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
     std::memcpy(&m_vertexesAndOffset[to], &m_vertexesAndOffset[from], sizeof(VertexesByOffset)*size);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ >= 8)
+#pragma GCC diagnostic pop
+#endif
     std::memcpy(&(*m_vertexIndexesCloud)[toM], &(*m_vertexIndexesCloud)[fromM], sizeof(GLuint)*sizeM);
 
     deleteAllObjectXXXCloud();

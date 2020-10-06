@@ -356,7 +356,19 @@ bool CT_Reader_GDAL::internalReadFile(CT_StandardItemGroup* group)
             size_t index = 0;
 
             for(int y=0; y<nYSize; ++y) {
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic ignored "-Wunused-result"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic ignored "-Wunused-result"
+#endif
                 poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float32, 0, 0 );
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic warning "-Wunused-result"
+#elif defined(__APPLE__)
+#pragma GCC diagnostic warning "-Wunused-result"
+#endif
 
                 for(int x=0; x<nXSize; ++x) {
                     raster->index(x, y, index);

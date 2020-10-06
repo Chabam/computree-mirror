@@ -50,7 +50,7 @@ public:
         INT64         = 1024,   // a signed integer 64 bits (it's a NUMBER_INT too)
         UINT64        = 2048,   // a unsigned integer 64 bits (it's a NUMBER_INT too)
 
-#ifdef ENVIRONMENT64
+#if defined(__x86_64__) || _M_X64 // Definition for GCC, Clang, and Intel's compiler or MSVC++
         SIZE_T        = UINT64,    // a unsigned integer 64 bits (it's a NUMBER_INT too)
 #else
         SIZE_T        = UINT32,    // a unsigned integer 32 bits (it's a NUMBER_INT too)
@@ -167,6 +167,7 @@ public:
     /**
      * @brief Returns true if this category is equivalent to category passed in parameter
      */
+    using ICategoryForModel::isEquivalentTo;
     virtual bool isEquivalentTo(const CT_AbstractCategory* c) const = 0;
 
     /**

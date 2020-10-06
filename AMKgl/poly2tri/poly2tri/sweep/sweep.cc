@@ -702,12 +702,24 @@ void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, 
   Triangle& ot = t->NeighborAcross(p);
   Point& op = *ot.OppositePoint(*t, p);
 
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic ignored "-Waddress"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic ignored "-Wtautological-undefined-compare"
+#endif
   if (&ot == nullptr) {
     // If we want to integrate the fillEdgeEvent do it here
     // With current implementation we should never get here
     //throw new RuntimeException( "[BUG:FIXME] FLIP failed due to missing triangle");
     assert(0);
   }
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic warning "-Waddress"
+#elif defined(__APPLE__)
+#pragma GCC diagnostic ignored "-Wtautological-undefined-compare"
+#endif
 
   if (InScanArea(p, *t->PointCCW(p), *t->PointCW(p), op)) {
     // Lets rotate shared edge one vertex CW
@@ -805,7 +817,7 @@ void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle&
 Sweep::~Sweep() {
 
     // Clean up memory
-    for(int i = 0; i < nodes_.size(); i++) {
+    for(int i = 0; i < static_cast<int>(nodes_.size()); i++) {
         delete nodes_[i];
     }
 

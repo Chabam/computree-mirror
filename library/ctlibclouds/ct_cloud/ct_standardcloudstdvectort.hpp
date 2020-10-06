@@ -71,7 +71,14 @@ void CT_StandardCloudStdVectorT<T>::erase(const size_t &beginIndex, const size_t
         T *dst = data+beginIndex;
         T *src = data+endIndex;
 
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ >= 8)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
         memcpy(dst, src, sizeof(T)*cpySize);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ >= 8)
+#pragma GCC diagnostic pop
+#endif
     }
 
     resize(size() - std::min(sizes, size()));
@@ -98,7 +105,14 @@ void CT_StandardCloudStdVectorT<T>::internalCopyData(const size_t &destIndex, co
     T *dst = data+destIndex;
     T *src = data+srcIndex;
 
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ >= 8)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
     memcpy(dst, src, sizeof(T)*size);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ >= 8)
+#pragma GCC diagnostic pop
+#endif
 }
 
 template<typename T>
@@ -107,7 +121,14 @@ void CT_StandardCloudStdVectorT<T>::copyDataFromTo(T* src, const size_t &destInd
     T *data = &pTAt(0);
     T *dst = data+destIndex;
 
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ >= 8)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
     memcpy(dst, src, sizeof(T)*size);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (__GNUC__ >= 8)
+#pragma GCC diagnostic pop
+#endif
 }
 
 template<typename T>

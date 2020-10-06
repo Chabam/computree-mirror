@@ -128,3 +128,12 @@ void DM_AttributesManagerUpdater::UpdateWithStep(DM_AttributesManager& manager, 
         return true;
     });
 }
+
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#pragma warning( disable : 4506 )
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic ignored "-Wint-in-bool-context"
+#endif

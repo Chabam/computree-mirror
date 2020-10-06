@@ -35,7 +35,13 @@ bool PB_XYBPieceByPiecePrivateExporter::internalCreateFile()
     if(mExporter.mustUseModels())
     {
         for(const CT_Scanner* scanner : mExporter.m_hInScanner.iterateInputs(mExporter.m_handleResultExport)) {
+#if defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic ignored "-Wself-assign"
+#endif
             scanner = scanner;
+#if defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic warning "-Wself-assign"
+#endif
             break;
         }
     }

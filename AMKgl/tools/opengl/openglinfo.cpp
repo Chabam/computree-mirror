@@ -46,7 +46,11 @@ void OpenGlInfo::init()
     if(!m_initialized) {
         m_initialized = true;
 
+#if __clang__
+        glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &m_info.maxStride);
+#else
         glGetIntegerv(GL_MAX_VERTEX_ATTRIB_STRIDE, &m_info.maxStride);
+#endif
 
         // NVIDIA memory
         glGetIntegerv(GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX,
