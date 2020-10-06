@@ -26,18 +26,37 @@ unix {
         OPENCV_LIB_ADD += opencv_world
     }
 
-    for(a, OPENCV_LIB_ADD) {
-        CONFIG(debug, debug|release) {
-            !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
-                USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/lib$${a} was not found"
+    linux {
+        for(a, OPENCV_LIB_ADD) {
+            CONFIG(debug, debug|release) {
+                !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
+                    USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/lib$${a} was not found"
+                } else {
+                    OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}.so
+                }
             } else {
-                OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}.so
+                !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
+                    USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/lib$${a} was not found"
+                } else {
+                    OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}.so
+                }
             }
-        } else {
-            !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
-                USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/lib$${a} was not found"
+        }
+    }
+    darwin {
+        for(a, OPENCV_LIB_ADD) {
+            CONFIG(debug, debug|release) {
+                !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
+                    USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/lib$${a} was not found"
+                } else {
+                    OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}.dylib
+                }
             } else {
-                OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}.so
+                !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
+                    USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/lib$${a} was not found"
+                } else {
+                    OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}.dylib
+                }
             }
         }
     }
@@ -68,13 +87,13 @@ win32-g++ {
             !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
                 USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/lib$${a} was not found"
             } else {
-                OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}$${OPENCV_VERSION}.dll.a
+                OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}.dll.a
             }
         } else {
             !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
                 USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/lib$${a} was not found"
             } else {
-                OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}$${OPENCV_VERSION}.dll.a
+                OPENCV_LIBS_FOUNDED += $$OPENCV_LIBS_PATH/lib$${a}.dll.a
             }
         }
     }

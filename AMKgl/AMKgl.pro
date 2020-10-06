@@ -20,11 +20,23 @@ UI_DIR = ui
 MOC_DIR = moc
 OBJECTS_DIR = obj
 
-# c++14
+# c++17
 greaterThan(QT_MAJOR_VERSION, 4) {
-    CONFIG += c++14
+    CONFIG += c++17
 } else {
-    QMAKE_CXXFLAGS += -std=c++14
+    QMAKE_CXXFLAGS += -std=c++17
+}
+
+linux|mingw {
+    # Silent warning for LibQGLviewer
+    QMAKE_CXXFLAGS += -Wno-deprecated -Wno-deprecated-copy -Wno-deprecated-declarations -Wno-unused -Wmaybe-uninitialized -Wno-c++11-compat
+}
+
+macx {
+    QMAKE_CXXFLAGS += -Wno-deprecated-declarations -Wno-inconsistent-missing-override
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+    # Silent OpenGL warning for MacOS > 10.14
+    DEFINES += GL_SILENCE_DEPRECATION
 }
 
 EIGEN_INC_PATH = "c:/eigen"
@@ -160,7 +172,8 @@ SOURCES +=\
     visitor/applycustomfunctiontoglobalpointsvisitor.cpp \
     visitor/meshobjectsvisitor.cpp \
     renderer/tools/flagspropertymanager.cpp \
-    scene/tools/objectsflagspropertymanager.cpp
+    scene/tools/objectsflagspropertymanager.cpp \
+    scene/permanentsceneelementtype.cpp
 
 HEADERS  += \
     renderer/pointcloud/chunkedpointcloud.h \
@@ -411,7 +424,13 @@ CONFIG(debug, debug|release) {
     LIBS += -lQGLViewer
 }
 
-LIBS += -lopengl32 -lglu32
+win32 {
+    LIBS += -lopengl32 -lglu32
+}
+
+linux|macx {
+    LIBS += -lGL -lGLU -lm
+}
 
 RESOURCES += \
     resource.qrc

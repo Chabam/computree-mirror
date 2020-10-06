@@ -15,32 +15,11 @@ CONFIG(debug, debug|release) {
 EXECUTABLE_DESTDIR = $${CT_PREFIX_INSTALL}/$${CT_DESTDIR_NAME}
 PLUGIN_DESTDIR = $${EXECUTABLE_DESTDIR}/plugins
 
-message(Element(s) will be installed to $${EXECUTABLE_DESTDIR})
+# message(Element(s) will be installed to $${EXECUTABLE_DESTDIR})
 
-contains(QMAKE_TARGET.arch, x86_64) {
-    DEFINES += ENVIRONMENT64
-} else {
-    isEmpty(QMAKE_TARGET.arch) {
-        *-64 {
-            DEFINES += ENVIRONMENT64
-        } else {
-            win32-g++:contains(QMAKE_HOST.arch, x86_64):{
-                DEFINES += ENVIRONMENT64
-            } else {
-                DEFINES += ENVIRONMENT32
-            }
-        }
-    } else {
-        win32-g++:contains(QMAKE_HOST.arch, x86_64):{
-            DEFINES += ENVIRONMENT64
-        } else {
-            DEFINES += ENVIRONMENT32
-        }
-    }
+equals(QT_ARCH, "x86") {
+    # message(32 bit compilation type detected)
 }
 
-contains(DEFINES, ENVIRONMENT64) {
-    message(64 bit compilation type detected)
-} else {
-    message(32 bit compilation type detected)
-}
+equals(QT_ARCH, "x86_64") {
+}    # message(64 bit compilation type detected)

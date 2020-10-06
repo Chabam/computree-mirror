@@ -1,7 +1,7 @@
 GDAL_LIB_ADD = gdal
 GDAL_LIBS_FOUNDED =
 
-unix {
+linux {
     for(a, GDAL_LIB_ADD) {
         CONFIG(debug, debug|release) {
             !exists($$GDAL_LIBS_PATH/lib$${a}*) {
@@ -14,6 +14,24 @@ unix {
                 USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/lib$${a} was not found"
             } else {
                 GDAL_LIBS_FOUNDED += $$GDAL_LIBS_PATH/lib$${a}.so
+            }
+        }
+    }
+}
+
+macx {
+    for(a, GDAL_LIB_ADD) {
+        CONFIG(debug, debug|release) {
+            !exists($$GDAL_LIBS_PATH/lib$${a}*) {
+                USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/lib$${a} was not found"
+            } else {
+                GDAL_LIBS_FOUNDED += $$GDAL_LIBS_PATH/lib$${a}.dylib
+            }
+        } else {
+            !exists($$GDAL_LIBS_PATH/lib$${a}*) {
+                USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/lib$${a} was not found"
+            } else {
+                GDAL_LIBS_FOUNDED += $$GDAL_LIBS_PATH/lib$${a}.dylib
             }
         }
     }

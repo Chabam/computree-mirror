@@ -9,23 +9,11 @@ DEFAULT_EIGEN_INC_PATH = "$$CT_LIB_PREFIX/3rdparty/eigen"
 
 COMPUTREE = ctlibcore
 
-# c++14
+# c++17
 greaterThan(QT_MAJOR_VERSION, 4) {
-    CONFIG += c++14
+    CONFIG += c++17
 } else {
-    QMAKE_CXXFLAGS += -std=c++14
-}
-
-win32-msvc {
-    CONFIG(debug, debug|release) {
-        LIBS += -lQGLViewerd
-    } else {
-        LIBS += -lQGLViewer
-    }
-
-    OTHER_FILES +=
-
-    LIBS += -lopengl32 -lglu32
+    QMAKE_CXXFLAGS += -std=c++17
 }
 
 LIBS += -lAMKgl
@@ -41,6 +29,7 @@ INCLUDEPATH += $$CT_LIB_PREFIX
 #TR_EXCLUDE  += $${CT_PREFIX}/ComputreeCore/*
 
 CONFIG -= plugin
+CONFIG += windows
 
 TARGET = CompuTreeGui
 TEMPLATE = app
@@ -128,9 +117,20 @@ TR_EXCLUDE  += ./muParser/*
 
 RESOURCES += resource/icones.qrc
 
-unix {
+linux {
     # add your own with quoting gyrations to make sure $ORIGIN gets to the command line unexpanded
     QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\'"
+    QMAKE_CXXFLAGS += -Wno-c++11-compat
+}
+
+win32:g++ {
+    QMAKE_CXXFLAGS += -Wno-c++11-compat
+}
+
+macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+    # Silent OpenGL warning for MacOS > 10.14
+    DEFINES += GL_SILENCE_DEPRECATION
 }
 
 ##### AMKGL #####
@@ -147,20 +147,27 @@ INCLUDEPATH += ../amkgl_defines_for_use_with_computree
 LIBS += -L$$AMKGL_LIB_DIR
 LIBS += -L$$QGLVIEWER_DIR
 
-win32-g++ {
+win32 {
     CONFIG(debug, debug|release) {
         LIBS += -lQGLViewerd
     } else {
         LIBS += -lQGLViewer
     }
 
-    OTHER_FILES +=
-
     LIBS += -lopengl32 -lglu32
 }
 
-unix {
+
+linux {
     LIBS += $$QGLVIEWER_DIR/libQGLViewer-qt5.a
+
+    LIBS += -lGL -lGLU -lm
+}
+
+macx {
+    LIBS += $$QGLVIEWER_DIR/libQGLViewer.a
+
+    LIBS += -framework OpenGL
 }
 
 !equals(PWD, $${OUT_PWD}) {

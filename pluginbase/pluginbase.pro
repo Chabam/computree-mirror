@@ -10,6 +10,10 @@ TARGET = plug_base
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
 
+macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+}
+
 HEADERS += $$CT_LIB_PREFIX/ctlibplugin/pluginentryinterface.h\
     pb_pluginentry.h \
     pb_steppluginmanager.h \

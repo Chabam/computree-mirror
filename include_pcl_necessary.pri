@@ -20,7 +20,7 @@ PCL_LIB_ADD += pcl_visualization
 
 PCL_LIBS_FOUNDED =
 
-unix {
+linux {
     QHULL_LIB_ADD =
     QHULL_LIB_ADD += qhull
 
@@ -52,6 +52,43 @@ unix {
                 USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/lib$${a} was not found"
             } else {
                 PCL_LIBS_FOUNDED += $$QHULL_LIBS_PATH/lib$${a}.so
+            }
+        }
+    }
+}
+
+macx {
+    QHULL_LIB_ADD =
+    QHULL_LIB_ADD += qhull
+
+    for(a, PCL_LIB_ADD) {
+        CONFIG(debug, debug|release) {
+            !exists($$PCL_LIBS_PATH/lib$${a}*) {
+                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/lib$${a} was not found"
+            } else {
+                PCL_LIBS_FOUNDED += $$PCL_LIBS_PATH/lib$${a}.dylib
+            }
+        } else {
+            !exists($$PCL_LIBS_PATH/lib$${a}*) {
+                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/lib$${a} was not found"
+            } else {
+                PCL_LIBS_FOUNDED += $$PCL_LIBS_PATH/lib$${a}.dylib
+            }
+        }
+    }
+
+    for(a, QHULL_LIB_ADD) {
+        CONFIG(debug, debug|release) {
+            !exists($$QHULL_LIBS_PATH/lib$${a}*) {
+                USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/lib$${a} was not found"
+            } else {
+                PCL_LIBS_FOUNDED += $$QHULL_LIBS_PATH/lib$${a}.dylib
+            }
+        } else {
+            !exists($$QHULL_LIBS_PATH/lib$${a}*) {
+                USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/lib$${a} was not found"
+            } else {
+                PCL_LIBS_FOUNDED += $$QHULL_LIBS_PATH/lib$${a}.dylib
             }
         }
     }

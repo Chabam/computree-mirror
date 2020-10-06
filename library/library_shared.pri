@@ -21,11 +21,24 @@ DESTDIR = $${EXECUTABLE_DESTDIR}
 TEMPLATE = lib
 CONFIG += plugin
 
-# c++14
+# c++17
 greaterThan(QT_MAJOR_VERSION, 4) {
-    CONFIG += c++14
+    CONFIG += c++17
 } else {
-    QMAKE_CXXFLAGS += -std=c++14
+    QMAKE_CXXFLAGS += -std=c++17
+}
+
+linux {
+    QMAKE_CXXFLAGS += -Wno-c++11-compat
+}
+
+mingw {
+    QMAKE_CXXFLAGS += -Wno-c++11-compat -Wno-deprecated-copy
+}
+
+macx {
+    QMAKE_CXXFLAGS += -Wno-inconsistent-missing-override
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 }
 
 LIBRARY_PWD = $$PWD/$$TARGET
