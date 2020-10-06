@@ -333,7 +333,7 @@ namespace AMKgl {
 
         QVector<QPoint> vec = m_polygon;
 
-        qSort(vec.begin(), vec.end(), customSort);
+        std::sort(vec.begin(), vec.end(), customSort);
 
         foreach (const QPoint &p, vec) {
             PolygonForPicking::ClosestResult r;
@@ -433,7 +433,12 @@ namespace AMKgl {
 
         QPointF intersection;
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
         QLineF::IntersectType type = line1.intersect(line2, &intersection);
+#else
+        QLineF::IntersectType type = line1.intersects(line2, &intersection);
+#endif
+
         if(type == QLineF::BoundedIntersection) {
 
             if(commonPoint.isNull() || (intersection != commonPoint)) {

@@ -37,7 +37,7 @@ void GStepsTreeViewDefault::indexClicked(const QModelIndex &index)
                     int i = 0;
 
                     while((i < s) && !ok) {
-                        QModelIndex child = parent.child(i, 0);
+                        QModelIndex child = parent.model()->index(i, 0, parent);
 
                         if(isExpanded(child))
                         {

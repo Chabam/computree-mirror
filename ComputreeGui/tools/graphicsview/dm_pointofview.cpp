@@ -53,21 +53,6 @@ DM_PointOfView::DM_PointOfView(QString name,
     _q3 = q3;
 }
 
-DM_PointOfView::DM_PointOfView(const DM_PointOfView &pof)
-{
-    _name = pof._name;
-    _cx = pof._cx;
-    _cy = pof._cy;
-    _cz = pof._cz;
-    _px = pof._px;
-    _py = pof._py;
-    _pz = pof._pz;
-    _q0 = pof._q0;
-    _q1 = pof._q1;
-    _q2 = pof._q2;
-    _q3 = pof._q3;
-}
-
 double DM_PointOfView::distanceFromSceneCenter() const
 {
     return (Eigen::Vector3d(cx(), cy(), cz()) - Eigen::Vector3d(px(), py(), pz())).norm();

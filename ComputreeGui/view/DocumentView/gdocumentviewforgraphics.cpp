@@ -500,8 +500,9 @@ void GDocumentViewForGraphics::showOptions()
 
         _graphicsOptionsView->setOptions(opt);
 
-        const QRect screen = QApplication::desktop()->screenGeometry();
-        _graphicsOptionsView->move(screen.center() - _graphicsOptionsView->rect().center());
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect rec = screen->geometry();
+        _graphicsOptionsView->move(rec.center() - _graphicsOptionsView->rect().center());
 
         if(_graphicsOptionsView->exec())
             validateOptions();
@@ -587,8 +588,9 @@ void GDocumentViewForGraphics::showAttributesOptions()
     dialog.setManager(&m_attributesManager);
     dialog.setDocument(this);
 
-    const QRect screen = QApplication::desktop()->screenGeometry();
-    dialog.move(screen.center() - dialog.rect().center());
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect rec = screen->geometry();
+    dialog.move(rec.center() - dialog.rect().center());
 
     dialog.exec();
 }

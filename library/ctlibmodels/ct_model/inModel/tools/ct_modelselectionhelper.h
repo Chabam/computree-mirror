@@ -88,148 +88,147 @@ private:
     /**
      * @brief A CT_InModelGraphNode is a node in a CT_InModelGraph (graph of CT_InAbstractModel).
      */
-    /*class CT_InModelGraphNode
-    {
-    public:
+//    class CT_InModelGraphNode
+//    {
+//    public:
 
-        CT_InModelGraphNode(const CT_InAbstractModel *model) : m_model((CT_InAbstractModel*)model), m_possibility(nullptr) {}
-        ~CT_InModelGraphNode()
-        {
-            qDeleteAll(m_childrensNode.begin(), m_childrensNode.end());
-        }
+//        CT_InModelGraphNode(const CT_InAbstractModel *model) : m_model((CT_InAbstractModel*)model), m_possibility(nullptr) {}
+//        ~CT_InModelGraphNode()
+//        {
+//            qDeleteAll(m_childrensNode.begin(), m_childrensNode.end());
+//        }
 
-        CT_InAbstractModel              *m_model;
-        CT_InStdModelPossibility        *m_possibility;
+//        CT_InAbstractModel              *m_model;
+//        CT_InStdModelPossibility        *m_possibility;
 
-        QList<CT_InModelGraphNode*>     m_childrensNode;
+//        QList<CT_InModelGraphNode*>     m_childrensNode;
 
-        CT_InModelGraphNode* cloneAlone() const {
-            CT_InModelGraphNode* cl = new CT_InModelGraphNode(m_model);
-            cl->m_possibility = m_possibility;
+//        CT_InModelGraphNode* cloneAlone() const {
+//            CT_InModelGraphNode* cl = new CT_InModelGraphNode(m_model);
+//            cl->m_possibility = m_possibility;
 
-            return cl;
-        }
-    };*/
+//            return cl;
+//        }
+//    };
 
     /**
      * @brief A CT_InModelGraph is the structure of CT_InAbstractModel. A developper can test and assign a possibility to a CT_InAbstractModel in the structure. If the
      *        graph is valid (all models has one possibility) the developper can use it to test/select possibilities by default.
      */
-    /*class CT_InModelGraph
-    {
-    public:
-        CT_InModelGraph();
-        ~CT_InModelGraph();
+//    class CT_InModelGraph
+//    {
+//    public:
+//        CT_InModelGraph();
+//        ~CT_InModelGraph();
 
-        /**
-         * @brief (Re)Construct the structure of the graph. All models don't have a possibility when you construct the structure. You must assign it with the method "setPossibilityForModel"
-         * @param rootInModel : the root model to use to construct the structure
-         */
-        //void constructStructure(const CT_InAbstractResultModel *inResultModel, const CT_InStdResultModelPossibility *possibility);
+//        /**
+//         * @brief (Re)Construct the structure of the graph. All models don't have a possibility when you construct the structure. You must assign it with the method "setPossibilityForModel"
+//         * @param rootInModel : the root model to use to construct the structure
+//         */
+//        //void constructStructure(const CT_InAbstractResultModel *inResultModel, const CT_InStdResultModelPossibility *possibility);
 
-        /**
-         * @brief Returns true if the graph is valid, all models has one possibility or no possibility if the model is optionnal.
-         */
-        //bool isValid() const;
+//        /**
+//         * @brief Returns true if the graph is valid, all models has one possibility or no possibility if the model is optionnal.
+//         */
+//        //bool isValid() const;
 
-        /**
-         * @brief Returns true if the possibility can be set for this model. It will test if the out model of the parent possibility in the
-         *        structure is the same parent of the out model of this possibility. It will also test if the possibility is not used by another
-         *        model in the structure (only one model can use this possibility).
-         * @param possibility : possibility to test
-         * @param model : the model to use
-         * @return always true for the root model. false if the parent possibility in the structure is not set or if is not a parent of this possibility.
-         */
-        //bool canSetPossibilityForModel(const CT_InStdModelPossibility *possibility, const CT_InAbstractModel *model) const;
+//        /**
+//         * @brief Returns true if the possibility can be set for this model. It will test if the out model of the parent possibility in the
+//         *        structure is the same parent of the out model of this possibility. It will also test if the possibility is not used by another
+//         *        model in the structure (only one model can use this possibility).
+//         * @param possibility : possibility to test
+//         * @param model : the model to use
+//         * @return always true for the root model. false if the parent possibility in the structure is not set or if is not a parent of this possibility.
+//         */
+//        //bool canSetPossibilityForModel(const CT_InStdModelPossibility *possibility, const CT_InAbstractModel *model) const;
 
-        /**
-         * @brief Set the possibility for this model.
-         * @param possibility : possibility to set
-         * @param model : the model to use
-         * @return Show method "canSetPossibilityForModel" for more information.
-         */
-        //bool setPossibilityForModel(const CT_InStdModelPossibility *possibility, const CT_InAbstractModel *model);
+//        /**
+//         * @brief Set the possibility for this model.
+//         * @param possibility : possibility to set
+//         * @param model : the model to use
+//         * @return Show method "canSetPossibilityForModel" for more information.
+//         */
+//        //bool setPossibilityForModel(const CT_InStdModelPossibility *possibility, const CT_InAbstractModel *model);
 
-        /**
-         * @brief Returns the possibility used for the model.
-         * @param model : model to search
-         * @return possibility founded or nullptr if it was not set or not founded.
-         */
-        //CT_InStdModelPossibility* possibilityForModel(const CT_InAbstractModel *model) const;
+//        /**
+//         * @brief Returns the possibility used for the model.
+//         * @param model : model to search
+//         * @return possibility founded or nullptr if it was not set or not founded.
+//         */
+//        //CT_InStdModelPossibility* possibilityForModel(const CT_InAbstractModel *model) const;
 
-        /**
-         * @brief Returns true if one model in the structure is optionnal.
-         */
-        //bool hasOneModelOptional() const;
+//        /**
+//         * @brief Returns true if one model in the structure is optionnal.
+//         */
+//        //bool hasOneModelOptional() const;
 
-        /**
-         * @brief Select possibilities in the graph
-         */
-        //void select();
+//        /**
+//         * @brief Select possibilities in the graph
+//         */
+//        //void select();
 
-        /**
-         * @brief Unselect all possibilities in the graph
-         */
-        //void clearSelection();
+//        /**
+//         * @brief Unselect all possibilities in the graph
+//         */
+//        //void clearSelection();
 
-        /**
-         * @brief Clone this graph with model and possibilities
-         */
-        //CT_InModelGraph* clone() const;
+//        /**
+//         * @brief Clone this graph with model and possibilities
+//         */
+//        //CT_InModelGraph* clone() const;
 
-        /**
-         * @brief Count and returns the number of possibilities that is not nullptr in the structure
-         */
-        //int howManyPossibilitiesIsNotNullInStructure() const;
+//        /**
+//         * @brief Count and returns the number of possibilities that is not nullptr in the structure
+//         */
+//        //int howManyPossibilitiesIsNotNullInStructure() const;
 
-        //void debugPrint();
+//        //void debugPrint();
 
-    /*private:
-        CT_InModelGraphNode *m_rootNode;
+//    private:
+//        CT_InModelGraphNode *m_rootNode;
 
-        /**
-         * @brief Recursively construct the structure of the graph.
-         */
-        //static void staticRecursiveConstructStructure(const CT_InAbstractModel *inModel, CT_InModelGraphNode *parentNode);
+//        /**
+//         * @brief Recursively construct the structure of the graph.
+//         */
+//        //static void staticRecursiveConstructStructure(const CT_InAbstractModel *inModel, CT_InModelGraphNode *parentNode);
 
-        /**
-         * @brief Returns true if the graph is valid, all models has one possibility.
-         */
-        //static bool staticRecursiveIsValid(const CT_InModelGraphNode *node);
+//        /**
+//         * @brief Returns true if the graph is valid, all models has one possibility.
+//         */
+//        //static bool staticRecursiveIsValid(const CT_InModelGraphNode *node);
 
-        /**
-         * @brief Search a node in the structure that match with the inModel.
-         */
-        //static CT_InModelGraphNode* staticRecursiveSearchNodeOfModel(const CT_InModelGraphNode *node, const CT_InAbstractModel *model);
+//        /**
+//         * @brief Search a node in the structure that match with the inModel.
+//         */
+//        //static CT_InModelGraphNode* staticRecursiveSearchNodeOfModel(const CT_InModelGraphNode *node, const CT_InAbstractModel *model);
 
-        /**
-         * @brief Search a node in the structure that match with the outModel.
-         */
-        //static CT_InModelGraphNode* staticRecursiveSearchNodeOfOutModel(const CT_InModelGraphNode *node, const CT_OutAbstractModel *outModel);
+//        /**
+//         * @brief Search a node in the structure that match with the outModel.
+//         */
+//        //static CT_InModelGraphNode* staticRecursiveSearchNodeOfOutModel(const CT_InModelGraphNode *node, const CT_OutAbstractModel *outModel);
 
-        /**
-         * @brief Recursively select possibility of the node
-         */
-        //static void staticRecursiveSelectPossibility(CT_InModelGraphNode *node, bool select);
+//        /**
+//         * @brief Recursively select possibility of the node
+//         */
+//        //static void staticRecursiveSelectPossibility(CT_InModelGraphNode *node, bool select);
 
-        /**
-         * @brief Recursively clone the structure (model and possibility)
-         */
-        //static void staticRecursiveClone(CT_InModelGraphNode *myNode, CT_InModelGraphNode *cloneNode);
+//        /**
+//         * @brief Recursively clone the structure (model and possibility)
+//         */
+//        //static void staticRecursiveClone(CT_InModelGraphNode *myNode, CT_InModelGraphNode *cloneNode);
 
-        /**
-         * @brief Recursively check if a model is optionnal
-         */
-        //static bool staticRecursiveIsOneModelOptional(CT_InModelGraphNode *node);
+//        /**
+//         * @brief Recursively check if a model is optionnal
+//         */
+//        //static bool staticRecursiveIsOneModelOptional(CT_InModelGraphNode *node);
 
-        /**
-         * @brief Recursively count possibilities that is not nullptr
-         */
-        //static int staticRecursiveCountPossibilityNotnullptr(CT_InModelGraphNode *node);
+//        /**
+//         * @brief Recursively count possibilities that is not nullptr
+//         */
+//        //static int staticRecursiveCountPossibilityNotnullptr(CT_InModelGraphNode *node);
 
-
-        //static void staticRecursiveDebugPrintGraph(CT_InModelGraphNode *node, QString preString = "");
-    //};
+//        //static void staticRecursiveDebugPrintGraph(CT_InModelGraphNode *node, QString preString = "");
+//    };
 
     struct CacheResult {
         bool m_canSelectAllPossibilitiesByDefault;

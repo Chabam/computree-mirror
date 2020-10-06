@@ -114,8 +114,8 @@ private:
     using IteratorInfo = QPair<childrens_iterator, childrens_iterator>;
 
     CT_ResultGroup*             m_result;
-    ParentType*                 m_currentParent;
     ValueT*                     m_currentValue;
+    ParentType*                 m_currentParent;
     QVector<OutModelType*>      m_modelsHierarchy;
     QVector<IteratorInfo>       m_iteratorHierarchy;
     int                         m_currentIndexInHierarchy;

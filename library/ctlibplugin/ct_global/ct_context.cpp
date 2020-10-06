@@ -5,8 +5,8 @@
 CT_Context* CT_Context::UNIQUE_INSTANCE = nullptr;
 
 CT_Context::CT_Context() :
-    m_coreInterface(nullptr),
-    m_guiManager(nullptr)
+    m_guiManager(nullptr),
+    m_coreInterface(nullptr)
 {
 }
 

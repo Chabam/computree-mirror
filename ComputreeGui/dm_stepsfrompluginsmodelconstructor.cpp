@@ -89,14 +89,14 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForLevelA
 
     QStandardItem *item = new QStandardItem(level->displayableName());
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)level), DR_Pointer);
+    item->setData(QVariant::fromValue((void*)level), DR_Pointer);
     item->setData((int)rootLevel ? IT_RootLevel : IT_SubLevel, DR_Type);
     item->setData((int)rootLevel ? IT_RootLevel : IT_SubLevel, DR_SecondaryType);
     l << item;
 
     QStandardItem *colItem = new QStandardItem();
     colItem->setEditable(false);
-    colItem->setData(qVariantFromValue((void*)level), DR_Pointer);
+    colItem->setData(QVariant::fromValue((void*)level), DR_Pointer);
     colItem->setData((int)rootLevel ? IT_RootLevel : IT_SubLevel, DR_Type);
     colItem->setData((int)rootLevel ? IT_RootLevel : IT_SubLevel, DR_SecondaryType);
     l << colItem;
@@ -160,7 +160,7 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForStep(C
     QStandardItem *item = new QStandardItem(step->pluginStaticCastT<>()->getKeyForStep(*step));
     item->setEditable(false);
     item->setToolTip(QObject::tr("<html><p>%1</p><p>%2</p></html>").arg(step->description()).arg(step->detailledDescription()));
-    item->setData(qVariantFromValue((void*)step), DR_Pointer);
+    item->setData(QVariant::fromValue((void*)step), DR_Pointer);
     item->setData((int)stepType, DR_Type);
     item->setData((int)stepType, DR_SecondaryType);
     l << item;
@@ -172,7 +172,7 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForStep(C
 
     item = new QStandardItem(pluginName);
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)step->pluginStaticCastT<>()), DR_Pointer);
+    item->setData(QVariant::fromValue((void*)step->pluginStaticCastT<>()), DR_Pointer);
     item->setData((int)IT_Plugin, DR_Type);
     item->setData((int)stepType, DR_SecondaryType);
     l << item;
@@ -186,7 +186,7 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForStep(C
 
     QStandardItem *item = new QStandardItem(nfs.stepKey);
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)nullptr), DR_Pointer);
+    item->setData(QVariant::fromValue((void*)nullptr), DR_Pointer);
     item->setData((int)IT_StepNF, DR_Type);
     item->setData((int)IT_StepNF, DR_SecondaryType);
     l << item;
@@ -198,7 +198,7 @@ QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForStep(C
 
     item = new QStandardItem(pluginName);
     item->setEditable(false);
-    item->setData(qVariantFromValue((void*)nullptr), DR_Pointer);
+    item->setData(QVariant::fromValue((void*)nullptr), DR_Pointer);
     item->setData((int)IT_Plugin, DR_Type);
     item->setData((int)IT_StepNF, DR_SecondaryType);
     l << item;

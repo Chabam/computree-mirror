@@ -65,14 +65,14 @@ DM_ItemDrawableManagerOptions::DM_ItemDrawableManagerOptions()
     _indexColorList = 0;
 }
 
-DM_ItemDrawableManagerOptions::DM_ItemDrawableManagerOptions(const DM_ItemDrawableManagerOptions &options)
+/*DM_ItemDrawableManagerOptions::DM_ItemDrawableManagerOptions(const DM_ItemDrawableManagerOptions &options)
 {
     _nLevelFiltering = options._nLevelFiltering;
     _filterString = options._filterString;
     _showOnlySelected = options._showOnlySelected;
     _automaticColorList = options._automaticColorList;
     _indexColorList = options._indexColorList;
-}
+}*/
 
 void DM_ItemDrawableManagerOptions::filterString(QString text)
 {

@@ -155,9 +155,8 @@ QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originInde
         indices.append(originIndex);
     } else {
 
-        int lin, col, levz;
+        int lin = 0, col = 0, levz = 0; // Default value to avoid uninitialized warning
         this->indexToGrid(originIndex, col, lin, levz);
-
 
         // Upper plane
         int neighbLevz = levz + n;

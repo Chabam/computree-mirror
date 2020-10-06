@@ -382,7 +382,7 @@ QList<DataT> CT_Profile<DataT>::neighboursValues(const size_t &index, const size
     {
 
         DataT val = valueAtIndex(ii);
-        if ((ii == index)) {
+        if (ii == index) {
             if (centermode == CM_KeepCenter) {
                 if ((val != NA()) || keepNAs) {liste.append(val);}
             } else if (centermode == CM_NAasCenter) {

@@ -52,7 +52,7 @@ public:
 
 private:
     Scene::ObjectType               m_objectType;
-    bool                            m_createInfoCloud;
+    //bool                            m_createInfoCloud;
     functionForVisit                m_visitFunction;
 };
 

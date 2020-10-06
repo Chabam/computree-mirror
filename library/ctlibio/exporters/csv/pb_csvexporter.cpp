@@ -255,7 +255,11 @@ void PB_CSVExporter::constructItemsModels()
                 list.append(model);
         }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
         if((list.size() != mItemsModels.size()) || !list.toSet().subtract(mItemsModels.toSet()).isEmpty())
+#else
+        if((list.size() != mItemsModels.size()) || !QSet(list.begin(), list.end()).subtract(QSet(mItemsModels.begin(), mItemsModels.end())).isEmpty())
+#endif
         {
             delete _configuration;
             _configuration = nullptr;
@@ -275,7 +279,11 @@ void PB_CSVExporter::constructItemsModels()
             list.append(model);
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     if((list.size() != mItemsModels.size()) || !list.toSet().subtract(mItemsModels.toSet()).isEmpty())
+#else
+    if((list.size() != mItemsModels.size()) || !QSet(list.begin(), list.end()).subtract(QSet(mItemsModels.begin(), mItemsModels.end())).isEmpty())
+#endif
     {
         delete _configuration;
         _configuration = nullptr;

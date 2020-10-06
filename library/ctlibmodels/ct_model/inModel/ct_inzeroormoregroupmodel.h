@@ -85,7 +85,7 @@ protected:
     /**
      * @brief Redefined to returns false because all childrens in this group can be in separate parents
      */
-    bool mustAllObligatoryChildrensFoundAtLeastOnePossibilityInTheSameParent() const;
+    bool mustAllObligatoryChildrensFoundAtLeastOnePossibilityInTheSameParent() const override;
 
     /**
      * @brief Redefined to change the minimum and maximum number of possibility to select

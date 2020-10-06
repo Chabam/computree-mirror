@@ -228,7 +228,7 @@ bool GStepViewDefault::recursiveSearchStepByNameAndExpandParent(const QModelInde
 
         for(int i=0; i<n; ++i)
         {
-            if(recursiveSearchStepByNameAndExpandParent(index.child(i, 0), anyName, pluginName, changeDisplayConfigIfNameFoundedIsNotDisplayed))
+            if(recursiveSearchStepByNameAndExpandParent(index.model()->index(i, 0, index), anyName, pluginName, changeDisplayConfigIfNameFoundedIsNotDisplayed))
                 return true;
         }
 
@@ -319,7 +319,7 @@ void GStepViewDefault::resizeColumnsOfTreeView()
 
 void GStepViewDefault::getMaxSizeOfColumnsRecursively(QStandardItem *item, const QString &text, const QFontMetrics &fm, const int &columnIndex, int &maxSize)
 {
-    maxSize = qMax(maxSize, fm.width(text));
+    maxSize = qMax(maxSize, fm.horizontalAdvance(text));
 
     int m = item->rowCount();
 

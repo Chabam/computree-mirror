@@ -16,9 +16,9 @@
 
 GStepManager2::GStepManager2(CDM_StepManager& stepManager,
                              QWidget *parent) :
-    m_stepManager(stepManager),
     QWidget(parent),
-    ui(new Ui::GStepManager2)
+    ui(new Ui::GStepManager2),
+    m_stepManager(stepManager)
 {
     ui->setupUi(this);
 
@@ -295,13 +295,13 @@ CT_AbstractResult* GStepManager2::extractResultFromItem(QTreeWidgetItem *item)
 void GStepManager2::setStepToItem(CT_VirtualAbstractStep *step, QTreeWidgetItem *item)
 {
     item->setData(0, Qt::UserRole, DT_Step);
-    item->setData(0, Qt::UserRole+1, qVariantFromValue((void*)step));
+    item->setData(0, Qt::UserRole+1, QVariant::fromValue((void*)step));
 }
 
 void GStepManager2::setResultToItem(CT_AbstractResult *result, QTreeWidgetItem *item)
 {
     item->setData(0, Qt::UserRole, DT_Result);
-    item->setData(0, Qt::UserRole+1, qVariantFromValue((void*)result));
+    item->setData(0, Qt::UserRole+1, QVariant::fromValue((void*)result));
 }
 
 void GStepManager2::recursiveUpdateTree(QTreeWidgetItem *parent)
@@ -579,9 +579,9 @@ bool GStepManager2::updateResultInTree(QTreeWidgetItem* child)
 
         for(int i=0; i<ui->treeWidget->columnCount(); ++i) {
             if(isClearedFromMemory)
-                child->setBackgroundColor(i, QColor(236, 208, 209));
+                child->setBackground(i, QBrush(QColor(236, 208, 209)));
             else
-                child->setBackgroundColor(i, QColor(220, 220, 220));
+                child->setBackground(i, QBrush(QColor(220, 220, 220)));
         }
 
         return true;
@@ -715,7 +715,7 @@ void GStepManager2::updateStepExecuteTimeInTree(QTreeWidgetItem* child, int exec
 void GStepManager2::updateStepColorsInTree(QTreeWidgetItem* child, bool isManual)
 {
     for(int i=0; i<ui->treeWidget->columnCount(); ++i) {
-        child->setBackgroundColor(i, isManual ? QColor(183, 225, 170) : QColor(170, 186, 225));
+        child->setBackground(i, isManual ? QBrush(QColor(183, 225, 170)) : QBrush(QColor(170, 186, 225)));
     }
 }
 

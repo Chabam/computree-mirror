@@ -37,29 +37,29 @@ public:
     /**
      * @brief Returns true if the value at the specified global index has been set in the total attribute cloud, false otherwise
      */
-    virtual bool hasBeenSet(const size_t& globalIndex) const = 0;
+    virtual bool hasBeenSet(const size_t& globalIndex) const override = 0;
 
     /**
      * @brief Returns the number of values set in the total attribute cloud
      */
-    virtual size_t numberOfSetValues() const = 0;
+    virtual size_t numberOfSetValues() const override = 0;
 
     /**
      * @brief Returns true if at least one value has been set in the total attribute cloud
      */
-    virtual bool hasValues() const = 0;
+    virtual bool hasValues() const override = 0;
 
     /**
      * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
      *        to count how many values has been set.
      */
-    virtual size_t numberOfSetLocalValues() const = 0;
+    virtual size_t numberOfSetLocalValues() const override = 0;
 
     /**
      * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
      *        to returns true if at least one value has been set.
      */
-    virtual bool hasLocalValues() const = 0;
+    virtual bool hasLocalValues() const override = 0;
 };
 
 #endif // CT_ABSTRACTPOINTATTRIBUTESSCALAR_H

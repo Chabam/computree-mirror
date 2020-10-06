@@ -68,9 +68,9 @@ private: \
   * Use this define in your .cpp BUT if you use CT_DEFAULT_IA_INIT in your .cpp it is not necessary to call this define too.
   */
 #if defined(_MSC_VER)
-#define CT_TYPE_IMPL_INIT_MACRO(ThisClassName) CT_StaticMethodInvoker ThisClassName::INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&staticInitNameTypeCorresp);
+#define CT_TYPE_IMPL_INIT_MACRO(ThisClassName) CT_StaticMethodInvoker ThisClassName::INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&ThisClassName::staticInitNameTypeCorresp);
 #else
-#define CT_TYPE_IMPL_INIT_MACRO(ThisClassName) template<> CT_StaticMethodInvoker ThisClassName::INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&staticInitNameTypeCorresp);
+#define CT_TYPE_IMPL_INIT_MACRO(ThisClassName) CT_StaticMethodInvoker ThisClassName::INVOKER_DEFAULT_NT = CT_StaticMethodInvoker(&ThisClassName::staticInitNameTypeCorresp);
 #endif
 
 /**

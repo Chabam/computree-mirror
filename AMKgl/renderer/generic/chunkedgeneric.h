@@ -47,7 +47,7 @@ public:
     /**
      * @brief Returns true if it was up to date
      */
-    bool isUpdated() const;
+    bool isUpdated() const override;
 
     /**
      * @brief Update only VAO
@@ -72,7 +72,7 @@ public:
     /**
      * @brief Returns the number of vertex/colors/infos per object
      */
-    quint8 getNumberOfElementPerObject() const;
+    quint8 getNumberOfElementPerObject() const override;
 
     /**
      * @brief Add a point to this chunk.
@@ -95,11 +95,11 @@ public:
     /**
      * @brief Transformation of objects
      */
-    void transformObjects(const Eigen::Matrix4f& trMatrix, const size_t& from, const size_t& count);
-    void translateObjects(const Eigen::Vector3f& translation, const size_t& from, const size_t& count);
-    void rotateObjects(const Eigen::AngleAxis<float>& rotation, const size_t& from, const size_t& count);
-    void rotateObjects(const Eigen::Quaternion<float>& rotation, const size_t& from, const size_t& count);
-    void scaleObjects(const Eigen::Vector3f& scaling, const size_t& from, const size_t& count);
+    void transformObjects(const Eigen::Matrix4f& trMatrix, const size_t& from, const size_t& count) override;
+    void translateObjects(const Eigen::Vector3f& translation, const size_t& from, const size_t& count) override;
+    void rotateObjects(const Eigen::AngleAxis<float>& rotation, const size_t& from, const size_t& count) override;
+    void rotateObjects(const Eigen::Quaternion<float>& rotation, const size_t& from, const size_t& count) override;
+    void scaleObjects(const Eigen::Vector3f& scaling, const size_t& from, const size_t& count) override;
 
     /**
      * @brief Inherited from IChunk. One object is composed of n points (n is defined in constructor ==> nElementByObject)
@@ -107,12 +107,12 @@ public:
      * @from : index of the first OBJECT to show/hide (not the global index or the local index but the index of
      *               the nth OBJECT in the list of indexes). Must be between [0; (countObjects()-1)] naturally.
      */
-    void setObjectsVisible(const size_t& from, const size_t& count = 1, bool visible = true);
+    void setObjectsVisible(const size_t& from, const size_t& count = 1, bool visible = true) override;
 
     /**
      * @brief Returns true if at least one object is visible
      */
-    bool isAtLeastOneObjectVisible(const size_t &from, const size_t &count) const;
+    bool isAtLeastOneObjectVisible(const size_t &from, const size_t &count) const override;
 
     /**
      * @brief Remove all points
@@ -122,12 +122,12 @@ public:
     /**
      * @brief Inherited from IChunk. Same as "clearPoints" method
      */
-    void clearObjects() { clearPoints(); }
+    void clearObjects() override { clearPoints(); }
 
     /**
      * @brief Remove all objects from this chunk but conserve the size of arrays
      */
-    void resetObjects();
+    void resetObjects() override;
 
     /**
      * @brief Returns the total number of points that was added to this object
@@ -139,7 +139,7 @@ public:
      * @warning NOT same as "countPoints" method
      * @return returns the number of objects. One object is composed of n points (n is defined in constructor ==> nElementByObject)
      */
-    size_t countObjects() const { return countPoints()/getNumberOfElementPerObject(); }
+    size_t countObjects() const override { return countPoints()/getNumberOfElementPerObject(); }
 
     /**
      * @brief Set the maximum number of points to draw when you call the method "fastDraw"
@@ -170,59 +170,59 @@ public:
     /**
      * @brief Draw all points normally (all points are drawn)
      */
-    void draw(DrawInfo &info);
+    void draw(DrawInfo &info) override;
 
     /**
      * @brief Draw all points fast (a reduced number of points are drawn)
      */
-    void fastDraw(DrawInfo &info);
+    void fastDraw(DrawInfo &info) override;
 
     /**
      * @brief Draw text or other objects
      */
-    void postDraw(DrawInfo &info);
+    void postDraw(DrawInfo &info) override;
 
     /**
      * @brief Lock it (mutex)
      */
-    void lock();
+    void lock() override;
     /**
      * @brief Unlock it (mutex)
      */
-    void unlock();
+    void unlock() override;
 
     /**
      * @brief Returns the color cloud, or nullptr if it was not created.
      */
-    Basic::AbstractColorCloud* getObjectColorCloud() const { return getColorCloud(); }
+    Basic::AbstractColorCloud* getObjectColorCloud() const override { return getColorCloud(); }
 
     /**
      * @brief Returns the normal cloud, or nullptr if it was not created.
      */
-    Basic::AbstractNormalCloud* getObjectNormalCloud() const { return getNormalCloud(); }
+    Basic::AbstractNormalCloud* getObjectNormalCloud() const override { return getNormalCloud(); }
 
     /**
      * @brief Returns the normal cloud, or nullptr if it was not created.
      */
-    Basic::AbstractInfoCloud* getObjectInfoCloud() const { return getInfoCloud(); }
+    Basic::AbstractInfoCloud* getObjectInfoCloud() const override { return getInfoCloud(); }
 
     /**
      * @brief Returns the color cloud to use. If it doesn't exist it will be created.
      * @warning If it can't be created the method returns nullptr !
      */
-    Basic::AbstractColorCloud* createOrGetObjectColorCloud() { return getColorCloud(); }
+    Basic::AbstractColorCloud* createOrGetObjectColorCloud() override { return getColorCloud(); }
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
      * @warning If it can't be created the method returns nullptr !
      */
-    Basic::AbstractNormalCloud* createOrGetObjectNormalCloud() { return getNormalCloud(); }
+    Basic::AbstractNormalCloud* createOrGetObjectNormalCloud() override { return getNormalCloud(); }
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
      * @warning If it can't be created the method returns nullptr !
      */
-    Basic::AbstractInfoCloud* createOrGetObjectInfoCloud() { return getInfoCloud(); }
+    Basic::AbstractInfoCloud* createOrGetObjectInfoCloud() override { return getInfoCloud(); }
 
 private:
 
@@ -277,7 +277,7 @@ private:
     /**
      * @brief Update vao, vbo, etc...
      */
-    bool internalUpdate();
+    bool internalUpdate() override;
 
     /**
      * @brief Draw fast but use basic method of opengl
@@ -313,7 +313,7 @@ private:
      * @brief Modify the boolean that inform if we can draw or not
      * @param status : the new status
      */
-    void setUpdated(bool status);
+    void setUpdated(bool status) override;
 
     /**
      * @brief Move values (vertex, info, color, etc...) from specified index to specified index
@@ -321,12 +321,12 @@ private:
      * @param to : local index of the destination
      * @param size: number of values to move
      */
-    void moveObjectsFromTo(const size_t& from, const size_t& to, const size_t& size);
+    void moveObjectsFromTo(const size_t& from, const size_t& to, const size_t& size) override;
 
     /**
      * @brief Set the number of objects in all array
      */
-    void setNumberOfObjects(const size_t& n);
+    void setNumberOfObjects(const size_t& n) override;
     void internalSetNumberOfObjects(const size_t& n, const bool& shrinkToFit);
 
     /**
@@ -372,7 +372,7 @@ private:
     /**
      * @brief Modify the update status of the context
      */
-    void setContextUpdated(GenericRendererContext* context, bool status);
+    void setContextUpdated(GenericRendererContext* context, bool status) override;
 };
 
 #endif // CHUNKEDGENERIC_H

@@ -74,7 +74,6 @@ bool CT_DelaunayOutline::contains(double x, double y)
     CT_DelaunayVertex* vt1;
     CT_DelaunayVertex* vt2;
     int nbInter = 0;
-    int nbInterVertices = 0;
 
     // if the point (x,y) is a vertex, it's contained in the polygon
     for (int i = 0 ; i < _vertices.size() ; i++)
@@ -92,7 +91,6 @@ bool CT_DelaunayOutline::contains(double x, double y)
 
         ok = true;
         nbInter = 0;
-        nbInterVertices = 0;
 
         for (int i = 0; i < (_vertices.size() - 1) ; i++)
         {

@@ -23,43 +23,43 @@ public:
     /**
      * @brief Return the title of the action (added to the view at the side of the icon)
      */
-    QString title() const;
+    QString title() const override;
 
     /**
      * @brief Return the description of the action
      */
-    QString description() const;
+    QString description() const override;
 
     /**
      * @brief Return the icon of the action
      */
-    QIcon icon() const;
+    QIcon icon() const override;
 
     /**
      * @brief Return the type of action
      */
-    QString type() const;
+    QString type() const override;
 
     /**
      * @brief called when a mouse press event occurs on the view
      *
      *        Return true if you do not want the event to be propagated.
      */
-    bool mousePressEvent(QMouseEvent *e);
+    bool mousePressEvent(QMouseEvent *e) override;
 
     /**
      * @brief called when a mouse move event occurs on the view
      *
      *        Return true if you do not want the event to be propagated.
      */
-    bool mouseMoveEvent(QMouseEvent *e);
+    bool mouseMoveEvent(QMouseEvent *e) override;
 
     /**
      * @brief called when a mouse release event occurs on the view
      *
      *        Return true if you do not want the event to be propagated.
      */
-    bool mouseReleaseEvent(QMouseEvent *e);
+    bool mouseReleaseEvent(QMouseEvent *e) override;
 
     /**
      * @brief This method is called when the action is active and when the signal "drawing3DChanged" of
@@ -69,13 +69,13 @@ public:
      *
      * @warning Elements drawn by an action is not exportable or selectable.
      */
-    void draw(GraphicsViewInterface &view, PainterInterface &painter);
+    void draw(GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief This method is called (always after draw(...)) when the action is active and when the graphics
      *        view is updated. You can overwrite them if you want to draw some 2D element like text or polygons, etc...
      */
-    void drawOverlay(GraphicsViewInterface &view, QPainter &painter);
+    void drawOverlay(GraphicsViewInterface &view, QPainter &painter) override;
 
     CT_ACTION_DECL_COPY(GraphicsViewDebugMode)
 

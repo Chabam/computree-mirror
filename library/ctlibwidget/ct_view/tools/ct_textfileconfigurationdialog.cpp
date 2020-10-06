@@ -424,10 +424,9 @@ void CT_TextFileConfigurationDialog::cb_showCols_clicked()
 
 void CT_TextFileConfigurationDialog::sb_tabSize_valueChanged(int arg1)
 {
-    ui->fileExtract->setTabStopWidth(arg1);
+    ui->fileExtract->setTabStopDistance(arg1);
     nbLines_valueChanged(ui->nbLines->value());
 }
-
 
 void CT_TextFileConfigurationDialog::skipLines_valueChanged(int arg1)
 {

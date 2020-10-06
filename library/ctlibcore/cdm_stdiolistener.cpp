@@ -64,7 +64,7 @@ void CDM_StdIOListener::writeStdout(const QString &s)
 
     QString sR = s + "\r\n";
 
-    fprintf(stderr, sR.toLatin1().constData());
+    fprintf(stderr, "%s", sR.toLatin1().constData());
 
     _notifier->setEnabled(true);
 

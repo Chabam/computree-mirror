@@ -203,7 +203,7 @@ void GPlyReadConfiguration::showContextMenu(const QPoint &point)
             QMenu menu;
 
             QAction* action = menu.addAction(tr("Nouveau"), this, SLOT(addNewObject()));
-            action->setData(qVariantFromValue(static_cast<void*>(item)));
+            action->setData(QVariant::fromValue(static_cast<void*>(item)));
 
             menu.exec(ui->treeWidget->mapToGlobal(point));
         } else if((type == COLOR_OBJECT_DATA)
@@ -212,7 +212,7 @@ void GPlyReadConfiguration::showContextMenu(const QPoint &point)
             QMenu menu;
 
             QAction* action = menu.addAction(tr("Supprimer"), this, SLOT(deleteObject()));
-            action->setData(qVariantFromValue(static_cast<void*>(item)));
+            action->setData(QVariant::fromValue(static_cast<void*>(item)));
 
             menu.exec(ui->treeWidget->mapToGlobal(point));
         }

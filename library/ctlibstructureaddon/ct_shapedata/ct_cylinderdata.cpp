@@ -108,7 +108,7 @@ CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloud(const
     CT_LineData* lineData = CT_LineData::staticCreateLineDataFromPointCloud(pointCloudIndex);
 
     CT_CylinderData* data = CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDirection(pointCloudIndex, pointCloudBarycenter, *lineData);
-    delete lineData;
+    delete[] lineData;
 
     return data;
 }
@@ -214,7 +214,7 @@ CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDir
                                                         direction.getRMSE(),
                                                         circleData->getError());
 
-    delete circleData;
+    delete[] circleData;
 
     return cylinderData;
 }

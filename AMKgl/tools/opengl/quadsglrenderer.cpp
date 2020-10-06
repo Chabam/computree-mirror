@@ -32,7 +32,7 @@ void QuadsGLRenderer::render()
 {
     const size_t& size = m_values.size();
 
-    for(int i=0; i<size; ++i)
+    for(int i=0; i<static_cast<int>(size); ++i)
         glVertex3fv(&m_values[i][0]);
 }
 

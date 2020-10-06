@@ -477,9 +477,10 @@ CT_AbstractItemAttribute* CT_Reader_GDAL::createAttributeWithGoodType(OGRFeature
 
     case OFTReal:
         return new CT_StdItemAttributeT<double>(CT_AbstractCategory::DATA_VALUE, ((poFeature != nullptr) ? poFeature->GetFieldAsDouble(iField) : 0));
-    }
 
-    return new CT_StdItemAttributeT<QString>(CT_AbstractCategory::DATA_VALUE, QString((poFeature != nullptr) ? poFeature->GetFieldAsString(iField) : QString()));
+    default:
+        return new CT_StdItemAttributeT<QString>(CT_AbstractCategory::DATA_VALUE, QString((poFeature != nullptr) ? poFeature->GetFieldAsString(iField) : QString()));
+    }
 }
 
 bool CT_Reader_GDAL::canBeOpened(const QString &filepath) const

@@ -82,8 +82,8 @@ QList<CT_MenuLevel *> CT_MenuLevel::levels() const
         return l1->displayableName().toLower() < l2->displayableName().toLower();
     };
 
-    qSort(levelsPredefinedSorted.begin(), levelsPredefinedSorted.end(), sortLevelsByDisplayableName);
-    qSort(levelsCustomSorted.begin(), levelsCustomSorted.end(), sortLevelsByDisplayableName);
+    std::sort(levelsPredefinedSorted.begin(), levelsPredefinedSorted.end(), sortLevelsByDisplayableName);
+    std::sort(levelsCustomSorted.begin(), levelsCustomSorted.end(), sortLevelsByDisplayableName);
 
     l.append(levelsPredefinedSorted);
     l.append(levelsCustomSorted);

@@ -252,7 +252,7 @@ QList<QStandardItem *> GItemDrawableModelManager::createItemsForItemModel(const 
             mItem->setEditable(false);
             mItem->setCheckable(true);
             mItem->setCheckState(model->isVisibleInDocument(view) ? Qt::Checked : Qt::Unchecked);
-            mItem->setData(qVariantFromValue((void*)view));
+            mItem->setData(QVariant::fromValue((void*)view));
             retList.append(mItem);
         }
     }

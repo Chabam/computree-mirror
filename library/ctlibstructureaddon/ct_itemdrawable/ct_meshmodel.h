@@ -54,72 +54,72 @@ public:
     /**
      * @brief Draw only faces
      */
-    void drawFaces(GraphicsViewInterface &view, PainterInterface &painter);
+    void drawFaces(GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief Begin draw multiple faces
      */
-    void beginDrawMultipleFace(GraphicsViewInterface &view, PainterInterface &painter);
+    void beginDrawMultipleFace(GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief Draw only face at index 'index'
      */
-    void drawFaceAt(const size_t &index, GraphicsViewInterface &view, PainterInterface &painter);
+    void drawFaceAt(const size_t &index, GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief Finish draw multiple faces
      */
-    void endDrawMultipleFace(GraphicsViewInterface &view, PainterInterface &painter);
+    void endDrawMultipleFace(GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief Draw only edges
      */
-    void drawEdges(GraphicsViewInterface &view, PainterInterface &painter);
+    void drawEdges(GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief Begin draw multiple edges
      */
-    void beginDrawMultipleEdge(GraphicsViewInterface &view, PainterInterface &painter);
+    void beginDrawMultipleEdge(GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief Draw only edge at index 'index'
      */
-    void drawEdgeAt(const size_t &index, GraphicsViewInterface &view, PainterInterface &painter);
+    void drawEdgeAt(const size_t &index, GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief Finish draw multiple edges
      */
-    void endDrawMultipleEdge(GraphicsViewInterface &view, PainterInterface &painter);
+    void endDrawMultipleEdge(GraphicsViewInterface &view, PainterInterface &painter) override;
 
     /**
      * @brief Returns the point cloud index
      */
-    const CT_AbstractPointCloudIndex* pointCloudIndex() const;
+    const CT_AbstractPointCloudIndex* pointCloudIndex() const override;
 
     /**
      * @brief Returns the face cloud index
      */
-    const CT_AbstractFaceCloudIndex* faceCloudIndex() const;
+    const CT_AbstractFaceCloudIndex* faceCloudIndex() const override;
 
     /**
      * @brief Returns the edge cloud index
      */
-    const CT_AbstractEdgeCloudIndex* edgeCloudIndex() const;
+    const CT_AbstractEdgeCloudIndex* edgeCloudIndex() const override;
 
     /**
      * @brief Returns the point cloud index registered
      */
-    CT_PCIR pointCloudIndexRegistered() const;
+    CT_PCIR pointCloudIndexRegistered() const override;
 
     /**
      * @brief Returns the face cloud index registered
      */
-    CT_FCIR faceCloudIndexRegistered() const;
+    CT_FCIR faceCloudIndexRegistered() const override;
 
     /**
      * @brief Returns the edge cloud index registered
      */
-    CT_ECIR edgeCloudIndexRegistered() const;
+    CT_ECIR edgeCloudIndexRegistered() const override;
 
     CT_ITEM_COPY_IMP(CT_MeshModel)
 

@@ -8,10 +8,10 @@ CT_AbstractItem::CT_AbstractItem()
     m_model = nullptr;
 }
 
-CT_AbstractItem::CT_AbstractItem(const CT_AbstractItem& other) :
-    m_result(other.m_result),
-    m_model(other.m_model)
+CT_AbstractItem::CT_AbstractItem(const CT_AbstractItem& other) : QObject(nullptr)
 {
+    m_result = other.m_result;
+    m_model = other.m_model;
 }
 
 CT_AbstractItem::~CT_AbstractItem()

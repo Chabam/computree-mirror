@@ -28,8 +28,8 @@
 #include "ct_boxdata.h"
 
 CT_BoxData::CT_BoxData() : SuperClass(),
-    _height(0),
     _width(0),
+    _height(0),
     _depth(0)
 {
 }
@@ -41,8 +41,8 @@ CT_BoxData::CT_BoxData(const Eigen::Vector3d& center,
                        double width,
                        double depth) : SuperClass(center, direction),
     _widthDirection(widthDirection),
-    _height(height),
     _width(width),
+    _height(height),
     _depth(depth)
 {
 }

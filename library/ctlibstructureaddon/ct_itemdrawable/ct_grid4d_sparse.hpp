@@ -49,6 +49,8 @@ CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(double wmin,
                                                                             resz,
                                                                             na)
 {
+    Q_UNUSED(initValue);
+
     const int nDims = 4;
     int ncells[nDims];
     ncells[0] = _dimw;
@@ -86,6 +88,8 @@ CT_Grid4D_Sparse<DataT>::CT_Grid4D_Sparse(double wmin,
                                                                             resz,
                                                                             na)
 {
+    Q_UNUSED(initValue);
+
     const int nDims = 4;
     int ncells[nDims];
     ncells[0] = _dimw;

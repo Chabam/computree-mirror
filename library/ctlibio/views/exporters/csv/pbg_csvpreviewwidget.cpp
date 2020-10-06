@@ -210,7 +210,7 @@ void PBG_CSVPreviewWidget::createColumn(const CT_OutAbstractSingularItemModel *s
     QStandardItem *item = new QStandardItem();
 
     if(preview)
-        item->setData(QColor(Qt::gray), Qt::BackgroundColorRole);
+        item->setData(QColor(Qt::gray), Qt::BackgroundRole);
 
     _model.insertColumn(columnIndex, QList<QStandardItem*>() << item);
 
@@ -220,7 +220,7 @@ void PBG_CSVPreviewWidget::createColumn(const CT_OutAbstractSingularItemModel *s
     item->setData(mItemAttributesModelsByItemModel[sItem].indexOf(ia), Qt::UserRole+1);
 
     if(preview)
-        item->setData(QColor(Qt::gray), Qt::BackgroundColorRole);
+        item->setData(QColor(Qt::gray), Qt::BackgroundRole);
 
     _model.setHorizontalHeaderItem(columnIndex, item);
 

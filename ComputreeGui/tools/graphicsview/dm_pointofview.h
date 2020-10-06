@@ -39,7 +39,7 @@ public:
                    double cx, double cy, double cz,
                    double px, double py, double pz,
                    double q0, double q1, double q2, double q3);
-    DM_PointOfView(const DM_PointOfView &pof);
+    DM_PointOfView(const DM_PointOfView &) = default;
 
     inline QString name() const { return _name; }
     inline double cx() const { return _cx; }

@@ -133,11 +133,6 @@ public:
             return *this;
         }
 
-    private:
-        ItemT*                              m_currentValue;
-        IChildrensIteratorQtStylePtr        m_iterator;
-
-
         template<typename ItemY>
         friend class ChildrensCollectionT;
 
@@ -145,6 +140,10 @@ public:
             if((m_iterator != nullptr) && m_iterator->hasNext())
                 m_currentValue = static_cast<ItemT*>(m_iterator->next());
         }
+
+    private:
+        IChildrensIteratorQtStylePtr        m_iterator;
+        ItemT*                              m_currentValue;
     };
 
     /**

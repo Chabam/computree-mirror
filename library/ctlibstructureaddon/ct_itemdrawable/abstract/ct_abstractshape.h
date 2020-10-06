@@ -68,12 +68,11 @@ public:
      *          - Document list is not copied
      */
     CT_AbstractShape(const CT_AbstractShape& other);
-    ~CT_AbstractShape() override;
 
-    void setCenterX(double x);
-    void setCenterY(double y);
-    void setCenterZ(double z);
-    void setCenterCoordinate(const Eigen::Vector3d& center);
+    void setCenterX(double x) override;
+    void setCenterY(double y) override;
+    void setCenterZ(double z) override;
+    void setCenterCoordinate(const Eigen::Vector3d& center) override;
 
     const CT_ShapeData* getPointerData() const;
     const CT_ShapeData& getData() const;

@@ -10,11 +10,12 @@ CT_InStdModelPossibility::CT_InStdModelPossibility()
     m_autoDeleteOutModel = false;
 }
 
-CT_InStdModelPossibility::CT_InStdModelPossibility(const CT_InStdModelPossibility& other) :
-    m_outModel(other.m_outModel),
-    m_selectionGroup(other.m_selectionGroup),
-    m_autoDeleteOutModel(false)
+CT_InStdModelPossibility::CT_InStdModelPossibility(const CT_InStdModelPossibility& other) : QObject( nullptr )
 {
+    m_outModel = other.m_outModel;
+    m_selectionGroup = other.m_selectionGroup;
+    m_autoDeleteOutModel = false;
+
     setSelected(other.isSelected());
 }
 

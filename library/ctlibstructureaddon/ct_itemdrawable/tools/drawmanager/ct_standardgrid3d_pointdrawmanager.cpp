@@ -18,7 +18,7 @@ void CT_StandardGrid3D_PointDrawManager::draw(GraphicsViewInterface &view, Paint
     double demiRes = item.resolution() / 2.0;
 
     double xmin, ymin, zmin, xmax, ymax, zmax;
-    int xx, yy, zz;
+    int xx = 0, yy = 0, zz = 0; // Default value to avoid uninitialized warning
 
     // For each voxel of the grid
     QList<size_t> indices;

@@ -157,12 +157,12 @@ CT_AbstractConfigurableWidget *CTG_ConfigurableElementsSelector::configurableWid
 
 void CTG_ConfigurableElementsSelector::setConfigurableElementToItem(CT_AbstractConfigurableElement *ce, QListWidgetItem *item) const
 {
-    item->setData(Qt::UserRole, qVariantFromValue((void*)ce));
+    item->setData(Qt::UserRole, QVariant::fromValue((void*)ce));
 }
 
 void CTG_ConfigurableElementsSelector::setConfigurableWidgetToItem(CT_AbstractConfigurableWidget *cw, QListWidgetItem *item) const
 {
-    item->setData(Qt::UserRole+2, qVariantFromValue((void*)cw));
+    item->setData(Qt::UserRole+2, QVariant::fromValue((void*)cw));
 
     if(cw != nullptr)
         cw->setDisabled(readOnly());

@@ -4,7 +4,7 @@
 #include "scene/permanentscene.h"
 #include "includeitem.h"
 
-PermanentItemSceneRemover::PermanentItemSceneRemover(PermanentItemScene &scene) : m_scene(scene), QObject()
+PermanentItemSceneRemover::PermanentItemSceneRemover(PermanentItemScene &scene) : QObject(), m_scene(scene)
 {
 }
 

@@ -25,9 +25,9 @@ Eigen::Matrix4d AffineInverse(const Eigen::Matrix4d& m)
 }
 
 PolygonObjectsOfItemPicker::PolygonObjectsOfItemPicker(const QVector<Plane> &polygonPlanes,
-                                           const QVector<TrianglePlane> &triangles) : m_polygonPlanes(polygonPlanes),
-                                                                                      m_triangles(triangles),
-                                                                                      ObjectsOfItemPicker()
+                                           const QVector<TrianglePlane> &triangles) : ObjectsOfItemPicker(),
+                                                                                      m_polygonPlanes(polygonPlanes),
+                                                                                      m_triangles(triangles)
 {
     m_pointAccessor = AMKglEA->getGlobalPointCloudManager();
     m_hasEnoughTriangle = m_triangles.size() > 0;
@@ -839,7 +839,7 @@ bool PolygonObjectsOfItemPicker::checkEllipse(const double &cx, const double &cy
         }
     }
 
-    if(!filled && (nInside != (nPlanes+1))) {
+    if(!filled && (nInside != static_cast<int>(nPlanes+1))) {
         if(checkPoint(cx, cy, cz)) {
             return true;
         }

@@ -245,8 +245,8 @@ public:
 
 private:
     ComputingModes                                  m_mode;
-    bool                                            m_drawMultipleLine;
-    bool                                            m_drawMultipleTriangle;
+    //bool                                            m_drawMultipleLine;
+    //bool                                            m_drawMultipleTriangle;
     size_t                                          m_nPoints;
     size_t                                          m_nEdges;
     size_t                                          m_nFaces;

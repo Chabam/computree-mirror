@@ -53,7 +53,7 @@ public:
     const DM_GraphicsViewOptions& getOptions();
 
 protected:
-    void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e) override;
 
 private:
     Ui::GGraphicsViewOptions    *ui;

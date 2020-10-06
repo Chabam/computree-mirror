@@ -42,10 +42,10 @@
 GColorGradientView::GColorGradientView(QWidget *parent)
    :QWidget(parent),
    arrowMoving(false),
+   arrowsVisible(true),
    backgroundVerSpace(5),
    backgroundHorSpace(5),
-   background(nullptr),
-   arrowsVisible(true)
+   background(nullptr)
 {
    qRegisterMetaType<GradientArrow>("GradientArrow");
    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

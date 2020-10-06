@@ -46,7 +46,7 @@ public:
     CT_Polyline2DData(const QVector<Eigen::Vector2d>& vertices);
     CT_Polyline2DData(const CT_Polyline2DData& other) = default;
 
-    void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const;
+    void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
 
     inline const QVector<Eigen::Vector2d>& getVertices() const {return _vertices;}
     inline int getVerticesNumber() {return _vertices.size();}

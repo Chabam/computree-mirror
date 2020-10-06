@@ -44,11 +44,6 @@ CT_AbstractShape::CT_AbstractShape(const CT_AbstractShape& other) : SuperClass(o
 {
 }
 
-CT_AbstractShape::~CT_AbstractShape()
-{
-    delete _data;
-}
-
 void CT_AbstractShape::setCenterX(double x)
 {
     _data->setCenterX(x);

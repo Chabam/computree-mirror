@@ -103,7 +103,7 @@ size_t CT_CloudIndexStdListT<T>::indexOf(const size_t &index) const
 
         first = std::lower_bound(first, last, index);
 
-        if(first!=last && !(index<(*first)))
+        if(first!=last && !(static_cast<int>(index)<(*first)))
            return *first;
     }
     else
@@ -126,7 +126,7 @@ size_t CT_CloudIndexStdListT<T>::lowerBound(const size_t &value) const
     if(this->sortType() == CT_AbstractCloudIndex::SortedInAscendingOrder)
         it = std::lower_bound(m_collection->begin(), m_collection->end(), value);
     else
-        it = std::find_if(m_collection->begin(), m_collection->end(), std::bind2nd(std::greater_equal<ct_index_type>(), ct_index_type(value)));
+        it = std::find_if(m_collection->begin(), m_collection->end(), std::bind(std::greater_equal<ct_index_type>(), std::placeholders::_1, ct_index_type(value)));
 
     return size() - std::distance(it, itEnd);
 }
@@ -140,7 +140,7 @@ size_t CT_CloudIndexStdListT<T>::upperBound(const size_t &value) const
     if(this->sortType() == CT_AbstractCloudIndex::SortedInAscendingOrder)
         it = std::upper_bound(m_collection->begin(), m_collection->end(), value);
     else
-        it = std::find_if(m_collection->begin(), m_collection->end(), std::bind2nd(std::greater<ct_index_type>(), ct_index_type(value)));
+        it = std::find_if(m_collection->begin(), m_collection->end(), std::bind(std::greater<ct_index_type>(), std::placeholders::_1, ct_index_type(value)));
 
     return size() - std::distance(it, itEnd);
 }
@@ -164,7 +164,7 @@ void CT_CloudIndexStdListT<T>::removeIndex(const size_t &index)
 
         first = std::lower_bound(first, last, index);
 
-        if(first!=last && !(index<(*first)))
+        if(first!=last && !(static_cast<int>(index)<(*first)))
             m_collection->erase(first);
     }
     else

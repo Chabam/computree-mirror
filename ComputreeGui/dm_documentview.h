@@ -47,6 +47,7 @@ public:
     virtual void addActionOptions(ActionOptionsInterface *options) = 0;
     virtual void removeActionOptions(ActionOptionsInterface *options) = 0;
 
+    using DM_Document::isVisible;
     virtual bool isVisible() const = 0;
 };
 

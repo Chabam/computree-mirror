@@ -13,8 +13,8 @@ public:
 
     typedef quint32 COUNT_TYPE; // max of 4294967296 elements !
 
-    ObjectsDispatchInformation() : m_count(0), DispatchInformation() {}
-    ObjectsDispatchInformation(const BEGIN_TYPE& begin) : m_count(0), DispatchInformation(begin) {}
+    ObjectsDispatchInformation() : DispatchInformation(), m_count(0) {}
+    ObjectsDispatchInformation(const BEGIN_TYPE& begin) : DispatchInformation(begin), m_count(0) {}
 
     void addObjects(const size_t& count) {
         m_count += (COUNT_TYPE)count;

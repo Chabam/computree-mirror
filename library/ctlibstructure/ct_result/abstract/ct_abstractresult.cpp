@@ -36,12 +36,12 @@ CT_AbstractResult::CT_AbstractResult() :
     m_resultTool.m_pointer = this;
 }
 
-CT_AbstractResult::CT_AbstractResult(const CT_AbstractResult& other) :
-    m_parentStep(nullptr),
-    m_displayableName(other.m_displayableName),
-    m_numberOfItemsVisible(0),
-    m_clearFromMemoryProgressValue(100)
+CT_AbstractResult::CT_AbstractResult(const CT_AbstractResult& other) : PrototypeModelInterfaceInheritTool<CT_AbstractItem, IResultForModel>(other)
 {
+    m_parentStep = nullptr;
+    m_displayableName = other.m_displayableName;
+    m_numberOfItemsVisible = 0;
+    m_clearFromMemoryProgressValue = 100;
     m_mutexBusy = new QMutex(QMutex::Recursive);
     m_resultTool.m_pointer = this;
 }

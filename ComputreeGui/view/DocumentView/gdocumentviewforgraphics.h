@@ -128,6 +128,7 @@ public:
     /**
      * @brief Returns the visibility of the item in the document.
      */
+    using GDocumentView::isVisible;
     bool isVisible(const CT_AbstractItemDrawable *item) const;
 
     /**

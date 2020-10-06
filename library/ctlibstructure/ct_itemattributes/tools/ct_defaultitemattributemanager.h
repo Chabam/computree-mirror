@@ -71,14 +71,24 @@ private: \
  * @brief Call CT_DEFAULT_IA_INIT in the top of your source file (.cpp) and pass the name of your singular item class
  *        between parenthesys.
  *
- *        In case of your class is templated use the macro "CT_DEFAULT_IA_INIT_TEMPLATED_VALUES"
- *        In case of your class is templated and use an OpenCV Mat type use the macro "CT_DEFAULT_IA_INIT_TEMPLATED_OPENCV"
- *
  * @example : CT_DEFAULT_IA_INIT(CT_Cylinder)
  */
 #define CT_DEFAULT_IA_INIT(ClassNameSI) \
     const CT_StaticMethodInvoker ClassNameSI::INVOKER_DEFAULT_IA = CT_StaticMethodInvoker(&ClassNameSI::staticInitDefaultItemAttributes); \
     CT_TYPE_IMPL_INIT_MACRO(ClassNameSI)
+
+/**
+ * @brief Call CT_DEFAULT_IA_INIT_TEMPLATED in the top of your source file (.cpp) and pass the name of your singular item class
+ *        between parenthesys.
+ *
+ *        In case of your class is templated use the macro "CT_DEFAULT_IA_INIT_TEMPLATED_VALUES"
+ *        In case of your class is templated and use an OpenCV Mat type use the macro "CT_DEFAULT_IA_INIT_TEMPLATED_OPENCV"
+ *
+ * @example : CT_DEFAULT_IA_INIT(CT_Cylinder)
+ */
+#define CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI) \
+    template<> const CT_StaticMethodInvoker ClassNameSI::INVOKER_DEFAULT_IA = CT_StaticMethodInvoker(&ClassNameSI::staticInitDefaultItemAttributes); \
+    template<> CT_TYPE_IMPL_INIT_MACRO(ClassNameSI)
 
 /**
  * @brief Call CT_DEFAULT_IA_INIT_TEMPLATED_VALUES in the top of your source file (.cpp) and pass the name of your singular
@@ -89,32 +99,19 @@ private: \
  * @example : CT_DEFAULT_IA_INIT_TEMPLATED_VALUES(CT_Grid)
  */
 #define CT_DEFAULT_IA_INIT_TEMPLATED_VALUES(ClassNameSI) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<bool>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<float>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<double>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<long>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<unsigned long>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<qint8>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<quint8>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<qint16>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<quint16>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<qint32>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<quint32>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<qint64>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<quint64>)
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<bool>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<float>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<double>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<long>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<unsigned long>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<qint8>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<quint8>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<qint16>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<quint16>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<qint32>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<quint32>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<qint64>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<quint64>)
 
 /**
  * @brief Call CT_DEFAULT_IA_INIT_TEMPLATED_VALUES in the top of your source file (.cpp) and pass the name of your singular
@@ -125,22 +122,14 @@ private: \
  * @example : CT_DEFAULT_IA_INIT_TEMPLATED_OPENCV(CT_Grid)
  */
 #define CT_DEFAULT_IA_INIT_TEMPLATED_OPENCV(ClassNameSI) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<bool>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<float>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<double>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<qint8>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<quint8>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<qint16>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<quint16>) \
-    template<> \
-    CT_DEFAULT_IA_INIT(ClassNameSI<qint32>)
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<bool>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<float>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<double>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<qint8>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<quint8>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<qint16>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<quint16>) \
+    CT_DEFAULT_IA_INIT_TEMPLATED(ClassNameSI<qint32>)
 
 /**
  * @brief A class tools used by the CT_Context to register all default item attribute defined

@@ -310,7 +310,7 @@ double CT_CloudMetrics::computePercentile(const std::vector<double> &array, cons
 
     int ip2 = ip1 + 1;
 
-    if(ip2 == arraySize)
+    if(ip2 == static_cast<int>(arraySize))
         return array[ip1];
 
     if(f == 0)
@@ -333,7 +333,7 @@ double CT_CloudMetrics::computeMode(const std::vector<double> &array, const size
     std::vector<double> classes(numberOfClasses + 1);
     classes[0] = array[0];
 
-    for(size_t i=1; i < (numberOfClasses + 1); ++i)
+    for(size_t i=1; i < static_cast<size_t>((numberOfClasses + 1)); ++i)
     {
         classes[i] = classes[i-1] + step;
     }
@@ -346,7 +346,7 @@ double CT_CloudMetrics::computeMode(const std::vector<double> &array, const size
     {
         // if there was rounding problem we can have j > numberOfClasses
         // or if step == 0
-        while((array[i] >= classes[j]) && (j < numberOfClasses))
+        while((array[i] >= classes[j]) && (j < static_cast<size_t>(numberOfClasses)))
         {
             ++j;
         }
@@ -357,7 +357,7 @@ double CT_CloudMetrics::computeMode(const std::vector<double> &array, const size
     size_t maxOccurence = res[0];
     size_t maxOccurenceIndex = 0;
 
-    for(size_t i = 1; i < numberOfClasses; ++i)
+    for(size_t i = 1; i < static_cast<size_t>(numberOfClasses); ++i)
     {
         if(res[i] > maxOccurence)
         {

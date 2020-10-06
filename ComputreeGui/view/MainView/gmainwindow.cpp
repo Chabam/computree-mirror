@@ -896,14 +896,16 @@ void GMainWindow::computeStepChooserDialogDefaults(QPoint &defaultPos, QSize &de
         defaultPos = ui->dockWidgetStepManager->pos();
         defaultPos.setY(defaultPos.y() + 90);
         defaultPos.setX(defaultPos.x() + ui->dockWidgetStepManager->width() + 10);
-        QRect rec = QApplication::desktop()->screenGeometry();
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect rec = screen->geometry();
         defaultSize.setWidth(m_stepChooserDialog->width());
         defaultSize.setHeight(rec.height()-defaultPos.y()-100);
     } else {
         defaultPos = this->pos();
         defaultPos.setY(ui->dockWidgetStepManager->pos().y() + 90);
         defaultPos.setX(defaultPos.x() + this->width() - m_stepChooserDialog->width() - 3);
-        QRect rec = QApplication::desktop()->screenGeometry();
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect rec = screen->geometry();
         defaultSize.setWidth(m_stepChooserDialog->width());
         defaultSize.setHeight(rec.height()-defaultPos.y()-100);
     }

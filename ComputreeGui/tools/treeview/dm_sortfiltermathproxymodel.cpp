@@ -77,8 +77,8 @@ bool DM_SortFilterMathProxyModel::setMathExpression(const QString &expression)
     m_mathExpression = expression;
 
     QChar dPoint = QLocale::system().decimalPoint();
-    m_mathExpression.replace('.', QLocale::system().decimalPoint());
-    m_mathExpression.replace(',', QLocale::system().decimalPoint());
+    m_mathExpression.replace('.', dPoint);
+    m_mathExpression.replace(',', dPoint);
 
     invalidateFilter();
 

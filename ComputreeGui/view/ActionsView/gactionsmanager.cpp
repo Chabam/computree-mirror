@@ -255,7 +255,7 @@ QList<QStandardItem*> GActionsManager::createItemForAction(CT_AbstractAction *ac
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState((m_currentAction != nullptr) ? ((ac->uniqueName() == m_currentAction->uniqueName()) ? Qt::Checked : Qt::Unchecked) : Qt::Unchecked);
-    item->setData(qVariantFromValue((void*)ac));
+    item->setData(QVariant::fromValue((void*)ac));
 
     list << item;
 

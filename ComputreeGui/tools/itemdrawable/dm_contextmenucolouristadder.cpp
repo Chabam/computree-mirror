@@ -119,7 +119,7 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
 
             model->visitAttributes([this, &subMenu, &i](const CT_OutAbstractItemAttributeModel* attModel) -> bool {
                 QAction *action = subMenu->addAction(attModel->displayableName(), this, SLOT(colorByAttributeAndGradient()));
-                action->setData(qVariantFromValue(DM_ContextMenuColouristAdder::ActionSetColorByAttribute(attModel, i)));
+                action->setData(QVariant::fromValue(DM_ContextMenuColouristAdder::ActionSetColorByAttribute(attModel, i)));
                 return true;
             });
         }

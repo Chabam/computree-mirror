@@ -346,11 +346,11 @@ void CTG_InModelPossibilitiesChoiceComboBoxDelegate::setEditorData(QWidget *edit
                 typeName = " [" + itemModel->itemNameFromType() + "]";
             }
 
-            comboBox->addItem(QString("%1%2").arg(inModel->displayableName()).arg(typeName), qVariantFromValue((void*)inModel));
+            comboBox->addItem(QString("%1%2").arg(inModel->displayableName()).arg(typeName), QVariant::fromValue((void*)inModel));
         }
 
         CT_InAbstractModel *selectedModel = comboBoxItem->currentInModel();
-        int index = comboBox->findData(qVariantFromValue((void*)selectedModel));
+        int index = comboBox->findData(QVariant::fromValue((void*)selectedModel));
 
         Q_ASSERT(index != -1);
 

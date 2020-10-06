@@ -203,6 +203,9 @@ public:
      */
     double getMaxError(Eigen::Vector2d* errorPoint = nullptr)
     {
+        // 'errorPoint' is used for returning pointer, not as an input, so we disable warning.
+        Q_UNUSED(errorPoint);
+
         if (_n() < 2) {return 0;}
 
         double maxError = 0;

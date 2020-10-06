@@ -831,10 +831,10 @@ bool ChunkedPointCloud::isUpdated() const
 
     ChunkCustomUpdateValues* cuv = context->createOrGetChunkCustomUpdateValues(this);
 
-    if(cuv->getUserValue("MaxNumberOfPointsInFastDrawMode", qVariantFromValue(m_maxNumberOfPointsInFastDrawMode)).value<size_t>() != m_maxNumberOfPointsInFastDrawMode)
+    if(cuv->getUserValue("MaxNumberOfPointsInFastDrawMode", QVariant::fromValue(m_maxNumberOfPointsInFastDrawMode)).value<size_t>() != m_maxNumberOfPointsInFastDrawMode)
         return false;
 
-    if(cuv->getUserValue("NPoints", qVariantFromValue(m_nPoints)).value<size_t>() != m_nPoints)
+    if(cuv->getUserValue("NPoints", QVariant::fromValue(m_nPoints)).value<size_t>() != m_nPoints)
         return false;
 
     return true;
@@ -1024,8 +1024,8 @@ void ChunkedPointCloud::setContextUpdated(PointRendererContext *context, bool st
     Chunk<PointRendererContext>::setContextUpdated(context, status);
 
     ChunkCustomUpdateValues* cuv = context->createOrGetChunkCustomUpdateValues(this);
-    cuv->setUserValue("MaxNumberOfPointsInFastDrawMode", qVariantFromValue(m_maxNumberOfPointsInFastDrawMode));
-    cuv->setUserValue("NPoints", qVariantFromValue(m_nPoints));
+    cuv->setUserValue("MaxNumberOfPointsInFastDrawMode", QVariant::fromValue(m_maxNumberOfPointsInFastDrawMode));
+    cuv->setUserValue("NPoints", QVariant::fromValue(m_nPoints));
 }
 
 void ChunkedPointCloud::createObjectColorCloudMemberIfNot()

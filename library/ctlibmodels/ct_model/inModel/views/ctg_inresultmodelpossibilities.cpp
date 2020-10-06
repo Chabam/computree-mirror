@@ -182,7 +182,7 @@ QList<QStandardItem*> CTG_InResultModelPossibilities::createItemsForResultModel(
     QStandardItem *rootName = new QStandardItem(resModel->displayableName());
     rootName->setDragEnabled(false);
     rootName->setEditable(false);
-    rootName->setData(qVariantFromValue((void*)resModel), Qt::UserRole + 1);    // the model is set here
+    rootName->setData(QVariant::fromValue((void*)resModel), Qt::UserRole + 1);    // the model is set here
     rootName->setData(resModel->shortDescription(), Qt::UserRole + 2);               // the description (help) is set on the first column
     retList.append(rootName);
 
@@ -190,14 +190,14 @@ QList<QStandardItem*> CTG_InResultModelPossibilities::createItemsForResultModel(
     QStandardItem *rootOther = new QStandardItem("");
     rootOther->setDragEnabled(false);
     rootOther->setEditable(false);
-    rootOther->setData(qVariantFromValue((void*)resModel), Qt::UserRole + 1);    // the model is set here
+    rootOther->setData(QVariant::fromValue((void*)resModel), Qt::UserRole + 1);    // the model is set here
     retList.append(rootOther);
 
     // Help icon (description)
     rootOther = new QStandardItem("");
     rootOther->setDragEnabled(false);
     rootOther->setEditable(false);
-    rootOther->setData(qVariantFromValue((void*)resModel), Qt::UserRole + 1);    // the model is set here
+    rootOther->setData(QVariant::fromValue((void*)resModel), Qt::UserRole + 1);    // the model is set here
     rootOther->setIcon(QIcon(":/Icones/Icones/help.png"));
     retList.append(rootOther);
 
@@ -214,21 +214,21 @@ QList<QStandardItem*> CTG_InResultModelPossibilities::createItemsForResultModel(
         item->setCheckState(Qt::Unchecked);
         item->setEditable(false);
         item->setEnabled(!m_readOnly);
-        item->setData(qVariantFromValue((void*)possibility), Qt::UserRole+1); // pointer to the possibility
+        item->setData(QVariant::fromValue((void*)possibility), Qt::UserRole+1); // pointer to the possibility
         rowList.append(item);
 
         // Displayable name of the step that has generated this output model
         item = new QStandardItem(possibility->outModel()->step() == nullptr ? tr("No Step") : possibility->outModel()->step()->stepToolForModel()->displayableCustomName());
         item->setDragEnabled(false);
         item->setEditable(false);
-        item->setData(qVariantFromValue((void*)possibility), Qt::UserRole+1); // pointer to the possibility
+        item->setData(QVariant::fromValue((void*)possibility), Qt::UserRole+1); // pointer to the possibility
         rowList.append(item);
 
         // Nothing
         item = new QStandardItem("");
         item->setDragEnabled(false);
         item->setEditable(false);
-        item->setData(qVariantFromValue((void*)possibility), Qt::UserRole+1); // pointer to the possibility
+        item->setData(QVariant::fromValue((void*)possibility), Qt::UserRole+1); // pointer to the possibility
         rowList.append(item);
 
         rootName->appendRow(rowList);

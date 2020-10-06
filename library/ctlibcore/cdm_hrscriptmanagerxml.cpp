@@ -13,7 +13,7 @@ QList<QString> CDM_HRScriptManagerXML::getFileExtensionAccepted() const
     QStringList l;
     l << ".cts";
 
-    return l;
+    return std::move(l);
 }
 
 QString CDM_HRScriptManagerXML::verifyScript(const QString &filePath)

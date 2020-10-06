@@ -5,14 +5,17 @@
 #include <QMutex>
 #include <QWaitCondition>
 
-#define CDM_IMPLEMENT_NORMAL_MESSAGE /*void CDM_Log::addMessage(const int &severity, CT_VirtualAbstractStep *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(severity, LogInterface::step, s, filter); } /*\
+#define CDM_IMPLEMENT_NORMAL_MESSAGE
+/*
+void CDM_Log::addMessage(const int &severity, CT_VirtualAbstractStep *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(severity, LogInterface::step, s, filter); } \
 void CDM_Log::addMessage(const int &severity, CT_AbstractAction *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(severity, LogInterface::action, s, filter); } \
 void CDM_Log::addMessage(const int &severity, PluginEntryInterface *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(severity, LogInterface::plugin, s, filter); } \
 void CDM_Log::addMessage(const int &severity, CT_AbstractStepPlugin *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(severity, LogInterface::plugin, s, filter); } \
 void CDM_Log::addMessage(const int &severity, CT_AbstractResult *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(severity, LogInterface::result, s, filter); } \
 void CDM_Log::addMessage(const int &severity, CT_AbstractItemDrawable *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(severity, LogInterface::itemdrawable, s, filter); }
 */
-#define CDM_IMPLEMENT_SEVERITY_MESSAGE(_M_TYPE_, SEVTYPE) void CDM_Log::_M_TYPE_(const int &type, const QString &s, const QString &filter) { addMessage(SEVTYPE, type, s, filter); }/* \
+#define CDM_IMPLEMENT_SEVERITY_MESSAGE(_M_TYPE_, SEVTYPE) void CDM_Log::_M_TYPE_(const int &type, const QString &s, const QString &filter) { addMessage(SEVTYPE, type, s, filter); }
+/*
 void CDM_Log::_M_TYPE_(CT_VirtualAbstractStep *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(SEVTYPE, LogInterface::step, s, filter); } \
 void CDM_Log::_M_TYPE_(CT_AbstractAction *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(SEVTYPE, LogInterface::action, s, filter); } \
 void CDM_Log::_M_TYPE_(PluginEntryInterface *type, const QString &s, const QString &filter) { Q_UNUSED(type) addMessage(SEVTYPE, LogInterface::plugin, s, filter); } \

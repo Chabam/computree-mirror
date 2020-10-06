@@ -12,8 +12,8 @@ class PointsDispatchInformation : public DispatchInformation {
 public:
     typedef quint32 COUNT_TYPE; // max of 4294967296 elements !
 
-    PointsDispatchInformation() :  m_count(0), DispatchInformation() {}
-    PointsDispatchInformation(const BEGIN_TYPE& begin) : m_count(0), DispatchInformation(begin) {}
+    PointsDispatchInformation() :  DispatchInformation(), m_count(0) {}
+    PointsDispatchInformation(const BEGIN_TYPE& begin) : DispatchInformation(begin), m_count(0) {}
 
     void addObjects(const size_t& count) {
         m_count += (COUNT_TYPE)count;

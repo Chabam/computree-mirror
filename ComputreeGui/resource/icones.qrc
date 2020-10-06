@@ -89,7 +89,6 @@
         <file>Icones/logo_IGN.png</file>
         <file>Icones/logo_INRA.jpg</file>
         <file>Icones/logo_ONF.jpg</file>
-        <file>Icones/logo_Université_de_Sherbrooke.png</file>
         <file>Icones/force.png</file>
     </qresource>
     <qresource prefix="/"/>

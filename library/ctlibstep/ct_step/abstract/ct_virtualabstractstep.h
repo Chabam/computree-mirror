@@ -46,7 +46,7 @@
 
 #include <QObject>
 #include <QDateTime>
-#include <QTime>
+#include <QElapsedTimer>
 
 #include <QDebug>
 
@@ -968,7 +968,7 @@ private:
     QMap<int, QString>              m_errorMessagesByErrorCode;       /*!< les messages d'erreurs en fonction du code d'erreur */
 
     QDateTime                       m_launchDateTime;           /*!< Date et heure de lancement du traitement */
-    QTime                           m_executeTime;          /*!< Calcul de la durée du traitement */
+    QElapsedTimer                   m_executeTime;          /*!< Calcul de la durée du traitement */
     int                             m_elapsedTimeInMs;               /*!< Durée effective du traitement */
 
     int                             m_currentProgressValue;              /*!< La progression */

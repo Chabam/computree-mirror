@@ -594,7 +594,7 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
     itemDisplay->setCheckable(true);
     itemDisplay->setCheckState(item.isSelected() ? Qt::Checked : Qt::Unchecked);
     itemDisplay->setText(item.model()->displayableName());
-    itemDisplay->setData(qVariantFromValue((void*)&item), Qt::UserRole + 1);
+    itemDisplay->setData(QVariant::fromValue((void*)&item), Qt::UserRole + 1);
 
     QObject::connect(&item, SIGNAL(selectChange(bool)), itemDisplay, SLOT(setBoolData(bool)), Qt::DirectConnection);
     QObject::connect(itemDisplay, SIGNAL(dataChanged(CG_CustomTreeItem*,int,QVariant)), this, SLOT(slotItemDataChanged(CG_CustomTreeItem*,int,QVariant)), Qt::QueuedConnection);
@@ -606,7 +606,7 @@ QList<CG_CustomTreeItem *> GTreeView::createItems(const CT_AbstractItemDrawable 
     for(int i=0; i<nColumnOfAttributes; ++i)
     {
         CG_CustomTreeItem *ii = new CG_CustomTreeItem();
-        ii->setData(qVariantFromValue((void*)&item));
+        ii->setData(QVariant::fromValue((void*)&item));
         ii->setEditable(false);
         l << ii;
     }
@@ -1060,7 +1060,7 @@ void GTreeView::recursiveRefreshExpanded(const QModelIndex &index, CG_CustomTree
 
     for(int i=0; i<n; ++i)
     {
-        QModelIndex child = index.child(i, 0);
+        QModelIndex child = index.model()->index(i, 0, index);
 
         CG_CustomTreeItem *ii = itemFromIndex(child);
         CT_AbstractItemDrawable *itemDrawable = itemDrawableFromItem(ii);

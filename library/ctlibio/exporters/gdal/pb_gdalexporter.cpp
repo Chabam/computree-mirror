@@ -196,7 +196,7 @@ void PB_GDALExporter::setRastersToExport(const QList<const CT_AbstractImage2D*>&
     if (!_names.isEmpty())
     {
         replaceBadCharacters(_names);
-        qSort(_modelsKeys.begin(), _modelsKeys.end());
+        std::sort(_modelsKeys.begin(), _modelsKeys.end());
         _shortNames = computeShortNames(_names);
 
 
@@ -396,7 +396,7 @@ bool PB_GDALExporter::exportVectors(const QList<const CT_AbstractShape2D*> vecto
     }
 
     replaceBadCharacters(names);
-    qSort(modelKeys.begin(), modelKeys.end());
+    std::sort(modelKeys.begin(), modelKeys.end());
     const QMap<QString, QString> shortNames = computeShortNames(names);
 
     for(const QString& key : modelKeys)

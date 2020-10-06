@@ -43,9 +43,9 @@ CT_Polygon2DData::CT_Polygon2DData() : SuperClass(),
 }
 
 CT_Polygon2DData::CT_Polygon2DData(const QVector<Eigen::Vector2d>& vertices) : SuperClass(),
+    _vertices(vertices),
     _area(0.0),
-    _areaComputed(false),
-    _vertices(vertices)
+    _areaComputed(false)
 {
     _min(0) = std::numeric_limits<double>::max();
     _min(1) = std::numeric_limits<double>::max();

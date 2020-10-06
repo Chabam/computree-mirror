@@ -183,6 +183,8 @@ void CT_Grid3DWooTraversalAlgorithm::compute(CT_Beam &data, Eigen::Vector3d *end
 
 bool CT_Grid3DWooTraversalAlgorithm::init(CT_Beam &data, size_t returnedIndex)
 {
+    Q_UNUSED(returnedIndex);
+
     _intersects = data.intersect(_gridBottom, _gridTop, _start, _end);
 
     if ( _intersects )
@@ -257,6 +259,8 @@ bool CT_Grid3DWooTraversalAlgorithm::init(CT_Beam &data, size_t returnedIndex)
 
 bool CT_Grid3DWooTraversalAlgorithm::getNextIndex(size_t returnedIndex)
 {
+    Q_UNUSED(returnedIndex);
+
     if ( _intersects )
     {
         // Finds along which axis to do the next step

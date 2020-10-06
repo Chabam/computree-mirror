@@ -86,7 +86,7 @@ size_t CT_CloudIndexStdMapT<T, ValueT>::indexOf(const size_t &index) const
 
     f = m_collection->lower_bound(ct_index_type(index));
 
-    if(f!=l && !(index < f->first))
+    if(f!=l && !(static_cast<int>(index) < f->first))
         return f->first;
 
     return size();
@@ -129,7 +129,7 @@ void CT_CloudIndexStdMapT<T, ValueT>::removeIndex(const size_t &index)
 
     f = m_collection->lower_bound(ct_index_type(index));
 
-    if(f!=l && !(index < f->first))
+    if(f!=l && !(static_cast<int>(index) < f->first))
         m_collection->erase(f);
 }
 

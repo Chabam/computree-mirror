@@ -9,7 +9,7 @@ class CT_SingleCollectionIteratorStdStyle : public std::iterator<std::input_iter
 public:
     using self_type = CT_SingleCollectionIteratorStdStyle<ItemT>;
 
-    CT_SingleCollectionIteratorStdStyle() : m_currentValue(nullptr), m_currentIndex(-1) {}
+    CT_SingleCollectionIteratorStdStyle() : m_currentIndex(-1), m_currentValue(nullptr) {}
 
     template<typename InfoCollection>
     static self_type create(const InfoCollection& c) {
@@ -50,7 +50,7 @@ public:
 
         ++m_currentIndex;
 
-        if(m_currentIndex < m_collections.size())
+        if(m_currentIndex < static_cast<int>(m_collections.size()))
         {
             m_currentValue = m_collections[m_currentIndex]; // got it !
         }

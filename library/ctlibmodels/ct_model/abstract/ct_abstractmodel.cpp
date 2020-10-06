@@ -8,13 +8,13 @@ CT_AbstractModel::CT_AbstractModel(const QString& displayableName) :
 {
 }
 
-CT_AbstractModel::CT_AbstractModel(const CT_AbstractModel& other) :
-    m_displayableName(other.m_displayableName),
-    m_shortDescription(other.m_shortDescription),
-    m_fullDescription(other.m_fullDescription),
-    m_parentModel(nullptr),
-    m_step(other.m_step)
+CT_AbstractModel::CT_AbstractModel(const CT_AbstractModel& other) : QObject( nullptr )
 {
+    m_displayableName = other.m_displayableName;
+    m_shortDescription = other.m_shortDescription;
+    m_fullDescription = other.m_fullDescription;
+    m_parentModel = nullptr;
+    m_step = other.m_step;
 }
 
 CT_AbstractModel::~CT_AbstractModel()

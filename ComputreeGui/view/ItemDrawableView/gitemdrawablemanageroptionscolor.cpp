@@ -92,7 +92,7 @@ void GItemDrawableManagerOptionsColor::setColorList(QList<QColor> colorList)
 QListWidgetItem* GItemDrawableManagerOptionsColor::createItemForColor(QColor color)
 {
     QListWidgetItem *item = new QListWidgetItem(ui->listWidgetCouleur);
-    item->setBackgroundColor(color);
+    item->setBackground(QBrush(color));
 
     return item;
 }
@@ -105,7 +105,7 @@ QList<QColor> GItemDrawableManagerOptionsColor::createColorListFromListWidget()
 
     for(int i=0; i<rowCount; ++i)
     {
-        list.append(ui->listWidgetCouleur->item(i)->backgroundColor());
+        list.append(ui->listWidgetCouleur->item(i)->background().color());
     }
 
     return list;

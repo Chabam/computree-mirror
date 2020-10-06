@@ -229,7 +229,7 @@ bool DM_StepTreeViewDefaultProxyModel::recursiveAcceptRow(const QModelIndex &ind
             bool notEmpty = false;
 
             while((i < s) && !notEmpty) {
-                if(recursiveAcceptRow(index.child(i, 0)))
+                if(recursiveAcceptRow(index.model()->index(i, 0, index)))
                     notEmpty = true;
 
                 ++i;

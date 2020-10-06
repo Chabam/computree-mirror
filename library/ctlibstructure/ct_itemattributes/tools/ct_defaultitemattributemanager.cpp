@@ -174,7 +174,7 @@ QList<CT_AbstractItemAttribute*> CT_DefaultItemAttributeManager::itemAttributesF
 
     visitItemAttributesForTypeInSelectedPossibilitiesOfInModel(itemType, inModel, visitor);
 
-    return s.toList();
+    return s.values();
 }
 
 CT_AbstractItemAttribute* CT_DefaultItemAttributeManager::firstItemAttributeFromInModel(const CT_InAbstractItemAttributeModel *inModel, const QString &itemType) const

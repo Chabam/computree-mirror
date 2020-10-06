@@ -115,7 +115,7 @@ bool PB_Grid2DExporter::exportItem(const CT_AbstractImage2D* item, const QString
     {
         for (int xx = 0 ; xx < xdim ; xx++)
         {
-            size_t sIndex;
+            size_t sIndex = -1; // Default value before initialization in 'index'
             item->index(xx, yy, sIndex);
             stream << item->valueAtIndexAsString(sIndex);
 

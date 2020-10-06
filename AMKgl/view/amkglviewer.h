@@ -81,7 +81,7 @@ public:
     /**
      * @brief Call to draw a text in 2D on this view
      */
-    void drawText(int x, int y, const QString& text, const QFont& fnt=QFont()) override;
+    void drawText(int x, int y, const QString& text, const QFont& fnt=QFont());
 
     /**
      * @brief Returns true if fast draw mode is currently used

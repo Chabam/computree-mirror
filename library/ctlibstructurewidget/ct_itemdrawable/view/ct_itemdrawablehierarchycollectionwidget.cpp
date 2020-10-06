@@ -423,9 +423,9 @@ QList<QStandardItem *> CT_ItemDrawableHierarchyCollectionWidget::createItemsForI
     item->setCheckable(true);
     item->setCheckState(Qt::Unchecked);
     item->setData(index, Qt::UserRole + 1);
-    item->setData(qVariantFromValue((void*)nullptr), Qt::UserRole + 2);
-    item->setData(qVariantFromValue((void*)modelItemd), Qt::UserRole + 4);
-    item->setData(qVariantFromValue((void*)sm), Qt::UserRole + 3);
+    item->setData(QVariant::fromValue((void*)nullptr), Qt::UserRole + 2);
+    item->setData(QVariant::fromValue((void*)modelItemd), Qt::UserRole + 4);
+    item->setData(QVariant::fromValue((void*)sm), Qt::UserRole + 3);
 
     l.append(item);
 
@@ -448,9 +448,9 @@ QList<QStandardItem *> CT_ItemDrawableHierarchyCollectionWidget::createItemsForI
     item->setCheckable(true);
     item->setCheckState(Qt::Unchecked);
     item->setData(index, Qt::UserRole + 1);
-    item->setData(qVariantFromValue((void*)itemd), Qt::UserRole + 2);
-    item->setData(qVariantFromValue((void*)nullptr), Qt::UserRole + 4);
-    item->setData(qVariantFromValue((void*)sm), Qt::UserRole + 3);
+    item->setData(QVariant::fromValue((void*)itemd), Qt::UserRole + 2);
+    item->setData(QVariant::fromValue((void*)nullptr), Qt::UserRole + 4);
+    item->setData(QVariant::fromValue((void*)sm), Qt::UserRole + 3);
 
     l.append(item);
 
@@ -471,8 +471,8 @@ QList<QStandardItem *> CT_ItemDrawableHierarchyCollectionWidget::createItemsForC
     item->setCheckable(true);
     item->setCheckState(Qt::Unchecked);
     item->setData(-1, Qt::UserRole + 1);
-    item->setData(qVariantFromValue((void*)colors.data()), Qt::UserRole + 2);
-    item->setData(qVariantFromValue((void*)m_selectionModelForPointCloud), Qt::UserRole + 3);
+    item->setData(QVariant::fromValue((void*)colors.data()), Qt::UserRole + 2);
+    item->setData(QVariant::fromValue((void*)m_selectionModelForPointCloud), Qt::UserRole + 3);
 
     l.append(item);
 
@@ -493,8 +493,8 @@ QList<QStandardItem *> CT_ItemDrawableHierarchyCollectionWidget::createItemsForN
     item->setCheckable(true);
     item->setCheckState(Qt::Unchecked);
     item->setData(-2, Qt::UserRole + 1);
-    item->setData(qVariantFromValue((void*)normals.data()), Qt::UserRole + 2);
-    item->setData(qVariantFromValue((void*)m_selectionModelForNormalCloud), Qt::UserRole + 3);
+    item->setData(QVariant::fromValue((void*)normals.data()), Qt::UserRole + 2);
+    item->setData(QVariant::fromValue((void*)m_selectionModelForNormalCloud), Qt::UserRole + 3);
 
     l.append(item);
 

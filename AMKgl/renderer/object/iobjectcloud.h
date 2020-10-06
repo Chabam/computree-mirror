@@ -115,8 +115,8 @@ public:
     size_t size() const { return m_array.size(); }
 
 protected:
-    quint8                                          m_nElementByObject;
     arrayT&                                         m_array;
+    quint8                                          m_nElementByObject;
 };
 
 /**
@@ -208,10 +208,10 @@ public:
     size_t size() const { return m_size; }
 
 protected:
-    quint8              m_nElementByObject;
     funcGetFirstValue   m_func;
     void*               m_context;
     size_t              m_size;
+    quint8              m_nElementByObject;
 };
 
 /**

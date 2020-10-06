@@ -102,7 +102,7 @@ QList<bool> CT_Profile<bool>::neighboursValues(const size_t &index, const size_t
     {
 
         bool val = valueAtIndex(ii);
-        if ((ii == index)) {
+        if (ii == index) {
             if (centermode == CM_KeepCenter) {liste.append(val);}
         } else {
             liste.append(val);

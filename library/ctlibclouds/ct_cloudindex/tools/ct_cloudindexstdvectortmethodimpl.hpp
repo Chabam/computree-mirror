@@ -76,7 +76,7 @@ size_t CT_CloudIndexStdVectorTMethodImpl<T>::indexOf(const size_t &index) const
 
         first = std::lower_bound(first, last, index);
 
-        if(first!=last && !(index<(*first)))
+        if(first!=last && !(static_cast<int>(index)<(*first)))
             return std::distance(_vector.begin(), first);
     }
     else
@@ -99,7 +99,7 @@ size_t CT_CloudIndexStdVectorTMethodImpl<T>::lowerBound(const size_t &value) con
     if(m_ci.sortType() == CT_AbstractCloudIndex::SortedInAscendingOrder)
         it = std::lower_bound(_vector.begin(), _vector.end(), value);
     else
-        it = std::find_if(_vector.begin(), _vector.end(), std::bind2nd(std::greater_equal<T>(), T(value)));
+        it = std::find_if(_vector.begin(), _vector.end(), std::bind(std::greater_equal<T>(), std::placeholders::_1, T(value)));
 
     return size() - (itEnd-it);
 }
@@ -113,7 +113,7 @@ size_t CT_CloudIndexStdVectorTMethodImpl<T>::upperBound(const size_t &value) con
     if(m_ci.sortType() == CT_AbstractCloudIndex::SortedInAscendingOrder)
         it = std::upper_bound(_vector.begin(), _vector.end(), value);
     else
-        it = std::find_if(_vector.begin(), _vector.end(), std::bind2nd(std::greater<T>(), T(value)));
+        it = std::find_if(_vector.begin(), _vector.end(), std::bind(std::greater<T>(), std::placeholders::_1, T(value)));
 
     return size() - (itEnd-it);
 }
@@ -137,7 +137,7 @@ void CT_CloudIndexStdVectorTMethodImpl<T>::removeIndex(const size_t &index)
 
         first = std::lower_bound(first, last, index);
 
-        if(first!=last && !(index<(*first)))
+        if(first!=last && !(static_cast<int>(index)<(*first)))
             _vector.erase(first);
     }
     else

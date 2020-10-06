@@ -42,7 +42,7 @@ public:
      * @brief Returns a unique type for a result
      * @overload Overloaded to return a unique type
      */
-    QString type() const;
+    QString type() const override;
 
     /**
      * @brief Returns a unique type for a result

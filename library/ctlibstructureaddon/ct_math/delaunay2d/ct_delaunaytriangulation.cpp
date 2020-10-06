@@ -32,7 +32,7 @@
 
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
-#include <QTime>
+#include <QElapsedTimer>
 
 CT_DelaunayTriangulation::CT_DelaunayTriangulation()
 {
@@ -519,8 +519,7 @@ bool CT_DelaunayTriangulation::doInsertion()
     t1 = _refTriangle;
     t2 = nullptr;
 
-    QTime time;
-
+    QElapsedTimer time;
 
     time.start();
 

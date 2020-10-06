@@ -14,7 +14,7 @@ protected:
     const static QString INDEX_CONFIG_ITEMS_BACKUP_VISIBLE;
     const static QString INDEX_CONFIG_ITEMS_NEW_VISIBLE;
 
-    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const;
+    virtual CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 };
 
 #endif // CT_STANDARDSTANDARDITEMGROUPDRAWMANAGER_H

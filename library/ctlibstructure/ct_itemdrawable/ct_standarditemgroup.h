@@ -296,7 +296,7 @@ public:
         Q_ASSERT(outModelToUse != nullptr);
 
         // now we can remove the item with the right model
-        removeSingularItemWithOutModel(outModelToUse);
+        return removeSingularItemWithOutModel(outModelToUse);
     }
 
     /**
@@ -487,7 +487,7 @@ public:
         Q_ASSERT(outModelToUse != nullptr);
 
         // now we can remove the group with the right model
-        removeGroupsWithOutModel(outModelToUse);
+        return removeGroupsWithOutModel(outModelToUse);
     }
 
     /**

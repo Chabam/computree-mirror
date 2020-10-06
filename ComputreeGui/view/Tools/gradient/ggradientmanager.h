@@ -40,8 +40,8 @@ private:
     struct GradientWidgetInfo {
         GradientWidgetInfo(QWidget *pWid, GColorGradientView *gv) : m_parentWidget(pWid), m_gradientView(gv) {}
 
-        GColorGradientView  *m_gradientView;
         QWidget             *m_parentWidget;
+        GColorGradientView  *m_gradientView;
         bool                m_selected;
 
         void setSelected(bool s);

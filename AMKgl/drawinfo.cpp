@@ -82,7 +82,7 @@ int DrawInfo::getWidthOfAllTextSaved() const
     QFontMetrics fm = m_painter.fontMetrics();
 
     foreach (const Message &m, m_messages) {
-        max = qMax(max, fm.width(m.text));
+        max = qMax(max, fm.QFontMetrics::horizontalAdvance(m.text));
     }
 
     return max;

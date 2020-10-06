@@ -118,7 +118,7 @@ void CT_Mesh::createCylinder(double radius, double height, int sides, double xPo
 
     size_t p = vi.cIndex();
 
-    for(size_t i=0; i<sides; ++i)
+    for(size_t i=0; static_cast<int>(i)<sides; ++i)
     {
         const CT_Point &v0 = vi.cT();
         size_t p0 = vi.cIndex();
@@ -139,7 +139,7 @@ void CT_Mesh::createCylinder(double radius, double height, int sides, double xPo
         size_t p2;
         size_t p3;
 
-        if(i<sides-1)
+        if(static_cast<int>(i)<sides-1)
         {
             CT_Point v2;
             p2 = vi.cIndex();

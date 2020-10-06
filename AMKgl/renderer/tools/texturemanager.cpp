@@ -32,7 +32,7 @@ bool TextureManager::createNew1DTextureOrUseExisting(const QString &uniqueName,
         info = new TextureInfo(uniqueName, texture);
         m_uniqueTextures.append(info);
     } else {
-        if(dataSize > info->texture->width()) {
+        if(static_cast<int>(dataSize) > info->texture->width()) {
             info->texture->destroy();
             info->texture->setSize((int)dataSize);
             info->texture->allocateStorage();

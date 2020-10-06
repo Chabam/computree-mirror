@@ -52,7 +52,7 @@ public:
     /**
      * @brief Set the attributes accessor
      */
-    void setAttributesAccessor(const IAttributesAccessor* accessor);
+    void setAttributesAccessor(const IAttributesAccessor* accessor) override;
 
     /**
      * @brief Set which cloud : vertex color/normal/etc... cloud OR object color/normal/etc... to use when draw object
@@ -78,78 +78,78 @@ public:
     /**
      * @brief Transformation of objects. Do nothing !
      */
-    void transformObjects(const Eigen::Matrix4f& trMatrix, const size_t& from, const size_t& count) { Q_UNUSED(trMatrix) Q_UNUSED(from) Q_UNUSED(count) }
-    void translateObjects(const Eigen::Vector3f& translation, const size_t& from, const size_t& count) { Q_UNUSED(translation) Q_UNUSED(from) Q_UNUSED(count) }
-    void rotateObjects(const Eigen::AngleAxis<float>& rotation, const size_t& from, const size_t& count) { Q_UNUSED(rotation) Q_UNUSED(from) Q_UNUSED(count)}
-    void rotateObjects(const Eigen::Quaternion<float>& rotation, const size_t& from, const size_t& count) { Q_UNUSED(rotation) Q_UNUSED(from) Q_UNUSED(count) }
-    void scaleObjects(const Eigen::Vector3f& scaling, const size_t& from, const size_t& count) { Q_UNUSED(scaling) Q_UNUSED(from) Q_UNUSED(count) }
+    void transformObjects(const Eigen::Matrix4f& trMatrix, const size_t& from, const size_t& count) override { Q_UNUSED(trMatrix) Q_UNUSED(from) Q_UNUSED(count) }
+    void translateObjects(const Eigen::Vector3f& translation, const size_t& from, const size_t& count) override { Q_UNUSED(translation) Q_UNUSED(from) Q_UNUSED(count) }
+    void rotateObjects(const Eigen::AngleAxis<float>& rotation, const size_t& from, const size_t& count) override { Q_UNUSED(rotation) Q_UNUSED(from) Q_UNUSED(count)}
+    void rotateObjects(const Eigen::Quaternion<float>& rotation, const size_t& from, const size_t& count) override { Q_UNUSED(rotation) Q_UNUSED(from) Q_UNUSED(count) }
+    void scaleObjects(const Eigen::Vector3f& scaling, const size_t& from, const size_t& count) override { Q_UNUSED(scaling) Q_UNUSED(from) Q_UNUSED(count) }
 
     /**
      * @brief Inherited from IChunk.
      */
-    void setObjectsVisible(const size_t& from, const size_t& count = 1, bool visible = true);
-    bool isAtLeastOneObjectVisible(const size_t &from, const size_t &count) const;
-    void clearObjects();
-    void resetObjects();
-    size_t countObjects() const;
-    quint8 getNumberOfElementPerObject() const;
+    void setObjectsVisible(const size_t& from, const size_t& count = 1, bool visible = true) override;
+    bool isAtLeastOneObjectVisible(const size_t &from, const size_t &count) const override;
+    void clearObjects() override;
+    void resetObjects() override;
+    size_t countObjects() const override;
+    quint8 getNumberOfElementPerObject() const override;
 
     /**
      * @brief Draw all points normally (all points are drawn)
      */
-    void draw(DrawInfo &info);
+    void draw(DrawInfo &info) override;
 
     /**
      * @brief Draw all points fast (a reduced number of points are drawn)
      */
-    void fastDraw(DrawInfo &info);
+    void fastDraw(DrawInfo &info) override;
 
     /**
      * @brief Draw text or other objects
      */
-    void postDraw(DrawInfo &info);
+    void postDraw(DrawInfo &info) override;
 
     /**
      * @brief Lock it (mutex)
      */
-    void lock() {}
+    void lock() override {}
     /**
      * @brief Unlock it (mutex)
      */
-    void unlock() {}
+    void unlock() override {}
 
     /**
      * @brief Returns the color cloud, or nullptr if it was not created.
      */
-    Basic::AbstractColorCloud* getObjectColorCloud() const;
+    Basic::AbstractColorCloud* getObjectColorCloud() const override;
 
     /**
      * @brief Returns the normal cloud, or nullptr if it was not created.
      */
-    Basic::AbstractNormalCloud* getObjectNormalCloud() const;
+    Basic::AbstractNormalCloud* getObjectNormalCloud() const override;
 
     /**
      * @brief Returns the normal cloud, or nullptr if it was not created.
      */
-    Basic::AbstractInfoCloud* getObjectInfoCloud() const;
+    Basic::AbstractInfoCloud* getObjectInfoCloud() const override;
 
     /**
      * @brief Returns the color cloud to use. If it doesn't exist it will be created.
      * @warning If it can't be created the method returns nullptr !
      */
-    Basic::AbstractColorCloud* createOrGetObjectColorCloud();
+    Basic::AbstractColorCloud* createOrGetObjectColorCloud() override;
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
      * @warning If it can't be created the method returns nullptr !
      */
-    Basic::AbstractNormalCloud* createOrGetObjectNormalCloud();
+    Basic::AbstractNormalCloud* createOrGetObjectNormalCloud() override;
 
     /**
      * @brief Returns the normal cloud to use. If it doesn't exist it will be created.
      * @warning If it can't be created the method returns nullptr !
      */
-    Basic::AbstractInfoCloud* createOrGetObjectInfoCloud();
+    Basic::AbstractInfoCloud* createOrGetObjectInfoCloud() override;
 
     /**
      * @brief Redefined to re-create display list
@@ -340,7 +340,7 @@ protected:
     /**
      * @brief Set the number of objects in all array
      */
-    void setNumberOfObjects(const size_t& n);
+    void setNumberOfObjects(const size_t& n) override;
     virtual void internalSetNumberOfObjects(const size_t& n, const bool& shrinkToFit) = 0;
 
     /**

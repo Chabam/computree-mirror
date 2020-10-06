@@ -4,7 +4,7 @@
 
 AnyElementAttributesProvider::AnyElementAttributesProvider()
 {
-    for(int i=0; i<m_objectsAttributesProvider.size(); ++i)
+    for(int i=0; i<static_cast<int>(m_objectsAttributesProvider.size()); ++i)
         m_objectsAttributesProvider[i] = new ObjectAttributesProvider();
 }
 

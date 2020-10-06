@@ -314,7 +314,7 @@ bool PB_StepPluginManager::loadExporters()
         if(!gdalExpoC.isEmpty()) {
             sep = addNewSeparator(new CT_StandardExporterSeparator("GDAL"));
 
-            qSort(gdalExpoC.begin(), gdalExpoC.end(), GDALExporterLessThan);
+            std::sort(gdalExpoC.begin(), gdalExpoC.end(), GDALExporterLessThan);
 
             QListIterator<PB_GDALExporter*> itGD(gdalExpoC);
 
@@ -368,7 +368,7 @@ bool PB_StepPluginManager::loadReaders()
         }
 
         if(!gdalReaderC.isEmpty()) {
-            qSort(gdalReaderC.begin(), gdalReaderC.end(), GDALReaderLessThan);
+            std::sort(gdalReaderC.begin(), gdalReaderC.end(), GDALReaderLessThan);
 
             QListIterator<CT_Reader_GDAL*> itGD(gdalReaderC);
 

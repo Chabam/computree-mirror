@@ -100,7 +100,7 @@ void GFavoritesMenuDialog::updateStepLabel()
 
 void GFavoritesMenuDialog::setLevelToItem(CT_MenuLevel *level, QTreeWidgetItem *item)
 {
-    item->setData(0, Qt::UserRole+1, qVariantFromValue((void*)level));
+    item->setData(0, Qt::UserRole+1, QVariant::fromValue((void*)level));
 }
 
 CT_MenuLevel *GFavoritesMenuDialog::levelFromItem(QTreeWidgetItem *item)

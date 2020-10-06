@@ -34,9 +34,9 @@ const CT_StandardScanPathDrawManager CT_ScanPath::SCANPATH_DRAW_MANAGER;
 CT_TYPE_IMPL_INIT_MACRO(CT_ScanPath)
 
 CT_ScanPath::CT_ScanPath() : SuperClass(),
+    _sorted(false),
     _minGPSTime(std::numeric_limits<double>::max()),
-    _maxGPSTime(-std::numeric_limits<double>::max()),
-    _sorted(false)
+    _maxGPSTime(-std::numeric_limits<double>::max())
 {
     setBoundingBox(_minGPSTime,
                    _minGPSTime,

@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <QApplication>
 #include <QKeyEvent>
+#include <QtGlobal>
 
 using QtNodes::FlowView;
 using QtNodes::FlowScene;
@@ -278,7 +279,7 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
 
         QTreeWidgetItem* inTreeitem = new QTreeWidgetItem(inItems.value(child->parentModel(), nullptr), QStringList(displayableName));
         inTreeitem->setForeground(0, Qt::white);
-        inTreeitem->setData(0, Qt::UserRole, qVariantFromValue(static_cast<void*>(const_cast<CT_InAbstractModel*>(child))));
+        inTreeitem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(const_cast<CT_InAbstractModel*>(child))));
         inTreeitem->setData(0, Qt::UserRole+1, QString().setNum(inItems.size()*100));
         inTreeitem->setToolTip(0, tr("%1 : %2").arg(displayableName).arg(child->detailledDescription()));
 
@@ -379,7 +380,7 @@ QTreeWidgetItem* CTG_ModelsLinkConfigurationFlowView::createOrGetOutTreeItemForM
 
     outTreeItem = new QTreeWidgetItem(parentOutTreeItem, QStringList(displayableName));
     outTreeItem->setForeground(0, Qt::white);
-    outTreeItem->setData(0, Qt::UserRole, qVariantFromValue(static_cast<void*>(model)));
+    outTreeItem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(model)));
     outTreeItem->setData(0, Qt::UserRole+1, QString());
     outTreeItem->setToolTip(0, tr("%1 : %2").arg(displayableName).arg(model->detailledDescription()));
 
@@ -679,8 +680,11 @@ CT_InStdModelPossibility* CTG_ModelsLinkConfigurationFlowView::findPossibilityBe
     const QList<const CT_InStdModelPossibility*> p1 = mPossibilitiesByModel.values(inOrOutModel1);
     const QList<const CT_InStdModelPossibility*> p2 = mPossibilitiesByModel.values(inOrOutModel2);
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     const QSet<const CT_InStdModelPossibility*> pI = p1.toSet().intersect(p2.toSet());
-
+#else
+    const QSet<const CT_InStdModelPossibility*> pI = QSet(p1.begin(), p1.end()).intersect(QSet(p2.begin(), p2.end()));
+#endif
     if(pI.isEmpty())
         return nullptr;
 

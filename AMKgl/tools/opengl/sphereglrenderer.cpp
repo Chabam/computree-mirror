@@ -27,14 +27,14 @@ void SphereGlRenderer::render()
     if(!m_indices.empty()) {
         const size_t& size = m_indices.size();
 
-        for(int i=0; i<size; ++i)
+        for(int i=0; i<static_cast<int>(size); ++i)
             glVertex3fv(&m_values[m_indices[i]][0]);
 
     } else {
 
         const size_t& size = m_values.size();
 
-        for(int i=0; i<size; ++i)
+        for(int i=0; i<static_cast<int>(size); ++i)
             glVertex3fv(&m_values[i][0]);
     }
 }
@@ -74,7 +74,7 @@ void SphereGlRenderer::initWithGlLineStrip(int nPoints)
     float stepTheta = finalTheta / ((float)nPointsTheta);
     float stepPhi = finalPhi / ((float)nPointsPhi);
 
-    float cosPhi, sinPhi, cosTheta, sinTheta, lastPhi;
+    float cosPhi, sinPhi, cosTheta, sinTheta, lastPhi = 0.0f;
 
     float currentTheta = 0;
 
@@ -133,9 +133,10 @@ void SphereGlRenderer::initWithGlLineStrip(int nPoints)
     m_thetaPhiValues[currentIndex] = Eigen::Vector2f(0, 0);
 
     if(!m_indices.empty())
-        m_indices[currentIndex++] = (GLuint)currentIndex;
+    {
+        currentIndex++;
+        m_indices[currentIndex] = (GLuint)currentIndex;
 
-    if(!m_indices.empty()) {
         for(int i=1; i<endPhiSecondPart; ++i) {
 
             reverse = false;

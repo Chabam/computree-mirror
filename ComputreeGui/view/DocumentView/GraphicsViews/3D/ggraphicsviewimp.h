@@ -87,6 +87,7 @@ public:
     void getBoundingBoxOfAllEdgesSelectedInView(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
     void getBoundingBoxOfAllFacesSelectedInView(Eigen::Vector3d &min, Eigen::Vector3d &max) const;
 
+    using AMKglViewer::setVisible;
     void setVisible(const CT_AbstractItemDrawable* item, bool e);
     bool isVisible(const CT_AbstractItemDrawable *item) const;
 
@@ -133,6 +134,7 @@ public:
     Q_DECL_DEPRECATED void setSelectRegionWidth(int width);
     Q_DECL_DEPRECATED void setSelectRegionHeight(int height);
     Q_DECL_DEPRECATED void select(const QPoint& point);
+    using AMKglViewer::select;
     void select(const QPolygon& polygon);
 
     CT_SPCIR getSelectedPoints() const;

@@ -82,6 +82,7 @@ public:
      */
     ChunkT& createOrGetChunkWithCoordinateSystemKey(const GLuint& csKey)
     {
+        Q_UNUSED(csKey);
         return createOrGetChunkFromUniqueIndex((const GLuint)this->uniqueIndex);
     }
 

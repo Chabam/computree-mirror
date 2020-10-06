@@ -4,7 +4,7 @@ double CT_MathStatistics::computeQuantile(QList<double> &values, double quantile
 {
     if (sort)
     {
-        qSort(values.begin(), values.end());
+        std::sort(values.begin(), values.end());
     }
 
     double n = quantile*values.size();
@@ -16,5 +16,3 @@ double CT_MathStatistics::computeQuantile(QList<double> &values, double quantile
     if (fractPart == 0) {return values.at(intPart);}
     return values.at(intPart) + fractPart * (values.at(intPart + 1) - values.at(intPart));
 }
-
-

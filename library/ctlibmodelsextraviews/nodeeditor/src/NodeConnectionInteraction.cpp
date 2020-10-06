@@ -67,7 +67,7 @@ canConnect(PortIndex &portIndex, TypeConverter & converter) const
 
   const int myStartPortIndex = _connection->getPortIndex(oppositePort(requiredPort));
 
-  if(_node->nodeState().getEntries(requiredPort).size() > portIndex)
+  if(_node->nodeState().getEntries(requiredPort).size() > static_cast<size_t>(portIndex))
   {
       auto existingConnections = _node->nodeState().connections(requiredPort, portIndex);
 

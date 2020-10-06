@@ -13,9 +13,9 @@ CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::CT_AttributesScalarT(
                                                                                 const SCALAR& min,
                                                                                 const SCALAR& max) :
     m_cir(cir),
-    m_manager(&manager),
     m_min(min),
-    m_max(max)
+    m_max(max),
+    m_manager(&manager)
 {
     dynamic_cast<CT_ScalarMinMaxManager<MANAGER_SCALAR>*>(m_manager)->registerAttribute(this, m_min, m_max);
 }

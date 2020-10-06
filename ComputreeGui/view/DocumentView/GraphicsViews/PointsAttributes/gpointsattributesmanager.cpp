@@ -140,7 +140,7 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
                                                                               [this, pa]() -> QVariant
                 {
                     AttributesScalarType* globalDPAS = static_cast<AttributesScalarType*>(m_manager->getAttributesFromInterface(pa, false));
-                    return qVariantFromValue(static_cast<void*>(globalDPAS));
+                    return QVariant::fromValue(static_cast<void*>(globalDPAS));
                 },
                 scalarRoot);
 
@@ -171,7 +171,7 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
                     {
                         AttributesColorType* globalDPAC = static_cast<AttributesColorType*>(m_manager->getAttributesFromInterface(pa, false));
 
-                        return qVariantFromValue(static_cast<void*>(globalDPAC));
+                        return QVariant::fromValue(static_cast<void*>(globalDPAC));
                     },
                     colorRoot);
 
@@ -202,7 +202,7 @@ void GPointsAttributesManager::buildTreeViewTForStep(CT_VirtualAbstractStep *ste
                         {
                             AttributesNormalType* globalDPAN = static_cast<AttributesNormalType*>(m_manager->getAttributesFromInterface(pa, false));
 
-                            return qVariantFromValue(static_cast<void*>(globalDPAN));
+                            return QVariant::fromValue(static_cast<void*>(globalDPAN));
                         },
                         normalRoot);
 
@@ -261,13 +261,13 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesScalarForModel(D
     // NOM
     QStandardItem *item = new QStandardItem(pa->displayableName());
     item->setEditable(false);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;
 
     // BOUTON APPLIQUER
     item = new QStandardItem(tr("Appliquer"));
     item->setEditable(false);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;
 
     // CHECKBOX "UTILISER SEUL ?"
@@ -277,7 +277,7 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesScalarForModel(D
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState(pa->isDisplayedAlone() ? Qt::Checked : Qt::Unchecked);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;*/
 
     // CHECKBOX "UTILISER GRADIENT PARTAGE ?"
@@ -285,13 +285,13 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesScalarForModel(D
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState(pa->isUsedSharedGradient() ? Qt::Checked : Qt::Unchecked);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;
 
     // BOUTON CONFIGURER
     item = new QStandardItem(tr("Configurer"));
     item->setEditable(false);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;
 
     return items;
@@ -304,13 +304,13 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesColorForModel(DM
     // NOM
     QStandardItem *item = new QStandardItem(pa->displayableName());
     item->setEditable(false);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;
 
     // BOUTON APPLIQUER
     item = new QStandardItem(tr("Appliquer"));
     item->setEditable(false);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;
 
     // CHECKBOX "UTILISER SEUL ?"
@@ -320,7 +320,7 @@ QList<QStandardItem*> GPointsAttributesManager::createAttributesColorForModel(DM
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState(pa->isDisplayedAlone() ? Qt::Checked : Qt::Unchecked);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;*/
 
     return items;
@@ -333,13 +333,13 @@ QList<QStandardItem *> GPointsAttributesManager::createAttributesNormalForModel(
     // NOM
     QStandardItem *item = new QStandardItem(pa->displayableName());
     item->setEditable(false);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;
 
     // BOUTON APPLIQUER
     item = new QStandardItem(tr("Appliquer"));
     item->setEditable(false);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;
 
     // CHECKBOX "UTILISER SEUL ?"
@@ -349,7 +349,7 @@ QList<QStandardItem *> GPointsAttributesManager::createAttributesNormalForModel(
     item->setEditable(false);
     item->setCheckable(true);
     item->setCheckState(pa->isDisplayedAlone() ? Qt::Checked : Qt::Unchecked);
-    item->setData(qVariantFromValue(static_cast<void*>(pa)));
+    item->setData(QVariant::fromValue(static_cast<void*>(pa)));
     items << item;*/
 
     return items;
@@ -409,7 +409,7 @@ QStandardItem* GPointsAttributesManager::findOrCreateChildForAttributeModel(cons
         child = new QStandardItem(attModel->displayableName());
         child->setEditable(false);
         child->setData(data());
-        child->setData(qVariantFromValue(static_cast<void*>(const_cast<CT_OutAbstractModel*>(attModel))), Qt::UserRole + 2);
+        child->setData(QVariant::fromValue(static_cast<void*>(const_cast<CT_OutAbstractModel*>(attModel))), Qt::UserRole + 2);
         items << child;
 
         QStandardItem* apply = new QStandardItem(tr("Appliquer"));
@@ -892,3 +892,12 @@ QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_Abs
     createNormalRootItemIfNull(m_itemEdgeRootNormal, parent);
     return m_itemEdgeRootNormal;
 }
+
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#pragma warning( disable : 4506 )
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic ignored "-Wint-in-bool-context"
+#endif

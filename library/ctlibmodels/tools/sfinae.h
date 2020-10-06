@@ -27,7 +27,7 @@ class IsAResultModelCopy
    class no { yes m[2];};
    struct BaseMixin
    {
-     int nOutResultModelCopiesCreated() const {}
+     int nOutResultModelCopiesCreated() const {return 0;}
    };
    struct Base : public Type, public BaseMixin {};
    template <typename T, T t>  class Helper{};
@@ -48,7 +48,7 @@ class IsAnOutputModel
    class no { yes m[2];};
    struct BaseMixin
    {
-     int uniqueIndex() const {}
+     int uniqueIndex() const {return 0;}
    };
    struct Base : public Type, public BaseMixin {};
    template <typename T, T t>  class Helper{};
@@ -70,7 +70,7 @@ class IsAnInputModel
    class no { yes m[2];};
    struct BaseMixin
    {
-     int uniqueIndex() const {}
+     int uniqueIndex() const {return 0;}
    };
    struct Base : public Type, public BaseMixin {};
    template <typename T, T t>  class Helper{};

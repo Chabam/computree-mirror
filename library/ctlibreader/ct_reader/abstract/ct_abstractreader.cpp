@@ -9,7 +9,7 @@ CT_AbstractReader::CT_AbstractReader(int subMenuLevel) :
 {
 }
 
-CT_AbstractReader::CT_AbstractReader(const CT_AbstractReader& other)
+CT_AbstractReader::CT_AbstractReader(const CT_AbstractReader& other) : QObject( nullptr )
 {
     m_formats = other.m_formats;
     m_tooltip = other.m_tooltip;

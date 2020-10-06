@@ -2,17 +2,17 @@
 
 template<typename StructType>
 CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT() :
+    SuperClass(),
     m_mask(StructMASK(0)),
-    m_shiftRight(0),
-    SuperClass()
+    m_shiftRight(0)
 {
 }
 
 template<typename StructType>
 CT_PointsAttributesScalarMaskT<StructType>::CT_PointsAttributesScalarMaskT(const CT_PointsAttributesScalarMaskT<StructType>& other) :
+    SuperClass(other),
     m_mask(other.m_mask),
-    m_shiftRight(other.m_shiftRight),
-    SuperClass(other)
+    m_shiftRight(other.m_shiftRight)
 {
 }
 
