@@ -38,6 +38,7 @@ mingw {
 
 macx {
     QMAKE_CXXFLAGS += -Wno-inconsistent-missing-override
+    QMAKE_RANLIB += -no_warning_for_no_symbols
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 }
 

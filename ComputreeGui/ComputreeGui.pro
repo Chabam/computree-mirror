@@ -128,6 +128,7 @@ win32:g++ {
 }
 
 macx {
+    QMAKE_RANLIB += -no_warning_for_no_symbols
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
     # Silent OpenGL warning for MacOS > 10.14
     DEFINES += GL_SILENCE_DEPRECATION
