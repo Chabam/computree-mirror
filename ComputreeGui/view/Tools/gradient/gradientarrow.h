@@ -28,7 +28,7 @@ class GradientArrow
 {
 public:
     explicit GradientArrow();
-    GradientArrow(const GradientArrow &other);
+    GradientArrow(const GradientArrow &other) = default;
     ~GradientArrow();
 
     // read

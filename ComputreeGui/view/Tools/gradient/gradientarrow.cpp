@@ -41,14 +41,7 @@ GradientArrow::GradientArrow()
    area << QPoint(0,5) << QPoint(5, 0) << QPoint(10,5) << QPoint(10, 20) << QPoint(0,20) << QPoint(0,5);
    setArea(area);
 }
-GradientArrow::GradientArrow(const GradientArrow &other)
-      :_hasFocus(other.hasFocus()),
-      _index(other.index()),
-      _area(other.area()),
-      _color(other.color()),
-      _pos(other.position())
-{
-}
+
 //f+//////////////////////////////////////////////////////////////////////////
 //
 //  Name:	dtor
