@@ -19,7 +19,8 @@ SUBDIRS       = ctlibmodels \
                 ctlibplugin \
                 ctlibio \
                 ctliblas \
-                ctlibcore
+                ctlibcore \
+                ctlibpcl
 
 ctlibmodelsextraviews.depends = ctlibmodels
 ctlibstructure.depends = ctlibmodels
@@ -36,6 +37,7 @@ ctlibplugin.depends = ctlibstep ctlibfilters ctlibmetrics ctlibexporter ctlibrea
 ctlibio.depends = ctlibstructureaddon ctlibexporter ctlibreader
 ctliblas.depends = ctlibstructureaddon ctlibfilters ctlibmetrics ctlibexporter ctlibreader
 ctlibcore.depends = ctlibplugin
+ctlibpcl.depends = ctlibclouds
 
 win32-msvc2013 {
     message( "msvc 2013 detected" )

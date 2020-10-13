@@ -5,7 +5,7 @@ contains ( QT_VERSION, "^5.*" ) {
 }
 
 include(../library_shared.pri)
-include(../../include_all.pri)
+include(../../config/include_dependencies.pri)
 
 TARGET = ctlibstdactions
 

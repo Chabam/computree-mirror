@@ -1,22 +1,23 @@
 # this is the common file for all library
 
-CT_LIB_PREFIX = ..
 CT_PREFIX = ..
+CT_PREFIX_LIB = ..
 CT_PREFIX_INSTALL = ../../..
+CT_PREFIX_CONFIG = ../config
 DEFAULT_EIGEN_INC_PATH = "../3rdparty/eigen"
 
 exists($$TARGET/libdependencies.pri) {
     include($$TARGET/libdependencies.pri)
 }
 
-include($${CT_PREFIX}/destdir.pri)
-include($${CT_PREFIX}/include_ct_library.pri)
+include($${CT_PREFIX_CONFIG}/destdir.pri)
+include(library_include_ct.pri)
 include(library_include_eigen.pri)
 
 INCLUDEPATH += .
 INCLUDEPATH += ..
 
-DESTDIR = $${EXECUTABLE_DESTDIR}
+DESTDIR = $${EXECUTABLE_DESTDIR}/libraries/core
 
 TEMPLATE = lib
 CONFIG += plugin
