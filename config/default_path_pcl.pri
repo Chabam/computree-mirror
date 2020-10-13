@@ -11,13 +11,14 @@ linux {
     BOOST_INC_PATH = "$${PCL_BASE_PATH}include"
 }
 
-windows {
-    PCL_BASE_PATH = "$$PWD/../ComputreeDependencies/pcl/"
+win32 {
+    PCL_BASE_PATH = "$$PWD/../3rdparty/pcl/"
     PCL_3RDPARTY_PATH = "$${PCL_BASE_PATH}3rdParty/"
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
     PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.11"
-    EIGEN_INC_PATH = "$${PCL_3RDPARTY_PATH}Eigen/eigen3"
+    # EIGEN_INC_PATH = "$${PCL_3RDPARTY_PATH}Eigen/eigen3"
+    EIGEN_INC_PATH = "$$PWD/../3rdparty/eigen/"
     QHULL_INC_PATH = "$${PCL_3RDPARTY_PATH}Qhull/include"
     QHULL_LIBS_PATH = "$${PCL_3RDPARTY_PATH}Qhull/lib"
     FLANN_INC_PATH = "$${PCL_3RDPARTY_PATH}FLANN/include"

@@ -1,10 +1,14 @@
-include(all_check_dependencies.pri) # Just verify if there is problems with dependencies, do nothing else
+# Just verify if there is problems with dependencies (paths, 3rd party libraries, compiler & options)
+include(config/check_dependencies_base.pri)
 
-TEMPLATE      = subdirs
-SUBDIRS       = AMKgl/libQGLViewer-2.7.2 library AMKgl ComputreeGui pluginbase
-CONFIG       += console ordered
+TEMPLATE = subdirs
+SUBDIRS += library AMKgl ComputreeGui
 
-win32-msvc2013 {
-    message( "msvc 2013 detected" )
-    QMAKE_CXXFLAGS += /FS
-}
+library.depends = 3rdparty/libQGLViewer
+AMKgl.depends = 3rdparty/libQGLViewer
+ComputreeGui.depends = AMKgl 3rdparty/muparser
+
+# Uncomment the following lines to remove libQGLViewer dependency
+# NO_QGLVIEWER = True
+# library.depends =
+# AMKgl.depends =

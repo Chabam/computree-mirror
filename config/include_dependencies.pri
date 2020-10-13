@@ -16,20 +16,20 @@ CHECK_LIBS_ONLY = false
 
 #if we must check if gdal can be used
 !isEmpty(CHECK_GEOS) {
-    include(geos_default_path.pri)
+    include(default_path_geos.pri)
 
-    exists(geos_user_path.pri) {
-        include(geos_user_path.pri)
+    exists(user_path_geos.pri) {
+        include(user_path_geos.pri)
     }
 
-    include(geos_check.pri)
+    include(check_geos.pri)
 
     #if GEOS can be used
     isEmpty(USE_GEOS_ERROR_MSG) {
-        include(include_geos_necessary.pri)
+        include(include_necessary_geos.pri)
 
         isEmpty(USE_GEOS_ERROR_MSG) {
-            warning("GEOS found and it will be used in $$TARGET")
+            message("GEOS found and it will be used in $$TARGET")
         }
     }
 }
@@ -56,20 +56,20 @@ contains( COMPUTREE, ctlibgdal ) {
 
 #if we must check if gdal can be used
 !isEmpty(CHECK_GDAL) {
-    include(gdal_default_path.pri)
+    include(default_path_gdal.pri)
 
-    exists(gdal_user_path.pri) {
-        include(gdal_user_path.pri)
+    exists(user_path_gdal.pri) {
+        include(user_path_gdal.pri)
     }
 
-    include(gdal_check.pri)
+    include(check_gdal.pri)
 
     #if GDAL can be used
     isEmpty(USE_GDAL_ERROR_MSG) {
-        include(include_gdal_necessary.pri)
+        include(include_necessary_gdal.pri)
 
         isEmpty(USE_GDAL_ERROR_MSG) {
-            warning("GDAL found and it will be used in $$TARGET")
+            message("GDAL found and it will be used in $$TARGET")
         }
     }
 }
@@ -118,20 +118,20 @@ contains( COMPUTREE, ctlibopencv ) {
 
 #if we must check if opencv can be used
 !isEmpty(CHECK_OPENCV) {
-    include(opencv_default_path.pri)
+    include(default_path_opencv.pri)
 
-    exists(opencv_user_path.pri) {
-        include(opencv_user_path.pri)
+    exists(user_path_opencv.pri) {
+        include(user_path_opencv.pri)
     }
 
-    include(opencv_check.pri)
+    include(check_opencv.pri)
 
     #if OPENCV can be used
     isEmpty(USE_OPENCV_ERROR_MSG) {
-        include(include_opencv_necessary.pri)
+        include(include_necessary_opencv.pri)
 
         isEmpty(USE_OPENCV_ERROR_MSG) {
-            warning("OPENCV found and it will be used in $$TARGET")
+            message("OPENCV found and it will be used in $$TARGET")
         }
     }
 }
@@ -181,20 +181,20 @@ contains( COMPUTREE, ctlibgsl ) {
 
 #if we must check if gsl can be used
 !isEmpty(CHECK_GSL) {
-    include(gsl_default_path.pri)
+    include(default_path_gsl.pri)
 
-    exists(gsl_user_path.pri) {
-        include(gsl_user_path.pri)
+    exists(user_pat_gslh.pri) {
+        include(user_path_gsl.pri)
     }
 
-    include(gsl_check.pri)
+    include(check_gsl.pri)
 
     #if GSL can be used
     isEmpty(USE_GSL_ERROR_MSG) {
-        include(include_gsl_necessary.pri)
+        include(include_necessary_gsl.pri)
 
         isEmpty(USE_GSL_ERROR_MSG) {
-            warning("GSL found and it will be used in $$TARGET")
+            message("GSL found and it will be used in $$TARGET")
         }
     }
 }
@@ -243,20 +243,20 @@ contains( COMPUTREE, ctlibpcl ) {
 
 #if we must check if pcl can be used
 !isEmpty(CHECK_PCL) {
-    include(pcl_default_path.pri)
+    include(default_path_pcl.pri)
 
-    exists(pcl_user_path.pri) {
-        include(pcl_user_path.pri)
+    exists(user_path_pcl.pri) {
+        include(user_path_pcl.pri)
     }
 
-    include(pcl_check.pri)
+    include(check_pcl.pri)
 
     #if PCL can be used
     isEmpty(USE_PCL_ERROR_MSG) {
-        include(include_pcl_necessary.pri)
+        include(include_necessary_pcl.pri)
 
         isEmpty(USE_PCL_ERROR_MSG) {
-            warning("PCL found and it will be used in $$TARGET")
+            message("PCL found and it will be used in $$TARGET")
         }
     }
 }
@@ -286,16 +286,16 @@ contains( COMPUTREE, ctlibpcl ) {
 ##### EIGEN IF PCL ######
 
 !contains( DEFINES, USE_PCL ) {
-    isEmpty(CT_LIB_PREFIX) {
-        INCLUDEPATH += ./3rdparty/eigen
-        TR_EXCLUDE  += ./3rdparty/eigen/*
+    isEmpty(CT_PREFIX_LIB) {
+        INCLUDEPATH += $$CT_PREFIX/3rdparty/eigen
+        TR_EXCLUDE  += $$CT_PREFIX/3rdparty/eigen/*
     } else {
-        INCLUDEPATH += $${CT_LIB_PREFIX}/3rdparty/eigen
-        TR_EXCLUDE  += $${CT_LIB_PREFIX}/3rdparty/eigen/*
+        INCLUDEPATH += $$CT_PREFIX/3rdparty/eigen
+        TR_EXCLUDE  += $$CT_PREFIX/3rdparty/eigen/*
     }
 }
 
 ### To avoid compilation error with GCC 7+
-unix {
+linux {
     INCLUDEPATH -= /usr/include
 }

@@ -6,7 +6,7 @@ linux {
 }
 
 win32 {
-    GSL_BASE_PATH = "$$PWD/../ComputreeDependencies/gsl/"
+    GSL_BASE_PATH = "$$PWD/../3rdparty/gsl/"
 
     GSL_INC_PATH = "$${GSL_BASE_PATH}include"
     GSL_LIBS_PATH = "$${GSL_BASE_PATH}lib/gsl"

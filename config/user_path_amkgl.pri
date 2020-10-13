@@ -1,4 +1,4 @@
-AMKGL_DEFINES_DIR = ../amkgl_defines_for_use_with_computree
+AMKGL_DEFINES_DIR = ../AMKgl/defines_computree
 
 INCLUDEPATH = ../AMKglTest
 
@@ -6,12 +6,12 @@ DEFINES += ENVIRONMENT64
 
 CT_PREFIX = ..
 CT_PREFIX_INSTALL = ../..
-CT_LIB_PREFIX = ../library
+CT_PREFIX_LIB = ../library
 
 COMPUTREE = ctlibplugin
 
 include(destdir.pri)
-include(include_ct_library.pri)
+include($${CT_PREFIX_LIB}/library_include_ct.pri)
 
 INCLUDEPATH += ../ComputreeGui/tools/amkgl
 

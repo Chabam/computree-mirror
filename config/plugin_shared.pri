@@ -4,23 +4,23 @@
 CONFIG -= depend_includepath
 
 isEmpty(CT_PREFIX) {
-    CT_PREFIX = ..
+    CT_PREFIX = ../..
 }
 
 isEmpty(CT_PREFIX_INSTALL) {
     CT_PREFIX_INSTALL = $$CT_PREFIX/..
 }
 
-isEmpty(CT_LIB_PREFIX) {
-    CT_LIB_PREFIX = $$CT_PREFIX/library
+isEmpty(CT_PREFIX_LIB) {
+    CT_PREFIX_LIB = $$CT_PREFIX/library
 }
 
 # all plugins needs this library
 COMPUTREE += ctlibplugin
 
 include(destdir.pri)
-include(include_ct_library.pri)
-include(include_all.pri)
+include(../library/library_include_ct.pri)
+include(include_dependencies.pri)
 
 contains ( QT_VERSION, "^5.*" ) {
     QT *= widgets

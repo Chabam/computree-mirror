@@ -8,7 +8,7 @@ defineReplace(searchDependencies) {
         NEW_LIBS_INCLUDED = false
 
         for(a, COMPUTREE) {
-            DEP_FILE_PATH = library/$${a}/libdependencies.pri
+            DEP_FILE_PATH = ../library/$${a}/libdependencies.pri
 
             !contains(DEPEND_FILE_INCLUDED, $$DEP_FILE_PATH) {
                 exists($$DEP_FILE_PATH) {
@@ -27,8 +27,8 @@ defineReplace(searchDependencies) {
     error(Too much dependencies - please contact the developper to resolve the file include_ct_library.pri at line 4)
 }
 
-isEmpty(CT_LIB_PREFIX) {
-    CT_LIB_PREFIX = ..
+isEmpty(CT_PREFIX_LIB) {
+    CT_PREFIX_LIB = ..
 }
 
 isEmpty(EXECUTABLE_DESTDIR) {
@@ -36,15 +36,15 @@ isEmpty(EXECUTABLE_DESTDIR) {
 }
 
 !isEmpty( COMPUTREE ) {
-    INCLUDEPATH *= $$CT_LIB_PREFIX
-    LIBS *= -L$${EXECUTABLE_DESTDIR}
+    INCLUDEPATH *= $$CT_PREFIX_LIB
+    LIBS *= -L$${EXECUTABLE_DESTDIR}/libraries/core
 
     COMPUTREE = $$searchDependencies()
 
     for(b, COMPUTREE) {
 #        !isEmpty(DONT_CHECK_CT_LIBRARY) {
             LIBS *= -l$${b}
-            INCLUDEPATH *= $${CT_LIB_PREFIX}/$${b}
+            INCLUDEPATH *= $${CT_PREFIX_LIB}/$${b}
 #           warning(Computree library $${b} will be used if founded)
 #        } else {
 #            exists(../$${CT_DESTDIR_NAME}/$${b}.*) {

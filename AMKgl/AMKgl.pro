@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-include(../qglviewer_default_path.pri)
+include(../config/default_path_qglviewer.pri)
 
 DEFINES += QGLVIEWER_STATIC
 
@@ -40,24 +40,24 @@ macx {
     DEFINES += GL_SILENCE_DEPRECATION
 }
 
-EIGEN_INC_PATH = "c:/eigen"
+DEFAULT_EIGEN_INC_PATH = "../3rdparty/eigen/"
 
-exists(eigen_user_path.pri) {
-    include(eigen_user_path.pri)
+exists(../config/user_path_eigen.pri) {
+    include(../config/user_path_eigen.pri)
 }
 
-EIGEN_CHECK_FILE = $$EIGEN_INC_PATH"/Eigen/Core"
+EIGEN_CHECK_FILE = $$DEFAULT_EIGEN_INC_PATH"/Eigen/Core"
 
 !exists($$EIGEN_CHECK_FILE) {
-    error("Eigen $$EIGEN_CHECK_FILE not found in $$EIGEN_INC_PATH ! Create file eigen_user_path.pri with a valid eigen path")
+    error("Eigen $$EIGEN_CHECK_FILE not found in $$DEFAULT_EIGEN_INC_PATH ! Create file eigen_user_path.pri with a valid eigen path")
 }
 
 AMKGL_DEFINES_DIR = generic
 
-exists(../amkgl_user_definitions.pri) {
+exists(../config/user_path_amkgl.pri) {
     USE_USER_DEFINITIONS = true
-    warning(amkgl_user_definitions.pri founded and used)
-    include(../amkgl_user_definitions.pri)
+    # message(user_path_amkgl.pri founded and used)
+    include(../config/user_path_amkgl.pri)
 } else {
     warning(To use this engine with your software please do a file amkgl_user_definitions.pri in .. directory)
 }
@@ -272,41 +272,19 @@ HEADERS  += \
     renderer/instanced/defaultinstancedpermanentrenderer.h \
     renderer/sphere/spherechunk.h \
     picker/objectsprocessorforpicker.h \
-    $$AMKGL_DEFINES_DIR/defineitem.h \
     picker/tools/itemspickingdefaultfunction.h \
     picker/objectsofitempicker.h \
-    $$AMKGL_DEFINES_DIR/includeitem.h \
     picker/tools/itemspickingtools.h \
     picker/itemspicker.h \
     picker/polygonitemspicker.h \
-    $$AMKGL_DEFINES_DIR/definegraphicsview.h \
-    $$AMKGL_DEFINES_DIR/includegraphicsview.h \
-    $$AMKGL_DEFINES_DIR/definemodel.h \
-    $$AMKGL_DEFINES_DIR/includemodel.h \
-    $$AMKGL_DEFINES_DIR/definepoint.h \
-    $$AMKGL_DEFINES_DIR/includepoint.h \
-    $$AMKGL_DEFINES_DIR/definecolor.h \
-    $$AMKGL_DEFINES_DIR/definenormal.h \
-    $$AMKGL_DEFINES_DIR/includecolor.h \
-    $$AMKGL_DEFINES_DIR/includenormal.h \
-    $$AMKGL_DEFINES_DIR/defineglobalcloud.h \
-    $$AMKGL_DEFINES_DIR/definecloudindexes.h \
     interfaces/iglobalpointcloudmanager.h \
     interfaces/icoordinatesystemmanager.h \
     amkglapp.h \
     interfaces/iamkgllog.h \
     picker/polygonobjectsofitempicker.h \
-    $$AMKGL_DEFINES_DIR/includecloudindex.h \
     interfaces/igraphicsdocument.h \
-    $$AMKGL_DEFINES_DIR/includeglobalcloud.h \
-    $$AMKGL_DEFINES_DIR/defineitempainter.h \
-    $$AMKGL_DEFINES_DIR/includeitempainter.h \
     view/amkglviewer.h \
     tools/qglviewer/qglviewertools.h \
-    $$AMKGL_DEFINES_DIR/defineitempermanentpainter.h \
-    $$AMKGL_DEFINES_DIR/includeitempermanentpainter.h \
-    $$AMKGL_DEFINES_DIR/defineitempickingpainter.h \
-    $$AMKGL_DEFINES_DIR/includeitempickingpainter.h \
     interfaces/ieasyaccess.h \
     picker/itemspickerbymodel.h \
     picker/pointspickerbymodel.h \
@@ -408,6 +386,30 @@ isEmpty(USE_USER_DEFINITIONS) {
         dummy/dummyitemmodel.h \
         dummy/dummyitempermanentpainter.h \
         dummy/dummyitempickingpainter.h
+} else {
+    HEADERS  += \
+        $$AMKGL_DEFINES_DIR/defineitem.h \
+        $$AMKGL_DEFINES_DIR/includeitem.h \
+        $$AMKGL_DEFINES_DIR/definegraphicsview.h \
+        $$AMKGL_DEFINES_DIR/includegraphicsview.h \
+        $$AMKGL_DEFINES_DIR/definemodel.h \
+        $$AMKGL_DEFINES_DIR/includemodel.h \
+        $$AMKGL_DEFINES_DIR/definepoint.h \
+        $$AMKGL_DEFINES_DIR/includepoint.h \
+        $$AMKGL_DEFINES_DIR/definecolor.h \
+        $$AMKGL_DEFINES_DIR/definenormal.h \
+        $$AMKGL_DEFINES_DIR/includecolor.h \
+        $$AMKGL_DEFINES_DIR/includenormal.h \
+        $$AMKGL_DEFINES_DIR/defineglobalcloud.h \
+        $$AMKGL_DEFINES_DIR/definecloudindexes.h \
+        $$AMKGL_DEFINES_DIR/includecloudindex.h \
+        $$AMKGL_DEFINES_DIR/includeglobalcloud.h \
+        $$AMKGL_DEFINES_DIR/defineitempainter.h \
+        $$AMKGL_DEFINES_DIR/includeitempainter.h \
+        $$AMKGL_DEFINES_DIR/defineitempermanentpainter.h \
+        $$AMKGL_DEFINES_DIR/includeitempermanentpainter.h \
+        $$AMKGL_DEFINES_DIR/defineitempickingpainter.h \
+        $$AMKGL_DEFINES_DIR/includeitempickingpainter.h \
 }
 
 FORMS    += \
