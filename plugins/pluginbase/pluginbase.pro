@@ -4,7 +4,7 @@ CHECK_CAN_USE_GDAL = 1
 MUST_USE_OPENCV = 1
 DONT_CHECK_CT_LIBRARY = 1
 
-include(../plugin_shared.pri)
+include(../../config/plugin_shared.pri)
 
 TARGET = plug_base
 
@@ -14,7 +14,7 @@ macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 }
 
-HEADERS += $$CT_LIB_PREFIX/ctlibplugin/pluginentryinterface.h\
+HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     pb_pluginentry.h \
     pb_steppluginmanager.h \
     step/pb_stepapplypointfilters.h \

@@ -51,7 +51,6 @@
 /*! \defgroup Steps_PB PluginBase (PB) steps
  */
 
-
 #include "pluginentryinterface.h"
 
 class PB_StepPluginManager;
