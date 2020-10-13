@@ -19,7 +19,7 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #pragma GCC diagnostic ignored "-Wint-in-bool-context"
 #endif
-#include "muParser/muParser.h"
+#include "muParser.h"
 #if defined(_WIN32) && defined(_MSC_VER)
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
 #pragma GCC diagnostic warning "-Wall"
