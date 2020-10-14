@@ -12,7 +12,7 @@ class CT_StandardGrid3D_SparseDrawManager : public CT_StandardAbstractItemDrawab
 public:
     CT_StandardGrid3D_SparseDrawManager(QString drawConfigurationName = "");
 
-    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const;
+    void draw(GraphicsViewInterface &view, PainterInterface &painter, const CT_AbstractItemDrawable &itemDrawable) const override;
 
 protected:
 

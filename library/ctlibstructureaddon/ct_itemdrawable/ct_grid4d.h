@@ -271,7 +271,7 @@ public:
      * \param index Index of cell to modify
      * \param value Double value to cast in effective type
      */
-    inline virtual void setValueAtIndexFromDouble(const size_t &index, const double &value) { setValueAtIndex(index, static_cast<DataT>(value)); }
+    inline virtual void setValueAtIndexFromDouble(const size_t &index, const double &value) override { setValueAtIndex(index, static_cast<DataT>(value)); }
 
     /*!
      * \brief Set value at specified index
@@ -322,7 +322,7 @@ public:
     /*!
      * \brief Compute min and max values
      */
-    virtual void computeMinMax();
+    virtual void computeMinMax() override;
 
     inline size_t wdim() const {return SuperClass::wdim();}
     inline size_t xdim() const {return SuperClass::xdim();}

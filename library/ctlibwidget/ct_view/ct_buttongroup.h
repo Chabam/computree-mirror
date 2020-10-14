@@ -48,16 +48,16 @@ public:
     CT_ButtonGroup(QWidget &parent, int &value);
     virtual ~CT_ButtonGroup();
 
-    QString type() const { return metaObject()->className(); }
+    QString type() const override { return metaObject()->className(); }
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
 
-    QWidget *createWidget(QWidget &parent);
+    QWidget *createWidget(QWidget &parent) override;
 
-    void updateValue();
+    void updateValue() override;
 
-    bool isValueAndWidgetValueDifferent() const;
+    bool isValueAndWidgetValueDifferent() const override;
 
     QVariant getValue() const;
 

@@ -14,27 +14,27 @@ class CT_GroupBox : public CT_GenericConfigurableWidget, public CT_WidgetWithVal
 public:
     CT_GroupBox(const QString& title, QWidget *parent = nullptr);
 
-    QString type() const { return metaObject()->className(); }
+    QString type() const override { return metaObject()->className(); }
 
     /**
      * @brief Redefined because in a group box you cannot add a new group box !
      */
-    CT_GroupBox* addNewGroupBox(const QString& title) { Q_UNUSED(title) return nullptr; }
+    CT_GroupBox* addNewGroupBox(const QString& title) override { Q_UNUSED(title) return nullptr; }
 
     /**
      * @brief Create the QGroupBox and return it
      */
-    QWidget* createWidget(QWidget &parent);
+    QWidget* createWidget(QWidget &parent) override;
 
     /**
      * @brief Redefined to call it to all widgets in this group box
      */
-    void updateValue();
+    void updateValue() override;
 
     /**
      * @brief Redefined to check all widgets in this group box
      */
-    bool isValueAndWidgetValueDifferent() const;
+    bool isValueAndWidgetValueDifferent() const override;
 
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;

@@ -158,12 +158,12 @@ public:
      * \param index Index of cell to modify
      * \param value Double value to cast in effective type
      */
-    virtual void setValueAtIndexFromDouble(const size_t &index, const double &value);
+    virtual void setValueAtIndexFromDouble(const size_t &index, const double &value) override;
 
     /*!
      * \brief Compute min and max values
      */
-    void computeMinMax();
+    void computeMinMax() override;
 
     /**
       * \brief Gives the NA value
@@ -223,7 +223,7 @@ public:
      * \param index index in the grid
      * \return A double value between 0 (min value) and 1 (max value), or -1 for NA
      */
-    virtual double ratioValueAtIndex(const size_t &index) const;
+    virtual double ratioValueAtIndex(const size_t &index) const override;
 
 
     /*!
@@ -231,7 +231,7 @@ public:
      * \param index index in the grid
      * \return A double value
      */
-    virtual double valueAtIndexAsDouble(const size_t &index) const;
+    virtual double valueAtIndexAsDouble(const size_t &index) const override;
 
 
     /*!
@@ -239,13 +239,13 @@ public:
      * \param index index in the grid
      * \return A QString représenting value
      */
-    virtual QString valueAtIndexAsString(const size_t &index) const;
+    virtual QString valueAtIndexAsString(const size_t &index) const override;
 
     /*!
      * \brief return na value as a string
      *
      */
-    virtual QString NAAsString() const;
+    virtual QString NAAsString() const override;
 
     /**
       * \brief Gives the value at length

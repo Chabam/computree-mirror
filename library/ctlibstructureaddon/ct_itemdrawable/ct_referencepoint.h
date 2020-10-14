@@ -88,7 +88,7 @@ public:
     void setCenterY(double y) override;
     void setCenterZ(double z) override;
     void setCenterCoordinate(const Eigen::Vector3d& center) override;
-    void setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max);
+    void setBoundingBox(const Eigen::Vector3d& min, const Eigen::Vector3d& max) override;
 
     CT_ITEM_COPY_IMP(CT_ReferencePoint)
 

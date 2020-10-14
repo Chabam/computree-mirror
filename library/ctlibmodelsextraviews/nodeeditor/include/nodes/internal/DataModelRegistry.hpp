@@ -61,7 +61,7 @@ public:
   template<typename ModelType>
   void registerModel(QString const &category = "Nodes")
   {
-    RegistryItemCreator creator = [](){ return std::make_unique<ModelType>(); };
+    RegistryItemCreator creator = [](){ return detail::make_unique<ModelType>(); };
     registerModelImpl<ModelType>(std::move(creator), category);
   }
 

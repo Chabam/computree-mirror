@@ -144,7 +144,7 @@ protected:
             }
         }
 
-        AbstractAttributeObject* copy() const {
+        AbstractAttributeObject* copy() const override {
             return new AttributeObject<VType>(*this);
         }
 

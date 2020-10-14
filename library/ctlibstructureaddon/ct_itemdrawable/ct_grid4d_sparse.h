@@ -157,7 +157,7 @@ public:
      * \param index Index
      * \return Value
      */
-    inline DataT valueAtIndex(const size_t index) const
+    inline DataT valueAtIndex(const size_t index) const override
     {
         size_t levw, levx, levy, levz;
         if( !CT_AbstractGrid4D::indexToGrid( index, levw, levx, levy, levz ) )
@@ -176,7 +176,7 @@ public:
      * \param value Value
      * \return True if the value has actually been set
      */
-    inline bool setValueAtIndex(const size_t index, const DataT value)
+    inline bool setValueAtIndex(const size_t index, const DataT value) override
     {
         size_t levw, levx, levy, levz;
         if( !CT_AbstractGrid4D::indexToGrid( index, levw, levx, levy, levz ) )
@@ -196,7 +196,7 @@ public:
     //          CompuTree Core and GUI tools        //
     //**********************************************//
 
-    virtual void computeMinMax();
+    virtual void computeMinMax() override;
 
     inline cv::SparseMatConstIterator_<DataT> beginIterator() const { return _data.begin(); }
     inline cv::SparseMatConstIterator_<DataT> endIterator()  const { return _data.end(); }

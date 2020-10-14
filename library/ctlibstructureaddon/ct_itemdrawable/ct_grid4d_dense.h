@@ -188,7 +188,7 @@ public:
      * \param index Index
      * \return Value
      */
-    inline DataT valueAtIndex(const size_t index) const
+    inline DataT valueAtIndex(const size_t index) const override
     {
         if ( index >= this->nCells() )
         {
@@ -204,7 +204,7 @@ public:
      * \param value Value
      * \return True if the value has actually been set
      */
-    inline bool setValueAtIndex(const size_t index, const DataT value)
+    inline bool setValueAtIndex(const size_t index, const DataT value) override
     {
         if ( index >= this->nCells() )
         {
