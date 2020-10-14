@@ -70,9 +70,9 @@ win32-msvc* {
 
     lib_opengl.files += ../3rdparty/opengl/opengl32.dll
     lib_opengl.path = $$DESTDIR
-}
 
-INSTALLS += lib_qt lib_qt_platforms lib_opencv lib_gdal lib_pcl setenv lib_opengl
+    INSTALLS += lib_qt lib_qt_platforms lib_opencv lib_gdal lib_pcl setenv lib_opengl
+}
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
@@ -210,6 +210,10 @@ macx {
     LIBS += $$QGLVIEWER_DIR/libQGLViewer.a
 
     LIBS += -framework OpenGL
+
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+    # Silent OpenGL warning for MacOS > 10.14
+    DEFINES += GL_SILENCE_DEPRECATION
 }
 
 !equals(PWD, $${OUT_PWD}) {

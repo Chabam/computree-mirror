@@ -8,13 +8,14 @@ QGLVIEWER_STATIC = yes
 TEMPLATE = lib
 TARGET = QGLViewer
 VERSION = 2.7.2
-CONFIG *= qt opengl warn_off shared thread create_prl rtti no_keywords
+CONFIG *= qt c++17 opengl warn_off shared thread create_prl rtti no_keywords
 
 linux|mingw {
     QMAKE_CXXFLAGS += -fcompare-debug-second
 }
 
 macx {
+    QMAKE_CXXFLAGS += -std=c++17
     QMAKE_RANLIB += -no_warning_for_no_symbols
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 }

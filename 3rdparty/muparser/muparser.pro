@@ -12,6 +12,10 @@ linux {
     QMAKE_CXXFLAGS += -Wno-deprecated-copy -Wno-cast-function-type
 }
 
+macx {
+    QMAKE_CXXFLAGS += -std=c++17
+}
+
 SOURCES += \
     src/muParser.cpp \
     src/muParserBase.cpp \
