@@ -121,7 +121,7 @@ size_t CT_LASHeader::getPointsRecordCount() const
 
 bool CT_LASHeader::mustTransformPoints() const
 {
-    return (!qFuzzyCompare(m_xOffset, 0) || !qFuzzyCompare(m_yOffset, 0) || !qFuzzyCompare(m_zOffset, 0) || !qFuzzyCompare(m_xScaleFactor, 1) || !qFuzzyCompare(m_yScaleFactor, 1) || !qFuzzyCompare(m_zScaleFactor, 1));
+    return (!qFuzzyIsNull(m_xOffset) || !qFuzzyIsNull(m_yOffset) || !qFuzzyIsNull(m_zOffset) || !qFuzzyCompare(m_xScaleFactor, 1) || !qFuzzyCompare(m_yScaleFactor, 1) || !qFuzzyCompare(m_zScaleFactor, 1));
 }
 
 void CT_LASHeader::transformPoint(const qint32 &x, const qint32 &y, const qint32 &z, double &xc, double &yc, double &zc) const

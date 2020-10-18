@@ -736,7 +736,7 @@ void GPointsAttributesManager::on_doubleSpinBoxGradientArrowValue_editingFinishe
 
         const double range = pas->max() - pas->min();
 
-        if(!qFuzzyCompare(range, 0))  {
+        if(!qFuzzyIsNull(range))  {
             double pos = (ui->doubleSpinBoxGradientArrowValue->value()-pas->min())/range;
 
             if(pos < 0)
@@ -802,7 +802,7 @@ void GPointsAttributesManager::updateArrowValue(qreal val, GradientArrow arr)
 
         const double range = pas->max() - pas->min();
 
-        ok = !qFuzzyCompare(range, 0);
+        ok = !qFuzzyIsNull(range);
 
         if(ok)
             ui->doubleSpinBoxGradientArrowValue->setValue((arr.position()*range)+pas->min());

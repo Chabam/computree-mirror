@@ -129,7 +129,7 @@ bool DM_AttributesScalarT<Type>::process(GDocumentViewForGraphics *doc)
 
     double range = m_manualMax-m_manualMin;
 
-    if(qFuzzyCompare(range, 0))
+    if(qFuzzyIsNull(range))
         range = 1;
 
     DM_ColorLinearInterpolator interpolator;

@@ -130,12 +130,12 @@ public:
      */
     inline bool colX(const double x, int &colx) const
     {
-        if (qFuzzyCompare(x, minX())) {colx = 0; return true;}
-        if (qFuzzyCompare(x, maxX())) {colx = _dimx - 1; return true;}
-
         if (x < minX() || x > maxX()) {return false;}
 
         colx = int(floor((x - minX()) / _res));
+
+        if (colx < 0) {return false;}
+        if (colx > (_dimx - 1)) {return false;}
 
         return true;
     }
@@ -148,12 +148,12 @@ public:
      */
     inline bool linY(const double y, int &liny) const
     {
-        if (qFuzzyCompare(y, minY())) {liny = 0; return true;}
-        if (qFuzzyCompare(y, maxY())) {liny = _dimy - 1; return true;}
-
         if (y < minY() || y > maxY()) {return false;}
 
         liny = int(floor((y - minY()) / _res));
+
+        if (liny < 0) {return false;}
+        if (liny > (_dimy - 1)) {return false;}
 
         return true;
     }
@@ -166,12 +166,12 @@ public:
      */
     inline bool levelZ(const double z, int &levz) const
     {
-        if (qFuzzyCompare(z,  minZ())) {levz = 0; return true;}
-        if (qFuzzyCompare(z,  maxZ())) {levz = _dimz - 1; return true;}
-
         if (z < minZ() || z > maxZ()) {return false;}
 
         levz = int(floor((z - minZ()) / _res));
+
+        if (levz < 0) {return false;}
+        if (levz > (_dimz - 1)) {return false;}
 
         return true;
     }

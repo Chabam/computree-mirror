@@ -292,7 +292,8 @@ bool CT_Reader_LArchitect_Grid::readHeader(QTextStream &stream, Eigen::Vector3d 
     if (!ok[0] || !ok[1] || !ok[2])
         return false;
 
-    if (!qFuzzyCompare(res[0], res[1]) || !qFuzzyCompare(res[0], res[2]))
+    double epsilon = 0.000000000001;
+    if (fabs(res[0] - res[1]) > epsilon || fabs(res[0] - res[2]) > epsilon)
         return false;
 
     // read dimensions of the grid

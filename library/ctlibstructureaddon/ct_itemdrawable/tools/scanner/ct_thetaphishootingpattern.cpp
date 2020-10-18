@@ -119,12 +119,12 @@ void CT_ThetaPhiShootingPattern::updateNumberOfRays()
     m_nVRays = 0;
 
     // Calculates the number of horizontal and vertical rays
-    if (!qFuzzyCompare(m_hRes, 0))
+    if (!qFuzzyIsNull(m_hRes))
     {
         m_nHRays = int(ceil(fabs(m_hFov/m_hRes)));
     }
 
-    if (!qFuzzyCompare(m_vRes, 0))
+    if (!qFuzzyIsNull(m_vRes))
     {
         m_nVRays = int(ceil(fabs(m_vFov/m_vRes)));
     }

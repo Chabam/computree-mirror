@@ -164,12 +164,13 @@ public:
      */
     inline bool xcol(const double xCoord, int &xcolumn) const
     {
-        if (qFuzzyCompare(xCoord, minXCoord())) {xcolumn = 0;         return true;}
-        if (qFuzzyCompare(xCoord, maxXCoord())) {xcolumn = _dimx - 1; return true;}
-
         if (xCoord < minXCoord() || xCoord > maxXCoord()) {return false;}
 
         xcolumn = int(floor((xCoord - minXCoord()) / _res));
+
+        if (xcolumn < 0) {return false;}
+        if (xcolumn > (_dimx - 1)) {return false;}
+
         return true;
     }
 
@@ -181,12 +182,13 @@ public:
      */
     inline bool lin(const double yCoord, int &yrow) const
     {
-        if (qFuzzyCompare(yCoord, minYCoord())) {yrow = _dimy - 1; return true;}
-        if (qFuzzyCompare(yCoord, maxYCoord())) {yrow = 0; return true;}
-
         if (yCoord < minYCoord() || yCoord > maxYCoord()) {return false;}
 
         yrow = int(floor((maxYCoord() - yCoord) / _res));
+
+        if (yrow < 0) {return false;}
+        if (yrow > (_dimy - 1)) {return false;}
+
         return true;
     }
 

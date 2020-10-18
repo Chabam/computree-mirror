@@ -115,14 +115,14 @@ void CT_Grid3DWooTraversalAlgorithm::compute(CT_Beam &data, Eigen::Vector3d *end
 
         // Initializing the tMax values
         for (int i = 0 ; i < 3 ; i++) {
-            !qFuzzyCompare(data.direction()(i), 0) ?
+            !qFuzzyIsNull(data.direction()(i)) ?
                         _tMax(i) = fabs((_boundary(i) - _start(i)) / data.direction()(i)) :
                     _tMax(i) = std::numeric_limits<double>::max();
         }
 
         // Initializing the deltaT values
         for (int i = 0 ; i < 3 ; i++) {
-            !qFuzzyCompare(data.direction()(i), 0) ?
+            !qFuzzyIsNull(data.direction()(i)) ?
                         _tDel(i) = fabs(_gridRes / data.direction()(i)) :
                     _tDel(i) = std::numeric_limits<double>::max();
         }
@@ -229,14 +229,14 @@ bool CT_Grid3DWooTraversalAlgorithm::init(CT_Beam &data, size_t returnedIndex)
 
         // Initializing the tMax values
         for (int i = 0 ; i < 3 ; i++) {
-            !qFuzzyCompare(data.direction()(i), 0) ?
+            !qFuzzyIsNull(data.direction()(i)) ?
                         _tMax(i) = fabs((_boundary(i) - _start(i)) / data.direction()(i)) :
                     _tMax(i) = std::numeric_limits<double>::max();
         }
 
         // Initializing the deltaT values
         for (int i = 0 ; i < 3 ; i++) {
-            !qFuzzyCompare(data.direction()(i), 0) ?
+            !qFuzzyIsNull(data.direction()(i)) ?
                         _tDel(i) = fabs(_gridRes / data.direction()(i)) :
                     _tDel(i) = std::numeric_limits<double>::max();
         }

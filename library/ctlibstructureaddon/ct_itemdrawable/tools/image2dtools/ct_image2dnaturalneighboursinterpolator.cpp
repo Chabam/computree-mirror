@@ -77,7 +77,7 @@ void CT_Image2DNaturalNeighboursInterpolator::interpolateForOneCell(const size_t
                 sum += (*nodePt)(2) / distance;
                 sum_poids += 1.0 / distance;
             }
-            if (!qFuzzyCompare(sum_poids, 0))
+            if (!qFuzzyIsNull(sum_poids))
             {
                 _rasterInterpol->setValue(xi, yi, float(sum / sum_poids));
             }
