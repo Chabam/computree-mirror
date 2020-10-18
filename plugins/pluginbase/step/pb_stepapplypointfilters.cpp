@@ -47,14 +47,16 @@ void PB_StepApplyPointFilters::savePostSettings(SettingsWriterInterface &writer)
 
 bool PB_StepApplyPointFilters::restorePostSettings(SettingsReaderInterface &reader)
 {
-    if(!SuperClass::restorePostSettings(reader))
+    if (!PB_ConfigurableElementTools::restoreSettingsOfConfigurableElementAndSaveItInACollection(m_selectedXYZFilters,
+                                                                                               pluginStaticCastT<PB_StepPluginManager>()->xyzFiltersAvailable(),
+                                                                                               this,
+                                                                                               "Filter",
+                                                                                               reader))
+    {
         return false;
+    }
 
-    return PB_ConfigurableElementTools::restoreSettingsOfConfigurableElementAndSaveItInACollection(m_selectedXYZFilters,
-                                                                                                   pluginStaticCastT<PB_StepPluginManager>()->xyzFiltersAvailable(),
-                                                                                                   this,
-                                                                                                   "Filter",
-                                                                                                   reader);
+    return SuperClass::restorePostSettings(reader);
 }
 
 CT_VirtualAbstractStep* PB_StepApplyPointFilters::createNewInstance() const
