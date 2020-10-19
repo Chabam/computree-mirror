@@ -145,24 +145,22 @@ isEmpty(USE_PCL_ERROR_MSG) {
     equals(CHECK_LIBS_ONLY, false) {
         DEFINES += USE_PCL
         DEFINES += USE_BOOST
-        
-        INCLUDEPATH += $$PCL_INC_PATH
-        INCLUDEPATH += $$EIGEN_INC_PATH
-        INCLUDEPATH += $$QHULL_INC_PATH
-        INCLUDEPATH += $$FLANN_INC_PATH
-        INCLUDEPATH += $$BOOST_INC_PATH
-        
-        TR_EXCLUDE  += $$PCL_INC_PATH/*
-        TR_EXCLUDE  += $$EIGEN_INC_PATH/*
-        TR_EXCLUDE  += $$QHULL_INC_PATH/*
-        TR_EXCLUDE  += $$FLANN_INC_PATH/*
-        TR_EXCLUDE  += $$BOOST_INC_PATH/*
 
-        DEPENDPATH  += $$QHULL_INC_PATH
+        INCLUDEPATH += $$LIB_PATH/$$PCL_INC_PATH
+        INCLUDEPATH += $$LIB_PATH/$$QHULL_INC_PATH
+        INCLUDEPATH += $$LIB_PATH/$$FLANN_INC_PATH
+        INCLUDEPATH += $$LIB_PATH/$$BOOST_INC_PATH
+        
+        TR_EXCLUDE  += $$LIB_PATH/$$PCL_INC_PATH/*
+        TR_EXCLUDE  += $$LIB_PATH/$$QHULL_INC_PATH/*
+        TR_EXCLUDE  += $$LIB_PATH/$$FLANN_INC_PATH/*
+        TR_EXCLUDE  += $$LIB_PATH/$$BOOST_INC_PATH/*
 
-        LIBS += -L$$PCL_LIBS_PATH
-        LIBS += -L$$BOOST_LIBS_PATH
-        LIBS += -L$$QHULL_LIBS_PATH
+        DEPENDPATH  += $$LIB_PATH/$$QHULL_INC_PATH
+
+        LIBS += -L$$LIB_PATH/$$PCL_LIBS_PATH
+        LIBS += -L$$LIB_PATH/$$BOOST_LIBS_PATH
+        LIBS += -L$$LIB_PATH/$$QHULL_LIBS_PATH
 
         LIBS += $$PCL_LIBS_FOUNDED
     }

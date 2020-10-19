@@ -1,6 +1,6 @@
 OPENCV_LIBS_FOUNDED =
 
-unix {
+linux {
 
     OPENCV_LIB_ADD =
 
@@ -128,11 +128,11 @@ isEmpty(USE_OPENCV_ERROR_MSG) {
     equals(CHECK_LIBS_ONLY, false) {
         DEFINES += USE_OPENCV
         
-        INCLUDEPATH += $$OPENCV_INC_PATH
+        INCLUDEPATH += $$LIB_PATH/$$OPENCV_INC_PATH
         
-        TR_EXCLUDE  += $$OPENCV_INC_PATH/*
+        TR_EXCLUDE  += $$LIB_PATH/$$OPENCV_INC_PATH/*
 
-        LIBS += -L$$OPENCV_LIBS_PATH
+        LIBS += -L$$LIB_PATH/$$OPENCV_LIBS_PATH
         LIBS += $$OPENCV_LIBS_FOUNDED
     }
 }

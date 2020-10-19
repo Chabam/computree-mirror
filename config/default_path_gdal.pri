@@ -6,7 +6,7 @@ linux {
 }
 
 win32 {
-    GDAL_BASE_PATH = "$$PWD/../3rdparty/gdal/"
+    GDAL_BASE_PATH = "../3rdparty/gdal/"
 
     GDAL_INC_PATH = $${GDAL_BASE_PATH}include
     GDAL_LIBS_PATH = $${GDAL_BASE_PATH}lib

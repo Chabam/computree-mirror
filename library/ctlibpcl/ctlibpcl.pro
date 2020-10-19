@@ -1,6 +1,6 @@
 MUST_USE_PCL = 1
-
-include(../library_shared.pri)
+MUST_USE_EIGEN = 1
+include(../../config/library_shared.pri)
 include(../../config/include_dependencies.pri)
 
 TARGET = ctlibpcl

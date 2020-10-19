@@ -4,21 +4,24 @@
 # Run "qmake; make; make install" to compile and install the library on Unix systems.
 # Optional arguments can tune install paths (as in "qmake PREFIX=$HOME"). See doc/download.html for details.
 
-QGLVIEWER_STATIC = yes
 TEMPLATE = lib
 TARGET = QGLViewer
 VERSION = 2.7.2
-CONFIG *= qt c++17 opengl warn_off shared thread create_prl rtti no_keywords
+CONFIG *= qt opengl warn_on shared thread create_prl rtti no_keywords
+
+#### Options for Computree ####
+QGLVIEWER_STATIC = yes
+CONFIG *= c++17 warn_off
 
 linux|mingw {
     QMAKE_CXXFLAGS += -fcompare-debug-second
 }
 
 macx {
-    QMAKE_CXXFLAGS += -std=c++17
     QMAKE_RANLIB += -no_warning_for_no_symbols
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 }
+###############################
 
 QGL_HEADERS = \
 	  qglviewer.h \
@@ -181,8 +184,8 @@ unix {
 	}
 
 	# Make much smaller libraries (and packages) by removing debugging informations
-        QMAKE_CFLAGS_RELEASE -= -g
-        QMAKE_CXXFLAGS_RELEASE -= -g
+	QMAKE_CFLAGS_RELEASE -= -g
+	QMAKE_CXXFLAGS_RELEASE -= -g
 
 	# install header
 	include.path = $${INCLUDE_DIR_}/QGLViewer
@@ -289,9 +292,9 @@ win32 {
 	!win32-g++ {
 		QMAKE_CXXFLAGS *= -TP -GR
 		DEFINES += NOMINMAX
-                win32-msvc2013 {
+		win32-msvc2013 {
 			QMAKE_CXXFLAGS *= -EH -FS
-                }
+		}
 	}
 }
 

@@ -1,6 +1,6 @@
 QT = core
 
-include(../library_shared.pri)
+include(../../config/library_shared.pri)
 
 TARGET = ctliblog
 

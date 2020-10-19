@@ -1,7 +1,7 @@
 GEOS_LIB_ADD = geos
 GEOS_LIBS_FOUNDED =
 
-unix {
+linux {
     for(a, GEOS_LIB_ADD) {
         CONFIG(debug, debug|release) {
             !exists($$GEOS_LIBS_PATH/lib$${a}*) {
@@ -19,7 +19,7 @@ unix {
     }
 }
 
-windows {
+win32 {
     for(a, GEOS_LIB_ADD) {
         CONFIG(debug, debug|release) {
             !exists($$GEOS_LIBS_PATH/$${a}*) {
@@ -42,11 +42,11 @@ isEmpty(USE_GEOS_ERROR_MSG) {
     equals(CHECK_LIBS_ONLY, false) {
         DEFINES += USE_GEOS
         
-        INCLUDEPATH += $$GEOS_INC_PATH
+        INCLUDEPATH += $$LIB_PATH/$$GEOS_INC_PATH
         
-        TR_EXCLUDE  += $$GEOS_INC_PATH/*
+        TR_EXCLUDE  += $$LIB_PATH/$$GEOS_INC_PATH/*
 
-        LIBS += -L$$GEOS_LIBS_PATH
+        LIBS += -L$$LIB_PATH/$$GEOS_LIBS_PATH
         LIBS += $$GEOS_LIBS_FOUNDED
     }
 }

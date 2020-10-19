@@ -2,17 +2,13 @@ COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctlibstepa
 
 CHECK_CAN_USE_GDAL = 1
 MUST_USE_OPENCV = 1
-DONT_CHECK_CT_LIBRARY = 1
+MUST_USE_EIGEN = 1
 
 include(../../config/plugin_shared.pri)
 
 TARGET = plug_base
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
-
-macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
-}
+QT += concurrent
 
 HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     pb_pluginentry.h \

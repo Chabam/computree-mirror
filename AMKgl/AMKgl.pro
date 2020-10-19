@@ -4,9 +4,8 @@
 #
 #-------------------------------------------------
 
-include(../config/default_path_qglviewer.pri)
-
-DEFINES += QGLVIEWER_STATIC
+DEFINES *= QGLVIEWER_STATIC
+DEFINES *= AMKGL_NO_TODO_WARNINGS
 
 QT       += core gui xml opengl concurrent
 
@@ -15,6 +14,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = AMKgl
 TEMPLATE = lib
 CONFIG *= staticlib
+
 DESTDIR = compiled
 UI_DIR = ui
 MOC_DIR = moc
@@ -40,33 +40,21 @@ macx {
     DEFINES += GL_SILENCE_DEPRECATION
 }
 
-DEFAULT_EIGEN_INC_PATH = "../3rdparty/eigen/"
+MUST_USE_EIGEN = 1
+MUST_USE_LIBQGLVIEWER = 1
 
-exists(../config/user_path_eigen.pri) {
-    include(../config/user_path_eigen.pri)
-}
-
-EIGEN_CHECK_FILE = $$DEFAULT_EIGEN_INC_PATH"/Eigen/Core"
-
-!exists($$EIGEN_CHECK_FILE) {
-    error("Eigen $$EIGEN_CHECK_FILE not found in $$DEFAULT_EIGEN_INC_PATH ! Create file eigen_user_path.pri with a valid eigen path")
-}
+include(../config/include_dependencies.pri)
 
 AMKGL_DEFINES_DIR = generic
 
-exists(../config/user_path_amkgl.pri) {
+exists(AMKgl_defines_computree.pri) {
     USE_USER_DEFINITIONS = true
-    # message(user_path_amkgl.pri founded and used)
-    include(../config/user_path_amkgl.pri)
+    # message(AMKgl_defines_computree.pri founded and used)
+    include(AMKgl_defines_computree.pri)
+    INCLUDEPATH += $$AMKGL_DEFINES_DIR
 } else {
-    warning(To use this engine with your software please do a file amkgl_user_definitions.pri in .. directory)
+    error(To use this engine with your software please do a file AMKgl_defines_computree.pri in .. directory)
 }
-
-!exists(../$$QGL_VIEWER_PATH/qglviewer.h) {
-    error("QGLViewer.h not found in ../$$QGL_VIEWER_PATH ! Check your QGLViewer directory.")
-}
-
-INCLUDEPATH += $$AMKGL_DEFINES_DIR
 
 SOURCES +=\
     renderer/pointcloud/chunkedpointcloud.cpp \
@@ -415,11 +403,11 @@ isEmpty(USE_USER_DEFINITIONS) {
 FORMS    += \
     view/drawmodeconfigurator.ui
 
-INCLUDEPATH += ../$$QGL_VIEWER_PATH
+# INCLUDEPATH += ../$$LIBQGLVIEWER_PATH
 INCLUDEPATH += poly2tri/poly2tri
-INCLUDEPATH += $$EIGEN_INC_PATH
+# INCLUDEPATH += $$EIGEN_INC_PATH
 
-LIBS += -L../$$QGL_VIEWER_PATH
+# LIBS += -L../$$LIBQGLVIEWER_PATH
 
 CONFIG(debug, debug|release) {
     LIBS += -lQGLViewerd

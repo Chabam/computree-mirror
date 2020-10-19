@@ -15,6 +15,8 @@ CONFIG(debug, debug|release) {
 EXECUTABLE_DESTDIR = $${CT_PREFIX_INSTALL}/$${CT_DESTDIR_NAME}
 PLUGIN_DESTDIR = $${EXECUTABLE_DESTDIR}/plugins
 
+# check folder for windows final install ?
+
 # message(Element(s) will be installed to $${EXECUTABLE_DESTDIR})
 
 equals(QT_ARCH, "x86") {

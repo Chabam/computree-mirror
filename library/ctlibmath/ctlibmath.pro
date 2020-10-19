@@ -1,6 +1,7 @@
 QT = core gui
 
-include(../library_shared.pri)
+MUST_USE_EIGEN = 1
+include(../../config/library_shared.pri)
 
 TARGET = ctlibmath
 

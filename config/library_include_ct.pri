@@ -42,17 +42,7 @@ isEmpty(EXECUTABLE_DESTDIR) {
     COMPUTREE = $$searchDependencies()
 
     for(b, COMPUTREE) {
-#        !isEmpty(DONT_CHECK_CT_LIBRARY) {
-            LIBS *= -l$${b}
-            INCLUDEPATH *= $${CT_PREFIX_LIB}/$${b}
-#           warning(Computree library $${b} will be used if founded)
-#        } else {
-#            exists(../$${CT_DESTDIR_NAME}/$${b}.*) {
-#                LIBS += -l$${b}
-#                warning(Computree library $${b} will be used)
-#            } else {
-#                error(Computree library \"$${b}\" not found. You must compile the project \"$${CT_PREFIX}/library/$${b}/$${b}.pro\" to avoid this error.)
-#            }
-#        }
+        LIBS *= -l$${b}
+        INCLUDEPATH *= $${CT_PREFIX_LIB}/$${b}
     }
 }

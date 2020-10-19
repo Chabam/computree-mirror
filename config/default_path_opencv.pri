@@ -7,7 +7,7 @@ linux {
 }
 
 win32-msvc {
-    OPENCV_BASE_PATH = "$$PWD/../3rdparty/opencv/build/"
+    OPENCV_BASE_PATH = "../3rdparty/opencv/build/"
 
     OPENCV_INC_PATH = "$${OPENCV_BASE_PATH}include"
     OPENCV_LIBS_PATH = "$${OPENCV_BASE_PATH}x64/vc15/lib"
@@ -15,7 +15,7 @@ win32-msvc {
 }
 
 win32-mingw {
-    OPENCV_BASE_PATH = "$$PWD/../3rdparty/opencv/"
+    OPENCV_BASE_PATH = "../3rdparty/opencv/"
 
     OPENCV_INC_PATH = "$${OPENCV_BASE_PATH}include/opencv4"
     OPENCV_LIBS_PATH = "$${OPENCV_BASE_PATH}lib"

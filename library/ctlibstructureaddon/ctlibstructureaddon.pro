@@ -5,8 +5,8 @@ contains ( QT_VERSION, "^5.*" ) {
 }
 
 MUST_USE_OPENCV = 1
-
-include(../library_shared.pri)
+MUST_USE_EIGEN = 1
+include(../../config/library_shared.pri)
 include(../../config/include_dependencies.pri)
 
 TARGET = ctlibstructureaddon

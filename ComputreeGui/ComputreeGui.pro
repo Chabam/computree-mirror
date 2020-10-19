@@ -1,14 +1,12 @@
-contains ( QT_VERSION, "^5.*" ) {
-    QT *= widgets
-}
-
 CT_PREFIX = ..
 CT_PREFIX_INSTALL = ../..
 CT_PREFIX_CONFIG = ../config
 CT_PREFIX_LIB = ../library
-DEFAULT_EIGEN_INC_PATH = "../3rdparty/eigen/"
 
 COMPUTREE = ctlibcore
+MUST_USE_EIGEN = 1
+MUST_USE_MUPARSER = 1
+MUST_USE_LIBQGLVIEWER = 1
 
 # c++17
 greaterThan(QT_MAJOR_VERSION, 4) {
@@ -17,17 +15,12 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QMAKE_CXXFLAGS += -std=c++17
 }
 
-LIBS += -lAMKgl
-
 include($${CT_PREFIX_CONFIG}/destdir.pri)
-include($${CT_PREFIX_LIB}/library_include_ct.pri)
-include($${CT_PREFIX_CONFIG}/user_path_eigen.pri)
-include($${CT_PREFIX_CONFIG}/default_path_amkgl.pri)
-include($${CT_PREFIX_CONFIG}/default_path_qglviewer.pri)
+include($${CT_PREFIX_CONFIG}/library_include_ct.pri)
+include($${CT_PREFIX_CONFIG}/include_dependencies.pri)
 
 INCLUDEPATH += .
 INCLUDEPATH += $$CT_PREFIX_LIB
-#TR_EXCLUDE  += $${CT_PREFIX}/ComputreeCore/*
 
 CONFIG -= plugin
 CONFIG += windows
@@ -35,8 +28,7 @@ CONFIG += windows
 TARGET = CompuTreeGui
 TEMPLATE = app
 RC_ICONS = Computree.ico
-QT += opengl
-QT += xml
+QT *= opengl xml concurrent widgets
 
 DESTDIR = $${EXECUTABLE_DESTDIR}
 
@@ -73,9 +65,6 @@ win32-msvc* {
 
     INSTALLS += lib_qt lib_qt_platforms lib_opencv lib_gdal lib_pcl setenv lib_opengl
 }
-
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
 
 HEADERS += dm_graphicsviewsynchronizedgroup.h \
     dm_graphicsviewsynchronizedgroupoptions.h \
@@ -144,16 +133,25 @@ HEADERS += \
 TRANSLATIONS += languages/computreegui_fr.ts \
                 languages/computreegui_en.ts
 
-include(view/view.pri)
-include(qtcolorpicker/qtcolorpicker.pri)
-# include(../3rdparty/muparser/muparser.pri)
-include(tools/tools.pri)
-
-TR_EXCLUDE  += ./qtcolorpicker/*
-# TR_EXCLUDE  += ./muParser/*
-
 RESOURCES += resource/icones.qrc
 
+include(view/view.pri)
+include(tools/tools.pri)
+include(qtcolorpicker/qtcolorpicker.pri)
+
+TR_EXCLUDE  += ./qtcolorpicker/*
+
+# AMKgl
+DEFINES *= AMKGL_NO_TODO_WARNINGS
+INCLUDEPATH += ../AMKgl ../AMKgl/defines_computree
+LIBS += -lAMKgl -L../AMKgl/compiled
+
+# Opengl
+win32 : LIBS += -lopengl32 -lglu32
+linux : LIBS += -lGL -lGLU -lm
+macx  : LIBS += -framework OpenGL
+
+# Other specific compiler options
 linux {
     # add your own with quoting gyrations to make sure $ORIGIN gets to the command line unexpanded
     QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\'"
@@ -169,53 +167,4 @@ macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
     # Silent OpenGL warning for MacOS > 10.14
     DEFINES += GL_SILENCE_DEPRECATION
-}
-
-##### AMKGL #####
-AMKGL_DIR = ../$$AMKGL_PATH
-AMKGL_LIB_DIR = $$AMKGL_DIR/compiled
-QGLVIEWER_DIR = ../$$QGL_VIEWER_PATH
-
-DEFINES += QGLVIEWER_STATIC
-DEFINES += MUPARSER_STATIC
-
-INCLUDEPATH += $$EIGEN_INC_PATH
-INCLUDEPATH += $$AMKGL_DIR
-INCLUDEPATH += $$QGLVIEWER_DIR
-INCLUDEPATH += ../AMKgl/defines_computree
-INCLUDEPATH += ../3rdparty/muparser/include
-
-LIBS += -L$$AMKGL_LIB_DIR
-LIBS += -L$$QGLVIEWER_DIR
-LIBS += -lmuparser -L../3rdparty/muparser
-
-win32 {
-    CONFIG(debug, debug|release) {
-        LIBS += -lQGLViewerd
-    } else {
-        LIBS += -lQGLViewer
-    }
-
-    LIBS += -lopengl32 -lglu32
-}
-
-
-linux {
-    LIBS += $$QGLVIEWER_DIR/libQGLViewer-qt5.a
-
-    LIBS += -lGL -lGLU -lm
-}
-
-macx {
-    LIBS += $$QGLVIEWER_DIR/libQGLViewer.a
-
-    LIBS += -framework OpenGL
-
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
-    # Silent OpenGL warning for MacOS > 10.14
-    DEFINES += GL_SILENCE_DEPRECATION
-}
-
-!equals(PWD, $${OUT_PWD}) {
-    error("Shadow build seems to be activated, please desactivated it !")
 }

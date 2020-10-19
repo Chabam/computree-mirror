@@ -6,7 +6,7 @@ linux {
 }
 
 win32 {
-    GEOS_BASE_PATH = "$$PWD/../3rdparty/geos/"
+    GEOS_BASE_PATH = "../3rdparty/geos/"
 
     GEOS_INC_PATH = $${GEOS_BASE_PATH}include
     GEOS_LIBS_PATH = $${GEOS_BASE_PATH}lib

@@ -18,13 +18,13 @@ isEmpty(CT_PREFIX_LIB) {
 # all plugins needs this library
 COMPUTREE += ctlibplugin
 
+LIB_PATH = ../
+
 include(destdir.pri)
-include(../library/library_include_ct.pri)
+include(library_include_ct.pri)
 include(include_dependencies.pri)
 
-contains ( QT_VERSION, "^5.*" ) {
-    QT *= widgets
-}
+QT *= widgets
 
 DESTDIR = $${PLUGIN_DESTDIR}
 
@@ -41,6 +41,10 @@ CONFIG(debug, debug|release) {
     MOC_DIR = release/.moc
     UI_DIR = release/.ui
     RCC_DIR = release/.rcc
+}
+
+macx {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 }
 
 msvc:DEFINES += _USE_MATH_DEFINES

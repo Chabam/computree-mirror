@@ -4,7 +4,7 @@ contains ( QT_VERSION, "^5.*" ) {
     QT *= widgets
 }
 
-include(../library_shared.pri)
+include(../../config/library_shared.pri)
 
 TARGET = ctlibmodels
 
