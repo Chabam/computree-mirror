@@ -2,7 +2,14 @@
 #define CT_STANDARDUNDEFINEDSIZEPOINTCLOUD_H
 
 #include "ct_defines.h"
+#if (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
 #include "ct_pointcloud/tools/abstract/ct_abstractundefinedsizepointcloud.h"
+#if (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 #include "ct_pointcloud/ct_internalpointcloud.h"
 
 class CT_CoordinateSystemManager;

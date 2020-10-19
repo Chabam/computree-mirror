@@ -6,7 +6,27 @@
 #include "tools/qglviewer/qglviewertools.h"
 
 #include <Eigen/LU>
+
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic ignored "-Wint-in-bool-context"
+#endif
 #include <manipulatedCameraFrame.h>
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(__APPLE__)
+#pragma GCC diagnostic pop
+#endif
 
 #include "g3dcameracontroller.h"
 
