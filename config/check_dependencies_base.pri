@@ -35,7 +35,6 @@ checkMandatoryDependence(eigen)
 checkMandatoryDependence(muparser)
 checkMandatoryDependence(libqglviewer)
 checkMandatoryDependence(opencv)
-checkMandatoryDependence(geos)
 checkMandatoryDependence(gdal)
 
 # Optional check for PCL
