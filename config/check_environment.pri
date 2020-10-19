@@ -65,7 +65,7 @@ win32-msvc*|*-g++|*-clang {
         compiler = "g++"
     }
     *-clang {
-        compiler = "g++"
+        compiler = "clang++"
     }
     message("> Compiler     : $$compiler")
     !isEmpty(comp_warning) {

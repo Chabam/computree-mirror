@@ -1,6 +1,6 @@
 OPENCV_LIBS_FOUNDED =
 
-linux {
+unix {
 
     OPENCV_LIB_ADD =
 
@@ -43,7 +43,7 @@ linux {
             }
         }
     }
-    darwin {
+    macx {
         for(a, OPENCV_LIB_ADD) {
             CONFIG(debug, debug|release) {
                 !exists($$OPENCV_LIBS_PATH/lib$${a}*) {

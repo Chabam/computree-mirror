@@ -6,4 +6,4 @@ SUBDIRS += AMKgl library ComputreeGui
 
 library.depends = 3rdparty/libQGLViewer
 AMKgl.depends = 3rdparty/libQGLViewer
-ComputreeGui.depends = AMKgl 3rdparty/muparser
+ComputreeGui.depends = AMKgl library 3rdparty/muparser

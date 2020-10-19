@@ -11,7 +11,7 @@ defineTest(checkMandatoryDependence) {
     include(check_$${1}.pri)
 
     !isEmpty(CHECK_ERROR_MSG) {
-        error("DEPENDENCY CHECK - $$name - Invalid path specified ($$include_file)")
+        error("DEPENDENCY CHECK - $$upper($${1}) - Invalid path specified ($$include_file)")
         error($$CHECK_ERROR_MSG)
     }
 
