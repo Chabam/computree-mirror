@@ -499,16 +499,18 @@ bool PB_GDALExporter::exportRaster(const CT_AbstractImage2D* grid, const QString
         }
 #if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
 #elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
 #endif
         poBand->RasterIO( GF_Write, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float32, 0, 0);
 #if defined(_WIN32) && defined(_MSC_VER)
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic warning "-Wunused-result"
+#pragma GCC diagnostic pop
 #elif defined(__APPLE__)
-#pragma GCC diagnostic warning "-Wunused-result"
+#pragma GCC diagnostic pop
 #endif
     }
 

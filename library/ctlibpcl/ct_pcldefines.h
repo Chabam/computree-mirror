@@ -4,9 +4,11 @@
 #ifndef Q_MOC_RUN
 #if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
@@ -21,11 +23,9 @@
     #include <pcl/filters/impl/statistical_outlier_removal.hpp>
 #if defined(_WIN32) && defined(_MSC_VER)
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic warning "-Wunused-parameter"
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#pragma GCC diagnostic pop
 #elif defined(__APPLE__)
-#pragma GCC diagnostic warning "-Wunused-parameter"
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#pragma GCC diagnostic pop
 #endif
 #endif
 

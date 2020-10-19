@@ -704,8 +704,10 @@ void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, 
 
 #if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Waddress"
 #elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wtautological-undefined-compare"
 #endif
   if (&ot == nullptr) {
@@ -716,9 +718,9 @@ void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, 
   }
 #if defined(_WIN32) && defined(_MSC_VER)
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic warning "-Waddress"
+#pragma GCC diagnostic pop
 #elif defined(__APPLE__)
-#pragma GCC diagnostic ignored "-Wtautological-undefined-compare"
+#pragma GCC diagnostic pop
 #endif
 
   if (InScanArea(p, *t->PointCCW(p), *t->PointCW(p), op)) {
