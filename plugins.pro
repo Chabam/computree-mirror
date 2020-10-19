@@ -4,19 +4,22 @@ include(config/check_dependencies_plugins.pri)
 TEMPLATE = subdirs
 SUBDIRS = plugins/pluginbase
 
-defineTest(addPlugin) {
-    exists(plugins/$${1}//$${1}.pro) {
-        SUBDIRS += plugins//$${1}
+defineReplace(addPlugin) {
+    exists(plugins/$${1}/$${1}.pro) {
         message("Plugin $${1} will be used.")
+        return(plugins/$${1})
     } else {
         warning("Plugin $${1} can't be found!")
+        return()
     }
 }
 
 # Uncomment/add you own plugin here
-# addPlugin(pluginartsfree)
-# addPlugin(pluginonf)
-# addPlugin(pluginonflsis)
-# addPlugin(pluginlvox)
-# addPlugin(plugingenerate)
-# addPlugin(plugintoolkit)
+# SUBDIRS += $$addPlugin(pluginartsfree)
+# SUBDIRS += $$addPlugin(pluginonf)
+# SUBDIRS += $$addPlugin(pluginonflsis)
+# SUBDIRS += $$addPlugin(pluginlvox)
+# SUBDIRS += $$addPlugin(plugingenerate)
+# SUBDIRS += $$addPlugin(plugintoolkit)
+# SUBDIRS += $$addPlugin(pluginmk)
+# SUBDIRS += $$addPlugin(pluginsegma)
