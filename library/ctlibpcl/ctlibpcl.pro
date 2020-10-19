@@ -15,13 +15,8 @@ SOURCES += \
     tools/ct_pcltools.cpp
 
 # c++14 for PCL (for the moment, because of FLANN issues with C++17)
-greaterThan(QT_MAJOR_VERSION, 4) {
-    CONFIG -= c++17
-    CONFIG += c++14
-} else {
-    QMAKE_CXXFLAGS -= -std=c++17
-    QMAKE_CXXFLAGS += -std=c++14
-}
+CONFIG -= c++17
+CONFIG += c++14
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15

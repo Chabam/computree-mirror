@@ -37,7 +37,9 @@ ctlibio.depends = ctlibstructureaddon ctlibexporter ctlibreader
 ctliblas.depends = ctlibstructureaddon ctlibfilters ctlibmetrics ctlibexporter ctlibreader
 ctlibcore.depends = ctlibplugin
 
-# PCL optional case
+# Optional use of Point Cloud Library (PCL)
+MUST_USE_PCL = 1
+
 !isEmpty(MUST_USE_PCL) {
     SUBDIRS += ctlibpcl
     ctlibpcl.depends = ctlibclouds
