@@ -1,6 +1,5 @@
 CT_PREFIX = ..
 CT_PREFIX_INSTALL = ../..
-CT_PREFIX_CONFIG = ../config
 CT_PREFIX_LIB = ../library
 
 COMPUTREE = ctlibcore
@@ -15,9 +14,9 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QMAKE_CXXFLAGS += -std=c++17
 }
 
-include($${CT_PREFIX_CONFIG}/destdir.pri)
-include($${CT_PREFIX_CONFIG}/library_include_ct.pri)
-include($${CT_PREFIX_CONFIG}/include_dependencies.pri)
+include(../config/destdir.pri)
+include(../config/library_include_ct.pri)
+include(../config/include_dependencies.pri)
 
 INCLUDEPATH += .
 INCLUDEPATH += $$CT_PREFIX_LIB

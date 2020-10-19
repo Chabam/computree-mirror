@@ -11,6 +11,7 @@ CONFIG *= qt opengl warn_on shared thread create_prl rtti no_keywords
 
 #### Options for Computree ####
 QGLVIEWER_STATIC = yes
+CONFIG -= warn_on
 CONFIG *= c++17 warn_off
 
 linux|mingw {

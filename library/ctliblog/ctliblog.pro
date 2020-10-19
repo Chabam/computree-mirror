@@ -1,5 +1,6 @@
 QT = core
 
+MUST_USE_EIGEN = 1
 include(../../config/library_shared.pri)
 
 TARGET = ctliblog

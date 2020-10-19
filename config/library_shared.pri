@@ -3,7 +3,6 @@
 CT_PREFIX = ..
 CT_PREFIX_LIB = ..
 CT_PREFIX_INSTALL = ../../..
-CT_PREFIX_CONFIG = ../config
 
 exists(../library/$$TARGET/libdependencies.pri) {
     include(../library/$$TARGET/libdependencies.pri)

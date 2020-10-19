@@ -59,13 +59,20 @@ windows {
 isEmpty(USE_GDAL_ERROR_MSG) {
     equals(CHECK_LIBS_ONLY, false) {
         DEFINES += USE_GDAL
+
+        win32 {
+            INCLUDEPATH += $$LIB_PATH/$$GDAL_INC_PATH
         
-        INCLUDEPATH += $$LIB_PATH/$$GDAL_INC_PATH
+            TR_EXCLUDE  += $$LIB_PATH/$$GDAL_INC_PATH/*
         
-        TR_EXCLUDE  += $$LIB_PATH/$$GDAL_INC_PATH/*
-        
-        LIBS += -L$$LIB_PATH/$$GDAL_LIBS_PATH
+            LIBS += -L$$LIB_PATH/$$GDAL_LIBS_PATH
+        } else {
+            INCLUDEPATH += $$GDAL_INC_PATH
+
+            TR_EXCLUDE  += $$GDAL_INC_PATH/*
+
+            LIBS += -L$$GDAL_LIBS_PATH
+        }
         LIBS += $$GDAL_LIBS_FOUNDED
     }
 }
-
