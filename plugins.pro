@@ -16,10 +16,10 @@ defineReplace(addPlugin) {
 
 # Uncomment/add you own plugin here
 # SUBDIRS += $$addPlugin(pluginartsfree)
-# SUBDIRS += $$addPlugin(pluginonf)
+SUBDIRS += $$addPlugin(pluginonf)
 # SUBDIRS += $$addPlugin(pluginonflsis)
 # SUBDIRS += $$addPlugin(pluginlvox)
 # SUBDIRS += $$addPlugin(plugingenerate)
-# SUBDIRS += $$addPlugin(plugintoolkit)
-# SUBDIRS += $$addPlugin(pluginmk)
-# SUBDIRS += $$addPlugin(pluginsegma)
+SUBDIRS += $$addPlugin(plugintoolkit)
+SUBDIRS += $$addPlugin(pluginmk)
+SUBDIRS += $$addPlugin(pluginsegma)

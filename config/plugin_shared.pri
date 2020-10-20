@@ -19,6 +19,7 @@ isEmpty(CT_PREFIX_LIB) {
 COMPUTREE += ctlibplugin
 
 LIB_PATH = ../
+MUST_USE_EIGEN = 1
 
 include(destdir.pri)
 include(library_include_ct.pri)

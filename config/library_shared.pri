@@ -7,9 +7,12 @@ CT_PREFIX_INSTALL = ../../..
 exists(../library/$$TARGET/libdependencies.pri) {
     include(../library/$$TARGET/libdependencies.pri)
 }
+
+LIB_PATH = ../
+MUST_USE_EIGEN = 1
+
 include(destdir.pri)
 include(library_include_ct.pri)
-LIB_PATH = ../
 include(include_dependencies.pri)
 
 INCLUDEPATH += .

@@ -4,7 +4,6 @@ contains ( QT_VERSION, "^5.*" ) {
     QT *= widgets
 }
 
-MUST_USE_EIGEN = 1
 include(../../config/library_shared.pri)
 
 TARGET = ctlibmetrics

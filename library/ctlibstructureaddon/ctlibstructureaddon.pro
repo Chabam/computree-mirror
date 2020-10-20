@@ -5,7 +5,6 @@ contains ( QT_VERSION, "^5.*" ) {
 }
 
 MUST_USE_OPENCV = 1
-MUST_USE_EIGEN = 1
 include(../../config/library_shared.pri)
 include(../../config/include_dependencies.pri)
 

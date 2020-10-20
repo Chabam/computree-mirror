@@ -2,7 +2,6 @@ COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctlibstepa
 
 CHECK_CAN_USE_GDAL = 1
 MUST_USE_OPENCV = 1
-MUST_USE_EIGEN = 1
 
 include(../../config/plugin_shared.pri)
 
