@@ -129,11 +129,11 @@ isEmpty(USE_OPENCV_ERROR_MSG) {
         DEFINES += USE_OPENCV
 
         win32 {
-            INCLUDEPATH += $$LIB_PATH/$$OPENCV_INC_PATH
+            INCLUDEPATH += $$LIB_PATH$$OPENCV_INC_PATH
         
-            TR_EXCLUDE  += $$LIB_PATH/$$OPENCV_INC_PATH/*
+            TR_EXCLUDE  += $$LIB_PATH$$OPENCV_INC_PATH/*
 
-            LIBS += -L$$LIB_PATH/$$OPENCV_LIBS_PATH
+            LIBS += -L$$LIB_PATH$$OPENCV_LIBS_PATH
         } else {
             INCLUDEPATH += $$OPENCV_INC_PATH
 

@@ -3,6 +3,8 @@ COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctlibstepa
 CHECK_CAN_USE_GDAL = 1
 MUST_USE_OPENCV = 1
 
+INCLUDED_PLUGIN = yes
+
 include(../../config/plugin_shared.pri)
 
 TARGET = plug_base

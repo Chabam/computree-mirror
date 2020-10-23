@@ -4,22 +4,28 @@ include(config/check_dependencies_plugins.pri)
 TEMPLATE = subdirs
 SUBDIRS = plugins/pluginbase
 
-defineReplace(addPlugin) {
-    exists(plugins/$${1}/$${1}.pro) {
-        message("Plugin $${1} will be used.")
-        return(plugins/$${1})
-    } else {
-        warning("Plugin $${1} can't be found!")
-        return()
-    }
-}
+# defineReplace(addPlugin) {
+#     exists(plugins/$${1}/$${1}.pro) {
+#         message("Plugin $${1} will be used.")
+#         return(plugins/$${1})
+#     } else {
+#         warning("Plugin $${1} can't be found!")
+#         return()
+#     }
+# }
 
 # Uncomment/add you own plugin here
 # SUBDIRS += $$addPlugin(pluginartsfree)
-SUBDIRS += $$addPlugin(pluginonf)
+# SUBDIRS += $$addPlugin(pluginonf)
 # SUBDIRS += $$addPlugin(pluginonflsis)
 # SUBDIRS += $$addPlugin(pluginlvox)
 # SUBDIRS += $$addPlugin(plugingenerate)
-SUBDIRS += $$addPlugin(plugintoolkit)
-SUBDIRS += $$addPlugin(pluginmk)
-SUBDIRS += $$addPlugin(pluginsegma)
+# SUBDIRS += $$addPlugin(plugintoolkit)
+# SUBDIRS += $$addPlugin(pluginmk)
+# SUBDIRS += $$addPlugin(pluginsegma)
+
+# Uncomment/add you own plugin here
+SUBDIRS += ../plugin-mk/pluginmk
+SUBDIRS += ../plugin-onf/pluginonf
+SUBDIRS += ../plugin-segma/pluginsegma
+SUBDIRS += ../plugin-toolkit/plugintoolkit

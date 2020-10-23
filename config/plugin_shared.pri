@@ -4,7 +4,11 @@
 CONFIG -= depend_includepath
 
 isEmpty(CT_PREFIX) {
-    CT_PREFIX = ../..
+    isEmpty(INCLUDED_PLUGIN) {
+        CT_PREFIX = ../../computreev6
+    } else {
+        CT_PREFIX = ../..
+    }
 }
 
 isEmpty(CT_PREFIX_INSTALL) {
@@ -15,10 +19,17 @@ isEmpty(CT_PREFIX_LIB) {
     CT_PREFIX_LIB = $$CT_PREFIX/library
 }
 
+isEmpty(LIB_PATH) {
+    isEmpty(INCLUDED_PLUGIN) {
+        LIB_PATH = ../../computreev6/3rdparty/
+    } else {
+        LIB_PATH = ../
+    }
+}
+
 # all plugins needs this library
 COMPUTREE += ctlibplugin
 
-LIB_PATH = ../
 MUST_USE_EIGEN = 1
 
 include(destdir.pri)

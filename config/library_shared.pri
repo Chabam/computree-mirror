@@ -19,7 +19,7 @@ INCLUDEPATH += .
 INCLUDEPATH += ..
 INCLUDEPATH += ../library
 
-DESTDIR = $${EXECUTABLE_DESTDIR}/libraries/core
+DESTDIR = $$LIBRARY_DESTDIR
 
 TEMPLATE = lib
 CONFIG += plugin

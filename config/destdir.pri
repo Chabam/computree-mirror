@@ -14,6 +14,7 @@ CONFIG(debug, debug|release) {
 
 EXECUTABLE_DESTDIR = $${CT_PREFIX_INSTALL}/$${CT_DESTDIR_NAME}
 PLUGIN_DESTDIR = $${EXECUTABLE_DESTDIR}/plugins
+LIBRARY_DESTDIR = $${EXECUTABLE_DESTDIR}/libraries/core
 
 # check folder for windows final install ?
 
