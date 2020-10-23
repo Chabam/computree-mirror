@@ -20,6 +20,7 @@
 // Qt includes
 #include <QPainter>
 #include <QMouseEvent>
+#include <QPainterPath>
 
 // local includes
 #include "gcolorgradientview.h"

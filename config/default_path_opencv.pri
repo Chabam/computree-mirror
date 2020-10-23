@@ -11,7 +11,7 @@ win32-msvc {
 
     OPENCV_INC_PATH = "$${OPENCV_BASE_PATH}include"
     OPENCV_LIBS_PATH = "$${OPENCV_BASE_PATH}x64/vc15/lib"
-    OPENCV_VERSION = 440
+    OPENCV_VERSION = 450
 }
 
 win32-mingw {
