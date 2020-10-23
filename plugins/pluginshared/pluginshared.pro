@@ -5,14 +5,12 @@ TARGET = pluginShared
 QT += xml
 QT += opengl
 
-# c++11
 greaterThan(QT_MAJOR_VERSION, 4) {
-    CONFIG += c++11
+    CONFIG += c++17
+	QT += widgets concurrent
 } else {
-    QMAKE_CXXFLAGS += -std=c++11
+    QMAKE_CXXFLAGS += -std=c++17
 }
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
 
 isEmpty(TEST_FEATURES) {
     TEMPLATE = lib
@@ -21,7 +19,7 @@ isEmpty(TEST_FEATURES) {
     TEMPLATE = app
 }
 
-include(../destdir.pri)
+include(../../config/destdir.pri)
 
 DESTDIR = $${PLUGINSHARED_DESTDIR}
 
@@ -43,7 +41,7 @@ CHECK_CAN_USE_PCL = 1
 CHECK_CAN_USE_GDAL = 1
 CHECK_CAN_USE_OPENCV = 1
 
-include(../include_all.pri)
+include(../../config/include_dependencied.pri)
 
 !isEmpty(TEST_FEATURES) {
     SOURCES +=
