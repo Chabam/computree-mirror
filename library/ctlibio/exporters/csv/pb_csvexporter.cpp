@@ -258,7 +258,7 @@ void PB_CSVExporter::constructItemsModels()
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
         if((list.size() != mItemsModels.size()) || !list.toSet().subtract(mItemsModels.toSet()).isEmpty())
 #else
-        if((list.size() != mItemsModels.size()) || !QSet(list.begin(), list.end()).subtract(QSet(mItemsModels.begin(), mItemsModels.end())).isEmpty())
+        if((list.size() != mItemsModels.size()) || !QSet<const CT_OutAbstractSingularItemModel*>(list.begin(), list.end()).subtract(QSet<const CT_OutAbstractSingularItemModel*>(mItemsModels.begin(), mItemsModels.end())).isEmpty())
 #endif
         {
             delete _configuration;
@@ -282,7 +282,7 @@ void PB_CSVExporter::constructItemsModels()
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     if((list.size() != mItemsModels.size()) || !list.toSet().subtract(mItemsModels.toSet()).isEmpty())
 #else
-    if((list.size() != mItemsModels.size()) || !QSet(list.begin(), list.end()).subtract(QSet(mItemsModels.begin(), mItemsModels.end())).isEmpty())
+    if((list.size() != mItemsModels.size()) || !QSet<const CT_OutAbstractSingularItemModel*>(list.begin(), list.end()).subtract(QSet<const CT_OutAbstractSingularItemModel*>(mItemsModels.begin(), mItemsModels.end())).isEmpty())
 #endif
     {
         delete _configuration;

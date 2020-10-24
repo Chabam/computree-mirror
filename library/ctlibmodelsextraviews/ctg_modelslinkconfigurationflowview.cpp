@@ -683,7 +683,7 @@ CT_InStdModelPossibility* CTG_ModelsLinkConfigurationFlowView::findPossibilityBe
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     const QSet<const CT_InStdModelPossibility*> pI = p1.toSet().intersect(p2.toSet());
 #else
-    const QSet<const CT_InStdModelPossibility*> pI = QSet(p1.begin(), p1.end()).intersect(QSet(p2.begin(), p2.end()));
+    const QSet<const CT_InStdModelPossibility*> pI = QSet<const CT_InStdModelPossibility*>(p1.begin(), p1.end()).intersect(QSet<const CT_InStdModelPossibility*>(p2.begin(), p2.end()));
 #endif
     if(pI.isEmpty())
         return nullptr;
