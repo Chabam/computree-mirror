@@ -162,7 +162,7 @@ QColor
 ConnectionStyle::
 normalColor(QString typeId) const
 {
-  std::size_t hash = qHash(typeId);
+  /*std::size_t hash = qHash(typeId);
 
   std::size_t const hue_range = 0xFF;
 
@@ -173,7 +173,15 @@ normalColor(QString typeId) const
 
   return QColor::fromHsl(int(hue),
                          int(sat),
-                         160);
+                         160);*/
+
+  int num = typeId.toInt();
+  if(num == -1) // Optional
+    return QColor(QRgb(0x808080)); // Gray
+  else if(num == 0) // Completed connection set
+    return QColor(QRgb(0x0f52ba)); // Saphir Blue
+  else // Incomplete set
+    return QColor(QRgb(0xba220f)); // Brick Red
 }
 
 

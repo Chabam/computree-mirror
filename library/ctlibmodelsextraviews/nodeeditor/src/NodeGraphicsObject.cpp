@@ -281,12 +281,13 @@ mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     if(_scene.isReadOnly())
         return;
 
-  auto & geom  = _node.nodeGeometry();
+  //auto & geom  = _node.nodeGeometry();
   auto & state = _node.nodeState();
 
   if (state.resizing())
   {
-    auto diff = event->pos() - event->lastPos();
+      return;
+    /*auto diff = event->pos() - event->lastPos();
 
     if (auto w = _node.nodeDataModel()->embeddedWidget())
     {
@@ -308,11 +309,15 @@ mouseMoveEvent(QGraphicsSceneMouseEvent * event)
       moveConnections();
 
       event->accept();
-    }
+    }*/
   }
   else
   {
-    QGraphicsObject::mouseMoveEvent(event);
+    //QGraphicsObject::mouseMoveEvent(event);
+
+    // Move nodes only on y-axis
+    auto diff = event->pos() - event->lastPos();
+    QGraphicsObject::moveBy(0.0,diff.y());
 
     if (event->lastPos() != event->pos())
       moveConnections();

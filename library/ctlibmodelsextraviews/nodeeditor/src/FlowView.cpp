@@ -243,15 +243,17 @@ void
 FlowView::
 scaleUp()
 {
-  double const step   = 1.2;
-  double const factor = std::pow(step, 1.0);
+  //double const step   = 1.2;
+  //double const factor = std::pow(step, 1.0);
 
-  QTransform t = transform();
+  //QTransform t = transform();
 
-  if (t.m11() > 2.0)
-    return;
+  //if (t.m11() > 2.0)
+  //  return;
 
-  scale(factor, factor);
+  //scale(factor, factor);
+
+  setSceneRect(sceneRect().translated(0.0, -50.0)); // Reverter move : 50px down
 }
 
 
@@ -259,10 +261,12 @@ void
 FlowView::
 scaleDown()
 {
-  double const step   = 1.2;
-  double const factor = std::pow(step, -1.0);
+  //double const step   = 1.2;
+  //double const factor = std::pow(step, -1.0);
 
-  scale(factor, factor);
+  //scale(factor, factor);
+
+  setSceneRect(sceneRect().translated(0.0, 50.0)); // Reverter move : 50px up
 }
 
 
@@ -361,7 +365,8 @@ mouseMoveEvent(QMouseEvent *event)
     if ((event->modifiers() & Qt::ShiftModifier) == 0)
     {
       QPointF difference = _clickPos - mapToScene(event->pos());
-      setSceneRect(sceneRect().translated(difference.x(), difference.y()));
+      //setSceneRect(sceneRect().translated(difference.x(), difference.y()));
+      setSceneRect(sceneRect().translated(0.0, difference.y())); // Vertical move only
     }
   }
 }

@@ -65,7 +65,7 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
     mFlowView = new FlowView(mFlowScene, this);
 
     auto hgi = new CT_HelpGraphicsItem();
-    hgi->setPos(-100, -100);
+    hgi->setPos(740, -60);
     hgi->setToolTip(tr("Tooltip à modifier par Alexandre Piboule. Il suffit de faire rechercher dans Qt Creator pour me trouver !"));
     mFlowScene->addItem(hgi);
 
@@ -239,34 +239,38 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mModelOfLastIndexClicked.fill(nullptr);
 
     mInTreeWidget = new QTreeWidget;
-    mInTreeWidget->setColumnCount(1);
+    mInTreeWidget->setColumnCount(2);
     mInTreeWidget->setHeaderHidden(true);
     mInTreeWidget->setItemDelegate(new RowDelegate());
-    mInTreeWidget->setStyleSheet(QString("background-color: rgba(0,0,0,0); "
-                                         "border-style: solid;"
-                                         "border-width: 0px;"));
+    mInTreeWidget->setStyleSheet(QString("QTreeWidget                {background-color: rgba(0,0,0, 0); border: 0px; color: white}"
+                                         "QTreeWidget::item          {background-color: rgba(0,0,0, 0); border: 0px; color: white}"
+                                         "QTreeWidget::item:selected {background-color: rgba(0,0,0,80);}"
+                                         "QTreeWidget::item:hover    {background-color: rgba(0,0,0,40);}"));
     mInTreeWidget->setWindowFlags(Qt::FramelessWindowHint);
     mInTreeWidget->setAttribute(Qt::WA_NoSystemBackground);
     mInTreeWidget->setAttribute(Qt::WA_TranslucentBackground);
     mInTreeWidget->setAttribute(Qt::WA_TransparentForMouseEvents);
     mInTreeWidget->setItemsExpandable(false);
+    //mInTreeWidget->setItemsExpandable(true);
     mInTreeWidget->header()->setStretchLastSection(false);
 
     mOutTreeWidget = new QTreeWidget;
-    mOutTreeWidget->setColumnCount(1);
+    mOutTreeWidget->setColumnCount(2);
     mOutTreeWidget->setHeaderHidden(true);
     mOutTreeWidget->setItemDelegate(new RowDelegate());
-    mOutTreeWidget->setStyleSheet(QString("background-color: rgba(0,0,0,0); "
-                                          "border-style: solid;"
-                                          "border-width: 0px;"));
+    mOutTreeWidget->setStyleSheet(QString("QTreeWidget                {background-color: rgba(0,0,0, 0); border: 0px; color: white}"
+                                          "QTreeWidget::item          {background-color: rgba(0,0,0, 0); border: 0px; color: white}"
+                                          "QTreeWidget::item:selected {background-color: rgba(0,0,0,80);}"
+                                          "QTreeWidget::item:hover    {background-color: rgba(0,0,0,40);}"));
     mOutTreeWidget->setWindowFlags(Qt::FramelessWindowHint);
     mOutTreeWidget->setAttribute(Qt::WA_NoSystemBackground);
     mOutTreeWidget->setAttribute(Qt::WA_TranslucentBackground);
     mOutTreeWidget->setAttribute(Qt::WA_TransparentForMouseEvents);
     mOutTreeWidget->setItemsExpandable(false);
+    //mOutTreeWidget->setItemsExpandable(true);
     mOutTreeWidget->header()->setStretchLastSection(false);
-    mOutTreeWidget->horizontalScrollBar()->setStyleSheet("height:0px;");
-    mOutTreeWidget->verticalScrollBar()->setStyleSheet("width:0px;");
+    //mOutTreeWidget->horizontalScrollBar()->setStyleSheet("height:0px;");
+    //mOutTreeWidget->verticalScrollBar()->setStyleSheet("width:0px;");
 
     QHash<const CT_AbstractModel*, QTreeWidgetItem*> inItems;
     QHash<const CT_AbstractModel*, QTreeWidgetItem*> outItems;
@@ -278,8 +282,16 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
         const QString displayableName = child->displayableName() + (extraName.isEmpty() ? QString() : tr(" (%1)").arg(extraName));
 
         QTreeWidgetItem* inTreeitem = new QTreeWidgetItem(inItems.value(child->parentModel(), nullptr), QStringList(displayableName));
-        inTreeitem->setForeground(0, Qt::white);
         inTreeitem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(const_cast<CT_InAbstractModel*>(child))));
+        if(child->isObligatory())
+        {
+            int min_connection = child->minimumNumberOfPossibilityToSelect();
+            int max_connection = child->maximumNumberOfPossibilityThatCanBeSelected();
+            QString more = "]";
+            if(max_connection == -1)
+                more = "+]";
+            inTreeitem->setText(1, "["+QString().setNum(min_connection)+more);
+        }
         inTreeitem->setData(0, Qt::UserRole+1, QString().setNum(inItems.size()*100));
         inTreeitem->setToolTip(0, tr("%1 : %2").arg(displayableName).arg(child->detailledDescription()));
 
@@ -289,6 +301,7 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
         font.setItalic(!obligatory);
         font.setBold(obligatory);
         inTreeitem->setFont(0, font);
+        inTreeitem->setFont(1, font);
 
         if(mInTreeWidget->topLevelItem(0) == nullptr)
             mInTreeWidget->addTopLevelItem(inTreeitem);
@@ -336,8 +349,13 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->expandAll();
     mOutTreeWidget->expandAll();
 
+    mInTreeWidget->sortItems(0, Qt::SortOrder::AscendingOrder);
+    mOutTreeWidget->sortItems(0, Qt::SortOrder::AscendingOrder);
+
     mInTreeWidget->resizeColumnToContents(0);
     mOutTreeWidget->resizeColumnToContents(0);
+    mInTreeWidget->resizeColumnToContents(1);
+    mOutTreeWidget->resizeColumnToContents(1);
 
     mInTreeWidget->resize(static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 100, inItems.size() * TREE_WIDGET_ITEM_SPACING);
     mOutTreeWidget->resize(static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 100, outItems.size() * TREE_WIDGET_ITEM_SPACING);
@@ -350,6 +368,12 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
 
     connect(mInTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
     connect(mOutTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
+
+    //connect(mInTreeWidget, &QTreeWidget::collapsed, [this](const QModelIndex& index) { Q_UNUSED(index); update(); });
+    //connect(mOutTreeWidget, &QTreeWidget::collapsed, [this](const QModelIndex& index) { Q_UNUSED(index); update(); });
+
+    //connect(mInTreeWidget, &QTreeWidget::expanded, [this](const QModelIndex& index) { Q_UNUSED(index); update(); });
+    //connect(mOutTreeWidget, &QTreeWidget::expanded, [this](const QModelIndex& index) { Q_UNUSED(index); update(); });
 }
 
 QTreeWidgetItem* CTG_ModelsLinkConfigurationFlowView::createOrGetOutTreeItemForModel(CT_AbstractModel* model, QHash<const CT_AbstractModel*, QTreeWidgetItem*>& outItems)
