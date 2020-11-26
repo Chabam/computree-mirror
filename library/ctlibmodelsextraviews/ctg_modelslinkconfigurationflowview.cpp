@@ -65,7 +65,7 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
     mFlowView = new FlowView(mFlowScene, this);
 
     auto hgi = new CT_HelpGraphicsItem();
-    hgi->setPos(740, -60);
+    hgi->setPos(800, -100);
     hgi->setToolTip(tr("Tooltip à modifier par Alexandre Piboule. Il suffit de faire rechercher dans Qt Creator pour me trouver !"));
     mFlowScene->addItem(hgi);
 
@@ -178,7 +178,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
         }
 
         mInNode = &mFlowScene->createNode(std::move(inType));
-        mInNode->nodeGraphicsObject().setPos(mInModelPortType == PT_OUT ? -100 : 400, 0);
+        mInNode->nodeGraphicsObject().setPos(mInModelPortType == PT_OUT ? -100 : 450, 0);
         mFlowScene->nodePlaced(*mInNode);
 
         std::unique_ptr<NodeDataModel> outType = std::make_unique<CT_ModelFlowDataModel>(tr("Données disponibles"), mOutTreeWidget->model(), oppositePort(PortType(mInModelPortType)), mOutTreeWidget);
@@ -190,7 +190,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
         }
 
         mOutNode = &mFlowScene->createNode(std::move(outType));
-        mOutNode->nodeGraphicsObject().setPos(mInModelPortType == PT_IN ? -100 : 400, 0);
+        mOutNode->nodeGraphicsObject().setPos(mInModelPortType == PT_IN ? -100 : 450, 0);
         mFlowScene->nodePlaced(*mOutNode);
 
         createConnectionForSelectedPossibilities();
@@ -283,14 +283,15 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
 
         QTreeWidgetItem* inTreeitem = new QTreeWidgetItem(inItems.value(child->parentModel(), nullptr), QStringList(displayableName));
         inTreeitem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(const_cast<CT_InAbstractModel*>(child))));
-        if(child->isObligatory())
-        {
-            int min_connection = child->minimumNumberOfPossibilityToSelect();
-            int max_connection = child->maximumNumberOfPossibilityThatCanBeSelected();
-            QString more = "]";
-            if(max_connection == -1)
-                more = "+]";
-            inTreeitem->setText(1, "["+QString().setNum(min_connection)+more);
+        int min_connection = child->minimumNumberOfPossibilityToSelect();
+        int max_connection = child->maximumNumberOfPossibilityThatCanBeSelected();
+        if(max_connection == -1)
+            inTreeitem->setText(1, "["+QString().setNum(min_connection)+"+]");
+        else {
+            if(min_connection == max_connection)
+                inTreeitem->setText(1, "["+QString().setNum(min_connection)+"]");
+            else
+                inTreeitem->setText(1, "["+QString().setNum(min_connection)+"-"+QString().setNum(max_connection)+"]");
         }
         inTreeitem->setData(0, Qt::UserRole+1, QString().setNum(inItems.size()*100));
         inTreeitem->setToolTip(0, tr("%1 : %2").arg(displayableName).arg(child->detailledDescription()));
@@ -395,7 +396,6 @@ QTreeWidgetItem* CTG_ModelsLinkConfigurationFlowView::createOrGetOutTreeItemForM
         if(parentOutTreeItem == nullptr)
             parentOutTreeItem = createOrGetOutTreeItemForModel(model->parentModel(), outItems);
     }
-
 
     const CT_OutAbstractSingularItemModel* outItemModel = dynamic_cast<const CT_OutAbstractSingularItemModel*>(model);
     const CT_OutAbstractItemAttributeModel* outItemAttributeModel = dynamic_cast<const CT_OutAbstractItemAttributeModel*>(model);
@@ -816,7 +816,9 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClick
     if(index.model() == mInTreeWidget->model())
         mOutTreeWidget->setCurrentIndex(QModelIndex());
     else
-        mInTreeWidget->setCurrentIndex(QModelIndex());
+        return;
+        // Only the InTreeWidget shall be interacting to select the OutTreeWidget possibilities
+        //mInTreeWidget->setCurrentIndex(QModelIndex());
 
     CT_AbstractModel* model = static_cast<CT_AbstractModel*>(index.data(Qt::UserRole).value<void*>());
     mModelOfLastIndexClicked[1] = mModelOfLastIndexClicked[0];

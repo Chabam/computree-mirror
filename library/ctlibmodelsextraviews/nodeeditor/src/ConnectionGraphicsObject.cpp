@@ -161,7 +161,11 @@ void
 ConnectionGraphicsObject::
 mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-  prepareGeometryChange();
+  Q_UNUSED(event);
+  return ;
+
+  // We don't want to move manually the connexions anymore
+  /*prepareGeometryChange();
 
   auto view = static_cast<QGraphicsView*>(event->widget());
   auto node = locateNodeAt(event->scenePos(),
@@ -193,7 +197,7 @@ mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 
   update();
 
-  event->accept();
+  event->accept();*/
 }
 
 

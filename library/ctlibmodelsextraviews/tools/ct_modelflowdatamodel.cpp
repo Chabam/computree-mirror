@@ -59,19 +59,8 @@ QtNodes::NodeDataType CT_ModelFlowDataModel::dataType(QtNodes::PortType portType
     if(portType == mPortType) {
         const PortInfo info = mModelByPortIndex.value(portIndex, PortInfo{});
 
-        QString otherNeeded = "0";
-        // IN PROGRESS
-        /*QString otherNeeded = "-1";
-        bool connectionsRequired = info.mModel->isOptionnal();
-        if(connectionsRequired)
-        {
-          //int maxConnectionsRequired = info.mModel->maximumNumberOfPossibilityThatCanBeSelected();
-          //quint8 minConnectionsRequired = info.mModel->minimumNumberOfPossibilityToSelect();
-          otherNeeded = "0";
-        }*/
-
         if(info.mModel != nullptr)
-            return CT_ModelFlowData(info.mModel, otherNeeded).type();
+            return CT_ModelFlowData(info.mModel, info.mId).type();
     }
 
     return NodeDataType();
