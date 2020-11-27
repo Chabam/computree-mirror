@@ -31,7 +31,6 @@ defineTest(checkMandatoryDependence) {
 isEmpty(LIB_PATH) : LIB_PATH = # empty
 
 # Check mandatory libraries
-# checkMandatoryDependence(gsl)
-# checkMandatoryDependence(openscenegraph)
-# checkMandatoryDependence(boost)
 # checkMandatoryDependence(dgtal)
+# checkMandatoryDependence(boost)
+# checkMandatoryDependence(gsl)
