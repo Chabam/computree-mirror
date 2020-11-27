@@ -22,12 +22,6 @@ isEmpty(LIB_PATH) : LIB_PATH = # empty
     include(include_necessary_libqglviewer.pri)
     message("DEPENDENCY SETUP - LIBQGLVIEWER will be used in $$TARGET")
 }
-!isEmpty(CHECK_CAN_USE_GEOS)|!isEmpty(MUST_USE_GEOS) {
-    include(default_path_geos.pri)
-    exists(user_path_geos.pri) : include(user_path_geos.pri)
-    include(include_necessary_geos.pri)
-    message("DEPENDENCY SETUP - GEOS         will be used in $$TARGET")
-}
 !isEmpty(CHECK_CAN_USE_GDAL)|!isEmpty(MUST_USE_GDAL)|contains( COMPUTREE, ctlibgdal) {
     include(default_path_gdal.pri)
     exists(user_path_gdal.pri) : include(user_path_gdal.pri)

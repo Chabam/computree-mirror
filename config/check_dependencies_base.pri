@@ -37,6 +37,9 @@ checkMandatoryDependence(libqglviewer)
 checkMandatoryDependence(opencv)
 checkMandatoryDependence(gdal)
 
+# Optional use of Point Cloud Library (PCL)
+MUST_USE_PCL = 1
+
 # Optional check for PCL
 !isEmpty(MUST_USE_PCL) : checkMandatoryDependence(pcl)
 
