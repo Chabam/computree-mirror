@@ -31,6 +31,7 @@ defineTest(checkMandatoryDependence) {
 isEmpty(LIB_PATH) : LIB_PATH = # empty
 
 # Check mandatory libraries
-# checkMandatoryDependence(dgtal)
-# checkMandatoryDependence(boost)
-# checkMandatoryDependence(gsl)
+#checkMandatoryDependence(dgtal)
+checkMandatoryDependence(flann)
+#checkMandatoryDependence(qhull)
+#checkMandatoryDependence(gsl)

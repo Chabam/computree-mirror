@@ -21,9 +21,6 @@ PCL_LIB_ADD += pcl_visualization
 PCL_LIBS_FOUNDED =
 
 linux {
-    QHULL_LIB_ADD =
-    QHULL_LIB_ADD += qhull
-
     for(a, PCL_LIB_ADD) {
         CONFIG(debug, debug|release) {
             !exists($$PCL_LIBS_PATH/lib$${a}*) {
@@ -36,31 +33,12 @@ linux {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/lib$${a} was not found"
             } else {
                 PCL_LIBS_FOUNDED += $$PCL_LIBS_PATH/lib$${a}.so
-            }
-        }
-    }
-
-    for(a, QHULL_LIB_ADD) {
-        CONFIG(debug, debug|release) {
-            !exists($$QHULL_LIBS_PATH/lib$${a}*) {
-                USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/lib$${a} was not found"
-            } else {
-                PCL_LIBS_FOUNDED += $$QHULL_LIBS_PATH/lib$${a}.so
-            }
-        } else {
-            !exists($$QHULL_LIBS_PATH/lib$${a}*) {
-                USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/lib$${a} was not found"
-            } else {
-                PCL_LIBS_FOUNDED += $$QHULL_LIBS_PATH/lib$${a}.so
             }
         }
     }
 }
 
 macx {
-    QHULL_LIB_ADD =
-    QHULL_LIB_ADD += qhull
-
     for(a, PCL_LIB_ADD) {
         CONFIG(debug, debug|release) {
             !exists($$PCL_LIBS_PATH/lib$${a}*) {
@@ -73,32 +51,12 @@ macx {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/lib$${a} was not found"
             } else {
                 PCL_LIBS_FOUNDED += $$PCL_LIBS_PATH/lib$${a}.dylib
-            }
-        }
-    }
-
-    for(a, QHULL_LIB_ADD) {
-        CONFIG(debug, debug|release) {
-            !exists($$QHULL_LIBS_PATH/lib$${a}*) {
-                USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/lib$${a} was not found"
-            } else {
-                PCL_LIBS_FOUNDED += $$QHULL_LIBS_PATH/lib$${a}.dylib
-            }
-        } else {
-            !exists($$QHULL_LIBS_PATH/lib$${a}*) {
-                USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/lib$${a} was not found"
-            } else {
-                PCL_LIBS_FOUNDED += $$QHULL_LIBS_PATH/lib$${a}.dylib
             }
         }
     }
 }
 
 windows {
-    QHULL_LIB_ADD =
-    QHULL_LIB_ADD += qhullstatic
-    #QHULL_LIB_ADD += qhullstatic_d
-
     for(a, PCL_LIB_ADD) {
         CONFIG(debug, debug|release) {
             !exists($$PCL_LIBS_PATH/$${a}*) {
@@ -115,72 +73,22 @@ windows {
             }
         }
     }
-
-
-    for(a, QHULL_LIB_ADD) {
-        CONFIG(debug, debug|release) {
-            !exists($$QHULL_LIBS_PATH/$${a}_d*) {
-                USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a}_d was not found"
-            } else {
-                PCL_LIBS_FOUNDED += -l$${a}_d
-            }
-        } else {
-            !exists($$QHULL_LIBS_PATH/$${a}*) {
-                USE_PCL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a} was not found"
-            } else {
-                PCL_LIBS_FOUNDED += -l$${a}
-            }
-        }
-    }
-}
-
-equals(CHECK_LIBS_ONLY, false) {
-    greaterThan(QT_MAJOR_VERSION, 4) {
-        load(moc)
-        QMAKE_MOC += -DBOOST_INCLUDE_GUARD_GOES_HERE
-    }
 }
 
 isEmpty(USE_PCL_ERROR_MSG) {
     equals(CHECK_LIBS_ONLY, false) {
         DEFINES += USE_PCL
-        DEFINES += USE_BOOST
 
         win32 {
             INCLUDEPATH += $$LIB_PATH/$$PCL_INC_PATH
-            INCLUDEPATH += $$LIB_PATH/$$QHULL_INC_PATH
-            INCLUDEPATH += $$LIB_PATH/$$FLANN_INC_PATH
-            INCLUDEPATH += $$LIB_PATH/$$BOOST_INC_PATH
-
             TR_EXCLUDE  += $$LIB_PATH/$$PCL_INC_PATH/*
-            TR_EXCLUDE  += $$LIB_PATH/$$QHULL_INC_PATH/*
-            TR_EXCLUDE  += $$LIB_PATH/$$FLANN_INC_PATH/*
-            TR_EXCLUDE  += $$LIB_PATH/$$BOOST_INC_PATH/*
-
-            DEPENDPATH  += $$LIB_PATH/$$QHULL_INC_PATH
-
             LIBS += -L$$LIB_PATH/$$PCL_LIBS_PATH
-            LIBS += -L$$LIB_PATH/$$BOOST_LIBS_PATH
-            LIBS += -L$$LIB_PATH/$$QHULL_LIBS_PATH
         } else {
             INCLUDEPATH += $$PCL_INC_PATH
-            INCLUDEPATH += $$QHULL_INC_PATH
-            INCLUDEPATH += $$FLANN_INC_PATH
-            INCLUDEPATH += $$BOOST_INC_PATH
-
             TR_EXCLUDE  += $$PCL_INC_PATH/*
-            TR_EXCLUDE  += $$QHULL_INC_PATH/*
-            TR_EXCLUDE  += $$FLANN_INC_PATH/*
-            TR_EXCLUDE  += $$BOOST_INC_PATH/*
-
-            DEPENDPATH  += $$QHULL_INC_PATH
-
             LIBS += -L$$PCL_LIBS_PATH
-            LIBS += -L$$BOOST_LIBS_PATH
-            LIBS += -L$$QHULL_LIBS_PATH
         }
 
         LIBS += $$PCL_LIBS_FOUNDED
     }
 }
-

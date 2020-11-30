@@ -34,17 +34,35 @@ isEmpty(LIB_PATH) : LIB_PATH = # empty
     include(include_necessary_opencv.pri)
     message("DEPENDENCY SETUP - OPENCV       will be used in $$TARGET")
 }
-# !isEmpty(CHECK_CAN_USE_GSL)|!isEmpty(MUST_USE_GSL)|contains( COMPUTREE, ctlibgsl) {
-#     include(default_path_gsl.pri)
-#     exists(user_path_gsl.pri) : include(user_path_gsl.pri)
-#     include(include_necessary_gsl.pri)
-#     message("DEPENDENCY SETUP - GSL          will be used in $$TARGET")
-# }
 !isEmpty(CHECK_CAN_USE_PCL)|!isEmpty(MUST_USE_PCL)|contains( COMPUTREE, ctlibpcl) {
     include(default_path_pcl.pri)
     exists(user_path_pcl.pri) : include(user_path_pcl.pri)
     include(include_necessary_pcl.pri)
     message("DEPENDENCY SETUP - PCL          will be used in $$TARGET")
+}
+!isEmpty(CHECK_CAN_USE_BOOST)|!isEmpty(MUST_USE_BOOST) {
+    include(default_path_boost.pri)
+    exists(user_path_boost.pri) : include(user_path_boost.pri)
+    include(include_necessary_boost.pri)
+    message("DEPENDENCY SETUP - BOOST        will be used in $$TARGET")
+}
+!isEmpty(CHECK_CAN_USE_GSL)|!isEmpty(MUST_USE_GSL)|contains( COMPUTREE, ctlibgsl) {
+    include(default_path_gsl.pri)
+    exists(user_path_gsl.pri) : include(user_path_gsl.pri)
+    include(include_necessary_gsl.pri)
+    message("DEPENDENCY SETUP - GSL          will be used in $$TARGET")
+}
+!isEmpty(CHECK_CAN_USE_FLANN)|!isEmpty(MUST_USE_FLANN) {
+    include(default_path_flann.pri)
+    exists(user_path_flann.pri) : include(user_path_flann.pri)
+    include(include_necessary_flann.pri)
+    message("DEPENDENCY SETUP - FLANN        will be used in $$TARGET")
+}
+!isEmpty(CHECK_CAN_USE_QHULL)|!isEmpty(MUST_USE_QHULL) {
+    include(default_path_qhull.pri)
+    exists(user_path_qhull.pri) : include(user_path_qhull.pri)
+    include(include_necessary_qhull.pri)
+    message("DEPENDENCY SETUP - QHULL        will be used in $$TARGET")
 }
 
 ### To avoid compilation error with GCC 7+

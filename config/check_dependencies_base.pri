@@ -32,6 +32,7 @@ isEmpty(LIB_PATH) : LIB_PATH = # empty
 
 # Check mandatory libraries
 checkMandatoryDependence(eigen)
+checkMandatoryDependence(boost)
 checkMandatoryDependence(muparser)
 checkMandatoryDependence(libqglviewer)
 checkMandatoryDependence(opencv)
@@ -41,7 +42,12 @@ checkMandatoryDependence(gdal)
 MUST_USE_PCL = 1
 
 # Optional check for PCL
-!isEmpty(MUST_USE_PCL) : checkMandatoryDependence(pcl)
+!isEmpty(MUST_USE_PCL) {
+    checkMandatoryDependence(pcl)
+    MUST_USE_BOOST = 1
+    MUST_USE_FLANN = 1
+    MUST_USE_QHULL = 1
+}
 
 # Include sub-projects from dependencies
 exists (../3rdparty/libQGLViewer/libQGLViewer.pro) {
