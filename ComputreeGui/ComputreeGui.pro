@@ -166,7 +166,7 @@ win32 {
     CONFIG(debug,   debug|release) : qt_deploy_options += --debug
 
     qt_deploy_cmd1 = $$[QT_INSTALL_LIBS]/../bin/windeployqt.exe $$DESTDIR $$qt_deploy_options
-    qt_deploy_cmd2 = copy "..\tools\win_setenv.cmd" $$WIN_PATH && cmd /C $$PWD/$$DESTDIR/win_setenv.cmd && del $$WIN_PATH\win_setenv.cmd
+    qt_deploy_cmd2 = copy "..\tools\qt.conf" $$WIN_PATH && copy "..\tools\win_setenv.cmd" $$WIN_PATH && cmd /C $$PWD/$$DESTDIR/win_setenv.cmd #&& del $$WIN_PATH\win_setenv.cmd
     qt_deploy_cmd3 = move $$WIN_PATH\libraries\Qt\opengl32sw.dll $$WIN_PATH\opengl32.dll
     qt_deploy_cmd4 = move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH
 
