@@ -31,40 +31,6 @@ QT *= opengl xml concurrent widgets
 
 DESTDIR = $${EXECUTABLE_DESTDIR}
 
-# FOR FINAL INSTALLATION (make install)
-# (done for Windows+MSVC, to be done for the other platforms)
-win32-msvc* {
-    lib_qt.files += $$[QT_INSTALL_LIBS]/../bin/Qt5Concurrent.dll
-    lib_qt.files += $$[QT_INSTALL_LIBS]/../bin/Qt5Core.dll
-    lib_qt.files += $$[QT_INSTALL_LIBS]/../bin/Qt5Gui.dll
-    lib_qt.files += $$[QT_INSTALL_LIBS]/../bin/Qt5OpenGL.dll
-    lib_qt.files += $$[QT_INSTALL_LIBS]/../bin/Qt5Widgets.dll
-    lib_qt.files += $$[QT_INSTALL_LIBS]/../bin/Qt5Xml.dll
-    lib_qt.path = $$DESTDIR/libraries/Qt
-
-    lib_qt_platforms.files += $$[QT_INSTALL_LIBS]/../plugins/platforms/qwindows.dll
-    lib_qt_platforms.path = $$DESTDIR/platforms
-
-    OPENCV_BASE_PATH = $$PWD/../3rdparty/opencv/build/
-    lib_opencv.files += $${OPENCV_BASE_PATH}bin/opencv_world440.dll
-    lib_opencv.path = $$DESTDIR/libraries/opencv
-
-    GDAL_BASE_PATH = $$PWD/../3rdparty/gdal/
-    lib_gdal.files += $${GDAL_BASE_PATH}bin/*.dll
-    lib_gdal.path = $$DESTDIR/libraries/gdal
-
-    lib_pcl.files += $${PCL_BASE_PATH}bin/*[^d].dll
-    lib_pcl.path = $$DESTDIR/libraries/pcl
-
-    setenv.files += ../tools/win_setenv.cmd
-    setenv.path = $$DESTDIR
-
-    lib_opengl.files += ../3rdparty/opengl/opengl32.dll
-    lib_opengl.path = $$DESTDIR
-
-    INSTALLS += lib_qt lib_qt_platforms lib_opencv lib_gdal lib_pcl setenv lib_opengl
-}
-
 HEADERS += dm_graphicsviewsynchronizedgroup.h \
     dm_graphicsviewsynchronizedgroupoptions.h \
     dm_itemdrawablemodelmanager.h \
@@ -166,4 +132,46 @@ macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
     # Silent OpenGL warning for MacOS > 10.14
     DEFINES += GL_SILENCE_DEPRECATION
+}
+
+# For final deployment of binaries to make a standalone package (this avoid to do the usual 'make install')
+win32 {
+    # Usefull definitions of paths
+    LIB = $$DESTDIR/libraries
+    WIN_PATH = $$PWD/$$DESTDIR
+    WIN_PATH ~= s,/,\\,g
+
+    # Common part for deployment
+    include(../config/default_path_opencv.pri)
+    CONFIG(release, debug|release) : lib_opencv.files += $$OPENCV_BASE_PATH/x64/vc15/bin/opencv_world450.dll
+    CONFIG(debug,   debug|release) : lib_opencv.files += $$OPENCV_BASE_PATH/x64/vc15/bin/opencv_world450d.dll
+    lib_opencv.path = $$LIB/opencv
+
+    include(../config/default_path_gdal.pri)
+    lib_gdal.files += $$GDAL_BASE_PATH/bin/*.dll
+    lib_gdal.path = $$LIB/gdal
+
+    include(../config/default_path_pcl.pri)
+    exists($$PCL_BASE_PATH) {
+        CONFIG(release, debug|release) : lib_pcl.files += $$PCL_BASE_PATH/bin/*[^d].dll
+        CONFIG(debug,   debug|release) : lib_pcl.files += $$PCL_BASE_PATH/bin/*d.dll
+        lib_pcl.path = $$LIB/pcl
+    }
+
+    INSTALLS += lib_opencv lib_gdal lib_pcl
+
+    # Specific part for deployment
+    qt_deploy_options = --force --no-translations --angle --compiler-runtime --plugindir $$LIB/Qt --libdir $$LIB/Qt
+    CONFIG(release, debug|release) : qt_deploy_options += --release
+    CONFIG(debug,   debug|release) : qt_deploy_options += --debug
+
+    qt_deploy_cmd1 = $$[QT_INSTALL_LIBS]/../bin/windeployqt.exe $$DESTDIR $$qt_deploy_options
+    qt_deploy_cmd2 = copy "..\tools\win_setenv.cmd" $$WIN_PATH && cmd /C $$PWD/$$DESTDIR/win_setenv.cmd && del $$WIN_PATH\win_setenv.cmd
+    qt_deploy_cmd3 = move $$WIN_PATH\libraries\Qt\opengl32sw.dll $$WIN_PATH\opengl32.dll
+    qt_deploy_cmd4 = move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH
+
+    qt_deploy.path = $$DESTDIR
+    qt_deploy.extra = $$qt_deploy_cmd1 && $$qt_deploy_cmd2 && $$qt_deploy_cmd3 && $$qt_deploy_cmd4
+
+    INSTALLS += qt_deploy
 }
