@@ -9,28 +9,30 @@ LIB = $$DESTDIR/libraries
 
 # For final deployment of binaries to make a standalone package (this avoid to do the usual 'make install')
 win32 {
-    # Usefull definitions of paths
-    WIN_PATH = $$DESTDIRFULL
-    WIN_PATH ~= s,/,\\,g
-
     # Common part for deployment
     include(default_path_opencv.pri)
-    CONFIG(release, debug|release) : lib_opencv.files += $$OPENCV_LIBS_PATH/../bin/opencv_world450.dll
-    CONFIG(debug,   debug|release) : lib_opencv.files += $$OPENCV_LIBS_PATH/../bin/opencv_world450d.dll
+    CONFIG(release, debug|release) : lib_opencv.files += $$PWD/$$OPENCV_LIBS_PATH/../bin/opencv_world450.dll
+    CONFIG(debug,   debug|release) : lib_opencv.files += $$PWD/$$OPENCV_LIBS_PATH/../bin/opencv_world450d.dll
     lib_opencv.path = $$LIB/opencv
 
     include(default_path_gdal.pri)
-    lib_gdal.files += $$GDAL_BASE_PATH/bin/*.dll
+    lib_gdal.files += $$PWD/$$GDAL_BASE_PATH/bin/*.dll
     lib_gdal.path = $$LIB/gdal
+
+    INSTALLS += lib_opencv lib_gdal
 
     include(default_path_pcl.pri)
     exists($$PCL_BASE_PATH) {
-        CONFIG(release, debug|release) : lib_pcl.files += $$PCL_BASE_PATH/bin/*[^d].dll
-        CONFIG(debug,   debug|release) : lib_pcl.files += $$PCL_BASE_PATH/bin/*d.dll
+        CONFIG(release, debug|release) : lib_pcl.files += $$PWD/$$PCL_BASE_PATH/bin/*[^d].dll
+        CONFIG(debug,   debug|release) : lib_pcl.files += $$PWD/$$PCL_BASE_PATH/bin/*d.dll
         lib_pcl.path = $$LIB/pcl
+
+        INSTALLS += lib_pcl
     }
 
-    INSTALLS += lib_opencv lib_gdal lib_pcl
+    # Usefull definitions of paths
+    WIN_PATH = $$DESTDIRFULL
+    WIN_PATH ~= s,/,\\,g
 
     # Specific part for deployment
     qt_deploy_options = --force --no-translations --angle --compiler-runtime --plugindir $$LIB/Qt --libdir $$LIB/Qt
@@ -49,10 +51,6 @@ win32 {
 }
 
 linux {
-    # Usefull definitions of paths
-    QT_PATH = $$[QT_INSTALL_BINS]/..
-    DEPLOYTOOL_PATH = $$[QT_INSTALL_BINS]
-
     # Common part for deployment
     include(default_path_opencv.pri)
     lib_opencv.files += $$OPENCV_LIBS_PATH/libopencv_*.so*
@@ -62,13 +60,19 @@ linux {
     lib_gdal.files += $$GDAL_LIBS_PATH/libgdal.so*
     lib_gdal.path = $$LIB/gdal
 
+    INSTALLS += lib_opencv lib_gdal
+
     include(default_path_pcl.pri)
     exists($$PCL_LIBS_PATH/libpcl_common.so) {
         lib_pcl.files += $$PCL_LIBS_PATH/libpcl_*.so*
         lib_pcl.path = $$LIB/pcl
+
+        INSTALLS += lib_pcl
     }
 
-    INSTALLS += lib_opencv lib_gdal lib_pcl
+    # Usefull definitions of paths
+    QT_PATH = $$[QT_INSTALL_BINS]/..
+    DEPLOYTOOL_PATH = $$[QT_INSTALL_BINS]
 
     # Specific part for deployment
     qt_deploy_cmd1 = cp tools/Computree.desktop tools/qt.conf tools/linux_setenv.sh $$DESTDIR ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$DESTDIR/CompuTreeGui.png & wait ;
