@@ -1,8 +1,8 @@
 linux {
     BOOST_BASE_PATH = "/usr/"
 
-    BOOST_LIBS_PATH = "$${PCL_BASE_PATH}lib/x86_64-linux-gnu"
-    BOOST_INC_PATH = "$${PCL_BASE_PATH}include"
+    BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}lib/x86_64-linux-gnu"
+    BOOST_INC_PATH = "$${BOOST_BASE_PATH}include"
 }
 
 win32 {

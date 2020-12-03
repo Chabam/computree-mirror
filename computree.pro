@@ -19,3 +19,5 @@ plugins.depends = base
 
 # Run "qmake; make; make install" on this file to compile and install everything
 # Dependencies are treated directly in sub-project files.
+
+include(config/installation_packages.pri)

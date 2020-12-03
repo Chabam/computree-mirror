@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=CompuTree
+Version=6.0
+Comment=Forest inventory with Lidar (ONF)
+Exec=CompuTreeGui
+Icon=CompuTreeGui
+Categories=Office;

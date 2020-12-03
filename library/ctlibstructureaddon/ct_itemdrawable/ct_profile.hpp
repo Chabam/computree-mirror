@@ -401,7 +401,7 @@ double CT_Profile<DataT>::getOtsuThreshold(CT_Profile<DataT> *outProfileLow, CT_
     double total = 0;
     double sum = 0;
 
-    for (int i = 0; i < nCells(); ++i)
+    for (int i = 0; i < static_cast<int>(nCells()); ++i)
     {
         sum += lengthForIndex(i) * valueAtIndex(i);
         total += valueAtIndex(i);
@@ -416,7 +416,7 @@ double CT_Profile<DataT>::getOtsuThreshold(CT_Profile<DataT> *outProfileLow, CT_
     double threshold1 = 0.0;
     double threshold2 = 0.0;
 
-    for (int i = 0; i < nCells(); ++i) {
+    for (int i = 0; i < static_cast<int>(nCells()); ++i) {
         wB += valueAtIndex(i);
         if (wB == 0)
             continue;
@@ -440,7 +440,7 @@ double CT_Profile<DataT>::getOtsuThreshold(CT_Profile<DataT> *outProfileLow, CT_
     // create filtered profiles
     if (outProfileLow != nullptr || outProfileHigh != nullptr)
     {
-        for (int i = 0; i < nCells(); ++i)
+        for (int i = 0; i < static_cast<int>(nCells()); ++i)
         {
             double length = lengthForIndex(i);
             if (outProfileLow  != nullptr && length >= threshold)

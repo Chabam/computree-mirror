@@ -1,7 +1,7 @@
 linux {
     FLANN_BASE_PATH = "/usr/"
 
-    FLANN_INC_PATH = "$${PCL_BASE_PATH}include"
+    FLANN_INC_PATH = "$${FLANN_BASE_PATH}include"
 }
 
 win32 {
