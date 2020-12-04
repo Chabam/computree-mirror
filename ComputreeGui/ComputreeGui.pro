@@ -27,6 +27,7 @@ CONFIG += windows
 TARGET = CompuTreeGui
 TEMPLATE = app
 RC_ICONS = Computree.ico
+macx : ICON = Computree.icns
 QT *= opengl xml concurrent widgets
 
 DESTDIR = $${EXECUTABLE_DESTDIR}
