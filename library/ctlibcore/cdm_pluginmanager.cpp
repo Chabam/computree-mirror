@@ -13,7 +13,11 @@
 
 CDM_PluginManager::CDM_PluginManager()
 {
-    _defaultPluginDirPath = "./plugins";
+#if defined(__APPLE__) // Clang Compiler (Apple)
+    _defaultPluginDirPath = qApp->applicationDirPath()+"/PlugIns";
+#else
+    _defaultPluginDirPath = qApp->applicationDirPath()+"/plugins";
+#endif
     m_guiManager = nullptr;
     m_stepsMenuManager.setPluginManager(this);
 
