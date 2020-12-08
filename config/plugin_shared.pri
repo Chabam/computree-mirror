@@ -56,7 +56,7 @@ CONFIG(debug, debug|release) {
 }
 
 macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 11.0
 }
 
 msvc:DEFINES += _USE_MATH_DEFINES

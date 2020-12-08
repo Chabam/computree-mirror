@@ -13,7 +13,7 @@ win32 {
 }
 
 macx {
-    BOOST_BASE_PATH = "/usr/local/Cellar/boost/1.73.0/"
+    BOOST_BASE_PATH = "/usr/local/Cellar/boost/1.74.0/"
 
     BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}lib"
     BOOST_INC_PATH = "$${BOOST_BASE_PATH}include"

@@ -13,7 +13,7 @@ win32 {
 }
 
 macx {
-    PCL_BASE_PATH = "/usr/local/Cellar/pcl/1.11.1_1.reinstall/"
+    PCL_BASE_PATH = "/usr/local/Cellar/pcl/1.11.1_6/"
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
     PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.11"
