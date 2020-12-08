@@ -25,7 +25,7 @@ SUBDIRS = plugins/pluginbase
 # SUBDIRS += $$addPlugin(pluginsegma)
 
 # Uncomment/add you own plugin here
-SUBDIRS += ../plugin-mk/pluginmk
-SUBDIRS += ../plugin-onf/pluginonf
-SUBDIRS += ../plugin-segma/pluginsegma
-SUBDIRS += ../plugin-toolkit/plugintoolkit
+SUBDIRS += ../pluginmk/pluginmk
+SUBDIRS += ../pluginonf/pluginonf
+SUBDIRS += ../pluginsegma/pluginsegma
+SUBDIRS += ../plugintoolkit/plugintoolkit
