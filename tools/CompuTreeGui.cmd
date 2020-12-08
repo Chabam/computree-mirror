@@ -8,7 +8,7 @@ SET np=^
 %local%Qt;^
 %local%opencv;
 
-SET PATH "%path%%np%"
+SET PATH=%np%%path%
 
 start CompuTreeGui.exe
 exit
