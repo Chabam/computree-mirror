@@ -32,7 +32,6 @@ isEmpty(LIB_PATH) : LIB_PATH = # empty
 
 # Check mandatory libraries
 checkMandatoryDependence(eigen)
-checkMandatoryDependence(boost)
 checkMandatoryDependence(muparser)
 checkMandatoryDependence(libqglviewer)
 checkMandatoryDependence(opencv)
@@ -43,10 +42,11 @@ MUST_USE_PCL = 1
 
 # Optional check for PCL
 !isEmpty(MUST_USE_PCL) {
-    checkMandatoryDependence(pcl)
     MUST_USE_BOOST = 1
     MUST_USE_FLANN = 1
-    MUST_USE_QHULL = 1
+    checkMandatoryDependence(pcl)
+    checkMandatoryDependence(boost)
+    checkMandatoryDependence(flann)
 }
 
 # Include sub-projects from dependencies

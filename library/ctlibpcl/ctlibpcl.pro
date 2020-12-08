@@ -1,7 +1,6 @@
 MUST_USE_PCL = 1
 MUST_USE_BOOST = 1
 MUST_USE_FLANN = 1
-MUST_USE_QHULL = 1
 include(../../config/library_shared.pri)
 include(../../config/include_dependencies.pri)
 
