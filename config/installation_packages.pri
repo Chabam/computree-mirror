@@ -7,9 +7,9 @@ DESTDIR = $${EXECUTABLE_DESTDIR}
 DESTDIRFULL = $$PWD/../$$DESTDIR
 LIB = $$DESTDIR/libraries
 
-# For final deployment of binaries to make a standalone package (this avoid to do the usual 'make install')
+# Final deployment of binaries : make a standalone package (this avoid to do the usual 'make install')
 win32 {
-    # Common part for deployment
+    # Copy other libraries dependencies
     include(default_path_opencv.pri)
     CONFIG(release, debug|release) : lib_opencv.files += $$PWD/$$OPENCV_LIBS_PATH/../bin/opencv_world450.dll
     CONFIG(debug,   debug|release) : lib_opencv.files += $$PWD/$$OPENCV_LIBS_PATH/../bin/opencv_world450d.dll
@@ -34,7 +34,7 @@ win32 {
     WIN_PATH = $$DESTDIRFULL
     WIN_PATH ~= s,/,\\,g
 
-    # Specific part for deployment
+    # Deployment using WinDeployQt
     qt_deploy_options = --force --no-translations --angle --compiler-runtime --plugindir $$LIB/Qt --libdir $$LIB/Qt
     CONFIG(release, debug|release) : qt_deploy_options += --release
     CONFIG(debug,   debug|release) : qt_deploy_options += --debug
@@ -51,41 +51,31 @@ win32 {
 }
 
 linux {
-    # Common part for deployment
-    include(default_path_opencv.pri)
-    lib_opencv.files += $$OPENCV_LIBS_PATH/libopencv_*.so*
-    lib_opencv.path = $$LIB/opencv
-
-    include(default_path_gdal.pri)
-    lib_gdal.files += $$GDAL_LIBS_PATH/libgdal.so*
-    lib_gdal.path = $$LIB/gdal
-
-    INSTALLS += lib_opencv lib_gdal
-
-    include(default_path_pcl.pri)
-    exists($$PCL_LIBS_PATH/libpcl_common.so) {
-        lib_pcl.files += $$PCL_LIBS_PATH/libpcl_*.so*
-        lib_pcl.path = $$LIB/pcl
-
-        INSTALLS += lib_pcl
-    }
-
     # Usefull definitions of paths
     QT_PATH = $$[QT_INSTALL_BINS]/..
     DEPLOYTOOL_PATH = $$[QT_INSTALL_BINS]
 
-    # Specific part for deployment
-    qt_deploy_cmd1 = cp tools/Computree.desktop tools/qt.conf tools/linux_setenv.sh $$DESTDIR ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$DESTDIR/CompuTreeGui.png & wait ;
-    qt_deploy_cmd2 = export LD_LIBRARY_PATH=$$[QT_INSTALL_LIBS]:$$QT_PATH${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} ;
-    qt_deploy_cmd3 = $$DEPLOYTOOL_PATH/linuxdeployqt-7-x86_64.AppImage $$DESTDIRFULL/CompuTreeGui -unsupported-allow-new-glibc & wait ;
-    # We don't use AppImage format separately, but it can be done by uncommenting this line and adding the step to the INSTALL command below
-    #qt_deploy_cmd4 = cd $$DESTDIR ; $$DEPLOYTOOL_PATH/linuxdeployqt-7-x86_64.AppImage $$PWDUP/$$DESTDIR/CompuTreeGui -unsupported-allow-new-glibc -appimage & wait ; cd $$PWD/.. ;
-    qt_deploy_cmd5 = mkdir -p $$LIB/Qt ; rm -rf $$LIB/Qt/* & wait ;
-    qt_deploy_cmd6 = mv $$DESTDIR/lib/* $$LIB/Qt ; mv $$DESTDIR/plugins/*/ $$LIB/Qt & wait ;
-    qt_deploy_cmd7 = rm -rf $$DESTDIR/doc $$DESTDIR/lib $$DESTDIR/translations ; rm -f $$LIB/Qt/libct*.so
+    # Deployment using LinuxDeployQt
+    APPDIR      = $$DESTDIRFULL/CompuTree.appdir/usr
+    DIR_LIBS    = $$APPDIR/lib
+    DIR_PLUGINS = $$APPDIR/plugins
+
+    qt_deploy_cmd1 = mkdir -p $$APPDIR/bin $$APPDIR/lib $$APPDIR/plugins $$APPDIR/share/applications $$APPDIR/share/icons/hicolor/256x256/apps & wait ;
+    qt_deploy_cmd2 = cp tools/Computree.desktop $$APPDIR/share/applications/CompuTreeGui.desktop ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/share/icons/hicolor/256x256/apps/CompuTreeGui.png ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/../CompuTreeGui.png & wait ;
+    qt_deploy_cmd3 = cp $$LIB/core/*.so $$APPDIR/lib ; cp $$DESTDIRFULL/plugins/*.so $$APPDIR/plugins ; cp $$DESTDIRFULL/CompuTreeGui $$APPDIR/bin/CompuTreeGui & wait ;
+    # Update the rpath in the various libraries/plugins we have to make sure they'll be loadable in an Appimage context (if needed : apt install patchelf)
+    qt_deploy_cmd4 = cd $$DIR_LIBS    ; for target in $$DIR_LIBS/libctli*     ; do for file in libctli*; do patchelf --replace-needed "\$\$file" "\\\$\$ORIGIN/\$\$file" "\$\$target"; done; done & wait ;
+    qt_deploy_cmd5 = cd $$DIR_LIBS    ; for target in $$DIR_PLUGINS/libplug_* ; do for file in libctli*; do patchelf --replace-needed "\$\$file" "\\\$\$ORIGIN/../lib/\$\$file" "\$\$target"; done; done & wait ;
+    qt_deploy_cmd6 = cd $$DIR_LIBS    ; for file   in libctli*  ; do patchelf --replace-needed "\$\$file" "\\\$\$ORIGIN/../lib/\$\$file"     $$APPDIR/bin/CompuTreeGui; done & wait ;
+    qt_deploy_cmd7 = cd $$DIR_PLUGINS ; for file   in libplug_* ; do patchelf --replace-needed "\$\$file" "\\\$\$ORIGIN/../plugins/\$\$file" $$APPDIR/bin/CompuTreeGui; done & wait ;
+    qt_deploy_cmd8 = export LD_LIBRARY_PATH=$$[QT_INSTALL_LIBS]:$$APPDIR/lib:$$QT_PATH${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} & wait ;
+    # Build the image (if not installed, download it from https://github.com/probonopd/linuxdeployqt and paste it into Qt's binary folder)
+    qt_deploy_cmd9 = $$DEPLOYTOOL_PATH/linuxdeployqt-7-x86_64.AppImage $$APPDIR/share/applications/CompuTreeGui.desktop -executable=$$APPDIR/bin/CompuTreeGui -bundle-non-qt-libs -extra-plugins=$$APPDIR/lib,$$APPDIR/plugins -unsupported-allow-new-glibc & wait ;
+    qt_deploy_cmd10 = rm  $$APPDIR/../AppRun ; cp $$PWD/../tools/AppRun $$APPDIR/../AppRun ; chmod +x $$APPDIR/../AppRun & wait ;
+    qt_deploy_cmd11 = cd $$DESTDIRFULL ; $$DEPLOYTOOL_PATH/linuxdeployqt-7-x86_64.AppImage $$APPDIR/bin/CompuTreeGui -unsupported-allow-new-glibc -appimage & wait ;
 
     qt_deploy.path = $$DESTDIR
-    qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd5 $$qt_deploy_cmd6 $$qt_deploy_cmd7
+    qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5 $$qt_deploy_cmd6 $$qt_deploy_cmd7 $$qt_deploy_cmd8 $$qt_deploy_cmd9 $$qt_deploy_cmd10 $$qt_deploy_cmd11
 
     INSTALLS += qt_deploy
 }
@@ -95,7 +85,7 @@ macx {
     DIR_FRAMEWORKS = $$DESTDIRFULL/CompuTreeGui.app/Contents/Frameworks
     DIR_PLUGINS    = $$DESTDIRFULL/CompuTreeGui.app/Contents/PlugIns
 
-    # Specific part for deployment
+    # Deployment using MacDeployQt
     qt_deploy_cmd1 = mkdir -p $$DIR_FRAMEWORKS $$DIR_PLUGINS  & wait ; cp $$DESTDIRFULL/libraries/core/*.dylib $$DIR_FRAMEWORKS ; cp $$DESTDIRFULL/plugins/*.dylib $$DIR_PLUGINS & wait ;
     qt_deploy_cmd2 = cd $$DIR_FRAMEWORKS ; for target in $$DIR_FRAMEWORKS/libctli*; do for file in libctli*; do install_name_tool -change "\$\$file" @executable_path/../Frameworks/"\$\$file" "\$\$target"; done; done & wait ;
     qt_deploy_cmd3 = cd $$DIR_FRAMEWORKS ; for target in $$DIR_PLUGINS/libplug_*  ; do for file in libctli*; do install_name_tool -change "\$\$file" @executable_path/../Frameworks/"\$\$file" "\$\$target"; done; done & wait ;

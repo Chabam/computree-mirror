@@ -218,7 +218,7 @@ unix {
 	target.path = $${LIB_DIR_}
 
 	# "make install" configuration options
-	INSTALLS *= target include documentation docImages docRefManual
+        #INSTALLS *= target include documentation docImages docRefManual
 }
 
 
@@ -250,7 +250,7 @@ macx|darwin-g++ {
 		}
 
 		# Framework already contains includes
-		INSTALLS -= include
+                #INSTALLS -= include
 	}
 
 	# GLUT for Mac architecture

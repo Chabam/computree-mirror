@@ -13,10 +13,12 @@
 
 CDM_PluginManager::CDM_PluginManager()
 {
-#if defined(__APPLE__) // Clang Compiler (Apple)
-    _defaultPluginDirPath = qApp->applicationDirPath()+"/PlugIns";
-#else
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
     _defaultPluginDirPath = qApp->applicationDirPath()+"/plugins";
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+    _defaultPluginDirPath = qApp->applicationDirPath()+"/../plugins";
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+    _defaultPluginDirPath = qApp->applicationDirPath()+"/PlugIns";
 #endif
     m_guiManager = nullptr;
     m_stepsMenuManager.setPluginManager(this);
