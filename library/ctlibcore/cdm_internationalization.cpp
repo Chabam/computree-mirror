@@ -17,7 +17,7 @@ CDM_Internationalization::CDM_Internationalization()
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
     m_languageDirectory = qApp->applicationDirPath()+"/../languages";
 #elif defined(__APPLE__) // Clang Compiler (Apple)
-    m_languageDirectory = qApp->applicationDirPath()+"/../languages";
+    m_languageDirectory = qApp->applicationDirPath()+"/../Languages";
 #endif
 }
 
