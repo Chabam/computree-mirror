@@ -1458,6 +1458,10 @@ QString GGraphicsViewImp::stateFileName() const
             name = fi.absolutePath() + '/' + fi.completeBaseName() + QString::number(m_uniqueIndex) + "." + fi.suffix();
     }
 
+#if defined(__linux__) // Linux
+    name = QDir::homePath() + "/.computree/" + name;
+#endif
+
     return name;
 }
 

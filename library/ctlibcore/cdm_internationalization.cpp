@@ -12,7 +12,13 @@ CDM_Internationalization::CDM_Internationalization()
     m_currentLanguageIndex = -1;
     m_saveLanguageIndex = -1;
     m_currentLanguageBaseName = "en";
-    m_languageDirectory = QString(".") + QDir::separator() + "languages";
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+    m_languageDirectory = qApp->applicationDirPath() + "/languages";
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+    m_languageDirectory = qApp->applicationDirPath()+"/../languages";
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+    m_languageDirectory = qApp->applicationDirPath()+"/../languages";
+#endif
 }
 
 CDM_Internationalization::~CDM_Internationalization()

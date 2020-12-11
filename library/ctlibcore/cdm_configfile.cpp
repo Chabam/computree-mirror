@@ -1,6 +1,7 @@
 #include "cdm_configfile.h"
 
 #include <QCoreApplication>
+#include <QDir>
 
 CDM_ConfigFile* CDM_ConfigFile::_uniqueInstance = nullptr;
 
@@ -16,7 +17,11 @@ CDM_ConfigFile* CDM_ConfigFile::createInstance()
             path = path.left(n);
         }
 
+#if defined(__linux__) // Linux
+        _uniqueInstance = new CDM_ConfigFile(QDir::homePath() + "/.computree/config.ini", QSettings::IniFormat);
+#else
         _uniqueInstance = new CDM_ConfigFile(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
+#endif
     }
 
     return _uniqueInstance;

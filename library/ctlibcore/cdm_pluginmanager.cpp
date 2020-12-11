@@ -9,7 +9,11 @@
 #include <QApplication>
 
 #define FAVORITES_FILENAME "favorites."
+#if defined(__linux__) // Linux
+#define FAVORITES_FILEPATH QDir::toNativeSeparators(QDir::homePath() + "/.computree/" + FAVORITES_FILENAME + stepsMenuManager()->favoriteDefaultFileExtension())
+#else
 #define FAVORITES_FILEPATH QDir::toNativeSeparators(qApp->applicationDirPath() + "/" + FAVORITES_FILENAME + stepsMenuManager()->favoriteDefaultFileExtension())
+#endif
 
 CDM_PluginManager::CDM_PluginManager()
 {
