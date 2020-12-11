@@ -38,7 +38,13 @@ using QtNodes::TypeConverter;
 using QtNodes::Connection;
 using QtNodes::ConnectionStyle;
 
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
 #define TREE_WIDGET_ITEM_SPACING 21
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#define TREE_WIDGET_ITEM_SPACING 21+2
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#define TREE_WIDGET_ITEM_SPACING 21+2
+#endif
 
 CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget *parent) :
     SuperClass(parent),
@@ -192,6 +198,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
 
         mOutNode = &mFlowScene->createNode(std::move(outType));
         mOutNode->nodeGraphicsObject().setPos(mInModelPortType == PT_IN ? -100 : 450, 0);
+        mOutNode->nodeGraphicsObject().setRef(false);
         mFlowScene->nodePlaced(*mOutNode);
 
         createConnectionForSelectedPossibilities();
@@ -359,8 +366,8 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->resizeColumnToContents(1);
     mOutTreeWidget->resizeColumnToContents(1);
 
-    mInTreeWidget->resize(static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 110, inItems.size() * TREE_WIDGET_ITEM_SPACING);
-    mOutTreeWidget->resize(static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 110, outItems.size() * TREE_WIDGET_ITEM_SPACING);
+    mInTreeWidget->resize(static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 115, inItems.size() * TREE_WIDGET_ITEM_SPACING + 5);
+    mOutTreeWidget->resize(static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 115, outItems.size() * TREE_WIDGET_ITEM_SPACING + 5);
 
     connect(mInTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
     connect(mOutTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);

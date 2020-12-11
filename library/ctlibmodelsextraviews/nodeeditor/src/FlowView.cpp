@@ -238,6 +238,8 @@ wheelEvent(QWheelEvent *event)
     scaleDown();
 
   Node* rightNode = _scene->allNodes().at(0);
+  if(_scene->allNodes().at(1)->nodeGraphicsObject().ref())
+      rightNode = _scene->allNodes().at(1);
   QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
   QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
 
@@ -382,6 +384,8 @@ mouseMoveEvent(QMouseEvent *event)
       setSceneRect(sceneRect().translated(0.0, difference.y())); // Vertical move only
 
       Node* rightNode = _scene->allNodes().at(0);
+      if(_scene->allNodes().at(1)->nodeGraphicsObject().ref())
+          rightNode = _scene->allNodes().at(1);
       QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
       QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
 
