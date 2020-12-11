@@ -8,7 +8,7 @@ include($${PLUGIN_SHARED_DIR}/include.pri)
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
 
-DESTDIR = $${PLUGINSHARED_DESTDIR}
+DESTDIR = $${PLUGIN_DESTDIR}
 TARGET = ctlibgopencv
 
 DEFINES += CTLIBOPENCV_LIBRARY

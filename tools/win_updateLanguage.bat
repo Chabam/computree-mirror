@@ -1,5 +1,8 @@
 @ECHO OFF
 
+echo Date du jour : %date%
+echo Heure courante : %time%
+
 echo;
 echo --------------------------------------------
 echo ----- SCRIPT BEGIN FOR DEBUG VERSION -------
@@ -29,9 +32,9 @@ echo;
 echo;
 
 echo;
-echo --------------------------------------------
+echo ----------------------------------------------
 echo ----- SCRIPT BEGIN FOR RELEASE VERSION -------
-echo --------------------------------------------
+echo ----------------------------------------------
 
 set ALLDESTDIR=%~dp0\..\..\ComputreeInstallRelease
 
@@ -55,6 +58,9 @@ echo;
 echo "////// !!!!!! \\\\\\\\\\\\"
 echo;
 echo;
+
+echo Date du jour : %date%
+echo Heure courante : %time%
 
 PAUSE
 

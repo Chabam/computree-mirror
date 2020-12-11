@@ -58,3 +58,7 @@ RESOURCES += resource.qrc
 
 TRANSLATIONS += languages/pluginbase_fr.ts \
                 languages/pluginbase_en.ts
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../languages

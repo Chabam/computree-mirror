@@ -99,6 +99,10 @@ HEADERS += \
 TRANSLATIONS += languages/computreegui_fr.ts \
                 languages/computreegui_en.ts
 
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/languages
+
 RESOURCES += resource/icones.qrc
 
 include(view/view.pri)

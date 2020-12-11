@@ -12,7 +12,7 @@ include($${CT_PREFIX}/include_ct_library.pri)
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += concurrent
 
-DESTDIR = $${PLUGINSHARED_DESTDIR}
+DESTDIR = $${PLUGIN_DESTDIR}
 TARGET = ctlibgdal
 
 DEFINES += CTLIBGDAL_LIBRARY

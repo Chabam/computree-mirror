@@ -21,7 +21,7 @@ isEmpty(TEST_FEATURES) {
 
 include(../../config/destdir.pri)
 
-DESTDIR = $${PLUGINSHARED_DESTDIR}
+DESTDIR = $${PLUGIN_DESTDIR}
 
 CONFIG(debug, debug|release) {
     OBJECTS_DIR = debug/.obj
@@ -819,6 +819,6 @@ FORMS += \
 TRANSLATIONS += languages/pluginshared_fr.ts \
                 languages/pluginshared_en.ts
 
-RESOURCES +=
-
-OTHER_FILES +=
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../languages

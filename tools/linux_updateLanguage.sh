@@ -3,9 +3,7 @@
 launchF() {
   bName=$(basename $1)
 
-
   for f in $1/*.pro; do
-
      if [ -f "$f" ]; then
        	if grep -iq "TRANSLATIONS" "$f"; then
 
@@ -78,9 +76,9 @@ echo;
 echo;
 
 echo;
-echo --------------------------------------------
+echo ----------------------------------------------
 echo ----- SCRIPT BEGIN FOR RELEASE VERSION -------
-echo --------------------------------------------
+echo ----------------------------------------------
 
 QTDIR=$1
 ALLDESTDIR="`pwd`/../../ComputreeInstallRelease"
