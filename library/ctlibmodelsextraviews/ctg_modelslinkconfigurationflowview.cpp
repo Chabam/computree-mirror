@@ -179,6 +179,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
 
         mInNode = &mFlowScene->createNode(std::move(inType));
         mInNode->nodeGraphicsObject().setPos(mInModelPortType == PT_OUT ? -100 : 450, 0);
+        mInNode->nodeGraphicsObject().setRef(true);
         mFlowScene->nodePlaced(*mInNode);
 
         std::unique_ptr<NodeDataModel> outType = std::make_unique<CT_ModelFlowDataModel>(tr("Données disponibles"), mOutTreeWidget->model(), oppositePort(PortType(mInModelPortType)), mOutTreeWidget);
@@ -358,14 +359,14 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->resizeColumnToContents(1);
     mOutTreeWidget->resizeColumnToContents(1);
 
-    mInTreeWidget->resize(static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 100, inItems.size() * TREE_WIDGET_ITEM_SPACING);
-    mOutTreeWidget->resize(static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 100, outItems.size() * TREE_WIDGET_ITEM_SPACING);
+    mInTreeWidget->resize(static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 110, inItems.size() * TREE_WIDGET_ITEM_SPACING);
+    mOutTreeWidget->resize(static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 110, outItems.size() * TREE_WIDGET_ITEM_SPACING);
 
     connect(mInTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
     connect(mOutTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
 
-    connect(mInTreeWidget, &QTreeWidget::entered, [this](const QModelIndex& index) { convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(index, (qApp->mouseButtons() == Qt::MiddleButton)); });
-    connect(mOutTreeWidget, &QTreeWidget::entered, [this](const QModelIndex& index) { convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(index, (qApp->mouseButtons() == Qt::MiddleButton)); });
+    connect(mInTreeWidget, &QTreeWidget::entered, [this](const QModelIndex& index) { convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(index, false); });
+    connect(mOutTreeWidget, &QTreeWidget::entered, [this](const QModelIndex& index) { convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(index, true); });
 
     connect(mInTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
     connect(mOutTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
@@ -808,7 +809,7 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClick
         return;
 
     bool mouseButtonPressed = false;
-    if(mKeyboardShiftModifierEnabled || (mouseButtonPressed = (qApp->mouseButtons() == Qt::MiddleButton))) {
+    if(mKeyboardShiftModifierEnabled || (mouseButtonPressed = index.model() == mOutTreeWidget->model()/*(qApp->mouseButtons() == Qt::MiddleButton)*/)) {
         convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(index, mouseButtonPressed);
         return;
     }
@@ -837,7 +838,12 @@ void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenPreviou
     CT_InStdModelPossibility* possibility = findPossibilityBetweenInAndOutModels(model, mModelOfLastIndexClicked[0]);
 
     if(possibility != nullptr)
-        possibility->setSelected(true);
+    {
+        if(possibility->isSelected())
+            possibility->setSelected(false);
+        else
+            possibility->setSelected(true);
+    }
 }
 
 void CTG_ModelsLinkConfigurationFlowView::connectionSelected(QtNodes::Connection& c)

@@ -236,6 +236,19 @@ wheelEvent(QWheelEvent *event)
     scaleUp();
   else
     scaleDown();
+
+  Node* rightNode = _scene->allNodes().at(0);
+  QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
+  QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
+
+  QRectF sceneRectArea = _scene->views().first()->sceneRect();
+
+  if(rightNodePos.y() < sceneRectArea.top() - 50)
+      rightNodePos.setY(sceneRectArea.top() - 50);
+  if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom() + 100)
+      rightNodePos.setY(sceneRectArea.bottom() + 100 - rightNodeRect.height());
+
+  _scene->setNodePosition(*rightNode,rightNodePos);
 }
 
 
@@ -367,6 +380,19 @@ mouseMoveEvent(QMouseEvent *event)
       QPointF difference = _clickPos - mapToScene(event->pos());
       //setSceneRect(sceneRect().translated(difference.x(), difference.y()));
       setSceneRect(sceneRect().translated(0.0, difference.y())); // Vertical move only
+
+      Node* rightNode = _scene->allNodes().at(0);
+      QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
+      QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
+
+      QRectF sceneRectArea = _scene->views().first()->sceneRect();
+
+      if(rightNodePos.y() < sceneRectArea.top() - 50)
+          rightNodePos.setY(sceneRectArea.top() - 50);
+      if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom() + 100)
+          rightNodePos.setY(sceneRectArea.bottom() + 100 - rightNodeRect.height());
+
+      _scene->setNodePosition(*rightNode,rightNodePos);
     }
   }
 }

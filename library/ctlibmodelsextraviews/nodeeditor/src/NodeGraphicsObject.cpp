@@ -317,7 +317,19 @@ mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
     // Move nodes only on y-axis
     auto diff = event->pos() - event->lastPos();
-    QGraphicsObject::moveBy(0.0,diff.y());
+
+    if(_ref) // We limit the position of the reference Node only
+    {
+        QRectF sceneRectArea = scene()->views().first()->sceneRect();
+        if(pos().y() < sceneRectArea.top() - 50)
+            setPos(pos().x(), sceneRectArea.top() - 50);
+        else if(pos().y() + boundingRect().height() > sceneRectArea.bottom() + 100)
+            setPos(pos().x(), sceneRectArea.bottom() + 100 - boundingRect().height());
+        else
+            moveBy(0.0,diff.y());
+    }
+    else
+        moveBy(0.0,diff.y());
 
     if (event->lastPos() != event->pos())
       moveConnections();

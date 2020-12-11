@@ -54,6 +54,12 @@ public:
   void
   lock(bool locked);
 
+  void
+  setRef(bool ref) { _ref = ref; }
+
+  bool
+  ref() { return _ref; }
+
 protected:
   void
   paint(QPainter*                       painter,
@@ -96,6 +102,8 @@ private:
   FlowScene & _scene;
 
   Node& _node;
+
+  bool _ref;
 
   bool _locked;
 
