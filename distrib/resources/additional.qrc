@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icon.png</file>
+        <file>gnu-lgpl-v3.0.md</file>
+    </qresource>
+</RCC>

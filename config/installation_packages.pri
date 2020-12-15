@@ -40,7 +40,7 @@ win32 {
     CONFIG(debug,   debug|release) : qt_deploy_options += --debug
 
     qt_deploy_cmd1 = $$[QT_INSTALL_BINS]/windeployqt.exe $$DESTDIR $$qt_deploy_options &&
-    qt_deploy_cmd2 = copy "tools\qt.conf" $$WIN_PATH && copy "tools\CompuTreeGui.cmd" $$WIN_PATH &&
+    qt_deploy_cmd2 = copy "distrib\windows\qt.conf" $$WIN_PATH && copy "distrib\windows\CompuTreeGui.cmd" $$WIN_PATH &&
     qt_deploy_cmd3 = move $$WIN_PATH\libraries\Qt\opengl32sw.dll $$WIN_PATH\opengl32.dll &&
     qt_deploy_cmd4 = move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH &&
     qt_deploy_cmd5 = move $$WIN_PATH\languages\release\*.qm $$WIN_PATH\languages\ &&
@@ -63,7 +63,7 @@ linux {
     DIR_PLUGINS = $$APPDIR/plugins
 
     qt_deploy_cmd1 = mkdir -p $$APPDIR/bin $$APPDIR/lib $$APPDIR/plugins $$APPDIR/languages $$APPDIR/share/applications $$APPDIR/share/icons/hicolor/256x256/apps & wait ;
-    qt_deploy_cmd2 = cp tools/Computree.desktop $$APPDIR/share/applications/CompuTreeGui.desktop ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/share/icons/hicolor/256x256/apps/CompuTreeGui.png ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/../CompuTreeGui.png & wait ;
+    qt_deploy_cmd2 = cp distrib/linux/Computree.desktop $$APPDIR/share/applications/CompuTreeGui.desktop ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/share/icons/hicolor/256x256/apps/CompuTreeGui.png ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/../CompuTreeGui.png & wait ;
     qt_deploy_cmd3 = cp $$LIB/core/*.so $$APPDIR/lib ; cp $$DESTDIRFULL/plugins/*.so $$APPDIR/plugins ; cp $$DESTDIRFULL/CompuTreeGui $$APPDIR/bin/CompuTreeGui & wait ;
     # Update the rpath in the various libraries/plugins we have to make sure they'll be loadable in an Appimage context (if needed : apt install patchelf)
     qt_deploy_cmd4 = cd $$DIR_LIBS    ; for target in $$DIR_LIBS/libctli*     ; do for file in libctli*; do patchelf --replace-needed "\$\$file" "\\\$\$ORIGIN/\$\$file" "\$\$target"; done; done & wait ;
@@ -73,7 +73,7 @@ linux {
     qt_deploy_cmd8 = export LD_LIBRARY_PATH=$$[QT_INSTALL_LIBS]:$$APPDIR/lib:$$QT_PATH${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} & wait ;
     # Build the image (if not installed, download it from https://github.com/probonopd/linuxdeployqt and paste it into Qt's binary folder)
     qt_deploy_cmd9 = $$DEPLOYTOOL_PATH/linuxdeployqt-7-x86_64.AppImage $$APPDIR/share/applications/CompuTreeGui.desktop -executable=$$APPDIR/bin/CompuTreeGui -no-translations -bundle-non-qt-libs -extra-plugins=$$APPDIR/lib,$$APPDIR/plugins -unsupported-allow-new-glibc & wait ;
-    qt_deploy_cmd10 = rm -f $$APPDIR/../AppRun ; cp $$PWD/../tools/AppRun $$APPDIR/../AppRun ; chmod +x $$APPDIR/../AppRun ; cp $$DESTDIRFULL/languages/* $$APPDIR/languages & wait ;
+    qt_deploy_cmd10 = rm -f $$APPDIR/../AppRun ; cp $$PWD/../distrib/linux/AppRun $$APPDIR/../AppRun ; chmod +x $$APPDIR/../AppRun ; cp $$DESTDIRFULL/languages/* $$APPDIR/languages & wait ;
     qt_deploy_cmd11 = cd $$DESTDIRFULL ; $$DEPLOYTOOL_PATH/linuxdeployqt-7-x86_64.AppImage $$APPDIR/bin/CompuTreeGui -no-translations -unsupported-allow-new-glibc -appimage & wait ;
 
     qt_deploy.path = $$DESTDIR
