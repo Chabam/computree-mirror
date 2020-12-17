@@ -43,11 +43,10 @@ win32 {
     qt_deploy_cmd2 = copy "distrib\windows\qt.conf" $$WIN_PATH && copy "distrib\windows\CompuTreeGui.cmd" $$WIN_PATH &&
     qt_deploy_cmd3 = move $$WIN_PATH\libraries\Qt\opengl32sw.dll $$WIN_PATH\opengl32.dll &&
     qt_deploy_cmd4 = move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH &&
-    qt_deploy_cmd5 = move $$WIN_PATH\languages\release\*.qm $$WIN_PATH\languages\ &&
-    qt_deploy_cmd6 = rmdir /Q $$WIN_PATH\languages\release
+    qt_deploy_cmd5 = move $$WIN_PATH\languages\release\*.qm $$WIN_PATH\languages\
 
     qt_deploy.path = $$DESTDIR
-    qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5 $$qt_deploy_cmd6
+    qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5
 
     INSTALLS += qt_deploy
 }
