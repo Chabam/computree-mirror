@@ -320,11 +320,12 @@ mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
     if(_ref) // We limit the position of the reference Node only
     {
-        QRectF sceneRectArea = scene()->views().first()->sceneRect();
-        if(pos().y() < sceneRectArea.top() - 50)
-            setPos(pos().x(), sceneRectArea.top() - 50);
-        else if(pos().y() + boundingRect().height() > sceneRectArea.bottom() + 100)
-            setPos(pos().x(), sceneRectArea.bottom() + 100 - boundingRect().height());
+        QRectF sceneRectArea = _scene.views().first()->mapToScene(_scene.views().first()->viewport()->geometry()).boundingRect();
+
+        if(pos().y() < sceneRectArea.top())
+            setPos(pos().x(), sceneRectArea.top());
+        else if(pos().y() + boundingRect().height() > sceneRectArea.bottom())
+            setPos(pos().x(), sceneRectArea.bottom() - boundingRect().height());
         else
             moveBy(0.0,diff.y());
     }
@@ -337,11 +338,11 @@ mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     event->ignore();
   }
 
-  QRectF r = scene()->sceneRect();
+  //QRectF r = scene()->sceneRect();
 
-  r = r.united(mapToScene(boundingRect()).boundingRect());
+  //r = r.united(mapToScene(boundingRect()).boundingRect());
 
-  scene()->setSceneRect(r);
+  //scene()->setSceneRect(r);
 }
 
 

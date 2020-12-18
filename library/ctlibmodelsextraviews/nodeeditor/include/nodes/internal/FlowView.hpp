@@ -33,10 +33,6 @@ public:
 
 public Q_SLOTS:
 
-  void scaleUp();
-
-  void scaleDown();
-
   void deleteSelectedNodes();
 
 protected:

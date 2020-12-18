@@ -222,20 +222,15 @@ void
 FlowView::
 wheelEvent(QWheelEvent *event)
 {
-  QPoint delta = event->angleDelta();
+  qreal delta = event->delta() / 3.0;
 
-  if (delta.y() == 0)
+  if (delta == 0.0)
   {
     event->ignore();
     return;
   }
 
-  double const d = delta.y() / std::abs(delta.y());
-
-  if (d > 0.0)
-    scaleUp();
-  else
-    scaleDown();
+  setSceneRect(sceneRect().translated(0.0, -delta));
 
   Node* rightNode = _scene->allNodes().at(0);
   if(_scene->allNodes().at(1)->nodeGraphicsObject().ref())
@@ -243,45 +238,14 @@ wheelEvent(QWheelEvent *event)
   QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
   QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
 
-  QRectF sceneRectArea = _scene->views().first()->sceneRect();
+  QRectF sceneRectArea = mapToScene(_scene->views().first()->viewport()->geometry()).boundingRect();
 
-  if(rightNodePos.y() < sceneRectArea.top() - 50)
-      rightNodePos.setY(sceneRectArea.top() - 50);
-  if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom() + 100)
-      rightNodePos.setY(sceneRectArea.bottom() + 100 - rightNodeRect.height());
+  if(rightNodePos.y() < sceneRectArea.top())
+      rightNodePos.setY(sceneRectArea.top());
+  if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom())
+      rightNodePos.setY(sceneRectArea.bottom() - rightNodeRect.height());
 
   _scene->setNodePosition(*rightNode,rightNodePos);
-}
-
-
-void
-FlowView::
-scaleUp()
-{
-  //double const step   = 1.2;
-  //double const factor = std::pow(step, 1.0);
-
-  //QTransform t = transform();
-
-  //if (t.m11() > 2.0)
-  //  return;
-
-  //scale(factor, factor);
-
-  setSceneRect(sceneRect().translated(0.0, -50.0)); // Reverter move : 50px down
-}
-
-
-void
-FlowView::
-scaleDown()
-{
-  //double const step   = 1.2;
-  //double const factor = std::pow(step, -1.0);
-
-  //scale(factor, factor);
-
-  setSceneRect(sceneRect().translated(0.0, 50.0)); // Reverter move : 50px up
 }
 
 
@@ -380,7 +344,6 @@ mouseMoveEvent(QMouseEvent *event)
     if ((event->modifiers() & Qt::ShiftModifier) == 0)
     {
       QPointF difference = _clickPos - mapToScene(event->pos());
-      //setSceneRect(sceneRect().translated(difference.x(), difference.y()));
       setSceneRect(sceneRect().translated(0.0, difference.y())); // Vertical move only
 
       Node* rightNode = _scene->allNodes().at(0);
@@ -389,12 +352,12 @@ mouseMoveEvent(QMouseEvent *event)
       QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
       QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
 
-      QRectF sceneRectArea = _scene->views().first()->sceneRect();
+      QRectF sceneRectArea = mapToScene(_scene->views().first()->viewport()->geometry()).boundingRect();
 
-      if(rightNodePos.y() < sceneRectArea.top() - 50)
-          rightNodePos.setY(sceneRectArea.top() - 50);
-      if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom() + 100)
-          rightNodePos.setY(sceneRectArea.bottom() + 100 - rightNodeRect.height());
+      if(rightNodePos.y() < sceneRectArea.top())
+          rightNodePos.setY(sceneRectArea.top());
+      if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom())
+          rightNodePos.setY(sceneRectArea.bottom() - rightNodeRect.height());
 
       _scene->setNodePosition(*rightNode,rightNodePos);
     }
