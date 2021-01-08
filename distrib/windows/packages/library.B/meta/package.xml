@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Library Qt</DisplayName>
+    <Description>Cross-platform software development for embedded &amp; desktop.</Description>
+    <Version>5.15.2</Version>
+    <ReleaseDate>2020-11-20</ReleaseDate>
+    <Default>true</Default>
+    <Name>library.B</Name>
+	<ForcedInstallation>true</ForcedInstallation>
+	<SortingPriority>60</SortingPriority>
+</Package>

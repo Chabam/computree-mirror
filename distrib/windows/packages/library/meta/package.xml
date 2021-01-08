@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Libraries</DisplayName>
+    <Description>Additionnal functions libraries loaded at runtime.</Description>
+    <Version>6.0.0</Version>
+    <ReleaseDate>2021-01-04</ReleaseDate>
+    <Name>library</Name>
+	<ExpandedByDefault>true</ExpandedByDefault>
+</Package>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Library Boost</DisplayName>
+    <Description>Complementary referential for C++ standard libraries.</Description>
+    <Version>1.74.0</Version>
+    <ReleaseDate>2020-08-11</ReleaseDate>
+    <Name>library.F</Name>
+	<SortingPriority>20</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

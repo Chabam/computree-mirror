@@ -1,6 +1,14 @@
 <RCC>
     <qresource prefix="/">
-        <file>icon.png</file>
-        <file>gnu-lgpl-v3.0.md</file>
+		<file>icons/Icone_48x48.png</file>
+		<file>icons/typical.png</file>
+		<file>icons/complete.png</file>
+		<file>icons/custom.png</file>
+		<file>icons/typical.svg</file>
+		<file>icons/complete.svg</file>
+		<file>icons/custom.svg</file>
+        <file>licences/gnu-lgpl-v3.0.md</file>
+		<file>licences/gnu-lgpl-v3.0.txt</file>
+		<file>licences/gnu-lgpl-v3.0.html</file>
     </qresource>
 </RCC>

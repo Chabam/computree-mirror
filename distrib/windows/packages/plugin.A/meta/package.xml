@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugin Base</DisplayName>
+    <Description>Steps for loading T-Lidarpoint cloud and loop-processing.</Description>
+    <Version>6.0.0</Version>
+    <ReleaseDate>2021-01-04</ReleaseDate>
+    <Default>true</Default>
+    <Name>plugin.A</Name>
+	<ForcedInstallation>true</ForcedInstallation>
+	<SortingPriority>110</SortingPriority>
+</Package>

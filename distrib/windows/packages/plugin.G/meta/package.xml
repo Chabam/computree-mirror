@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugin MK</DisplayName>
+    <Description>Description to be filled.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.G</Name>
+	<SortingPriority>50</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

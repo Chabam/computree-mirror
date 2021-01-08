@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugins</DisplayName>
+    <Description>Plugins for data processing (dynamically loaded).</Description>
+    <Version>6.0.0</Version>
+    <ReleaseDate>2021-01-04</ReleaseDate>
+    <Name>plugin</Name>
+	<ExpandedByDefault>true</ExpandedByDefault>
+</Package>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Qt ANGLE</DisplayName>
+    <Description>Used on Windows to implement OpenGL ES on top of DirectX.</Description>
+    <Version>5.15.2</Version>
+    <ReleaseDate>2020-11-20</ReleaseDate>
+    <Default>true</Default>
+    <Name>library.B.1</Name>
+</Package>

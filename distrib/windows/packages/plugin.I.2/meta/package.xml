@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugin ARTS Pro</DisplayName>
+    <Description>Pro (paying) version of the plugin from Arts et Métiers ParisTech.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.I.2</Name>
+	<SortingPriority>10</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

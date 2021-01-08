@@ -1,0 +1,29 @@
+QWidget
+{
+    color: #f7f7f7;
+    background: #292b2c;
+}
+
+QPushButton, QToolButton
+{
+    color: #f7f7f7;
+	font-weight : bold;
+	background: #0275d8;
+    border-radius: 5px;
+    min-height: 35px;
+    max-height: 35px;
+    padding-left: 10px;
+    padding-right: 10px;
+	margin-left: 5px;
+    margin-right: 5px;
+}
+
+QPushButton::disabled, QToolButton::disabled
+{
+	background: #494e50;
+}
+
+QPushButton::entered, QPushButton::pressed, QToolButton::entered, QToolButton::pressed
+{
+	background: #5bc0de;
+}

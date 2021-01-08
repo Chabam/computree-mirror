@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Library OpenCV</DisplayName>
+    <Description>Open Compute Vision.</Description>
+    <Version>4.5.0</Version>
+    <ReleaseDate>2020-10-12</ReleaseDate>
+    <Default>true</Default>
+    <Name>library.D</Name>
+	<ForcedInstallation>true</ForcedInstallation>
+	<SortingPriority>40</SortingPriority>
+</Package>

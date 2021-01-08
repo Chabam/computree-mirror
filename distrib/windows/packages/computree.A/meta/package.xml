@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Computree Core</DisplayName>
+    <Description>Computree Core components.</Description>
+    <Version>6.0.0</Version>
+    <ReleaseDate>2021-01-04</ReleaseDate>
+    <Default>true</Default>
+    <Name>computree.A</Name>
+	<ForcedInstallation>true</ForcedInstallation>
+	<SortingPriority>30</SortingPriority>
+</Package>

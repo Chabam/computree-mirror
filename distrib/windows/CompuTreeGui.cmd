@@ -10,5 +10,6 @@ SET np=^
 
 SET PATH=%np%%path%
 
+cd "%~dp0"
 start CompuTreeGui.exe
 exit

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Library PCL</DisplayName>
+    <Description>Point Cloud Library.</Description>
+    <Version>1.11.1</Version>
+    <ReleaseDate>2020-08-14</ReleaseDate>
+    <Name>library.E</Name>
+	<SortingPriority>30</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

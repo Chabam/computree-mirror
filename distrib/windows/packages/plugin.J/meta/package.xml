@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugin Geometree</DisplayName>
+    <Description>From Sébastien Bauwens PhD.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.J</Name>
+	<SortingPriority>20</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

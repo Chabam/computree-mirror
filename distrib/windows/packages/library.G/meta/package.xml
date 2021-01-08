@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Library DGTAL</DisplayName>
+    <Description>Digital Geometry Tools and Algorithms Library.</Description>
+    <Version>1.1.0</Version>
+    <ReleaseDate>2020-10-06</ReleaseDate>
+    <Name>library.G</Name>
+	<SortingPriority>10</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>
