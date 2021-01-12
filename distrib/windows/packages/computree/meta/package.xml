@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Computree</DisplayName>
     <Description>Computree program.</Description>
+	<DisplayName xml:lang="fr_fr">Computree</DisplayName>
+    <Description xml:lang="fr">Programme Computree.</Description>
     <Version>6.0.0</Version>
     <ReleaseDate>2021-01-04</ReleaseDate>
     <Script>installscript.qs</Script>

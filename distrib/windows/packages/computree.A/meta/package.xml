@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Computree Core</DisplayName>
     <Description>Computree Core components.</Description>
+	<DisplayName xml:lang="fr_fr">Computree Core</DisplayName>
+    <Description xml:lang="fr">Principaux composants de Computree.</Description>
     <Version>6.0.0</Version>
     <ReleaseDate>2021-01-04</ReleaseDate>
     <Default>true</Default>

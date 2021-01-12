@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Plugins</DisplayName>
     <Description>Plugins for data processing (dynamically loaded).</Description>
+    <DisplayName xml:lang="fr_fr">Plugins</DisplayName>
+    <Description xml:lang="fr">Plugins pour le traitement des données (chargés dynamiquement).</Description>
     <Version>6.0.0</Version>
     <ReleaseDate>2021-01-04</ReleaseDate>
     <Name>plugin</Name>

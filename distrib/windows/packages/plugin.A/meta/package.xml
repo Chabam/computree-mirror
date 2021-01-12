@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <Package>
     <DisplayName>Plugin Base</DisplayName>
-    <Description>Steps for loading T-Lidarpoint cloud and loop-processing.</Description>
+    <Description>Steps for loading T-Lidar point cloud and loop-processing.</Description>
+	<DisplayName xml:lang="fr_fr">Plugin Base</DisplayName>
+    <Description xml:lang="fr">Étapes de chargement du nuage de points Lidar terrestre et du traitement en boucle.</Description>
     <Version>6.0.0</Version>
     <ReleaseDate>2021-01-04</ReleaseDate>
     <Default>true</Default>

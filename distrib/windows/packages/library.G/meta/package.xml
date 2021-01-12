@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Library DGTAL</DisplayName>
     <Description>Digital Geometry Tools and Algorithms Library.</Description>
+    <DisplayName xml:lang="fr_fr">Librairie DGTAL</DisplayName>
+    <Description xml:lang="fr">Digital Geometry Tools and Algorithms Library.</Description>
     <Version>1.1.0</Version>
     <ReleaseDate>2020-10-06</ReleaseDate>
     <Name>library.G</Name>

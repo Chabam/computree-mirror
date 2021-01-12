@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Library Qt</DisplayName>
     <Description>Cross-platform software development for embedded &amp; desktop.</Description>
+	<DisplayName xml:lang="fr_fr">Librairie Qt</DisplayName>
+    <Description xml:lang="fr">Développement de logiciels multiplateformes pour les applications embarquées et de bureau.</Description>
     <Version>5.15.2</Version>
     <ReleaseDate>2020-11-20</ReleaseDate>
     <Default>true</Default>

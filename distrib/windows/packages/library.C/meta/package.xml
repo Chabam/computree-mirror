@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Library GDAL</DisplayName>
     <Description>Geospatial Data Abstraction Library.</Description>
+	<DisplayName xml:lang="fr_fr">Librairie GDAL</DisplayName>
+    <Description xml:lang="fr">Geospatial Data Abstraction Library.</Description>
     <Version>3.2.0</Version>
     <ReleaseDate>2020-10-26</ReleaseDate>
     <Default>true</Default>

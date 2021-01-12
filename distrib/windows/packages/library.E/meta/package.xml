@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Library PCL</DisplayName>
     <Description>Point Cloud Library.</Description>
+    <DisplayName xml:lang="fr_fr">Librairie PCL</DisplayName>
+    <Description xml:lang="fr">Point Cloud Library.</Description>
     <Version>1.11.1</Version>
     <ReleaseDate>2020-08-14</ReleaseDate>
     <Name>library.E</Name>

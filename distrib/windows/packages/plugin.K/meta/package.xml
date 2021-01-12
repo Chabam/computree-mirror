@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Plugin Meshlab</DisplayName>
     <Description>Plugin for use of MeshLab plugins as steps.</Description>
+	<DisplayName xml:lang="fr_fr">Plugin Meshlab</DisplayName>
+    <Description xml:lang="fr">Plugin pour l&apos;utilisation des plugins MeshLab comme étapes.</Description>
     <Version>1.0.0</Version>
     <ReleaseDate>2021-01-01</ReleaseDate>
     <Name>plugin.K</Name>

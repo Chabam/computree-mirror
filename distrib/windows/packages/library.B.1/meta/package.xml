@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <Package>
     <DisplayName>Qt ANGLE</DisplayName>
-    <Description>Used on Windows to implement OpenGL ES on top of DirectX.</Description>
+    <Description>Used on Windows to use OpenGL ES on top of DirectX.</Description>
+	<DisplayName xml:lang="fr_fr">Qt ANGLE</DisplayName>
+    <Description xml:lang="fr">Utilisé sous Windows pour utiliser OpenGL ES au-dessus de DirectX.</Description>
     <Version>5.15.2</Version>
     <ReleaseDate>2020-11-20</ReleaseDate>
     <Default>true</Default>

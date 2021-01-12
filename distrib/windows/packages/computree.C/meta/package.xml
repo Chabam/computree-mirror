@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Visual C++ Redistribuable 2019 [64bit]</DisplayName>
     <Description>Microsoft Visual C++ 2019 Libraries Runtime Add-ins for Windows.</Description>
+	<DisplayName xml:lang="fr_fr">Visual C++ Redistribuable 2019 [64bit]</DisplayName>
+    <Description xml:lang="fr">Compléments d&apos;exécution des librairies Microsoft Visual C ++ 2019 pour Windows.</Description>
     <Version>14.27.29016</Version>
     <ReleaseDate>2019-08-29</ReleaseDate>
     <Name>computree.C</Name>

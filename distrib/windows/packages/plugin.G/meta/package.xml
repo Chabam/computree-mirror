@@ -2,6 +2,8 @@
 <Package>
     <DisplayName>Plugin MK</DisplayName>
     <Description>ENSAM plugin (developed by Michael KREBS).</Description>
+	<DisplayName xml:lang="fr_fr">Plugin MK</DisplayName>
+    <Description xml:lang="fr">Plugin de l&apos;ENSAM (développé par Michael KREBS).</Description>
     <Version>1.0.0</Version>
     <ReleaseDate>2021-01-01</ReleaseDate>
     <Name>plugin.G</Name>
