@@ -19,22 +19,28 @@ function Component() {
     if (installer.isInstaller()) {
 		// System check (architecture, OS, version)
         if (systemInfo.currentCpuArchitecture != "x86_64") {
-            cancelInstaller("Installation on " + systemInfo.currentCpuArchitecture + " architecture is not supported by Computree.");
+			var infoText = qsTr("Installation on %1 architecture is not supported by Computree.").arg(systemInfo.currentCpuArchitecture);
+            cancelInstaller(infoText);
             return;
         }
         if (systemInfo.productType != "windows") {
-            cancelInstaller("Installation on " + systemInfo.productType + " is not supported by Computree.");
+			var infoText = qsTr("Installation on %1 is not supported by Computree.").arg(systemInfo.productType);
+            cancelInstaller(infoText);
             return;
         }
         var str = systemInfo.productVersion;
         if (parseInt(str.substr(0,str.indexOf(' ')),10) < 7) {
-            cancelInstaller("Installation on Windows " + systemInfo.productVersion + " is not supported by Computree.");
+			var infoText = qsTr("Installation on Windows %1 is not supported by Computree.").arg(systemInfo.productVersion);
+            cancelInstaller(infoText);
             return;
         }
 
         // Add custom installation mode page
         component.loaded.connect(component, Component.prototype.installerLoaded);
         ComponentSelectionPage = gui.pageById(QInstaller.ComponentSelection);
+
+		installer.setDefaultPageVisible(QInstaller.TargetDirectory, false);
+		installer.addWizardPage(component, "TargetWidget", QInstaller.TargetDirectory)
 
         // BUG : on first page, the default component page is still visible, and the new page is not
         installer.setDefaultPageVisible(QInstaller.ComponentSelection, false);
@@ -53,13 +59,25 @@ function Component() {
         installer.installationFinished.connect(component, Component.prototype.installationFinishedPageIsShown);
         installer.finishButtonClicked.connect(component, Component.prototype.installationFinished);
     }
-
-    if(installer.isUninstaller()) {
-        installer.uninstallationFinished.connect(component, Component.prototype.uninstallationFinished);            
-    }
 }
 
+var Dir = new function () {
+    this.toNativeSparator = function (path) {
+        if (systemInfo.productType === "windows")
+            return path.replace(/\//g, '\\');
+        return path;
+    }
+};
+
 Component.prototype.installerLoaded = function () {
+    var widget = gui.pageWidgetByObjectName("DynamicTargetWidget");
+    if (widget != null) {
+        widget.targetChooser.clicked.connect(this, Component.prototype.chooseTarget);
+        widget.targetDirectory.textChanged.connect(this, Component.prototype.targetChanged);
+
+        widget.targetDirectory.text = Dir.toNativeSparator(installer.value("TargetDir"));
+    }
+
     var widget = gui.pageWidgetByObjectName("DynamicInstallationWidget");
     if (widget != null) {
         widget.customInstall.toggled.connect(this, Component.prototype.customInstallToggled);
@@ -67,7 +85,6 @@ Component.prototype.installerLoaded = function () {
         widget.completeInstall.toggled.connect(this, Component.prototype.completeInstallToggled);
 
         widget.defaultInstall.checked = true;
-        widget.windowTitle = qsTr("Select Installation Type");
     }
 }
 
@@ -95,17 +112,43 @@ Component.prototype.completeInstallToggled = function (checked) {
     }
 }
 
+Component.prototype.targetChanged = function (text) {
+    var widget = gui.pageWidgetByObjectName("DynamicTargetWidget");
+    if (widget != null) {
+        if (text != "") {
+            if (!installer.fileExists(text + "/components.xml")) {
+                widget.complete = true;
+                installer.setValue("TargetDir", text);
+                return;
+            }
+        }
+        widget.complete = false;
+    }
+}
+
+Component.prototype.chooseTarget = function () {
+    var widget = gui.pageWidgetByObjectName("DynamicTargetWidget");
+    if (widget != null) {
+        var newTarget = QFileDialog.getExistingDirectory(qsTr("Choose your target directory."), widget.targetDirectory.text);
+        if (newTarget != "")
+		{
+		    newTarget += "/CompuTree"; // The same subfolder of TargetDir in config.xml
+            widget.targetDirectory.text = Dir.toNativeSparator(newTarget);
+		}
+    }
+}
+
 function getComponent( name ) {
     var comps=installer.components();
     for( i=0; i< comps.length; i++ ) {
         if( comps[i].name == name ) return comps[i];
     }
-    throw new Error( "Component not found: " + name );
+    throw new Error( qsTr("Component not found: %1").arg(name) );
 }
 
 function isComponentSelected( name ) {
     try{ return getComponent( name ).installationRequested(); }
-    catch(e){ console.log( "Component not found: " + name ); }
+    catch(e){ console.log( qsTr("Component not found: %1").arg(name) ); }
     return false;
 }
 
@@ -115,18 +158,23 @@ Component.prototype.createOperations = function() {
 
     // Additionnal shortcuts
 	if (systemInfo.productType === "windows") {
+		var infoText1 = qsTr("Forest inventory with Lidar (ONF)");
         component.addOperation("CreateShortcut", "@TargetDir@/CompuTreeGui.cmd", "@StartMenuDir@/CompuTree.lnk",
             "workingDirectory=@TargetDir@", "iconPath=@TargetDir@/CompuTreeGui.exe", "iconId=0",
-			"description=Forest inventory with Lidar (ONF)");
+			"description="+infoText1);
+		var infoText2 = qsTr("Modify/Update/Uninstall program features");
 	    component.addOperation("CreateShortcut", "@TargetDir@/CompuTreeGuiUninstall.exe", "@StartMenuDir@/Uninstall.lnk",
             "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/System32/shell32.dll",
-            "iconId=31", "description=Modify/Update/Uninstall program features");
+            "iconId=31", "description="+infoText2);
+		var infoText3 = qsTr("Software license");
 		component.addOperation("CreateShortcut", "@TargetDir@/Licenses/gnu-lgpl-v3.0.txt", "@StartMenuDir@/License.lnk",
             "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/System32/shell32.dll",
-            "iconId=1", "description=Software license");
-		component.addOperation("CreateShortcut", "@TargetDir@/Computree_Charter_v2018_08_eng.pdf", "@StartMenuDir@/Chart.lnk",
+            "iconId=1", "description="+infoText3);
+		var infoText4 = qsTr("Software charter");
+		var name = qsTr("Computree_Charter_v2018_08_eng.pdf");
+		component.addOperation("CreateShortcut", "@TargetDir@/"+name, "@StartMenuDir@/Chart.lnk",
             "workingDirectory=@TargetDir@", "iconPath=%SystemRoot%/System32/shell32.dll",
-            "iconId=165", "description=Software chart");
+            "iconId=165", "description="+infoText4);
 		if (isComponentSelected("computree.B")) {
             // BUG : not recognized as a directory but as a file link
 		    component.addOperation("CreateShortcut", "@TargetDir@/examples", "@StartMenuDir@/Samples.lnk",
@@ -177,9 +225,4 @@ Component.prototype.installationFinished = function() {
     } catch(e) {
         console.log(e);
     }
-}
-
-Component.prototype.uninstallationFinished = function() {
-	// BUG : uninstaller does not execute the final commad to erase the desktp shortcut
-    installer.executeDetached("cmd", ["/C", "del", "/F", "/Q", "@DesktopDir@\\CompuTree.lnk"]);
 }

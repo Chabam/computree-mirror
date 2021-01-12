@@ -8,19 +8,16 @@
     <InstallerApplicationIcon>../../resources/icons/Computree</InstallerApplicationIcon>
     <Logo>../../resources/icons/Icone_48x48.png</Logo>
     <WizardStyle>Modern</WizardStyle>
-    <WizardDefaultWidth>800</WizardDefaultWidth>
+    <WizardDefaultWidth>750</WizardDefaultWidth>
     <WizardDefaultHeight>500</WizardDefaultHeight>
     <StyleSheet>style.qss</StyleSheet>
     <StartMenuDir>CompuTree</StartMenuDir>
     <TargetDir>@ApplicationsDir@/CompuTree</TargetDir>
-    <!--<RemoveTargetDir>false</RemoveTargetDir>-->
     <MaintenanceToolName>CompuTreeGuiUninstall</MaintenanceToolName>
-    <RemoteRepositories>
+    <!--<RemoteRepositories>
         <Repository>
             <Url>http://rdinnovation.onf.fr/svn/computreev6/</Url>
         </Repository>
-    </RemoteRepositories>
-    <Translations>
-        <Translation>en.qm</Translation>
-    </Translations>
+    </RemoteRepositories>-->
+    <ControlScript>controllerscript.qs</ControlScript>
 </Installer>

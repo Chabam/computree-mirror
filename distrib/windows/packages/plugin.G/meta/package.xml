@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Package>
     <DisplayName>Plugin MK</DisplayName>
-    <Description>Description to be filled.</Description>
+    <Description>ENSAM plugin (developed by Michael KREBS).</Description>
     <Version>1.0.0</Version>
     <ReleaseDate>2021-01-01</ReleaseDate>
     <Name>plugin.G</Name>

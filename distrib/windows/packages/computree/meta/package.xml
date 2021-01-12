@@ -8,10 +8,15 @@
     <UserInterfaces>
         <UserInterface>installationwidget.ui</UserInterface>
         <UserInterface>finishwidget.ui</UserInterface>
+		<UserInterface>targetwidget.ui</UserInterface>
     </UserInterfaces>
     <Name>computree</Name>
 	<ExpandedByDefault>true</ExpandedByDefault>
     <Licenses>
         <License name="License Agreement" file="gnu-lgpl-v3.0.txt" />
     </Licenses>
+    <Translations>
+        <Translation>fr.qm</Translation>
+        <Translation>en.qm</Translation>
+    </Translations>
 </Package>
