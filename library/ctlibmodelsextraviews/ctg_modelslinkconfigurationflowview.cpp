@@ -91,6 +91,9 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
        }
      }
      )");
+
+    // Nothing was already clicked
+    mFirstStatePressed = 0;
 }
 
 CTG_ModelsLinkConfigurationFlowView::~CTG_ModelsLinkConfigurationFlowView()
@@ -366,14 +369,14 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->resizeColumnToContents(1);
     mOutTreeWidget->resizeColumnToContents(1);
 
-    int InWidth = static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 115;
-    int OutWidth = static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 115;
+    int InWidth = static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 120;
+    int OutWidth = static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 120;
 
     if(InWidth < 200) InWidth = 200;
     if(OutWidth < 200) OutWidth = 200;
 
-    mInTreeWidget->resize(InWidth, inItems.size() * TREE_WIDGET_ITEM_SPACING + 5);
-    mOutTreeWidget->resize(OutWidth, outItems.size() * TREE_WIDGET_ITEM_SPACING + 5);
+    mInTreeWidget->resize(InWidth, inItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
+    mOutTreeWidget->resize(OutWidth, outItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
 
     connect(mInTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
     connect(mOutTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
@@ -844,7 +847,10 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClick
 void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(const QModelIndex& index, bool mouseButtonPressed)
 {
     if(isReadOnly() || (mModelOfLastIndexClicked[0] == nullptr) || (!mKeyboardShiftModifierEnabled && !mouseButtonPressed))
+    {
+        mFirstStatePressed = 0;
         return;
+    }
 
     CT_AbstractModel* model = static_cast<CT_AbstractModel*>(index.data(Qt::UserRole).value<void*>());
 
@@ -852,10 +858,26 @@ void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionBetweenPreviou
 
     if(possibility != nullptr)
     {
-        if(possibility->isSelected())
-            possibility->setSelected(false);
+        if(mFirstStatePressed == 0)
+        {
+            if(possibility->isSelected())
+            {
+                mFirstStatePressed = -1;
+                possibility->setSelected(false);
+            }
+            else
+            {
+                mFirstStatePressed = 1;
+                possibility->setSelected(true);
+            }
+        }
         else
-            possibility->setSelected(true);
+        {
+            if(mFirstStatePressed == 1)
+                possibility->setSelected(true);
+            else
+                possibility->setSelected(false);
+        }
     }
 }
 

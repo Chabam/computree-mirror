@@ -147,6 +147,8 @@ private:
 
     bool                                        mKeyboardShiftModifierEnabled;
 
+    int                                         mFirstStatePressed;
+
     bool                                        mInDestructor;
 
     /**
