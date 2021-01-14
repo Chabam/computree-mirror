@@ -124,6 +124,15 @@ public:
 
     virtual quint64 mask() const { return 0; }
 
+    /**
+     * @brief Copy scalars of the source cloud for the destination cloud and let a modificator modify the new value to set
+     * @param source : the source cloud
+     * @param destination : the destination cloud (must be the same size as the source cloud)
+     * @param modificator : a function that must modify the new value to set or nullptr to copy it only
+     * @return false if destination has values already set ! true otherwise
+     */
+    bool copyAndModifyAttributesOfSForD(CT_CIR source, CT_CIR destination, typename CT_AbstractXAttributeManager<MANAGER_SCALAR>::AttributeModificator modificator = nullptr) { return scalarsManager()->copyAndModifyAttributesOfSForD(source, destination, modificator); }
+
 private:
     CT_CIR                                          m_cir;
     SCALAR                                          m_min;

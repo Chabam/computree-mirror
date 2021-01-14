@@ -1,6 +1,8 @@
 #ifndef CT_SPARSEATTRIBUTEMANAGER_H
 #define CT_SPARSEATTRIBUTEMANAGER_H
 
+#include <functional>
+
 #include "ct_global/ct_cloudscontext.h"
 #include "ct_global/ct_repositorymanager.h"
 
@@ -10,6 +12,8 @@
 template<typename T, typename TCIR>
 class CT_SparseAttributeManager : public CT_AbstractXAttributeManager<T>
 {
+    using SuperClass = CT_AbstractXAttributeManager<T>;
+
 public:
     using PEF = typename TCIR::element_type::element_type;
     using Setter = CT_SparseAttributeSetter<T, PEF>;
@@ -33,6 +37,8 @@ public:
     const T& tAtLocalIndex(const size_t& localIndex) const final;
 
     void createCollectionsIfNotCreated();
+
+    bool copyAndModifyAttributesOfSForD(CT_CIR source, CT_CIR destination, typename SuperClass::AttributeModificator modificator = nullptr) final;
 
 protected:
     using SetterPtrAttributesCollection = typename Setter::PtrParseAttributesCollectionType;
@@ -154,6 +160,57 @@ void CT_SparseAttributeManager<T, TCIR>::createCollectionsIfNotCreated()
         return;
 
     mAttributes = PS_REPOSITORY->createNewIndexCloudTSyncWithPEF<PEF, CT_SparseAttributeSetter<T, PEF>::ParseAttributesCollection>();
+}
+
+template<typename T, typename TCIR>
+bool CT_SparseAttributeManager<T, TCIR>::copyAndModifyAttributesOfSForD(CT_CIR source, CT_CIR destination, typename SuperClass::AttributeModificator modificator)
+{
+    if(mAttributes.isNull()
+            || source.dynamicCast<typename TCIR::element_type>().isNull()
+            || destination.dynamicCast<typename TCIR::element_type>().isNull())
+        return false;
+
+    auto sourceCI = source->abstractCloudIndex();
+    auto destCI = destination->abstractCloudIndex();
+
+    const auto sourceSize = sourceCI->size();
+    const auto destSize = destCI->size();
+
+    if(destSize == 0)
+        return true;
+
+    if(hasBeenSet(destCI->indexAt(0)))
+        return false;
+
+    auto setter = createAttributesSetter(destination.dynamicCast<typename TCIR::element_type>());
+
+    if(modificator == nullptr)
+    {
+        for(auto i=0; i<sourceSize && i<destSize; ++i)
+        {
+            setter.setValueWithGlobalIndex(destCI->indexAt(i), tAt(sourceCI->indexAt(i)));
+        }
+    }
+    else
+    {
+        T destValue;
+
+        for(auto i=0; i<sourceSize && i<destSize; ++i)
+        {
+            const auto sourceGlobalIndex = sourceCI->indexAt(i);
+            const T& sourceValue = tAt(sourceCI->indexAt(i));
+            const auto destinationGlobalIndex = destCI->indexAt(i);
+
+            const int ret = modificator(sourceGlobalIndex, sourceValue, destinationGlobalIndex, destValue);
+
+            if(ret > 0)
+                setter.setValueWithGlobalIndex(destinationGlobalIndex, destValue);
+            else if(ret < 0)
+                return true;
+        }
+    }
+
+    return true;
 }
 
 #endif // CT_SPARSEATTRIBUTEMANAGER_H
