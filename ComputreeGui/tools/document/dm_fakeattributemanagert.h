@@ -6,6 +6,8 @@
 template<typename AttributeType, typename CloudType, typename ApplicableToT>
 class DM_FakeAttributeManagerT : public CT_AbstractXAttributeManager<AttributeType>
 {
+    using SuperClass = CT_AbstractXAttributeManager<AttributeType>;
+
 public:
     using ApplicableTo = ApplicableToT;
 
@@ -71,6 +73,11 @@ public:
     const AttributeType& tAtLocalIndex(const size_t& localIndex) const final
     {
         return tAt(localIndex);
+    }
+
+    bool copyAndModifyAttributesOfSForD(CT_CIR , CT_CIR , typename SuperClass::AttributeModificator) final
+    {
+        return false;
     }
 
 private:
