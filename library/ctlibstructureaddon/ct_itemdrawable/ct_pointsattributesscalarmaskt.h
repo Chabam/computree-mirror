@@ -110,6 +110,8 @@ public:
      */
     CT_PointsAttributesScalarMaskT(const CT_PointsAttributesScalarMaskT<StructType>& other);
 
+    bool copyAttributesOfSForD(CT_CIR source, CT_CIR destination) final { return scalarsManager()->copyAndModifyAttributesOfSForD(source, destination); }
+
     CT_ITEM_COPY_IMP(CT_PointsAttributesScalarMaskT<StructType>)
 
     quint64 mask() const final;

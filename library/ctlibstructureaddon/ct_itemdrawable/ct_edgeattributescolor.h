@@ -27,6 +27,8 @@ public:
 
     size_t numberOfSetValues() const final { return SuperClass::numberOfSetValues(); }
 
+    bool copyAttributesOfSForD(CT_CIR source, CT_CIR destination) final { return colorsManager()->copyAndModifyAttributesOfSForD(source, destination); }
+
     CT_ITEM_COPY_IMP(CT_EdgeAttributesColor)
 
 private:

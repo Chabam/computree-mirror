@@ -4,6 +4,7 @@
 #include "ctlibstructureaddon_global.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
+#include "ct_defines.h"
 
 /**
  * @brief Represents a cloud of attributes likes colors or values. He is a singular item a bit special because
@@ -63,6 +64,14 @@ public:
      *        to returns true if at least one value has been set.
      */
     virtual bool hasLocalValues() const = 0;
+
+    /**
+     * @brief Copy attributes of the source cloud for the destination cloud
+     * @param source : the source cloud
+     * @param destination : the destination cloud (must be the same size as the source cloud)
+     * @return false if destination has values already set ! true otherwise
+     */
+    virtual bool copyAttributesOfSForD(CT_CIR source, CT_CIR destination) = 0;
 };
 
 #endif // CT_ABSTRACTATTRIBUTES_H

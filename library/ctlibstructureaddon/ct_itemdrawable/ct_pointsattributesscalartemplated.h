@@ -65,6 +65,8 @@ public:
      */
     CT_PointsAttributesScalarTemplated(const CT_PointsAttributesScalarTemplated<SCALAR>& other) = default;
 
+    bool copyAttributesOfSForD(CT_CIR source, CT_CIR destination) final { return scalarsManager()->copyAndModifyAttributesOfSForD(source, destination); }
+
     CT_ITEM_COPY_IMP(CT_PointsAttributesScalarTemplated<SCALAR>)
 };
 
