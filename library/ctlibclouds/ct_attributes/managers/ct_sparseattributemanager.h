@@ -28,6 +28,8 @@ public:
 
     bool visitValues(typename CT_AbstractXAttributeManager<T>::Visitor v) const final;
 
+    bool visitAllIndexesSet(typename CT_AbstractXAttributeManager<T>::IVisitor v) const final;
+
     size_t numberOfSetValues() const final;
 
     bool isEmpty() const final;
@@ -93,6 +95,28 @@ bool CT_SparseAttributeManager<T, TCIR>::visitValues(typename CT_AbstractXAttrib
     while(it != end)
     {
         if(!v((*it).first, (*it).second))
+            return false;
+
+        ++it;
+    }
+
+    return true;
+}
+
+template<typename T, typename TCIR>
+bool CT_SparseAttributeManager<T, TCIR>::visitAllIndexesSet(typename CT_AbstractXAttributeManager<T>::IVisitor v) const
+{
+    if(mAttributes.isNull())
+        return true;
+
+    const SetterAttributesCollection* collection = dynamic_cast<SetterAttributesCollection*>(mAttributes->abstractModifiableCloudIndex());
+
+    auto it = collection->cbegin();
+    auto end = collection->cend();
+
+    while(it != end)
+    {
+        if(!v((*it).first))
             return false;
 
         ++it;

@@ -18,6 +18,12 @@ public:
      */
     using DVisitor = std::function<bool (const size_t& /*globalIndex*/, double /*value*/)>;
 
+    /**
+     * @brief The visitor receive the global index of the scalar. The visitor
+     *        must returns true if the visit must continue or false to abort it.
+     */
+    using IVisitor = std::function<bool (const size_t& /*globalIndex*/)>;
+
     CT_AbstractAttributesScalar();
     CT_AbstractAttributesScalar(const CT_AbstractAttributesScalar& other);
     CT_AbstractAttributesScalar& operator=(const CT_AbstractAttributesScalar& other);
@@ -44,6 +50,11 @@ public:
      * @brief Visit all defined scalars of the total scalar cloud
      */
     virtual bool visitValuesAsDouble(DVisitor v) const = 0;
+
+    /**
+     * @brief Visit all indexes of defined scalars of the total scalar cloud
+     */
+    virtual bool visitAllIndexesSet(IVisitor v) const = 0;
 
     /**
      * @brief Returns true if at least one scalar has been set in the total scalar cloud
@@ -82,11 +93,20 @@ public:
     /**
      * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
      *        and call the visitor each time a scalar has been set.
-     * @param v : a functon that will receive for first parameter the global index of the scalar and for second parameter the value of the scalar. The
+     * @param v : a function that will receive for first parameter the global index of the scalar and for second parameter the value of the scalar. The
      *            visitor must returns false if the visit must be aborted or true to continue the visit.
      * @return False if the visitor has aborted the visit, true otherwise.
      */
     virtual bool visitLocalValuesAsDouble(DVisitor v) const = 0;
+
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        and call the visitor each time a scalar has been set.
+     * @param v : a function that will receive the global index of the scalar. The
+     *            visitor must returns false if the visit must be aborted or true to continue the visit.
+     * @return False if the visitor has aborted the visit, true otherwise.
+     */
+    virtual bool visitLocalIndexesSet(IVisitor v) const = 0;
 
     /**
      * @brief Returns the minimum value for the local scalar cloud

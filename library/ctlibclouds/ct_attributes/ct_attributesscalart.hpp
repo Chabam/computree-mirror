@@ -53,6 +53,12 @@ double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAsDouble
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAt(const size_t& globalIndex) const
+{
+    return convertScalarOfManagerToScalar(m_manager->tAt(globalIndex));
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
 bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::hasBeenSet(const size_t& globalIndex) const
 {
     return m_manager->hasBeenSet(globalIndex);
@@ -71,6 +77,12 @@ bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::visitValuesAsDou
     {
         return v(globalIndex, double(convertScalarOfManagerToScalar(value)));
     });
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::visitAllIndexesSet(IVisitor v) const
+{
+    return m_manager->visitAllIndexesSet(v);
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
@@ -134,6 +146,27 @@ double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAsDouble
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAtLocalIndex(const size_t& localIndex) const
+{
+    size_t count = 0;
+    SCALAR scalarFounded = SCALAR();
+
+    visitLocalValues([&count, &localIndex, &scalarFounded](const size_t&, SCALAR value) -> bool
+    {
+        if(count == localIndex)
+        {
+            scalarFounded = value;
+            return false;
+        }
+
+        ++count;
+        return true;
+    });
+
+    return scalarFounded;
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
 size_t CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::numberOfSetLocalValues() const
 {
     CT_AbstractCloudIndex* ci = m_cir->abstractCloudIndex();
@@ -173,6 +206,24 @@ bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::visitLocalValues
     {
         return v(globalIndex, double(value));
     });
+}
+
+template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
+bool CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::visitLocalIndexesSet(IVisitor v) const
+{
+    CT_AbstractCloudIndex* ci = m_cir->abstractCloudIndex();
+
+    const size_t size = ci->size();
+
+    for(size_t i=0; i<size; ++i)
+    {
+        const size_t globalIndex = ci->indexAt(i);
+
+        if(m_manager->hasBeenSet(globalIndex) && !v(globalIndex))
+            return false;
+    }
+
+    return true;
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>

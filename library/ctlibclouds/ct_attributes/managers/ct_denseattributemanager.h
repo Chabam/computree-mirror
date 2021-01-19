@@ -25,6 +25,8 @@ public:
 
     bool visitValues(typename CT_AbstractXAttributeManager<T>::Visitor v) const final;
 
+    bool visitAllIndexesSet(typename CT_AbstractXAttributeManager<T>::IVisitor v) const final;
+
     size_t numberOfSetValues() const final;
 
     bool isEmpty() const final;
@@ -83,6 +85,24 @@ bool CT_DenseAttributeManager<T, TCIR, syncWithT>::visitValues(typename CT_Abstr
     for(size_t i=0; i<size; ++i)
     {
         if(bits->value(i) && !v(i, (*attributes)[i]))
+            return false;
+    }
+
+    return true;
+}
+
+template<typename T, typename TCIR, int syncWithT>
+bool CT_DenseAttributeManager<T, TCIR, syncWithT>::visitAllIndexesSet(typename CT_AbstractXAttributeManager<T>::IVisitor v) const
+{
+    if(mAttributes.isNull())
+        return true;
+
+    const auto bits = mBits->cloudT();
+    const size_t size = bits->size();
+
+    for(size_t i=0; i<size; ++i)
+    {
+        if(bits->value(i) && !v(i))
             return false;
     }
 

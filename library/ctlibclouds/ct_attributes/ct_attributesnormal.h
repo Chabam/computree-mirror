@@ -19,6 +19,12 @@ public:
      */
     using NormalVisitor = typename CT_AbstractXAttributeManager<CT_Normal>::Visitor;
 
+    /**
+     * @brief The visitor receive the global index of the attribute. The visitor
+     *        must returns true if the visit must continue or false to abort it.
+     */
+    using IVisitor = typename CT_AbstractXAttributeManager<CT_Normal>::IVisitor;
+
     CT_AttributesNormal();
     CT_AttributesNormal(CT_CIR cir, CT_AbstractXAttributeManager<CT_Normal>& manager);
 
@@ -57,6 +63,11 @@ public:
     bool visitValues(NormalVisitor v) const;
 
     /**
+     * @brief Visit all indexes of defined normals of the total normal cloud
+     */
+    bool visitAllIndexesSet(IVisitor v) const;
+
+    /**
      * @brief Returns true if at least one normal has been set in the total normal cloud
      */
     bool hasValues() const;
@@ -83,11 +94,20 @@ public:
     /**
      * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
      *        and call the visitor each time a normal has been set.
-     * @param v : a functon that will receive for first parameter the global index of the normal and for second parameter the value of the normal. The
+     * @param v : a function that will receive for first parameter the global index of the normal and for second parameter the value of the normal. The
      *            visitor must returns false if the visit must be aborted or true to continue the visit.
      * @return False if the visitor has aborted the visit, true otherwise.
      */
     bool visitLocalValues(NormalVisitor v) const;
+
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        and call the visitor each time a normal has been set.
+     * @param v : a function that will receive the global index of the normal. The
+     *            visitor must returns false if the visit must be aborted or true to continue the visit.
+     * @return False if the visitor has aborted the visit, true otherwise.
+     */
+    bool visitLocalIndexesSet(IVisitor v) const;
 
     /**
      * @brief Returns the manager of the total normal cloud
@@ -144,6 +164,12 @@ template<typename InheritFrom>
 bool CT_AttributesNormal<InheritFrom>::visitValues(CT_AttributesNormal<InheritFrom>::NormalVisitor v) const
 {
     return m_manager->visitValues(v);
+}
+
+template<typename InheritFrom>
+bool CT_AttributesNormal<InheritFrom>::visitAllIndexesSet(IVisitor v) const
+{
+    return m_manager->visitAllIndexesSet(v);
 }
 
 template<typename InheritFrom>
@@ -224,6 +250,24 @@ bool CT_AttributesNormal<InheritFrom>::visitLocalValues(CT_AttributesNormal<Inhe
             if(!v(globalIndex, value))
                 return false;
         }
+    }
+
+    return true;
+}
+
+template<typename InheritFrom>
+bool CT_AttributesNormal<InheritFrom>::visitLocalIndexesSet(IVisitor v) const
+{
+    CT_AbstractCloudIndex* ci = m_cir->abstractCloudIndex();
+
+    const size_t size = ci->size();
+
+    for(size_t i=0; i<size; ++i)
+    {
+        const size_t globalIndex = ci->indexAt(i);
+
+        if(m_manager->hasBeenSet(globalIndex) && !v(globalIndex))
+                return false;
     }
 
     return true;

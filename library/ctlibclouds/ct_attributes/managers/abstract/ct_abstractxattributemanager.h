@@ -51,6 +51,12 @@ public:
     using Visitor = std::function<bool (const size_t& /*globalIndex*/, const T& /*value*/)>;
 
     /**
+     * @brief The visitor receive the global index of the attribute. The visitor
+     *        must returns true if the visit must continue or false to abort it.
+     */
+    using IVisitor = std::function<bool (const size_t& /*globalIndex*/)>;
+
+    /**
      * @brief The modificator receive the element T to evaluate and must assign the new value to set in the other element T. So the modificator
      *        must returns an integer >0 to set the new value, 0 to ignore the new value and not set it or <0 to cancel the visit.
      */
@@ -76,6 +82,14 @@ public:
      *         visitor has returned false.
      */
     virtual bool visitValues(Visitor v) const = 0;
+
+    /**
+     * @brief Visit only indexes that has attributes set
+     * @param v : the visitor
+     * @return Returns true if the visitor has always returned true or if the collection is empty. False if the
+     *         visitor has returned false.
+     */
+    virtual bool visitAllIndexesSet(IVisitor v) const = 0;
 
     /**
      * @brief Returns the number of attributes that has values (hasBeenSet(...) == true). Be careful that you cannot

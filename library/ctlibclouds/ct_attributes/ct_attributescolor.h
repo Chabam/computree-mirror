@@ -19,6 +19,12 @@ public:
      */
     using ColorVisitor = typename CT_AbstractXAttributeManager<CT_Color>::Visitor;
 
+    /**
+     * @brief The visitor receive the global index of the attribute. The visitor
+     *        must returns true if the visit must continue or false to abort it.
+     */
+    using IVisitor = typename CT_AbstractXAttributeManager<CT_Color>::IVisitor;
+
     CT_AttributesColor();
     CT_AttributesColor(CT_CIR cir, CT_AbstractXAttributeManager<CT_Color>& manager);
 
@@ -58,6 +64,11 @@ public:
     bool visitValues(ColorVisitor v) const;
 
     /**
+     * @brief Visit all indexes of defined colors of the total color cloud
+     */
+    bool visitAllIndexesSet(IVisitor v) const;
+
+    /**
      * @brief Returns true if at least one color has been set in the total color cloud
      */
     bool hasValues() const;
@@ -84,11 +95,20 @@ public:
     /**
      * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
      *        and call the visitor each time a color has been set.
-     * @param v : a functon that will receive for first parameter the global index of the color and for second parameter the value of the color. The
+     * @param v : a function that will receive for first parameter the global index of the color and for second parameter the value of the color. The
      *            visitor must returns false if the visit must be aborted or true to continue the visit.
      * @return False if the visitor has aborted the visit, true otherwise.
      */
     bool visitLocalValues(ColorVisitor v) const;
+
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        and call the visitor each time a color has been set.
+     * @param v : a function that will receive the global index of the color. The
+     *            visitor must returns false if the visit must be aborted or true to continue the visit.
+     * @return False if the visitor has aborted the visit, true otherwise.
+     */
+    bool visitLocalIndexesSet(IVisitor v) const;
 
     /**
      * @brief Returns the manager of the total color cloud
@@ -146,6 +166,12 @@ template<typename InheritFrom>
 bool CT_AttributesColor<InheritFrom>::visitValues(CT_AttributesColor<InheritFrom>::ColorVisitor v) const
 {
     return m_manager->visitValues(v);
+}
+
+template<typename InheritFrom>
+bool CT_AttributesColor<InheritFrom>::visitAllIndexesSet(IVisitor v) const
+{
+    return m_manager->visitAllIndexesSet(v);
 }
 
 template<typename InheritFrom>
@@ -226,6 +252,24 @@ bool CT_AttributesColor<InheritFrom>::visitLocalValues(CT_AttributesColor<Inheri
             if(!v(globalIndex, value))
                 return false;
         }
+    }
+
+    return true;
+}
+
+template<typename InheritFrom>
+bool CT_AttributesColor<InheritFrom>::visitLocalIndexesSet(IVisitor v) const
+{
+    CT_AbstractCloudIndex* ci = m_cir->abstractCloudIndex();
+
+    const size_t size = ci->size();
+
+    for(size_t i=0; i<size; ++i)
+    {
+        const size_t globalIndex = ci->indexAt(i);
+
+        if(m_manager->hasBeenSet(globalIndex) && !v(globalIndex))
+                return false;
     }
 
     return true;

@@ -44,6 +44,22 @@ public:
         return true;
     }
 
+    bool visitAllIndexesSet(typename CT_AbstractXAttributeManager<AttributeType>::IVisitor v) const final
+    {
+        if(mAttributesCloud == nullptr)
+            return true;
+
+        const size_t s = mAttributesCloud->size();
+
+        for(size_t i=0; i<s; ++i)
+        {
+            if(!v(i))
+                return false;
+        }
+
+        return true;
+    }
+
     size_t numberOfSetValues() const final
     {
         return (mAttributesCloud != nullptr) ? mAttributesCloud->size() : 0;

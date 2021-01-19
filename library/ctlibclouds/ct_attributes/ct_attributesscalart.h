@@ -25,6 +25,12 @@ public:
      */
     using SVisitor = std::function<bool (const size_t& /*globalIndex*/, SCALAR /*value*/)>;
 
+    /**
+     * @brief The visitor receive the global index of the attribute. The visitor
+     *        must returns true if the visit must continue or false to abort it.
+     */
+    using IVisitor = typename CT_AbstractXAttributeManager<MANAGER_SCALAR>::IVisitor;
+
     CT_AttributesScalarT();
 
     /**
@@ -55,27 +61,58 @@ public:
     CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>& operator=(const CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>& other) = default;
 
     // GLOBAL //
+    /**
+     * @brief Returns the scalar converted in double at the specified global index
+     */
     double scalarAsDoubleAt(const size_t& globalIndex) const;
 
+    /**
+     * @brief Returns the scalar converted in double at the specified global index
+     */
+    SCALAR scalarAt(const size_t& globalIndex) const;
+
+    /**
+     * @brief Returns true if the scalar at the specified global index has been set
+     */
     bool hasBeenSet(const size_t& globalIndex) const;
 
+    /**
+     * @brief Returns the number of set scalars in the total scalar cloud
+     */
     size_t numberOfSetValues() const;
 
+    /**
+     * @brief Visit all defined scalars of the total scalar cloud
+     */
     bool visitValuesAsDouble(DVisitor v) const;
 
+    /**
+     * @brief Visit all indexes of defined scalars of the total scalar cloud
+     */
+    bool visitAllIndexesSet(IVisitor v) const;
+
+    /**
+     * @brief Returns true if at least one scalar has been set in the total scalar cloud
+     */
     bool hasValues() const;
 
+    /**
+     * @brief Returns the minimum scalar value of the total scalar cloud converted in double
+     */
     double minScalarAsDouble() const;
 
+    /**
+     * @brief Returns the maximum scalar value of the total scalar cloud converted in double
+     */
     double maxScalarAsDouble() const;
 
     /**
-     * @brief Returns the minimum scalar for the total scalar cloud
+     * @brief Returns the minimum scalar of the total scalar cloud
      */
     SCALAR minScalar() const;
 
     /**
-     * @brief Returns the maximum scalar for the total scalar cloud
+     * @brief Returns the maximum scalar of the total scalar cloud
      */
     SCALAR maxScalar() const;
 
@@ -85,25 +122,65 @@ public:
     bool visitValues(SVisitor v) const;
 
     // LOCAL //
+    /**
+     * @brief Returns the scalar converted in double at the specified local index. For performance prefer to use the method "visitLocalValues(...)"
+     * @param localIndex : the local index, must be in range [0;numberOfSetLocalValues()[
+     */
     double scalarAsDoubleAtLocalIndex(const size_t& localIndex) const;
 
+    /**
+     * @brief Returns the scalar at the specified local index. For performance prefer to use the method "visitLocalValues(...)"
+     * @param localIndex : the local index, must be in range [0;numberOfSetLocalValues()[
+     */
+    SCALAR scalarAtLocalIndex(const size_t& localIndex) const;
+
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        to count how many scalars has been set.
+     */
     size_t numberOfSetLocalValues() const;
 
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        to returns true if at least one scalar has been set.
+     */
     bool hasLocalValues() const;
 
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        and call the visitor each time a scalar has been set.
+     * @param v : a function that will receive for first parameter the global index of the scalar and for second parameter the value of the scalar. The
+     *            visitor must returns false if the visit must be aborted or true to continue the visit.
+     * @return False if the visitor has aborted the visit, true otherwise.
+     */
     bool visitLocalValuesAsDouble(DVisitor v) const;
 
+    /**
+     * @brief This method will loop over the collection of global indexes (of points, edges or faces) set in the constructor
+     *        and call the visitor each time a scalar has been set.
+     * @param v : a function that will receive the global index of the scalar. The
+     *            visitor must returns false if the visit must be aborted or true to continue the visit.
+     * @return False if the visitor has aborted the visit, true otherwise.
+     */
+    bool visitLocalIndexesSet(IVisitor v) const;
+
+    /**
+     * @brief Returns the minimum scalar converted in double of the local scalar cloud
+     */
     double minLocalScalarAsDouble() const;
 
+    /**
+     * @brief Returns the maximum scalar converted in double of the local scalar cloud
+     */
     double maxLocalScalarAsDouble() const;
 
     /**
-     * @brief Returns the minimum scalar for the local scalar cloud
+     * @brief Returns the minimum scalar of the local scalar cloud
      */
     SCALAR minLocalScalar() const;
 
     /**
-     * @brief Returns the maximum scalar for the local scalar cloud
+     * @brief Returns the maximum scalar of the local scalar cloud
      */
     SCALAR maxLocalScalar() const;
 
@@ -122,7 +199,10 @@ public:
      */
     CT_AbstractXAttributeManager<MANAGER_SCALAR>* scalarsManager() const;
 
-    virtual quint64 mask() const { return 0; }
+    /**
+     * @brief Returns the value of the mask used
+     */
+    virtual quint64 mask() const { return 0xFFFFFFFF; }
 
     /**
      * @brief Copy scalars of the source cloud for the destination cloud and let a modificator modify the new value to set
