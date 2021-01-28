@@ -45,7 +45,7 @@ public:
     /**
      * @brief Returns the normal at the specified global index
      */
-    const CT_Normal& constNormalAt(const size_t& globalIndex) const;
+    const CT_Normal& constNormalAt(const size_t& globalIndex, bool* hasBeenSet = nullptr) const;
 
     /**
      * @brief Returns true if the normal at the specified global index has been set
@@ -143,9 +143,9 @@ CT_AttributesNormal<InheritFrom>::CT_AttributesNormal(CT_CIR cir, CT_AbstractXAt
 }
 
 template<typename InheritFrom>
-const CT_Normal& CT_AttributesNormal<InheritFrom>::constNormalAt(const size_t& globalIndex) const
+const CT_Normal& CT_AttributesNormal<InheritFrom>::constNormalAt(const size_t& globalIndex, bool* hasBeenSet) const
 {
-    return m_manager->tAt(globalIndex);
+    return m_manager->tAt(globalIndex, hasBeenSet);
 }
 
 template<typename InheritFrom>

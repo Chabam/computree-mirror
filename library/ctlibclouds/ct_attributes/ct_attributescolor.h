@@ -46,7 +46,7 @@ public:
     /**
      * @brief Returns the color at the specified global index
      */
-    const CT_Color& constColorAt(const size_t& globalIndex) const;
+    const CT_Color& constColorAt(const size_t& globalIndex, bool* hasBeenSet = nullptr) const;
 
     /**
      * @brief Returns true if the color at the specified global index has been set
@@ -145,9 +145,9 @@ CT_AttributesColor<InheritFrom>::CT_AttributesColor(CT_CIR cir,
 }
 
 template<typename InheritFrom>
-const CT_Color& CT_AttributesColor<InheritFrom>::constColorAt(const size_t& globalIndex) const
+const CT_Color& CT_AttributesColor<InheritFrom>::constColorAt(const size_t& globalIndex, bool* hasBeenSet) const
 {
-    return m_manager->tAt(globalIndex);
+    return m_manager->tAt(globalIndex, hasBeenSet);
 }
 
 template<typename InheritFrom>

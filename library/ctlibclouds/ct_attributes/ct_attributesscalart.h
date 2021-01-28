@@ -64,12 +64,12 @@ public:
     /**
      * @brief Returns the scalar converted in double at the specified global index
      */
-    double scalarAsDoubleAt(const size_t& globalIndex) const;
+    double scalarAsDoubleAt(const size_t& globalIndex, bool* hasBeenSet = nullptr) const;
 
     /**
      * @brief Returns the scalar converted in double at the specified global index
      */
-    SCALAR scalarAt(const size_t& globalIndex) const;
+    SCALAR scalarAt(const size_t& globalIndex, bool* hasBeenSet = nullptr) const;
 
     /**
      * @brief Returns true if the scalar at the specified global index has been set

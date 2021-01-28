@@ -34,7 +34,7 @@ public:
     /**
      * @brief Returns the scalar at the specified global index
      */
-    virtual double scalarAsDoubleAt(const size_t& globalIndex) const = 0;
+    virtual double scalarAsDoubleAt(const size_t& globalIndex, bool* hasBeenSet = nullptr) const = 0;
 
     /**
      * @brief Returns true if the scalar at the specified global index has been set

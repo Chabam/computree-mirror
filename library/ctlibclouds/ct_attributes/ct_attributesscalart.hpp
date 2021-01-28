@@ -47,15 +47,15 @@ CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::~CT_AttributesScalarT
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
-double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAsDoubleAt(const size_t& globalIndex) const
+double CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAsDoubleAt(const size_t& globalIndex, bool* hasBeenSet) const
 {
-    return double(convertScalarOfManagerToScalar(m_manager->tAt(globalIndex)));
+    return double(convertScalarOfManagerToScalar(m_manager->tAt(globalIndex, hasBeenSet)));
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
-SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAt(const size_t& globalIndex) const
+SCALAR CT_AttributesScalarT<SCALAR, InheritFrom, MANAGER_SCALAR>::scalarAt(const size_t& globalIndex, bool* hasBeenSet) const
 {
-    return convertScalarOfManagerToScalar(m_manager->tAt(globalIndex));
+    return convertScalarOfManagerToScalar(m_manager->tAt(globalIndex, hasBeenSet));
 }
 
 template<typename SCALAR, typename InheritFrom, typename MANAGER_SCALAR>
