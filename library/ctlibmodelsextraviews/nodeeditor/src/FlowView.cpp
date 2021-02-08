@@ -222,15 +222,8 @@ void
 FlowView::
 wheelEvent(QWheelEvent *event)
 {
-  qreal delta = event->delta() / 3.0;
-
-  if (delta == 0.0)
-  {
-    event->ignore();
-    return;
-  }
-
-  setSceneRect(sceneRect().translated(0.0, -delta));
+  qreal delta = -event->delta() / 3.0;
+  setSceneRect(sceneRect().translated(0.0, delta));
 
   Node* rightNode = _scene->allNodes().at(0);
   if(_scene->allNodes().at(1)->nodeGraphicsObject().ref())
@@ -246,6 +239,8 @@ wheelEvent(QWheelEvent *event)
       rightNodePos.setY(sceneRectArea.bottom() - rightNodeRect.height());
 
   _scene->setNodePosition(*rightNode,rightNodePos);
+
+  event->accept();
 }
 
 

@@ -369,11 +369,13 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->resizeColumnToContents(1);
     mOutTreeWidget->resizeColumnToContents(1);
 
-    int InWidth = static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 120;
-    int OutWidth = static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 120;
+    //int InWidth = static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 120;
+    //int OutWidth = static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 120;
+    //if(InWidth < 200) InWidth = 200;
+    //if(OutWidth < 200) OutWidth = 200;
 
-    if(InWidth < 200) InWidth = 200;
-    if(OutWidth < 200) OutWidth = 200;
+    int InWidth  = mInTreeWidget->columnWidth(0)  + mInTreeWidget->columnWidth(1)  + 10;
+    int OutWidth = mOutTreeWidget->columnWidth(0) + mOutTreeWidget->columnWidth(1) + 10;
 
     mInTreeWidget->resize(InWidth, inItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
     mOutTreeWidget->resize(OutWidth, outItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
@@ -826,6 +828,7 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClick
 
     bool mouseButtonPressed = false;
     if(mKeyboardShiftModifierEnabled || (mouseButtonPressed = index.model() == mOutTreeWidget->model()/*(qApp->mouseButtons() == Qt::MiddleButton)*/)) {
+        if(mFirstStatePressed != 0) mFirstStatePressed = 0;
         convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(index, mouseButtonPressed);
         return;
     }
