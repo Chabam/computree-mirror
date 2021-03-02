@@ -17,7 +17,8 @@ public:
       */
     static CT_CategoryManager* CM();
 
-    CT_CategoryManager();
+    CT_CategoryManager(const CT_CategoryManager& other) = delete;
+    CT_CategoryManager& operator=(const CT_CategoryManager& other) = delete;
     ~CT_CategoryManager();
 
     /**
@@ -37,6 +38,10 @@ public:
     QList<const CT_AbstractCategory*> categories() const;
 
 private:
+    friend class CT_StructureContext;
+
+    CT_CategoryManager();
+
     /**
      * @brief The default category manager
      */

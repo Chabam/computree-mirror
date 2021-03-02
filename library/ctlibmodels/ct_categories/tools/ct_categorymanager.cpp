@@ -6,14 +6,14 @@ CT_CategoryManager* CT_CategoryManager::UNIQUE_INSTANCE = nullptr;
 
 CT_CategoryManager* CT_CategoryManager::CM()
 {
-    if(UNIQUE_INSTANCE == nullptr)
-        UNIQUE_INSTANCE = new CT_CategoryManager();
-
     return UNIQUE_INSTANCE;
 }
 
 CT_CategoryManager::CT_CategoryManager()
 {
+    assert(UNIQUE_INSTANCE == nullptr);
+
+    UNIQUE_INSTANCE = this;
 }
 
 CT_CategoryManager::~CT_CategoryManager()
