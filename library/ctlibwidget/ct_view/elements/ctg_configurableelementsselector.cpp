@@ -326,8 +326,19 @@ void CTG_ConfigurableElementsSelector::transferFromSelectedToAvailable(QListWidg
 
 void CTG_ConfigurableElementsSelector::on_pushButtonAddAll_clicked()
 {
-    while(ui->listWidgetAvailable->count() > 0)
-        transferFromAvailableToSelected(ui->listWidgetAvailable->item(0));
+    int n = ui->listWidgetAvailable->count();
+
+    for(int i=0; i<n; ++i)
+    {
+        transferFromAvailableToSelected(ui->listWidgetAvailable->item(i));
+
+        if(n > ui->listWidgetAvailable->count())
+        {
+            n = ui->listWidgetAvailable->count();
+            --i;
+        }
+    }
+
 }
 
 void CTG_ConfigurableElementsSelector::on_pushButtonRemoveAll_clicked()
