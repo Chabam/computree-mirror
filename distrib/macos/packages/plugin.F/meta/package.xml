@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugin LVOX</DisplayName>
+    <Description>Voxelization , managing occlusions.</Description>
+	<DisplayName xml:lang="fr_fr">Plugin LVOX</DisplayName>
+    <Description xml:lang="fr">Voxélisation, gestion des occlusions.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.F</Name>
+	<SortingPriority>60</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

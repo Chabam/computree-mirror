@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>CompuTree</Name>
+    <Version>6.0.0</Version>
+    <Title>CompuTree</Title>
+    <Publisher>GIP ECOFOR</Publisher>
+    <ProductUrl>http://computree.onf.fr</ProductUrl>
+    <InstallerApplicationIcon>../../resources/icons/Computree</InstallerApplicationIcon>
+    <Logo>../../resources/icons/Icone_48x48.png</Logo>
+    <WizardStyle>Modern</WizardStyle>
+    <WizardDefaultWidth>900</WizardDefaultWidth>
+    <WizardDefaultHeight>600</WizardDefaultHeight>
+    <StyleSheet>style.qss</StyleSheet>
+    <StartMenuDir>CompuTree</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/CompuTree</TargetDir>
+    <MaintenanceToolName>CompuTreeGuiUninstall</MaintenanceToolName>
+    <!--<RemoteRepositories>
+        <Repository>
+            <Url>http://rdinnovation.onf.fr/svn/computreev6/</Url>
+        </Repository>
+    </RemoteRepositories>-->
+    <ControlScript>controllerscript.qs</ControlScript>
+</Installer>

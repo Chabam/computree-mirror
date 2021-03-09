@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>SimpleWorld</DisplayName>
+    <Description>Extention of Simpletree for large area of trees.</Description>
+	<DisplayName xml:lang="fr_fr">SimpleWorld</DisplayName>
+    <Description xml:lang="fr">Extension de Simpletree pour une grande superficie d&apos;arbres.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.H.3</Name>
+	<SortingPriority>10</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

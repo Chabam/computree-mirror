@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>SimpleForest</DisplayName>
+    <Description>Extention of Simpletree for multiple trees.</Description>
+	<DisplayName xml:lang="fr_fr">SimpleForest</DisplayName>
+    <Description xml:lang="fr">Extension de Simpletree pour plusieurs arbres.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.H.2</Name>
+	<SortingPriority>20</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

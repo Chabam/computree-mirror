@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Libraries</DisplayName>
+    <Description>Additional functions libraries loaded at runtime.</Description>
+	<DisplayName xml:lang="fr_fr">Librairies</DisplayName>
+	<Description xml:lang="fr">Librairies de fonctions supplémentaires chargées lors de l&apos;exécution.</Description>
+    <Version>6.0.0</Version>
+    <ReleaseDate>2021-01-04</ReleaseDate>
+    <Name>library</Name>
+	<ExpandedByDefault>true</ExpandedByDefault>
+</Package>

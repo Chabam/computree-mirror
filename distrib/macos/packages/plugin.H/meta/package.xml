@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugin Simpletree</DisplayName>
+    <Description>Complete tree structure including every branch for a tree cloud.</Description>
+	<DisplayName xml:lang="fr_fr">Plugin Simpletree</DisplayName>
+    <Description xml:lang="fr">Arborescence complète, y compris toutes les branches d'un nuage d'arbre.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.H</Name>
+	<SortingPriority>40</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>
