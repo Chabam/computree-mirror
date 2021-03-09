@@ -170,10 +170,10 @@ private:
     bool isAFavoriteSubLevel() const;
 
 private:
-    typedef QList<CT_VirtualAbstractStep*>          StepCollection;
-    typedef QMap<QString, CT_VirtualAbstractStep*>  StepCollectionSorted;
-    typedef QList<CT_NotFoundedStep>                StepNotFoundedCollection;
-    typedef QList<CT_MenuLevel*>                    LevelCollection;
+    typedef QList<CT_VirtualAbstractStep*>               StepCollection;
+    typedef QMultiMap<QString, CT_VirtualAbstractStep*>  StepCollectionSorted;
+    typedef QList<CT_NotFoundedStep>                     StepNotFoundedCollection;
+    typedef QList<CT_MenuLevel*>                         LevelCollection;
 
     StepCollection              m_steps;
     StepCollectionSorted        m_stepsSorted;

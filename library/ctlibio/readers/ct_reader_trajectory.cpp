@@ -298,7 +298,7 @@ bool CT_Reader_Trajectory::internalReadFile(CT_StandardItemGroup* group)
                     continue;
 
                 // Read each word separately
-                wordsOfLine = currentLine.split(m_separator, QString::SkipEmptyParts);
+                wordsOfLine = currentLine.split(m_separator, Qt::SkipEmptyParts);
 
                 // Checking for a valid line
                 if(maxIndex >= wordsOfLine.size()) {

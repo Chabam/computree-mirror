@@ -39,7 +39,7 @@ class GMainProgressDialog : public IMainProgressDialog
     Q_OBJECT
 
 public:
-    GMainProgressDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+    GMainProgressDialog(QWidget *parent = nullptr);
 
     bool isCanceled() const;
     void setData(const void *data);

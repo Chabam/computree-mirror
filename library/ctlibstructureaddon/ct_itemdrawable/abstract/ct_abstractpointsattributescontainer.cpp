@@ -21,7 +21,7 @@ void CT_AbstractPointsAttributesContainer::internalInsertAttributes(const int &k
     m_att.insert(key, const_cast<CT_AbstractPointsAttributes*>(att));
 }
 
-const QHash<int, CT_AbstractPointsAttributes *>& CT_AbstractPointsAttributesContainer::internalAttributes() const
+const QMultiHash<int, CT_AbstractPointsAttributes *>& CT_AbstractPointsAttributesContainer::internalAttributes() const
 {
     return m_att;
 }

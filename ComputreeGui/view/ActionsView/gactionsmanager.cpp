@@ -96,7 +96,7 @@ void GActionsManager::refreshView()
 
     if(m_actionsManager != nullptr)
     {
-        QMap<QString, CT_AbstractAction*> byType;
+        QMultiMap<QString, CT_AbstractAction*> byType;
 
         // Create a map of actions sorted by type. Actions added in the map is get from plugins.
         QList<CT_AbstractAction*> actions = m_actionsManager->actionsFromPlugins();
@@ -105,7 +105,7 @@ void GActionsManager::refreshView()
         while(it.hasNext())
         {
             CT_AbstractAction *ac = it.next();
-            byType.insertMulti(ac->type(), ac);
+            byType.insert(ac->type(), ac);
         }
 
         // Create the model of the treeview from the map

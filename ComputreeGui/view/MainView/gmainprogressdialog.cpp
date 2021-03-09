@@ -32,7 +32,7 @@
 
 #include "dm_guimanager.h"
 
-GMainProgressDialog::GMainProgressDialog(QWidget *parent, Qt::WindowFlags flags) : IMainProgressDialog(parent, flags)
+GMainProgressDialog::GMainProgressDialog(QWidget *parent) : IMainProgressDialog(parent)
 {
     _canClose = false;
     m_canceled = false;

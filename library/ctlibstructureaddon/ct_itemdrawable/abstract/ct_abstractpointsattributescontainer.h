@@ -25,7 +25,7 @@ public:
     virtual void clearPointsAttributesCollection();
 
 private:
-    QHash<int, CT_AbstractPointsAttributes*>   m_att;
+    QMultiHash<int, CT_AbstractPointsAttributes*>   m_att;
 
 protected:
     /**
@@ -36,7 +36,7 @@ protected:
     /**
      * @brief Returns the map
      */
-    const QHash<int, CT_AbstractPointsAttributes*>& internalAttributes() const;
+    const QMultiHash<int, CT_AbstractPointsAttributes*>& internalAttributes() const;
 };
 
 #endif // CT_ABSTRACTPOINTSATTRIBUTESCONTAINER_H

@@ -160,7 +160,7 @@ QString CDM_CitationInfo::getPluginRIS()
 QString CDM_CitationInfo::parseRIS(QString ris)
 {    
     QMultiMap<QString, QString> fields;
-    QStringList lines = ris.split("\n", QString::SkipEmptyParts);
+    QStringList lines = ris.split("\n", Qt::SkipEmptyParts);
 
     for (int i = 0 ; i < lines.size() ; i++)
     {

@@ -178,7 +178,7 @@ bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
                 line = stream.readLine();
                 currentSizeRead += line.size();
                 setProgress(int(currentSizeRead*100)/fileSize);
-                QStringList values = line.split(" ", QString::SkipEmptyParts);
+                QStringList values = line.split(" ", Qt::SkipEmptyParts);
                 bool ok = readPoint(values, point);
 
                 // FIXME: convert radius filter to lambda

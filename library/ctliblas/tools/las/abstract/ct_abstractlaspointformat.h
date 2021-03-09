@@ -31,7 +31,7 @@ class CTLIBLAS_EXPORT CT_AbstractLASPointFormat
 {
 public:
     // a type = an attribute (if there is no value for a type in the collection it means that no attribute has been found for this type)
-    using AttributeByTypeCollection = QHash<CT_LasDefine::LASPointAttributesType, const CT_AbstractPointAttributesScalar*>;
+    using AttributeByTypeCollection = QMultiHash<CT_LasDefine::LASPointAttributesType, const CT_AbstractPointAttributesScalar*>;
 
     CT_AbstractLASPointFormat();
     virtual ~CT_AbstractLASPointFormat();

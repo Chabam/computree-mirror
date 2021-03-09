@@ -158,8 +158,8 @@ void QGLViewer::defaultConstructor() {
 
 All viewer parameters (display flags, scene parameters, associated objects...)
 are set to their default values. See the associated documentation. */
-QGLViewer::QGLViewer(QWidget *parent, Qt::WindowFlags flags)
-    : QOpenGLWidget(parent, flags) {
+QGLViewer::QGLViewer(QWidget *parent)
+    : QOpenGLWidget(parent) {
   defaultConstructor();
 }
 
@@ -174,9 +174,8 @@ are set to their default values. See the associated documentation.
 
 If the \p shareWidget parameter points to a valid \c QGLWidget, the QGLViewer
 will share the OpenGL context with \p shareWidget (see isSharing()). */
-QGLViewer::QGLViewer(QWidget *parent, const QGLWidget *shareWidget,
-                     Qt::WindowFlags flags)
-    : QOpenGLWidget(parent, flags) {
+QGLViewer::QGLViewer(QWidget *parent, const QGLWidget *shareWidget)
+    : QOpenGLWidget(parent) {
   Q_UNUSED(shareWidget)
   qWarning("The constructor with a shareWidget is deprecated, use the regular "
            "contructor instead.");
@@ -187,8 +186,8 @@ QGLViewer::QGLViewer(QWidget *parent, const QGLWidget *shareWidget,
 share GL contexts, even with \c QGLContext sub-classes (use \p shareWidget
 otherwise). */
 QGLViewer::QGLViewer(QGLContext *context, QWidget *parent,
-                     const QGLWidget *shareWidget, Qt::WindowFlags flags)
-    : QOpenGLWidget(parent, flags) {
+                     const QGLWidget *shareWidget)
+    : QOpenGLWidget(parent) {
   Q_UNUSED(context)
   Q_UNUSED(shareWidget)
   qWarning("The constructor with a QGLContext is deprecated, use the regular "
@@ -202,8 +201,8 @@ This is for instance needed to ask for a stencil buffer or for stereo display
 (as is illustrated in the <a href="../examples/stereoViewer.html">stereoViewer
 example</a>). */
 QGLViewer::QGLViewer(const QGLFormat &format, QWidget *parent,
-                     const QGLWidget *shareWidget, Qt::WindowFlags flags)
-    : QOpenGLWidget(parent, flags) {
+                     const QGLWidget *shareWidget)
+    : QOpenGLWidget(parent) {
   Q_UNUSED(format)
   Q_UNUSED(shareWidget)
   qWarning("The constructor with a QGLFormat is deprecated, use the regular "

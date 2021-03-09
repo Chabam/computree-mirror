@@ -201,7 +201,7 @@ bool CT_DenseAttributeManager<T, TCIR, syncWithT>::copyAndModifyAttributesOfSFor
 
     if(modificator == nullptr)
     {
-        for(auto i=0; i<sourceSize && i<destSize; ++i)
+        for(unsigned long i=0; i<sourceSize && i<destSize; ++i)
         {
             setter.setValueWithGlobalIndex(destCI->indexAt(i), tAt(sourceCI->indexAt(i)));
         }
@@ -210,7 +210,7 @@ bool CT_DenseAttributeManager<T, TCIR, syncWithT>::copyAndModifyAttributesOfSFor
     {
         T destValue;
 
-        for(auto i=0; i<sourceSize && i<destSize; ++i)
+        for(unsigned long i=0; i<sourceSize && i<destSize; ++i)
         {
             const auto sourceGlobalIndex = sourceCI->indexAt(i);
             const T& sourceValue = tAt(sourceCI->indexAt(i));

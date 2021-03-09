@@ -159,7 +159,7 @@ bool CT_MenuLevel::addStepToCollectionOrDeleteIt(CT_VirtualAbstractStep* step)
     }
 
     m_steps.append(step);
-    m_stepsSorted.insertMulti(step->description().toLower(), step);
+    m_stepsSorted.insert(step->description().toLower(), step);
 
     connect(step, SIGNAL(destroyed(QObject*)), this, SLOT(stepDeleted(QObject*)), Qt::DirectConnection);
 
