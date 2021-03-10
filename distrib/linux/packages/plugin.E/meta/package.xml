@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugin Segma</DisplayName>
+    <Description>Segmentation of raster images.</Description>
+	<DisplayName xml:lang="fr_fr">Plugin Segma</DisplayName>
+    <Description xml:lang="fr">Segmentation des images matricielles.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.E</Name>
+	<SortingPriority>70</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

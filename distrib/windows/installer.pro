@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = computree_6_0_installer_x86_64
+INSTALLER = computree_6_0_installer_x86_64_WIN
 
 # Usefull definitions of paths
 PATH_SRC = $$PWD/../../../ComputreeInstallRelease

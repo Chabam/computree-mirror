@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Simpletree Core</DisplayName>
+    <Description>Core components of Simpletree plugin.</Description>
+	<DisplayName xml:lang="fr_fr">Simpletree Core</DisplayName>
+    <Description xml:lang="fr">Composants principaux du plugin Simpletree.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2021-01-01</ReleaseDate>
+    <Name>plugin.H.1</Name>
+	<SortingPriority>30</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Library Core</DisplayName>
+    <Description>Core libraries of the Computree program.</Description>
+	<DisplayName xml:lang="fr_fr">Librairies Principales</DisplayName>
+    <Description xml:lang="fr">Librairies Principales du programme Computree.</Description>
+    <Version>6.0.0</Version>
+    <ReleaseDate>2021-01-04</ReleaseDate>
+    <Default>true</Default>
+    <Name>library.A</Name>
+	<ForcedInstallation>true</ForcedInstallation>
+	<SortingPriority>70</SortingPriority>
+</Package>
