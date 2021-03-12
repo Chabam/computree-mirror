@@ -29,6 +29,7 @@
 #include "settingsinterfaces.h"
 
 #include <QFileDialog>
+#include <QString>
 
 CT_FileChoiceButton::CT_FileChoiceButton(QString btlab, CT_FileChoiceButton::NeededFileType filetype, QString fileFilter, QStringList &value, QString description)
 {
@@ -109,12 +110,12 @@ QWidget* CT_FileChoiceButton::createWidget(QWidget &parent)
 
 void CT_FileChoiceButton::updateValue()
 {       
-    *(_data._value) = _labelCreated->text().split("\n", Qt::SkipEmptyParts);
+    *(_data._value) = _labelCreated->text().split("\n", QString::SkipEmptyParts);
 }
 
 bool CT_FileChoiceButton::isValueAndWidgetValueDifferent() const
 {
-    return ((*_data._value) != _labelCreated->text().split("\n", Qt::SkipEmptyParts));
+    return ((*_data._value) != _labelCreated->text().split("\n", QString::SkipEmptyParts));
 }
 
 QVariant CT_FileChoiceButton::getValue() const

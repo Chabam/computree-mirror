@@ -135,8 +135,8 @@ bool PB_OPFExporter::exportTreeGroup(const CT_TTreeGroup* topology, const QStrin
 
         QString prefix = "";
 
-        txtStream << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << Qt::endl;
-        txtStream << prefix << "<opf version=\"2.0\" editable=\"true\">" << Qt::endl;
+        txtStream << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" << endl;
+        txtStream << prefix << "<opf version=\"2.0\" editable=\"true\">" << endl;
 
         CT_TNodeGroup* root = topology->rootNode();
 
@@ -154,7 +154,7 @@ bool PB_OPFExporter::exportTreeGroup(const CT_TTreeGroup* topology, const QStrin
             ok = recursiveWriteFile(txtStream, "topology", root, prefix + "\t");
         }
 
-        txtStream << prefix << "</opf>" << Qt::endl;
+        txtStream << prefix << "</opf>" << endl;
 
         file.close();
 
@@ -166,7 +166,7 @@ bool PB_OPFExporter::exportTreeGroup(const CT_TTreeGroup* topology, const QStrin
 
 bool PB_OPFExporter::writeAttributesBdd(QTextStream &stream, const CT_TTreeGroup *topology, const QString &prefix)
 {
-    stream << prefix << "<attributeBDD>" << Qt::endl;
+    stream << prefix << "<attributeBDD>" << endl;
 
     DEF_CT_AbstractGroupModelOut* model = topology->modelStaticT<DEF_CT_AbstractGroupModelOut>();
 
@@ -177,10 +177,10 @@ bool PB_OPFExporter::writeAttributesBdd(QTextStream &stream, const CT_TTreeGroup
 
     while(it.hasNext()) {
         it.next();
-        stream << prefix << "\t<attribute name=\"" << it.key() << "\" class=\"" << it.value() << "\"/>" << Qt::endl;
+        stream << prefix << "\t<attribute name=\"" << it.key() << "\" class=\"" << it.value() << "\"/>" << endl;
     }
 
-    stream << prefix << "</attributeBDD>" << Qt::endl;
+    stream << prefix << "</attributeBDD>" << endl;
 
     return true;
 }
@@ -217,7 +217,7 @@ bool PB_OPFExporter::writeMeshAndShapeBdd(QTextStream &stream, const QString &pr
 {
     if(!m_meshes.isEmpty())
     {
-        stream << prefix << "<meshBDD>" << Qt::endl;
+        stream << prefix << "<meshBDD>" << endl;
 
         int i = 0;
 
@@ -226,9 +226,9 @@ bool PB_OPFExporter::writeMeshAndShapeBdd(QTextStream &stream, const QString &pr
         while(it.hasNext())
             writeMesh(stream, it.next(), i++, prefix + "\t");
 
-        stream << prefix << "</meshBDD>" << Qt::endl;
+        stream << prefix << "</meshBDD>" << endl;
 
-        stream << prefix << "<shapeBDD>" << Qt::endl;
+        stream << prefix << "<shapeBDD>" << endl;
 
         i = 0;
 
@@ -237,7 +237,7 @@ bool PB_OPFExporter::writeMeshAndShapeBdd(QTextStream &stream, const QString &pr
         while(it.hasNext())
             writeShape(stream, it.next(), i++, prefix + "\t");
 
-        stream << prefix << "</shapeBDD>" << Qt::endl;
+        stream << prefix << "</shapeBDD>" << endl;
     }
 
     return true;
@@ -285,13 +285,13 @@ bool PB_OPFExporter::writeMesh(QTextStream &stream, CT_Mesh *mesh, const int &in
     if((pci != nullptr)
             && (fci != nullptr))
     {
-        stream << prefix << "<mesh Id=\"" << index << "\" enableScale=\"true\">" << Qt::endl;
+        stream << prefix << "<mesh Id=\"" << index << "\" enableScale=\"true\">" << endl;
 
         CT_PointIterator itP(pci);
 
         size_t pBeginIndex = std::numeric_limits<size_t>::max();
 
-        stream << prefix << "\t<points>" << Qt::endl << prefix << "\t\t";
+        stream << prefix << "\t<points>" << endl << prefix << "\t\t";
 
         while(itP.hasNext())
         {
@@ -303,11 +303,11 @@ bool PB_OPFExporter::writeMesh(QTextStream &stream, CT_Mesh *mesh, const int &in
                 pBeginIndex = itP.cIndex();
         }
 
-        stream << Qt::endl << prefix << "\t</points>" << Qt::endl;
+        stream << endl << prefix << "\t</points>" << endl;
 
         CT_FaceIterator itF(fci);
 
-        stream << prefix << "\t<faces>" << Qt::endl;
+        stream << prefix << "\t<faces>" << endl;
 
         int i = 0;
 
@@ -315,18 +315,18 @@ bool PB_OPFExporter::writeMesh(QTextStream &stream, CT_Mesh *mesh, const int &in
         {
             const CT_Face &f = itF.next().cT();
 
-            stream << prefix << "\t\t<face Id=\"" << i << "\">" << Qt::endl;
+            stream << prefix << "\t\t<face Id=\"" << i << "\">" << endl;
 
-            stream << prefix << "\t\t\t" << f.iPointAt(0)-pBeginIndex << " " << f.iPointAt(1)-pBeginIndex << " " << f.iPointAt(2)-pBeginIndex << Qt::endl;
+            stream << prefix << "\t\t\t" << f.iPointAt(0)-pBeginIndex << " " << f.iPointAt(1)-pBeginIndex << " " << f.iPointAt(2)-pBeginIndex << endl;
 
-            stream << prefix << "\t\t</face>" << Qt::endl;
+            stream << prefix << "\t\t</face>" << endl;
 
             ++i;
         }
 
-        stream << prefix << "\t</faces>" << Qt::endl;
+        stream << prefix << "\t</faces>" << endl;
 
-        stream << prefix << "</mesh>" << Qt::endl;
+        stream << prefix << "</mesh>" << endl;
     }
 
     return true;
@@ -340,10 +340,10 @@ bool PB_OPFExporter::writeShape(QTextStream &stream, CT_Mesh *mesh, const int &i
     if((pci != nullptr)
             && (fci != nullptr))
     {
-        stream << prefix << "<shape Id=\"" << index << "\">" << Qt::endl;
-        stream << prefix << "\t<name>Mesh" << index << "</name>" << Qt::endl;
-        stream << prefix << "\t<meshIndex>" << index << "</meshIndex>" << Qt::endl;
-        stream << prefix << "</shape>" << Qt::endl;
+        stream << prefix << "<shape Id=\"" << index << "\">" << endl;
+        stream << prefix << "\t<name>Mesh" << index << "</name>" << endl;
+        stream << prefix << "\t<meshIndex>" << index << "</meshIndex>" << endl;
+        stream << prefix << "</shape>" << endl;
     }
 
     return true;
@@ -360,7 +360,7 @@ bool PB_OPFExporter::recursiveWriteFile(QTextStream &stream, const QString &type
     if (opfNode != nullptr)
         scale = opfNode->opfModel()->opfLevel();
 
-    stream << prefix << "<" << type << " class=\"" << node->model()->displayableName() << "\" scale=\"" << scale << "\" id=\"" << node->id() << "\">" << Qt::endl;
+    stream << prefix << "<" << type << " class=\"" << node->model()->displayableName() << "\" scale=\"" << scale << "\" id=\"" << node->id() << "\">" << endl;
 
     const CT_MeshModel* mesh = nullptr;
 
@@ -408,7 +408,7 @@ bool PB_OPFExporter::recursiveWriteFile(QTextStream &stream, const QString &type
         }
     }
 
-    stream << prefix << "</" + type + ">" << Qt::endl;
+    stream << prefix << "</" + type + ">" << endl;
 
     return ok;
 }
@@ -417,7 +417,7 @@ bool PB_OPFExporter::writeAttribute(QTextStream &stream, const CT_TNodeGroup *no
 {
     Q_UNUSED(node)
 
-    stream << prefix << "<" + att->model()->displayableName() << ">" << att->toString(l, nullptr) << "</" << att->model()->displayableName() << ">" << Qt::endl;
+    stream << prefix << "<" + att->model()->displayableName() << ">" << att->toString(l, nullptr) << "</" << att->model()->displayableName() << ">" << endl;
 
     return true;
 }
@@ -426,10 +426,10 @@ bool PB_OPFExporter::writeGeometry(QTextStream &stream, CT_TNodeGroup *node, con
 {
     if(mesh != nullptr)
     {
-        stream << prefix << "<geometry class=\"Mesh\">" << Qt::endl;
-        stream << prefix << "\t<shapeIndex>" << m_meshes.indexOf(mesh->mesh()) << "</shapeIndex>" << Qt::endl;
+        stream << prefix << "<geometry class=\"Mesh\">" << endl;
+        stream << prefix << "\t<shapeIndex>" << m_meshes.indexOf(mesh->mesh()) << "</shapeIndex>" << endl;
 
-        stream << prefix << "\t<mat>" << Qt::endl;
+        stream << prefix << "\t<mat>" << endl;
 
         CT_TOPFNodeGroup *opfNode = dynamic_cast<CT_TOPFNodeGroup*>(node);
 
@@ -439,26 +439,26 @@ bool PB_OPFExporter::writeGeometry(QTextStream &stream, CT_TNodeGroup *node, con
             matrix = opfNode->opfMatrix();
         }
 
-        stream << prefix << "\t\t" << matrix(0,0)*100.0f << "\t" << matrix(0,1)*100.0f << "\t" << matrix(0,2)*100.0f << "\t" << matrix(0,3)*100.0f << Qt::endl;
-        stream << prefix << "\t\t" << matrix(1,0)*100.0f << "\t" << matrix(1,1)*100.0f << "\t" << matrix(1,2)*100.0f << "\t" << matrix(1,3)*100.0f << Qt::endl;
-        stream << prefix << "\t\t" << matrix(2,0)*100.0f << "\t" << matrix(2,1)*100.0f << "\t" << matrix(2,2)*100.0f << "\t" << matrix(2,3)*100.0f << Qt::endl;
+        stream << prefix << "\t\t" << matrix(0,0)*100.0f << "\t" << matrix(0,1)*100.0f << "\t" << matrix(0,2)*100.0f << "\t" << matrix(0,3)*100.0f << endl;
+        stream << prefix << "\t\t" << matrix(1,0)*100.0f << "\t" << matrix(1,1)*100.0f << "\t" << matrix(1,2)*100.0f << "\t" << matrix(1,3)*100.0f << endl;
+        stream << prefix << "\t\t" << matrix(2,0)*100.0f << "\t" << matrix(2,1)*100.0f << "\t" << matrix(2,2)*100.0f << "\t" << matrix(2,3)*100.0f << endl;
 
-        stream << prefix << "\t</mat>" << Qt::endl;
+        stream << prefix << "\t</mat>" << endl;
 
         const CT_OPFMeshModel *opfMeshModel = dynamic_cast<const CT_OPFMeshModel*>(mesh);
 
         if(opfMeshModel != nullptr)
         {
-            stream << prefix << "\t<dUp>" << opfMeshModel->dUp() << "</dUp>" << Qt::endl;
-            stream << prefix << "\t<dDwn>" << opfMeshModel->dDown() << "</dDwn>" << Qt::endl;
+            stream << prefix << "\t<dUp>" << opfMeshModel->dUp() << "</dUp>" << endl;
+            stream << prefix << "\t<dDwn>" << opfMeshModel->dDown() << "</dDwn>" << endl;
         }
         else
         {
-            stream << prefix << "\t<dUp>1.0</dUp>" << Qt::endl;
-            stream << prefix << "\t<dDwn>1.0</dDwn>" << Qt::endl;
+            stream << prefix << "\t<dUp>1.0</dUp>" << endl;
+            stream << prefix << "\t<dDwn>1.0</dDwn>" << endl;
         }
 
-        stream << prefix << "</geometry>" << Qt::endl;
+        stream << prefix << "</geometry>" << endl;
     }
 
     return true;

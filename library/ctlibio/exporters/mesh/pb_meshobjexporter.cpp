@@ -52,7 +52,7 @@ CT_AbstractExporter::ExportReturn PB_MeshObjExporter::internalExportToFile()
     {
         QTextStream txtStream(&file);
 
-        txtStream << "# " << QFileInfo(currentFilePath).fileName() << Qt::endl << Qt::endl;
+        txtStream << "# " << QFileInfo(currentFilePath).fileName() << endl << endl;
 
         if(mustUseModels())
         {
@@ -118,7 +118,7 @@ void PB_MeshObjExporter::clearAttributesClouds()
 
 bool PB_MeshObjExporter::exportMesh(const CT_MeshModel* item, QTextStream& stream, const int& nExported, const int& totalToExport, size_t& ptNb, size_t& lastPointCount)
 {
-    stream << "o " << item->id() << Qt::endl << Qt::endl;
+    stream << "o " << item->id() << endl << endl;
 
     CT_Mesh* mesh = item->mesh();
 
@@ -137,7 +137,7 @@ bool PB_MeshObjExporter::exportMesh(const CT_MeshModel* item, QTextStream& strea
             const CT_Point &point = itP.next().currentPoint();
             hashTablePoint.insert(itP.cIndex(), i+1);
 
-            stream << "v " << double(point(0)) << " " << double(point(1)) << " " << double(point(2)) << Qt::endl;
+            stream << "v " << double(point(0)) << " " << double(point(1)) << " " << double(point(2)) << endl;
 
             ++i;
             ++ptNb;
@@ -145,7 +145,7 @@ bool PB_MeshObjExporter::exportMesh(const CT_MeshModel* item, QTextStream& strea
             setExportProgress((((int(i)*50)/int(totalSize))+nExported)/totalToExport);
         }
 
-        stream << Qt::endl;
+        stream << endl;
 
         totalSize = itF.size();
         i = 0;
@@ -154,7 +154,7 @@ bool PB_MeshObjExporter::exportMesh(const CT_MeshModel* item, QTextStream& strea
         {
             const CT_Face &face = itF.next().cT();
 
-            stream << "f " << (hashTablePoint.value(face.iPointAt(0)) + lastPointCount) << " " << (hashTablePoint.value(face.iPointAt(1)) + lastPointCount) << " " << (hashTablePoint.value(face.iPointAt(2)) + lastPointCount) << Qt::endl;
+            stream << "f " << (hashTablePoint.value(face.iPointAt(0)) + lastPointCount) << " " << (hashTablePoint.value(face.iPointAt(1)) + lastPointCount) << " " << (hashTablePoint.value(face.iPointAt(2)) + lastPointCount) << endl;
 
             ++i;
 
@@ -162,7 +162,7 @@ bool PB_MeshObjExporter::exportMesh(const CT_MeshModel* item, QTextStream& strea
         }
     }
 
-    stream << Qt::endl;
+    stream << endl;
     lastPointCount = ptNb;
 
     return true;

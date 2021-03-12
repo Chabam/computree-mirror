@@ -157,7 +157,7 @@ bool CT_Reader_OBJ::checkHasInfoOfVertex(const QString &buf) const
 
 bool CT_Reader_OBJ::loadVertex(const QString &buf, CT_Point &point) const
 {
-    QStringList sl = buf.split(" ", Qt::SkipEmptyParts);
+    QStringList sl = buf.split(" ", QString::SkipEmptyParts);
 
     if(sl.size() >= 4)
     {
@@ -183,7 +183,7 @@ bool CT_Reader_OBJ::checkHasInfoOfFace(const QString &buf) const
 
 bool CT_Reader_OBJ::loadFace(const QString &buf, const size_t &beginVertexIndex, CT_Mesh *mesh, CT_MutableFaceIterator &itFaces, CT_MutableEdgeIterator &itEdges) const
 {
-    QStringList sl = buf.split(" ", Qt::SkipEmptyParts);
+    QStringList sl = buf.split(" ", QString::SkipEmptyParts);
 
     if(sl.size() >= 4)
     {
