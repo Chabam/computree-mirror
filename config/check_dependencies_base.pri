@@ -33,7 +33,6 @@ isEmpty(LIB_PATH) : LIB_PATH = # empty
 # Check mandatory libraries
 checkMandatoryDependence(eigen)
 checkMandatoryDependence(muparser)
-checkMandatoryDependence(libqglviewer)
 checkMandatoryDependence(opencv)
 checkMandatoryDependence(gdal)
 
@@ -50,12 +49,6 @@ MUST_USE_PCL = 1
 }
 
 # Include sub-projects from dependencies
-exists (../3rdparty/libQGLViewer/libQGLViewer.pro) {
-    SUBDIRS += 3rdparty/libQGLViewer
-} else {
-    error("libQGLViewer.pro can't be found! It is mandatory to compile it with Computree.")
-}
-
 exists (../3rdparty/muparser/muparser.pro) {
     SUBDIRS += 3rdparty/muparser
 } else {

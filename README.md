@@ -4,13 +4,7 @@ Computree is a processing platform for 3D points clouds in forestry. It is manag
 
 ## Installation
 
-Download the package for your platform at [this address](http://rdinnovation.onf.fr/projects/computree/wiki/Fr_installation_v5).
-
-Once downloaded, if you are using Windows, please run the script (double click):
-
-```bash
-win_setenv.cmd
-```
+Download the package for your platform at [this address](http://rdinnovation.onf.fr/projects/computree-wiki-user/wiki/Telechargements_et_installation) and follow the instructions.
 
 ## Compilation & development
 
@@ -43,4 +37,4 @@ make install
 Please contact our team at contact@computree.onf.fr to get involved in Computree's evolutions.
 
 ## License
-[GPL](http://www.gnu.org/licenses/gpl-3.0.html)
+[LGPL](http://www.gnu.org/licenses/lgpl-3.0.html)

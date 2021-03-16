@@ -5,7 +5,6 @@ CT_PREFIX_LIB = ../library
 COMPUTREE = ctlibcore
 MUST_USE_EIGEN = 1
 MUST_USE_MUPARSER = 1
-MUST_USE_LIBQGLVIEWER = 1
 
 # c++17
 greaterThan(QT_MAJOR_VERSION, 4) {
