@@ -4,10 +4,9 @@
 #
 #-------------------------------------------------
 
-DEFINES *= QGLVIEWER_STATIC
 DEFINES *= AMKGL_NO_TODO_WARNINGS
 
-QT       += core gui xml opengl concurrent
+QT       += core gui xml opengl concurrent 3drender
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -49,7 +48,6 @@ AMKGL_DEFINES_DIR = generic
 
 exists(AMKgl_defines_computree.pri) {
     USE_USER_DEFINITIONS = true
-    # message(AMKgl_defines_computree.pri founded and used)
     include(AMKgl_defines_computree.pri)
     INCLUDEPATH += $$AMKGL_DEFINES_DIR
 } else {
@@ -403,17 +401,7 @@ isEmpty(USE_USER_DEFINITIONS) {
 FORMS    += \
     view/drawmodeconfigurator.ui
 
-# INCLUDEPATH += ../$$LIBQGLVIEWER_PATH
 INCLUDEPATH += poly2tri/poly2tri
-# INCLUDEPATH += $$EIGEN_INC_PATH
-
-# LIBS += -L../$$LIBQGLVIEWER_PATH
-
-CONFIG(debug, debug|release) {
-    LIBS += -lQGLViewerd
-} else {
-    LIBS += -lQGLViewer
-}
 
 win32 {
     LIBS += -lopengl32 -lglu32

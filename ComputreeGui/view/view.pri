@@ -139,30 +139,3 @@ INCLUDEPATH += view/ItemDrawableModelView
 INCLUDEPATH += view/ItemDrawableConfigurationView
 INCLUDEPATH += view/MainView
 INCLUDEPATH += view/StepConfigurationView
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -29,6 +29,8 @@ RC_ICONS = Computree.ico
 macx : ICON = Computree.icns
 QT *= opengl xml concurrent widgets
 
+QT += 3drender
+
 DESTDIR = $${EXECUTABLE_DESTDIR}
 
 HEADERS += dm_graphicsviewsynchronizedgroup.h \
