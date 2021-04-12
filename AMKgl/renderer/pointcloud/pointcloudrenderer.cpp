@@ -67,8 +67,9 @@ void PointCloudRenderer::addPoints(const CloudIndex *indexes,
             size_t begin = r->getBeginningOfCloud();
             size_t end = r->getEndOfCloud();
 
-            while(size != 0) {
-                const size_t &index = (*indexes)[--size];
+            do
+            {
+                const size_t &index = (*indexes)[size];
 
                 if((index < begin) || (index > end)) {
                     r->endAddMultiplePoints();
@@ -81,7 +82,13 @@ void PointCloudRenderer::addPoints(const CloudIndex *indexes,
                 }
 
                 r->addPoint(index, dispatchInfos);
-            }
+
+                if(size == 0)
+                    break;
+
+                --size;
+
+            } while(1);
 
             r->endAddMultiplePoints();
         }
