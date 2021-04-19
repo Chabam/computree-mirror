@@ -1,7 +1,27 @@
 #ifndef SHAPETOVOLUME_H
 #define SHAPETOVOLUME_H
 
-#include <amkglviewer.h>
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
+#pragma GCC diagnostic ignored "-Wint-in-bool-context"
+#endif
+#include <qglviewer.h>
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(__APPLE__)
+#pragma GCC diagnostic pop
+#endif
+
 #include "picker/geometry/triangleplane.h"
 
 #include <QVector>
@@ -20,7 +40,7 @@ public:
      * @warning The polygon must have point ordered in clockwise !
      */
     static QVector<TrianglePlane> staticTriangulatePolygonAndConvertItToPlanes(const QPolygon &polygon,
-                                                                               const QGLCamera &camera);
+                                                                               const qglviewer::Camera &camera);
 
     /**
      * @brief Returns triangles transformed by the matrix
@@ -106,15 +126,15 @@ public:
      * @warning The polygon must have point ordered in clockwise !
      */
     static QVector<Plane> staticConvertPolygonToPlanes(const QPolygon &polygon,
-                                                       const QGLCamera &camera);
+                                                       const qglviewer::Camera &camera);
 
     /**
      * @brief Convert a 2D point to a 3D line that begin at zNear of the camera and end on the zFar of the camera
      */
-    static void staticConvert2DPointTo3DLine(const QGLCamera &camera,
+    static void staticConvert2DPointTo3DLine(const qglviewer::Camera &camera,
                                              const QPoint &pos,
-                                             Eigen::Vector3d &nearV,
-                                             Eigen::Vector3d &farV);
+                                             qglviewer::Vec &nearV,
+                                             qglviewer::Vec &farV);
 
     /**
      * @brief Get the camera near and far plane
@@ -122,7 +142,7 @@ public:
      * @param nearPlane : (out) near plane computed
      * @param farPlane :  (out)far plane computed
      */
-    static void staticGetCameraPlane(const QGLCamera &camera, Plane& nearPlane, Plane& farPlane);
+    static void staticGetCameraPlane(const qglviewer::Camera &camera, Plane& nearPlane, Plane& farPlane);
 };
 
 #endif // SHAPETOVOLUME_H

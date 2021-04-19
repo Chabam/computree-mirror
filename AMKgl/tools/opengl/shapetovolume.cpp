@@ -52,7 +52,7 @@ QVector<QPolygon> ShapeToVolume::staticConvertPolygonToTriangle(const QPolygon &
 }
 
 QVector<TrianglePlane> ShapeToVolume::staticTriangulatePolygonAndConvertItToPlanes(const QPolygon &polygon,
-                                                                                   const QGLCamera &camera)
+                                                                                   const qglviewer::Camera &camera)
 {
     QVector<TrianglePlane> result;
 
@@ -73,7 +73,7 @@ QVector<TrianglePlane> ShapeToVolume::staticTriangulatePolygonAndConvertItToPlan
 }
 
 QVector<Plane> ShapeToVolume::staticConvertPolygonToPlanes(const QPolygon &polygon,
-                                                           const QGLCamera &camera)
+                                                           const qglviewer::Camera &camera)
 {
     QVector<Plane> v;
 
@@ -82,8 +82,8 @@ QVector<Plane> ShapeToVolume::staticConvertPolygonToPlanes(const QPolygon &polyg
         QVectorIterator<QPoint> it(polygon);
 
         QPoint lastPos = it.next();
-        Eigen::Vector3d lastNearV, lastFarV;
-        Eigen::Vector3d nearV, farV;
+        qglviewer::Vec lastNearV, lastFarV;
+        qglviewer::Vec nearV, farV;
 
         staticConvert2DPointTo3DLine(camera, lastPos, lastNearV, lastFarV);
 
@@ -110,13 +110,13 @@ QVector<Plane> ShapeToVolume::staticConvertPolygonToPlanes(const QPolygon &polyg
     return v;
 }
 
-void ShapeToVolume::staticConvert2DPointTo3DLine(const QGLCamera &camera,
+void ShapeToVolume::staticConvert2DPointTo3DLine(const qglviewer::Camera &camera,
                                                  const QPoint &pos,
-                                                 Eigen::Vector3d &nearV,
-                                                 Eigen::Vector3d &farV)
+                                                 qglviewer::Vec &nearV,
+                                                 qglviewer::Vec &farV)
 {
-    Eigen::Vector3d orig;
-    Eigen::Vector3d dir;
+    qglviewer::Vec orig;
+    qglviewer::Vec dir;
     camera.convertClickToLine(pos, orig, dir);
 
     Plane nearPlane, farPlane;
@@ -124,8 +124,8 @@ void ShapeToVolume::staticConvert2DPointTo3DLine(const QGLCamera &camera,
 
     Eigen::Vector3d nearPointIntersect, farPointIntersect;
 
-    bool ok = IntersectionChecker::staticDoesASegmentIntersectWithAPlane(Eigen::Vector3d(orig),
-                                                               Eigen::Vector3d(orig+dir),
+    bool ok = IntersectionChecker::staticDoesASegmentIntersectWithAPlane(QGLViewerTools::vecToEigen(orig),
+                                                               QGLViewerTools::vecToEigen(orig+dir),
                                                                nearPlane.m_vertex[0],
                                                                nearPlane.m_vertex[1],
                                                                nearPlane.m_vertex[2],
@@ -136,8 +136,8 @@ void ShapeToVolume::staticConvert2DPointTo3DLine(const QGLCamera &camera,
 
     Q_ASSERT_X(ok, "ShapeToVolume", "Segment don't intersect Near plane");
 
-    ok = IntersectionChecker::staticDoesASegmentIntersectWithAPlane(Eigen::Vector3d(orig),
-                                                               Eigen::Vector3d(orig+dir),
+    ok = IntersectionChecker::staticDoesASegmentIntersectWithAPlane(QGLViewerTools::vecToEigen(orig),
+                                                               QGLViewerTools::vecToEigen(orig+dir),
                                                                farPlane.m_vertex[0],
                                                                farPlane.m_vertex[1],
                                                                farPlane.m_vertex[2],
@@ -148,79 +148,78 @@ void ShapeToVolume::staticConvert2DPointTo3DLine(const QGLCamera &camera,
 
     Q_ASSERT_X(ok, "ShapeToVolume", "Segment don't intersect Far plane");
 
-    nearV = nearPointIntersect;
-    farV = farPointIntersect;
+    nearV = QGLViewerTools::eigenToVec(nearPointIntersect);
+    farV = QGLViewerTools::eigenToVec(farPointIntersect);
 }
 
-void ShapeToVolume::staticGetCameraPlane(const QGLCamera &camera,
+void ShapeToVolume::staticGetCameraPlane(const qglviewer::Camera &camera,
                                          Plane &nearPlane,
                                          Plane &farPlane)
 {
-    Eigen::Vector3d points[2];
-    Eigen::Vector3d orig = camera.position()*2;
+    qglviewer::Vec points[2];
+    qglviewer::Vec orig = camera.position()*2;
 
     points[0].z = camera.zNear();
     points[1].z = camera.zFar();
 
     switch (camera.type())
     {
-        case QGLCamera::PERSPECTIVE:
+        case qglviewer::Camera::PERSPECTIVE:
         {
-            points[0][1] = points[0][2] * tan(camera.fieldOfView()*0.5);
-            points[0][0] = points[0][1] * camera.aspectRatio();
+            points[0].y = points[0].z * tan(camera.fieldOfView()/2.0);
+            points[0].x = points[0].y * camera.aspectRatio();
 
-            const qreal ratio = points[1][2] / points[0][2];
+            const qreal ratio = points[1].z / points[0].z;
 
-            points[1][1] = ratio * points[0][1];
-            points[1][0] = ratio * points[0][0];
+            points[1].y = ratio * points[0].y;
+            points[1].x = ratio * points[0].x;
             break;
         }
-        default:
-        case QGLCamera::ORTHOGRAPHIC:
+        case qglviewer::Camera::ORTHOGRAPHIC:
         {
             GLdouble hw, hh;
             camera.getOrthoWidthHeight(hw, hh);
-            points[0][0] = points[1][0] = qreal(hw);
-            points[0][1] = points[1][1] = qreal(hh);
+            points[0].x = points[1].x = qreal(hw);
+            points[0].y = points[1].y = qreal(hh);
             break;
         }
     }
 
-    Eigen::Vector3d tmp[2];
-    Eigen::Vector3d p1[2], p2[2], p3[2], p4[2];
+    qglviewer::Vec tmp[2];
+    qglviewer::Vec p1[2], p2[2], p3[2], p4[2];
 
     tmp[0] = camera.worldCoordinatesOf(points[0]);
     tmp[1] = camera.worldCoordinatesOf(points[1]);
 
-    p1[0] = Eigen::Vector3d(-tmp[0][0], -tmp[0][1], -tmp[0][2]) + orig;
-    p1[1] = Eigen::Vector3d(-tmp[1][0], -tmp[1][1], -tmp[1][2]) + orig;
+    p1[0] = qglviewer::Vec(-tmp[0].x, -tmp[0].y, -tmp[0].z) + orig;
+    p1[1] = qglviewer::Vec(-tmp[1].x, -tmp[1].y, -tmp[1].z) + orig;
 
-    points[0][1] = -points[0][1];
-    points[1][1] = -points[1][1];
-
-    tmp[0] = camera.worldCoordinatesOf(points[0]);
-    tmp[1] = camera.worldCoordinatesOf(points[1]);
-
-    p2[0] = Eigen::Vector3d(-tmp[0][0], -tmp[0][1], -tmp[0][2]) + orig;
-    p2[1] = Eigen::Vector3d(-tmp[1][0], -tmp[1][1], -tmp[1][2]) + orig;
-
-    points[0][0] = -points[0][0];
-    points[1][0] = -points[1][0];
+    points[0].y = -points[0].y;
+    points[1].y = -points[1].y;
 
     tmp[0] = camera.worldCoordinatesOf(points[0]);
     tmp[1] = camera.worldCoordinatesOf(points[1]);
 
-    p3[0] = Eigen::Vector3d(-tmp[0][0], -tmp[0][1], -tmp[0][2]) + orig;
-    p3[1] = Eigen::Vector3d(-tmp[1][0], -tmp[1][1], -tmp[1][2]) + orig;
+    p2[0] = qglviewer::Vec(-tmp[0].x, -tmp[0].y, -tmp[0].z) + orig;
+    p2[1] = qglviewer::Vec(-tmp[1].x, -tmp[1].y, -tmp[1].z) + orig;
 
-    points[0][1] = -points[0][1];
-    points[1][1] = -points[1][1];
+    points[0].x = -points[0].x;
+    points[1].x = -points[1].x;
 
     tmp[0] = camera.worldCoordinatesOf(points[0]);
     tmp[1] = camera.worldCoordinatesOf(points[1]);
 
-    p4[0] = Eigen::Vector3d(-tmp[0][0], -tmp[0][1], -tmp[0][2]) + orig;
-    p4[1] = Eigen::Vector3d(-tmp[1][0], -tmp[1][1], -tmp[1][2]) + orig;
+    p3[0] = qglviewer::Vec(-tmp[0].x, -tmp[0].y, -tmp[0].z) + orig;
+    p3[1] = qglviewer::Vec(-tmp[1].x, -tmp[1].y, -tmp[1].z) + orig;
+
+    points[0].y = -points[0].y;
+    points[1].y = -points[1].y;
+
+    tmp[0] = camera.worldCoordinatesOf(points[0]);
+    tmp[1] = camera.worldCoordinatesOf(points[1]);
+
+    p4[0] = qglviewer::Vec(-tmp[0].x, -tmp[0].y, -tmp[0].z) + orig;
+    p4[1] = qglviewer::Vec(-tmp[1].x, -tmp[1].y, -tmp[1].z) + orig;
 
     nearPlane.set(p1[0], p2[0], p3[0], p4[0]);
     farPlane.set(p1[1], p2[1], p3[1], p4[1]);
