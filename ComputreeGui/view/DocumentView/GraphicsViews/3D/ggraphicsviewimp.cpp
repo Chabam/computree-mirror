@@ -40,29 +40,6 @@
 #include "view/DocumentView/gdocumentviewforgraphics.h"
 #include "view/Tools/graphicsviewdebugmode.h"
 
-#include "constraint.h"
-
-#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#elif defined(__APPLE__) // Clang Compiler (Apple)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wint-in-bool-context"
-#endif
-#include <manipulatedCameraFrame.h>
-#if defined(_WIN32) && defined(_MSC_VER)
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(__APPLE__)
-#pragma GCC diagnostic pop
-#endif
-
 #include <Eigen/Core>
 
 QString GGraphicsViewImp::DEFAULT_STATE_FILENAME = "3DViewer.config";
@@ -81,6 +58,11 @@ GGraphicsViewImp::GGraphicsViewImp(const GDocumentViewForGraphics* parentDocumen
     m_backupFacesSelected = CT_SFCIR(nullptr);
 
     m_uniqueIndex = NUMBER_OF_VIEWS++;
+    m_2dview = false;
+
+    setAxisIsDrawn(false);
+    setGridIsDrawn(false);
+    setFPSIsDisplayed(false);
 
     connect(actionsHandler(), SIGNAL(currentActionChanged(CT_AbstractAction*)), this, SLOT(currentActionChanged(CT_AbstractAction*)));
     connect(this, SIGNAL(debugModeChanged(bool)), this, SLOT(amkglDebugModeChanged(bool)), Qt::DirectConnection);
@@ -98,16 +80,17 @@ GGraphicsViewImp::~GGraphicsViewImp()
 void GGraphicsViewImp::active2DView(bool e)
 {
     if(e) {
-        qglviewer::LocalConstraint* c = new qglviewer::LocalConstraint();
-        c->setTranslationConstraintType(qglviewer::AxisPlaneConstraint::FREE);
-        c->setRotationConstraintType(qglviewer::AxisPlaneConstraint::FORBIDDEN);
+        //qglviewer::LocalConstraint* c = new qglviewer::LocalConstraint();
+        //c->setTranslationConstraintType(qglviewer::AxisPlaneConstraint::FREE);
+        //c->setRotationConstraintType(qglviewer::AxisPlaneConstraint::FORBIDDEN);
 
-        amkglCamera()->frame()->setConstraint(c);
-
+        //amkglCamera()->frame()->setConstraint(c);
         m_camController->setType(CameraInterface::ORTHOGRAPHIC);
+        m_2dview = true;
 
     } else {
-        amkglCamera()->frame()->setConstraint(nullptr);
+        //amkglCamera()->frame()->setConstraint(nullptr);
+        m_2dview = false;
     }
 }
 
@@ -138,7 +121,8 @@ QOpenGLWidget* GGraphicsViewImp::getOpenGLWidget() const
 
 bool GGraphicsViewImp::is2DView() const
 {
-    return (amkglCamera()->frame()->constraint() != nullptr);
+    //return (amkglCamera()->frame()->constraint() != nullptr);
+    return m_2dview;
 }
 
 void GGraphicsViewImp::setOptions(const DM_GraphicsViewOptions &newOptions)
@@ -1111,31 +1095,34 @@ void GGraphicsViewImp::visitObjectsOfCurrentAction(const int &uniqueIndex, const
 Eigen::Vector3d GGraphicsViewImp::pointUnderPixel(const QPoint &pixel,
                                                   bool &found) const
 {
-    return QGLViewerTools::vecToEigen(amkglCamera()->pointUnderPixel(pixel, found));
+    //return QGLViewerTools::vecToEigen(amkglCamera()->pointUnderPixel(pixel, found));
+    Q_UNUSED(pixel);
+    Q_UNUSED(found);
+    return Eigen::Vector3d(0.0,0.0,0.0);
 }
 
 void GGraphicsViewImp::convertClickToLine(const QPoint &pixel,
                                           Eigen::Vector3d &orig,
                                           Eigen::Vector3d &dir) const
 {
-    AMKglViewer::VecType vecOrig;
-    AMKglViewer::VecType vecDir;
+    Eigen::Vector3d vecOrig;
+    Eigen::Vector3d vecDir;
 
-    amkglCamera()->convertClickToLine(pixel,
-                                      vecOrig,
-                                      vecDir);
+    QGLViewerTools::convertClickToLine(*(amkglCamera()), pixel, vecOrig, vecDir);
 
-    orig = QGLViewerTools::vecToEigen(vecOrig);
-    dir = QGLViewerTools::vecToEigen(vecDir);
+    orig = vecOrig;
+    dir = vecDir;
 }
 
 void GGraphicsViewImp::convert3DPositionToPixel(const Eigen::Vector3d &position,
                                                 QPoint &pixel) const
 {
-    qreal res[3];
-    amkglCamera()->getProjectedCoordinatesOf(position.data(), res);
-    pixel.setX(res[0]);
-    pixel.setY(res[1]);
+    //qreal res[3];
+    //amkglCamera()->getProjectedCoordinatesOf(position.data(), res);
+    //pixel.setX(res[0]);
+    //pixel.setY(res[1]);
+    Q_UNUSED(position);
+    Q_UNUSED(pixel);
 }
 
 int GGraphicsViewImp::width() const
@@ -1158,20 +1145,20 @@ void GGraphicsViewImp::drawCameraInformations()
     const DM_GraphicsViewOptions& options = constGetOptionsInternal();
 
     if(options.getCameraInformationDisplayed().testFlag(DM_GraphicsViewOptions::CameraPosition))
-        getDrawInfo()->drawText(tr("Position : %1 | %2 | %3").arg(amkglCamera()->position().x)
-                                                             .arg(amkglCamera()->position().y)
-                                                             .arg(amkglCamera()->position().z));
+        getDrawInfo()->drawText(tr("Position : %1 | %2 | %3").arg(amkglCamera()->position().x())
+                                                             .arg(amkglCamera()->position().y())
+                                                             .arg(amkglCamera()->position().z()));
 
     if(options.getCameraInformationDisplayed().testFlag(DM_GraphicsViewOptions::CameraSceneCenter))
-        getDrawInfo()->drawText(tr("Centre de la scene : %1 | %2 | %3").arg(amkglCamera()->sceneCenter().x)
-                                                             .arg(amkglCamera()->sceneCenter().y)
-                                                             .arg(amkglCamera()->sceneCenter().z));
+        getDrawInfo()->drawText(tr("Centre de la scene : %1 | %2 | %3").arg(amkglCamera()->viewCenter().x())
+                                                             .arg(amkglCamera()->viewCenter().y())
+                                                             .arg(amkglCamera()->viewCenter().z()));
 
     if(options.getCameraInformationDisplayed().testFlag(DM_GraphicsViewOptions::CameraViewDirection))
-        getDrawInfo()->drawText(tr("Direction : %1 | %2 | %3 | %4").arg(amkglCamera()->orientation()[0])
-                                                                   .arg(amkglCamera()->orientation()[1])
-                                                                   .arg(amkglCamera()->orientation()[2])
-                                                                   .arg(amkglCamera()->orientation()[3]));
+        getDrawInfo()->drawText(tr("Direction : %1 | %2 | %3 | %4").arg(amkglCamera()->viewVector()[0])
+                                                                   .arg(amkglCamera()->viewVector()[1])
+                                                                   .arg(amkglCamera()->viewVector()[2])
+                                                                   .arg(amkglCamera()->viewVector()[3]));
 }
 
 void GGraphicsViewImp::computeAndSetTextPosition()
@@ -1249,7 +1236,7 @@ void GGraphicsViewImp::getBoundingBoxOfSelectedElementsOfMeshesInView(Scene::Obj
 
 void GGraphicsViewImp::init()
 {
-    AMKglViewer::init();
+    AMKglViewer::initializeGL();
 
     if(getDocument() != nullptr)
         m_sceneForAction.addedTo(getDocument(), getNewOpenGlContext());
@@ -1261,7 +1248,9 @@ void GGraphicsViewImp::preDraw()
 {
     makeCurrent();
 
-    setBackgroundColor(constGetOptionsInternal().getBackgroundColor());
+    QColor color = QColor(48, 48, 48);
+    glClearColor(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+    //setBackgroundColor(constGetOptionsInternal().getBackgroundColor());
 
     AMKglViewer::preDraw();
 
@@ -1467,7 +1456,7 @@ QString GGraphicsViewImp::stateFileName() const
 
 void GGraphicsViewImp::saveStateToFile()
 {
-    QString name = stateFileName();
+    /*QString name = stateFileName();
 
     if (name.isEmpty())
         return;
@@ -1514,12 +1503,12 @@ void GGraphicsViewImp::saveStateToFile()
         f.close();
     }
     else
-        GUI_LOG->addWarningMessage(LogInterface::gui, tr("Save to file error : Unable to save to file %1").arg(name) + ":\n" + f.errorString());
+        GUI_LOG->addWarningMessage(LogInterface::gui, tr("Save to file error : Unable to save to file %1").arg(name) + ":\n" + f.errorString());*/
 }
 
 bool GGraphicsViewImp::restoreStateFromFile()
 {
-    QString name = stateFileName();
+    /*QString name = stateFileName();
 
     if (name.isEmpty())
         return false;
@@ -1575,13 +1564,12 @@ bool GGraphicsViewImp::restoreStateFromFile()
 
                 setOptions(opt);
 
-                if(qIsNaN(amkglCamera()->position().x)
-                        || qIsNaN(amkglCamera()->position().y)
-                        || qIsNaN(amkglCamera()->position().z)
-                        || qIsNaN(amkglCamera()->orientation()[0])
-                        || qIsNaN(amkglCamera()->orientation()[1])
-                        || qIsNaN(amkglCamera()->orientation()[2])
-                        || qIsNaN(amkglCamera()->orientation()[3])) {
+                if(qIsNaN(amkglCamera()->position().x())
+                        || qIsNaN(amkglCamera()->position().y())
+                        || qIsNaN(amkglCamera()->position().z())
+                        || qIsNaN(amkglCamera()->viewVector()[0])
+                        || qIsNaN(amkglCamera()->viewVector()[1])
+                        || qIsNaN(amkglCamera()->viewVector()[2])) {
 
                     m_camController->homePosition();
                 }
@@ -1595,7 +1583,7 @@ bool GGraphicsViewImp::restoreStateFromFile()
     {
         GUI_LOG->addWarningMessage(LogInterface::gui, tr("Open file error : Unable to open file %1").arg(name) + ":\n" + f.errorString());
         return false;
-    }
+    }*/
 
     return true;
 }

@@ -5,33 +5,15 @@
 #include "actions/picking/actionpickanyelements.h"
 #include "visitor/applycustomfunctiontoobjectvisitor.h"
 #include "tools/opengl/cylinderglrenderer.h"
+#include "tools/qglviewer/qglviewertools.h"
 
-#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#elif defined(__APPLE__) // Clang Compiler (Apple)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wint-in-bool-context"
-#endif
-#include <manipulatedCameraFrame.h>
-#if defined(_WIN32) && defined(_MSC_VER)
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(__APPLE__)
-#pragma GCC diagnostic pop
-#endif
-
+#include <GL/GLU.h>
+#include <QGL>
 #include <QOpenGLContext>
 #include <QInputDialog>
 
 AMKglViewer::AMKglViewer(const IGraphicsDocument* doc, QWidget *parent) :
-    QGLViewer(parent)
+    QOpenGLWidget(parent)
 {
     setAttribute(Qt::WA_NoSystemBackground);
 
@@ -41,12 +23,7 @@ AMKglViewer::AMKglViewer(const IGraphicsDocument* doc, QWidget *parent) :
     m_pickingAction = new ActionPickAnyElements();
     m_pickingAction->setGlViewer(this);
 
-	qglviewer::Camera* currentCamera = QGLViewer::camera();
-    m_camera = new SpecialCam(*currentCamera);
-    setCamera(m_camera);
-	delete currentCamera;
-
-    //camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
+    m_camera = new CameraType();
 
     m_takeScreenshot = false;
     m_screenshotMultiplicationFactor = 1.0;
@@ -62,10 +39,17 @@ AMKglViewer::AMKglViewer(const IGraphicsDocument* doc, QWidget *parent) :
     m_fastDrawTimer.setInterval(2000);
     m_fastDrawTimer.setSingleShot(true);
 
-    connect(&m_fastDrawTimer, SIGNAL(timeout()), this, SLOT(fastDrawTimerTimeOut()));
-    connect(QGLViewer::camera()->frame(), SIGNAL(spun()), QGLViewer::camera()->frame(), SLOT(stopSpinning()));
+    m_axisIsDrawn    = false;
+    m_gridIsDrawn    = false;
+    m_FPSIsDisplayed = false;
+    m_cameraIsEdited = false;
+    m_textIsEnabled  = true;
+    m_stereoDisplay  = false;
 
-    setSceneRadius(20);
+    connect(&m_fastDrawTimer, SIGNAL(timeout()), this, SLOT(fastDrawTimerTimeOut()));
+    //connect(m_camera->frame(), SIGNAL(spun()), m_camera->frame(), SLOT(stopSpinning()));
+
+    //m_camera->setSceneRadius(20);
     setMouseTracking(true);
 
     setDocument(doc);
@@ -124,21 +108,20 @@ ActionPickAnyElements* AMKglViewer::getPickingAction() const
 
 Eigen::Vector3d AMKglViewer::getCameraPosition() const
 {
-    qglviewer::Vec cameraPosition = camera()->position();
+    QVector3D cameraPosition = m_camera->position();
 
-    return Eigen::Vector3d(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    return Eigen::Vector3d(cameraPosition.x(), cameraPosition.y(), cameraPosition.z());
 }
 
 Eigen::Matrix4d AMKglViewer::getCameraModelViewMatrix() const
 {
-    GLdouble modelViewMatrix[16];
-    camera()->getModelViewMatrix(modelViewMatrix);
+    QMatrix4x4 modelViewMatrix = m_camera->projectionMatrix();
 
     Eigen::Matrix4d matrix;
-    matrix << modelViewMatrix[0], modelViewMatrix[4], modelViewMatrix[8], modelViewMatrix[12],
-              modelViewMatrix[1], modelViewMatrix[5], modelViewMatrix[9], modelViewMatrix[13],
-              modelViewMatrix[2], modelViewMatrix[6], modelViewMatrix[10], modelViewMatrix[14],
-              modelViewMatrix[3], modelViewMatrix[7], modelViewMatrix[11], modelViewMatrix[15];
+    matrix << modelViewMatrix(0,0), modelViewMatrix(0,1), modelViewMatrix(0,2), modelViewMatrix(0,2),
+              modelViewMatrix(1,0), modelViewMatrix(1,1), modelViewMatrix(1,2), modelViewMatrix(1,2),
+              modelViewMatrix(2,0), modelViewMatrix(2,1), modelViewMatrix(2,2), modelViewMatrix(2,2),
+              modelViewMatrix(3,0), modelViewMatrix(3,1), modelViewMatrix(3,2), modelViewMatrix(3,2);
 
     return matrix;
 }
@@ -189,29 +172,29 @@ void AMKglViewer::takeScreenshot()
     QHash<QString, QString> formats;
     formats.insert("JPEG", "JPEG (*.jpg)");
     formats.insert("PNG", "PNG (*.png)");
-    QString selected = formats.value(snapshotFormat(), formats.value("JPEG"));
+    QString selected = formats.value(formats.value("JPEG"));
 
-    const QString fn = QFileDialog::getSaveFileName(nullptr, tr("Choisissez un nom de fichier"), snapshotFileName(), formats.values().join(";;"), &selected);
+    const QString fn = QFileDialog::getSaveFileName(nullptr, tr("Choisissez un nom de fichier"), m_snapshotFileName, formats.values().join(";;"), &selected);
 
     if(fn.isEmpty())
         return;
 
     bool ok;
-    const double factor = QInputDialog::getDouble(nullptr, tr("Resolution [%1 x %2]").arg(size().width()).arg(size().height()), tr("Facteur de multiplication"), m_screenshotMultiplicationFactor, 1, 4, 1, &ok);
+    const double factor = QInputDialog::getDouble(nullptr, tr("Resolution [%1 x %2]").arg(size().width(), size().height()), tr("Facteur de multiplication"), m_screenshotMultiplicationFactor, 1, 4, 1, &ok);
 
     if(!ok)
         return;
 
     m_screenshotMultiplicationFactor = factor;
 
-    setSnapshotFileName(fn);
-    setSnapshotFormat(formats.key(selected));
+    m_snapshotFileName = fn;
+    m_snapshotFormat = formats.key(selected);
 
     m_takeScreenshot = true;
     update();
 }
 
-void AMKglViewer::init()
+void AMKglViewer::initializeGL()
 {
     initializeOpenGLFunctions();
 
@@ -233,6 +216,27 @@ void AMKglViewer::init()
 
     if((m_document != nullptr) && (m_permanentItemScene == nullptr))
         setPermanentSceneToRender(m_document->getPermanentSceneToRender());
+
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
+
+    const QColor bgColor = QColor(51, 51, 51);
+    glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), bgColor.alphaF());
+
+    // Clear the buffer where we're going to draw
+    if (format().stereo()) {
+      glDrawBuffer(GL_BACK_RIGHT);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      glDrawBuffer(GL_BACK_LEFT);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    } else
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Give time to glInit to finish and then call setFullScreen().
+    if (isFullScreen())
+      QTimer::singleShot(100, this, SLOT(delayedFullScreen()));
 }
 
 void AMKglViewer::paintGL()
@@ -249,7 +253,12 @@ void AMKglViewer::paintEvent(QPaintEvent *e)
         m_glBuffer = new QGLFramebufferObject(size()*m_screenshotMultiplicationFactor);
     }
 
-    QGLViewer::paintGL();
+    QGLpreDraw();
+    draw();
+    QGLpostDraw();
+
+    Q_EMIT drawFinished(true);
+
     checkOpenglError();
 }
 
@@ -268,7 +277,7 @@ void AMKglViewer::preDraw()
     m_painter->setPen(Qt::white);
     m_drawInfo->reset();
 
-    m_camera->m_useNormalCamera = true;
+    m_useNormalCamera = true;
 
     // Save current OpenGL state
     glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -287,16 +296,92 @@ void AMKglViewer::preDraw()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    const QColor bgColor = backgroundColor();
+    const QColor bgColor = QColor(51, 51, 51);
     glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), bgColor.alphaF());
 
-    QGLViewer::preDraw();
+    QGLpreDraw();
 
-    m_camera->m_useNormalCamera = false;
-    m_camera->loadModelViewMatrix(true);
+    m_useNormalCamera = false;
+    loadModelViewMatrix(true);
 
     if(getPermanentSceneToRender() != nullptr)
         getPermanentSceneToRender()->preDraw(*m_drawInfo);
+}
+
+void AMKglViewer::QGLpreDraw() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  loadProjectionMatrix();
+  loadModelViewMatrix();
+
+  Q_EMIT drawNeeded();
+}
+
+void AMKglViewer::QGLpostDraw() {
+  // Reset model view matrix to world coordinates origin
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  loadModelViewMatrix();
+
+  // Save OpenGL state
+  glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+  // Set neutral GL state
+  glDisable(GL_TEXTURE_1D);
+  glDisable(GL_TEXTURE_2D);
+  glDisable(GL_TEXTURE_GEN_Q);
+  glDisable(GL_TEXTURE_GEN_R);
+  glDisable(GL_TEXTURE_GEN_S);
+  glDisable(GL_TEXTURE_GEN_T);
+  glDisable(GL_COLOR_MATERIAL);
+  m_foregroundColor = QColor(180.0, 180.0, 180.0);
+  glColor4f(m_foregroundColor.redF(),
+            m_foregroundColor.greenF(),
+            m_foregroundColor.blueF(),
+            m_foregroundColor.alphaF());
+
+  //if (m_cameraIsEdited)
+  //  m_camera->drawAllPaths();
+
+  // Pivot point, line when camera rolls, zoom region
+  //QGLViewer::drawVisualHints();
+
+  //if (m_gridIsDrawn) {
+  //  glLineWidth(1.0);
+  //  QGLViewer::drawGrid(camera()->sceneRadius());
+  //}
+  //if (m_axisIsDrawn) {
+  //  glLineWidth(2.0);
+  //  QGLViewer::drawAxis(camera()->sceneRadius());
+  //}
+
+  // FPS computation
+  //const unsigned int maxCounter = 20;
+  //if (++fpsCounter_ == maxCounter) {
+  //  f_p_s_ = 1000.0 * maxCounter / fpsTime_.restart();
+  //  fpsString_ = tr("%1Hz", "Frames per seconds, in Hertz")
+  //                   .arg(f_p_s_, 0, 'f', ((f_p_s_ < 10.0) ? 1 : 0));
+  //  fpsCounter_ = 0;
+  //}
+
+  // Restore foregroundColor
+  float color[4];
+  color[0] = m_foregroundColor.red()   / 255.0f;
+  color[1] = m_foregroundColor.green() / 255.0f;
+  color[2] = m_foregroundColor.blue()  / 255.0f;
+  color[3] = 1.0f;
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+  glDisable(GL_LIGHTING);
+  glDisable(GL_DEPTH_TEST);
+
+  //if (m_FPSIsDisplayed)
+  //  QGLViewer::displayFPS();
+  //if (m_displayMessage)
+  //  QGLViewer::drawText(10, height() - 10, m_message);
+
+  // Restore GL state
+  glPopAttrib();
+  glPopMatrix();
 }
 
 void AMKglViewer::draw()
@@ -311,11 +396,15 @@ void AMKglViewer::draw()
         return;
     }
 
-    if(getPermanentSceneToRender() != nullptr) {
-        if(getPermanentSceneToRender()->mustReduceNumberOfPointsInNormalDraw()) {
+    if(getPermanentSceneToRender() != nullptr)
+    {
+        if(getPermanentSceneToRender()->mustReduceNumberOfPointsInNormalDraw())
+        {
             m_inFastDraw = true;
             getPermanentSceneToRender()->fastDraw(*m_drawInfo);
-        } else {
+        }
+        else
+        {
             getPermanentSceneToRender()->draw(*m_drawInfo);
         }
     }
@@ -328,19 +417,22 @@ void AMKglViewer::fastDraw()
 
     m_inFastDraw = false;
 
-    if(getPermanentSceneToRender() != nullptr) {
-
+    if(getPermanentSceneToRender() != nullptr)
+    {
         if(!getPermanentSceneToRender()->mustReduceNumberOfPointsInNormalDraw()
-                && !getPermanentSceneToRender()->mustReduceNumberOfPointsInFastDraw()) {
+        && !getPermanentSceneToRender()->mustReduceNumberOfPointsInFastDraw())
+        {
             getPermanentSceneToRender()->draw(*m_drawInfo);
             return;
         }
 
-
-        if(getPermanentSceneToRender()->mustReduceNumberOfPointsInFastDraw()) {
+        if(getPermanentSceneToRender()->mustReduceNumberOfPointsInFastDraw())
+        {
             m_inFastDraw = true;
             getPermanentSceneToRender()->fastDraw(*m_drawInfo);
-        } else {
+        }
+        else
+        {
             getPermanentSceneToRender()->draw(*m_drawInfo);
         }
     }
@@ -356,17 +448,17 @@ void AMKglViewer::postDraw()
     else
         m_drawInfo->drawText("NORMAL MODE");*/
 
-    m_camera->m_useNormalCamera = true;
-    m_camera->loadModelViewMatrix(true);
+    m_useNormalCamera = true;
+    loadModelViewMatrix(true);
 
     subPostDraw(*m_drawInfo);
 
-    QGLViewer::postDraw();
+    QGLpostDraw();
 
     //drawOrigineAxes();
 
-    GLdouble mwMatrix[16];
-    camera()->getModelViewMatrix(mwMatrix);
+    //GLdouble mwMatrix[16];
+    //m_camera->getModelViewMatrix(mwMatrix);
 
     // Restore OpenGL state
     glMatrixMode(GL_MODELVIEW);
@@ -400,7 +492,7 @@ void AMKglViewer::postDraw()
         m_takeScreenshot = false;
 
         const QImage img = m_glBuffer->toImage();
-        img.save(snapshotFileName());
+        img.save(m_snapshotFileName);
 
         delete m_glBuffer;
         m_glBuffer = nullptr;
@@ -419,8 +511,8 @@ void AMKglViewer::mousePressEvent(QMouseEvent *e)
 
     ++m_params.nMouseButtonPressed;
 
-    if(clickAction(Qt::Key(0), e->modifiers(), e->button()) != QGLViewer::SELECT)
-        QGLViewer::mousePressEvent(e);
+    //if(clickAction(Qt::Key(0), e->modifiers(), e->button()) != QGLViewer::SELECT)
+    QOpenGLWidget::mousePressEvent(e);
 }
 
 void AMKglViewer::mouseMoveEvent(QMouseEvent *e)
@@ -431,7 +523,7 @@ void AMKglViewer::mouseMoveEvent(QMouseEvent *e)
     if(getPickingAction()->mouseMoveEvent(e))
         return;
 
-    QGLViewer::mouseMoveEvent(e);
+    QOpenGLWidget::mouseMoveEvent(e);
 }
 
 void AMKglViewer::mouseReleaseEvent(QMouseEvent *e)
@@ -444,8 +536,8 @@ void AMKglViewer::mouseReleaseEvent(QMouseEvent *e)
     --m_params.nMouseButtonPressed;
     m_params.nMouseButtonPressed = qMax(m_params.nMouseButtonPressed, 0);
 
-    if(clickAction(Qt::Key(0), e->modifiers(), e->button()) != QGLViewer::SELECT)
-        QGLViewer::mouseReleaseEvent(e);
+    //if(clickAction(Qt::Key(0), e->modifiers(), e->button()) != QGLViewer::SELECT)
+    QOpenGLWidget::mouseReleaseEvent(e);
 }
 
 void AMKglViewer::mouseDoubleClickEvent(QMouseEvent *e)
@@ -455,7 +547,7 @@ void AMKglViewer::mouseDoubleClickEvent(QMouseEvent *e)
     if(getPickingAction()->mouseDoubleClickEvent(e))
         return;
 
-    QGLViewer::mouseDoubleClickEvent(e);
+    QOpenGLWidget::mouseDoubleClickEvent(e);
 }
 
 void AMKglViewer::wheelEvent(QWheelEvent *e)
@@ -465,19 +557,19 @@ void AMKglViewer::wheelEvent(QWheelEvent *e)
     if(getPickingAction()->wheelEvent(e))
         return;
 
-    QGLViewer::wheelEvent(e);
+    QOpenGLWidget::wheelEvent(e);
 }
 
 void AMKglViewer::resizeEvent(QResizeEvent *e)
 {
     restartFastDrawTimer();
-    QGLViewer::resizeEvent(e);
+    QOpenGLWidget::resizeEvent(e);
 }
 
 void AMKglViewer::showEvent(QShowEvent *e)
 {
     restartFastDrawTimer();
-    QGLViewer::showEvent(e);
+    QOpenGLWidget::showEvent(e);
 }
 
 void AMKglViewer::keyPressEvent(QKeyEvent *e)
@@ -488,7 +580,7 @@ void AMKglViewer::keyPressEvent(QKeyEvent *e)
     if(e->key() == Qt::Key_Escape)
         return;
 
-    QGLViewer::keyPressEvent(e);
+    QOpenGLWidget::keyPressEvent(e);
 }
 
 void AMKglViewer::keyReleaseEvent(QKeyEvent *e)
@@ -499,7 +591,7 @@ void AMKglViewer::keyReleaseEvent(QKeyEvent *e)
     if(e->key() == Qt::Key_Escape)
         return;
 
-    QGLViewer::keyReleaseEvent(e);
+    QOpenGLWidget::keyReleaseEvent(e);
 }
 
 void AMKglViewer::setDebugModeEnabled(bool enableIt)
@@ -541,21 +633,21 @@ void AMKglViewer::checkOpenglError()
 
 void AMKglViewer::drawOrigineAxes()
 {
-    qglviewer::Vec center = camera()->sceneCenter();
+    QVector3D center = m_camera->viewCenter();
 
     glBegin(GL_LINES);
 
     glColor3f(1,0,0);
-    glVertex3f(center.x, center.y, center.z);
-    glVertex3f(center.x+1, center.y, center.z);
+    glVertex3f(center.x(), center.y(), center.z());
+    glVertex3f(center.x()+1, center.y(), center.z());
 
     glColor3f(0,1,0);
-    glVertex3f(center.x, center.y, center.z);
-    glVertex3f(center.x, center.y+1, center.z);
+    glVertex3f(center.x(), center.y(), center.z());
+    glVertex3f(center.x(), center.y()+1, center.z());
 
     glColor3f(0,0,1);
-    glVertex3f(center.x, center.y, center.z);
-    glVertex3f(center.x, center.y, center.z+1);
+    glVertex3f(center.x(), center.y(), center.z());
+    glVertex3f(center.x(), center.y(), center.z()+1);
 
     glEnd();
 }
@@ -568,10 +660,10 @@ void AMKglViewer::restartFastDrawTimer()
     emit fastDrawSet();
 }
 
-void AMKglViewer::SpecialCam::loadModelViewMatrix(bool reset) const
+void AMKglViewer::loadModelViewMatrix(bool reset) const
 {
     if(m_useNormalCamera) {
-        Camera::loadModelViewMatrix(reset);
+        //Camera::loadModelViewMatrix(reset);
         return;
     }
 
@@ -584,4 +676,68 @@ void AMKglViewer::SpecialCam::loadModelViewMatrix(bool reset) const
 
         glLoadMatrixd(m.data());
     }
+}
+
+void AMKglViewer::loadProjectionMatrix(bool reset) const {
+  // WARNING: makeCurrent must be called by every calling method
+  glMatrixMode(GL_PROJECTION);
+
+  if (reset)
+    glLoadIdentity();
+
+  computeProjectionMatrix();
+
+  glMultMatrixd(m_projectionMatrix);
+}
+
+void AMKglViewer::computeProjectionMatrix() const {
+  if (m_projectionMatrixIsUpToDate)
+    return;
+
+  const qreal ZNear = m_camera->nearPlane();
+  const qreal ZFar = m_camera->farPlane();
+
+  switch (m_camera->projectionType()) {
+  case Qt3DRender::QCameraLens::PerspectiveProjection: {
+    // #CONNECTION# all non null coefficients were set to 0.0 in constructor.
+    const qreal f = 1.0 / tan(m_camera->fieldOfView() / 2.0);
+    m_projectionMatrix[0] = f / m_camera->aspectRatio();
+    m_projectionMatrix[5] = f;
+    m_projectionMatrix[10] = (ZNear + ZFar) / (ZNear - ZFar);
+    m_projectionMatrix[11] = -1.0;
+    m_projectionMatrix[14] = 2.0 * ZNear * ZFar / (ZNear - ZFar);
+    m_projectionMatrix[15] = 0.0;
+    break;
+  }
+  default:
+  case Qt3DRender::QCameraLens::OrthographicProjection: {
+    GLdouble w, h;
+    QGLViewerTools::getOrthoWidthHeight(*m_camera, w, h);
+    m_projectionMatrix[0] = 1.0 / w;
+    m_projectionMatrix[5] = 1.0 / h;
+    m_projectionMatrix[10] = -2.0 / (ZFar - ZNear);
+    m_projectionMatrix[11] = 0.0;
+    m_projectionMatrix[14] = -(ZFar + ZNear) / (ZFar - ZNear);
+    m_projectionMatrix[15] = 1.0;
+    break;
+  }
+  }
+
+  m_projectionMatrixIsUpToDate = true;
+}
+
+void AMKglViewer::select(const QMouseEvent *event)
+{
+  // For those who don't derive but rather rely on the signal-slot mechanism.
+  Q_EMIT pointSelected(event);
+  select(event->pos());
+}
+
+void AMKglViewer::select(const QPoint &point)
+{
+    Q_UNUSED(point);
+  //beginSelection(point);
+  //drawWithNames();
+  //endSelection(point);
+  //postSelection(point);
 }

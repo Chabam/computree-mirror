@@ -1,29 +1,8 @@
 #ifndef AMKGLVIEWER_H
 #define AMKGLVIEWER_H
 
-#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#elif defined(__APPLE__) // Clang Compiler (Apple)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wint-in-bool-context"
-#endif
-#include <qglviewer.h>
-#include <camera.h>
-#if defined(_WIN32) && defined(_MSC_VER)
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(__APPLE__)
-#pragma GCC diagnostic pop
-#endif
-
 #include <Eigen/Core>
+#include <Qt3DRender/QCamera>
 
 #include "drawinfo.h"
 #include "interfaces/igraphicsdocument.h"
@@ -37,15 +16,13 @@ class ActionPickAnyElements;
  *        overload virtual pure methods to let the engine access to document,
  *        graphicsview, etc.... and be able to redraw the view.
  */
-class AMKglViewer : public QGLViewer, protected QOpenGLFunctions {
+class AMKglViewer : public QOpenGLWidget, protected QOpenGLFunctions {
 
     Q_OBJECT
 
 public:
 
-    typedef qglviewer::Camera           CameraType;
-    typedef qglviewer::Vec              VecType;
-    typedef qglviewer::Quaternion       QuatType;
+    typedef QGLCamera         CameraType;
     typedef PermanentItemSceneByModel   PermanentSceneToRender;
 
     enum RedrawMethod {
@@ -134,13 +111,15 @@ public slots:
     void redraw(RedrawMethod m = RedrawAll);
 
 protected:
-    void init() override;
+    void initializeGL() override;
     void paintGL() override;
     void paintEvent(QPaintEvent *e) override;
-    void preDraw() override;
-    void draw() override;
-    void fastDraw() override;
-    void postDraw() override;
+    void preDraw();
+    void draw();
+    void fastDraw();
+    void postDraw();
+    void QGLpreDraw();
+    void QGLpostDraw();
     virtual void subPostDraw(DrawInfo &info) { Q_UNUSED(info) }
     virtual void drawOverlay(QPainter& painter, DrawInfo &info);
 
@@ -165,18 +144,25 @@ protected:
      */
     bool isDebugModeEnabled() const;
 
+    void loadModelViewMatrix(bool reset=true) const;
+
+    void loadProjectionMatrix(bool reset=true) const;
+
+Q_SIGNALS:
+  void viewerInitialized();
+  void drawNeeded();
+  void drawFinished(bool automatic);
+  void animateNeeded();
+  void helpRequired();
+  void axisIsDrawnChanged(bool drawn);
+  void gridIsDrawnChanged(bool drawn);
+  void FPSIsDisplayedChanged(bool displayed);
+  void textIsEnabledChanged(bool enabled);
+  void cameraIsEditedChanged(bool edited);
+  void stereoChanged(bool on);
+  void pointSelected(const QMouseEvent *e);
+
 private:
-
-    class SpecialCam : public qglviewer::Camera
-    {
-    public:
-        SpecialCam() : qglviewer::Camera(), m_useNormalCamera(true) {}
-        SpecialCam(const qglviewer::Camera& other) : qglviewer::Camera(other), m_useNormalCamera(true) {}
-
-        void loadModelViewMatrix(bool reset=true) const;
-
-        bool    m_useNormalCamera;
-    };
 
     struct RenderParams {
         RenderParams() {
@@ -191,7 +177,7 @@ private:
     IGraphicsDocument*          m_document;
     PermanentSceneToRender*     m_permanentItemScene;
     QOpenGLContext*             m_newOpenglContext;
-    SpecialCam*                 m_camera;
+    CameraType*                 m_camera;
     RenderParams                m_params;
     QTimer                      m_fastDrawTimer;
     bool                        m_inFastDraw;
@@ -200,9 +186,53 @@ private:
     ActionPickAnyElements*      m_pickingAction;
     bool                        m_debugModeEnabled;
     QGLFramebufferObject*       m_glBuffer;
+    mutable GLdouble            m_projectionMatrix[16];
+    mutable bool                m_projectionMatrixIsUpToDate;
+    QColor                      m_foregroundColor;
+    QColor                      m_backgroundColor;
     bool                        m_takeScreenshot;
     double                      m_screenshotMultiplicationFactor;
+    bool                        m_useNormalCamera;
+    QString                     m_snapshotFileName;
+    QString                     m_snapshotFormat;
+    bool                        m_axisIsDrawn;
+    bool                        m_gridIsDrawn;
+    bool                        m_FPSIsDisplayed;
+    bool                        m_cameraIsEdited;
+    bool                        m_textIsEnabled;
+    bool                        m_stereoDisplay;
+    bool                        m_displayMessage;
+    QString                     m_message;
 
+public Q_SLOTS:
+    void setAxisIsDrawn(bool draw = true)
+    {
+        m_axisIsDrawn = draw;
+        //Q_EMIT axisIsDrawnChanged(draw);
+        update();
+    }
+    void setGridIsDrawn(bool draw = true)
+    {
+        m_gridIsDrawn = draw;
+        //Q_EMIT gridIsDrawnChanged(draw);
+        update();
+    }
+    void setFPSIsDisplayed(bool display = true)
+    {
+        m_FPSIsDisplayed = display;
+        //Q_EMIT FPSIsDisplayedChanged(display);
+        update();
+    }
+
+  virtual void select(const QMouseEvent *event);
+  virtual void select(const QPoint &point);
+
+public:
+    bool axisIsDrawn() const { return m_axisIsDrawn; }
+    bool gridIsDrawn() const { return m_gridIsDrawn; }
+    bool FPSIsDisplayed() const { return m_FPSIsDisplayed; }
+
+private:
     /**
      * @brief Check if opengl has send errors and add it to log if true
      */
@@ -212,6 +242,8 @@ private:
      * @brief Draw the axes at pivot point of camera
      */
     void drawOrigineAxes();
+
+    void computeProjectionMatrix() const;
 
 private slots:
     /**

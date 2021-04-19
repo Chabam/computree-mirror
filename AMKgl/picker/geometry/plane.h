@@ -1,27 +1,6 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#elif defined(__APPLE__) // Clang Compiler (Apple)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wint-in-bool-context"
-#endif
-#include <qglviewer.h>
-#if defined(_WIN32) && defined(_MSC_VER)
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(__APPLE__)
-#pragma GCC diagnostic pop
-#endif
-
 #include <Eigen/Dense>
 
 /**
@@ -42,10 +21,10 @@ public:
     /**
      * @brief Construct a plane by 4 points
      */
-    PlaneT(const qglviewer::Vec &v1,
-          const qglviewer::Vec &v2,
-          const qglviewer::Vec &v3,
-          const qglviewer::Vec &v4)
+    PlaneT(const Eigen::Vector3d &v1,
+           const Eigen::Vector3d &v2,
+           const Eigen::Vector3d &v3,
+           const Eigen::Vector3d &v4)
     {
         set(v1, v2, v3, v4);
     }
@@ -61,28 +40,28 @@ public:
     /**
      * @brief Modify the plane by 4 points
      */
-    void set(const qglviewer::Vec &v1,
-             const qglviewer::Vec &v2,
-             const qglviewer::Vec &v3,
-             const qglviewer::Vec &v4)
+    void set(const Eigen::Vector3d &v1,
+             const Eigen::Vector3d &v2,
+             const Eigen::Vector3d &v3,
+             const Eigen::Vector3d &v4)
     {
-        qglviewer::Vec norm = (v2-v1)^(v3-v2);
+        Eigen::Vector3d norm = (v2-v1).cross(v3-v2);
         const double length = norm.norm();
 
         if (length>1e-6)
             norm/= length;
         else
-            norm.setValue(0.0f,0.0f,0.0f);
+            norm.setZero();
 
         m_fv[0] = norm[0];
         m_fv[1] = norm[1];
         m_fv[2] = norm[2];
-        m_fv[3] = -(v1*norm);
+        m_fv[3] = -(v1.dot(norm));
 
-        m_vertex[0] = EigenVec3Type(v1.x, v1.y, v1.z);
-        m_vertex[1] = EigenVec3Type(v2.x, v2.y, v2.z);
-        m_vertex[2] = EigenVec3Type(v3.x, v3.y, v3.z);
-        m_vertex[3] = EigenVec3Type(v4.x, v4.y, v4.z);
+        m_vertex[0] = EigenVec3Type(v1.x(), v1.y(), v1.z());
+        m_vertex[1] = EigenVec3Type(v2.x(), v2.y(), v2.z());
+        m_vertex[2] = EigenVec3Type(v3.x(), v3.y(), v3.z());
+        m_vertex[3] = EigenVec3Type(v4.x(), v4.y(), v4.z());
     }
 
     /**
@@ -94,11 +73,10 @@ public:
              const Eigen::Matrix<OtherScalar, 3, 1> &v3,
              const Eigen::Matrix<OtherScalar, 3, 1> &v4)
     {
-        set(qglviewer::Vec(v1[0], v1[1], v1[2]),
-            qglviewer::Vec(v2[0], v2[1], v2[2]),
-            qglviewer::Vec(v3[0], v3[1], v3[2]),
-            qglviewer::Vec(v4[0], v4[1], v4[2]));
-
+        set(Eigen::Vector3d(v1[0], v1[1], v1[2]),
+            Eigen::Vector3d(v2[0], v2[1], v2[2]),
+            Eigen::Vector3d(v3[0], v3[1], v3[2]),
+            Eigen::Vector3d(v4[0], v4[1], v4[2]));
     }
 
     /**

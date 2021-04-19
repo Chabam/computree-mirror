@@ -1,37 +1,17 @@
 #ifndef QGLVIEWERTOOLS_H
 #define QGLVIEWERTOOLS_H
 
-#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#elif defined(__APPLE__) // Clang Compiler (Apple)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wint-in-bool-context"
-#endif
-#include <qglviewer.h>
-#if defined(_WIN32) && defined(_MSC_VER)
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(__APPLE__)
-#pragma GCC diagnostic pop
-#endif
-
 #include <Eigen/Core>
+#include <QGL>
 
 class QGLViewerTools {
 public:
-    static inline Eigen::Vector3d vecToEigen(const qglviewer::Vec& v) {
-        return Eigen::Vector3d(v.x, v.y, v.z);
+    static inline Eigen::Vector3d vecToEigen(const QVector3D& v) {
+        return Eigen::Vector3d(v.x(), v.y(), v.z());
     }
 
-    static inline qglviewer::Vec eigenToVec(const Eigen::Vector3d& v) {
-        return qglviewer::Vec(v[0], v[1], v[2]);
+    static inline QVector3D eigenToVec(const Eigen::Vector3d& v) {
+        return QVector3D(v[0], v[1], v[2]);
     }
 
     static inline Eigen::Matrix4d doubleMatrixToEigen(GLdouble modelViewMatrix[16]) {
