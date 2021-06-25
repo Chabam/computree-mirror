@@ -32,6 +32,8 @@ public:
     NodeDataType dataType(PortType portType,
                           PortIndex portIndex) const override;
 
+    void setInData(std::shared_ptr<NodeData> nodeData, PortIndex port) override { Q_UNUSED(nodeData); Q_UNUSED(port); }
+
     std::shared_ptr<NodeData> outData(PortIndex port) const override;
 
     std::shared_ptr<NodeData> inData(PortIndex port) const override;
