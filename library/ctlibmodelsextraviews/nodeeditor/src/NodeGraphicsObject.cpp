@@ -342,12 +342,11 @@ mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     event->ignore();
   }
 
-  // RM : Move nodes only on y-axis
-  //QRectF r = scene()->sceneRect();
+  QRectF r = scene()->sceneRect();
 
-  //r = r.united(mapToScene(boundingRect()).boundingRect());
+  r = r.united(mapToScene(boundingRect()).boundingRect());
 
-  //scene()->setSceneRect(r);
+  scene()->setSceneRect(r);
 }
 
 

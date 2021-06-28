@@ -266,7 +266,7 @@ void
 FlowView::
 wheelEvent(QWheelEvent *event)
 {
-  /*QPoint delta = event->angleDelta();
+  QPoint delta = event->angleDelta();
 
   if (delta.y() == 0)
   {
@@ -274,7 +274,7 @@ wheelEvent(QWheelEvent *event)
     return;
   }
 
-  double const d = delta.y() / std::abs(delta.y());
+  /*double const d = delta.y() / std::abs(delta.y());
 
   if (d > 0.0)
     scaleUp();
@@ -282,23 +282,32 @@ wheelEvent(QWheelEvent *event)
     scaleDown();*/
 
   // RM : move scene/nodes only vertically
+  setSceneRect(sceneRect().translated(0.0, -delta.y()));
   QGraphicsView::wheelEvent(event);
-
-  Node* rightNode = _scene->allNodes().at(0);
-  if(_scene->allNodes().at(1)->nodeGraphicsObject().ref())
-      rightNode = _scene->allNodes().at(1);
-  QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
-  QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
-
-  QRectF sceneRectArea = mapToScene(_scene->views().first()->viewport()->geometry()).boundingRect();
-
-  if(rightNodePos.y() < sceneRectArea.top())
-      rightNodePos.setY(sceneRectArea.top());
-  if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom())
-      rightNodePos.setY(sceneRectArea.bottom() - rightNodeRect.height());
-
-  _scene->setNodePosition(*rightNode,rightNodePos);
+  limitNodeToRect();
 }
+
+
+void
+FlowView::
+limitNodeToRect()
+{
+    Node* rightNode = scene()->allNodes().at(0);
+    if(scene()->allNodes().at(1)->nodeGraphicsObject().ref())
+        rightNode = scene()->allNodes().at(1);
+    QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
+    QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
+
+    QRectF sceneRectArea = mapToScene(scene()->views().first()->viewport()->geometry()).boundingRect();
+
+    if(rightNodePos.y() < sceneRectArea.top())
+        rightNodePos.setY(sceneRectArea.top());
+    if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom())
+        rightNodePos.setY(sceneRectArea.bottom() - rightNodeRect.height());
+
+    scene()->setNodePosition(*rightNode,rightNodePos);
+}
+
 
 void
 FlowView::
@@ -450,20 +459,7 @@ mouseMoveEvent(QMouseEvent *event)
       //setSceneRect(sceneRect().translated(difference.x(), difference.y()));
       setSceneRect(sceneRect().translated(0.0, difference.y())); // Vertical move only
 
-      Node* rightNode = _scene->allNodes().at(0);
-      if(_scene->allNodes().at(1)->nodeGraphicsObject().ref())
-          rightNode = _scene->allNodes().at(1);
-      QPointF rightNodePos = rightNode->nodeGraphicsObject().pos();
-      QRectF rightNodeRect = rightNode->nodeGraphicsObject().boundingRect();
-
-      QRectF sceneRectArea = mapToScene(_scene->views().first()->viewport()->geometry()).boundingRect();
-
-      if(rightNodePos.y() < sceneRectArea.top())
-          rightNodePos.setY(sceneRectArea.top());
-      if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom())
-          rightNodePos.setY(sceneRectArea.bottom() - rightNodeRect.height());
-
-      _scene->setNodePosition(*rightNode,rightNodePos);
+      limitNodeToRect();
     }
   }
 }
