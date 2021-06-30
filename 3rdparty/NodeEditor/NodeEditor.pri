@@ -1,5 +1,5 @@
 # uncomment to compile as static or dynamic library
-#DEFINES += NODE_EDITOR_STATIC
+DEFINES += NODE_EDITOR_STATIC
 #DEFINES += NODE_EDITOR_SHARED
 
 HEADERS += $$files($$PWD/include/nodes/*, true)

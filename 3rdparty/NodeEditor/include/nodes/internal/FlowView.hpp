@@ -36,6 +36,8 @@ public:
 
   bool isReadOnly() const;
 
+  void limitNodeToRect();
+
 public Q_SLOTS:
 
   virtual void
