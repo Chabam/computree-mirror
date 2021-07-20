@@ -18,9 +18,7 @@
 #include "readers/tools/gdal/ct_gdaltools.h"
 #endif
 
-#ifdef USE_OPENCV
 #include "ct_itemdrawable/ct_image2d.h"
-#endif
 
 class PB_StepExportAttributesInLoop: public CT_AbstractStep
 {
@@ -62,7 +60,6 @@ private:
     QMap<QString, OGRFieldType>  _ogrTypes;
 #endif
 
-#ifdef USE_OPENCV
     class RastersMap : public QMap<QString, CT_Image2D<double>*>
     {
     public:
@@ -72,7 +69,6 @@ private:
             qDeleteAll(this->begin(), this->end());
         }
     };
-#endif
 
     CT_HandleInResultGroup<>                                        mInResult;
     CT_HandleInStdZeroOrMoreGroup                                   mInRootGroup;
@@ -112,9 +108,7 @@ private:
     QStringList _outRasterFolder;
     bool        _subFolders;
 
-#ifdef USE_OPENCV
     QString     mGrid2DExporterUniqueName;
-#endif
 
     QString createExportBaseName(bool& first) const;
     void computeModelsKeysAndNamesAndOgrTypes();

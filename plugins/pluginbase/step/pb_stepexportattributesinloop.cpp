@@ -1,10 +1,7 @@
 #include "pb_stepexportattributesinloop.h"
 
-#ifdef USE_OPENCV
 #include "ct_itemdrawable/ct_image2d.h"
 #include "exporters/grid2d/pb_grid2dexporter.h"
-#endif
-
 #include "ct_log/ct_logmanager.h"
 
 #include <QFile>
@@ -30,10 +27,8 @@ PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop() : SuperClass()
 
     _subFolders = true;
 
-#ifdef USE_OPENCV
     mGrid2DExporterUniqueName = PB_Grid2DExporter().uniqueName();
     _rasterDriverName = mGrid2DExporterUniqueName;
-#endif
 
 #ifdef USE_GDAL
     _vectorDriverName = DEF_ESRI_SHP;
@@ -73,11 +68,9 @@ void PB_StepExportAttributesInLoop::fillPreInputConfigurationDialog(CT_StepConfi
 {
     preInputConfigDialog->addBool(tr("Activer export ASCII tabulaire (1 fichier en tout)"), "", tr("Activer"), _asciiExport);
 
-#ifdef USE_OPENCV
     preInputConfigDialog->addEmpty();
     preInputConfigDialog->addBool(tr("Activer export raster (1 fichier / tour / métrique)"), "", tr("Activer"), _rasterExport);
     preInputConfigDialog->addTitle(tr("L'export raster nécessite une grille de placettes (désactiver si pas de résultat valide)"));
-#endif
 
 #ifdef USE_GDAL
     preInputConfigDialog->addEmpty();
@@ -95,10 +88,8 @@ void PB_StepExportAttributesInLoop::declareInputModels(CT_StepInModelStructureMa
     manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
     manager.addGroup(mInRootGroup, mInGroupMain);
 
-#ifdef USE_OPENCV
     if (_rasterExport)
         manager.addItem(mInGroupMain, mInPlotListInGrid, tr("Grille de placettes"));
-#endif
 
     manager.addGroup(mInGroupMain, mInGroupChild);
 
@@ -130,7 +121,6 @@ void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConf
         postInputConfigDialog->addFileChoice(tr("Choix du fichier"), CT_FileChoiceButton::OneNewFile, tr("Fichier texte (*.txt)"), _outASCIIFileName);
     }
 
-#ifdef USE_OPENCV
     if (_rasterExport)
     {
         QStringList driversR;
@@ -147,7 +137,6 @@ void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConf
         postInputConfigDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outRasterFolder);
         postInputConfigDialog->addBool(tr("Créer un sous-dossier par métrique"), "", "", _subFolders);
     }
-#endif
 
 #ifdef USE_GDAL
     if (_vectorExport)
@@ -166,7 +155,6 @@ void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConf
 
 void PB_StepExportAttributesInLoop::compute()
 {
-    _modelsKeys.clear();
     _names.clear();
 
     QScopedPointer<QFile> fileASCII;
@@ -177,6 +165,7 @@ void PB_StepExportAttributesInLoop::compute()
 
     if (firstTurnFromCounter)
     {
+        _modelsKeys.clear();
         computeModelsKeysAndNamesAndOgrTypes();
 
         if(isStopped())
@@ -184,6 +173,7 @@ void PB_StepExportAttributesInLoop::compute()
 
         createFieldsNamesFileForVectorsIfNecessary();
     }
+
 
     if(isStopped() || !exportInAsciiIfNecessary(fileASCII, streamASCII, firstTurnFromCounter))
         return;
@@ -204,7 +194,6 @@ void PB_StepExportAttributesInLoop::compute()
         if(isStopped())
             return;
 
-#ifdef USE_OPENCV
         RastersMap rasters;
         if (_rasterExport)
         {
@@ -223,7 +212,7 @@ void PB_StepExportAttributesInLoop::compute()
                 }
             }
         }
-#endif
+
         auto iteratorGroupsChild = grpMain->groups(mInGroupChild);
 
         for(const CT_StandardItemGroup* grp : iteratorGroupsChild)
@@ -279,6 +268,7 @@ void PB_StepExportAttributesInLoop::compute()
                 vectorFeature->SetGeometry(&pt);
             }
 #endif
+
             if (!streamASCII.isNull())
             {
                 (*streamASCII.data()) << exportBaseName << "\t";
@@ -297,6 +287,7 @@ void PB_StepExportAttributesInLoop::compute()
                 {
                     (*streamASCII.data()) << pair.second->toString(pair.first, nullptr);
                 }
+
 #ifdef USE_GDAL
                 if (vectorLayer != nullptr)
                 {
@@ -326,7 +317,6 @@ void PB_StepExportAttributesInLoop::compute()
                 }
 #endif
 
-#ifdef USE_OPENCV
                 CT_Image2D<double>* raster = rasters.value(key, nullptr);
 
                 if (_rasterExport && raster != nullptr)
@@ -338,7 +328,6 @@ void PB_StepExportAttributesInLoop::compute()
                     else
                         raster->setValueAtCoords(x, y, val);
                 }
-#endif
                 if (hasMetricsToExport && !streamASCII.isNull())
                 {
                     if(i < _modelsKeys.size() - 1) {(*streamASCII.data()) << "\t";} else {(*streamASCII.data()) << "\n";}
@@ -351,7 +340,6 @@ void PB_StepExportAttributesInLoop::compute()
 #endif
         }
 
-#ifdef USE_OPENCV
         if (_rasterExport)
         {
             QMapIterator<QString, CT_Image2D<double>*> itRaster(rasters);
@@ -400,7 +388,6 @@ void PB_StepExportAttributesInLoop::compute()
                 }
             }
         }
-#endif
 
     }
 }
