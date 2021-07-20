@@ -36,17 +36,31 @@ win32 {
 
     # Deployment using WinDeployQt
     qt_deploy_options = --force --no-translations --angle --compiler-runtime --plugindir $$LIB/Qt --libdir $$LIB/Qt
-    CONFIG(release, debug|release) : qt_deploy_options += --release
-    CONFIG(debug,   debug|release) : qt_deploy_options += --debug
+    CONFIG(release, debug|release) {
+        qt_deploy_options += --release
+    }
+    CONFIG(debug,   debug|release) {
+        qt_deploy_options += --debug
+    }
 
     qt_deploy_cmd1 = $$[QT_INSTALL_BINS]/windeployqt.exe $$DESTDIR $$qt_deploy_options &&
     qt_deploy_cmd2 = copy "distrib\windows\qt.conf" $$WIN_PATH && copy "distrib\windows\CompuTreeGui.cmd" $$WIN_PATH &&
     qt_deploy_cmd3 = move $$WIN_PATH\libraries\Qt\opengl32sw.dll $$WIN_PATH\opengl32.dll &&
-    qt_deploy_cmd4 = move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH &&
-    qt_deploy_cmd5 = move $$WIN_PATH\languages\release\*.qm $$WIN_PATH\languages\
+    CONFIG(release, debug|release) {
+        qt_deploy_cmd4 = move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH &&
+        qt_deploy_cmd5 = move $$WIN_PATH\languages\release\*.qm $$WIN_PATH\languages\
+    }
+    CONFIG(debug,   debug|release) {
+        qt_deploy_cmd5 = move $$WIN_PATH\languages\debug\*.qm $$WIN_PATH\languages\
+    }
 
     qt_deploy.path = $$DESTDIR
-    qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5
+    CONFIG(release, debug|release) {
+        qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5
+    }
+    CONFIG(debug,   debug|release) {
+        qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd5
+    }
 
     INSTALLS += qt_deploy
 }
