@@ -19,6 +19,7 @@ template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::I
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_ZLEVEL_ENABLED = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeZLevelEnabled();
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_ZLEVEL_VALUE = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeZLevelValue();
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_SHOW_GRID = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeShowGrid();
+template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_SHOW_NA = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeShowNA();
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_CLUSTER_MODE = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeClusterMode();
 
 template< typename DataT >
@@ -46,6 +47,7 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
     bool fixerZ = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_ENABLED).toBool();
     double z = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_ZLEVEL_VALUE).toDouble();
     bool show_grid = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_SHOW_GRID).toBool();
+    bool show_na = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_SHOW_NA).toBool();
     bool clusterMode = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_CLUSTER_MODE).toBool();
 
     double amplitude = item.dataMax() - item.dataMin();
@@ -275,7 +277,10 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                 Eigen::Vector2d tLeft(x - demiRes, y + demiRes);
                 Eigen::Vector2d bRight(tLeft(0)+item.resolution(), tLeft(1)-item.resolution());
 
-                painter.fillRectXY(tLeft, bRight, z_val);
+                if (value != item.NA() || show_na)
+                {
+                    painter.fillRectXY(tLeft, bRight, z_val);
+                }
 
                 if (show_grid)
                 {
@@ -299,6 +304,7 @@ CT_ItemDrawableConfiguration CT_StandardImage2DDrawManager<DataT>::createDrawCon
     item.addNewConfiguration(staticInitConfigMapModeZLevelEnabled(), QObject::tr("Mode Raster : Fixer le niveau Z"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(staticInitConfigMapModeZLevelValue(), QObject::tr("Mode Raster : Niveau Z (m)"), CT_ItemDrawableConfiguration::Double, 0);
     item.addNewConfiguration(staticInitConfigMapModeShowGrid(), QObject::tr("Mode Raster : Afficher grille"), CT_ItemDrawableConfiguration::Bool, false);
+    item.addNewConfiguration(staticInitConfigMapModeShowNA(), QObject::tr("Mode Raster : Afficher NA"), CT_ItemDrawableConfiguration::Bool, true);
 
     item.addNewConfiguration(staticInitConfig3DModeEnabled(), QObject::tr("Mode 3D"), CT_ItemDrawableConfiguration::Bool, !_defaultMapMode);
     item.addNewConfiguration(staticInitConfig3DModeLinkPointsEnabled(), QObject::tr("Mode 3D    : Relier les centres de cases"), CT_ItemDrawableConfiguration::Bool, false);
@@ -371,6 +377,12 @@ template< typename DataT >
 QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeShowGrid()
 {
     return "IM2D_SHGRD";
+}
+
+template< typename DataT >
+QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeShowNA()
+{
+    return "IM2D_SHNA";
 }
 
 template< typename DataT >

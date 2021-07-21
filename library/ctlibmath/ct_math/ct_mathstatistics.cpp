@@ -7,7 +7,7 @@ double CT_MathStatistics::computeQuantile(QList<double> &values, double quantile
         std::sort(values.begin(), values.end());
     }
 
-    double n = quantile*values.size();
+    double n = quantile*(values.size() - 1);
     int intPart = (int) n;
     double fractPart = n - (double)intPart;
 
