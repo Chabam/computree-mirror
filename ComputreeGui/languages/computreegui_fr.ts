@@ -693,7 +693,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Step Description</source>
-        <translation>Decription de l&apos;étape</translation>
+        <translation>Description de l&apos;étape</translation>
     </message>
     <message>
         <source>Plugin and Step citations</source>
