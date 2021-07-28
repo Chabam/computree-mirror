@@ -113,7 +113,13 @@ QtNodes::PortIndex CT_ModelFlowDataModel::portIndexOfModel(const CT_AbstractMode
 void CT_ModelFlowDataModel::recursiveConstructPorts(QModelIndex current, PortIndex& portIndex)
 {
     CT_AbstractModel* model = static_cast<CT_AbstractModel*>(current.data(Qt::UserRole).value<void*>());
-    mModelByPortIndex.insert(portIndex++, PortInfo{model, current.data(Qt::UserRole+1).toString()});
+    //QString title = current.data(Qt::UserRole+1).toString();
+    // RM : use Id of PortInfo to customize connection/port colors
+    QString title = "ITEM";
+    if(portIndex == 0) title = "GROUP";
+    if(mModel->rowCount(current) == 0) title = "ATTRIBUTE";
+
+    mModelByPortIndex.insert(portIndex++, PortInfo{model, title});
 
     const int nR = mModel->rowCount(current);
 

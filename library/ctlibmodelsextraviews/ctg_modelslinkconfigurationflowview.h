@@ -77,6 +77,9 @@ public:
 
     bool isReadOnly() const final;
 
+    void scaleUp();
+    void scaleDown();
+
 public slots:
     /**
      * @brief Set which "input result model possibility" to display

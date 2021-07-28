@@ -135,6 +135,10 @@ loadJsonFromByteArray(QByteArray const &byteArray)
   CONNECTION_STYLE_READ_COLOR(obj, SelectedHaloColor);
   CONNECTION_STYLE_READ_COLOR(obj, HoveredColor);
 
+  CONNECTION_STYLE_READ_COLOR(obj, GroupColor);
+  CONNECTION_STYLE_READ_COLOR(obj, ItemColor);
+  CONNECTION_STYLE_READ_COLOR(obj, AttributeColor);
+
   CONNECTION_STYLE_READ_FLOAT(obj, LineWidth);
   CONNECTION_STYLE_READ_FLOAT(obj, ConstructionLineWidth);
   CONNECTION_STYLE_READ_FLOAT(obj, PointDiameter);
@@ -163,7 +167,22 @@ QColor
 ConnectionStyle::
 normalColor(QString typeId) const
 {
-  std::size_t hash = qHash(typeId);
+  if(typeId == "GROUP")
+      return GroupColor;
+      //return QColor(QRgb(0xba220f)); // Brick Red
+
+  if(typeId == "ITEM")
+      return ItemColor;
+      //return QColor(QRgb(0x0f52ba)); // Saphir Blue
+
+  if(typeId == "ATTRIBUTE")
+      return AttributeColor;
+      //return QColor(QRgb(0x228b22)); // Forest Green
+
+  // Should never finish here
+  return QColor(QRgb(0x808080)); // Middle Gray
+
+  /*std::size_t hash = qHash(typeId);
 
   std::size_t const hue_range = 0xFF;
 
@@ -175,14 +194,7 @@ normalColor(QString typeId) const
 
   return QColor::fromHsl(int(hue),
                          int(sat),
-                         160);
-
-/*if(num == -1)     // Optional
-    return QColor(QRgb(0x808080)); // Middle Gray
-  else if(num == 0) // Completed connection set
-    return QColor(QRgb(0x0f52ba)); // Saphir Blue
-  else              // Incomplete set
-    return QColor(QRgb(0xba220f)); // Brick Red*/
+                         160);*/
 }
 
 
@@ -209,6 +221,26 @@ hoveredColor() const
   return HoveredColor;
 }
 
+QColor
+ConnectionStyle::
+groupColor() const
+{
+  return GroupColor;
+}
+
+QColor
+ConnectionStyle::
+itemColor() const
+{
+  return ItemColor;
+}
+
+QColor
+ConnectionStyle::
+attributeColor() const
+{
+  return AttributeColor;
+}
 
 float
 ConnectionStyle::

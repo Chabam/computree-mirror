@@ -116,7 +116,8 @@ drawSketchLine(QPainter * painter,
     QPen p;
     p.setWidth(connectionStyle.constructionLineWidth());
     p.setColor(connectionStyle.constructionColor());
-    p.setStyle(Qt::DashLine);
+    // RM : remove dashed line for preview connections
+    //p.setStyle(Qt::DashLine);
 
     painter->setPen(p);
     painter->setBrush(Qt::NoBrush);

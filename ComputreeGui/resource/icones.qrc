@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/Icones">
+	    <file>Icones/plus.png</file>
+	    <file>Icones/minus.png</file>
         <file>Icones/database.png</file>
         <file>Icones/media-floppy.png</file>
         <file>Icones/preferences-system.png</file>

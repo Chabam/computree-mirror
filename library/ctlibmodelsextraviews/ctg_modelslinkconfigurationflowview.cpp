@@ -20,6 +20,8 @@
 
 #include "PortType.hpp"
 
+#include <QPushButton>
+#include <QGraphicsProxyWidget>
 #include <QTreeWidget>
 #include <QHeaderView>
 #include <QScrollBar>
@@ -75,6 +77,30 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
     hgi->setToolTip(tr("Tooltip à modifier par Alexandre Piboule. Il suffit de faire rechercher dans Qt Creator pour me trouver !"));
     mFlowScene->addItem(hgi);
 
+    // RM : Zoom buttons
+    QPushButton* sizeUp = new QPushButton();
+    QPushButton* sizeDown = new QPushButton();
+    QPixmap pixmapUp(":/Icones/Icones/plus.png");
+    QPixmap pixmapDown(":/Icones/Icones/minus.png");
+    QIcon iconUp = QIcon(pixmapUp);
+    QIcon iconDown = QIcon(pixmapDown);
+    sizeUp->setIcon(iconUp);
+    sizeDown->setIcon(iconDown);
+    sizeUp->setIconSize(pixmapUp.rect().size());
+    sizeDown->setIconSize(pixmapDown.rect().size());
+    sizeUp->setStyleSheet("border: 0px; background-color: rgba(0,0,0, 0);");
+    sizeDown->setStyleSheet("border: 0px; background-color: rgba(0,0,0, 0);");
+
+    QGraphicsProxyWidget* itemUp = mFlowScene->addWidget(sizeUp);
+    itemUp->setPos(900,-90);
+    itemUp->setZValue(1);
+    QGraphicsProxyWidget* itemDown = mFlowScene->addWidget(sizeDown);
+    itemDown->setPos(900,-40);
+    itemDown->setZValue(1);
+
+    connect(sizeUp, &QPushButton::pressed, this, &CTG_ModelsLinkConfigurationFlowView::scaleUp);
+    connect(sizeDown, &QPushButton::pressed, this, &CTG_ModelsLinkConfigurationFlowView::scaleDown);
+
     connect(mFlowScene, &FlowScene::connectionSelected, this, &CTG_ModelsLinkConfigurationFlowView::connectionSelected);
     connect(mFlowScene, &FlowScene::connectionDoubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::connectionDoubleClicked);
     connect(mFlowScene, &FlowScene::nodeSelected, this, &CTG_ModelsLinkConfigurationFlowView::nodeSelected);
@@ -83,17 +109,18 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
 
     ui->verticalLayout->addWidget(mFlowView);
 
-    ConnectionStyle::setConnectionStyle(
-       R"(
-     {
-       "ConnectionStyle": {
-         "UseDataDefinedColors": true
-       }
-     }
-     )");
-
     // Nothing was already clicked
     mFirstStatePressed = 0;
+}
+
+void CTG_ModelsLinkConfigurationFlowView::scaleUp()
+{
+    mFlowView->scaleUp();
+}
+
+void CTG_ModelsLinkConfigurationFlowView::scaleDown()
+{
+    mFlowView->scaleDown();
 }
 
 CTG_ModelsLinkConfigurationFlowView::~CTG_ModelsLinkConfigurationFlowView()
@@ -187,7 +214,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
         }
 
         mInNode = &mFlowScene->createNode(std::move(inType));
-        mInNode->nodeGraphicsObject().setPos(mInModelPortType == PT_OUT ? -100 : 450, 0);
+        mInNode->nodeGraphicsObject().setPos(mInModelPortType == PT_OUT ? 0 : 450, 0);
         mInNode->nodeGraphicsObject().setRef(true);
         mFlowScene->nodePlaced(*mInNode);
 
@@ -200,7 +227,7 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
         }
 
         mOutNode = &mFlowScene->createNode(std::move(outType));
-        mOutNode->nodeGraphicsObject().setPos(mInModelPortType == PT_IN ? -100 : 450, 0);
+        mOutNode->nodeGraphicsObject().setPos(mInModelPortType == PT_IN ? 0 : 450, 0);
         mOutNode->nodeGraphicsObject().setRef(false);
         mFlowScene->nodePlaced(*mOutNode);
 
@@ -290,28 +317,32 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
         const CT_InAbstractSingularItemModel* inItemModel = dynamic_cast<const CT_InAbstractSingularItemModel*>(child);
         const CT_InAbstractItemAttributeModel* inItemAttributeModel = dynamic_cast<const CT_InAbstractItemAttributeModel*>(child);
         const QString extraName = (inItemModel != nullptr) ? inItemModel->itemNameFromType() : ((inItemAttributeModel != nullptr) ? inItemAttributeModel->valueTypeToString() : QString());
-        const QString displayableName = child->displayableName() + (extraName.isEmpty() ? QString() : tr(" (%1)").arg(extraName));
+        const QString displayableName = child->displayableName();
+        const QString displayableType = extraName.isEmpty() ? QString() : tr(" (%1)").arg(extraName);
+
+        // RM : remove the first useless root group line
+        if(displayableName == "*")
+            return true;
 
         QTreeWidgetItem* inTreeitem = new QTreeWidgetItem(inItems.value(child->parentModel(), nullptr), QStringList(displayableName));
         inTreeitem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(const_cast<CT_InAbstractModel*>(child))));
         int min_connection = child->minimumNumberOfPossibilityToSelect();
         int max_connection = child->maximumNumberOfPossibilityThatCanBeSelected();
         if(max_connection == -1)
-            inTreeitem->setText(1, "["+QString().setNum(min_connection)+"+]");
+            inTreeitem->setText(1, "0/"+QString().setNum(min_connection)+"+");
         else {
             if(min_connection == max_connection)
-                inTreeitem->setText(1, "["+QString().setNum(min_connection)+"]");
+                inTreeitem->setText(1, "0/"+QString().setNum(min_connection));
             else
-                inTreeitem->setText(1, "["+QString().setNum(min_connection)+"-"+QString().setNum(max_connection)+"]");
+                inTreeitem->setText(1, "0/"+QString().setNum(min_connection)+"-"+QString().setNum(max_connection));
         }
         inTreeitem->setData(0, Qt::UserRole+1, QString().setNum(inItems.size()*100));
-        inTreeitem->setToolTip(0, tr("%1 : %2").arg(displayableName).arg(child->detailledDescription()));
+        inTreeitem->setToolTip(0, tr("%1%2: %3\nDescription:\n%4").arg(displayableName, displayableType, child->shortDescription(), child->detailledDescription()));
 
         const bool obligatory = child->parentModel() == nullptr ? child->isObligatory() : child->recursiveAtLeastOneChildrenOrThisIsObligatory();
 
         QFont font = inTreeitem->font(0);
         font.setItalic(!obligatory);
-        font.setBold(obligatory);
         inTreeitem->setFont(0, font);
         inTreeitem->setFont(1, font);
 
@@ -361,18 +392,10 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->expandAll();
     mOutTreeWidget->expandAll();
 
-    mInTreeWidget->sortItems(0, Qt::SortOrder::AscendingOrder);
-    mOutTreeWidget->sortItems(0, Qt::SortOrder::AscendingOrder);
-
     mInTreeWidget->resizeColumnToContents(0);
     mOutTreeWidget->resizeColumnToContents(0);
     mInTreeWidget->resizeColumnToContents(1);
     mOutTreeWidget->resizeColumnToContents(1);
-
-    //int InWidth = static_cast<RowDelegate*>(mInTreeWidget->itemDelegate())->maxWidth + 120;
-    //int OutWidth = static_cast<RowDelegate*>(mOutTreeWidget->itemDelegate())->maxWidth + 120;
-    //if(InWidth < 200) InWidth = 200;
-    //if(OutWidth < 200) OutWidth = 200;
 
     int InWidth  = mInTreeWidget->columnWidth(0)  + mInTreeWidget->columnWidth(1)  + 10;
     int OutWidth = mOutTreeWidget->columnWidth(0) + mOutTreeWidget->columnWidth(1) + 10;
@@ -387,13 +410,7 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     connect(mOutTreeWidget, &QTreeWidget::entered, [this](const QModelIndex& index) { convertPreviewConnectionBetweenPreviousIndexClickedAndIndexEnteredToConnection(index, true); });
 
     connect(mInTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
-    connect(mOutTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
-
-    //connect(mInTreeWidget, &QTreeWidget::collapsed, [this](const QModelIndex& index) { Q_UNUSED(index); update(); });
-    //connect(mOutTreeWidget, &QTreeWidget::collapsed, [this](const QModelIndex& index) { Q_UNUSED(index); update(); });
-
-    //connect(mInTreeWidget, &QTreeWidget::expanded, [this](const QModelIndex& index) { Q_UNUSED(index); update(); });
-    //connect(mOutTreeWidget, &QTreeWidget::expanded, [this](const QModelIndex& index) { Q_UNUSED(index); update(); });
+    //connect(mOutTreeWidget, &QTreeWidget::customContextMenuRequested, this, &CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested);
 }
 
 QTreeWidgetItem* CTG_ModelsLinkConfigurationFlowView::createOrGetOutTreeItemForModel(CT_AbstractModel* model, QHash<const CT_AbstractModel*, QTreeWidgetItem*>& outItems)
@@ -419,13 +436,14 @@ QTreeWidgetItem* CTG_ModelsLinkConfigurationFlowView::createOrGetOutTreeItemForM
     const CT_OutAbstractSingularItemModel* outItemModel = dynamic_cast<const CT_OutAbstractSingularItemModel*>(model);
     const CT_OutAbstractItemAttributeModel* outItemAttributeModel = dynamic_cast<const CT_OutAbstractItemAttributeModel*>(model);
     const QString extraName = ((outItemModel != nullptr) && (outItemModel->itemDrawable() != nullptr)) ? outItemModel->itemDrawable()->itemToolForModel()->nameFromType() : (((outItemAttributeModel != nullptr) && (outItemAttributeModel->itemAttribute() != nullptr)) ? outItemAttributeModel->itemAttribute()->itemAttributeToolForModel()->valueTypeToString() : QString());
-    const QString displayableName = model->displayableName() + (extraName.isEmpty() ? QString() : tr(" (%1)").arg(extraName));
+    const QString displayableName = model->displayableName();
+    const QString displayableType = extraName.isEmpty() ? QString() : tr(" (%1)").arg(extraName);
 
     outTreeItem = new QTreeWidgetItem(parentOutTreeItem, QStringList(displayableName));
     outTreeItem->setForeground(0, Qt::white);
     outTreeItem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(model)));
     outTreeItem->setData(0, Qt::UserRole+1, QString());
-    outTreeItem->setToolTip(0, tr("%1 : %2").arg(displayableName).arg(model->detailledDescription()));
+    outTreeItem->setToolTip(0, tr("%1%2: %3\nDescription:\n%4").arg(displayableName, displayableType, model->shortDescription(), model->detailledDescription()));
 
     if((mOutTreeWidget->topLevelItem(0) == nullptr) || (parentOutTreeItem == nullptr))
         mOutTreeWidget->addTopLevelItem(outTreeItem);
@@ -459,27 +477,45 @@ std::shared_ptr<QtNodes::Connection> CTG_ModelsLinkConfigurationFlowView::create
     return (mInModelPortType == PT_IN) ? mFlowScene->createConnection(*mInNode, inPortIndex, *mOutNode, outPortIndex, TypeConverter{CT_InDataTypeToOutDataTypeConverter()}, isAPreview, data) : mFlowScene->createConnection(*mOutNode, outPortIndex, *mInNode, inPortIndex, TypeConverter{CT_InDataTypeToOutDataTypeConverter()}, isAPreview, data);
 }
 
+bool portIndexLessThan(const QtNodes::Connection* connection1, const QtNodes::Connection* connection2)
+{
+    return connection1->getPortIndex(PortType::In) < connection2->getPortIndex(PortType::In);
+}
+
 void CTG_ModelsLinkConfigurationFlowView::convertPreviewConnectionsSelectedToConnections()
 {
     QMutableHashIterator<QtNodes::Connection*, const CT_InStdModelPossibility*> it(mPreviewConnections);
 
     const CT_InAbstractModel* inModel = nullptr;
 
+    it.toFront();
     if(it.hasNext())
         inModel = mInModelByPossibility.value(it.next().value());
     else
         return;
 
-    it.toFront();
-
     QList<const CT_InStdModelPossibility*> possibilitiesToSelect;
     const int maxToSelect = inModel->maximumNumberOfPossibilityThatCanBeSelected();
 
+    QList<QtNodes::Connection*> connections;
+    it.toFront();
     while(it.hasNext())
     {
         it.next();
+        connections.append(it.key());
+    }
 
-        QtNodes::Connection* connection = it.key();
+    std::sort(connections.begin(), connections.end(), portIndexLessThan);
+
+    for(auto connection : connections)
+    {
+        it.toFront();
+        while(it.hasNext())
+        {
+            it.next();
+            if(it.key() == connection)
+                break;
+        }
 
         if(connection->getConnectionGraphicsObject().isSelected())
         {
@@ -650,6 +686,36 @@ void CTG_ModelsLinkConfigurationFlowView::setInputDataForNodeDataModel(QtNodes::
     });
 }
 
+QTreeWidgetItem* getItemFromPortNumber(QTreeWidget* treeWidget, PortIndex portIndex)
+{
+    QTreeWidgetItem* root = treeWidget->topLevelItem(0);
+    int currentPort = 0;
+
+    if(currentPort == portIndex)
+        return root;
+
+    // There is only one root and then children
+    for( int i = 0; i < root->childCount(); ++i )
+    {
+        currentPort++;
+        if(currentPort == portIndex)
+            return root->child(i);
+        else
+        {
+            QTreeWidgetItem* currentItem = root->child(i);
+            for( int k = 0; k < currentItem->childCount(); ++k )
+            {
+                currentPort++;
+                if(currentPort == portIndex)
+                    return currentItem->child(k);
+            }
+        }
+    }
+
+    // Should never finish here !
+    return root;
+}
+
 void CTG_ModelsLinkConfigurationFlowView::createOrDeleteConnectionWhenPossibilitySelectionStateHasChanged(const CT_InStdModelPossibility* possibility, bool state)
 {
     Connection* c = mConnectionByPossibility.value(possibility, nullptr);
@@ -661,11 +727,48 @@ void CTG_ModelsLinkConfigurationFlowView::createOrDeleteConnectionWhenPossibilit
 
         auto sharedC = createConnection(inPortIndex, outPortIndex, false, static_cast<void*>(const_cast<CT_InStdModelPossibility*>(possibility)));
         mConnectionByPossibility.insert(possibility, sharedC.get());
+
+        // RM : Find QTreeWidgetItem in mInTreeWidget and modify current count of connection (x/y)
+        QTreeWidgetItem* inItem = getItemFromPortNumber(mInTreeWidget, inPortIndex);
+        QStringList inItemFields = inItem->text(1).split("/");
+        QString newText = QString::number(inItemFields[0].toInt() + 1) + "/" + inItemFields[1];
+        inItem->setText(1, newText);
+
+        // RM : When selection is done on an attribute, the upper parent (item) font must be bold
+        QTreeWidgetItem* outItem = getItemFromPortNumber(mOutTreeWidget, outPortIndex);
+        if(outItem->childCount() == 0)
+        {
+            // This is an attribute, then :
+            QTreeWidgetItem* outItemParent = outItem->parent();
+            QFont font = outItemParent->font(0);
+            font.setBold(true);
+            outItemParent->setFont(0, font);
+        }
     }
     else if((c != nullptr) && (state == false))
     {
+        PortIndex inPortIndex = static_cast<CT_ModelFlowDataModel*>(mInNode->nodeDataModel())->portIndexOfModel(mInModelByPossibility.value(possibility, nullptr));
+        PortIndex outPortIndex = static_cast<CT_ModelFlowDataModel*>(mOutNode->nodeDataModel())->portIndexOfModel(possibility->outModel());
+
         mConnectionByPossibility.remove(possibility);
         mFlowScene->deleteConnection(*c);
+
+        // RM : Find QTreeWidgetItem in mInTreeWidget and modify current count of connection (x/y)
+        QTreeWidgetItem* inItem = getItemFromPortNumber(mInTreeWidget, inPortIndex);
+        QStringList inItemFields = inItem->text(1).split("/");
+        QString newText = QString::number(inItemFields[0].toInt() - 1) + "/" + inItemFields[1];
+        inItem->setText(1, newText);
+
+        // RM : When selection is done on an attribute, the upper parent (item) font must be bold
+        QTreeWidgetItem* outItem = getItemFromPortNumber(mOutTreeWidget, outPortIndex);
+        if(outItem->childCount() == 0)
+        {
+            // This is an attribute, then :
+            QTreeWidgetItem* outItemParent = outItem->parent();
+            QFont font = outItemParent->font(0);
+            font.setBold(false);
+            outItemParent->setFont(0, font);
+        }
     }
 }
 
@@ -810,8 +913,27 @@ void CTG_ModelsLinkConfigurationFlowView::unselectPossibilityWhenConnectionIsDel
             if(outModelOfPossibilityIsAChildOfTheCurrentOutModel)
             {
                 Connection* c = mConnectionByPossibility.take(childSelectedPossibility);
+                PortIndex inPortIndexChild = c->getPortIndex(PortType::Out); // Port is inverted in NodeEditor logic
+                PortIndex outPortIndexChild = c->getPortIndex(PortType::In);
                 childSelectedPossibility->setSelected(false);
                 mFlowScene->deleteConnection(*c);
+
+                // RM : Find QTreeWidgetItem in mInTreeWidget and modify current count of connection (x/y)
+                QTreeWidgetItem* inItem = getItemFromPortNumber(mInTreeWidget, inPortIndexChild);
+                QStringList inItemFields = inItem->text(1).split("/");
+                QString newText = QString::number(inItemFields[0].toInt() - 1) + "/" + inItemFields[1];
+                inItem->setText(1, newText);
+
+                // RM : When selection is done on an attribute, the upper parent (item) font must be bold
+                QTreeWidgetItem* outItem = getItemFromPortNumber(mOutTreeWidget, outPortIndexChild);
+                if(outItem->childCount() == 0)
+                {
+                    // This is an attribute, then :
+                    QTreeWidgetItem* outItemParent = outItem->parent();
+                    QFont font = outItemParent->font(0);
+                    font.setBold(false);
+                    outItemParent->setFont(0, font);
+                }
             }
         }
 
@@ -837,7 +959,7 @@ void CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClick
         mOutTreeWidget->setCurrentIndex(QModelIndex());
     else
         return;
-        // Only the InTreeWidget shall be interacting to select the OutTreeWidget possibilities
+        // RM : Only the InTreeWidget shall be interacting to select the OutTreeWidget possibilities
         //mInTreeWidget->setCurrentIndex(QModelIndex());
 
     CT_AbstractModel* model = static_cast<CT_AbstractModel*>(index.data(Qt::UserRole).value<void*>());
@@ -898,11 +1020,38 @@ void CTG_ModelsLinkConfigurationFlowView::connectionSelected(QtNodes::Connection
 void CTG_ModelsLinkConfigurationFlowView::connectionDoubleClicked(QtNodes::Connection& c)
 {
     if(!c.connectionState().isAPreview())
+    {
+        PortIndex inPortIndex = c.getPortIndex(PortType::Out); // Port is inverted in NodeEditor logic
+        PortIndex outPortIndex = c.getPortIndex(PortType::In);
+
+        qWarning() << "DELET portIN  = " << (int)inPortIndex;
+        qWarning() << "DELET portOUT = " << (int)outPortIndex;
+
         mFlowScene->deleteConnection(c);
+
+        // RM : Find QTreeWidgetItem in mInTreeWidget and modify current count of connection (x/y)
+        QTreeWidgetItem* inItem = getItemFromPortNumber(mInTreeWidget, inPortIndex);
+        QStringList inItemFields = inItem->text(1).split("/");
+        QString newText = QString::number(inItemFields[0].toInt() - 1) + "/" + inItemFields[1];
+        inItem->setText(1, newText);
+
+        // RM : When selection is done on an attribute, the upper parent (item) font must be bold
+        QTreeWidgetItem* outItem = getItemFromPortNumber(mOutTreeWidget, outPortIndex);
+        if(outItem->childCount() == 0)
+        {
+            // This is an attribute, then :
+            QTreeWidgetItem* outItemParent = outItem->parent();
+            QFont font = outItemParent->font(0);
+            font.setBold(false);
+            outItemParent->setFont(0, font);
+        }
+    }
 }
 
-void CTG_ModelsLinkConfigurationFlowView::nodeSelected(QtNodes::Node& /*n*/)
+void CTG_ModelsLinkConfigurationFlowView::nodeSelected(QtNodes::Node& n)
 {
+    Q_UNUSED(n);
+
     mInTreeWidget->clearSelection();
     mOutTreeWidget->clearSelection();
 
@@ -930,14 +1079,18 @@ void CTG_ModelsLinkConfigurationFlowView::treeWidgetContextMenuRequested(const Q
 
     QTreeWidgetItem* it = tw->itemAt(p);
 
+    CT_AbstractModel* model = static_cast<CT_AbstractModel*>(tw->currentIndex().data(Qt::UserRole).value<void*>());
+    mModelOfLastIndexClicked[1] = mModelOfLastIndexClicked[0];
+    mModelOfLastIndexClicked[0] = model;
+
     if(it == nullptr)
         return;
 
     displayPreviewConnectionsForIndexClicked(tw->currentIndex());
 
     QMenu menu(this);
-    menu.addAction(tr("Tout sélectionner"), this, &CTG_ModelsLinkConfigurationFlowView::convertAllPreviewConnectionsToConnections);
-    menu.addAction(tr("Tout dé-sélectionner"), this, &CTG_ModelsLinkConfigurationFlowView::removeAllConnections);
+    menu.addAction(tr("Tout sélectionner sur ce niveau"), this, &CTG_ModelsLinkConfigurationFlowView::convertAllPreviewConnectionsToConnections);
+    menu.addAction(tr("Tout dé-sélectionner sur ce niveau"), this, &CTG_ModelsLinkConfigurationFlowView::removeAllConnections);
     menu.exec(tw->mapToGlobal(p));
 }
 
@@ -945,6 +1098,7 @@ void CTG_ModelsLinkConfigurationFlowView::convertAllPreviewConnectionsToConnecti
 {
     QHashIterator<QtNodes::Connection*, const CT_InStdModelPossibility*> it(mPreviewConnections);
 
+    it.toFront();
     while(it.hasNext())
     {
         it.next();
@@ -966,7 +1120,26 @@ void CTG_ModelsLinkConfigurationFlowView::removeAllConnections()
             {
                 Connection* c = mConnectionByPossibility.take(possibility);
                 const_cast<CT_InStdModelPossibility*>(possibility)->setSelected(false);
+                PortIndex inPortIndexChild = c->getPortIndex(PortType::Out); // Port is inverted in NodeEditor logic
+                PortIndex outPortIndexChild = c->getPortIndex(PortType::In);
                 mFlowScene->deleteConnection(*c);
+
+                // RM : Find QTreeWidgetItem in mInTreeWidget and modify current count of connection (x/y)
+                QTreeWidgetItem* inItem = getItemFromPortNumber(mInTreeWidget, inPortIndexChild);
+                QStringList inItemFields = inItem->text(1).split("/");
+                QString newText = QString::number(inItemFields[0].toInt() - 1) + "/" + inItemFields[1];
+                inItem->setText(1, newText);
+
+                // RM : When selection is done on an attribute, the upper parent (item) font must be bold
+                QTreeWidgetItem* outItem = getItemFromPortNumber(mOutTreeWidget, outPortIndexChild);
+                if(outItem->childCount() == 0)
+                {
+                    // This is an attribute, then :
+                    QTreeWidgetItem* outItemParent = outItem->parent();
+                    QFont font = outItemParent->font(0);
+                    font.setBold(false);
+                    outItemParent->setFont(0, font);
+                }
             }
         }
     }

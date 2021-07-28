@@ -37,6 +37,10 @@ public:
   QColor selectedHaloColor() const;
   QColor hoveredColor() const;
 
+  QColor groupColor() const;
+  QColor itemColor() const;
+  QColor attributeColor() const;
+
   float lineWidth() const;
   float constructionLineWidth() const;
   float pointDiameter() const;
@@ -50,6 +54,10 @@ private:
   QColor SelectedColor;
   QColor SelectedHaloColor;
   QColor HoveredColor;
+
+  QColor GroupColor;
+  QColor ItemColor;
+  QColor AttributeColor;
 
   float LineWidth;
   float ConstructionLineWidth;
