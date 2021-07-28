@@ -40,11 +40,8 @@ GGraphicsViewOptions::GGraphicsViewOptions(QWidget *parent) :
 
     _options = new DM_GraphicsViewOptions();
 
-    _colorSelected = new QtColorPicker(this);
-    _colorSelected->setStandardColors();
-
-    _colorBackground = new QtColorPicker(this);
-    _colorBackground->setStandardColors();
+    _colorSelected = new QtColorPicker();
+    _colorBackground = new QtColorPicker();
 
     ui->horizontalLayoutSelectedColor->addWidget(_colorSelected);
     ui->horizontalLayoutBackgroundColor->addWidget(_colorBackground);
@@ -115,8 +112,8 @@ const DM_GraphicsViewOptions& GGraphicsViewOptions::getOptions()
 
 void GGraphicsViewOptions::updateUiFromOptions()
 {
-    _colorSelected->setCurrentColor(_options->getSelectedColor());
-    _colorBackground->setCurrentColor(_options->getBackgroundColor());
+    _colorSelected->setColor(_options->getSelectedColor());
+    _colorBackground->setColor(_options->getBackgroundColor());
 
     ui->doubleSpinBoxPointSize->setValue(_options->getPointSize());
     ui->checkBoxDrawAxis->setChecked(_options->drawAxis());
@@ -168,9 +165,9 @@ void GGraphicsViewOptions::updateUiFromOptions()
 
 void GGraphicsViewOptions::updateOptionsFromUi()
 {
-    QColor cc = _colorBackground->currentColor();
+    QColor cc = _colorBackground->getColor();
     _options->setBackgroudColor(cc);
-    cc = _colorSelected->currentColor();
+    cc = _colorSelected->getColor();
     _options->setSelectedColor(cc);
 
     _options->setPointSize(ui->doubleSpinBoxPointSize->value());

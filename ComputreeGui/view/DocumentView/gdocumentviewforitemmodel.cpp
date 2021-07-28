@@ -8,8 +8,7 @@
 
 #include "dm_guimanager.h"
 #include "dm_actionshandler.h"
-
-#include "qtcolorpicker.h"
+#include "dm_colorpicker.h"
 
 #include "ct_actions/abstract/ct_abstractactionfortreeview.h"
 

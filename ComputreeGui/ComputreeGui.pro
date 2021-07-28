@@ -80,7 +80,8 @@ SOURCES += main.cpp \
     dm_iteminfoforgraphics.cpp \
     dm_progresslistenermanager.cpp \
     dm_stepsfrompluginsmodelconstructor.cpp \
-    dm_itemdrawableconfigurationmanagerview.cpp
+    dm_itemdrawableconfigurationmanagerview.cpp \
+    dm_colorpicker.cpp
 
 HEADERS += \
     dm_document.h \
@@ -94,7 +95,8 @@ HEADERS += \
     dm_asynchroneprogress.h \
     dm_itemdrawablemanageroptions.h \
     dm_graphicsviewcamera.h \
-    dm_context.h
+    dm_context.h \
+    dm_colorpicker.h
     
 TRANSLATIONS += languages/computreegui_fr.ts \
                 languages/computreegui_en.ts
@@ -107,9 +109,6 @@ RESOURCES += resource/icones.qrc
 
 include(view/view.pri)
 include(tools/tools.pri)
-include(qtcolorpicker/qtcolorpicker.pri)
-
-TR_EXCLUDE  += ./qtcolorpicker/*
 
 # AMKgl
 DEFINES *= AMKGL_NO_TODO_WARNINGS

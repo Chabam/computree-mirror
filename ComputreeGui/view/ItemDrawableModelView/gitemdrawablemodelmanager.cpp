@@ -8,7 +8,7 @@
 
 #include "dm_guimanager.h"
 #include "dm_documentview.h"
-#include "qtcolorpicker.h"
+#include "dm_colorpicker.h"
 
 #include "ct_point.h"
 #include "ct_iterator/ct_singlemodeliteratorstdstyleforresultgroup.h"

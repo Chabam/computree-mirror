@@ -14,8 +14,7 @@
 #include <QToolButton>
 #include <QWidgetAction>
 
-#include "qtcolorpicker/qtcolorpicker.h"
-
+#include "dm_colorpicker.h"
 #include "dm_guimanager.h"
 
 #include "tools/treeview/dm_sortfiltermathproxymodel.h"

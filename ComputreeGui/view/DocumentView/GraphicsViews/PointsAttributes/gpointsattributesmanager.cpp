@@ -32,11 +32,9 @@ GPointsAttributesManager::GPointsAttributesManager(QWidget *parent) :
     m_itemEdgeRootNormal = nullptr;
     m_internalSetColor = false;
 
-    ui->pushButtonGradientColorPicker->setStandardColors();
     ui->pushButtonAddColor->setEnabled(false);
 
-    ui->pushButtonNormalsColorPicker->setStandardColors();
-    ui->pushButtonNormalsColorPicker->setCurrentColor(Qt::white);
+    ui->pushButtonNormalsColorPicker->setColor(Qt::white);
     ui->pushButtonApplyEditNormals->setEnabled(false);
 
     ui->treeView->setModel(&m_model);
@@ -533,7 +531,7 @@ void GPointsAttributesManager::editAttributesNormal(DM_AbstractAttributesNormal 
 
     GDocumentViewForGraphics::NormalsConfiguration c = m_doc->getNormalsConfiguration();
 
-    ui->pushButtonNormalsColorPicker->setCurrentColor(c.normalColor);
+    ui->pushButtonNormalsColorPicker->setColor(c.normalColor);
     ui->doubleSpinBoxNormalsLength->setValue(double(c.normalLength));
 
     ui->widgetEditNormals->setVisible(true);
@@ -547,7 +545,7 @@ void GPointsAttributesManager::clearEditNormal()
 void GPointsAttributesManager::applyAndSaveNormal()
 {
     GDocumentViewForGraphics::NormalsConfiguration c;
-    c.normalColor = ui->pushButtonNormalsColorPicker->currentColor();
+    c.normalColor = ui->pushButtonNormalsColorPicker->getColor();
     c.normalLength = float(ui->doubleSpinBoxNormalsLength->value());
 
     m_doc->applyNormalsConfiguration(c);
@@ -676,10 +674,10 @@ void GPointsAttributesManager::on_colorGradientView_newFocusColor(const QColor &
 {
     Q_UNUSED(arrowIndex)
 
-    if(ui->pushButtonGradientColorPicker->currentColor() != color)
+    if(ui->pushButtonGradientColorPicker->getColor() != color)
     {
         m_internalSetColor = true;
-        ui->pushButtonGradientColorPicker->setCurrentColor(color);
+        ui->pushButtonGradientColorPicker->setColor(color);
     }
 
     GradientArrow arr = ui->colorGradientView->arrowByIndex(arrowIndex);

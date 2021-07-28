@@ -31,8 +31,7 @@
 
 #include <QDialog>
 #include "dm_graphicsviewoptions.h"
-
-#include "qtcolorpicker.h"
+#include "dm_colorpicker.h"
 
 namespace Ui {
     class GGraphicsViewOptions;

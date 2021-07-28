@@ -5,7 +5,7 @@
 #include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 #include "ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h"
 
-#include "qtcolorpicker/qtcolorpicker.h"
+#include "dm_colorpicker.h"
 #include "dm_itemdrawablemanageroptions.h"
 #include "tools/graphicsview/dm_pointscolourist.h"
 #include "tools/graphicsview/dm_pointsrecoverer.h"
@@ -22,7 +22,7 @@ DM_ContextMenuColouristAdder::DM_ContextMenuColouristAdder(IColouristContextMenu
 {
     m_docManager = nullptr;
     m_autoColorProducer = nullptr;
-    m_colorPicker = new QtColorPicker(nullptr, -1, true, false);
+    m_colorPicker = new QtColorPicker();
 }
 
 DM_ContextMenuColouristAdder::~DM_ContextMenuColouristAdder()
@@ -212,21 +212,18 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
 
 void DM_ContextMenuColouristAdder::colorByUniqueColor()
 {
-    m_colorPicker->showColorDialog();
+    m_colorPicker->changeColor();
 
-    if(!m_colorPicker->isDialogCanceled())
-    {
-        QColor newColor = m_colorPicker->currentColor();
+    QColor newColor = m_colorPicker->getColor();
 
-        int docIndex = ((QAction*)sender())->data().toInt();
-        DocumentInterface *doc = m_docManager->documentAt(docIndex);
+    int docIndex = ((QAction*)sender())->data().toInt();
+    DocumentInterface *doc = m_docManager->documentAt(docIndex);
 
-        QList<CT_AbstractItemDrawable*> items = m_itemAccess.getItemDrawableToColorize();
-        QListIterator<CT_AbstractItemDrawable*> it(items);
+    QList<CT_AbstractItemDrawable*> items = m_itemAccess.getItemDrawableToColorize();
+    QListIterator<CT_AbstractItemDrawable*> it(items);
 
-        while(it.hasNext())
-            doc->setColor((CT_AbstractItemDrawable*)it.next(), newColor);
-    }
+    while(it.hasNext())
+        doc->setColor((CT_AbstractItemDrawable*)it.next(), newColor);
 }
 
 void DM_ContextMenuColouristAdder::colorByAutomaticColorUsingColorProducer()
