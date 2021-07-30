@@ -250,7 +250,7 @@
   <customwidget>
    <class>QtColorPicker</class>
    <extends>QPushButton</extends>
-   <header>qtcolorpicker/qtcolorpicker.h</header>
+   <header>dm_colorpicker.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
