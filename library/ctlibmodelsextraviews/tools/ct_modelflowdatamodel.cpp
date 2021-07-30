@@ -116,13 +116,25 @@ void CT_ModelFlowDataModel::recursiveConstructPorts(QModelIndex current, PortInd
     //QString title = current.data(Qt::UserRole+1).toString();
     // RM : use Id of PortInfo to customize connection/port colors
     QString title = "ITEM";
-    if(portIndex == 0) title = "GROUP";
-    if(mModel->rowCount(current) == 0) title = "ATTRIBUTE";
+    if(portIndex == 0) title = "GROUP"; // Root group
+    if(!mModel->hasChildren(current)) title = "ATTRIBUTE";
+    else
+    {
+        const int nR = mModel->rowCount(current);
+        for(int r=0; r<nR; ++r)
+        {
+            QModelIndex child = mModel->index(r, 0, current);
+            if(mModel->hasChildren(child))
+            {
+                title = "GROUP"; // normal group
+                break;
+            }
+        }
+    }
 
     mModelByPortIndex.insert(portIndex++, PortInfo{model, title});
 
     const int nR = mModel->rowCount(current);
-
     for(int r=0; r<nR; ++r)
     {
         QModelIndex child = mModel->index(r, 0, current);
