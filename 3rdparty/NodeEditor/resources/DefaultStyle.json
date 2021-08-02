@@ -27,18 +27,18 @@
     "Opacity": 1.0
   },
   "ConnectionStyle": {
-    "ConstructionColor": [180, 180, 180],
+    "ConstructionColor": [127, 127, 127],
     "NormalColor": "darkcyan",
     "SelectedColor": [100, 100, 100],
     "SelectedHaloColor": "orange",
     "HoveredColor": "lightcyan",
 
-    "GroupColor": [186, 34, 15],
-    "ItemColor": [15, 82, 186],
-    "AttributeColor": [34, 139, 34],
+    "GroupColor": [204, 227, 239],
+    "ItemColor": [244, 166, 131],
+    "AttributeColor": [64, 143, 193],
 
     "LineWidth": 3.0,
-    "ConstructionLineWidth": 1.5,
+    "ConstructionLineWidth": 1.0,
     "PointDiameter": 10.0,
 
     "UseDataDefinedColors": true
