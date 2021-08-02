@@ -155,7 +155,6 @@ void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConf
 
 void PB_StepExportAttributesInLoop::compute()
 {
-    _names.clear();
 
     QScopedPointer<QFile> fileASCII;
     QScopedPointer<QTextStream> streamASCII;
@@ -165,6 +164,7 @@ void PB_StepExportAttributesInLoop::compute()
 
     if (firstTurnFromCounter)
     {
+        _names.clear();
         _modelsKeys.clear();
         computeModelsKeysAndNamesAndOgrTypes();
 
@@ -266,6 +266,8 @@ void PB_StepExportAttributesInLoop::compute()
                 pt.setX(x);
                 pt.setY(y);
                 vectorFeature->SetGeometry(&pt);
+
+                qDebug() << "01";
             }
 #endif
 
@@ -292,19 +294,23 @@ void PB_StepExportAttributesInLoop::compute()
                 if (vectorLayer != nullptr)
                 {
                     const std::string fieldName = _shortNames.value(key).toStdString();
+                    qDebug() << "02";
 
                     if (_ogrTypes.value(key) == OFTBinary)
                     {
                         vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
+                        qDebug() << "03";
                     }
                     else if (_ogrTypes.value(key) == OFTString)
                     {
                         const std::string text = replaceAccentCharacters(pair.second->toString(pair.first, nullptr)).toStdString();
                         vectorFeature->SetField(fieldName.data(), text.data());
+                        qDebug() << "04";
                     }
                     else if (_ogrTypes.value(key) == OFTInteger)
                     {
                         vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
+                        qDebug() << "05";
 //                        }
 //                        else if (_ogrTypes.value(key) == OFTInteger64)
 //                        {
@@ -313,7 +319,10 @@ void PB_StepExportAttributesInLoop::compute()
                     else
                     {
                         vectorFeature->SetField(fieldName.data(), pair.second->toDouble(pair.first, nullptr));
+                        qDebug() << "06";
                     }
+                    qDebug() << "07";
+
                 }
 #endif
 
@@ -336,8 +345,17 @@ void PB_StepExportAttributesInLoop::compute()
 
 #ifdef USE_GDAL
             if(vectorLayer != nullptr)
+            {
+                if( vectorLayer->CreateFeature(vectorFeature) != OGRERR_NONE )
+                {
+                    //  erreur
+                }
+
                 OGRFeature::DestroyFeature(vectorFeature);
+            }
 #endif
+            qDebug() << "08";
+
         }
 
         if (_rasterExport)
