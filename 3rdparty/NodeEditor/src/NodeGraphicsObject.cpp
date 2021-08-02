@@ -326,8 +326,8 @@ mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     {
         QRectF sceneRectArea = _scene.views().first()->mapToScene(_scene.views().first()->viewport()->geometry()).boundingRect();
 
-        if(pos().y() < sceneRectArea.top())
-            setPos(pos().x(), sceneRectArea.top());
+        if(pos().y() < sceneRectArea.top() + 15)
+            setPos(pos().x(), sceneRectArea.top() + 15);
         else if(pos().y() + boundingRect().height() > sceneRectArea.bottom())
             setPos(pos().x(), sceneRectArea.bottom() - boundingRect().height());
         else

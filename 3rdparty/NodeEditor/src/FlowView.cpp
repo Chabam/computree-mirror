@@ -300,8 +300,8 @@ limitNodeToRect()
 
     QRectF sceneRectArea = mapToScene(scene()->views().first()->viewport()->geometry()).boundingRect();
 
-    if(rightNodePos.y() < sceneRectArea.top())
-        rightNodePos.setY(sceneRectArea.top());
+    if(rightNodePos.y() < sceneRectArea.top() + 15)
+        rightNodePos.setY(sceneRectArea.top() + 15);
     if(rightNodePos.y() + rightNodeRect.height() > sceneRectArea.bottom())
         rightNodePos.setY(sceneRectArea.bottom() - rightNodeRect.height());
 
