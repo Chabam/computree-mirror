@@ -1,6 +1,10 @@
 #include "ct_modelflowdatamodel.h"
-
 #include "ct_modelflowdata.h"
+
+#include "ct_model/inModel/abstract/ct_inabstractsingularitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractsingularitemmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractitemattributemodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
 
 CT_ModelFlowDataModel::CT_ModelFlowDataModel() :
     mModel(nullptr),
@@ -113,24 +117,16 @@ QtNodes::PortIndex CT_ModelFlowDataModel::portIndexOfModel(const CT_AbstractMode
 void CT_ModelFlowDataModel::recursiveConstructPorts(QModelIndex current, PortIndex& portIndex)
 {
     CT_AbstractModel* model = static_cast<CT_AbstractModel*>(current.data(Qt::UserRole).value<void*>());
-    //QString title = current.data(Qt::UserRole+1).toString();
-    // RM : use Id of PortInfo to customize connection/port colors
-    QString title = "ITEM";
-    if(portIndex == 0) title = "GROUP"; // Root group
-    if(!mModel->hasChildren(current)) title = "ATTRIBUTE";
-    else
-    {
-        const int nR = mModel->rowCount(current);
-        for(int r=0; r<nR; ++r)
-        {
-            QModelIndex child = mModel->index(r, 0, current);
-            if(mModel->hasChildren(child))
-            {
-                title = "GROUP"; // normal group
-                break;
-            }
-        }
-    }
+    QString title = "GROUP";
+
+    // Test of type for Abstract Model using dynamic cast
+    CT_InAbstractSingularItemModel* inItem = dynamic_cast<CT_InAbstractSingularItemModel*>(model);
+    CT_OutAbstractSingularItemModel* outItem = dynamic_cast<CT_OutAbstractSingularItemModel*>(model);
+    CT_InAbstractItemAttributeModel* inAttribute = dynamic_cast<CT_InAbstractItemAttributeModel*>(model);
+    CT_OutAbstractItemAttributeModel* outAttribute = dynamic_cast<CT_OutAbstractItemAttributeModel*>(model);
+
+    if(inItem || outItem) title = "ITEM";
+    if(inAttribute || outAttribute) title = "ATTRIBUTE";
 
     mModelByPortIndex.insert(portIndex++, PortInfo{model, title});
 
