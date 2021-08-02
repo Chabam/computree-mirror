@@ -686,34 +686,33 @@ void CTG_ModelsLinkConfigurationFlowView::setInputDataForNodeDataModel(QtNodes::
     });
 }
 
+void getItemFromPortNumberScan(QTreeWidgetItem* currentItem, int &currentPortIndex, QTreeWidgetItem* &returnItem, PortIndex portIndex)
+{
+    if(currentPortIndex == portIndex)
+        returnItem = currentItem;
+    else
+    {
+        int childCount = currentItem->childCount();
+        for (int i = 0; i < childCount; i++)
+        {
+            QTreeWidgetItem *item = currentItem->child(i);
+            currentPortIndex++;
+            getItemFromPortNumberScan(item, currentPortIndex, returnItem, portIndex);
+            if(currentPortIndex >= portIndex)
+                break;
+        }
+    }
+}
+
 QTreeWidgetItem* getItemFromPortNumber(QTreeWidget* treeWidget, PortIndex portIndex)
 {
     QTreeWidgetItem* root = treeWidget->topLevelItem(0);
+    QTreeWidgetItem* returnItem = nullptr;
     int currentPort = 0;
 
-    if(currentPort == portIndex)
-        return root;
+    getItemFromPortNumberScan(root, currentPort, returnItem, portIndex);
 
-    // There is only one root and then children
-    for( int i = 0; i < root->childCount(); ++i )
-    {
-        currentPort++;
-        if(currentPort == portIndex)
-            return root->child(i);
-        else
-        {
-            QTreeWidgetItem* currentItem = root->child(i);
-            for( int k = 0; k < currentItem->childCount(); ++k )
-            {
-                currentPort++;
-                if(currentPort == portIndex)
-                    return currentItem->child(k);
-            }
-        }
-    }
-
-    // Should never finish here !
-    return root;
+    return returnItem;
 }
 
 void CTG_ModelsLinkConfigurationFlowView::createOrDeleteConnectionWhenPossibilitySelectionStateHasChanged(const CT_InStdModelPossibility* possibility, bool state)
@@ -1023,9 +1022,6 @@ void CTG_ModelsLinkConfigurationFlowView::connectionDoubleClicked(QtNodes::Conne
     {
         PortIndex inPortIndex = c.getPortIndex(PortType::Out); // Port is inverted in NodeEditor logic
         PortIndex outPortIndex = c.getPortIndex(PortType::In);
-
-        qWarning() << "DELET portIN  = " << (int)inPortIndex;
-        qWarning() << "DELET portOUT = " << (int)outPortIndex;
 
         mFlowScene->deleteConnection(c);
 
