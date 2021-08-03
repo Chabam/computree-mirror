@@ -109,7 +109,7 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
                             if (drawAsMap && !itemDrawable.isSelected())
                             {
                                 double h = double(qRound((data*scaling) + offset));
-                                painter.setColor( QColor::fromHsv(h,255,255,transparencyValue) );
+                                painter.setColor( QColor::fromHsv(int(h),255,255,transparencyValue) );
                             } else {
                                 painter.setColor(QColor(255,255,255));
                             }
