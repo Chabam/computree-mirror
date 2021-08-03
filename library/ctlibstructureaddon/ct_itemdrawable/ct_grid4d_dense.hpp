@@ -22,10 +22,10 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(double wmin,
                                         double xmin,
                                         double ymin,
                                         double zmin,
-                                        size_t dimw,
-                                        size_t dimx,
-                                        size_t dimy,
-                                        size_t dimz,
+                                        int dimw,
+                                        int dimx,
+                                        int dimy,
+                                        int dimz,
                                         double resw,
                                         double resx,
                                         double resy,
@@ -85,9 +85,7 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(double wmin,
 }
 
 template< typename DataT>
-CT_Grid4D_Dense<DataT>* CT_Grid4D_Dense<DataT>::createGrid4DFromWXYZCoords(const CT_OutAbstractSingularItemModel *model,
-                                                                           const CT_AbstractResult *result,
-                                                                           double wmin,
+CT_Grid4D_Dense<DataT>* CT_Grid4D_Dense<DataT>::createGrid4DFromWXYZCoords(double wmin,
                                                                            double xmin,
                                                                            double ymin,
                                                                            double zmin,
@@ -102,10 +100,10 @@ CT_Grid4D_Dense<DataT>* CT_Grid4D_Dense<DataT>::createGrid4DFromWXYZCoords(const
                                                                            DataT na,
                                                                            DataT initValue)
 {
-    size_t dimw = ceil((wmax - wmin)/resw);
-    size_t dimx = ceil((xmax - xmin)/resx);
-    size_t dimy = ceil((ymax - ymin)/resy);
-    size_t dimz = ceil((zmax - zmin)/resz);
+    int dimw = int(ceil((wmax - wmin)/resw));
+    int dimx = int(ceil((xmax - xmin)/resx));
+    int dimy = int(ceil((ymax - ymin)/resy));
+    int dimz = int(ceil((zmax - zmin)/resz));
 
     // to ensure a point exactly on a maximum limit of the grid will be included in the grid
     while (wmax >= (wmin + dimw * resw))
@@ -128,54 +126,7 @@ CT_Grid4D_Dense<DataT>* CT_Grid4D_Dense<DataT>::createGrid4DFromWXYZCoords(const
         dimz++;
     }
 
-    return new CT_Grid4D_Dense<DataT>(model, result, wmin, xmin, ymin, zmin, dimw, dimx, dimy, dimz, resw, resx, resy, resz, na, initValue);
-}
-
-template< typename DataT>
-CT_Grid4D_Dense<DataT>* CT_Grid4D_Dense<DataT>::createGrid4DFromWXYZCoords(const QString &modelName,
-                                                                           const CT_AbstractResult *result,
-                                                                           double wmin,
-                                                                           double xmin,
-                                                                           double ymin,
-                                                                           double zmin,
-                                                                           double wmax,
-                                                                           double xmax,
-                                                                           double ymax,
-                                                                           double zmax,
-                                                                           double resw,
-                                                                           double resx,
-                                                                           double resy,
-                                                                           double resz,
-                                                                           DataT na,
-                                                                           DataT initValue)
-{
-    size_t dimw = ceil((wmax - wmin)/resw);
-    size_t dimx = ceil((xmax - xmin)/resx);
-    size_t dimy = ceil((ymax - ymin)/resy);
-    size_t dimz = ceil((zmax - zmin)/resz);
-
-    // to ensure a point exactly on a maximum limit of the grid will be included in the grid
-    while (wmax >= (wmin + dimw * resw))
-    {
-        dimw++;
-    }
-
-    while (xmax >= (xmin + dimx * resx))
-    {
-        dimx++;
-    }
-
-    while (ymax >= (ymin + dimy * resy))
-    {
-        dimy++;
-    }
-
-    while (zmax >= (zmin + dimz * resz))
-    {
-        dimz++;
-    }
-
-    return new CT_Grid4D_Dense<DataT>(modelName, result, wmin, xmin, ymin, zmin, dimw, dimx, dimy, dimz, resw, resx, resy, resz, na, initValue);
+    return new CT_Grid4D_Dense<DataT>(wmin, xmin, ymin, zmin, dimw, dimx, dimy, dimz, resw, resx, resy, resz, na, initValue);
 }
 
 template< typename DataT>

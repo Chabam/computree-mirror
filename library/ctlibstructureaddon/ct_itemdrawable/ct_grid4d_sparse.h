@@ -159,7 +159,7 @@ public:
      */
     inline DataT valueAtIndex(const size_t index) const override
     {
-        size_t levw, levx, levy, levz;
+        int levw, levx, levy, levz;
         if( !CT_AbstractGrid4D::indexToGrid( index, levw, levx, levy, levz ) )
         {
             return NA();
@@ -178,7 +178,7 @@ public:
      */
     inline bool setValueAtIndex(const size_t index, const DataT value) override
     {
-        size_t levw, levx, levy, levz;
+        int levw, levx, levy, levz;
         if( !CT_AbstractGrid4D::indexToGrid( index, levw, levx, levy, levz ) )
         {
             return false;

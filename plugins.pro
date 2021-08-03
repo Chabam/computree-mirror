@@ -28,5 +28,6 @@ SUBDIRS = plugins/pluginbase
 SUBDIRS += ../pluginmk/pluginmk
 SUBDIRS += ../pluginonf/pluginonf
 SUBDIRS += ../pluginsegma/pluginsegma
-# SUBDIRS += ../pluginignlif/pluginignlif
+SUBDIRS += ../pluginignlif/pluginignlif
 SUBDIRS += ../plugintoolkit/plugintoolkit
+SUBDIRS += ../plugingenerate/plugingenerate

@@ -24,10 +24,10 @@ CT_Grid4D<DataT>::CT_Grid4D(double wmin,
                             double xmin,
                             double ymin,
                             double zmin,
-                            size_t dimw,
-                            size_t dimx,
-                            size_t dimy,
-                            size_t dimz,
+                            int dimw,
+                            int dimx,
+                            int dimy,
+                            int dimz,
                             double resw,
                             double resx,
                             double resy,
@@ -104,7 +104,7 @@ double CT_Grid4D<DataT>::ratioValueAtIndex(const size_t index) const
 }
 
 template< typename DataT>
-DataT CT_Grid4D<DataT>::value(const size_t levw, const size_t levx, const size_t levy, const size_t levz) const
+DataT CT_Grid4D<DataT>::value(const int levw, const int levx, const int levy, const int levz) const
 {
     size_t i;
     if( index( levw, levx, levy, levz, i) )
@@ -162,7 +162,7 @@ bool CT_Grid4D<DataT>::addValueAtWXYZ(const double w, const double x, const doub
 }
 
 template< typename DataT>
-bool CT_Grid4D<DataT>::addValue( size_t levw, size_t levx, size_t levy, size_t levz, DataT value )
+bool CT_Grid4D<DataT>::addValue( int levw, int levx, int levy, int levz, DataT value )
 {
     size_t i;
     if( index( levw, levx, levy, levz, i) )
@@ -174,11 +174,11 @@ bool CT_Grid4D<DataT>::addValue( size_t levw, size_t levx, size_t levy, size_t l
 }
 
 template< typename DataT>
-bool CT_Grid4D<DataT>::neighboursValues(const size_t levw,
-                                        const size_t levx,
-                                        const size_t levy,
-                                        const size_t levz,
-                                        const size_t distance,
+bool CT_Grid4D<DataT>::neighboursValues(const int levw,
+                                        const int levx,
+                                        const int levy,
+                                        const int levz,
+                                        const int distance,
                                         QList<DataT>& outNeighboursValues,
                                         const bool keepNAs,
                                         const CenterMode centermode) const
@@ -191,32 +191,32 @@ bool CT_Grid4D<DataT>::neighboursValues(const size_t levw,
     if (levy >= _dimy || levy < 0 ) {return false;}
     if (levz >= _dimz || levz < 0 ) {return false;}
 
-    size_t firstLevw = levw-distance;
-    size_t lastLevw = levw+distance;
-    size_t firstLevx = levx-distance;
-    size_t lastLevx = levx+distance;
-    size_t firstLevy = levy-distance;
-    size_t lastLevy = levy+distance;
-    size_t firstLevz = levz-distance;
-    size_t lastLevz = levz+distance;
+    int firstLevw = levw-distance;
+    int lastLevw = levw+distance;
+    int firstLevx = levx-distance;
+    int lastLevx = levx+distance;
+    int firstLevy = levy-distance;
+    int lastLevy = levy+distance;
+    int firstLevz = levz-distance;
+    int lastLevz = levz+distance;
 
-    if (firstLevw >= _dimw) {firstLevw = 0;}
+    if (firstLevw < 0) {firstLevw = 0;}
     if (lastLevw >= _dimw) {lastLevw = _dimw - 1;}
-    if (firstLevx >= _dimx) {firstLevx = 0;}
+    if (firstLevx < 0) {firstLevx = 0;}
     if (lastLevx >= _dimx) {lastLevx = _dimx - 1;}
-    if (firstLevy >= _dimy) {firstLevy = 0;}
+    if (firstLevy < 0) {firstLevy = 0;}
     if (lastLevy >= _dimy) {lastLevy = _dimy - 1;}
-    if (firstLevz >= _dimz) {firstLevz = 0;}
+    if (firstLevz < 0) {firstLevz = 0;}
     if (lastLevz >= _dimz) {lastLevz = _dimz - 1;}
 
 
-    for (size_t ww = firstLevw ; ww <= lastLevw ; ww++)
+    for (int ww = firstLevw ; ww <= lastLevw ; ww++)
     {
-        for (size_t xx = firstLevx ; xx <= lastLevx ; xx++)
+        for (int xx = firstLevx ; xx <= lastLevx ; xx++)
         {
-            for (size_t yy = firstLevy ; yy <= lastLevy ; yy++)
+            for (int yy = firstLevy ; yy <= lastLevy ; yy++)
             {
-                for (size_t zz = firstLevz ; zz <= lastLevz ; zz++)
+                for (int zz = firstLevz ; zz <= lastLevz ; zz++)
                 {
                     DataT val = value(ww, xx, yy, zz);
 

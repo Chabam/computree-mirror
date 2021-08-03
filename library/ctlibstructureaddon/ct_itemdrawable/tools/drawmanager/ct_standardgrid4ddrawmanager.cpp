@@ -25,13 +25,13 @@ void CT_StandardGrid4DDrawManager<bool>::draw(GraphicsViewInterface &view, Paint
     bool    useTransparency = drawConfiguration()->variableValue(INDEX_CONFIG_TRANSPARENCY_ENABLED).toBool();
     int     transparencyValue = drawConfiguration()->variableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
 
-    size_t     ww  = drawConfiguration()->variableValue(INDEX_CONFIG_W_DISPLAY_VALUE).toInt();
-    size_t     nXinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
-    size_t     nXsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
-    size_t     nYinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
-    size_t     nYsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
-    size_t     nZinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
-    size_t     nZsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
+    int     ww  = drawConfiguration()->variableValue(INDEX_CONFIG_W_DISPLAY_VALUE).toInt();
+    int     nXinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
+    int     nXsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
+    int     nYinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
+    int     nYsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
+    int     nZinf = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
+    int     nZsup = drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
 
     if (nXsup > item.xdim()) {nXsup = item.xdim();}
     if (nYsup > item.ydim()) {nXsup = item.ydim();}
@@ -55,9 +55,9 @@ void CT_StandardGrid4DDrawManager<bool>::draw(GraphicsViewInterface &view, Paint
     double scaling = 240.0 / (highThresh - lowThresh);
     double offset = - (240*lowThresh)/(highThresh - lowThresh);
 
-    size_t xdim = item.xdim();
-    size_t ydim = item.ydim();
-    size_t zdim = item.zdim();
+    int xdim = item.xdim();
+    int ydim = item.ydim();
+    int zdim = item.zdim();
     double demiResx = reductionCoef*item.xres() / 2.0;
     double demiResy = reductionCoef*item.yres() / 2.0;
     double demiResz = reductionCoef*item.zres() / 2.0;
@@ -68,11 +68,11 @@ void CT_StandardGrid4DDrawManager<bool>::draw(GraphicsViewInterface &view, Paint
     if ( ww <= item.wdim() )
     {
         // For each voxel of the grid
-        for (size_t xx = nXinf ; xx < (xdim - nXsup) ; xx++)
+        for (int xx = nXinf ; xx < (xdim - nXsup) ; xx++)
         {
-            for (size_t yy = nYinf ; yy < (ydim - nYsup)  ; yy++)
+            for (int yy = nYinf ; yy < (ydim - nYsup)  ; yy++)
             {
-                for (size_t zz = nZinf ; zz < (zdim - nZsup); zz++)
+                for (int zz = nZinf ; zz < (zdim - nZsup); zz++)
                 {
                     size_t index;
                     if (item.index(ww, xx, yy, zz, index))

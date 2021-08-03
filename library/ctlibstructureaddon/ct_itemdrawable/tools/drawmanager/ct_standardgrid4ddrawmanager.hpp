@@ -39,22 +39,22 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
 
     // Getting the configuration values
     GLenum  drawingMode;
-    bool    wireMode = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_WIRE_MODE_ENABLED).toBool();
-    bool    uselowThresh = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_LOW_THRESHOLDS_ENABLED).toBool();
-    bool    usehighThresh = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIGH_THRESHOLDS_ENABLED).toBool();
-    double  lowThresh = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_LOW_THRESHOLDS_VALUE).toDouble();
-    double  highThresh = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIGH_THRESHOLDS_VALUE).toDouble();
-    double  reductionCoef = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_REDUCTION_COEF).toDouble();
-    bool    useTransparency = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_TRANSPARENCY_ENABLED).toBool();
-    int     transparencyValue = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
+    bool    wireMode = this->drawConfiguration()->variableValue(INDEX_CONFIG_WIRE_MODE_ENABLED).toBool();
+    bool    uselowThresh = this->drawConfiguration()->variableValue(INDEX_CONFIG_LOW_THRESHOLDS_ENABLED).toBool();
+    bool    usehighThresh = this->drawConfiguration()->variableValue(INDEX_CONFIG_HIGH_THRESHOLDS_ENABLED).toBool();
+    double  lowThresh = this->drawConfiguration()->variableValue(INDEX_CONFIG_LOW_THRESHOLDS_VALUE).toDouble();
+    double  highThresh = this->drawConfiguration()->variableValue(INDEX_CONFIG_HIGH_THRESHOLDS_VALUE).toDouble();
+    double  reductionCoef = this->drawConfiguration()->variableValue(INDEX_CONFIG_REDUCTION_COEF).toDouble();
+    bool    useTransparency = this->drawConfiguration()->variableValue(INDEX_CONFIG_TRANSPARENCY_ENABLED).toBool();
+    int     transparencyValue = this->drawConfiguration()->variableValue(INDEX_CONFIG_TRANSPARENCY_VALUE).toInt();
 
-    size_t     ww  = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_W_DISPLAY_VALUE).toInt();
-    size_t     nXinf = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
-    size_t     nXsup = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
-    size_t     nYinf = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
-    size_t     nYsup = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
-    size_t     nZinf = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
-    size_t     nZsup = this->getDrawConfiguration()->getVariableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
+    int     ww  = this->drawConfiguration()->variableValue(INDEX_CONFIG_W_DISPLAY_VALUE).toInt();
+    int     nXinf = this->drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XINF).toInt();
+    int     nXsup = this->drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_XSUP).toInt();
+    int     nYinf = this->drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YINF).toInt();
+    int     nYsup = this->drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_YSUP).toInt();
+    int     nZinf = this->drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZINF).toInt();
+    int     nZsup = this->drawConfiguration()->variableValue(INDEX_CONFIG_HIDE_PLANE_NB_ZSUP).toInt();
 
     if (nXsup > item.xdim()) {nXsup = item.xdim();}
     if (nYsup > item.ydim()) {nXsup = item.ydim();}
@@ -66,11 +66,11 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
     if ( wireMode ) {drawingMode = GL_LINE;}
     else            {drawingMode = GL_FILL;}
 
-    if (!uselowThresh) {lowThresh =  (double)item.dataMin();}
-    if (!usehighThresh) {highThresh =  (double)item.dataMax();}
+    if (!uselowThresh) {lowThresh =  double(item.dataMin());}
+    if (!usehighThresh) {highThresh =  double(item.dataMax());}
 
     bool drawAsMap = true;
-    if (lowThresh == highThresh) {drawAsMap = false;}
+    if (qFuzzyCompare(lowThresh, highThresh)) {drawAsMap = false;}
 
     QColor color = painter.getColor();
 
@@ -78,9 +78,9 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
     double scaling = 240.0 / (highThresh - lowThresh);
     double offset = - (240*lowThresh)/(highThresh - lowThresh);
 
-    size_t xdim = item.xdim();
-    size_t ydim = item.ydim();
-    size_t zdim = item.zdim();
+    int xdim = item.xdim();
+    int ydim = item.ydim();
+    int zdim = item.zdim();
     double demiResx = reductionCoef*item.xres() / 2.0;
     double demiResy = reductionCoef*item.yres() / 2.0;
     double demiResz = reductionCoef*item.zres() / 2.0;
@@ -91,11 +91,11 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
     if ( ww <= item.wdim() )
     {
         // For each voxel of the grid
-        for (size_t xx = nXinf ; xx < (xdim - nXsup) ; xx++)
+        for (int xx = nXinf ; xx < (xdim - nXsup) ; xx++)
         {
-            for (size_t yy = nYinf ; yy < (ydim - nYsup)  ; yy++)
+            for (int yy = nYinf ; yy < (ydim - nYsup)  ; yy++)
             {
-                for (size_t zz = nZinf ; zz < (zdim - nZsup); zz++)
+                for (int zz = nZinf ; zz < (zdim - nZsup); zz++)
                 {
                     size_t index;
                     if (item.index(ww, xx, yy, zz, index))
@@ -108,7 +108,7 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
 
                             if (drawAsMap && !itemDrawable.isSelected())
                             {
-                                double h = (int) qRound((data*scaling) + offset);
+                                double h = double(qRound((data*scaling) + offset));
                                 painter.setColor( QColor::fromHsv(h,255,255,transparencyValue) );
                             } else {
                                 painter.setColor(QColor(255,255,255));

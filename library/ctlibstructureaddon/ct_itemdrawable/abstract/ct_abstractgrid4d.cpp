@@ -24,7 +24,7 @@ CT_AbstractGrid4D::CT_AbstractGrid4D() : SuperClass()
     _dimz = 1;
 }
 
-CT_AbstractGrid4D::CT_AbstractGrid4D(double wmin, double xmin, double ymin, double zmin, size_t dimw, size_t dimx, size_t dimy, size_t dimz, double resw, double resx, double resy, double resz)
+CT_AbstractGrid4D::CT_AbstractGrid4D(double wmin, double xmin, double ymin, double zmin, int dimw, int dimx, int dimy, int dimz, double resw, double resx, double resy, double resz)
 {
     _bot(0) = wmin;
     _bot(1) = xmin;
@@ -64,10 +64,10 @@ CT_AbstractGrid4D::CT_AbstractGrid4D(double wmin, double xmin, double ymin, doub
     _resy = resy;
     _resz = resz;
 
-    _dimw = ceil((wmax - wmin)/_resw);
-    _dimx = ceil((xmax - xmin)/_resx);
-    _dimy = ceil((ymax - ymin)/_resy);
-    _dimz = ceil((zmax - zmin)/_resz);
+    _dimw = int(ceil((wmax - wmin)/_resw));
+    _dimx = int(ceil((xmax - xmin)/_resx));
+    _dimy = int(ceil((ymax - ymin)/_resy));
+    _dimz = int(ceil((zmax - zmin)/_resz));
 
     Eigen::Vector3d maxCoordinates(xmin + resx * _dimx,
                                    ymin + resy * _dimy,

@@ -70,10 +70,10 @@ public:
               double xmin,
               double ymin,
               double zmin,
-              size_t dimw,
-              size_t dimx,
-              size_t dimy,
-              size_t dimz,
+              int dimw,
+              int dimx,
+              int dimy,
+              int dimz,
               double resw,
               double resx,
               double resy,
@@ -164,7 +164,7 @@ public:
      * \param levz z level (0 is the first)
      * \return Value at (levw, levx, levy, levz)
      */
-    DataT value(const size_t levw, const size_t levx, const size_t levy, const size_t levz) const;
+    DataT value(const int levw, const int levx, const int levy, const int levz) const;
 
     /**
       * \brief Gives the value of the cell containing (w,x,y,z) coordinate (in cartesian space)
@@ -232,7 +232,7 @@ public:
     bool addValueAtWXYZ(const double w, const double x, const double y, const double z, const DataT value);
 
 
-    bool addValue( size_t levw, size_t levx, size_t levy, size_t levz, DataT value );
+    bool addValue(int levw, int levx, int levy, int levz, DataT value );
 
     /**
       * \brief Gives neighbours values
@@ -246,11 +246,11 @@ public:
       * \param centermode : How should be treated the central cell ?
       * \return False if distance was less than 1 or the cell was outside the grid
       */
-    bool neighboursValues(const size_t levw,
-                          const size_t levx,
-                          const size_t levy,
-                          const size_t levz,
-                          const size_t distance,
+    bool neighboursValues(const int levw,
+                          const int levx,
+                          const int levy,
+                          const int levz,
+                          const int distance,
                           QList<DataT>& outNeighboursValues,
                           const bool keepNAs = false,
                           const CenterMode centermode = CT_Grid4D::CM_DropCenter) const;
@@ -290,7 +290,7 @@ public:
      * \param value Value
      * \return True if the value has actually been set
      */
-    inline bool setValue(const size_t levw, const size_t levx, const size_t levy, const size_t levz, DataT value)
+    inline bool setValue(const int levw, const int levx, const int levy, const int levz, DataT value)
     {
         size_t i;
         if( index(levw, levx, levy, levz, i) )
@@ -324,10 +324,10 @@ public:
      */
     virtual void computeMinMax() override;
 
-    inline size_t wdim() const {return SuperClass::wdim();}
-    inline size_t xdim() const {return SuperClass::xdim();}
-    inline size_t ydim() const {return SuperClass::ydim();}
-    inline size_t zdim() const {return SuperClass::zdim();}
+    inline int wdim() const {return SuperClass::wdim();}
+    inline int xdim() const {return SuperClass::xdim();}
+    inline int ydim() const {return SuperClass::ydim();}
+    inline int zdim() const {return SuperClass::zdim();}
     inline double minW() const {return SuperClass::minW();}
     inline double wres() const {return SuperClass::wres();}
     inline double xres() const {return SuperClass::xres();}
