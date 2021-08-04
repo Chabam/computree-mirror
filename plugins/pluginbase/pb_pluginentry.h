@@ -67,10 +67,10 @@ class PB_PluginEntry : public PluginEntryInterface
 
 public:
     PB_PluginEntry();
-    ~PB_PluginEntry();
+    ~PB_PluginEntry() override;
 
-    QString getVersion() const;
-    CT_AbstractStepPlugin* getPlugin() const;
+    QString getVersion() const override;
+    CT_AbstractStepPlugin* getPlugin() const override;
 
 private:
     PB_StepPluginManager *_stepPluginManager;

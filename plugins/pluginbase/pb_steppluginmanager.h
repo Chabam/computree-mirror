@@ -44,13 +44,13 @@ class PB_StepPluginManager : public CT_AbstractStepPlugin
 {
 public:
     PB_StepPluginManager();
-    ~PB_StepPluginManager();
+    ~PB_StepPluginManager() override;
 
-    QString getPluginURL() const {return QString("http://rdinnovation.onf.fr/projects/plugin-base/wiki");}
+    QString getPluginURL() const override {return QString("http://rdinnovation.onf.fr/projects/plugin-base/wiki");}
 
-    bool init();
+    bool init() override;
 
-    QString getPluginRISCitation() const;
+    QString getPluginRISCitation() const override;
 
     /**
      * @brief Returns a collection that contains a copy of raster metrics available in all plugins
@@ -92,16 +92,16 @@ public:
     const QMap<QString, CT_AbstractExporter*>& exportersForPointsWithPieceByPieceAvailable() const;
 protected:
 
-    QSettings* initQSettings();
+    QSettings* initQSettings() override;
 
-    bool loadGenericsStep();
-    bool loadOpenFileStep();
-    bool loadCanBeAddedFirstStep();
-    bool loadActions();
-    bool loadExporters();
-    bool loadReaders();
-    bool loadFilters();
-    bool loadMetrics();
+    bool loadGenericsStep() override;
+    bool loadOpenFileStep() override;
+    bool loadCanBeAddedFirstStep() override;
+    bool loadActions() override;
+    bool loadExporters() override;
+    bool loadReaders() override;
+    bool loadFilters() override;
+    bool loadMetrics() override;
 
     bool loadAfterAllPluginsLoaded() final;
     //void aboutToBeUnloaded();
