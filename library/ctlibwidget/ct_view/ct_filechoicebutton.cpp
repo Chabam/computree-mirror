@@ -110,12 +110,12 @@ QWidget* CT_FileChoiceButton::createWidget(QWidget &parent)
 
 void CT_FileChoiceButton::updateValue()
 {       
-    *(_data._value) = _labelCreated->text().split("\n", QString::SkipEmptyParts);
+    *(_data._value) = _labelCreated->text().split("\n", Qt::SkipEmptyParts);
 }
 
 bool CT_FileChoiceButton::isValueAndWidgetValueDifferent() const
 {
-    return ((*_data._value) != _labelCreated->text().split("\n", QString::SkipEmptyParts));
+    return ((*_data._value) != _labelCreated->text().split("\n", Qt::SkipEmptyParts));
 }
 
 QVariant CT_FileChoiceButton::getValue() const

@@ -73,7 +73,7 @@ Then calls setSnapshotFormat() with the selected one (unless the user cancels).
 Returns \c false if the user presses the Cancel button and \c true otherwise. */
 bool QGLViewer::openSnapshotFormatDialog() {
   bool ok = false;
-  QStringList list = formats.split(";;", QString::SkipEmptyParts);
+  QStringList list = formats.split(";;", Qt::SkipEmptyParts);
   int current = list.indexOf(FDFormatString[snapshotFormat()]);
   QString format =
       QInputDialog::getItem(this, "Snapshot format", "Select a snapshot format",

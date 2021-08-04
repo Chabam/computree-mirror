@@ -70,7 +70,7 @@ bool CT_Reader_TerraScanPrj::internalReadFile(CT_StandardItemGroup* group)
             while(!stream.atEnd() && !isStopped())
             {
                 line = stream.readLine();
-                QStringList values = line.split(" ", QString::SkipEmptyParts);
+                QStringList values = line.split(" ", Qt::SkipEmptyParts);
 
                 if (values.size() > 1 && values.at(0) == "Block" && !values.at(1).isEmpty())
                 {
