@@ -41,9 +41,9 @@ public:
 
     PB_TestBug();
 
-    QString description() const;
+    QString description() const override;
 
-    QString detailledDescription() const;
+    QString detailledDescription() const override;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 
