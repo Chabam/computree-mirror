@@ -14,7 +14,7 @@
  * @brief A pattern of shots can be shown like an origin of shot and a cloud of
  *        point of impact, [point of impact] - [origin] = [direction] !
  */
-class PLUGINSHAREDSHARED_EXPORT CT_ShootingPatternFromPointCloud : public CT_ShootingPattern
+class CTLIBSTRUCTUREADDON_EXPORT CT_ShootingPatternFromPointCloud : public CT_ShootingPattern
 {
 public:
     /**
@@ -35,11 +35,11 @@ public:
      */
     CT_ShootingPatternFromPointCloud(const CT_ShootingPatternFromPointCloud& other);
 
-    const Eigen::Vector3d& getCenterCoordinate() const { return m_origin; }
-    inline const Eigen::Vector3d& getOrigin() const { return m_origin; }
-    virtual size_t getNumberOfShots() const;
-    virtual CT_Shot getShotAt(const size_t& index);
-    virtual CT_Shot getShotForPoint(const CT_Point& pt);
+    const Eigen::Vector3d& centerCoordinate() const { return m_origin; }
+    inline const Eigen::Vector3d& origin() const { return m_origin; }
+    virtual size_t numberOfShots() const;
+    virtual CT_Shot shotAt(const size_t& index);
+    virtual CT_Shot shotForPoint(const CT_Point& pt);
     virtual CT_ShootingPattern* clone() const;
 
 private:

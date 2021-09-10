@@ -18,6 +18,8 @@ HEADERS += \
     ct_itemdrawable/tools/gridtools/ct_grid3dbeamvisitor_indexlist.h \
     ct_itemdrawable/tools/gridtools/ct_grid3dwootraversalalgorithm.h \
     ct_itemdrawable/tools/pointclustertools/ct_polylinesalgorithms.h \
+    ct_itemdrawable/tools/scanner/ct_parallelshootingpatternfrompointcloud.h \
+    ct_itemdrawable/tools/scanner/ct_shootingpatternfrompointcloud.h \
     ctlibstructureaddon_global.h \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h \
@@ -216,6 +218,8 @@ SOURCES += \
     ct_itemdrawable/tools/gridtools/ct_grid3dbeamvisitor_indexlist.cpp \
     ct_itemdrawable/tools/gridtools/ct_grid3dwootraversalalgorithm.cpp \
     ct_itemdrawable/tools/pointclustertools/ct_polylinesalgorithms.cpp \
+    ct_itemdrawable/tools/scanner/ct_parallelshootingpatternfrompointcloud.cpp \
+    ct_itemdrawable/tools/scanner/ct_shootingpatternfrompointcloud.cpp \
     ct_itemdrawable/tools/scanner/ct_shot.cpp \
     ct_itemdrawable/tools/scanner/ct_thetaphishootingpattern.cpp \
     ct_itemdrawable/ct_affiliationid.cpp \
@@ -319,3 +323,12 @@ SOURCES += \
     ct_itemdrawable/ct_pointsattributesscalartemplated.cpp \
     ct_itemdrawable/ct_pointsattributesscalarmaskt.cpp \
     ct_itemdrawable/ct_faceattributesscalart.cpp
+
+TRANSLATIONS += languages/ctlibstructureaddon_fr.ts \
+                languages/ctlibstructureaddon_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

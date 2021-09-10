@@ -194,3 +194,12 @@ SOURCES += \
     ct_attributes/abstract/ct_abstractattributesscalar.cpp \
     ct_normalcloud/tools/normalsestimator.cpp \
     ct_cloud/ct_bitcloud.cpp
+
+TRANSLATIONS += languages/ctlibclouds_fr.ts \
+                languages/ctlibclouds_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

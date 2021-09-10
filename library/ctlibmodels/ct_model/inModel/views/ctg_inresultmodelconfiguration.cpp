@@ -53,8 +53,7 @@ void CTG_InResultModelConfiguration::accept()
         });
 
         if(!ok) {
-            QMessageBox::warning(this, tr("Avertissement"), tr("Vous n'avez pas correctement configuré "
-                                                               "les données d'entrée. Liste des erreurs détectées :\r\n\r\n- %1").arg(errors.join("\r\n- ")), QMessageBox::Ok);
+            QMessageBox::warning(this, tr("Avertissement"), tr("Vous n'avez pas correctement configuré les données d'entrée. Liste des erreurs détectées :\r\n\r\n- %1").arg(errors.join("\r\n- ")), QMessageBox::Ok);
 
             return;
         }

@@ -30,3 +30,12 @@ SOURCES += \
     ct_step/tools/menu/ct_stepsmenu.cpp \
     ct_actions/ct_actionsseparator.cpp \
     ct_global/ct_context.cpp
+
+TRANSLATIONS += languages/ctlibplugin_fr.ts \
+                languages/ctlibplugin_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

@@ -24,3 +24,12 @@ SOURCES += \
     ct_reader/tools/ct_readeroutmodelstructuremanager.cpp \
     ct_itemdrawable/ct_readeritem.cpp \
     ct_reader/extensions/ct_readerpointsfilteringextension.cpp
+
+TRANSLATIONS += languages/ctlibreader_fr.ts \
+                languages/ctlibreader_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

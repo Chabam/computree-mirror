@@ -30,3 +30,12 @@ SOURCES += \
     ct_triangulation/ct_nodet.cpp \
     ct_triangulation/ct_trianglet.cpp \
     ct_triangulation/ct_voronoinodet.cpp
+
+TRANSLATIONS += languages/ctlibmath_fr.ts \
+                languages/ctlibmath_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

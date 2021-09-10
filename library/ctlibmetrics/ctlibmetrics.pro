@@ -25,3 +25,13 @@ SOURCES += \
     ct_metric/abstract/ct_abstractmetric_xyz.cpp \
     ct_metric/points/ct_cloudmetrics.cpp \
     ct_metric/abstract/ct_abstractmetricgeneric.cpp
+
+
+TRANSLATIONS += languages/ctlibmetrics_fr.ts \
+                languages/ctlibmetrics_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

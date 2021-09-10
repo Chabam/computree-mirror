@@ -6,6 +6,8 @@
 
 class CT_LASPieceByPiecePrivateExporter : public CT_AbstractPieceByPieceExporter
 {
+    Q_OBJECT
+
 public:
     ~CT_LASPieceByPiecePrivateExporter() final;
 

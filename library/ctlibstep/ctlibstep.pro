@@ -30,3 +30,12 @@ SOURCES += \
     ct_step/tools/output/ct_outmanager.cpp \
     ct_step/tools/ct_uniqueindexgenerator.cpp \
     ct_step/tools/ct_logmanageradapterforstep.cpp
+
+TRANSLATIONS += languages/ctlibstep_fr.ts \
+                languages/ctlibstep_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

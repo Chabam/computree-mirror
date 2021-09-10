@@ -22,3 +22,12 @@ SOURCES += \
     ct_step/ct_stepbeginloop.cpp \
     ct_step/ct_stependloop.cpp \
     ct_tools/ct_monitoredqthread.cpp
+
+TRANSLATIONS += languages/ctlibstepaddon_fr.ts \
+                languages/ctlibstepaddon_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

@@ -25,3 +25,12 @@ SOURCES += \
     ct_actions/abstract/ct_abstractactionforgraphicsview.cpp \
     ct_actions/abstract/ct_abstractactionfortreeview.cpp \
     ct_actions/view/abstract/ct_gabstractactionforgraphicsviewoptions.cpp
+
+TRANSLATIONS += languages/ctlibaction_fr.ts \
+                languages/ctlibaction_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages

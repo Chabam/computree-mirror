@@ -22,7 +22,7 @@
  * scene, where the angles between the rays are negligible.
  *
  */
-class PLUGINSHAREDSHARED_EXPORT CT_ParallelShootingPatternFromPointCloud: public CT_ShootingPattern {
+class CTLIBSTRUCTUREADDON_EXPORT CT_ParallelShootingPatternFromPointCloud: public CT_ShootingPattern {
 public:
 
     /**
@@ -46,10 +46,10 @@ public:
      */
     CT_ParallelShootingPatternFromPointCloud(const CT_ParallelShootingPatternFromPointCloud& other);
 
-    const Eigen::Vector3d& getCenterCoordinate() const { return m_point; }
-    size_t getNumberOfShots() const;
-    CT_Shot getShotAt(const size_t& index);
-    CT_Shot getShotForPoint(const CT_Point& pt);
+    const Eigen::Vector3d& centerCoordinate() const { return m_point; }
+    size_t numberOfShots() const;
+    CT_Shot shotAt(const size_t& index);
+    CT_Shot shotForPoint(const CT_Point& pt);
     CT_ShootingPattern* clone() const;
 
 private:

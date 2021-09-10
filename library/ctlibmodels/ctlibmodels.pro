@@ -135,3 +135,12 @@ FORMS += \
     ct_model/inModel/views/ctg_inmodelpossibilitieschoice.ui \
     ct_model/inModel/views/ctg_inresultmodelconfiguration.ui \
     ct_model/inModel/views/ctg_inresultmodelpossibilities.ui
+
+TRANSLATIONS += languages/ctlibmodels_fr.ts \
+                languages/ctlibmodels_en.ts
+
+LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+
+CONFIG += lrelease
+QMAKE_LRELEASE_FLAGS += -removeidentical
+LRELEASE_DIR = $$DESTDIR/../../languages
