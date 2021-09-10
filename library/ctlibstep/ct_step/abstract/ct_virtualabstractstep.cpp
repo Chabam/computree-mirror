@@ -35,7 +35,9 @@
 int CT_VirtualAbstractStep::CURRENT_ID = 1;
 
 CT_VirtualAbstractStep::CT_VirtualAbstractStep() :
-    m_uniqueId(CURRENT_ID++),
+// Correction AP 10/09/2021 : pour que les numéros d'étapes commencent à 1 dans le script
+//    m_uniqueId(CURRENT_ID++),
+    m_uniqueId(0),
     m_parentStep(nullptr),
     m_plugin(nullptr),
     m_uniqueIndexGenerator(new CT_UniqueIndexGenerator()),
@@ -188,6 +190,10 @@ void CT_VirtualAbstractStep::init()
 
         // to show a default out model :
         finalizeConfiguration(); // create output models
+    }
+    // Correction AP 10/09/2021 : pour que les numéros d'étapes commencent à 1 dans le script
+    else {
+        m_uniqueId = CURRENT_ID++;
     }
 }
 
