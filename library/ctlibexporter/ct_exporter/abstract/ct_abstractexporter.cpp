@@ -355,7 +355,13 @@ bool CT_AbstractExporter::exportToFile()
 
             do
             {
-                setFilePath(path + QString("_%1").arg(internalCounter++));
+                if (internalCounter == 0)
+                {
+                    setFilePath(path);
+                } else {
+                    setFilePath(path + QString("_%1").arg(internalCounter));
+                }
+                ++internalCounter;
 
                 if((ret = internalExportToFile()) == ErrorWhenExport)
                 {

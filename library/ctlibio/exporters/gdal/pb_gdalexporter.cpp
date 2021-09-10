@@ -303,16 +303,22 @@ CT_AbstractExporter::ExportReturn PB_GDALExporter::internalExportToFile()
     }
     else if(!mRasters.isEmpty())
     {
-        int cpt = 0;
-        for(auto raster : mRasters)
+        if (mRasters.size() > 1)
         {
-            if(isStopped())
-                break;
+            int cpt = 0;
+            for(auto raster : mRasters)
+            {
+                if(isStopped())
+                    break;
 
-            if(!exportRaster(raster, prePath + QString("_%1").arg(cpt) + "." + suffix))
+                if(!exportRaster(raster, prePath + QString("_%1").arg(cpt) + "." + suffix))
+                    return ErrorWhenExport;
+
+                ++cpt;
+            }
+        } else {
+            if(!exportRaster(mRasters.first(), prePath + "." + suffix))
                 return ErrorWhenExport;
-
-            ++cpt;
         }
     }
 
