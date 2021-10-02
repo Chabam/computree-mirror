@@ -8,7 +8,6 @@
 #include "picker/tools/pointspickingdefaultfunction.h"
 #include "picker/tools/objectsflagstool.h"
 #include "actions/picking/actionpickanyelements.h"
-#include "tools/qglviewer/qglviewertools.h"
 #include "includepoint.h"
 
 #include "dm_guimanager.h"
@@ -40,29 +39,6 @@
 #include "view/DocumentView/gdocumentviewforgraphics.h"
 #include "view/Tools/graphicsviewdebugmode.h"
 
-#include "constraint.h"
-
-#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#elif defined(__APPLE__) // Clang Compiler (Apple)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-#pragma GCC diagnostic ignored "-Wint-in-bool-context"
-#endif
-#include <manipulatedCameraFrame.h>
-#if defined(_WIN32) && defined(_MSC_VER)
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
-#pragma GCC diagnostic pop
-#elif defined(__APPLE__)
-#pragma GCC diagnostic pop
-#endif
-
 #include <Eigen/Core>
 
 QString GGraphicsViewImp::DEFAULT_STATE_FILENAME = "3DViewer.config";
@@ -82,6 +58,12 @@ GGraphicsViewImp::GGraphicsViewImp(const GDocumentViewForGraphics* parentDocumen
 
     m_uniqueIndex = NUMBER_OF_VIEWS++;
 
+    AMKglViewer::camera()->setSceneRadius(20);
+
+    setAxisIsDrawn(constGetOptionsInternal().drawAxis());
+    setGridIsDrawn(constGetOptionsInternal().drawGrid());
+    setFPSIsDisplayed(constGetOptionsInternal().getCameraInformationDisplayed().testFlag(DM_GraphicsViewOptions::FpsInformation));
+
     connect(actionsHandler(), SIGNAL(currentActionChanged(CT_AbstractAction*)), this, SLOT(currentActionChanged(CT_AbstractAction*)));
     connect(this, SIGNAL(debugModeChanged(bool)), this, SLOT(amkglDebugModeChanged(bool)), Qt::DirectConnection);
 }
@@ -97,18 +79,10 @@ GGraphicsViewImp::~GGraphicsViewImp()
 
 void GGraphicsViewImp::active2DView(bool e)
 {
-    if(e) {
-        qglviewer::LocalConstraint* c = new qglviewer::LocalConstraint();
-        c->setTranslationConstraintType(qglviewer::AxisPlaneConstraint::FREE);
-        c->setRotationConstraintType(qglviewer::AxisPlaneConstraint::FORBIDDEN);
+    amkglCamera()->enableRotationConstraint(e);
 
-        amkglCamera()->frame()->setConstraint(c);
-
+    if(e)
         m_camController->setType(CameraInterface::ORTHOGRAPHIC);
-
-    } else {
-        amkglCamera()->frame()->setConstraint(nullptr);
-    }
 }
 
 void GGraphicsViewImp::disablePointsSelectionBackup()
@@ -138,7 +112,7 @@ QOpenGLWidget* GGraphicsViewImp::getOpenGLWidget() const
 
 bool GGraphicsViewImp::is2DView() const
 {
-    return (amkglCamera()->frame()->constraint() != nullptr);
+    return amkglCamera()->isRotationConstraintEnabled();
 }
 
 void GGraphicsViewImp::setOptions(const DM_GraphicsViewOptions &newOptions)
@@ -1111,22 +1085,16 @@ void GGraphicsViewImp::visitObjectsOfCurrentAction(const int &uniqueIndex, const
 Eigen::Vector3d GGraphicsViewImp::pointUnderPixel(const QPoint &pixel,
                                                   bool &found) const
 {
-    return QGLViewerTools::vecToEigen(amkglCamera()->pointUnderPixel(pixel, found));
+    return amkglCamera()->pointUnderPixel(pixel, found);
 }
 
 void GGraphicsViewImp::convertClickToLine(const QPoint &pixel,
                                           Eigen::Vector3d &orig,
                                           Eigen::Vector3d &dir) const
 {
-    AMKglViewer::VecType vecOrig;
-    AMKglViewer::VecType vecDir;
-
     amkglCamera()->convertClickToLine(pixel,
-                                      vecOrig,
-                                      vecDir);
-
-    orig = QGLViewerTools::vecToEigen(vecOrig);
-    dir = QGLViewerTools::vecToEigen(vecDir);
+                                      orig,
+                                      dir);
 }
 
 void GGraphicsViewImp::convert3DPositionToPixel(const Eigen::Vector3d &position,
@@ -1153,25 +1121,25 @@ GraphicsView* GGraphicsViewImp::getGraphicsView() const
     return const_cast<GGraphicsViewImp*>(this);
 }
 
-void GGraphicsViewImp::drawCameraInformations()
+void GGraphicsViewImp::drawCameraInformations(DrawInfo& info)
 {
     const DM_GraphicsViewOptions& options = constGetOptionsInternal();
 
     if(options.getCameraInformationDisplayed().testFlag(DM_GraphicsViewOptions::CameraPosition))
-        getDrawInfo()->drawText(tr("Position : %1 | %2 | %3").arg(amkglCamera()->position().x)
-                                                             .arg(amkglCamera()->position().y)
-                                                             .arg(amkglCamera()->position().z));
+        info.drawText(tr("Position : %1 | %2 | %3").arg(amkglCamera()->position().x())
+                                                             .arg(amkglCamera()->position().y())
+                                                             .arg(amkglCamera()->position().z()));
 
     if(options.getCameraInformationDisplayed().testFlag(DM_GraphicsViewOptions::CameraSceneCenter))
-        getDrawInfo()->drawText(tr("Centre de la scene : %1 | %2 | %3").arg(amkglCamera()->sceneCenter().x)
-                                                             .arg(amkglCamera()->sceneCenter().y)
-                                                             .arg(amkglCamera()->sceneCenter().z));
+        info.drawText(tr("Centre de la scene : %1 | %2 | %3").arg(amkglCamera()->sceneCenter().x())
+                                                                       .arg(amkglCamera()->sceneCenter().y())
+                                                                       .arg(amkglCamera()->sceneCenter().z()));
 
     if(options.getCameraInformationDisplayed().testFlag(DM_GraphicsViewOptions::CameraViewDirection))
-        getDrawInfo()->drawText(tr("Direction : %1 | %2 | %3 | %4").arg(amkglCamera()->orientation()[0])
-                                                                   .arg(amkglCamera()->orientation()[1])
-                                                                   .arg(amkglCamera()->orientation()[2])
-                                                                   .arg(amkglCamera()->orientation()[3]));
+        info.drawText(tr("Direction : %1 | %2 | %3 | %4").arg(amkglCamera()->orientation().x())
+                                                                   .arg(amkglCamera()->orientation().y())
+                                                                   .arg(amkglCamera()->orientation().z())
+                                                                   .arg(amkglCamera()->orientation().w()));
 }
 
 void GGraphicsViewImp::computeAndSetTextPosition()
@@ -1304,14 +1272,14 @@ void GGraphicsViewImp::subPostDraw(DrawInfo &info)
     /*glBegin(GL_LINES);
 
     Eigen::Vector3d uV = camera()->upVector();
-    uV *= 2.0;
+    uV *= AMKglViewer::camera()->sceneRadius();
 
     glColor3f(1, 0, 0);
     glVertex3d(0,  0, 0);
     glVertex3d(uV[0], uV[1], uV[2]);
 
     uV = camera()->rightVector();
-    uV *= 2.0;
+    uV *= AMKglViewer::camera()->sceneRadius();
 
     glColor3f(0, 1, 0);
     glVertex3d(0,  0, 0);
@@ -1319,21 +1287,21 @@ void GGraphicsViewImp::subPostDraw(DrawInfo &info)
 
     glEnd();*/
 
-    drawCameraInformations();
-
     AMKglViewer::subPostDraw(info);
 
     // draw pivot point (scene center)
     /*glPushMatrix();
-    glTranslatef(amkglCamera()->pivotPoint().x,
-                 amkglCamera()->pivotPoint().y,
-                 amkglCamera()->pivotPoint().z);
+    glTranslatef(amkglCamera()->pivotPoint().x(),
+                 amkglCamera()->pivotPoint().y(),
+                 amkglCamera()->pivotPoint().z());
     drawAxis();
     glPopMatrix();*/
 }
 
 void GGraphicsViewImp::drawOverlay(QPainter &painter, DrawInfo &info)
 {
+    drawCameraInformations(info);
+
     AMKglViewer::drawOverlay(painter, info);
 
     m_sceneForAction.drawOverlay(painter, info);
@@ -1415,9 +1383,21 @@ void GGraphicsViewImp::keyPressEvent(QKeyEvent *e)
             && e->modifiers().testFlag(Qt::AltModifier)) {
         setDebugModeEnabled(!isDebugModeEnabled());
     }
-    
-    
-    if(e->key() == Qt::Key_Delete) {
+    else if(e->key() == Qt::Key_A)
+    {
+        DM_GraphicsViewOptions opt;
+        opt.updateFromOtherOptions(constGetOptionsInternal());
+        opt.setDrawAxis(!opt.drawAxis());
+        setOptions(opt);
+    }
+    else if(e->key() == Qt::Key_G)
+    {
+        DM_GraphicsViewOptions opt;
+        opt.updateFromOtherOptions(constGetOptionsInternal());
+        opt.setDrawGrid(!opt.drawGrid());
+        setOptions(opt);
+    }
+    else if(e->key() == Qt::Key_Delete) {
         int ret = QMessageBox::question(nullptr, tr("Suppression"), tr("Voulez-vous supprimer les items sélectionnés de la vue ?"), QMessageBox::Yes | QMessageBox::Cancel);
 
         if(ret == QMessageBox::Yes)
@@ -1425,16 +1405,6 @@ void GGraphicsViewImp::keyPressEvent(QKeyEvent *e)
     }
 
     AMKglViewer::keyPressEvent(e);
-
-    DM_GraphicsViewOptions newOptions;
-    newOptions.updateFromOtherOptions(constGetOptionsInternal());
-    newOptions.setDrawGrid(gridIsDrawn());
-    newOptions.setDrawAxis(axisIsDrawn());
-    newOptions.setCameraInformationDisplayed(FPSIsDisplayed() ?
-                                                 newOptions.getCameraInformationDisplayed() | DM_GraphicsViewOptions::FpsInformation
-                                               : newOptions.getCameraInformationDisplayed() & ~DM_GraphicsViewOptions::FpsInformation);
-
-    setOptions(newOptions);
 }
 
 void GGraphicsViewImp::keyReleaseEvent(QKeyEvent *e)
@@ -1575,13 +1545,13 @@ bool GGraphicsViewImp::restoreStateFromFile()
 
                 setOptions(opt);
 
-                if(qIsNaN(amkglCamera()->position().x)
-                        || qIsNaN(amkglCamera()->position().y)
-                        || qIsNaN(amkglCamera()->position().z)
-                        || qIsNaN(amkglCamera()->orientation()[0])
-                        || qIsNaN(amkglCamera()->orientation()[1])
-                        || qIsNaN(amkglCamera()->orientation()[2])
-                        || qIsNaN(amkglCamera()->orientation()[3])) {
+                if(qIsNaN(amkglCamera()->position().x())
+                        || qIsNaN(amkglCamera()->position().y())
+                        || qIsNaN(amkglCamera()->position().z())
+                        || qIsNaN(amkglCamera()->orientation().x())
+                        || qIsNaN(amkglCamera()->orientation().y())
+                        || qIsNaN(amkglCamera()->orientation().z())
+                        || qIsNaN(amkglCamera()->orientation().w())) {
 
                     m_camController->homePosition();
                 }
@@ -1591,13 +1561,9 @@ bool GGraphicsViewImp::restoreStateFromFile()
 
         return false;
     }
-    else
-    {
-        GUI_LOG->addWarningMessage(LogInterface::gui, tr("Open file error : Unable to open file %1").arg(name) + ":\n" + f.errorString());
-        return false;
-    }
 
-    return true;
+    GUI_LOG->addWarningMessage(LogInterface::gui, tr("Open file error : Unable to open file %1").arg(name) + ":\n" + f.errorString());
+    return false;
 }
 
 AMKglViewer::CameraType* GGraphicsViewImp::amkglCamera() const

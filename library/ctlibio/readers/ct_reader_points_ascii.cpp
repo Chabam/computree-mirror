@@ -503,7 +503,7 @@ bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
                     continue;
 
                 // Read each word separately
-                wordsOfLine = currentLine.split(m_separator, Qt::SkipEmptyParts);
+                wordsOfLine = currentLine.split(m_separator, QT_SKIP_EMPTY_PARTS);
 
                 // Checking for a valid line
                 if(maxIndex >= wordsOfLine.size()) {

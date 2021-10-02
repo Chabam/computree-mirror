@@ -1,8 +1,12 @@
 #include "math.h"
 
+#include <Eigen/Geometry>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 Math::Math()
 {
-
 }
 
 void Math::getClosestPointBetweenPointAndLine(const Eigen::Vector3d &p, const Eigen::Vector3d &LP0, const Eigen::Vector3d &dir, Eigen::Vector3d& pOnLine)
@@ -455,4 +459,82 @@ bool Math::getClosestPointBetweenSegmentAndTriangle(const Eigen::Vector3d &p1, c
 bool Math::isPointInPolygon(const QPolygon &pol, const QPoint &p)
 {
     return (pol.size() > 1) && pol.containsPoint(p, Qt::OddEvenFill);
+}
+
+Eigen::Vector3d Math::Rotate(const Eigen::Quaterniond& q, const Eigen::Vector3d& v)
+{
+    const double q00 = 2.0 * q.x() * q.x();
+    const double q11 = 2.0 * q.y() * q.y();
+    const double q22 = 2.0 * q.z() * q.z();
+
+    const double q01 = 2.0 * q.x() * q.y();
+    const double q02 = 2.0 * q.x() * q.z();
+    const double q03 = 2.0 * q.x() * q.w();
+
+    const double q12 = 2.0 * q.y() * q.z();
+    const double q13 = 2.0 * q.y() * q.w();
+
+    const double q23 = 2.0 * q.z() * q.w();
+
+    return Eigen::Vector3d((1.0 - q11 - q22) * v[0] + (q01 - q23) * v[1] + (q02 + q13) * v[2],
+            (q01 + q23) * v[0] + (1.0 - q22 - q00) * v[1] + (q12 - q03) * v[2],
+            (q02 - q13) * v[0] + (q12 + q03) * v[1] +
+            (1.0 - q11 - q00) * v[2]);
+}
+
+Eigen::Vector3d Math::OrthogonalVec(const Eigen::Vector3d& src)
+{
+    // Find smallest component. Keep equal case for null values.
+    if ((fabs(src.y()) >= 0.9 * fabs(src.x())) && (fabs(src.z()) >= 0.9 * fabs(src.x())))
+        return Eigen::Vector3d(0.0, -src.z(), src.y());
+    else if ((fabs(src.x()) >= 0.9 * fabs(src.y())) && (fabs(src.z()) >= 0.9 * fabs(src.y())))
+        return Eigen::Vector3d(-src.z(), 0.0, src.x());
+
+    return Eigen::Vector3d(-src.y(), src.x(), 0.0);
+}
+
+Eigen::Quaterniond Math::CreateQuaternionThatRotateFromTo(const Eigen::Vector3d& from, const Eigen::Vector3d& to)
+{
+    const double epsilon = 1E-10;
+
+    const double fromSqNorm = from.squaredNorm();
+    const double toSqNorm = to.squaredNorm();
+    // Identity Quaternion when one vector is null
+    if ((fromSqNorm < epsilon) || (toSqNorm < epsilon)) {
+        Eigen::Quaterniond q;
+        q.x() = q.y() = q.z() = 0.0;
+        q.w() = 1.0;
+
+        return q;
+    }
+
+    Eigen::Vector3d axis = from.cross(to);
+    const double axisSqNorm = axis.squaredNorm();
+
+    // Aligned vectors, pick any axis, not aligned with from or to
+    if (axisSqNorm < epsilon)
+        axis = OrthogonalVec(from);
+
+    double angle = asin(sqrt(axisSqNorm / (fromSqNorm * toSqNorm)));
+
+    if (from.dot(to) < 0.0)
+        angle = M_PI - angle;
+
+    return Eigen::Quaterniond(Eigen::AngleAxisd(angle, axis.normalized()));
+}
+
+Eigen::Quaterniond Math::CreateQuaternionFromRotatedBasis(const Eigen::Vector3d& x, const Eigen::Vector3d& y, const Eigen::Vector3d& z)
+{
+    Eigen::Matrix3d m;
+    double normX = x.norm();
+    double normY = y.norm();
+    double normZ = z.norm();
+
+    for (int i = 0; i < 3; ++i) {
+      m(i,0) = x[i] / normX;
+      m(i,1) = y[i] / normY;
+      m(i,2) = z[i] / normZ;
+    }
+
+    return Eigen::Quaterniond(m);
 }

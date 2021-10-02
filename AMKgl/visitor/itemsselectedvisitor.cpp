@@ -1,6 +1,6 @@
 #include "itemsselectedvisitor.h"
 
-#include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
+#include "includeitem.h"
 
 ItemsSelectedVisitor::ItemsSelectedVisitor()
 {

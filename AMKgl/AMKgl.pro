@@ -4,7 +4,6 @@
 #
 #-------------------------------------------------
 
-DEFINES *= QGLVIEWER_STATIC
 DEFINES *= AMKGL_NO_TODO_WARNINGS
 
 QT       += core gui xml opengl concurrent
@@ -28,7 +27,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 }
 
 linux|mingw {
-    # Silent warning for LibQGLviewer
+    # Silent warning
     QMAKE_CXXFLAGS += -Wno-deprecated -Wno-deprecated-copy -Wno-deprecated-declarations -Wno-unused -Wmaybe-uninitialized -Wno-c++11-compat
 }
 
@@ -41,7 +40,6 @@ macx {
 }
 
 MUST_USE_EIGEN = 1
-MUST_USE_LIBQGLVIEWER = 1
 
 include(../config/include_dependencies.pri)
 
@@ -162,7 +160,9 @@ SOURCES +=\
     visitor/meshobjectsvisitor.cpp \
     renderer/tools/flagspropertymanager.cpp \
     scene/tools/objectsflagspropertymanager.cpp \
-    scene/permanentsceneelementtype.cpp
+    scene/permanentsceneelementtype.cpp \
+    view/amkglcamera.cpp \
+    tools/amkgldomutils.cpp
 
 HEADERS  += \
     renderer/pointcloud/chunkedpointcloud.h \
@@ -272,7 +272,6 @@ HEADERS  += \
     picker/polygonobjectsofitempicker.h \
     interfaces/igraphicsdocument.h \
     view/amkglviewer.h \
-    tools/qglviewer/qglviewertools.h \
     interfaces/ieasyaccess.h \
     picker/itemspickerbymodel.h \
     picker/pointspickerbymodel.h \
@@ -359,7 +358,9 @@ HEADERS  += \
     picker/tools/pointspickingdefaultfunction.h \
     renderer/tools/objectsflagproperty.h \
     renderer/tools/flagspropertymanager.h \
-    scene/tools/objectsflagspropertymanager.h
+    scene/tools/objectsflagspropertymanager.h \
+    view/amkglcamera.h \
+    tools/amkgldomutils.h
 
 isEmpty(USE_USER_DEFINITIONS) {
     HEADERS  += dummy/dummypoint.h \
@@ -403,17 +404,7 @@ isEmpty(USE_USER_DEFINITIONS) {
 FORMS    += \
     view/drawmodeconfigurator.ui
 
-# INCLUDEPATH += ../$$LIBQGLVIEWER_PATH
 INCLUDEPATH += poly2tri/poly2tri
-# INCLUDEPATH += $$EIGEN_INC_PATH
-
-# LIBS += -L../$$LIBQGLVIEWER_PATH
-
-CONFIG(debug, debug|release) {
-    LIBS += -lQGLViewerd
-} else {
-    LIBS += -lQGLViewer
-}
 
 win32 {
     LIBS += -lopengl32 -lglu32

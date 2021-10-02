@@ -31,6 +31,12 @@
 #include <QFileDialog>
 #include <QString>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+#define QT_SKIP_EMPTY_PARTS Qt::SkipEmptyParts
+#else
+#define QT_SKIP_EMPTY_PARTS QString::SkipEmptyParts
+#endif
+
 CT_FileChoiceButton::CT_FileChoiceButton(QString btlab, CT_FileChoiceButton::NeededFileType filetype, QString fileFilter, QStringList &value, QString description)
 {
     _data._buttonLabel = btlab;
@@ -109,13 +115,13 @@ QWidget* CT_FileChoiceButton::createWidget(QWidget &parent)
 }
 
 void CT_FileChoiceButton::updateValue()
-{       
-    *(_data._value) = _labelCreated->text().split("\n", Qt::SkipEmptyParts);
+{
+    *(_data._value) = _labelCreated->text().split("\n", QT_SKIP_EMPTY_PARTS);
 }
 
 bool CT_FileChoiceButton::isValueAndWidgetValueDifferent() const
 {
-    return ((*_data._value) != _labelCreated->text().split("\n", Qt::SkipEmptyParts));
+    return ((*_data._value) != _labelCreated->text().split("\n", QT_SKIP_EMPTY_PARTS));
 }
 
 QVariant CT_FileChoiceButton::getValue() const

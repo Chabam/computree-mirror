@@ -89,7 +89,7 @@ bool CT_Reader_IDXYZ::internalReadFile(CT_StandardItemGroup* group)
             {
                 line = stream.readLine();
                 currentSizeRead += line.size();
-                QStringList values = line.split("\t", Qt::SkipEmptyParts);
+                QStringList values = line.split("\t", QT_SKIP_EMPTY_PARTS);
 
                 if (values.size() >= 4)
                 {

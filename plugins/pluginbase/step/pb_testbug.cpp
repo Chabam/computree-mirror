@@ -56,7 +56,10 @@ CT_VirtualAbstractStep* PB_TestBug::createNewInstance() const
 
 void PB_TestBug::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    manager.setNotNeedInputResult();
+    manager.addResult(_inResult);
+    manager.setZeroOrMoreRootGroup(_inResult, _rootGroup);
+    manager.addGroup(_rootGroup, _inGroup);
+    manager.addItem(_inGroup, _inScene);
 }
 
 void PB_TestBug::declareOutputModels(CT_StepOutModelStructureManager& manager)
@@ -68,7 +71,25 @@ void PB_TestBug::declareOutputModels(CT_StepOutModelStructureManager& manager)
 
 void PB_TestBug::compute()
 {
-    for (CT_ResultGroup* resOut : _outResult.iterateOutputs())
+    for (const CT_Scene* scene : _inScene.iterateInputs(_inResult))
+    {
+        CT_PointCluster* cluster = _outItem.createInstance();
+
+        CT_PointIterator it(scene->pointCloudIndex());
+
+        while(it.hasNext())
+        {
+            cluster->addPoint(it.next().currentGlobalIndex());
+        }
+
+        CT_StandardItemGroup* group = _outGrp.createInstance();
+
+        auto res = _outResult.createInstance();
+        res->addRootGroup(_outGrp, group);
+        group->addSingularItem(_outItem, cluster);
+    }
+
+    /*for (CT_ResultGroup* resOut : _outResult.iterateOutputs())
     {
         CT_StandardItemGroup* grp = nullptr;
         CT_Circle2D* item = nullptr;
@@ -88,5 +109,5 @@ void PB_TestBug::compute()
         resOut->addRootGroup(_outGrp, grp);
         item = new CT_Circle2D(new CT_Circle2DData(Eigen::Vector2d(2, 2), 0.5));
         grp->addSingularItem(_outItem, item);
-    }
+    }*/
 }

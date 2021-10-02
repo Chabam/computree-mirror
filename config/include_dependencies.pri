@@ -16,12 +16,6 @@ isEmpty(LIB_PATH) : LIB_PATH = # empty
     include(include_necessary_muparser.pri)
     message("DEPENDENCY SETUP - MUPARSER     will be used in $$TARGET")
 }
-!isEmpty(CHECK_CAN_USE_LIBQGLVIEWER)|!isEmpty(MUST_USE_LIBQGLVIEWER) {
-    include(default_path_libqglviewer.pri)
-    exists(user_path_libqglviewer.pri) : include(user_path_libqglviewer.pri)
-    include(include_necessary_libqglviewer.pri)
-    message("DEPENDENCY SETUP - LIBQGLVIEWER will be used in $$TARGET")
-}
 !isEmpty(CHECK_CAN_USE_GDAL)|!isEmpty(MUST_USE_GDAL)|contains( COMPUTREE, ctlibgdal) {
     include(default_path_gdal.pri)
     exists(user_path_gdal.pri) : include(user_path_gdal.pri)

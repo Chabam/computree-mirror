@@ -14,7 +14,7 @@
 #pragma GCC diagnostic ignored "-Wextra"
 #pragma GCC diagnostic ignored "-Wint-in-bool-context"
 #endif
-#include <qglviewer.h>
+#include <view/amkglcamera.h>
 #if defined(_WIN32) && defined(_MSC_VER)
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
 #pragma GCC diagnostic pop
@@ -25,6 +25,7 @@
 #include "picker/geometry/triangleplane.h"
 
 #include <QVector>
+#include <QPolygon>
 
 class ShapeToVolume
 {
@@ -40,7 +41,7 @@ public:
      * @warning The polygon must have point ordered in clockwise !
      */
     static QVector<TrianglePlane> staticTriangulatePolygonAndConvertItToPlanes(const QPolygon &polygon,
-                                                                               const qglviewer::Camera &camera);
+                                                                               const AMKglCamera &camera);
 
     /**
      * @brief Returns triangles transformed by the matrix
@@ -126,15 +127,15 @@ public:
      * @warning The polygon must have point ordered in clockwise !
      */
     static QVector<Plane> staticConvertPolygonToPlanes(const QPolygon &polygon,
-                                                       const qglviewer::Camera &camera);
+                                                       const AMKglCamera& camera);
 
     /**
      * @brief Convert a 2D point to a 3D line that begin at zNear of the camera and end on the zFar of the camera
      */
-    static void staticConvert2DPointTo3DLine(const qglviewer::Camera &camera,
+    static void staticConvert2DPointTo3DLine(const AMKglCamera &camera,
                                              const QPoint &pos,
-                                             qglviewer::Vec &nearV,
-                                             qglviewer::Vec &farV);
+                                             Eigen::Vector3d& nearV,
+                                             Eigen::Vector3d& farV);
 
     /**
      * @brief Get the camera near and far plane
@@ -142,7 +143,7 @@ public:
      * @param nearPlane : (out) near plane computed
      * @param farPlane :  (out)far plane computed
      */
-    static void staticGetCameraPlane(const qglviewer::Camera &camera, Plane& nearPlane, Plane& farPlane);
+    static void staticGetCameraPlane(const AMKglCamera &camera, Plane& nearPlane, Plane& farPlane);
 };
 
 #endif // SHAPETOVOLUME_H

@@ -53,9 +53,9 @@ void DrawInfo::getModelViewMatrix(GLdouble mw[])
 
 Eigen::Vector4d DrawInfo::getCameraTranslation() const
 {
-    return Eigen::Vector4d(m_viewer->camera()->position().x,
-                           m_viewer->camera()->position().y,
-                           m_viewer->camera()->position().z,
+    return Eigen::Vector4d(m_viewer->camera()->position().x(),
+                           m_viewer->camera()->position().y(),
+                           m_viewer->camera()->position().z(),
                            1);
 }
 

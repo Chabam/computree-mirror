@@ -373,5 +373,8 @@ void ChunkGenericCloudObjectForOutliers::addVertexesTo(const std::vector<DoubleP
     }*/
 
     for(quint8 i=0; i<m_nVertexPerObject; ++i)
-        vertexes->vertexes[i] = (points[i] - vertexes->offset).cast<float>();
+    {
+        Eigen::Vector3f& tmp = vertexes->vertexes[i];
+        tmp = (points[i] - vertexes->offset).cast<float>();
+    }
 }

@@ -16,7 +16,6 @@
 #include "picker/tools/objectsflagstool.h"
 
 #include "tools/opengl/shapetovolume.h"
-#include "tools/qglviewer/qglviewertools.h"
 #include "tools/polygonforpicking.h"
 #include "tools/rectangleforpicking.h"
 #include "tools/pointcloudattributesprovider.h"
@@ -266,7 +265,7 @@ bool ActionPickAnyElements::pick()
                 ok = false;
 
                 if(!AMKglEA->getGlobalPointCloudManager()->isEmpty()) {
-                    GLdouble modelViewMatrix[16];
+                    Eigen::Matrix4d modelViewMatrix;
                     m_glViewer->camera()->getModelViewMatrix(modelViewMatrix);
 
                     PolygonPointsPickerByModel picker(ShapeToVolume::staticTriangulatePolygonAndConvertItToPlanes(getPolygon(),
@@ -313,8 +312,8 @@ bool ActionPickAnyElements::pick()
                         picker.setCheckOperation(checkOperation);
                     }
 
-                    picker.setCameraPosition(QGLViewerTools::vecToEigen(m_glViewer->camera()->position()));
-                    picker.setCameraModelViewMatrix(QGLViewerTools::doubleMatrixToEigen(modelViewMatrix));
+                    picker.setCameraPosition(m_glViewer->camera()->position());
+                    picker.setCameraModelViewMatrix(modelViewMatrix);
 
                     m_glViewer->getPermanentSceneToRender()->visitPoints(picker);
 
@@ -327,7 +326,7 @@ bool ActionPickAnyElements::pick()
 
             } else if(getElementToPickType() == ETP_Items) {
                 if(ok) {
-                    GLdouble modelViewMatrix[16];
+                    Eigen::Matrix4d modelViewMatrix;
                     m_glViewer->camera()->getModelViewMatrix(modelViewMatrix);
 
                     PolygonItemsPickerByModel picker(ShapeToVolume::staticConvertPolygonToPlanes(getPolygon(), *m_glViewer->camera()),
@@ -378,8 +377,8 @@ bool ActionPickAnyElements::pick()
                         picker.setCheckOperation(checkOperation);
                     }
 
-                    picker.setCameraPosition(QGLViewerTools::vecToEigen(m_glViewer->camera()->position()));
-                    picker.setCameraModelViewMatrix(QGLViewerTools::doubleMatrixToEigen(modelViewMatrix));
+                    picker.setCameraPosition(m_glViewer->camera()->position());
+                    picker.setCameraModelViewMatrix(modelViewMatrix);
 
                     m_glViewer->getPermanentSceneToRender()->visitItems(picker);
 
@@ -389,7 +388,7 @@ bool ActionPickAnyElements::pick()
                 }
             } else if((getElementToPickType() == ETP_Faces) || (getElementToPickType() == ETP_Edges)) {
 
-                GLdouble modelViewMatrix[16];
+                Eigen::Matrix4d modelViewMatrix;
                 m_glViewer->camera()->getModelViewMatrix(modelViewMatrix);
 
                 PolygonMeshObjectsPickerByModel* picker = nullptr;
@@ -448,8 +447,8 @@ bool ActionPickAnyElements::pick()
                     picker->setCheckOperation(checkOperation);
                 }
 
-                picker->setCameraPosition(QGLViewerTools::vecToEigen(m_glViewer->camera()->position()));
-                picker->setCameraModelViewMatrix(QGLViewerTools::doubleMatrixToEigen(modelViewMatrix));
+                picker->setCameraPosition(m_glViewer->camera()->position());
+                picker->setCameraModelViewMatrix(modelViewMatrix);
 
                 m_glViewer->getPermanentSceneToRender()->visitObjectsOfTypes(objectToVisit, *picker);
 

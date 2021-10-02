@@ -27,7 +27,8 @@
 
 #include "ct_step/abstract/ct_abstractstepcanbeaddedfirst.h"
 
-#include "ct_itemdrawable/ct_circle2d.h"
+#include "ct_itemdrawable/ct_scene.h"
+#include "ct_itemdrawable/ct_pointcluster.h"
 #include "ct_itemdrawable/ct_loopcounter.h"
 
 #include "ct_view/tools/ct_textfileconfigurationdialog.h"
@@ -57,9 +58,14 @@ protected:
 
 private:
 
+    CT_HandleInResultGroup<> _inResult;
+    CT_HandleInStdZeroOrMoreGroup _rootGroup;
+    CT_HandleInStdGroup<> _inGroup;
+    CT_HandleInSingularItem<CT_Scene>   _inScene;
+
     CT_HandleOutResultGroup                                                             _outResult;
     CT_HandleOutStdGroup                                                                _outGrp;
-    CT_HandleOutSingularItem<CT_Circle2D>                                               _outItem;
+    CT_HandleOutSingularItem<CT_PointCluster>                                               _outItem;
 
 };
 

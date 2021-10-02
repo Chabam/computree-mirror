@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QWidget>
+#include <functional>
 
 #include "PortType.hpp"
 #include "NodeData.hpp"

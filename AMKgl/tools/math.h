@@ -5,7 +5,7 @@
 #include <QPointF>
 #include <QPolygon>
 
-#include <Eigen/Core>
+#include <Eigen/Dense>
 
 class Math
 {
@@ -109,6 +109,25 @@ public:
      * @brief Returns true if the point is in the polygon
      */
     static bool isPointInPolygon(const QPolygon &pol, const QPoint &p);
+
+    /**
+     * @brief Rotate a vector using a rotation quaternion
+     */
+    static Eigen::Vector3d Rotate(const Eigen::Quaterniond& rotation, const Eigen::Vector3d& v);
+
+    /**
+     * @brief Returns a vector orthogonal to the src vector
+     */
+    static Eigen::Vector3d OrthogonalVec(const Eigen::Vector3d& src);
+
+    /**
+     * @brief Create a quaternion that will rotate from the "from" direction to the
+     *        "to" direction.
+     */
+    static Eigen::Quaterniond CreateQuaternionThatRotateFromTo(const Eigen::Vector3d &from,
+                                                               const Eigen::Vector3d &to);
+
+    static Eigen::Quaterniond CreateQuaternionFromRotatedBasis(const Eigen::Vector3d& x, const Eigen::Vector3d& y, const Eigen::Vector3d& z);
 };
 
 #endif // MATH_H

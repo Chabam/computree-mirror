@@ -3,6 +3,7 @@
 #include "amkglapp.h"
 #include "interfaces/igraphicsdocument.h"
 #include "tools/icloudattributesprovider.h"
+#include "includenormal.h"
 
 #include <QOpenGLFunctions_2_0>
 

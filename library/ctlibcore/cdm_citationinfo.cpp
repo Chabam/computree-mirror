@@ -2,6 +2,12 @@
 #include "ct_abstractstepplugin.h"
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+#define QT_SKIP_EMPTY_PARTS Qt::SkipEmptyParts
+#else
+#define QT_SKIP_EMPTY_PARTS QString::SkipEmptyParts
+#endif
+
 CDM_CitationInfo::CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager) : QObject(nullptr)
 {
     _stepManager = stepManager;
@@ -160,7 +166,7 @@ QString CDM_CitationInfo::getPluginRIS()
 QString CDM_CitationInfo::parseRIS(QString ris)
 {    
     QMultiMap<QString, QString> fields;
-    QStringList lines = ris.split("\n", Qt::SkipEmptyParts);
+    QStringList lines = ris.split("\n", QT_SKIP_EMPTY_PARTS);
 
     for (int i = 0 ; i < lines.size() ; i++)
     {

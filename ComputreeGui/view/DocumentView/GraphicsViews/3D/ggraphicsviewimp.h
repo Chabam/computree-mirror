@@ -134,7 +134,6 @@ public:
     Q_DECL_DEPRECATED void setSelectRegionWidth(int width);
     Q_DECL_DEPRECATED void setSelectRegionHeight(int height);
     Q_DECL_DEPRECATED void select(const QPoint& point);
-    using AMKglViewer::select;
     void select(const QPolygon& polygon);
 
     CT_SPCIR getSelectedPoints() const;
@@ -264,7 +263,7 @@ private:
     /**
      * @brief Draw camera informations
      */
-    void drawCameraInformations();
+    void drawCameraInformations(DrawInfo &info);
 
     /**
      * @brief Compute and set the text position
