@@ -68,7 +68,7 @@ QString CT_StepsMenu::staticOperationToDisplayableName(CT_StepsMenu::LevelOperat
     case LO_Export : return QObject::tr("Exporter");
     case LO_WorkFlow : return QObject::tr("Flux");
     case LO_Points : return QObject::tr("Points");
-    case LO_GeometricalShapes : return QObject::tr("Géométrie 3D;;aa");
+    case LO_GeometricalShapes : return QObject::tr("Géométrie 3D");
     case LO_Voxels : return QObject::tr("Voxels");
     case LO_Shapes2D : return QObject::tr("Géométrie 2D");
     case LO_Rasters : return QObject::tr("Rasters / Images");
