@@ -68,10 +68,21 @@ isEmpty(USE_QHULL_ERROR_MSG) {
         DEFINES += USE_QHULL
 
         win32 {
-            INCLUDEPATH += $$LIB_PATH/$$QHULL_INC_PATH
-            TR_EXCLUDE  += $$LIB_PATH/$$QHULL_INC_PATH/*
-            DEPENDPATH  += $$LIB_PATH/$$QHULL_INC_PATH
-            LIBS += -L$$LIB_PATH/$$QHULL_LIBS_PATH
+            ABS_PATH = $$absolute_path($$QHULL_INC_PATH)
+            TMP_LIB_PATH = $$LIB_PATH/
+
+            equals(ABS_PATH, $$QHULL_INC_PATH) {
+                TMP_LIB_PATH = ""
+            }
+
+            INCLUDEPATH += $$TMP_LIB_PATH$$QHULL_INC_PATH
+            TR_EXCLUDE  += $$TMP_LIB_PATH$$QHULL_INC_PATH/*
+            DEPENDPATH  += $$TMP_LIB_PATH$$QHULL_INC_PATH
+            LIBS += -L$$TMP_LIB_PATH$$QHULL_LIBS_PATH
+
+            !isEmpty(QHULL_BIN_PATH) {
+                LIBS += -L$${TMP_LIB_PATH}$$QHULL_BIN_PATH
+            }
         } else {
             INCLUDEPATH += $$QHULL_INC_PATH
             TR_EXCLUDE  += $$QHULL_INC_PATH/*

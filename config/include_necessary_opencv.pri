@@ -129,16 +129,24 @@ isEmpty(USE_OPENCV_ERROR_MSG) {
         DEFINES += USE_OPENCV
 
         win32 {
-            INCLUDEPATH += $$LIB_PATH$$OPENCV_INC_PATH
-        
-            TR_EXCLUDE  += $$LIB_PATH$$OPENCV_INC_PATH/*
+            ABS_PATH = $$absolute_path($$PCL_INC_PATH)
+            TMP_LIB_PATH = $$LIB_PATH
 
-            LIBS += -L$$LIB_PATH$$OPENCV_LIBS_PATH
+            equals(ABS_PATH, $$PCL_INC_PATH) {
+                TMP_LIB_PATH = ""
+            }
+
+            INCLUDEPATH += $$TMP_LIB_PATH$$OPENCV_INC_PATH
+            TR_EXCLUDE  += $$TMP_LIB_PATH$$OPENCV_INC_PATH/*
+            LIBS += -L$$TMP_LIB_PATH$$OPENCV_LIBS_PATH
+
+            !isEmpty(OPENCV_BIN_PATH) {
+                LIBS += -L$${TMP_LIB_PATH}$$OPENCV_BIN_PATH
+            }
+
         } else {
             INCLUDEPATH += $$OPENCV_INC_PATH
-
             TR_EXCLUDE  += $$OPENCV_INC_PATH/*
-
             LIBS += -L$$OPENCV_LIBS_PATH
         }
 

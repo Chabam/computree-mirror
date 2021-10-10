@@ -9,6 +9,7 @@ win32 {
     PCL_BASE_PATH = "../3rdparty/pcl/"
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
+    PCL_BIN_PATH = "$${PCL_BASE_PATH}bin"
     PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.11"
 }
 

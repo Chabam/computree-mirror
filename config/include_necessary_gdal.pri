@@ -61,11 +61,21 @@ isEmpty(USE_GDAL_ERROR_MSG) {
         DEFINES += USE_GDAL
 
         win32 {
-            INCLUDEPATH += $$LIB_PATH/$$GDAL_INC_PATH
-        
-            TR_EXCLUDE  += $$LIB_PATH/$$GDAL_INC_PATH/*
-        
-            LIBS += -L$$LIB_PATH/$$GDAL_LIBS_PATH
+
+            ABS_PATH = $$absolute_path($$GDAL_INC_PATH)
+            TMP_LIB_PATH = $$LIB_PATH/
+
+            equals(ABS_PATH, $$GDAL_INC_PATH) {
+                TMP_LIB_PATH = ""
+            }
+
+            INCLUDEPATH += $$TMP_LIB_PATH$$GDAL_INC_PATH
+            TR_EXCLUDE  += $$TMP_LIB_PATH$$GDAL_INC_PATH/*
+            LIBS += -L$$TMP_LIB_PATH$$GDAL_LIBS_PATH
+
+            !isEmpty(GDAL_BIN_PATH) {
+                LIBS += -L$${TMP_LIB_PATH}$$GDAL_BIN_PATH
+            }
         } else {
             INCLUDEPATH += $$GDAL_INC_PATH
 

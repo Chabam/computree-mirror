@@ -10,6 +10,7 @@ win32 {
 
     QHULL_INC_PATH = "$${QHULL_BASE_PATH}include"
     QHULL_LIBS_PATH = "$${QHULL_BASE_PATH}lib"
+    QHULL_BIN_PATH = "$${QHULL_BASE_PATH}bin"
 }
 
 macx {

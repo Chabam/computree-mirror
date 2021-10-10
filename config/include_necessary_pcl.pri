@@ -62,14 +62,22 @@ windows {
             !exists($$PCL_LIBS_PATH/$${a}*) {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a} was not found"
             } else {
-                PCL_LIBS_FOUNDED += -l$${a}
+                exists($$PCL_LIBS_PATH/$${a}_debug*) {
+                    PCL_LIBS_FOUNDED += -l$${a}_debug
+                } else {
+                    PCL_LIBS_FOUNDED += -l$${a}
+                }
             }
         } else {
 
             !exists($$PCL_LIBS_PATH/$${a}*) {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a} was not found"
             } else {
-                PCL_LIBS_FOUNDED += -l$${a}
+                exists($$PCL_LIBS_PATH/$${a}_release*) {
+                    PCL_LIBS_FOUNDED += -l$${a}_release
+                } else {
+                    PCL_LIBS_FOUNDED += -l$${a}
+                }
             }
         }
     }
@@ -80,9 +88,21 @@ isEmpty(USE_PCL_ERROR_MSG) {
         DEFINES += USE_PCL
 
         win32 {
-            INCLUDEPATH += $$LIB_PATH/$$PCL_INC_PATH
-            TR_EXCLUDE  += $$LIB_PATH/$$PCL_INC_PATH/*
-            LIBS += -L$$LIB_PATH/$$PCL_LIBS_PATH
+            ABS_PATH = $$absolute_path($$PCL_INC_PATH)
+            TMP_LIB_PATH = $$LIB_PATH/
+
+            equals(ABS_PATH, $$PCL_INC_PATH) {
+                TMP_LIB_PATH = ""
+            }
+
+            INCLUDEPATH += $${TMP_LIB_PATH}$$PCL_INC_PATH
+            TR_EXCLUDE  += $${TMP_LIB_PATH}$$PCL_INC_PATH/*
+            LIBS += -L$${TMP_LIB_PATH}$$PCL_LIBS_PATH
+
+            !isEmpty(PCL_BIN_PATH) {
+                LIBS += -L$${TMP_LIB_PATH}$$PCL_BIN_PATH
+            }
+
         } else {
             INCLUDEPATH += $$PCL_INC_PATH
             TR_EXCLUDE  += $$PCL_INC_PATH/*
