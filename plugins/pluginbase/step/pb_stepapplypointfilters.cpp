@@ -8,7 +8,7 @@
 #include "ct_filter/abstract/ct_abstractfilter_xyz.h"
 #include "ctliblas/filters/abstract/ct_abstractfilter_las.h"
 
-#include "tools/pb_configurableelementtools.h"
+#include "tools/ct_configurableelementtools.h"
 
 PB_StepApplyPointFilters::PB_StepApplyPointFilters() : SuperClass()
 {
@@ -32,14 +32,14 @@ QString PB_StepApplyPointFilters::description() const
 // Step detailled description
 QString PB_StepApplyPointFilters::detailledDescription() const
 {
-    return PB_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzFiltersAvailable());
+    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzFiltersAvailable());
 }
 
 void PB_StepApplyPointFilters::savePostSettings(SettingsWriterInterface &writer) const
 {
     SuperClass::savePostSettings(writer);
 
-    PB_ConfigurableElementTools::saveSettingsOfACollectionOfConfigurableElement(m_selectedXYZFilters,
+    CT_ConfigurableElementTools::saveSettingsOfACollectionOfConfigurableElement(m_selectedXYZFilters,
                                                                                 this,
                                                                                 "Filter",
                                                                                 writer);
@@ -47,7 +47,7 @@ void PB_StepApplyPointFilters::savePostSettings(SettingsWriterInterface &writer)
 
 bool PB_StepApplyPointFilters::restorePostSettings(SettingsReaderInterface &reader)
 {
-    if (!PB_ConfigurableElementTools::restoreSettingsOfConfigurableElementAndSaveItInACollection(m_selectedXYZFilters,
+    if (!CT_ConfigurableElementTools::restoreSettingsOfConfigurableElementAndSaveItInACollection(m_selectedXYZFilters,
                                                                                                pluginStaticCastT<PB_StepPluginManager>()->xyzFiltersAvailable(),
                                                                                                this,
                                                                                                "Filter",

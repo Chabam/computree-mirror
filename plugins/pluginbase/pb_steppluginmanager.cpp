@@ -101,9 +101,9 @@
 
 #include "ct_filter/abstract/ct_abstractfilter_xyz.h"
 
-#include "tools/pb_configurableelementtools.h"
-#include "tools/pb_readerstools.h"
-#include "tools/pb_exportertools.h"
+#include "tools/ct_configurableelementtools.h"
+#include "tools/ct_readerstools.h"
+#include "tools/ct_exportertools.h"
 
 #include <QMessageBox>
 #include <QSettings>
@@ -364,7 +364,7 @@ bool PB_StepPluginManager::loadReaders()
             QString name = CT_GdalTools::staticGdalDriverName(driver);
 
             if(!name.isEmpty())
-                gdalReaderC.append(new CT_Reader_GDAL(driver, CT_StepsMenu::LP_Raster, CT_StepsMenu::LP_Vector, CT_StepsMenu::LP_Others));
+                gdalReaderC.append(new CT_Reader_GDAL(driver, CT_StepsMenu::LP_Others, CT_StepsMenu::LP_Raster, CT_StepsMenu::LP_Vector));
         }
 
         if(!gdalReaderC.isEmpty()) {
@@ -434,7 +434,7 @@ void PB_StepPluginManager::aboutToBeUnloaded()
 */
 void PB_StepPluginManager::initRasterMetricsCollection()
 {
-    PB_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractMetric*>>(m_rasterMetricsOfAllPlugins,
+    CT_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractMetric*>>(m_rasterMetricsOfAllPlugins,
                                                                    [](const CT_AbstractStepPlugin* plugin) -> QList<CT_AbstractMetric*> {
                                                                         return plugin->getMetricsAvailable();
                                                                    },
@@ -445,7 +445,7 @@ void PB_StepPluginManager::initRasterMetricsCollection()
 
 void PB_StepPluginManager::initXyzMetricsCollection()
 {
-    PB_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractMetric*>>(m_xyzMetricsOfAllPlugins,
+    CT_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractMetric*>>(m_xyzMetricsOfAllPlugins,
                                                                    [](const CT_AbstractStepPlugin* plugin) -> QList<CT_AbstractMetric*> {
                                                                         return plugin->getMetricsAvailable();
                                                                    },
@@ -457,7 +457,7 @@ void PB_StepPluginManager::initXyzMetricsCollection()
 
 void PB_StepPluginManager::initXyzFiltersCollection()
 {
-    PB_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractFilter*>>(m_xyzFiltersOfAllPlugins,
+    CT_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractFilter*>>(m_xyzFiltersOfAllPlugins,
                                                                    [](const CT_AbstractStepPlugin* plugin) -> QList<CT_AbstractFilter*> {
                                                                         return plugin->getFiltersAvailable();
                                                                    },
@@ -468,13 +468,13 @@ void PB_StepPluginManager::initXyzFiltersCollection()
 
 void PB_StepPluginManager::initReadersCollection()
 {
-    PB_ReadersTools::initAvailableReaders(m_readersOfAllPlugins, nullptr);
+    CT_ReadersTools::initAvailableReaders(m_readersOfAllPlugins, nullptr);
 }
 
 void PB_StepPluginManager::initExportersCollection()
 {
-    PB_ExporterTools::initAvailableExporters(m_exportersOfAllPlugins, nullptr);
-    PB_ExporterTools::initAvailableExporters(m_exportersOfAllPluginsForPointsWithPieceByPieceAvailable,
+    CT_ExporterTools::initAvailableExporters(m_exportersOfAllPlugins, nullptr);
+    CT_ExporterTools::initAvailableExporters(m_exportersOfAllPluginsForPointsWithPieceByPieceAvailable,
                                              [](const CT_AbstractExporter* exporter)->bool {
                                                  return exporter->canExportPoints() && exporter->canExportPieceByPiece();
                                              });

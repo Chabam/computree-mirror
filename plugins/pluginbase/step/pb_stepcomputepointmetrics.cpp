@@ -7,7 +7,7 @@
 
 #include "ct_view/elements/ctg_configurableelementsselector.h"
 
-#include "tools/pb_configurableelementtools.h"
+#include "tools/ct_configurableelementtools.h"
 
 PB_StepComputePointMetrics::PB_StepComputePointMetrics() : SuperClass()
 {
@@ -27,12 +27,12 @@ QString PB_StepComputePointMetrics::description() const
 
 QString PB_StepComputePointMetrics::detailledDescription() const
 {
-    return PB_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable());
+    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable());
 }
 
 void PB_StepComputePointMetrics::savePostSettings(SettingsWriterInterface &writer) const
 {
-    PB_ConfigurableElementTools::saveSettingsOfACollectionOfConfigurableElement(m_selectedXYZMetrics,
+    CT_ConfigurableElementTools::saveSettingsOfACollectionOfConfigurableElement(m_selectedXYZMetrics,
                                                                                 this,
                                                                                 "Metric",
                                                                                 writer);
@@ -42,7 +42,7 @@ void PB_StepComputePointMetrics::savePostSettings(SettingsWriterInterface &write
 
 bool PB_StepComputePointMetrics::restorePostSettings(SettingsReaderInterface &reader)
 {
-    if(!PB_ConfigurableElementTools::restoreSettingsOfConfigurableElementAndSaveItInACollection(m_selectedXYZMetrics,
+    if(!CT_ConfigurableElementTools::restoreSettingsOfConfigurableElementAndSaveItInACollection(m_selectedXYZMetrics,
                                                                                                 pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable(),
                                                                                                 this,
                                                                                                 "Metric",

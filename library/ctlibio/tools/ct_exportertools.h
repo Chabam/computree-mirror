@@ -1,12 +1,12 @@
-#ifndef PB_EXPORTERTOOLS_H
-#define PB_EXPORTERTOOLS_H
+#ifndef CT_EXPORTERTOOLS_H
+#define CT_EXPORTERTOOLS_H
 
 #include "ct_global/ct_context.h"
 #include "ct_exporter/abstract/ct_abstractexporter.h"
 #include "ct_exporter/ct_standardexporterseparator.h"
 #include "ct_abstractstepplugin.h"
 
-class PB_ExporterTools {
+class CT_ExporterTools {
 public:
     /**
      * @brief For all plugins loaded, get the list of exporters and add all exporter that
@@ -91,4 +91,4 @@ public:
     }
 };
 
-#endif // PB_EXPORTERTOOLS_H
+#endif // CT_EXPORTERTOOLS_H

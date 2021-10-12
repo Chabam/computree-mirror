@@ -2,7 +2,7 @@
 
 #include "pb_steppluginmanager.h"
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
-#include "tools/pb_readerstools.h"
+#include "tools/ct_readerstools.h"
 #include "ct_log/ct_logmanager.h"
 
 #include <QMessageBox>
@@ -17,7 +17,7 @@ PB_StepLoopOnFiles::PB_StepLoopOnFiles() : SuperClass(),
 
 PB_StepLoopOnFiles::~PB_StepLoopOnFiles()
 {
-    delete mReader;
+    if (mReader != nullptr) {delete mReader;}
     delete m_folderIterator;
 }
 
@@ -33,7 +33,7 @@ CT_VirtualAbstractStep* PB_StepLoopOnFiles::createNewInstance() const
 
 void PB_StepLoopOnFiles::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    const QStringList list_readersList = PB_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
+    const QStringList list_readersList = CT_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
 
     preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedUniqueName);
 }
@@ -45,14 +45,14 @@ void PB_StepLoopOnFiles::finalizePreSettings()
     CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
 
     if(reader == nullptr) {
-        delete mReader;
+        if (mReader != nullptr) {delete mReader;}
         mReader = nullptr;
         return;
     }
 
     if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
     {
-        delete mReader;
+        if (mReader != nullptr) {delete mReader;}
         mReader = reader->copyFull();
     }
 }
@@ -268,6 +268,6 @@ QDirIterator* PB_StepLoopOnFiles::createFilesIterator(const QString& dirPath) co
     if(mReader == nullptr)
         return nullptr;
 
-    const QStringList fileFilters = PB_ReadersTools::constructStringListToFilterFiles(mReader);
+    const QStringList fileFilters = CT_ReadersTools::constructStringListToFilterFiles(mReader);
     return new QDirIterator(dirPath, fileFilters, QDir::Files | QDir::NoSymLinks, QDirIterator::NoIteratorFlags);
 }

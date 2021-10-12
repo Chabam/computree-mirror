@@ -29,10 +29,7 @@ HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     step/pb_steploadfilebyname.h \
     step/pb_stepusereadertoloadfiles.h \
     step/pb_stepcreatereaderlist.h \
-    step/pb_testbug.h \
-    tools/pb_configurableelementtools.h \
-    tools/pb_exportertools.h \
-    tools/pb_readerstools.h
+    step/pb_testbug.h
 
 SOURCES += \
     pb_pluginentry.cpp \

@@ -2,7 +2,7 @@
 
 #include "pb_steppluginmanager.h"
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
-#include "tools/pb_readerstools.h"
+#include "tools/ct_readerstools.h"
 
 #include <QMessageBox>
 
@@ -37,7 +37,7 @@ CT_VirtualAbstractStep* PB_StepCreateReaderList::createNewInstance() const
 
 void PB_StepCreateReaderList::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    const QStringList list_readersList = PB_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
+    const QStringList list_readersList = CT_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
 
     preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedUniqueName);
 }
@@ -66,7 +66,7 @@ void PB_StepCreateReaderList::declareInputModels(CT_StepInModelStructureManager&
 
 bool PB_StepCreateReaderList::postInputConfigure()
 {
-    const QString fileFilter = PB_ReadersTools::constructStringForFileDialog(mReader);
+    const QString fileFilter = CT_ReadersTools::constructStringForFileDialog(mReader);
 
     if(fileFilter.isEmpty()) {
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun reader sélectionné"));

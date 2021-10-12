@@ -2,7 +2,7 @@
 
 #include "pb_steppluginmanager.h"
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
-#include "tools/pb_readerstools.h"
+#include "tools/ct_readerstools.h"
 #include "ct_log/ct_logmanager.h"
 
 #include <QMessageBox>
@@ -17,7 +17,7 @@ PB_StepLoopOnFileSets::PB_StepLoopOnFileSets() : CT_StepBeginLoop(),
 
 PB_StepLoopOnFileSets::~PB_StepLoopOnFileSets()
 {
-    delete mReader;
+    if (mReader != nullptr) {delete mReader;}
 }
 
 QString PB_StepLoopOnFileSets::description() const
@@ -32,7 +32,7 @@ CT_VirtualAbstractStep* PB_StepLoopOnFileSets::createNewInstance() const
 
 void PB_StepLoopOnFileSets::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    const QStringList list_readersList = PB_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
+    const QStringList list_readersList = CT_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
 
     preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedUniqueName);
 }
@@ -44,21 +44,21 @@ void PB_StepLoopOnFileSets::finalizePreSettings()
     CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedUniqueName);
 
     if(reader == nullptr) {
-        delete mReader;
+        if (mReader != nullptr) {delete mReader;}
         mReader = nullptr;
         return;
     }
 
     if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
     {
-        delete mReader;
+        if (mReader != nullptr) {delete mReader;}
         mReader = reader->copyFull();
     }
 }
 
 bool PB_StepLoopOnFileSets::postInputConfigure()
 {
-    const QString fileFilter = PB_ReadersTools::constructStringForFileDialog(mReader);
+    const QString fileFilter = CT_ReadersTools::constructStringForFileDialog(mReader);
 
     if(fileFilter.isEmpty()) {
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun reader sélectionné"));
@@ -287,7 +287,7 @@ QList<PB_StepLoopOnFileSets::Set> PB_StepLoopOnFileSets::ReadSetsInFile(const QS
 
     QDir dir(folderPath);
 
-    const QStringList fileFilters = PB_ReadersTools::constructStringListToFilterFiles(reader);
+    const QStringList fileFilters = CT_ReadersTools::constructStringListToFilterFiles(reader);
     const bool noFileFilter = fileFilters.contains("*.*");
 
     int nFile = 0;

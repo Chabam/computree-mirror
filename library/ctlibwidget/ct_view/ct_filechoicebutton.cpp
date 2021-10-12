@@ -83,14 +83,14 @@ QWidget* CT_FileChoiceButton::createWidget(QWidget &parent)
     {
         _widgetCreated = new QWidget(&parent);
         _pushButtonCreated = new QPushButton(_widgetCreated);
-        _pushButtonCreated->setText(_data._buttonLabel);
+        _pushButtonCreated->setText(QString(" %1").arg(_data._buttonLabel));
+        _pushButtonCreated->setStyleSheet("text-align:left;");
+        _pushButtonCreated->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 
-        _scrollArea = new QScrollArea(_widgetCreated);
-        _scrollArea->setFrameShape(QScrollArea::NoFrame);
-        _scrollArea->setWidgetResizable(true);
-        _scrollArea->setSizeAdjustPolicy(QScrollArea::AdjustToContents);
-
-        _labelCreated = new QLabel(_scrollArea);
+        _labelCreated = new QLabel(_widgetCreated);
+        _labelCreated->setWordWrap(true);
+        _labelCreated->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+        _labelCreated->setMinimumWidth(600);
 
         _labelCreated->setText("");
         for (int i = 0 ; i < (*_data._value).size() ; ++i)
@@ -103,9 +103,7 @@ QWidget* CT_FileChoiceButton::createWidget(QWidget &parent)
         _verticalLayout->setSpacing(0);
 
         _verticalLayout->addWidget(_pushButtonCreated);
-        _verticalLayout->addWidget(_scrollArea);
-        _scrollArea->setWidget(_labelCreated);
-        _labelCreated->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        _verticalLayout->addWidget(_labelCreated);
 
         connect(_pushButtonCreated, SIGNAL(clicked()),this,SLOT(chooseFile()));
 

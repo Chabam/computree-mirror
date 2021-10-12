@@ -1,12 +1,12 @@
-#ifndef PB_READERSTOOLS_H
-#define PB_READERSTOOLS_H
+#ifndef CT_READERSTOOLS_H
+#define CT_READERSTOOLS_H
 
 #include "ct_global/ct_context.h"
 #include "ct_reader/abstract/ct_abstractreader.h"
 #include "ct_reader/ct_standardreaderseparator.h"
 #include "ct_abstractstepplugin.h"
 
-class PB_ReadersTools {
+class CT_ReadersTools {
 public:
 
     /**
@@ -129,4 +129,4 @@ public:
     }
 };
 
-#endif // PB_READERSTOOLS_H
+#endif // CT_READERSTOOLS_H

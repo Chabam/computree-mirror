@@ -1,5 +1,5 @@
-#ifndef PB_CONFIGURABLEELEMENTTOOLS_H
-#define PB_CONFIGURABLEELEMENTTOOLS_H
+#ifndef CT_CONFIGURABLEELEMENTTOOLS_H
+#define CT_CONFIGURABLEELEMENTTOOLS_H
 
 #include "ct_global/ct_context.h"
 #include "ct_element/abstract/ct_abstractconfigurableelement.h"
@@ -7,7 +7,7 @@
 /**
  * @brief Class tools for CT_AbstractConfigurableElement with static methods to disable duplicated code
  */
-class PB_ConfigurableElementTools
+class CT_ConfigurableElementTools
 {
 public:
 
@@ -141,4 +141,4 @@ public:
     }
 };
 
-#endif // PB_CONFIGURABLEELEMENTTOOLS_H
+#endif // CT_CONFIGURABLEELEMENTTOOLS_H

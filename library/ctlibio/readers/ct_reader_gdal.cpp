@@ -33,12 +33,7 @@ CT_Reader_GDAL::CT_Reader_GDAL(const GDALDriver* driver, int defaultMenuLevel, i
 
     QStringList ext = QString(m_driver->GetMetadataItem(GDAL_DMD_EXTENSION)).split("/");
 
-    if (ext.size() == 1 && ext.first().isEmpty())
-    {
-        setSubMenuLevel(defaultMenuLevel);
-
-    }
-    else if (driverType == "Raster")
+    if (driverType == "Raster")
     {
         setSubMenuLevel(rasterMenuLevel == -1 ? defaultMenuLevel : rasterMenuLevel);
     }

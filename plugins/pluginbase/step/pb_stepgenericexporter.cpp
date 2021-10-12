@@ -1,6 +1,6 @@
 #include "pb_stepgenericexporter.h"
 
-#include "tools/pb_exportertools.h"
+#include "tools/ct_exportertools.h"
 #include "ct_view/ct_checkbox.h"
 #include "loginterface.h"
 
@@ -154,7 +154,7 @@ bool PB_StepGenericExporter::postInputConfigure()
     if(isDir)
         exportFileName = QFileDialog::getExistingDirectory(nullptr, tr("Exporter dans..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename);
     else
-        exportFileName = QFileDialog::getSaveFileName(nullptr, tr("Exporter sous..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename, PB_ExporterTools::constructStringForFileDialog(_exporter));
+        exportFileName = QFileDialog::getSaveFileName(nullptr, tr("Exporter sous..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename, CT_ExporterTools::constructStringForFileDialog(_exporter));
 
     if(exportFileName.isEmpty())
         return false;

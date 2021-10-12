@@ -33,7 +33,7 @@ ctlibexporter.depends = ctlibmodelsextraviews ctlibwidget ctlibstructureaddon
 ctlibreader.depends = ctlibstructure ctlibwidget
 ctlibstdactions.depends = ctliblog ctlibclouds ctlibmath ctlibstructure ctlibaction
 ctlibplugin.depends = ctlibstep ctlibfilters ctlibmetrics ctlibexporter ctlibreader ctlibaction
-ctlibio.depends = ctlibstructureaddon ctlibexporter ctlibreader
+ctlibio.depends = ctlibplugin ctlibstructureaddon ctlibexporter ctlibreader
 ctliblas.depends = ctlibstructureaddon ctlibfilters ctlibmetrics ctlibexporter ctlibreader
 ctlibcore.depends = ctlibplugin
 

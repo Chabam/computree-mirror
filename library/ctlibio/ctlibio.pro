@@ -73,6 +73,9 @@ HEADERS +=  \
     exporters/xyb/pb_xybexporter.h \
     readers/tools/gdal/ct_gdaltools.h \
     exporters/xyb/private/pb_xybpiecebypieceprivateexporter.h \
+    tools/ct_configurableelementtools.h \
+    tools/ct_exportertools.h \
+    tools/ct_readerstools.h \
     views/exporters/csv/pbg_csvconfigurationdialog.h \
     views/exporters/csv/pbg_csvdatareflistwidget.h \
     views/exporters/csv/pbg_csvpreviewwidget.h

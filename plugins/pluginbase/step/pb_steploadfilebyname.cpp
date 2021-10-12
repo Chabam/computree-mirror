@@ -5,7 +5,7 @@
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 #include "ct_log/ct_logmanager.h"
 
-#include "tools/pb_readerstools.h"
+#include "tools/ct_readerstools.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -20,7 +20,7 @@ PB_StepLoadFileByName::PB_StepLoadFileByName() : SuperClass(),
 
 PB_StepLoadFileByName::~PB_StepLoadFileByName()
 {
-    delete mReader;
+    if (mReader != nullptr) {delete mReader;}
 }
 
 QString PB_StepLoadFileByName::description() const
@@ -40,7 +40,7 @@ CT_VirtualAbstractStep* PB_StepLoadFileByName::createNewInstance() const
 
 void PB_StepLoadFileByName::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    const QStringList list_readersList = PB_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
+    const QStringList list_readersList = CT_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
 
     preInputConfigDialog->addStringChoice(tr("Choose file type"), "", list_readersList, m_readerSelectedClassName);
 }
@@ -57,7 +57,7 @@ void PB_StepLoadFileByName::declareInputModels(CT_StepInModelStructureManager& m
 bool PB_StepLoadFileByName::postInputConfigure()
 {
     CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedClassName);
-    const QString fileFilter = PB_ReadersTools::constructStringForFileDialog(reader);
+    const QString fileFilter = CT_ReadersTools::constructStringForFileDialog(reader);
 
     if(fileFilter.isEmpty()) {
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun reader sélectionné"));
@@ -80,7 +80,7 @@ bool PB_StepLoadFileByName::postInputConfigure()
 
         if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
         {
-            delete mReader;
+            if (mReader != nullptr) {delete mReader;}
             mReader = reader->copyFull();
         }
 
@@ -190,7 +190,7 @@ bool PB_StepLoadFileByName::restorePostSettings(SettingsReaderInterface &reader)
     if(fReader == nullptr)
         return false;
 
-    delete mReader;
+    if (mReader != nullptr) {delete mReader;}
     mReader = fReader->copyFull();
 
     return mReader->restoreSettings(reader);
