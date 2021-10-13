@@ -651,7 +651,7 @@ bool PB_GDALExporter::exportPoint2D(const CT_Point2D *point, GDALDataset *datase
     OGRPoint ogrp;
 
     ogrp.setX(point->x());
-    ogrp.setX(point->y());
+    ogrp.setY(point->y());
     ogrp.setZ(0);
 
     return exportOGRGeometry(&ogrp, dataset, layer, poFeature);

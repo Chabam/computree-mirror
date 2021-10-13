@@ -65,3 +65,16 @@ void CT_Shape2DData::setCenter(const Eigen::Vector3d& center)
     _center(1) = center(1);
 }
 
+bool CT_Shape2DData::doesBBIntersect2D(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+{
+    Eigen::Vector3d minBB, maxBB;
+    getBoundingBox(minBB, maxBB);
+
+    if (maxBB(0) < min(0)) {return false;}
+    if (maxBB(1) < min(1)) {return false;}
+    if (minBB(0) > max(0)) {return false;}
+    if (minBB(1) > max(1)) {return false;}
+
+    return true;
+}
+

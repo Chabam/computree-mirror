@@ -55,6 +55,8 @@ public:
     void setCenter(const Eigen::Vector3d& center);
 
     virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const = 0;
+    virtual bool doesBBIntersect2D(Eigen::Vector3d& min, Eigen::Vector3d& max) const;
+
 
     virtual CT_Shape2DData* copy() const = 0;
 
