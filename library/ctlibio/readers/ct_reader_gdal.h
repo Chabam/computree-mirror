@@ -10,6 +10,8 @@
 #include "ct_itemdrawable/ct_point2d.h"
 #include "ct_itemdrawable/ct_polygon2d.h"
 #include "ct_itemdrawable/ct_polyline2d.h"
+#include "ctlibio/readers/headers/ct_gdalheader.h"
+
 #include "gdal_priv.h"
 #include "ogr_geometry.h"
 #include "ogr_feature.h"
@@ -49,6 +51,14 @@ public:
 
     READER_ALL_COPY_IMP(CT_Reader_GDAL)
 
+    virtual CT_FileHeader* createHeaderPrototype() const override;
+
+
+    /**
+     * @brief Returns first Raster band if exist otherwise returns null
+     */
+    CT_Image2D<float> *firstRaster();
+
 protected:
 
     /**
@@ -57,6 +67,8 @@ protected:
     bool postVerifyFile(const QString &filepath) override;
 
     void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
+
+    virtual CT_FileHeader* internalReadHeader(const QString& filepath, QString& error) const;
 
     bool internalReadFile(CT_StandardItemGroup* group) override;
 

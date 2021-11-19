@@ -73,21 +73,27 @@ QString CT_Reader_GDAL::getTypeOfDriver() const
     return QString();
 }
 
+CT_FileHeader* CT_Reader_GDAL::createHeaderPrototype() const
+{
+    return new CT_GDALHeader();
+}
+
+
 bool CT_Reader_GDAL::postVerifyFile(const QString& filepath)
 {
-    #ifdef USE_GDAL
+#ifdef USE_GDAL
     if(m_driver != nullptr)
         return canBeOpened(filepath);
-    #else
+#else
     Q_UNUSED(filepath)
-    #endif
+#endif
 
     return false;
 }
 
 void CT_Reader_GDAL::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    #ifdef USE_GDAL
+#ifdef USE_GDAL
     GDALDataset *data = getDataSet(filepath());
 
     if(data != nullptr)
@@ -139,8 +145,82 @@ void CT_Reader_GDAL::internalDeclareOutputModels(CT_ReaderOutModelStructureManag
 
         GDALClose(data);
     }
-    #endif
+#endif
 }
+
+#ifdef USE_GDAL
+CT_FileHeader *CT_Reader_GDAL::internalReadHeader(const QString &filepath, QString &error) const
+{
+    GDALDataset *data = getDataSet(filepath);
+
+    if(data == nullptr)
+        return nullptr;
+
+    CT_GDALHeader* f = new CT_GDALHeader();
+    f->setFilePath(filepath);
+
+    int count = data->GetRasterCount();
+
+    Eigen::Vector3d min, max;
+
+    min(0) = std::numeric_limits<double>::max();
+    min(1) = std::numeric_limits<double>::max();
+    min(2) = 0;
+    max(0) = -std::numeric_limits<double>::max();
+    max(1) = -std::numeric_limits<double>::max();
+    max(2) = 0;
+
+    if(count > 0) {
+        double padfTransform[6];
+
+        for(int i = 0; i < count ; ++i) {
+
+            GDALRasterBand *poBand = data->GetRasterBand(i+1);
+
+            poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
+
+            int nXSize = poBand->GetXSize();
+            int nYSize = poBand->GetYSize();
+
+            double xMin = padfTransform[0];
+            double yMin = padfTransform[3] - nYSize*padfTransform[1];
+
+            double res = padfTransform[1];
+
+            double xMax = xMin + nXSize * res;
+            double yMax = yMin + nYSize * res;
+
+            if (xMin < min(0)) {min(0) = xMin;}
+            if (yMin < min(1)) {min(1) = yMin;}
+            if (xMax > max(0)) {max(0) = xMax;}
+            if (yMax > max(1)) {max(1) = yMax;}
+        }
+    } else {
+        count = data->GetLayerCount();
+
+        for(int i = 0 ; i < count ; ++i) {
+
+            OGRLayer *poLayer = data->GetLayer(i);
+
+            OGREnvelope sExtents;
+            if(poLayer->GetExtent(&sExtents,TRUE) == OGRERR_NONE )
+            {
+                if (sExtents.MinX < min(0)) {min(0) = sExtents.MinX;}
+                if (sExtents.MinY < min(1)) {min(1) = sExtents.MinY;}
+                if (sExtents.MaxX > max(0)) {max(0) = sExtents.MaxX;}
+                if (sExtents.MaxY > max(1)) {max(1) = sExtents.MaxY;}
+            }
+        }
+    }
+
+    f->setBoundingBox(min, max);
+
+    GDALClose(data);
+
+    return f;
+}
+#endif
+
 
 #ifdef USE_GDAL
 bool CT_Reader_GDAL::createGeometryModel(OGRFeatureDefn *poFDefn,
@@ -257,10 +337,10 @@ bool CT_Reader_GDAL::createPolyline(OGRFeature *poFeature,
 }
 
 bool CT_Reader_GDAL::createPolygon(OGRFeature *poFeature,
-                   OGRFeatureDefn *poFDefn,
-                   OGRPolygon *polygon,
-                   LayerHandleType* layerHandle,
-                   CT_StandardItemGroup *rootGroup)
+                                   OGRFeatureDefn *poFDefn,
+                                   OGRPolygon *polygon,
+                                   LayerHandleType* layerHandle,
+                                   CT_StandardItemGroup *rootGroup)
 {
     const OGRLinearRing *ring = polygon->getExteriorRing();
 
@@ -292,10 +372,10 @@ bool CT_Reader_GDAL::createPolygon(OGRFeature *poFeature,
 }
 
 bool CT_Reader_GDAL::createPoint(OGRFeature *poFeature,
-                 OGRFeatureDefn *poFDefn,
-                 OGRPoint *point,
-                 LayerHandleType* layerHandle,
-                 CT_StandardItemGroup *rootGroup)
+                                 OGRFeatureDefn *poFDefn,
+                                 OGRPoint *point,
+                                 LayerHandleType* layerHandle,
+                                 CT_StandardItemGroup *rootGroup)
 {
 
     CT_StandardItemGroup* layer = layerHandle->createInstance();
@@ -313,7 +393,7 @@ bool CT_Reader_GDAL::createPoint(OGRFeature *poFeature,
 
 bool CT_Reader_GDAL::internalReadFile(CT_StandardItemGroup* group)
 {
-    #ifdef USE_GDAL
+#ifdef USE_GDAL
 
     GDALDataset *data = getDataSet(filepath());
 
@@ -409,18 +489,95 @@ bool CT_Reader_GDAL::internalReadFile(CT_StandardItemGroup* group)
     GDALClose(data);
 
     return true;
-    #else
+#else
 
     return false;
-    #endif
+#endif
 }
+
+
+CT_Image2D<float>* CT_Reader_GDAL::firstRaster()
+{
+#ifdef USE_GDAL
+
+    GDALDataset *data = getDataSet(filepath());
+
+    if(data == nullptr)
+        return nullptr;
+
+    CT_Image2D<float>* raster = nullptr;
+
+    int count = data->GetRasterCount();
+
+    if(count > 0) {
+        double padfTransform[6];
+
+        GDALRasterBand *poBand = data->GetRasterBand(1);
+
+        poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
+
+        const int nXSize = poBand->GetXSize();
+        const int nYSize = poBand->GetYSize();
+
+        const double xMin = padfTransform[0];
+        const double yMin = padfTransform[3] - nYSize*padfTransform[1];
+
+        const double na = poBand->GetNoDataValue();
+
+        raster = new CT_Image2D<float>(xMin,
+                                       yMin,
+                                       nXSize,
+                                       nYSize,
+                                       padfTransform[1], 0, na, na);
+
+        float *pafScanline = (float *) CPLMalloc(sizeof(float)*nXSize);
+
+        size_t index = 0;
+
+        for(int y=0; y<nYSize; ++y) {
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#endif
+            poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float32, 0, 0 );
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(__APPLE__)
+#pragma GCC diagnostic pop
+#endif
+
+            for(int x=0; x<nXSize; ++x) {
+                raster->index(x, y, index);
+                raster->setValueAtIndex(index, pafScanline[x]);
+            }
+        }
+
+        CPLFree(pafScanline);
+
+        raster->computeMinMax();
+    }
+
+    GDALClose(data);
+
+    return raster;
+
+#else
+    return nullptr;
+#endif
+}
+
 
 QString CT_Reader_GDAL::displayableName() const
 {
-    #ifdef USE_GDAL
+#ifdef USE_GDAL
     if(!m_nameFromDriver.isEmpty())
         return m_nameFromDriver;
-    #endif
+#endif
     return metaObject()->className();
 }
 
@@ -431,7 +588,7 @@ QString CT_Reader_GDAL::uniqueName() const
 
 void CT_Reader_GDAL::init()
 {
-    #ifdef USE_GDAL
+#ifdef USE_GDAL
     if(m_driver != nullptr) {
 
         updateNameFromDriver();

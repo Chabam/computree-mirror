@@ -25,6 +25,7 @@ HEADERS +=  \
     readers/ct_reader_asciigrid3d.h \
     readers/ct_reader_points_ascii.h \
     readers/ct_reader_idxyz.h \
+    readers/headers/ct_gdalheader.h \
     readers/headers/ct_xybheader.h \
     readers/ct_reader_ptx.h \
     readers/tools/ply/internal/plyelement.h \
@@ -87,7 +88,7 @@ HEADERS +=  \
 #    exporters/profile/pb_profileexporter.h \
 #    exporters/xyb/pb_multixybexporter.h
 
-SOURCES += \ 
+SOURCES += \
     readers/ct_reader_ascrgb.cpp \
     readers/ct_reader_gdal.cpp \
     readers/ct_reader_larchitect_grid.cpp \
@@ -99,6 +100,7 @@ SOURCES += \
     readers/ct_reader_points_ascii.cpp \
     readers/ct_reader_idxyz.cpp \
     readers/headers/ct_xybheader.cpp \
+    readers/headers/ct_gdalheader.cpp \
     readers/ct_reader_ptx.cpp \
     readers/tools/ply/plyheader.cpp \
     readers/tools/ply/internal/plyelement.cpp \
