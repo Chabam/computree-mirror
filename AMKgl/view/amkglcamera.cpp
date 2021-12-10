@@ -38,7 +38,6 @@ AMKglCamera::AMKglCamera() :
     for (unsigned short j = 0; j < 16; ++j)
     {
         m_modelViewMatrix[j] = ((j % 5 == 0) ? 1.0 : 0.0);
-        // computeProjectionMatrix() is lazy and assumes 0.0 almost everywhere.
         m_projectionMatrix[j] = 0.0;
     }
 
@@ -50,7 +49,6 @@ AMKglCamera::AMKglCamera(const AMKglCamera& other)
     for (unsigned short j = 0; j < 16; ++j)
     {
         m_modelViewMatrix[j] = ((j % 5 == 0) ? 1.0 : 0.0);
-        // computeProjectionMatrix() is lazy and assumes 0.0 almost everywhere.
         m_projectionMatrix[j] = 0.0;
     }
 
@@ -164,8 +162,7 @@ void AMKglCamera::setViewDirection(const Eigen::Vector3d& direction)
 
     Eigen::Vector3d xAxis = direction.cross(upVector());
     if (xAxis.squaredNorm() < 1E-10) {
-      // target is aligned with upVector, this means a rotation around X axis
-      // X axis is then unchanged, let's keep it !
+      // rotation around X axis
       xAxis = localInverseTransformOf(Eigen::Vector3d(1.0, 0.0, 0.0));
     }
 
@@ -258,7 +255,6 @@ double AMKglCamera::pixelGLRatio(const Eigen::Vector3d& position) const
         return 2.0 * h / screenHeight();
     }
     }
-    // Bad compilers complain
     return 1.0;
 }
 
@@ -282,7 +278,7 @@ double AMKglCamera::zNear() const
     const double zNearScene = zClippingCoefficient() * sceneRadius();
     double z = distanceToSceneCenter() - zNearScene;
 
-    // Prevents negative or null zNear values.
+    // Avoid zNear <=0
     const double zMin = zNearCoefficient() * zNearScene;
     if (z < zMin)
     {
@@ -312,7 +308,6 @@ void AMKglCamera::getOrthoWidthHeight(GLdouble& halfWidth, GLdouble& halfHeight)
 
 void AMKglCamera::getFrustumPlanesCoefficients(GLdouble coef[6][4]) const
 {
-    // Computed once and for all
     const Eigen::Vector3d pos = position();
     const Eigen::Vector3d viewDir = viewDirection();
     const Eigen::Vector3d up = upVector();
@@ -346,13 +341,11 @@ void AMKglCamera::getFrustumPlanesCoefficients(GLdouble coef[6][4]) const
         for (int j = 4; j < 6; ++j)
             dist[j] = pos.dot(normal[j]);
 
-        // Natural equations are:
+        // Optimisation for :
         // dist[0,1,4,5] = pos * normal[0,1,4,5];
         // dist[2] = (pos + zNear() * viewDir) * normal[2];
         // dist[3] = (pos + zFar()  * viewDir) * normal[3];
 
-        // 2 times less computations using expanded/merged equations. Dir vectors
-        // are normalized.
         const double posRightCosHH = chhfov * pos.dot(right);
         dist[0] = -shhfov * posViewDir;
         dist[1] = dist[0] + posRightCosHH;
@@ -379,7 +372,7 @@ void AMKglCamera::getFrustumPlanesCoefficients(GLdouble coef[6][4]) const
         break;
     }
 
-    // Front and far planes are identical for both camera types.
+    // Front and Back planes are the same for Ortho and perspective
     normal[2] = -viewDir;
     normal[3] = viewDir;
     dist[2] = -posViewDir - zNear();
@@ -409,7 +402,6 @@ void AMKglCamera::setProjectionType(AMKglCamera::ProjectionType type)
 void AMKglCamera::setFieldOfView(double fov)
 {
     m_fieldOfView = fov;
-    //m_orthoCoef = tan(fov / 2.0);
     setFocusDistance(sceneRadius() / m_orthoCoef);
     m_projectionMatrixIsUpToDate = false;
 }
@@ -540,7 +532,7 @@ void AMKglCamera::loadModelViewMatrix(bool reset) const
 
     if (reset)
     {
-        // Identity matrix
+        // Identity
         Eigen::Matrix4d m = Eigen::Matrix4d::Identity();
 
         glLoadMatrixd(m.data());
@@ -564,7 +556,7 @@ void AMKglCamera::computeProjectionMatrix() const
       m_projectionMatrix[11] = -1.0;
       m_projectionMatrix[14] = 2.0 * ZNear * ZFar / (ZNear - ZFar);
       m_projectionMatrix[15] = 0.0;
-      // same as gluPerspective( 180.0*fieldOfView()/M_PI, aspectRatio(), zNear(), zFar() );
+      // equiv to gluPerspective( 180.0*fieldOfView()/M_PI, aspectRatio(), zNear(), zFar() );
       break;
     }
     case PT_ORTHOGRAPHIC: {
@@ -576,7 +568,7 @@ void AMKglCamera::computeProjectionMatrix() const
       m_projectionMatrix[11] = 0.0;
       m_projectionMatrix[14] = -(ZFar + ZNear) / (ZFar - ZNear);
       m_projectionMatrix[15] = 1.0;
-      // same as glOrtho( -w, w, -h, h, zNear(), zFar() );
+      // equiv to glOrtho( -w, w, -h, h, zNear(), zFar() );
       break;
     }
     }
@@ -775,7 +767,7 @@ void AMKglCamera::convertClickToLine(const QPoint& pixel, Eigen::Vector3d& orig,
 Eigen::Vector3d AMKglCamera::pointUnderPixel(const QPoint& pixel, bool& found) const
 {
     float depth;
-    // Qt uses upper corner for its origin while GL uses the lower corner.
+    // Qt use upper corner as origin while GL uses lower corner
     glReadPixels(pixel.x(), screenHeight() - 1 - pixel.y(), 1, 1,
                  GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
     found = static_cast<double>(depth)< 1.0;
@@ -1063,7 +1055,7 @@ void AMKglCamera::rotate(Eigen::Quaterniond& q)
       q = Eigen::Quaterniond::Identity();
 
     m_orientation *= q;
-    m_orientation.normalize(); // Prevents numerical drift
+    m_orientation.normalize();
     modified();
 }
 
@@ -1079,7 +1071,7 @@ void AMKglCamera::rotateAroundPoint(Eigen::Quaterniond& rotation, const Eigen::V
       rotation = Eigen::Quaterniond::Identity();
 
     m_orientation *= rotation;
-    m_orientation.normalize(); // Prevents numerical drift
+    m_orientation.normalize();
 
     Eigen::AngleAxisd aa;
     aa = rotation;
@@ -1204,8 +1196,7 @@ void AMKglCamera::mouseMoveEvent(QMouseEvent* e)
         Eigen::Quaterniond rot;
         if (m_rotatesAroundUpVector)
         {
-            // Multiply by 2.0 to get on average about the same speed as with the
-            // deformed ball
+            // Multiply by 2.0 to have the same speed as with the deformed ball
             double dx = 2.0 * m_rotationSensitivity * (m_mousePreviousPos.x() - e->x()) / screenWidth();
             const double dy = 2.0 * m_rotationSensitivity * (m_mousePreviousPos.y() - e->y()) / screenHeight();
             if (m_constrainedRotationIsReversed)
@@ -1286,8 +1277,7 @@ double AMKglCamera::wheelDelta(const QWheelEvent* event) const
 
 double AMKglCamera::ProjectOnBall(double x, double y)
 {
-    // If you change the size value, change angle computation in
-    // deformedBallQuaternion().
+    // If you change the size value, change angle computation in deformedBallQuaternion().
     const double size = 1.0;
     const double size2 = size * size;
     const double size_limit = size2 * 0.5;

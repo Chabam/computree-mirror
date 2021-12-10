@@ -354,8 +354,6 @@ void PB_StepExportAttributesInLoop::compute()
                 OGRFeature::DestroyFeature(vectorFeature);
             }
 #endif
-            qDebug() << "08";
-
         }
 
         if (_rasterExport)

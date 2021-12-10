@@ -21,6 +21,8 @@ template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::I
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_SHOW_GRID = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeShowGrid();
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_SHOW_NA = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeShowNA();
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_CLUSTER_MODE = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeClusterMode();
+template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_APPLY_THRESHOLD = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeApplyThreshold();
+template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_THRESHOLD = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeThreshold();
 
 template< typename DataT >
 CT_StandardImage2DDrawManager<DataT>::CT_StandardImage2DDrawManager(QString drawConfigurationName, bool mapMode, bool scale)
@@ -49,6 +51,10 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
     bool show_grid = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_SHOW_GRID).toBool();
     bool show_na = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_SHOW_NA).toBool();
     bool clusterMode = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_CLUSTER_MODE).toBool();
+
+    bool applyThreshold = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_APPLY_THRESHOLD).toBool();
+    double threshold = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_THRESHOLD).toDouble();
+
 
     double amplitude = item.dataMax() - item.dataMin();
     double scaling = (zmax - zmin) / amplitude;
@@ -263,7 +269,15 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                     painter.setColor(QColor(125, 0, 0));
                 } else {
 
-                    if (clusterMode)
+                    if (applyThreshold)
+                    {
+                        if (value < threshold)
+                        {
+                            painter.setColor(colors.value(value, QColor(0, 0, 0)));
+                        } else {
+                            painter.setColor(colors.value(value, QColor(255, 255, 255)));
+                        }
+                    } else if (clusterMode)
                     {
                         painter.setColor(colors.value(value, QColor(255, 255, 255)));
                     } else {
@@ -305,6 +319,8 @@ CT_ItemDrawableConfiguration CT_StandardImage2DDrawManager<DataT>::createDrawCon
     item.addNewConfiguration(staticInitConfigMapModeZLevelValue(), QObject::tr("Mode Raster : Niveau Z (m)"), CT_ItemDrawableConfiguration::Double, 0);
     item.addNewConfiguration(staticInitConfigMapModeShowGrid(), QObject::tr("Mode Raster : Afficher grille"), CT_ItemDrawableConfiguration::Bool, false);
     item.addNewConfiguration(staticInitConfigMapModeShowNA(), QObject::tr("Mode Raster : Afficher NA"), CT_ItemDrawableConfiguration::Bool, true);
+    item.addNewConfiguration(staticInitConfigMapModeApplyThreshold(), QObject::tr("Mode Raster : Appliquer Seuil"), CT_ItemDrawableConfiguration::Bool, false);
+    item.addNewConfiguration(staticInitConfigMapModeThreshold(), QObject::tr("Mode Raster : Seuil"), CT_ItemDrawableConfiguration::Double, 0);
 
     item.addNewConfiguration(staticInitConfig3DModeEnabled(), QObject::tr("Mode 3D"), CT_ItemDrawableConfiguration::Bool, !_defaultMapMode);
     item.addNewConfiguration(staticInitConfig3DModeLinkPointsEnabled(), QObject::tr("Mode 3D    : Relier les centres de cases"), CT_ItemDrawableConfiguration::Bool, false);
@@ -389,5 +405,17 @@ template< typename DataT >
 QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeClusterMode()
 {
     return "IM2D_COLMD";
+}
+
+template< typename DataT >
+QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeApplyThreshold()
+{
+    return "IM2D_APPTH";
+}
+
+template< typename DataT >
+QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeThreshold()
+{
+    return "IM2D_THRES";
 }
 

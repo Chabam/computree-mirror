@@ -27,6 +27,9 @@ protected:
     const static QString INDEX_CONFIG_MAP_MODE_SHOW_GRID;
     const static QString INDEX_CONFIG_MAP_MODE_SHOW_NA;
     const static QString INDEX_CONFIG_MAP_MODE_CLUSTER_MODE;
+    const static QString INDEX_CONFIG_MAP_MODE_APPLY_THRESHOLD;
+    const static QString INDEX_CONFIG_MAP_MODE_THRESHOLD;
+
 
     static QString staticInitConfig3DModeEnabled();
     static QString staticInitConfig3DModeLinkPointsEnabled();
@@ -40,6 +43,9 @@ protected:
     static QString staticInitConfigMapModeShowGrid();
     static QString staticInitConfigMapModeShowNA();
     static QString staticInitConfigMapModeClusterMode();
+    static QString staticInitConfigMapModeApplyThreshold();
+    static QString staticInitConfigMapModeThreshold();
+
 
     CT_ItemDrawableConfiguration createDrawConfiguration(QString drawConfigurationName) const override;
 
