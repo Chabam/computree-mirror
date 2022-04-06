@@ -74,7 +74,7 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
 
     auto hgi = new CT_HelpGraphicsItem();
     hgi->setPos(800, -100);
-    hgi->setToolTip(tr("Tooltip à modifier par Alexandre Piboule. Il suffit de faire rechercher dans Qt Creator pour me trouver !"));
+    hgi->setToolTip(tr("Cette interface permet de faire correspondre à chaque donnée rechechée, une donnée disponible dans les données d'entrée.<br><br>Pour chaque donnée recherchée :<br>1. Séléctionner la donnée recherchée<br>2. Séléctionner la donnée disponible à lui attribuer<br><br>Cela crée un lien entre les deux éléments.<br><br><i>Les données recherchées en italique sont optionnelles.</i><br><br>Les compteurs à droite des données recherchées indiquent :<br>nombre d'éléments séléctionnés / nombre d'éléments nécessaires."));
     mFlowScene->addItem(hgi);
 
     // RM : Zoom buttons
