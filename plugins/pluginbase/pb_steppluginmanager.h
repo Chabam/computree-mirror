@@ -30,7 +30,7 @@
 #define PB_STEPPLUGINMANAGER_H
 
 #include "ct_abstractstepplugin.h"
-//#include "ct_log/ct_fileloglistener.h"
+#include "ct_log/ct_fileloglistener.h"
 
 #ifdef USE_GDAL
 #include "gdal.h"
@@ -108,7 +108,7 @@ protected:
 
 private:
     //CT_FileLogListener  m_fileLog;
-    //CT_FileLogListener* _logListener;
+    CT_FileLogListener* _logListener;
 
     QList<CT_AbstractConfigurableElement *> m_rasterMetricsOfAllPlugins;
     QList<CT_AbstractConfigurableElement *> m_xyzMetricsOfAllPlugins;

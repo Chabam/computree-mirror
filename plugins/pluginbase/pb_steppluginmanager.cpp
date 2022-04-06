@@ -118,13 +118,14 @@
 
 PB_StepPluginManager::PB_StepPluginManager() : CT_AbstractStepPlugin()
 {
-    /*_logListener = new CT_FileLogListener();
+    _logListener = new CT_FileLogListener();
     _logListener->setFilePath("log_computree.log");
 
-    m_fileLog.setFilePath("./logPB.txt");
-    m_fileLog.setSeverityAccepted(QVector<int>() << LogInterface::debug);
-    m_fileLog.setFilter("pb");
-*/
+
+//    m_fileLog.setFilePath("./logPB.txt");
+//    m_fileLog.setSeverityAccepted(QVector<int>() << LogInterface::debug);
+//    m_fileLog.setFilter("pb");
+
     #ifdef USE_GDAL
     CPLSetErrorHandler(PB_StepPluginManager::staticGdalErrorHandler);
     GDALAllRegister();
@@ -133,7 +134,7 @@ PB_StepPluginManager::PB_StepPluginManager() : CT_AbstractStepPlugin()
 
 PB_StepPluginManager::~PB_StepPluginManager()
 {
-    //PS_LOG->removeLogListener(_logListener);
+    PS_LOG->removeLogListener(_logListener);
     //PS_LOG->removeLogListener(&m_fileLog);
 }
 
@@ -190,9 +191,9 @@ const QMap<QString, CT_AbstractExporter *> &PB_StepPluginManager::exportersForPo
 
 bool PB_StepPluginManager::init()
 {
-    /*PS_LOG->addPrioritaryLogListener(_logListener);
+    PS_LOG->addPrioritaryLogListener(_logListener);
 
-    PS_LOG->addNormalLogListener(&m_fileLog);*/
+    //PS_LOG->addNormalLogListener(&m_fileLog);
     PS_LOG->addMessage(LogInterface::debug, LogInterface::plugin, QObject::tr("Plugin_Base initialized"), "pb");
 
     return CT_AbstractStepPlugin::init();
