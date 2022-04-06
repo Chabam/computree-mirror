@@ -30,7 +30,7 @@ AMKglCamera::AMKglCamera() :
     setSceneRadius(1.0);
     m_orthoCoef = tan(fieldOfView() / 2.0);
     setSceneCenter(Eigen::Vector3d(0.0, 0.0, 0.0));
-    setProjectionType(PT_PERSPECTIVE);
+    setProjectionType(PT_ORTHOGRAPHIC);
     setZNearCoefficient(0.005);
     setZClippingCoefficient(sqrt(3.0));
     setScreenWidthAndHeight(600, 400);

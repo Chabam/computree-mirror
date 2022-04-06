@@ -960,8 +960,8 @@ void GDocumentViewForGraphics::createAndAddCameraAndGraphicsOptions(QWidget *par
     _buttonCameraType = new QPushButton(widgetContainer);
     _buttonCameraType->setMaximumWidth(33);
     _buttonCameraType->setMinimumWidth(33);
-    _buttonCameraType->setToolTip(tr("Passer en vue Orthoscopique"));
-    _buttonCameraType->setIcon(QIcon(":/Icones/Icones/perspview.png"));
+    _buttonCameraType->setToolTip(tr("Passer en vue Perspective"));
+    _buttonCameraType->setIcon(QIcon(":/Icones/Icones/orthoview.png"));
     _buttonCameraType->setEnabled(true);
 
     connect(GUI_MANAGER->getPluginManager(), SIGNAL(finishLoading()), this, SLOT(pluginExporterManagerReloaded()));

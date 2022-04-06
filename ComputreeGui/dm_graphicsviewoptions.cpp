@@ -56,14 +56,14 @@ DM_GraphicsViewOptions::DM_GraphicsViewOptions() : QObject(nullptr)
     _backgroundColor = QColor(48, 48, 48);
     _selectedColor = Qt::red;
     _pointSize = 1.0;
-    _drawAxis = true;
+    _drawAxis = false;
     m_drawGrid = false;
     _useColor = true;
     _useTransparency = false;
     _useLight = false;
     _cameraInfoDisplayed = DM_GraphicsViewOptions::CameraNone;
     _cameraInfoPosition = DM_GraphicsViewOptions::InfoInLowerRightCorner;
-    _cameraType = CameraInterface::PERSPECTIVE;
+    _cameraType = CameraInterface::ORTHOGRAPHIC;
     m_normalColor = Qt::yellow;
     m_normalLength = 0.05f;
     m_mustShowNormals = false;

@@ -69,11 +69,11 @@ public:
 
     void redrawAllDocument();
 
-    DocumentInterface* new3DDocument(bool fromGui, bool inLoadConfigurationFromMainWindow, float pointSize = 1.0, bool orthographic = false, QColor *color = nullptr);
+    DocumentInterface* new3DDocument(bool fromGui, bool inLoadConfigurationFromMainWindow, float pointSize = 1.0, bool orthographic = true, QColor *color = nullptr);
     DocumentInterface* new2DDocument(bool fromGui, bool inLoadConfigurationFromMainWindow);
     DocumentInterface* newTreeViewDocument(bool fromGui, bool inLoadConfigurationFromMainWindow);
 
-    DocumentInterface* new3DDocument(float pointSize = 1.0, bool orthographic = false, QColor *color = nullptr);
+    DocumentInterface* new3DDocument(float pointSize = 1.0, bool orthographic = true, QColor *color = nullptr);
     DocumentInterface* new2DDocument();
     DocumentInterface* newTreeViewDocument();
     int nDocuments() const;
