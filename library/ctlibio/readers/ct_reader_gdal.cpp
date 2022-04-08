@@ -151,6 +151,7 @@ void CT_Reader_GDAL::internalDeclareOutputModels(CT_ReaderOutModelStructureManag
 #ifdef USE_GDAL
 CT_FileHeader *CT_Reader_GDAL::internalReadHeader(const QString &filepath, QString &error) const
 {
+    Q_UNUSED(error);
     GDALDataset *data = getDataSet(filepath);
 
     if(data == nullptr)

@@ -1,6 +1,7 @@
 #include "pb_profileexporter.h"
 #include "ct_itemdrawable/abstract/ct_abstractprofile.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <QMessageBox>
 #include <QFile>

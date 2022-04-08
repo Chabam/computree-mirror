@@ -397,11 +397,11 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
             // 0b0000 0000 1111 0000
             nor6_10 = m_hOutNumberOfReturn.createInstance(240, 4, pcir, mCore6_10Manager);
 
-            // 0b0000 0111 0000 0000
-            cf = m_hOutClassificationFlag.createInstance(1792, 8, pcir, mCore6_10Manager);
+            // 0b0000 1111 0000 0000
+            cf = m_hOutClassificationFlag.createInstance(3840, 8, pcir, mCore6_10Manager);
 
-            // 0b0001 1000 0000 0000
-            sc = m_hOutScannerChannel.createInstance(6144, 11, pcir, mCore6_10Manager);
+            // 0b0011 0000 0000 0000
+            sc = m_hOutScannerChannel.createInstance(12288, 12, pcir, mCore6_10Manager);
 
             // 0b0100 0000 0000 0000
             sdf6_10 = m_hOutScanDirectionFlag.createInstance(16384, 14, pcir, mCore6_10Manager);

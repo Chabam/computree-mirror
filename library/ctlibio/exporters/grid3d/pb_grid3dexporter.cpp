@@ -1,6 +1,7 @@
 #include "pb_grid3dexporter.h"
 #include "ct_itemdrawable/abstract/ct_abstractgrid3d.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <QMessageBox>
 #include <QFile>

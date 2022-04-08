@@ -156,14 +156,14 @@ bool CT_LASPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints()
     mHeader->m_projectIDGuidData2 = 0;
     mHeader->m_projectIDGuidData3 = 0;
     mHeader->m_projectIDGuidData4 = 0;
-    mHeader->m_versionMajor = 1;  // format 1.2
-    mHeader->m_versionMinor = 2;
+    mHeader->m_versionMajor = 1;  // format 1.4
+    mHeader->m_versionMinor = 4;
 #ifdef _MSC_VER
     strcpy_s(mHeader->m_systemID, "EXPORT");
-    strcpy_s(mHeader->m_sofwareID, "Computree 3.0");
+    strcpy_s(mHeader->m_sofwareID, "Computree 6.0");
 #else
     strcpy(mHeader->m_systemID, "EXPORT");
-    strcpy(mHeader->m_sofwareID, "Computree 3.0");
+    strcpy(mHeader->m_sofwareID, "Computree 6.0");
 #endif
     mHeader->m_fileCreationDayOfYear = quint16(date.dayOfYear());
     mHeader->m_fileCreationYear = quint16(date.year());

@@ -1,5 +1,6 @@
 #include "pb_ascrgbexporter.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <QMessageBox>
 #include <QFile>

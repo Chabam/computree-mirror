@@ -1,5 +1,7 @@
 #include "pb_polygon2dexporter.h"
 #include "ct_itemdrawable/ct_polygon2d.h"
+
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <QMessageBox>
 #include <QFile>
