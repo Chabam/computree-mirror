@@ -6,6 +6,7 @@
 #include <QStringList>
 #include <QColor>
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 class DM_DomUtils

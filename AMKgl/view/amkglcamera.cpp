@@ -1235,6 +1235,7 @@ void AMKglCamera::mouseReleaseEvent(QMouseEvent* /*e*/)
 
 void AMKglCamera::mouseDoubleClickEvent(QMouseEvent* e)
 {
+    Q_UNUSED(e);
     m_manipulated = true;
     align();
     emit manipulated();
@@ -1253,11 +1254,12 @@ void AMKglCamera::wheelEvent(QWheelEvent* e)
 
 void AMKglCamera::keyPressEvent(QKeyEvent* e)
 {
+    Q_UNUSED(e);
 }
 
 void AMKglCamera::keyReleaseEvent(QKeyEvent* e)
 {
-
+    Q_UNUSED(e);
 }
 
 double AMKglCamera::deltaWithPrevPos(const QMouseEvent* event) const

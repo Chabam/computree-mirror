@@ -1,5 +1,6 @@
 #include "amkgldomutils.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 QDomElement AMKglDomUtils::QColorDomElement(const QColor& color, const QString& name, QDomDocument& doc)

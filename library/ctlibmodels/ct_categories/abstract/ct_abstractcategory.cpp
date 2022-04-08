@@ -2,6 +2,7 @@
 
 #include "ct_categories/tools/ct_categorymanager.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <QMetaEnum>
 
