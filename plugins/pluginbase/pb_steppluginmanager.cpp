@@ -65,6 +65,7 @@
 */
 #include "exporters/xyb/pb_xybexporter.h"
 #include "ctliblas/exporters/ct_exporter_las.h"
+#include "ctliblaz/exporters/ct_exporter_laz.h"
 
 #include "exporters/groupdata/pb_groupdataexporter.h"
 #include "exporters/mesh/pb_meshobjexporter.h"
@@ -86,6 +87,7 @@
 #include "ctlibio/readers/ct_reader_larchitect_grid.h"
 #include "ctlibio/readers/ct_reader_opf.h"
 #include "ctliblas/readers/ct_reader_lasv2.h"
+#include "ctliblaz/readers/ct_reader_laz.h"
 #include "ctlibio/readers/ct_reader_gdal.h"
 #include "ctlibio/readers/ct_reader_idxyz.h"
 #include "ctlibio/readers/ct_reader_terrascanprj.h"
@@ -279,6 +281,7 @@ bool PB_StepPluginManager::loadExporters()
     sep->addExporter(new PB_MeshObjExporter(CT_StepsMenu::LP_Meshes));
     sep->addExporter(new PB_OPFExporter(CT_StepsMenu::LP_Others));
     sep->addExporter(new CT_Exporter_LAS(CT_StepsMenu::LP_Points));
+    sep->addExporter(new CT_Exporter_LAZ(CT_StepsMenu::LP_Points));
 
     //sep->addExporter(new PB_MultiXYBExporter());
     //sep->addExporter(new PB_ProfileExporter());
@@ -338,6 +341,7 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_ASCRGB(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_IDXYZ(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_LASV2(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_LAZ(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_PTX(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_OBJ(CT_StepsMenu::LP_Meshes));
     sep->addReader(new CT_Reader_LArchitect_Grid(CT_StepsMenu::LP_Voxels));

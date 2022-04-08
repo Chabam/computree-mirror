@@ -19,6 +19,7 @@ SUBDIRS       = ctlibmodels \
                 ctlibplugin \
                 ctlibio \
                 ctliblas \
+                ctliblaz \
                 ctlibcore
 
 ctlibmodelsextraviews.depends = ctlibmodels
@@ -35,6 +36,7 @@ ctlibstdactions.depends = ctliblog ctlibclouds ctlibmath ctlibstructure ctlibact
 ctlibplugin.depends = ctlibstep ctlibfilters ctlibmetrics ctlibexporter ctlibreader ctlibaction
 ctlibio.depends = ctlibplugin ctlibstructureaddon ctlibexporter ctlibreader
 ctliblas.depends = ctlibstructureaddon ctlibfilters ctlibmetrics ctlibexporter ctlibreader
+ctliblaz.depends = ctlibstructureaddon ctlibreader ctlibexporter ctliblas
 ctlibcore.depends = ctlibplugin
 
 # Optional use of Point Cloud Library (PCL)
