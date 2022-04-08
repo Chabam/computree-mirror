@@ -35,6 +35,7 @@ checkMandatoryDependence(eigen)
 checkMandatoryDependence(muparser)
 checkMandatoryDependence(opencv)
 checkMandatoryDependence(gdal)
+checkMandatoryDependence(laszip)
 
 # Optional use of Point Cloud Library (PCL)
 MUST_USE_PCL = 1
@@ -52,4 +53,10 @@ exists (../3rdparty/muparser/muparser.pro) {
     SUBDIRS += 3rdparty/muparser
 } else {
     error("muparser.pro can't be found! It is mandatory to compile it with Computree.")
+}
+
+exists (../3rdparty/laszip/laszip.pro) {
+    SUBDIRS += 3rdparty/laszip
+} else {
+    error("laszip.pro can't be found! It is mandatory to compile it with Computree.")
 }

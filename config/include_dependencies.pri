@@ -28,6 +28,12 @@ isEmpty(LIB_PATH) : LIB_PATH = # empty
     include(include_necessary_opencv.pri)
     message("DEPENDENCY SETUP - OPENCV       will be used in $$TARGET")
 }
+!isEmpty(CHECK_CAN_USE_LASZIP)|!isEmpty(MUST_USE_LASZIP) {
+    include(default_path_laszip.pri)
+    exists(user_path_laszip.pri) : include(user_path_laszip.pri)
+    include(include_necessary_laszip.pri)
+    message("DEPENDENCY SETUP - LASZIP       will be used in $$TARGET")
+}
 !isEmpty(CHECK_CAN_USE_PCL)|!isEmpty(MUST_USE_PCL)|contains( COMPUTREE, ctlibpcl) {
     include(default_path_pcl.pri)
     exists(user_path_pcl.pri) : include(user_path_pcl.pri)
