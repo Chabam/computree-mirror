@@ -10,12 +10,12 @@ CT_StepEndLoop::CT_StepEndLoop() : CT_AbstractStep()
 
 QString CT_StepEndLoop::description() const
 {
-    return tr("2- Termine une boucle dans le script");
+    return tr("Fin de boucle");
 }
 
 QString CT_StepEndLoop::detailledDescription() const
 {
-    return tr("Nécessite une CT_StepBeginLoop auparavant pour initier la boucle");
+    return tr("Nécessite une étape de début de boucle en amont");
 }
 
 CT_VirtualAbstractStep* CT_StepEndLoop::createNewInstance() const

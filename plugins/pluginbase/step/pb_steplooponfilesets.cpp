@@ -22,8 +22,14 @@ PB_StepLoopOnFileSets::~PB_StepLoopOnFileSets()
 
 QString PB_StepLoopOnFileSets::description() const
 {
-    return tr("4- Loops on files sets defined in a text file");
+    return tr("Boucle sur des groupes de fichiers");
 }
+
+QString PB_StepLoopOnFileSets::detailledDescription() const
+{
+    return tr("A chaque tour de boucle, créer une liste de fichiers appartenant à un même groupe.<br>Les groupes sont définis dans un fichier texte de paramétrage dont:<br>- la première colone indique le nom des groupe<br>- la seconde le chemin des fichiers.");
+}
+
 
 CT_VirtualAbstractStep* PB_StepLoopOnFileSets::createNewInstance() const
 {

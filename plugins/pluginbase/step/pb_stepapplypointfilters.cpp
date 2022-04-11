@@ -26,7 +26,7 @@ PB_StepApplyPointFilters::~PB_StepApplyPointFilters()
 // Step description (tooltip of contextual menu)
 QString PB_StepApplyPointFilters::description() const
 {
-    return tr("1- Filtres de points");
+    return tr("Filtres de points");
 }
 
 // Step detailled description

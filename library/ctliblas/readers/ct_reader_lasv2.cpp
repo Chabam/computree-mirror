@@ -36,7 +36,7 @@ CT_Reader_LASV2::~CT_Reader_LASV2()
 
 QString CT_Reader_LASV2::displayableName() const
 {
-    return tr("Points, format LAS (V2)");
+    return tr("Points, format LAS");
 }
 
 bool CT_Reader_LASV2::setFilePath(const QString& filepath)

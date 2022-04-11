@@ -22,7 +22,7 @@ PB_StepComputePointMetrics::~PB_StepComputePointMetrics()
 // Step description (tooltip of contextual menu)
 QString PB_StepComputePointMetrics::description() const
 {
-    return tr("1- Métriques de points (XYZ)");
+    return tr("Métriques de points (XYZ)");
 }
 
 QString PB_StepComputePointMetrics::detailledDescription() const

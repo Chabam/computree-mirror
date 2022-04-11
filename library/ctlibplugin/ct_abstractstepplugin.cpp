@@ -316,7 +316,12 @@ void CT_AbstractStepPlugin::addNewStep(CT_VirtualAbstractStep *step, CT_StepsMen
 
 void CT_AbstractStepPlugin::addNewStep(CT_VirtualAbstractStep *step, CT_StepsMenu::LevelOperationType levelOperation, CT_StepsMenu::LevelPredefined subLevelPredefined)
 {
-    addNewStep(step, levelOperation, CT_StepsMenu::staticPredefinedToString(subLevelPredefined));
+    CT_MenuLevel *level = menuOfSteps()->createOrGetRootLevel(levelOperation);
+
+    level = CT_MenuLevel::staticCreateOrGetLevelInParentLevel(subLevelPredefined, level);
+
+    if(level->addStepToCollectionOrDeleteIt(step))
+        initStep(step);
 }
 
 CT_StepsMenu* CT_AbstractStepPlugin::menuOfSteps() const

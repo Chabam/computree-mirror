@@ -16,6 +16,7 @@ public:
     ~PB_StepLoopOnFileSets();
 
     QString description() const final;
+    QString detailledDescription() const final;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 

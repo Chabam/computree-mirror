@@ -83,7 +83,7 @@ CT_VirtualAbstractStep *DM_StepsFromPluginsModelConstructor::stepFromIndex(const
     return nullptr;
 }
 
-QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForLevelAndSubLevelRecursively(const CT_MenuLevel *level, bool rootLevel)
+QList<QStandardItem *> DM_StepsFromPluginsModelConstructor::createItemsForLevelAndSubLevelRecursively(CT_MenuLevel *level, bool rootLevel)
 {
     QList<QStandardItem*> l;
 

@@ -104,7 +104,7 @@ public:
     /**
      * @brief Returns the index of the plugin in the list
      */
-    int getPluginIndex(CT_AbstractStepPlugin *p) const;
+    int getPluginIndex(CT_AbstractStepPlugin *p) const;       
 
 private:
 

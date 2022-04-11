@@ -324,3 +324,4 @@ void CDM_PluginManager::clearPlugins()
     qDeleteAll(_plugins.begin(), _plugins.end());
     _plugins.clear();
 }
+

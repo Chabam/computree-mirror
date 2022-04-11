@@ -25,7 +25,7 @@ PB_StepLoadFileByName::~PB_StepLoadFileByName()
 
 QString PB_StepLoadFileByName::description() const
 {
-    return tr("3- Create file reader from name");
+    return tr("Créer un sélecteur de fichier par attribut de nom");
 }
 
 QString PB_StepLoadFileByName::detailledDescription() const

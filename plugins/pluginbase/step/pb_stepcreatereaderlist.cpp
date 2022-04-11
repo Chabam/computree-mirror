@@ -20,13 +20,13 @@ PB_StepCreateReaderList::~PB_StepCreateReaderList()
 // Step description (tooltip of contextual menu)
 QString PB_StepCreateReaderList::description() const
 {
-    return tr("1- Créer une liste de readers");
+    return tr("Créer une liste de fichiers");
 }
 
 // Step detailled description
 QString PB_StepCreateReaderList::detailledDescription() const
 {
-    return tr("Cette étape créer une liste de reader (lecteur de fichier). Ces readers pourront par la suite être utilisés par d'autres étapes pour charger les fichiers.");
+    return tr("Cette étape créer une liste de readers (lecteur de fichier). Ces readers pourront par la suite être utilisés par d'autres étapes pour charger les fichiers.");
 }
 
 // Step copy method

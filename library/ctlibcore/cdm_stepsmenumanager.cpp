@@ -20,6 +20,8 @@ CDM_StepsMenuManager::CDM_StepsMenuManager()
 {
     m_menuOfSteps = new CT_StepsMenu();
     m_pluginManager = nullptr;
+
+    CT_MenuLevel::defineHighPriorityStepsOrder();
 }
 
 CDM_StepsMenuManager::~CDM_StepsMenuManager()
@@ -85,7 +87,7 @@ void writeStepNotFoundedInformationToFavoritesFileRecursively(const CT_MenuLevel
     xmlWriter.writeEndElement();
 }
 
-void CDM_StepsMenuManager::writeLevelInformationToFavoritesFileRecursively(const CT_MenuLevel *level, QXmlStreamWriter &xmlWriter)
+void CDM_StepsMenuManager::writeLevelInformationToFavoritesFileRecursively(CT_MenuLevel *level, QXmlStreamWriter &xmlWriter)
 {
     xmlWriter.writeStartElement(XML_LEVEL_START_KEY);
     xmlWriter.writeTextElement(XML_LEVEL_NAME_KEY, level->displayableName());

@@ -94,7 +94,7 @@ private:
     /**
      * @brief Create and return a list of QStandardItem that will be added to the tree for a level and it's sub level recursively
      */
-    QList<QStandardItem*> createItemsForLevelAndSubLevelRecursively(const CT_MenuLevel *level, bool rootLevel = true);
+    QList<QStandardItem*> createItemsForLevelAndSubLevelRecursively(CT_MenuLevel *level, bool rootLevel = true);
 
     /**
      * @brief Create and return a list of QStandardItem that will be added to the tree for a step

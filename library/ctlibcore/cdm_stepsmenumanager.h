@@ -49,7 +49,7 @@ private:
     CT_StepsMenu        *m_menuOfSteps;
     CDM_PluginManager   *m_pluginManager;
 
-    void writeLevelInformationToFavoritesFileRecursively(const CT_MenuLevel *level, QXmlStreamWriter &xmlWriter);
+    void writeLevelInformationToFavoritesFileRecursively(CT_MenuLevel *level, QXmlStreamWriter &xmlWriter);
     void writeStepInformationToFavoritesFileRecursively(const CT_VirtualAbstractStep *step, QXmlStreamWriter &xmlWriter);
 
     void readLevelAndAddItToFavoritesRecursively(CT_MenuLevel *parentLevel, QXmlStreamReader &xmlReader);

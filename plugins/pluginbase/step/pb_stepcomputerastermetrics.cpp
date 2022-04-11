@@ -21,7 +21,7 @@ PB_StepComputeRasterMetrics::~PB_StepComputeRasterMetrics()
 
 QString PB_StepComputeRasterMetrics::description() const
 {
-    return tr("2- Métriques de rasters");
+    return tr("Métriques de rasters");
 }
 
 QString PB_StepComputeRasterMetrics::detailledDescription() const

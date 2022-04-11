@@ -49,7 +49,7 @@ public:
      *        the specified parent level if it does not already exist, otherwise return
      *        it.
      */
-    static CT_MenuLevel* staticCreateOrGetLevelInParentLevel(const QString& customDisplayableName, CT_MenuLevel* parentLevel);
+    static CT_MenuLevel* staticCreateOrGetLevelInParentLevel(const QString& customDisplayableName, CT_MenuLevel* parentLevel, bool isCustom = true);
 
     /**
      * @brief Create a level with a predefined displayable name and add it to
@@ -99,7 +99,7 @@ public:
     /**
      * @brief Returns the list of steps contained in this level
      */
-    QList<CT_VirtualAbstractStep*> steps() const;
+    QList<CT_VirtualAbstractStep*> steps();
 
     /**
      * @brief Returns the list of steps not founded contained in this level
@@ -122,6 +122,12 @@ public:
      * @brief Returns the parent level
      */
     CT_MenuLevel* parentLevel() const;
+
+
+    /**
+     * @brief Define step orders (static), for given step list
+     */
+    static void defineHighPriorityStepsOrder();
 
 private:
     friend class CT_StepsMenu;
@@ -169,19 +175,28 @@ private:
      */
     bool isAFavoriteSubLevel() const;
 
+
 private:
     typedef QList<CT_VirtualAbstractStep*>               StepCollection;
-    typedef QMultiMap<QString, CT_VirtualAbstractStep*>  StepCollectionSorted;
     typedef QList<CT_NotFoundedStep>                     StepNotFoundedCollection;
     typedef QList<CT_MenuLevel*>                         LevelCollection;
 
     StepCollection              m_steps;
-    StepCollectionSorted        m_stepsSorted;
     StepNotFoundedCollection    m_stepsNotFounded;
     LevelCollection             m_levelsPredefined;
     LevelCollection             m_levelsCustom;
     QString                     m_displayableName;
     CT_MenuLevel*               m_parent;
+    bool                        m_isCustomLevel;
+
+
+    static QList<QString>   STEPORDER;
+
+    /**
+     * @brief Step order comparator
+     */
+    static bool sortByStepOrder(const CT_VirtualAbstractStep *s1, const CT_VirtualAbstractStep *s2);
+
 
 private slots:
     /**

@@ -210,8 +210,11 @@ QSettings* PB_StepPluginManager::initQSettings()
 
 bool PB_StepPluginManager::loadGenericsStep()
 {
-    addNewWorkflowStep<PB_StepBeginLoopThroughGroups02>(CT_StepsMenu::LP_Loops);
-    addNewWorkflowStep<CT_StepEndLoop>(CT_StepsMenu::LP_Loops);
+    addNewWorkflowStep<PB_StepBeginLoopThroughGroups02>();
+    addNewWorkflowStep<CT_StepEndLoop>();
+    addNewWorkflowStep<PB_StepLoopOnFileSets>();
+    addNewWorkflowStep<PB_StepLoopOnFiles>();
+
     addNewPointsStep<PB_StepApplyPointFilters>(CT_StepsMenu::LP_Filter);
     addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter);
     addNewMetricStep<PB_StepComputePointMetrics>();
@@ -220,8 +223,6 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewLoadStep<PB_StepCreateReaderList>();
     addNewLoadStep<PB_StepUseReaderToLoadFiles>();
     addNewLoadStep<PB_StepLoadFileByName>();
-    addNewLoadStep<PB_StepLoopOnFileSets>();
-    addNewLoadStep<PB_StepLoopOnFiles>();
 
     addNewExportStep<PB_StepExportItemList>();
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);

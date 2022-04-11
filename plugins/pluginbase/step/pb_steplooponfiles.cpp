@@ -23,7 +23,7 @@ PB_StepLoopOnFiles::~PB_StepLoopOnFiles()
 
 QString PB_StepLoopOnFiles::description() const
 {
-    return tr("5- Loops on files in selected directory");
+    return tr("Boucle sur les fichiers d'un dossier");
 }
 
 CT_VirtualAbstractStep* PB_StepLoopOnFiles::createNewInstance() const
@@ -67,7 +67,7 @@ bool PB_StepLoopOnFiles::postInputConfigure()
     QStringList folders;
     folders.append(m_folderPath);
     CT_GenericConfigurableWidget configDialog;
-    configDialog.addFileChoice(tr("Choose directory containing files"), CT_FileChoiceButton::OneExistingFolder, "", folders);
+    configDialog.addFileChoice(tr("Choix du répertoire contenant les fichiers"), CT_FileChoiceButton::OneExistingFolder, "", folders);
 
     if(CT_ConfigurableWidgetToDialog::exec(&configDialog) == QDialog::Accepted)
     {

@@ -129,7 +129,7 @@ void GAboutPluginsDialog::initView()
         ui->pushButtonRecharger->setToolTip("");
 }
 
-void GAboutPluginsDialog::createItemsForLevelRecursively(QTreeWidgetItem *parent, const CT_MenuLevel *level, const CT_AbstractStepPlugin *plugin)
+void GAboutPluginsDialog::createItemsForLevelRecursively(QTreeWidgetItem *parent, CT_MenuLevel *level, const CT_AbstractStepPlugin *plugin)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(parent);
     item->setData(0, Qt::DisplayRole, level->displayableName());
@@ -306,7 +306,7 @@ void GAboutPluginsDialog::on_pb_redmineExport_clicked()
     exportFile.close();
 }
 
-void GAboutPluginsDialog::exportStepsForLevel(QTextStream &stream, const CT_MenuLevel *level, QString levelName)
+void GAboutPluginsDialog::exportStepsForLevel(QTextStream &stream, CT_MenuLevel *level, QString levelName)
 {
     // sub levels
     QList<CT_MenuLevel*> levels = level->levels();

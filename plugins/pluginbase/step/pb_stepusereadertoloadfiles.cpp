@@ -10,7 +10,7 @@ PB_StepUseReaderToLoadFiles::PB_StepUseReaderToLoadFiles() : SuperClass()
 
 QString PB_StepUseReaderToLoadFiles::description() const
 {
-    return tr("2- Charger des fichiers à l'aide de readers");
+    return tr("Charger les fichiers d'une liste");
 }
 
 CT_VirtualAbstractStep* PB_StepUseReaderToLoadFiles::createNewInstance() const

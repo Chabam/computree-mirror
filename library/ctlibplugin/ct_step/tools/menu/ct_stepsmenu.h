@@ -56,7 +56,6 @@ public:
         LP_Loops,
         LP_Plots,
         LP_Footprints,
-        LP_DEM,
         LP_Crowns,
         LP_Stems,
         LP_Points,

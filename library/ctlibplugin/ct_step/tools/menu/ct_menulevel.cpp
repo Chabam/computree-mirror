@@ -3,7 +3,9 @@
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 #include "ct_step/tools/menu/ct_stepsmenu.h"
 
-CT_MenuLevel* CT_MenuLevel::staticCreateOrGetLevelInParentLevel(const QString &customDisplayableName, CT_MenuLevel *parentLevel)
+QList<QString> CT_MenuLevel::STEPORDER;
+
+CT_MenuLevel* CT_MenuLevel::staticCreateOrGetLevelInParentLevel(const QString &customDisplayableName, CT_MenuLevel *parentLevel, bool isCustom)
 {
     Q_ASSERT(parentLevel != nullptr);
 
@@ -11,15 +13,19 @@ CT_MenuLevel* CT_MenuLevel::staticCreateOrGetLevelInParentLevel(const QString &c
 
     if(level == nullptr) {
         level = new CT_MenuLevel(customDisplayableName);
+        level->m_isCustomLevel = isCustom;
         parentLevel->addLevel(level);
     }
+
 
     return level;
 }
 
 CT_MenuLevel* CT_MenuLevel::staticCreateOrGetLevelInParentLevel(const CT_StepsMenu::LevelPredefined& predefinedLevel, CT_MenuLevel* parentLevel)
 {
-    return staticCreateOrGetLevelInParentLevel(CT_StepsMenu::staticPredefinedToString(predefinedLevel), parentLevel);
+    CT_MenuLevel* level = staticCreateOrGetLevelInParentLevel(CT_StepsMenu::staticPredefinedToString(predefinedLevel), parentLevel, false);
+
+    return level;
 }
 
 QString CT_MenuLevel::displayableName() const
@@ -57,14 +63,14 @@ bool CT_MenuLevel::addNotFoundedStep(const CT_NotFoundedStep& nfs)
     return true;
 }
 
-QList<CT_VirtualAbstractStep *> CT_MenuLevel::steps() const
+QList<CT_VirtualAbstractStep *> CT_MenuLevel::steps()
 {
-    if (isAFavoriteSubLevel())
+    if (!isAFavoriteSubLevel() && !m_isCustomLevel)
     {
-        return m_steps;
+        std::sort(m_steps.begin(), m_steps.end(), sortByStepOrder);
     }
 
-    return m_stepsSorted.values();
+    return m_steps;
 }
 
 QList<CT_MenuLevel::CT_NotFoundedStep> CT_MenuLevel::stepsNotFounded() const
@@ -159,7 +165,6 @@ bool CT_MenuLevel::addStepToCollectionOrDeleteIt(CT_VirtualAbstractStep* step)
     }
 
     m_steps.append(step);
-    m_stepsSorted.insert(step->description().toLower(), step);
 
     connect(step, SIGNAL(destroyed(QObject*)), this, SLOT(stepDeleted(QObject*)), Qt::DirectConnection);
 
@@ -236,3 +241,37 @@ void CT_MenuLevel::stepDeleted(QObject* step)
 {
     m_steps.removeOne(static_cast<CT_VirtualAbstractStep*>(step));
 }
+
+
+void CT_MenuLevel::defineHighPriorityStepsOrder()
+{
+    CT_MenuLevel::STEPORDER.clear();
+
+    CT_MenuLevel::STEPORDER.append("PB_StepCreateReaderList");
+    CT_MenuLevel::STEPORDER.append("PB_StepUseReaderToLoadFiles");
+    CT_MenuLevel::STEPORDER.append("PB_StepLoadFileByName");
+
+    CT_MenuLevel::STEPORDER.append("PB_StepApplyPointFilters");
+    CT_MenuLevel::STEPORDER.append("TK_StepReducePointsDensity");
+
+    CT_MenuLevel::STEPORDER.append("PB_StepBeginLoopThroughGroups02");
+    CT_MenuLevel::STEPORDER.append("PB_StepLoopOnFiles");
+    CT_MenuLevel::STEPORDER.append("PB_StepLoopOnFileSets");
+    CT_MenuLevel::STEPORDER.append("CT_StepEndLoop");
+
+    CT_MenuLevel::STEPORDER.append("PB_StepComputePointMetrics");
+    CT_MenuLevel::STEPORDER.append("PB_StepComputeRasterMetrics");
+}
+
+bool CT_MenuLevel::sortByStepOrder(const CT_VirtualAbstractStep *s1, const CT_VirtualAbstractStep *s2)
+{
+    int s1Order = CT_MenuLevel::STEPORDER.indexOf(s1->name());
+    int s2Order = CT_MenuLevel::STEPORDER.indexOf(s2->name());
+
+    if (s1Order < 0 && s2Order < 0) {return s1->description() < s2->description();}
+    if (s1Order < 0) {return false;}
+    if (s2Order < 0) {return true;}
+
+    return s1Order < s2Order;
+}
+

@@ -6,12 +6,14 @@ PB_StepBeginLoopThroughGroups02::PB_StepBeginLoopThroughGroups02() : SuperClass(
 
 QString PB_StepBeginLoopThroughGroups02::description() const
 {
-    return tr("1- Boucle sur les groupes");
+    return tr("Boucle standard");
 }
 
 QString PB_StepBeginLoopThroughGroups02::detailledDescription() const
 {
-    return tr("Nécessite une CT_StepEndLoop pour terminer la boucle");
+    return tr("A chaque tour de boucle, cette étape conserve uniquement un élément de la liste séléctionnée en entrée.<br>"
+            "L'utilisateur doit choisir un attribut servant à nommer les tours, ce qui permet par exemple des exports adaptatifs.<br>"
+            "Nécessite une étape \"Fin de boucle\" pour terminer la boucle. ");
 }
 
 CT_VirtualAbstractStep* PB_StepBeginLoopThroughGroups02::createNewInstance() const
