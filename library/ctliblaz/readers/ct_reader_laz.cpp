@@ -104,7 +104,7 @@ void CT_Reader_LAZ::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
     manager.addPointAttribute(m_hOutScanDirectionFlag, tr("Scan Direction Flag"));
     manager.addPointAttribute(m_hOutEdgeOfFlightLine, tr("Edge of Flight Line"));
 
-    manager.addPointAttribute(m_hOutIntensity, tr("Intensité"));
+    manager.addPointAttribute(m_hOutIntensity, tr("Intensity"));
     manager.addPointAttribute(m_hOutClassification, tr("Classification"));
     manager.addPointAttribute(m_hOutUserData, tr("User Data"));
     manager.addPointAttribute(m_hOutPointSourceID, tr("Point Source "));

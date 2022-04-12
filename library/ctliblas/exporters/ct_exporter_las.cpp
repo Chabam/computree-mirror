@@ -91,7 +91,7 @@ void CT_Exporter_LAS::internalDeclareInputModels(CT_ExporterInModelStructureMana
     manager.addPointAttributeToGroup(m_hInGroup, m_hInScanDirectionFlag, tr("Scan Direction Flag"));
     manager.addPointAttributeToGroup(m_hInGroup, m_hInEdgeOfFlightLine, tr("Edge of Flight Line"));
 
-    manager.addPointAttributeToGroup(m_hInGroup, m_hInIntensity, tr("Intensité"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInIntensity, tr("Intensity"));
     manager.addPointAttributeToGroup(m_hInGroup, m_hInClassification, tr("Classification"));
     manager.addPointAttributeToGroup(m_hInGroup, m_hInUserData, tr("User Data"));
     manager.addPointAttributeToGroup(m_hInGroup, m_hInPointSourceID, tr("Point Source "));

@@ -893,7 +893,7 @@ private:
     public:
         CT_VirtualAbstractStep* m_pointer;
 
-        QString displayableCustomName() const override { return m_pointer->displayableCustomName(); }
+        QString displayableCustomName() const override { return QString("(%2) %1").arg(m_pointer->description(), QString().setNum(m_pointer->uniqueID()));}
         bool isStepAPrototype() const override { return m_pointer->isAPrototype(); }
         bool visitStepHisOutResults(const OutResultsVisitor& visitor) const override {
             return m_pointer->visitOutResults([&visitor](const CT_AbstractResult* result) -> bool {

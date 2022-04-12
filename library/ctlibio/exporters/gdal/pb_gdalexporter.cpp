@@ -232,7 +232,7 @@ void PB_GDALExporter::internalDeclareInputModels(CT_ExporterInModelStructureMana
     if(driverType == RASTER_DRIVER_TYPE)
         manager.addItemToGroup(m_hInGroup, m_hInRaster, tr("Rasters"));
     else if(driverType == VECTOR_DRIVER_TYPE)
-        manager.addItemToGroup(m_hInGroup, m_hInVector, tr("Vectors"));
+        manager.addItemToGroup(m_hInGroup, m_hInVector, tr("Données vectorielles"));
 }
 
 CT_AbstractExporter::ExportReturn PB_GDALExporter::internalExportToFile()

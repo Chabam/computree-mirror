@@ -76,7 +76,7 @@ void PB_StepApplyPointFilters::declareInputModels(CT_StepInModelStructureManager
 bool PB_StepApplyPointFilters::postInputConfigure()
 {
     CTG_ConfigurableElementsSelector cd(nullptr, hasChildrens());
-    cd.setWindowTitle("Filtres séléctionnées");
+    cd.setWindowTitle("Filtres séléctionnés");
     cd.setElementsAvailable(pluginStaticCastT<PB_StepPluginManager>()->xyzFiltersAvailable());
     cd.setElementsSelected(&m_selectedXYZFilters);
 

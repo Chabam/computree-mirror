@@ -50,8 +50,10 @@ void CTG_InResultModelPossibilities::setInResultModelManager(const CT_InModelStr
 
     ui->treeView->expandAll();
 
-    setMinimumWidth(ui->treeView->header()->length());
+    //setMinimumWidth(ui->treeView->header()->length());
     setMaximumWidth(ui->treeView->header()->length());
+
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
 
 void CTG_InResultModelPossibilities::setReadOnly(bool enabled)

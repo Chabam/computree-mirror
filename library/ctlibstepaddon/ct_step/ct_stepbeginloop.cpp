@@ -53,9 +53,9 @@ void CT_StepBeginLoop::finalizePostSettings()
 
 void CT_StepBeginLoop::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
-    manager.addResult(m_hOutResult);
+    manager.addResult(m_hOutResult, tr("Compteur"));
     manager.setRootGroup(m_hOutResult, m_hOutRootGroup);
-    manager.addItem(m_hOutRootGroup, m_hOutLoopCounter);
+    manager.addItem(m_hOutRootGroup, m_hOutLoopCounter, tr("Compteur"));
 }
 
 void CT_StepBeginLoop::compute()

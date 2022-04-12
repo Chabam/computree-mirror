@@ -21,7 +21,6 @@ public:
     CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:
-    void fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog) final;
 
     void declareInputModels(CT_StepInModelStructureManager& manager) final;
 

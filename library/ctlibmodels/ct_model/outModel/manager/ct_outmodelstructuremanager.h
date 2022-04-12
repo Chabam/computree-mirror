@@ -104,7 +104,7 @@ public:
     template<class HandleOutResult>
     void addResult(HandleOutResult& handleResult,
                    const QString& resultName = QString{"Result"},
-                   const QString& displayableName = QString{"Out Result"},
+                   const QString& displayableName = QString{"Result"},
                    const QString& shortDescription = QString{""}) {
         // check, at compilation time, if the handle contains an output model
         internalAddResult(handleResult,
@@ -138,7 +138,7 @@ public:
     template<class HandleResult, class HandleOutGroup>
     void setRootGroup(const HandleResult& handleResult,
                       HandleOutGroup& rootGroupHandle,
-                      const QString& displayableName = QString{"Out Root Group"},
+                      const QString& displayableName = QObject::tr("Root Group"),
                       const QString& shortDescription = QString{""},
                       const QString& detailledDescription = QString{""}) {
 
@@ -163,7 +163,7 @@ public:
     template<class HandleGroupParent, class HandleOutGroup>
     void addGroup(const HandleGroupParent& parentGroup,
                   HandleOutGroup& groupHandle,
-                  const QString& displayableName = QString{"Out Group"},
+                  const QString& displayableName = QObject::tr("Group"),
                   const QString& shortDescription = QString{""},
                   const QString& detailledDescription = QString{""},
                   typename HandleOutGroup::GroupType* prototype = nullptr) {
@@ -197,7 +197,7 @@ public:
     template<class HandleGroupParent, class HandleOutItem>
     void addItem(const HandleGroupParent& parentGroup,
                  HandleOutItem& itemHandle,
-                 const QString& displayableName = QString{"Out Item"},
+                 const QString& displayableName = QObject::tr("Item"),
                  const QString& shortDescription = QString{""},
                  const QString& detailledDescription = QString{""},
                  typename HandleOutItem::ItemType* prototype = nullptr) {
@@ -232,7 +232,7 @@ public:
     void addItemAttribute(const HandleItemParent& parentItem,
                           HandleOutItemAttribute& itemAttributeHandle,
                           const Category& category,
-                          const QString& displayableName = QString{"Out Item Attribute"},
+                          const QString& displayableName = QObject::tr("Item Attribute"),
                           const QString& shortDescription = QString{""},
                           const QString& detailledDescription = QString{""},
                           typename HandleOutItemAttribute::ItemAttributeType* prototype = nullptr) {
@@ -260,7 +260,7 @@ public:
     template<class HandleGroupParent, class HandleOutPointAttribute>
     void addPointAttribute(const HandleGroupParent& parentGroup,
                            HandleOutPointAttribute& itemHandle,
-                           const QString& displayableName = QString{"Out Item"},
+                           const QString& displayableName = QObject::tr("Item"),
                            const QString& shortDescription = QString{""},
                            const QString& detailledDescription = QString{""},
                            typename HandleOutPointAttribute::ItemType* prototype = nullptr) {
@@ -286,7 +286,7 @@ public:
     template<class HandleGroupParent, class HandleOutEdgeAttribute>
     void addEdgeAttribute(const HandleGroupParent& parentGroup,
                           HandleOutEdgeAttribute& itemHandle,
-                          const QString& displayableName = QString{"Out Item"},
+                          const QString& displayableName = QObject::tr("Item"),
                           const QString& shortDescription = QString{""},
                           const QString& detailledDescription = QString{""},
                           typename HandleOutEdgeAttribute::ItemType* prototype = nullptr) {
@@ -312,7 +312,7 @@ public:
     template<class HandleGroupParent, class HandleOutFaceAttribute>
     void addFaceAttribute(const HandleGroupParent& parentGroup,
                           HandleOutFaceAttribute& itemHandle,
-                          const QString& displayableName = QString{"Out Item"},
+                          const QString& displayableName = QObject::tr("Item"),
                           const QString& shortDescription = QString{""},
                           const QString& detailledDescription = QString{""},
                           typename HandleOutFaceAttribute::ItemType* prototype = nullptr) {

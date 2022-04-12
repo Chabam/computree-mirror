@@ -27,8 +27,8 @@ public:
         LO_WorkFlow,            // Steps that can control the worklow of all other steps
         LO_Points,              // Steps that produce points clouds / clusters
         LO_GeometricalShapes,   // Steps that produce 3D geometrical shapes
-        LO_Voxels,              // Steps that produce voxels
         LO_Shapes2D,            // Steps that produce 2D geometrical shapes
+        LO_Voxels,              // Steps that produce voxels
         LO_Rasters,             // Steps that produce rasters
         LO_Meshes,              // Steps that produce meshes
         LO_Metrics,             // Steps that produce metrics

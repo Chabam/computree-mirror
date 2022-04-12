@@ -639,7 +639,7 @@ CT_StepConfigurableDialog* CT_VirtualAbstractStep::createOrGetStandardPreInputCo
         return m_preInputConfigDialog;
 
     m_preInputConfigDialog = new CT_StepConfigurableDialog();
-    m_preInputConfigDialog->setWindowTitle(m_preInputConfigDialog->windowTitle() + QString(" (%1)").arg(displayableCustomName()));
+    m_preInputConfigDialog->setWindowTitle(m_preInputConfigDialog->windowTitle() + QString(" : %1 (%2)").arg(description(), QString().setNum(uniqueID())));
     return m_preInputConfigDialog;
 }
 
@@ -807,7 +807,7 @@ void CT_VirtualAbstractStep::createPreInputConfigurationDialog()
 {
     if(m_preInputConfigDialog == nullptr) {
         m_preInputConfigDialog = new CT_StepConfigurableDialog();
-        m_preInputConfigDialog->setWindowTitle(m_preInputConfigDialog->windowTitle() + QString(" (%1)").arg(displayableCustomName()));
+        m_preInputConfigDialog->setWindowTitle(m_preInputConfigDialog->windowTitle() + QString(" : %1 (%2)").arg(description(), QString().setNum(uniqueID())));
 
         fillPreInputConfigurationDialog(m_preInputConfigDialog);
 
@@ -822,7 +822,7 @@ void CT_VirtualAbstractStep::createPostInputConfigurationDialog()
 {
     if(m_postInputConfigDialog == nullptr) {
         m_postInputConfigDialog = new CT_StepConfigurableDialog();
-        m_postInputConfigDialog->setWindowTitle(m_postInputConfigDialog->windowTitle() + QString(" (%1)").arg(displayableCustomName()));
+        m_postInputConfigDialog->setWindowTitle(m_postInputConfigDialog->windowTitle() + QString(" : %1 (%2)").arg(description(), QString().setNum(uniqueID())));
 
         fillPostInputConfigurationDialog(m_postInputConfigDialog);
 
