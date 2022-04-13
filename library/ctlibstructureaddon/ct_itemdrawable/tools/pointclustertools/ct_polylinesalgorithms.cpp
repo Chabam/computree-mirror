@@ -38,7 +38,8 @@ void CT_PolylinesAlgorithms::createPolyline2D(const CT_PointCluster *baseCluster
     current = unMarked.takeFirst();
     polylineCluster->addPoint(current->indexInCloud);
 
-    CT_PointAccessor pAccess;
+    CT_PointAccessor pAccess1;
+    CT_PointAccessor pAccess2;
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Prise en compte de chaque point candidat//////////////////////////////////////////
@@ -55,8 +56,8 @@ void CT_PolylinesAlgorithms::createPolyline2D(const CT_PointCluster *baseCluster
         {
             CandidatePoint* candidate = unMarked.at(i);
 
-            const CT_Point &p1 = pAccess.constPointAt(candidate->indexInCloud);
-            const CT_Point &p2 = pAccess.constPointAt(current->indexInCloud);
+            const CT_Point &p1 = pAccess1.constPointAt(candidate->indexInCloud);
+            const CT_Point &p2 = pAccess2.constPointAt(current->indexInCloud);
 
             // Distance a l'objet qu'on vient d'ajouter pour ensuite la comparer a la distance de l'ancienne tete et de l'ancienne queue de ma polyligne
             double distance = CT_MathPoint::distance2D (p1, p2);
@@ -80,8 +81,8 @@ void CT_PolylinesAlgorithms::createPolyline2D(const CT_PointCluster *baseCluster
                 // Comparaison a la tete
                 if ( current->indexInCloud == polylineIndexCloud->first())
                 {
-                    const CT_Point &pA = pAccess.constPointAt(candidate->indexInCloud);
-                    const CT_Point &pB = pAccess.constPointAt(polylineIndexCloud->last());
+                    const CT_Point &pA = pAccess1.constPointAt(candidate->indexInCloud);
+                    const CT_Point &pB = pAccess2.constPointAt(polylineIndexCloud->last());
 
                     distanceToOtherEnd = CT_MathPoint::distance2D(Eigen::Vector3d(pA(0), pA(1), pA(2)), Eigen::Vector3d(pB(0), pB(1), pB(2)));
 
@@ -101,8 +102,8 @@ void CT_PolylinesAlgorithms::createPolyline2D(const CT_PointCluster *baseCluster
                 // Comparaison a la queue
                 else if ( current->indexInCloud == polylineIndexCloud->last())
                 {
-                    const CT_Point &pA = pAccess.constPointAt(candidate->indexInCloud);
-                    const CT_Point &pB = pAccess.constPointAt(polylineIndexCloud->first());
+                    const CT_Point &pA = pAccess1.constPointAt(candidate->indexInCloud);
+                    const CT_Point &pB = pAccess2.constPointAt(polylineIndexCloud->first());
 
                     distanceToOtherEnd = CT_MathPoint::distance2D(Eigen::Vector3d(pA(0), pA(1), pA(2)), Eigen::Vector3d(pB(0), pB(1), pB(2)));
 

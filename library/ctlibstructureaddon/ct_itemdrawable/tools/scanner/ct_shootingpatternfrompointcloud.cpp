@@ -28,7 +28,7 @@ size_t CT_ShootingPatternFromPointCloud::numberOfShots() const
 CT_Shot CT_ShootingPatternFromPointCloud::shotAt(const size_t &index)
 {
     auto idx = m_pcir->abstractCloudIndexT()->constIndexAt(index);
-    CT_Point p = m_pAccessor.pointAt(idx);
+    const CT_Point& p = m_pAccessor.pointAt(idx);
 
     auto direction = p - m_origin;
     return CT_Shot(m_origin, direction);

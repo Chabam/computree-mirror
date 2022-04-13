@@ -26,7 +26,8 @@ void CT_StandardPointClusterDrawManager::draw(GraphicsViewInterface& view, Paint
 
     if(drawConfiguration()->variableValue(INDEX_CONFIG_LINES_VISIBLE).toBool())
     {
-        CT_PointAccessor pointAccessor;
+        CT_PointAccessor pointAccessor1;
+        CT_PointAccessor pointAccessor2;
         const CT_AbstractPointCloudIndex* pointCloudIndex = item.pointCloudIndex();
 
         if(pointCloudIndex->size() > 1)
@@ -38,8 +39,9 @@ void CT_StandardPointClusterDrawManager::draw(GraphicsViewInterface& view, Paint
                 const size_t index1 = size_t(pointCloudIndex->constIndexAt(i));
                 const size_t index2 = size_t(pointCloudIndex->constIndexAt(i+1));
 
-                const CT_Point& point1 = pointAccessor.constPointAt(index1);
-                const CT_Point& point2 = pointAccessor.constPointAt(index2);
+                const CT_Point& point1 = pointAccessor1.constPointAt(index1);
+                const CT_Point& point2 = pointAccessor2.constPointAt(index2);
+
                 painter.drawLine(point1(0), point1(1), point1(2), point2(0), point2(1), point2(2));
             }
         }

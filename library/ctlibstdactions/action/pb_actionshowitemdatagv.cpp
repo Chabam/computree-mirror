@@ -170,7 +170,9 @@ void PB_ActionShowItemDataGV::drawOverlay(GraphicsViewInterface &view, QPainter 
     CT_SFCIR fcir = graphicsView()->getSelectedFaces();
 
     CT_FaceIterator itf(fcir);
-    CT_PointAccessor pAccess;
+    CT_PointAccessor pAccess1;
+    CT_PointAccessor pAccess2;
+    CT_PointAccessor pAccess3;
 
     if(itf.hasNext())
     {
@@ -178,9 +180,9 @@ void PB_ActionShowItemDataGV::drawOverlay(GraphicsViewInterface &view, QPainter 
 
         const CT_Face &f = itf.cT();
 
-        const CT_Point &p1 = pAccess.constPointAt(f.iPointAt(0));
-        const CT_Point &p2 = pAccess.constPointAt(f.iPointAt(1));
-        const CT_Point &p3 = pAccess.constPointAt(f.iPointAt(2));
+        const CT_Point &p1 = pAccess1.constPointAt(f.iPointAt(0));
+        const CT_Point &p2 = pAccess2.constPointAt(f.iPointAt(1));
+        const CT_Point &p3 = pAccess3.constPointAt(f.iPointAt(2));
 
         painter.save();
         painter.setPen(QColor(255,255,255));
@@ -203,8 +205,8 @@ void PB_ActionShowItemDataGV::drawOverlay(GraphicsViewInterface &view, QPainter 
         ite.next();
 
         const CT_Edge &e = ite.cT();
-        const CT_Point &p1 = pAccess.constPointAt(e.iPointAt(0));
-        const CT_Point &p2 = pAccess.constPointAt(e.iPointAt(1));
+        const CT_Point &p1 = pAccess1.constPointAt(e.iPointAt(0));
+        const CT_Point &p2 = pAccess2.constPointAt(e.iPointAt(1));
 
         painter.save();
         painter.setPen(QColor(255,255,255));
