@@ -26,6 +26,10 @@
         <source>Début de boucle, tour %1 sur %2 (Nom : %3)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Compteur</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CT_StepEndLoop</name>

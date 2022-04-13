@@ -763,10 +763,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Vectors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Creation of output file failed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -784,6 +780,10 @@
     </message>
     <message>
         <source>Failed to create feature in shapefile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Données vectorielles</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

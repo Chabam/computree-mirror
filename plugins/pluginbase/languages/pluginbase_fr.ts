@@ -1004,19 +1004,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nom du fichier = nom du tour courant + nom du fichier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Si coché vous devrez choisir un item de type &quot;compteur&quot; et le nom du fichier contiendra le nom du tour courant.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chaque item sera exporté dans un fichier différent<byte value="xd"/> - le nom du fichier à utiliser sera fonction du choix que vous allez faire ci-dessous.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Un item par fichier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1024,31 +1012,50 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Un item par fichier obligatoire (l&apos;exportateur ne peut pas faire autrement) :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nom du fichier original</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nom du fichier contenu dans un attribut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Si coché : <byte value="xd"/>- L&apos;attribut à relier sera un fils de l&apos;item à exporter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nom du fichier contenu dans un attribut d&apos;un autre item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Si coché : <byte value="xd"/>- L&apos;attribut à relier sera un fils d&apos;un autre item que celui à exporter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Exporter dans...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chaque item sera exporté dans un fichier différent
+Le nom du fichier à utiliser sera fonction du choix que vous allez faire ci-dessous.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exporter un item par fichier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment définir le nom du fichier :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>  - Choisir un nom du fichier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saisie manuelle du nom de fichier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>  - Nom du fichier contenu dans un attribut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché : 
+L&apos;attribut à utiliser appartiendra à l&apos;item à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>  - Nom du fichier contenu dans un attribut d&apos;un autre item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché : 
+L&apos;attribut à utiliser appartiendra à un autre item que celui à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2097,10 +2104,6 @@ Veuillez sélectionner les paramètres pour réaliser les tranches.</translation
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Conditionner le chargement à un attribut booléen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fichiers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2110,14 +2113,6 @@ Veuillez sélectionner les paramètres pour réaliser les tranches.</translation
     </message>
     <message>
         <source>Reader</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Item conditionnant le chargement</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attribut conditionnel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

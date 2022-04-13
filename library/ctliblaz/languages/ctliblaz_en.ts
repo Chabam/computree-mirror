@@ -52,10 +52,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Intensité</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Classification</source>
         <translation type="unfinished"></translation>
     </message>
@@ -109,6 +105,10 @@
     </message>
     <message>
         <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Intensity</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -205,10 +205,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Intensité</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Classification</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,6 +282,10 @@
     </message>
     <message>
         <source>Impossible de detruire le reader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Intensity</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

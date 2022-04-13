@@ -2295,19 +2295,7 @@ Only files headers are loaded at this stage. </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nom du fichier = nom du tour courant + nom du fichier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Si coché vous devrez choisir un item de type &quot;compteur&quot; et le nom du fichier contiendra le nom du tour courant.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chaque item sera exporté dans un fichier différent<byte value="xd"/> - le nom du fichier à utiliser sera fonction du choix que vous allez faire ci-dessous.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Un item par fichier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2315,27 +2303,46 @@ Only files headers are loaded at this stage. </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Un item par fichier obligatoire (l&apos;exportateur ne peut pas faire autrement) :</source>
+        <source>Chaque item sera exporté dans un fichier différent
+Le nom du fichier à utiliser sera fonction du choix que vous allez faire ci-dessous.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nom du fichier original</source>
+        <source>Exporter un item par fichier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nom du fichier contenu dans un attribut</source>
+        <source>Comment définir le nom du fichier :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Si coché : <byte value="xd"/>- L&apos;attribut à relier sera un fils de l&apos;item à exporter</source>
+        <source>  - Choisir un nom du fichier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nom du fichier contenu dans un attribut d&apos;un autre item</source>
+        <source>Saisie manuelle du nom de fichier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Si coché : <byte value="xd"/>- L&apos;attribut à relier sera un fils d&apos;un autre item que celui à exporter</source>
+        <source>  - Nom du fichier contenu dans un attribut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché : 
+L&apos;attribut à utiliser appartiendra à l&apos;item à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>  - Nom du fichier contenu dans un attribut d&apos;un autre item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché : 
+L&apos;attribut à utiliser appartiendra à un autre item que celui à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3507,7 +3514,7 @@ Please select parameters for slicing.</translation>
     </message>
     <message>
         <source>Conditionner le chargement à un attribut booléen</source>
-        <translation>Conditionnal loading in function of boolean attribute</translation>
+        <translation type="vanished">Conditionnal loading in function of boolean attribute</translation>
     </message>
     <message>
         <source>Fichiers</source>
@@ -3515,11 +3522,11 @@ Please select parameters for slicing.</translation>
     </message>
     <message>
         <source>Item conditionnant le chargement</source>
-        <translation>Item containing boolean attribute</translation>
+        <translation type="vanished">Item containing boolean attribute</translation>
     </message>
     <message>
         <source>Attribut conditionnel</source>
-        <translation>Boolean attribute</translation>
+        <translation type="vanished">Boolean attribute</translation>
     </message>
     <message>
         <source>Chargement du fichier %1</source>
