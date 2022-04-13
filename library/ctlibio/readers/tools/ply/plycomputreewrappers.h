@@ -247,6 +247,7 @@ struct Ply_CT_GenericCloud_Wrapper {
  * @brief Wrapper to use the configuration widget of a ply file with computree
  */
 class GPly_CT_ReadConfiguration_Wrapper : public CT_AbstractConfigurableWidget {
+    Q_OBJECT
 public:
     GPly_CT_ReadConfiguration_Wrapper(QWidget *parent = nullptr) : CT_AbstractConfigurableWidget(parent) {
         QVBoxLayout* layout = new QVBoxLayout(this);

@@ -2,47 +2,33 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
-    <name></name>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid4d_dense.hpp" line="354"/>
-        <source>4D grid&lt;%1&gt;, dense</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>CTG_ConfigurableElementsSelector</name>
     <message>
-        <location filename="../ct_view/elements/ctg_configurableelementsselector.ui" line="14"/>
         <source>Configuration</source>
-        <translation>Configuration</translation>
+        <translation type="vanished">Configuration</translation>
     </message>
     <message>
-        <location filename="../ct_view/elements/ctg_configurableelementsselector.ui" line="28"/>
         <source>Ajouter tout</source>
-        <translation>Add all</translation>
+        <translation type="vanished">Add all</translation>
     </message>
     <message>
-        <location filename="../ct_view/elements/ctg_configurableelementsselector.ui" line="70"/>
         <source>Supprimer</source>
-        <translation>Remove</translation>
+        <translation type="vanished">Remove</translation>
     </message>
     <message>
-        <location filename="../ct_view/elements/ctg_configurableelementsselector.ui" line="77"/>
         <source>Supprimer tout</source>
-        <translation>Remove all</translation>
+        <translation type="vanished">Remove all</translation>
     </message>
     <message>
-        <location filename="../ct_view/elements/ctg_configurableelementsselector.cpp" line="207"/>
         <source>Erreur</source>
-        <translation>Error</translation>
+        <translation type="vanished">Error</translation>
     </message>
 </context>
 <context>
     <name>CTG_InModelPossibilitiesChoice</name>
     <message>
-        <location filename="../ct_view/inModel/ctg_inmodelpossibilitieschoice.ui" line="14"/>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="vanished">Form</translation>
     </message>
     <message>
         <source>Sortie</source>
@@ -61,49 +47,35 @@
         <translation type="vanished">Input</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inmodelpossibilitieschoice.cpp" line="444"/>
         <source>Sélectionner</source>
-        <translation>Select</translation>
+        <translation type="vanished">Select</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inmodelpossibilitieschoice.cpp" line="448"/>
         <source>Désélectionner</source>
-        <translation>Unselect</translation>
+        <translation type="vanished">Unselect</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inmodelpossibilitieschoice.cpp" line="535"/>
         <source>Données disponibles</source>
-        <translation>Available data</translation>
+        <translation type="vanished">Available data</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inmodelpossibilitieschoice.cpp" line="536"/>
         <source>Sél.</source>
-        <translation>Sel.</translation>
+        <translation type="vanished">Sel.</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inmodelpossibilitieschoice.cpp" line="537"/>
         <source>Données recherchées</source>
-        <translation>Searched data</translation>
+        <translation type="vanished">Searched data</translation>
     </message>
 </context>
 <context>
     <name>CTG_InResultModelConfiguration</name>
     <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelconfiguration.ui" line="14"/>
         <source>Configuration des résultats d&apos;entrée</source>
-        <translation>Configuration of input results</translation>
+        <translation type="vanished">Configuration of input results</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelconfiguration.cpp" line="64"/>
         <source>Avertissement</source>
-        <translation>Warning</translation>
-    </message>
-    <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelconfiguration.cpp" line="64"/>
-        <source>Vous n&apos;avez pas correctement configuré un tour, veuillez sélectionner des données d&apos;entrée.
-
-%1</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Warning</translation>
     </message>
     <message>
         <source>Vous n&apos;avez pas correctement configuré un tour, veuillez sélectionner des données d&apos;entrée.
@@ -117,79 +89,54 @@
 <context>
     <name>CTG_InResultModelPossibilities</name>
     <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelpossibilities.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelpossibilities.cpp" line="111"/>
         <source>Nom des résultats</source>
-        <translation>Results names</translation>
+        <translation type="vanished">Results names</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelpossibilities.cpp" line="113"/>
-        <location filename="../ct_view/inModel/ctg_inresultmodelpossibilities.cpp" line="250"/>
         <source>Aide</source>
-        <translation>Help</translation>
+        <translation type="vanished">Help</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelpossibilities.cpp" line="250"/>
         <source>&lt;html&gt;Description du résultat d&apos;entrée : &lt;br/&gt;&lt;br/&gt;%1&lt;/html&gt;</source>
-        <translation>&lt;html&gt;Input result description: &lt;br/&gt;&lt;br/&gt;%1&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;Input result description: &lt;br/&gt;&lt;br/&gt;%1&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Description</source>
         <translation type="vanished">Description</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelpossibilities.cpp" line="112"/>
         <source>Etape</source>
-        <translation>Step</translation>
+        <translation type="vanished">Step</translation>
     </message>
 </context>
 <context>
     <name>CTG_InResultModelTurnChoice</name>
     <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelturnchoice.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelturnchoice.cpp" line="107"/>
         <source>Nom des résultats</source>
-        <translation>Resultats names</translation>
+        <translation type="vanished">Resultats names</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inresultmodelturnchoice.cpp" line="108"/>
         <source>Etape</source>
-        <translation>Step</translation>
+        <translation type="vanished">Step</translation>
     </message>
 </context>
 <context>
     <name>CTG_InTurnManager</name>
     <message>
-        <location filename="../ct_view/inModel/ctg_inturnmanager.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Modèles</source>
         <translation type="vanished">Models</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inturnmanager.cpp" line="128"/>
         <source>Séléction des données d&apos;entrée</source>
-        <translation>Input data selection</translation>
+        <translation type="vanished">Input data selection</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inturnmanager.cpp" line="219"/>
         <source>Avertissement</source>
-        <translation>Warning</translation>
+        <translation type="vanished">Warning</translation>
     </message>
     <message>
-        <location filename="../ct_view/inModel/ctg_inturnmanager.cpp" line="219"/>
         <source>Impossible de créer un nouveau tour car le dernier n&apos;est pas valide. Veuillez sélectionner au moins un élément pour chaque résultat puis ré-essayez.</source>
-        <translation>Impssible to create turn because it is invalide. Please select at least one element for each result before trying again. </translation>
+        <translation type="vanished">Impssible to create turn because it is invalide. Please select at least one element for each result before trying again. </translation>
     </message>
     <message>
         <source>Vous ne pouvez pas supprimer le tour car il en faut au moins un.</source>
@@ -204,22 +151,6 @@
     </message>
 </context>
 <context>
-    <name>CT_AbstractItemDrawable</name>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractitemdrawable.cpp" line="97"/>
-        <source>Model passed in parameter is not a CT_OutAbstractItemModel</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>CT_AbstractItemGroup</name>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractitemgroup.cpp" line="253"/>
-        <source>Model passed in parameter is not a CT_OutAbstractGroupModel</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>CT_AbstractMetric</name>
     <message>
         <source>Impossible de trouver l&apos;attribut %1 (métrique : %2) !</source>
@@ -230,53 +161,27 @@
         <translation type="vanished">Wring type for attribute %1 !</translation>
     </message>
     <message>
-        <location filename="../ct_metric/abstract/ct_abstractmetric.cpp" line="32"/>
-        <source> : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_metric/abstract/ct_abstractmetric.cpp" line="106"/>
         <source>Impossible de trouver l&apos;attribut recherché (métrique : %2) !</source>
-        <translation>Impossible to find searched attribute (metric: %2)!</translation>
+        <translation type="vanished">Impossible to find searched attribute (metric: %2)!</translation>
     </message>
     <message>
-        <location filename="../ct_metric/abstract/ct_abstractmetric.cpp" line="112"/>
         <source>Mauvais type pour l&apos;attribut recherché (%1 au lieu de %2) !</source>
-        <translation>Invalid type for searched attribute (%1 intead of %2)!</translation>
-    </message>
-</context>
-<context>
-    <name>CT_AbstractSingularItemDrawable</name>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.cpp" line="205"/>
-        <source>Model passed in parameter is not a CT_OutAbstractGroupModel</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>CT_AbstractStepLoadFile</name>
-    <message>
-        <location filename="../ct_step/abstract/ct_abstractsteploadfile.cpp" line="239"/>
-        <source>%1 compatible file (%2);;All Files (*.*)</source>
-        <translation></translation>
+        <translation type="vanished">Invalid type for searched attribute (%1 intead of %2)!</translation>
     </message>
 </context>
 <context>
     <name>CT_AsciiFileChoiceButton</name>
     <message>
-        <location filename="../ct_view/ct_asciifilechoicebutton.cpp" line="118"/>
         <source>Séparateurs de colonne possibles</source>
-        <translation>Possible field separators</translation>
+        <translation type="vanished">Possible field separators</translation>
     </message>
     <message>
-        <location filename="../ct_view/ct_asciifilechoicebutton.cpp" line="119"/>
         <source>Séparateurs décimal possibles</source>
-        <translation>Pssible decimal separators</translation>
+        <translation type="vanished">Pssible decimal separators</translation>
     </message>
     <message>
-        <location filename="../ct_view/ct_asciifilechoicebutton.cpp" line="308"/>
         <source>Choisir un fichier</source>
-        <translation>Select a file</translation>
+        <translation type="vanished">Select a file</translation>
     </message>
 </context>
 <context>
@@ -307,24 +212,20 @@
 <context>
     <name>CT_FileChoiceButton</name>
     <message>
-        <location filename="../ct_view/ct_filechoicebutton.cpp" line="186"/>
         <source>Choisir un fichier</source>
-        <translation>Select a file</translation>
+        <translation type="vanished">Select a file</translation>
     </message>
     <message>
-        <location filename="../ct_view/ct_filechoicebutton.cpp" line="194"/>
         <source>Choisir un ou plusieurs fichiers</source>
-        <translation>Select one or more file</translation>
+        <translation type="vanished">Select one or more file</translation>
     </message>
     <message>
-        <location filename="../ct_view/ct_filechoicebutton.cpp" line="206"/>
         <source>Choisir un répertoire</source>
-        <translation>Select a folder</translation>
+        <translation type="vanished">Select a folder</translation>
     </message>
     <message>
-        <location filename="../ct_view/ct_filechoicebutton.cpp" line="213"/>
         <source>Fichier à créer</source>
-        <translation>File to create</translation>
+        <translation type="vanished">File to create</translation>
     </message>
 </context>
 <context>
@@ -337,77 +238,48 @@
 <context>
     <name>CT_GenericConfigurableWidget</name>
     <message>
-        <location filename="../ct_view/ct_genericconfigurablewidget.cpp" line="23"/>
         <source>Configuration</source>
-        <translation>Configuration</translation>
+        <translation type="vanished">Configuration</translation>
     </message>
 </context>
 <context>
     <name>CT_InAbstractModel</name>
     <message>
-        <location filename="../ct_model/inModel/abstract/ct_inabstractmodel.cpp" line="167"/>
         <source>Le modèle %1 (%2) a %3 possibilité(s) sauvegardée(s) mais aucune de sélectionné</source>
-        <translation>The model %1  (%2) has %3 saved possibilities but no one selected</translation>
-    </message>
-    <message>
-        <location filename="../ct_model/inModel/abstract/ct_inabstractmodel.cpp" line="576"/>
-        <source>
-</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">The model %1  (%2) has %3 saved possibilities but no one selected</translation>
     </message>
 </context>
 <context>
     <name>CT_InResultModelNotNeedInputResult</name>
     <message>
-        <location filename="../ct_result/model/inModel/ct_inresultmodelnotneedinputresult.cpp" line="6"/>
         <source>Not input result</source>
-        <translation>No input result</translation>
+        <translation type="vanished">No input result</translation>
     </message>
 </context>
 <context>
     <name>CT_InZeroOrMoreGroupModel</name>
     <message>
-        <location filename="../ct_itemdrawable/model/inModel/ct_inzeroormoregroupmodel.cpp" line="7"/>
         <source>Aucun ou un groupe</source>
-        <translation>No group or one group</translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/model/inModel/ct_inzeroormoregroupmodel.cpp" line="8"/>
-        <source>*</source>
-        <translation></translation>
+        <translation type="vanished">No group or one group</translation>
     </message>
 </context>
 <context>
     <name>CT_ItemDrawableHierarchyCollectionWidget</name>
     <message>
-        <location filename="../ct_view/itemdrawable/ct_itemdrawablehierarchycollectionwidget.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/itemdrawable/ct_itemdrawablehierarchycollectionwidget.cpp" line="112"/>
-        <source>Documents</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/itemdrawable/ct_itemdrawablehierarchycollectionwidget.cpp" line="325"/>
         <source>Nom</source>
-        <translation>Name</translation>
+        <translation type="vanished">Name</translation>
     </message>
     <message>
-        <location filename="../ct_view/itemdrawable/ct_itemdrawablehierarchycollectionwidget.cpp" line="326"/>
         <source>Utiliser</source>
-        <translation>Use</translation>
+        <translation type="vanished">Use</translation>
     </message>
     <message>
-        <location filename="../ct_view/itemdrawable/ct_itemdrawablehierarchycollectionwidget.cpp" line="471"/>
         <source>Couleur</source>
-        <translation>Color</translation>
+        <translation type="vanished">Color</translation>
     </message>
     <message>
-        <location filename="../ct_view/itemdrawable/ct_itemdrawablehierarchycollectionwidget.cpp" line="493"/>
         <source>Normale</source>
-        <translation>Normal</translation>
+        <translation type="vanished">Normal</translation>
     </message>
 </context>
 <context>
@@ -554,33 +426,28 @@
 <context>
     <name>CT_StepBeginLoop</name>
     <message>
-        <location filename="../ct_step/ct_stepbeginloop.cpp" line="24"/>
         <source>Démarre une boucle dans le script</source>
-        <translation>Begins a loop in the script</translation>
+        <translation type="vanished">Begins a loop in the script</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stepbeginloop.cpp" line="29"/>
         <source>Nécessite une CT_StepEndLoop pour terminer la boucle</source>
-        <translation>Needs a CT_StepEndLoop to end the loop</translation>
+        <translation type="vanished">Needs a CT_StepEndLoop to end the loop</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stepbeginloop.cpp" line="71"/>
         <source>Nombre d&apos;itérations</source>
-        <translation>Number of iterations</translation>
+        <translation type="vanished">Number of iterations</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stepbeginloop.cpp" line="78"/>
         <source>Compteur</source>
-        <translation>Counter</translation>
+        <translation type="vanished">Counter</translation>
     </message>
     <message>
         <source>Début de boucle, tour %1 sur %2 (%3)</source>
         <translation type="vanished">Loop beginning, turn %1 / %2 (%3)</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stepbeginloop.cpp" line="121"/>
         <source>Début de boucle, tour %1 sur %2</source>
-        <translation>Beginning of the loop, turn %1 / %2</translation>
+        <translation type="vanished">Beginning of the loop, turn %1 / %2</translation>
     </message>
 </context>
 <context>
@@ -597,396 +464,133 @@
         <translation type="vanished">Ends a loop in the script</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stependloop.cpp" line="31"/>
         <source>2- Termine une boucle dans le script</source>
-        <translation>2- Ends a loop in the script</translation>
+        <translation type="vanished">2- Ends a loop in the script</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stependloop.cpp" line="36"/>
         <source>Nécessite une CT_StepBeginLoop auparavant pour initier la boucle</source>
-        <translation>Needs a  CT_StepBeginLoo before to begin the loop</translation>
+        <translation type="vanished">Needs a  CT_StepBeginLoo before to begin the loop</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stependloop.cpp" line="54"/>
         <source>Résultat compteur</source>
-        <translation>Counter result</translation>
+        <translation type="vanished">Counter result</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stependloop.cpp" line="56"/>
         <source>Compteur</source>
-        <translation>Counter</translation>
+        <translation type="vanished">Counter</translation>
     </message>
     <message>
-        <location filename="../ct_step/ct_stependloop.cpp" line="76"/>
         <source>Fin de boucle, tour %1 sur %2</source>
-        <translation>End of loop, turn %1 / %2</translation>
+        <translation type="vanished">End of loop, turn %1 / %2</translation>
     </message>
 </context>
 <context>
     <name>CT_TextFileConfigurationDialog</name>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="20"/>
         <source>Configuration</source>
-        <translation>Configuration</translation>
+        <translation type="vanished">Configuration</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="44"/>
         <source>Choisir le fichier</source>
-        <translation>Select the file</translation>
+        <translation type="vanished">Select the file</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="72"/>
         <source>filePath</source>
-        <translation>filePath</translation>
+        <translation type="vanished">filePath</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="94"/>
         <source>Extrait du fichier : </source>
-        <translation>Extract of the file:</translation>
+        <translation type="vanished">Extract of the file:</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="114"/>
         <source>Premières lignes</source>
-        <translation>First lines</translation>
+        <translation type="vanished">First lines</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="128"/>
         <source>Afficher colonnes, taille des tabulations :</source>
-        <translation>Show columns, size for tabulations:</translation>
+        <translation type="vanished">Show columns, size for tabulations:</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="151"/>
-        <source>px</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="223"/>
         <source>Pas de ligne d&apos;entête dans le fichier</source>
-        <translation>No header line in the file</translation>
+        <translation type="vanished">No header line in the file</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="288"/>
         <source>Séparateur décimal :</source>
-        <translation>Decimal separator:</translation>
+        <translation type="vanished">Decimal separator:</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="295"/>
         <source>Point</source>
-        <translation>Point</translation>
+        <translation type="vanished">Point</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="308"/>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.cpp" line="494"/>
         <source>Virgule</source>
-        <translation>Coma</translation>
+        <translation type="vanished">Coma</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="355"/>
         <source>Séparateur de champs :</source>
-        <translation>Fields separator:</translation>
+        <translation type="vanished">Fields separator:</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="381"/>
         <source>Détécter</source>
-        <translation>Detect</translation>
+        <translation type="vanished">Detect</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="237"/>
         <source>Nombre de lignes à ignorer avant la ligne d&apos;entêtes : </source>
-        <translation>Number of lines to skip before headers line:</translation>
+        <translation type="vanished">Number of lines to skip before headers line:</translation>
     </message>
     <message>
         <source>Extraire les noms de champs</source>
         <translation type="vanished">Extract fields names</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.ui" line="437"/>
         <source>Correspondance des champs :</source>
-        <translation>Fields matching:</translation>
+        <translation type="vanished">Fields matching:</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.cpp" line="52"/>
         <source>Aucun fichier valide choisi.</source>
-        <translation>No valid file choosen.</translation>
+        <translation type="vanished">No valid file choosen.</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.cpp" line="67"/>
         <source>Fichier ascii</source>
-        <translation>ASCII file</translation>
+        <translation type="vanished">ASCII file</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.cpp" line="98"/>
         <source>Choix du fichier ascii</source>
-        <translation>Choose ASCII file</translation>
+        <translation type="vanished">Choose ASCII file</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.cpp" line="493"/>
-        <source>Tabulation</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.cpp" line="495"/>
         <source>Point-Virgule</source>
-        <translation>Semi-colon</translation>
+        <translation type="vanished">Semi-colon</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_textfileconfigurationdialog.cpp" line="496"/>
         <source>Espace</source>
-        <translation>Space</translation>
+        <translation type="vanished">Space</translation>
     </message>
 </context>
 <context>
     <name>CT_VirtualAbstractStep</name>
     <message>
-        <location filename="../ct_step/abstract/ct_virtualabstractstep.cpp" line="551"/>
-        <source> quit manual mode</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_step/abstract/ct_virtualabstractstep.cpp" line="622"/>
         <source>Erreur %1</source>
-        <translation>Error %1</translation>
+        <translation type="vanished">Error %1</translation>
     </message>
     <message>
-        <location filename="../ct_step/abstract/ct_virtualabstractstep.cpp" line="625"/>
         <source>Aucune erreur detecte</source>
-        <translation>No error detected</translation>
-    </message>
-    <message>
-        <location filename="../ct_step/abstract/ct_virtualabstractstep.cpp" line="723"/>
-        <source>No description for this step</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_step/abstract/ct_virtualabstractstep.cpp" line="728"/>
-        <source>No detailled description for this step</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_step/abstract/ct_virtualabstractstep.cpp" line="943"/>
-        <source> enter manual mode</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_step/abstract/ct_virtualabstractstep.cpp" line="1654"/>
-        <source> - Start computing at 	%1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_step/abstract/ct_virtualabstractstep.cpp" line="1763"/>
-        <source> - Computing completed, elapsed time:		%1h:%2m:%3s:%4ms</source>
-        <translation></translation>
+        <translation type="vanished">No error detected</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../ct_itemdrawable/abstract/ct_virtualgrid2d.h" line="283"/>
-        <location filename="../ct_itemdrawable/ct_grid3d.h" line="445"/>
-        <location filename="../ct_itemdrawable/ct_grid3d_sparse.h" line="448"/>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="466"/>
-        <location filename="../ct_itemdrawable/ct_image2d.h" line="389"/>
-        <source>X dimension</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_virtualgrid2d.h" line="284"/>
-        <location filename="../ct_itemdrawable/ct_grid3d.h" line="446"/>
-        <location filename="../ct_itemdrawable/ct_grid3d_sparse.h" line="449"/>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="467"/>
-        <location filename="../ct_itemdrawable/ct_image2d.h" line="390"/>
-        <source>Y dimension</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_virtualgrid2d.h" line="285"/>
-        <location filename="../ct_itemdrawable/ct_grid3d_sparse.h" line="451"/>
-        <source>X min</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_virtualgrid2d.h" line="286"/>
-        <location filename="../ct_itemdrawable/ct_grid3d_sparse.h" line="452"/>
-        <source>Y min</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_virtualgrid2d.h" line="287"/>
-        <location filename="../ct_itemdrawable/ct_grid3d.h" line="448"/>
-        <location filename="../ct_itemdrawable/ct_grid3d_sparse.h" line="454"/>
-        <location filename="../ct_itemdrawable/ct_image2d.h" line="391"/>
-        <location filename="../ct_itemdrawable/ct_profile.h" line="411"/>
-        <source>Resolution</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_virtualgrid2d.h" line="288"/>
-        <location filename="../ct_itemdrawable/ct_grid3d.h" line="449"/>
-        <location filename="../ct_itemdrawable/ct_grid3d_sparse.h" line="455"/>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="474"/>
-        <location filename="../ct_itemdrawable/ct_image2d.h" line="392"/>
-        <location filename="../ct_itemdrawable/ct_profile.h" line="412"/>
-        <source>NA</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid3d.h" line="447"/>
-        <location filename="../ct_itemdrawable/ct_grid3d_sparse.h" line="450"/>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="468"/>
-        <source>Z dimension</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid3d_sparse.h" line="453"/>
-        <source>Z min</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid3d.h" line="450"/>
-        <location filename="../ct_itemdrawable/ct_image2d.h" line="393"/>
-        <source>Min Value</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid3d.h" line="451"/>
-        <location filename="../ct_itemdrawable/ct_image2d.h" line="394"/>
-        <source>Max Value</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="465"/>
-        <source>W dimension</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="469"/>
-        <source>W min</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="470"/>
-        <source>Resolution W</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="471"/>
-        <source>Resolution X</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="472"/>
-        <source>Resolution Y</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_grid4d.h" line="473"/>
-        <source>Resolution Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_profile.h" line="407"/>
-        <source>Dimension</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_profile.h" line="408"/>
-        <source>X origin</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_profile.h" line="409"/>
-        <source>Y origin</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_profile.h" line="410"/>
-        <source>Z origin</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_exporter/abstract/ct_abstractexporterattributesselection.cpp" line="39"/>
-        <location filename="../ct_view/tools/ct_configurablewidgettodialog.cpp" line="49"/>
         <source>Erreur</source>
-        <translation>Error</translation>
+        <translation type="vanished">Error</translation>
     </message>
     <message>
-        <location filename="../ct_exporter/abstract/ct_abstractexporterattributesselection.cpp" line="44"/>
         <source>Configuration des autres éléments de l&apos;export</source>
-        <translation>Configuration of other éléments for export</translation>
+        <translation type="vanished">Configuration of other éléments for export</translation>
     </message>
     <message>
         <source>Nombre de points</source>
         <translation type="vanished">Number of points</translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="219"/>
-        <source>ID</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="220"/>
-        <source>Name</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="221"/>
-        <source>Center X</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="222"/>
-        <source>Center Y</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="223"/>
-        <source>Center Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="224"/>
-        <source>Min X</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="225"/>
-        <source>Max X</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="226"/>
-        <source>Min Y</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="227"/>
-        <source>Max Y</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="228"/>
-        <source>Min Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="229"/>
-        <source>Max Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="230"/>
-        <source>Size X</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="231"/>
-        <source>Size Y</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractsingularitemdrawable.h" line="232"/>
-        <source>Size Z</source>
-        <translation></translation>
     </message>
     <message>
         <source>Nom</source>
@@ -1005,211 +609,128 @@
         <translation type="vanished">Z center</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_affiliationid.h" line="113"/>
-        <source>Affiliation_ID</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_circle.h" line="85"/>
-        <location filename="../ct_itemdrawable/ct_circle2d.h" line="71"/>
         <source>Rayon du cercle</source>
-        <translation>Radius of the circle</translation>
+        <translation type="vanished">Radius of the circle</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_circle.h" line="86"/>
         <source>Erreur d&apos;ajustement du cercle</source>
-        <translation>Circle fitting error</translation>
+        <translation type="vanished">Circle fitting error</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_cylinder.h" line="89"/>
         <source>Direction X</source>
-        <translation>X direction</translation>
+        <translation type="vanished">X direction</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_cylinder.h" line="90"/>
         <source>Direction Y</source>
-        <translation>Y direction</translation>
+        <translation type="vanished">Y direction</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_cylinder.h" line="91"/>
         <source>Direction Z</source>
-        <translation>Z direction</translation>
+        <translation type="vanished">Z direction</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_cylinder.h" line="92"/>
         <source>Rayon</source>
-        <translation>Radius</translation>
+        <translation type="vanished">Radius</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_cylinder.h" line="93"/>
-        <location filename="../ct_itemdrawable/ct_line.h" line="100"/>
         <source>Longueur</source>
-        <translation>Length</translation>
+        <translation type="vanished">Length</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_cylinder.h" line="94"/>
         <source>RMSE d&apos;ajustement du cercle</source>
-        <translation>Circle fitting RMSE</translation>
+        <translation type="vanished">Circle fitting RMSE</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_cylinder.h" line="95"/>
         <source>RMSE d&apos;ajustement de la ligne</source>
-        <translation>Line fitting RMSE</translation>
+        <translation type="vanished">Line fitting RMSE</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_line.h" line="101"/>
         <source>Erreur d&apos;ajustement de la ligne</source>
-        <translation>Line fitting error</translation>
+        <translation type="vanished">Line fitting error</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="109"/>
         <source>X1 axe mineur</source>
-        <translation>X1 minor axis</translation>
+        <translation type="vanished">X1 minor axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="110"/>
         <source>Y1 axe mineur</source>
-        <translation>Y1 minor axis</translation>
+        <translation type="vanished">Y1 minor axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="111"/>
         <source>Z1 axe mineur</source>
-        <translation>Z1 minor axis</translation>
+        <translation type="vanished">Z1 minor axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="112"/>
         <source>X2 axe mineur</source>
-        <translation>X2 minor axis</translation>
+        <translation type="vanished">X2 minor axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="113"/>
         <source>Y2 axe mineur</source>
-        <translation>Y2 minor axis</translation>
+        <translation type="vanished">Y2 minor axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="114"/>
         <source>Z2 axe mineur</source>
-        <translation>Z2 minor axis</translation>
+        <translation type="vanished">Z2 minor axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="116"/>
         <source>X1 axe majeur</source>
-        <translation>X1 major axis</translation>
+        <translation type="vanished">X1 major axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="117"/>
         <source>Y1 axe majeur</source>
-        <translation>Y1 major axis</translation>
+        <translation type="vanished">Y1 major axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="118"/>
         <source>Z1 axe majeur</source>
-        <translation>Z1 major axis</translation>
+        <translation type="vanished">Z1 major axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="119"/>
         <source>X2 axe majeur</source>
-        <translation>X2 major axis</translation>
+        <translation type="vanished">X2 major axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="120"/>
         <source>Y2 axe majeur</source>
-        <translation>Y2 major axis</translation>
+        <translation type="vanished">Y2 major axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="121"/>
         <source>Z2 axe majeur</source>
-        <translation>Z2 major axis</translation>
+        <translation type="vanished">Z2 major axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="123"/>
         <source>Longueur axe mineur</source>
-        <translation>Length of minor axis</translation>
+        <translation type="vanished">Length of minor axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="124"/>
         <source>Longueur axe majeur</source>
-        <translation>Length of major axis</translation>
+        <translation type="vanished">Length of major axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="126"/>
         <source>Erreur d&apos;ajustement de l&apos;ellipse</source>
-        <translation>Ellipse fitting error</translation>
+        <translation type="vanished">Ellipse fitting error</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="128"/>
         <source>Ratio des axes</source>
-        <translation>Axis ratio</translation>
+        <translation type="vanished">Axis ratio</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="130"/>
         <source>Angle de début</source>
-        <translation>Beginning angle</translation>
+        <translation type="vanished">Beginning angle</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_ellipse.h" line="131"/>
         <source>Angle de fin</source>
-        <translation>Ending angle</translation>
+        <translation type="vanished">Ending angle</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_line.h" line="92"/>
-        <location filename="../ct_itemdrawable/ct_line2d.h" line="82"/>
-        <source>X1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_line.h" line="93"/>
-        <location filename="../ct_itemdrawable/ct_line2d.h" line="83"/>
-        <source>Y1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_line.h" line="94"/>
-        <source>Z1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_line.h" line="96"/>
-        <location filename="../ct_itemdrawable/ct_line2d.h" line="84"/>
-        <source>X2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_line.h" line="97"/>
-        <location filename="../ct_itemdrawable/ct_line2d.h" line="85"/>
-        <source>Y2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_line.h" line="98"/>
-        <source>Z2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_planarbspline.h" line="77"/>
         <source>Degré de polynome</source>
-        <translation>Polynome order</translation>
+        <translation type="vanished">Polynome order</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_planarbspline.h" line="78"/>
         <source>Nombre de points de contrôle</source>
-        <translation>Number of control points</translation>
+        <translation type="vanished">Number of control points</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_polygon2d.h" line="75"/>
-        <location filename="../ct_itemdrawable/ct_polyline2d.h" line="74"/>
-        <source>Number Of Vertices</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_polygon2d.h" line="76"/>
-        <source>Polygon Area</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_faceattributescolor.h" line="40"/>
         <source>Taille</source>
-        <translation>Size</translation>
+        <translation type="vanished">Size</translation>
     </message>
     <message>
         <source>Largeur_X</source>
@@ -1220,63 +741,20 @@
         <translation type="vanished">Y_height</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_line2d.h" line="81"/>
         <source>Longueur de la ligne</source>
-        <translation>Line length</translation>
+        <translation type="vanished">Line length</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.cpp" line="24"/>
         <source>Utiliser une valeur Z différente</source>
-        <translation>Use a different Z value</translation>
+        <translation type="vanished">Use a different Z value</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardabstractshape2ddrawmanager.cpp" line="25"/>
         <source>Valeur Z</source>
-        <translation>Z value</translation>
+        <translation type="vanished">Z value</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_fileheader.h" line="79"/>
-        <source>FileName</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_fileheader.h" line="80"/>
-        <source>Directory</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_scanner.h" line="200"/>
-        <source>ScanID</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_scanner.h" line="201"/>
-        <source>PositionX</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_scanner.h" line="202"/>
-        <source>PositionY</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_scanner.h" line="203"/>
-        <source>PositionZ</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_transformationmatrix.h" line="43"/>
         <source>Matrice de transformation</source>
-        <translation>Transformation matrix</translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.cpp" line="84"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp" line="181"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp" line="47"/>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="76"/>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="111"/>
-        <source>Points</source>
-        <translation></translation>
+        <translation type="vanished">Transformation matrix</translation>
     </message>
     <message>
         <source>Polygones</source>
@@ -1287,211 +765,144 @@
         <translation type="vanished">Polylines</translation>
     </message>
     <message>
-        <location filename="../ct_exporter/abstract/ct_abstractexporterpointattributesselection.cpp" line="29"/>
-        <source>Colors</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_exporter/abstract/ct_abstractexporterpointattributesselection.cpp" line="30"/>
-        <source>Normals</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Nombre de placettes</source>
         <translation type="vanished">Plots number</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractshape2d.h" line="89"/>
-        <source>Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_sphere.h" line="70"/>
         <source>Rayon de la sphere</source>
-        <translation>Sphere radius</translation>
+        <translation type="vanished">Sphere radius</translation>
     </message>
     <message>
-        <location filename="../ct_turn/inTurn/ct_inturn.cpp" line="47"/>
         <source>Le modèle %1 (%2) a %3 possibilité(s) sélectionnée(s) cependant il faut en sélectionner au minimum %4</source>
-        <translation>Model %1 (%2) has %3 selected possibilities, but you have to select at least %4</translation>
+        <translation type="vanished">Model %1 (%2) has %3 selected possibilities, but you have to select at least %4</translation>
     </message>
     <message>
-        <location filename="../ct_turn/inTurn/ct_inturn.cpp" line="202"/>
-        <source>
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="73"/>
         <source>Charger</source>
-        <translation>Load</translation>
+        <translation type="vanished">Load</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="74"/>
         <source>Exporter</source>
-        <translation>Export</translation>
+        <translation type="vanished">Export</translation>
     </message>
     <message>
         <source>Formes géométriques</source>
         <translation type="vanished">Geometrical shapes</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="78"/>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="115"/>
-        <source>Voxels</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="81"/>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="116"/>
         <source>Maillages</source>
-        <translation>Meshes</translation>
+        <translation type="vanished">Meshes</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="75"/>
         <source>Flux</source>
-        <translation>Workflow</translation>
+        <translation type="vanished">Workflow</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="77"/>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="112"/>
         <source>Géométrie 3D</source>
-        <translation>3D geometry</translation>
+        <translation type="vanished">3D geometry</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="79"/>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="114"/>
         <source>Géométrie 2D</source>
-        <translation>2D geometry</translation>
+        <translation type="vanished">2D geometry</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="80"/>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="113"/>
-        <source>Rasters / Images</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="82"/>
         <source>Métriques</source>
-        <translation>Metrics</translation>
+        <translation type="vanished">Metrics</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="83"/>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="118"/>
         <source>Autres</source>
-        <translation>Others</translation>
+        <translation type="vanished">Others</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="84"/>
         <source>Travaux en cours (Beta)</source>
-        <translation>Work in progress (Beta)</translation>
+        <translation type="vanished">Work in progress (Beta)</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="85"/>
         <source>Favoris</source>
-        <translation>Favorites</translation>
+        <translation type="vanished">Favorites</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="89"/>
         <source>Inconnu TODO !</source>
-        <translation>Unknown TODO !</translation>
+        <translation type="vanished">Unknown TODO !</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="95"/>
         <source>Filtrer</source>
-        <translation>Filter</translation>
+        <translation type="vanished">Filter</translation>
     </message>
     <message>
         <source>Créer</source>
         <translation type="vanished">Create</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="96"/>
         <source>Créer / Fusionner</source>
-        <translation>Create / Merge</translation>
+        <translation type="vanished">Create / Merge</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="97"/>
         <source>Extraire</source>
-        <translation>Extract</translation>
+        <translation type="vanished">Extract</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="98"/>
         <source>Détecter</source>
-        <translation>Detect</translation>
+        <translation type="vanished">Detect</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="99"/>
         <source>Transformer</source>
-        <translation>Transform</translation>
+        <translation type="vanished">Transform</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="100"/>
         <source>Classifier</source>
-        <translation>Classify</translation>
+        <translation type="vanished">Classify</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="101"/>
         <source>Analyser</source>
-        <translation>Analyze</translation>
+        <translation type="vanished">Analyze</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="102"/>
         <source>Ajuster</source>
-        <translation>Ajust</translation>
+        <translation type="vanished">Ajust</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="103"/>
         <source>Coloriser</source>
-        <translation>Colorize</translation>
+        <translation type="vanished">Colorize</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="104"/>
         <source>Clusteriser</source>
-        <translation>Clusterize</translation>
+        <translation type="vanished">Clusterize</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="106"/>
         <source>Placettes</source>
-        <translation>Plots</translation>
+        <translation type="vanished">Plots</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="107"/>
         <source>Emprises</source>
-        <translation>Footprints</translation>
+        <translation type="vanished">Footprints</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="109"/>
         <source>Détécter (houppiers)</source>
-        <translation>Detect (Crowns)</translation>
+        <translation type="vanished">Detect (Crowns)</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="110"/>
         <source>Détécter (tiges)</source>
-        <translation>Detect (Stems)</translation>
+        <translation type="vanished">Detect (Stems)</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="117"/>
         <source>Attributs</source>
-        <translation>Attributes</translation>
+        <translation type="vanished">Attributes</translation>
     </message>
     <message>
         <source>Clusters</source>
         <translation type="vanished">Clusters</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="105"/>
         <source>Boucles</source>
-        <translation>Loops</translation>
+        <translation type="vanished">Loops</translation>
     </message>
     <message>
         <source>Houppiers</source>
         <translation type="vanished">Crowns</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="108"/>
         <source>Modèles Num. d&apos;Elévation</source>
-        <translation>Digital elevation models</translation>
+        <translation type="vanished">Digital elevation models</translation>
     </message>
     <message>
         <source>Tiges</source>
@@ -1506,591 +917,332 @@
         <translation type="vanished">Items attributes</translation>
     </message>
     <message>
-        <location filename="../ct_step/tools/menu/ct_stepsmenu.cpp" line="121"/>
         <source>Inconnu (TODO)</source>
-        <translation>Unknown (TODO)</translation>
+        <translation type="vanished">Unknown (TODO)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_box2d.h" line="72"/>
         <source>Largeur X</source>
-        <translation>X width</translation>
+        <translation type="vanished">X width</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_box2d.h" line="73"/>
         <source>Hauteur Y</source>
-        <translation>Y height</translation>
+        <translation type="vanished">Y height</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/ct_loopcounter.h" line="107"/>
-        <source>TurnName</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_loopcounter.h" line="108"/>
-        <source>CurrentTurn</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_loopcounter.h" line="109"/>
-        <source>NTurn</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_readeritem.h" line="74"/>
-        <source>ReaderType</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_readeritem.h" line="75"/>
-        <source>FilePath</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/tools/ct_configurablewidgettodialog.cpp" line="22"/>
         <source>Appliquer</source>
-        <translation>Apply</translation>
+        <translation type="vanished">Apply</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_configurablewidgettodialog.cpp" line="23"/>
         <source>Annuler</source>
-        <translation>Cancel</translation>
+        <translation type="vanished">Cancel</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_configurablewidgettodialog.cpp" line="40"/>
         <source>La configuration est invalide</source>
-        <translation>The configuration is invalid</translation>
+        <translation type="vanished">The configuration is invalid</translation>
     </message>
     <message>
-        <location filename="../ct_view/tools/ct_configurablewidgettodialog.cpp" line="43"/>
-        <source> :
-
-%1
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/tools/ct_configurablewidgettodialog.cpp" line="45"/>
-        <source>.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_view/tools/ct_configurablewidgettodialog.cpp" line="47"/>
         <source>Veuillez corriger les erreurs.</source>
-        <translation>Please correct errors.</translation>
+        <translation type="vanished">Please correct errors.</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.cpp" line="76"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.cpp" line="85"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp" line="182"/>
-        <source>Bounding Shape</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.cpp" line="77"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.cpp" line="86"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp" line="183"/>
         <source>Centre de la Bounding Shape</source>
-        <translation>Bounding Shape center</translation>
+        <translation type="vanished">Bounding Shape center</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.cpp" line="78"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp" line="184"/>
         <source>Taille des points (Bounding Shape)</source>
-        <translation>Points size (Bounding Shape)</translation>
+        <translation type="vanished">Points size (Bounding Shape)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardbeamdrawmanager.cpp" line="38"/>
-        <source>Length of the ray</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.cpp" line="60"/>
         <source>Dessiner le rectangle</source>
-        <translation>Draw rectangle</translation>
+        <translation type="vanished">Draw rectangle</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardbox2ddrawmanager.cpp" line="61"/>
         <source>Remplir</source>
-        <translation>Fill</translation>
+        <translation type="vanished">Fill</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcircle2ddrawmanager.cpp" line="48"/>
         <source>Dessiner le cercle</source>
-        <translation>Draw circle</translation>
+        <translation type="vanished">Draw circle</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp" line="62"/>
         <source>Dessiner le cylindre</source>
-        <translation>Draw cylinder</translation>
+        <translation type="vanished">Draw cylinder</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp" line="63"/>
         <source>Dessiner l&apos;axe</source>
-        <translation>Draw axis</translation>
+        <translation type="vanished">Draw axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp" line="64"/>
         <source>Dessiner le cercle médian</source>
-        <translation>Draw median circle</translation>
+        <translation type="vanished">Draw median circle</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcylinderdrawmanager.cpp" line="65"/>
         <source>Niveau de transparence [0;255]</source>
-        <translation>Transparency level [0;255]</translation>
+        <translation type="vanished">Transparency level [0;255]</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp" line="145"/>
-        <source>Min Red</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp" line="146"/>
-        <source>Max Red</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp" line="147"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="263"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="159"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="159"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="308"/>
         <source>Mode Raster</source>
-        <translation>Raster mode</translation>
+        <translation type="vanished">Raster mode</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp" line="148"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="264"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="309"/>
         <source>Mode Raster : Fixer le niveau Z</source>
-        <translation>Raster mode: fix Z-level</translation>
+        <translation type="vanished">Raster mode: fix Z-level</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp" line="149"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="265"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="310"/>
         <source>Mode Raster : Niveau Z (m)</source>
-        <translation>Raster mode: Z-Level (m)</translation>
+        <translation type="vanished">Raster mode: Z-Level (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="266"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="162"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="162"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="311"/>
         <source>Mode Raster : Afficher grille</source>
-        <translation>Raster mode: show grid</translation>
+        <translation type="vanished">Raster mode: show grid</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardcolorcompositedrawmanager.cpp" line="151"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="268"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="164"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="164"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="313"/>
         <source>Mode 3D</source>
-        <translation>3D mode</translation>
+        <translation type="vanished">3D mode</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="269"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="165"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="165"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="314"/>
         <source>Mode 3D    : Relier les centres de cases</source>
-        <translation>3D mode: link cell centers</translation>
+        <translation type="vanished">3D mode: link cell centers</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="270"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="315"/>
         <source>Mode 3D    : Visualiser le relief</source>
-        <translation>3D mode: Show relief</translation>
+        <translation type="vanished">3D mode: Show relief</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="271"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="166"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="166"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="316"/>
         <source>Mode 3D    : Mettre à l&apos;échelle</source>
-        <translation>3D mode: scale</translation>
+        <translation type="vanished">3D mode: scale</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="272"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="317"/>
         <source>Mode 3D    : Z min de l&apos;échelle (m)</source>
-        <translation>3D mode: Zmin for scaling (m)</translation>
+        <translation type="vanished">3D mode: Zmin for scaling (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxydrawmanager.hpp" line="273"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="318"/>
         <source>Mode 3D    : Z max de l&apos;échelle (m)</source>
-        <translation>3D mode: Zmax for scaling (m)</translation>
+        <translation type="vanished">3D mode: Zmax for scaling (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="160"/>
         <source>Mode Raster : Fixer le niveau Y</source>
-        <translation>Raster mode: fix Y-level</translation>
+        <translation type="vanished">Raster mode: fix Y-level</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="161"/>
         <source>Mode Raster : Niveau Y (m)</source>
-        <translation>Raster mode: Y-level (m)</translation>
+        <translation type="vanished">Raster mode: Y-level (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="167"/>
         <source>Mode 3D    : Y min de l&apos;échelle (m)</source>
-        <translation>3D mode: Ymin for scaling (m)</translation>
+        <translation type="vanished">3D mode: Ymin for scaling (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dxzdrawmanager.hpp" line="168"/>
         <source>Mode 3D    : Y max de l&apos;échelle (m)</source>
-        <translation>3D mode: Ymax for scaling (m)</translation>
+        <translation type="vanished">3D mode: Ymax for scaling (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="160"/>
         <source>Mode Raster : Fixer le niveau X</source>
-        <translation>Raster mode: fix X-level</translation>
+        <translation type="vanished">Raster mode: fix X-level</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="161"/>
         <source>Mode Raster : Niveau X (m)</source>
-        <translation>Raster mode: X-level (m)</translation>
+        <translation type="vanished">Raster mode: X-level (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="167"/>
         <source>Mode 3D    : X min de l&apos;échelle (m)</source>
-        <translation>3D mode: Xmin for scaling (m)</translation>
+        <translation type="vanished">3D mode: Xmin for scaling (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid2dyzdrawmanager.hpp" line="168"/>
         <source>Mode 3D    : X max de l&apos;échelle (m)</source>
-        <translation>3D mode: Xmax for scaling (m)</translation>
+        <translation type="vanished">3D mode: Xmax for scaling (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="153"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="146"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="153"/>
         <source>Mode filaire</source>
-        <translation>Wired mode</translation>
+        <translation type="vanished">Wired mode</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="154"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="147"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="154"/>
         <source>Forcer limite basse</source>
-        <translation>Force low limit</translation>
+        <translation type="vanished">Force low limit</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="155"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="148"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="155"/>
         <source>Limite basse (forcée)</source>
-        <translation>Low limit (forced)</translation>
+        <translation type="vanished">Low limit (forced)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="156"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="149"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="156"/>
         <source>Forcer limite haute</source>
-        <translation>Force high limit</translation>
+        <translation type="vanished">Force high limit</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="157"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="150"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="157"/>
         <source>Limite haute (forcée)</source>
-        <translation>High limit (forced)</translation>
+        <translation type="vanished">High limit (forced)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="158"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="151"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="158"/>
         <source>Coef. de reduction</source>
-        <translation>Reduction coef.</translation>
+        <translation type="vanished">Reduction coef.</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="159"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="152"/>
         <source>Utiliser couleurs pré-définies</source>
-        <translation>Use predefined colors</translation>
+        <translation type="vanished">Use predefined colors</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="160"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="153"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="160"/>
         <source>Valeur de transparence</source>
-        <translation>Transparency value</translation>
+        <translation type="vanished">Transparency value</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="161"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="154"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="161"/>
         <source>Nb. Plans masqués X-</source>
-        <translation>Nb. of hidden planes X-</translation>
+        <translation type="vanished">Nb. of hidden planes X-</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="162"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="155"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="162"/>
         <source>Nb. Plans masqués X+</source>
-        <translation>Nb. of hidden planes X+</translation>
+        <translation type="vanished">Nb. of hidden planes X+</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="163"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="156"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="163"/>
         <source>Nb. Plans masqués Y-</source>
-        <translation>Nb. of hidden planes Y-</translation>
+        <translation type="vanished">Nb. of hidden planes Y-</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="164"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="157"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="164"/>
         <source>Nb. Plans masqués Y+</source>
-        <translation>Nb. of hidden planes Y+</translation>
+        <translation type="vanished">Nb. of hidden planes Y+</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="165"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="158"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="165"/>
         <source>Nb. Plans masqués Z-</source>
-        <translation>Nb. of hidden planes Z-</translation>
+        <translation type="vanished">Nb. of hidden planes Z-</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.hpp" line="166"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid3ddrawmanager.hpp" line="159"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="166"/>
         <source>Nb. Plans masqués Z+</source>
-        <translation>Nb. of hidden planes Z+</translation>
+        <translation type="vanished">Nb. of hidden planes Z+</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="152"/>
         <source>W fixe</source>
-        <translation>Fixed W</translation>
+        <translation type="vanished">Fixed W</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.hpp" line="159"/>
         <source>Activer transparence</source>
-        <translation>Activate transparency</translation>
+        <translation type="vanished">Activate transparency</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.hpp" line="319"/>
         <source>Colorisation par valeurs uniques</source>
-        <translation>Colorization by unique values</translation>
+        <translation type="vanished">Colorization by unique values</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.cpp" line="52"/>
         <source>Dessiner les points</source>
-        <translation>Draw points</translation>
+        <translation type="vanished">Draw points</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardline2ddrawmanager.cpp" line="53"/>
         <source>Dessiner la ligne</source>
-        <translation>Draw line</translation>
+        <translation type="vanished">Draw line</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.cpp" line="60"/>
         <source>Taille de Ligne</source>
-        <translation>Line width</translation>
+        <translation type="vanished">Line width</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardlinedrawmanager.cpp" line="61"/>
         <source>Style de Ligne</source>
-        <translation>Line style</translation>
+        <translation type="vanished">Line style</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp" line="179"/>
-        <source>Faces</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardmeshmodeldrawmanager.cpp" line="180"/>
-        <source>Edges</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.cpp" line="82"/>
         <source>Dessiner les Points de contrôle</source>
-        <translation>Draw control points</translation>
+        <translation type="vanished">Draw control points</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.cpp" line="83"/>
         <source>Taille des points de contrôle</source>
-        <translation>Control point size</translation>
+        <translation type="vanished">Control point size</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardplanarbsplinedrawmanager.cpp" line="84"/>
         <source>Dessiner la courbe B-Spline</source>
-        <translation>Draw B-Spline curve</translation>
+        <translation type="vanished">Draw B-Spline curve</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.cpp" line="54"/>
         <source>Dessiner le point</source>
-        <translation>Draw point</translation>
+        <translation type="vanished">Draw point</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpoint2ddrawmanager.cpp" line="55"/>
         <source>Taille du point</source>
-        <translation>Point size</translation>
+        <translation type="vanished">Point size</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.cpp" line="55"/>
         <source>Barycentre</source>
-        <translation>Barycenter</translation>
+        <translation type="vanished">Barycenter</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpointclusterdrawmanager.cpp" line="56"/>
         <source>Polyligne</source>
-        <translation>Polyline</translation>
+        <translation type="vanished">Polyline</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.cpp" line="61"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpolyline2ddrawmanager.cpp" line="69"/>
         <source>Dessiner les sommets</source>
-        <translation>Draw vertices</translation>
+        <translation type="vanished">Draw vertices</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.cpp" line="62"/>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpolyline2ddrawmanager.cpp" line="70"/>
         <source>Dessiner les côtés</source>
-        <translation>Draw edges</translation>
+        <translation type="vanished">Draw edges</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardpolygon2ddrawmanager.cpp" line="63"/>
         <source>Dessiner centroid</source>
-        <translation>Draw centroid</translation>
+        <translation type="vanished">Draw centroid</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="188"/>
         <source>Mode colonne</source>
-        <translation>Column mode</translation>
+        <translation type="vanished">Column mode</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="189"/>
         <source>Rayon de colonne</source>
-        <translation>Column radius</translation>
+        <translation type="vanished">Column radius</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="190"/>
         <source>Mode graph</source>
-        <translation>Graph mode</translation>
+        <translation type="vanished">Graph mode</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="191"/>
         <source>Dessiner axe</source>
-        <translation>Draw axis</translation>
+        <translation type="vanished">Draw axis</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="192"/>
         <source>Dessiner barres</source>
-        <translation>Draw bars</translation>
+        <translation type="vanished">Draw bars</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="193"/>
         <source>Dessiner points</source>
-        <translation>Draw points</translation>
+        <translation type="vanished">Draw points</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="194"/>
         <source>Taille des points</source>
-        <translation>Point size</translation>
+        <translation type="vanished">Point size</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="195"/>
         <source>Dessiner courbe</source>
-        <translation>Draw curve</translation>
+        <translation type="vanished">Draw curve</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="196"/>
         <source>Orientation graph</source>
-        <translation>Graph orientation</translation>
+        <translation type="vanished">Graph orientation</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="197"/>
         <source>Mise à l&apos;échelle</source>
-        <translation>Scaling</translation>
+        <translation type="vanished">Scaling</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardprofiledrawmanager.hpp" line="198"/>
         <source>Coefficient d&apos;échelle (m)</source>
-        <translation>Scaling coefficient (m)</translation>
+        <translation type="vanished">Scaling coefficient (m)</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.cpp" line="45"/>
-        <source>Buffer</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.cpp" line="46"/>
         <source>Facteur multiplicatif</source>
-        <translation>Multiplicative factor</translation>
+        <translation type="vanished">Multiplicative factor</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardreferencepointdrawmanager.cpp" line="47"/>
         <source>Taille de point</source>
-        <translation>Point size</translation>
+        <translation type="vanished">Point size</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardscannerdrawmanager.cpp" line="50"/>
-        <source>Field of view scale</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardscannerdrawmanager.h" line="14"/>
-        <source>Scan position</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.h" line="13"/>
-        <source>Sphere</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardstandarditemgroupdrawmanager.cpp" line="43"/>
         <source>Anciens Items</source>
-        <translation>Old items</translation>
+        <translation type="vanished">Old items</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardstandarditemgroupdrawmanager.cpp" line="44"/>
         <source>Nouveaux Items</source>
-        <translation>New items</translation>
+        <translation type="vanished">New items</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp" line="48"/>
         <source>Aretes</source>
-        <translation>Edges</translation>
+        <translation type="vanished">Edges</translation>
     </message>
     <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp" line="49"/>
         <source>Enveloppe convexe</source>
-        <translation>Convex hull</translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp" line="50"/>
-        <source>Voronoï</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h" line="136"/>
-        <source>Number of points</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/ct_shootingpatternd.h" line="85"/>
-        <source>Number of shots</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp" line="61"/>
-        <source>Draw points</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp" line="62"/>
-        <source>Draw lines</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp" line="63"/>
-        <source>Points size</source>
-        <translation></translation>
+        <translation type="vanished">Convex hull</translation>
     </message>
 </context>
 </TS>

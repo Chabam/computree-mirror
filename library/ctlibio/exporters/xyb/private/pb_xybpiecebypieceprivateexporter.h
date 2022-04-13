@@ -9,6 +9,8 @@
 
 class PB_XYBPieceByPiecePrivateExporter : public CT_AbstractPieceByPieceExporter
 {
+    Q_OBJECT
+
 private:
     friend class PB_XYBExporter;
     using HandleItemType = PB_XYBExporter::HandleItemType;

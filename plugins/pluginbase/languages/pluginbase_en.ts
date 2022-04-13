@@ -1305,7 +1305,7 @@ In 3D mode, the tool only works on selected cells</translation>
     <name>PB_StepApplyPointFilters</name>
     <message>
         <source>Filtres de points</source>
-        <translation type="vanished">Points filters</translation>
+        <translation>Points filters</translation>
     </message>
     <message>
         <source>1- Filtres de points</source>
@@ -1317,19 +1317,23 @@ In 3D mode, the tool only works on selected cells</translation>
     </message>
     <message>
         <source>Groupe</source>
-        <translation type="vanished">Group</translation>
+        <translation>Group</translation>
     </message>
     <message>
         <source>Item contenant des points</source>
-        <translation type="vanished">Item containing points</translation>
+        <translation>Item containing points</translation>
     </message>
     <message>
         <source>Attributs LAS</source>
-        <translation type="vanished">LAS attributes</translation>
+        <translation>LAS attributes</translation>
     </message>
     <message>
         <source>Filtres séléctionnés</source>
         <translation type="vanished">Selected filters</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1429,15 +1433,23 @@ In 3D mode, the tool only works on selected cells</translation>
     </message>
     <message>
         <source>Groupe</source>
-        <translation type="vanished">Group</translation>
+        <translation>Group</translation>
     </message>
     <message>
         <source>Item</source>
-        <translation type="vanished">Item</translation>
+        <translation>Item</translation>
     </message>
     <message>
         <source>Nom</source>
-        <translation type="vanished">Name</translation>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <source>Boucle standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A chaque tour de boucle, cette étape conserve uniquement un élément de la liste séléctionnée en entrée.&lt;br&gt;L&apos;utilisateur doit choisir un attribut servant à nommer les tours, ce qui permet par exemple des exports adaptatifs.&lt;br&gt;Nécessite une étape &quot;Fin de boucle&quot; pour terminer la boucle. </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1557,7 +1569,7 @@ In 3D mode, the tool only works on selected cells</translation>
     <name>PB_StepComputePointMetrics</name>
     <message>
         <source>Métriques de points (XYZ)</source>
-        <translation type="vanished">Points metrics (XYZ)</translation>
+        <translation>Points metrics (XYZ)</translation>
     </message>
     <message>
         <source>1- Métriques de points (XYZ)</source>
@@ -1569,23 +1581,23 @@ In 3D mode, the tool only works on selected cells</translation>
     </message>
     <message>
         <source>Groupe</source>
-        <translation type="vanished">Group</translation>
+        <translation>Group</translation>
     </message>
     <message>
         <source>Scène</source>
-        <translation type="vanished">Scene</translation>
+        <translation>Scene</translation>
     </message>
     <message>
         <source>Emprise de la placette</source>
-        <translation type="vanished">Plot XY area shape</translation>
+        <translation>Plot XY area shape</translation>
     </message>
     <message>
         <source>Attributs LAS</source>
-        <translation type="vanished">LAS attributes</translation>
+        <translation>LAS attributes</translation>
     </message>
     <message>
         <source>Métriques</source>
-        <translation type="vanished">Metrics</translation>
+        <translation>Metrics</translation>
     </message>
     <message>
         <source>Métriques séléctionnées</source>
@@ -1594,6 +1606,14 @@ In 3D mode, the tool only works on selected cells</translation>
     <message>
         <source>Métriques (%1)</source>
         <translation type="vanished">Metrics (%1)</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> (%1)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1611,7 +1631,7 @@ In 3D mode, the tool only works on selected cells</translation>
     <name>PB_StepComputeRasterMetrics</name>
     <message>
         <source>Métriques de rasters</source>
-        <translation type="vanished">Rasters metrics</translation>
+        <translation>Rasters metrics</translation>
     </message>
     <message>
         <source>2- Métriques de rasters</source>
@@ -1623,11 +1643,11 @@ In 3D mode, the tool only works on selected cells</translation>
     </message>
     <message>
         <source>Groupe</source>
-        <translation type="vanished">Group</translation>
+        <translation>Group</translation>
     </message>
     <message>
         <source>Emprise de la placette</source>
-        <translation type="vanished">Plot XY area shape</translation>
+        <translation>Plot XY area shape</translation>
     </message>
     <message>
         <source>Métriques séléctionnées</source>
@@ -1636,6 +1656,22 @@ In 3D mode, the tool only works on selected cells</translation>
     <message>
         <source>Métriques calculées</source>
         <translation type="vanished">Computed metrics</translation>
+    </message>
+    <message>
+        <source>Métriques</source>
+        <translation type="unfinished">Metrics</translation>
+    </message>
+    <message>
+        <source>Rasters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raster</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> (%1)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1733,15 +1769,15 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Choix du type de fichier</source>
-        <translation type="vanished">Choose file type</translation>
+        <translation>Choose file type</translation>
     </message>
     <message>
         <source>Choisir les fichiers</source>
-        <translation type="vanished">Choose files</translation>
+        <translation>Choose files</translation>
     </message>
     <message>
         <source>Liste de readers</source>
-        <translation type="vanished">Readers list</translation>
+        <translation>Readers list</translation>
     </message>
     <message>
         <source>Groupe</source>
@@ -1749,11 +1785,11 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Fichier</source>
-        <translation type="vanished">File</translation>
+        <translation>File</translation>
     </message>
     <message>
         <source>Entête</source>
-        <translation type="vanished">Header</translation>
+        <translation>Header</translation>
     </message>
     <message>
         <source>1- Créer une liste de readers</source>
@@ -1761,22 +1797,50 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Fichier %1 inexistant ou non valide</source>
-        <translation type="vanished">Fichier %1 not existing or not valid</translation>
+        <translation>Fichier %1 not existing or not valid</translation>
     </message>
     <message>
         <source>Aucun reader disponible (*.error)</source>
         <translation type="vanished">No available reader (*.error)</translation>
+    </message>
+    <message>
+        <source>Erreur</source>
+        <translation type="unfinished">Error</translation>
+    </message>
+    <message>
+        <source>Créer une liste de fichiers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cette étape créer une liste de readers (lecteur de fichier). Ces readers pourront par la suite être utilisés par d&apos;autres étapes pour charger les fichiers.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun reader sélectionné</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun fichier sélectionné</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fichier &quot;%1&quot; non accepté par le reader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reader</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PB_StepExportAttributesInLoop</name>
     <message>
         <source>Export d&apos;attributs dans une boucle</source>
-        <translation type="vanished">Attributes export in loop</translation>
+        <translation>Attributes export in loop</translation>
     </message>
     <message>
         <source>Résultat</source>
-        <translation type="vanished">Result</translation>
+        <translation>Result</translation>
     </message>
     <message>
         <source>Groupe</source>
@@ -1784,87 +1848,87 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Grille de placettes</source>
-        <translation type="vanished">Plots grid</translation>
+        <translation>Plots grid</translation>
     </message>
     <message>
         <source>Item (avec XY)</source>
-        <translation type="vanished">Item (with XY)</translation>
+        <translation>Item (with XY)</translation>
     </message>
     <message>
         <source>Attribut Item (avec XY)</source>
-        <translation type="vanished">Item Attribute (with XY)</translation>
+        <translation>Item Attribute (with XY)</translation>
     </message>
     <message>
         <source>Item</source>
-        <translation type="vanished">Item</translation>
+        <translation>Item</translation>
     </message>
     <message>
         <source>Attribut Item</source>
-        <translation type="vanished">Item Attribute</translation>
+        <translation>Item Attribute</translation>
     </message>
     <message>
         <source>Résultat compteur</source>
-        <translation type="vanished">Counter result</translation>
+        <translation>Counter result</translation>
     </message>
     <message>
         <source>Compteur</source>
-        <translation type="vanished">Counter</translation>
+        <translation>Counter</translation>
     </message>
     <message>
         <source>Activer export ASCII tabulaire (1 fichier en tout)</source>
-        <translation type="vanished">Activate ASCII tabular export (only one file for all loops turns)</translation>
+        <translation>Activate ASCII tabular export (only one file for all loops turns)</translation>
     </message>
     <message>
         <source>Activer</source>
-        <translation type="vanished">Activate</translation>
+        <translation>Activate</translation>
     </message>
     <message>
         <source>Activer export raster (1 fichier / tour / métrique)</source>
-        <translation type="vanished">Activate raster export (1 file / loop turn / metric)</translation>
+        <translation>Activate raster export (1 file / loop turn / metric)</translation>
     </message>
     <message>
         <source>L&apos;export raster nécessite une grille de placettes (désactiver si pas de résultat valide)</source>
-        <translation type="vanished">The raster export needs a plots grid to work (don&apos;t activate if not present in input results)</translation>
+        <translation>The raster export needs a plots grid to work (don&apos;t activate if not present in input results)</translation>
     </message>
     <message>
         <source>Activer export vectoriel (1 fichier / tour)</source>
-        <translation type="vanished">Activate vector export (1 file / loop turn)</translation>
+        <translation>Activate vector export (1 file / loop turn)</translation>
     </message>
     <message>
         <source>Export dans une boucle (cas normal)</source>
-        <translation type="vanished">Export in loop (standard case, uncheck if used outside of loop)</translation>
+        <translation>Export in loop (standard case, uncheck if used outside of loop)</translation>
     </message>
     <message>
         <source>Choix du fichier</source>
-        <translation type="vanished">File choose</translation>
+        <translation>File choose</translation>
     </message>
     <message>
         <source>Fichier texte (*.txt)</source>
-        <translation type="vanished">Text file (*.txt)</translation>
+        <translation>Text file (*.txt)</translation>
     </message>
     <message>
         <source>Export raster (1 fichier / tour / métrique)</source>
-        <translation type="vanished">Raster export (1 file / loop turn / metric)</translation>
+        <translation>Raster export (1 file / loop turn / metric)</translation>
     </message>
     <message>
         <source>Prefixe pour les fichiers exportés</source>
-        <translation type="vanished">Prefix for exported files (optionnal)</translation>
+        <translation>Prefix for exported files (optionnal)</translation>
     </message>
     <message>
         <source>Choix du format d&apos;export</source>
-        <translation type="vanished">Choose export format</translation>
+        <translation>Choose export format</translation>
     </message>
     <message>
         <source>Répertoire d&apos;export (vide de préférence)</source>
-        <translation type="vanished">Export folder (empty is better)</translation>
+        <translation>Export folder (empty is better)</translation>
     </message>
     <message>
         <source>Créer un sous-dossier par métrique</source>
-        <translation type="vanished">Create one folder for each metric</translation>
+        <translation>Create one folder for each metric</translation>
     </message>
     <message>
         <source>Export vectoriel (1 fichier / tour)</source>
-        <translation type="vanished">Vector export (1 file / loop turn)</translation>
+        <translation>Vector export (1 file / loop turn)</translation>
     </message>
     <message>
         <source>Impossible de créer le fichier d&apos;export ASCII. Arrêt des traitements.</source>
@@ -1877,6 +1941,34 @@ Only files headers are loaded at this stage. </translation>
     <message>
         <source>Impossible d&apos;utiliser le format d&apos;export Vectoriel choisi.</source>
         <translation type="vanished">Choosen vector export format impossible to use.</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export ASCII tabulaire (1 fichier en tout)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> : Impossible de créer le fichier d&apos;export ASCII. Arrêt des traitements.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> : Impossible d&apos;ouvrir le fichier d&apos;export ASCII. Arrêt des traitements.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> : Impossible d&apos;utiliser le format d&apos;export Vectoriel choisi.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> : Impossible de créer la couche &quot;point&quot;.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1895,7 +1987,7 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Permet un export avec nom de fichier adaptatif.&lt;br&gt;Cette étape peut utiliser n&apos;importe quel exporter.&lt;br&gt;Le nom du fichier de sorti, est déterminé à partir du compteur de boucle spécifié.</source>
-        <translation type="vanished">Allow to use standard exporters but with an adaptative file name.&lt;bt&gt;This step can use any exporter.&lt;br&gt;The ouput file name is obtained from selected loop counter, using active turn name (in general input file name). </translation>
+        <translation>Allow to use standard exporters but with an adaptative file name.&lt;bt&gt;This step can use any exporter.&lt;br&gt;The ouput file name is obtained from selected loop counter, using active turn name (in general input file name). </translation>
     </message>
     <message>
         <source>Résultat</source>
@@ -1931,7 +2023,7 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Export avec nom de fichier adaptatif (DEPRECATED)</source>
-        <translation type="vanished">Export with adaptative file name (DEPRECATED)</translation>
+        <translation>Export with adaptative file name (DEPRECATED)</translation>
     </message>
     <message>
         <source>Nom de base (optionnel)</source>
@@ -1943,11 +2035,11 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Répertoire d&apos;export</source>
-        <translation type="vanished">Export directory</translation>
+        <translation>Export directory</translation>
     </message>
     <message>
         <source>Préfixe de nom de fichier</source>
-        <translation type="vanished">Prefix for export file name (optionnal)</translation>
+        <translation>Prefix for export file name (optionnal)</translation>
     </message>
     <message>
         <source>Suffixe de nom de fichier</source>
@@ -1955,11 +2047,11 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>ERREUR : aucun exporter disponible</source>
-        <translation type="vanished">ERROR: no exporter available</translation>
+        <translation>ERROR: no exporter available</translation>
     </message>
     <message>
         <source>Choix du type de fichier</source>
-        <translation type="vanished">Choose file type</translation>
+        <translation>Choose file type</translation>
     </message>
 </context>
 <context>
@@ -1970,19 +2062,19 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Redallage+Export de points dans une boucle</source>
-        <translation type="vanished">Point cloud clipping and export in loop</translation>
+        <translation>Point cloud clipping and export in loop</translation>
     </message>
     <message>
         <source>Parmi les points de la scène d&apos;entrée, séléctionne pour chaque emprise la liste des points à exporter.Cet étape fonctionne dans une boucle, gardant le même fichier de sortie pour chaque emprise, pour toutes les scènes d&apos;entrée (une par tour de boucle).</source>
-        <translation type="vanished">Among input scene points, this step select for each footprint contained points ot export. It is working in loop, keeping same output file for each footprint, cumulating points of all input scenes (one for each loop turn).</translation>
+        <translation>Among input scene points, this step select for each footprint contained points ot export. It is working in loop, keeping same output file for each footprint, cumulating points of all input scenes (one for each loop turn).</translation>
     </message>
     <message>
         <source>Résultat compteur</source>
-        <translation type="vanished">Counter result</translation>
+        <translation>Counter result</translation>
     </message>
     <message>
         <source>Compteur</source>
-        <translation type="vanished">Counter</translation>
+        <translation>Counter</translation>
     </message>
     <message>
         <source>Scène</source>
@@ -1994,11 +2086,11 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Emprise</source>
-        <translation type="vanished">Footprint</translation>
+        <translation>Footprint</translation>
     </message>
     <message>
         <source>Nom</source>
-        <translation type="vanished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Résultat</source>
@@ -2006,11 +2098,11 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Répertoire d&apos;export</source>
-        <translation type="vanished">Export directory</translation>
+        <translation>Export directory</translation>
     </message>
     <message>
         <source>Suffixe de nom de fichier</source>
-        <translation type="vanished">Suffix for file name</translation>
+        <translation>Suffix for file name</translation>
     </message>
     <message>
         <source>ERREUR : aucun exporter disponible</source>
@@ -2018,7 +2110,7 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Choix du type de fichier</source>
-        <translation type="vanished">Choose file type</translation>
+        <translation>Choose file type</translation>
     </message>
     <message>
         <source>Nomage selon coordonnées : Xmin_Ymin</source>
@@ -2026,11 +2118,35 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Offset sur les coodonnées Xmin et Ymin</source>
-        <translation type="vanished">Offset on coordinates Xmin and Ymin (naming)</translation>
+        <translation>Offset on coordinates Xmin and Ymin (naming)</translation>
     </message>
     <message>
         <source>Erreur lors de l&apos;exportation : %1</source>
         <translation type="vanished">Export error: %1</translation>
+    </message>
+    <message>
+        <source>Erreur</source>
+        <translation type="unfinished">Error</translation>
+    </message>
+    <message>
+        <source>Résultat emprise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nommage selon coordonnées : Xmin_Ymin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun exporter sélectionné</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erreur lors de l&apos;exportation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erreur lors de  la finalisation de l&apos;export</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2124,7 +2240,7 @@ Only files headers are loaded at this stage. </translation>
     <name>PB_StepGenericExporter</name>
     <message>
         <source>Exporte un(des) fichier(s) de type :</source>
-        <translation type="vanished">Export one(many) file(s) of type:</translation>
+        <translation>Export one(many) file(s) of type:</translation>
     </message>
     <message>
         <source>Nom adaptatif (dans une boucle)</source>
@@ -2168,22 +2284,74 @@ Only files headers are loaded at this stage. </translation>
     </message>
     <message>
         <source>Exporter dans...</source>
-        <translation type="vanished">Export in ...</translation>
+        <translation>Export in ...</translation>
     </message>
     <message>
         <source>Exporter sous...</source>
-        <translation type="vanished">Export as...</translation>
+        <translation>Export as...</translation>
+    </message>
+    <message>
+        <source>%1 : %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom du fichier = nom du tour courant + nom du fichier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché vous devrez choisir un item de type &quot;compteur&quot; et le nom du fichier contiendra le nom du tour courant.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chaque item sera exporté dans un fichier différent<byte value="xd"/> - le nom du fichier à utiliser sera fonction du choix que vous allez faire ci-dessous.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Un item par fichier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché : <byte value="xd"/>%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Un item par fichier obligatoire (l&apos;exportateur ne peut pas faire autrement) :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom du fichier original</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom du fichier contenu dans un attribut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché : <byte value="xd"/>- L&apos;attribut à relier sera un fils de l&apos;item à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom du fichier contenu dans un attribut d&apos;un autre item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché : <byte value="xd"/>- L&apos;attribut à relier sera un fils d&apos;un autre item que celui à exporter</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PB_StepGenericLoadFile</name>
     <message>
         <source>Charge un fichier du type</source>
-        <translation type="vanished">Load a file of type</translation>
+        <translation>Load a file of type</translation>
     </message>
     <message>
         <source>Entête de fichier</source>
         <translation type="vanished">File header</translation>
+    </message>
+    <message>
+        <source>%1 : %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2263,7 +2431,7 @@ Only files headers are loaded at this stage. </translation>
     <message>
         <source>Create a file reader, using a base name obtained from checked field.
  You have to select a sample file, to allow reader configuration. </source>
-        <translation type="vanished">Create a file reader, using a base name obtained from checked field.
+        <translation>Create a file reader, using a base name obtained from checked field.
 You need to select a sample file, to allow reader configuration. </translation>
     </message>
     <message>
@@ -2272,27 +2440,27 @@ You need to select a sample file, to allow reader configuration. </translation>
     </message>
     <message>
         <source>Choisir un fichier exemple</source>
-        <translation type="vanished">Choose a sample file</translation>
+        <translation>Choose a sample file</translation>
     </message>
     <message>
         <source>Le fichier choisi doit :</source>
-        <translation type="vanished">Choosen file must:</translation>
+        <translation>Choosen file must:</translation>
     </message>
     <message>
         <source>- Etre dans le répertoire des fichiers à charger</source>
-        <translation type="vanished">- Be in the directory of the files to be loaded</translation>
+        <translation>- Be in the directory of the files to be loaded</translation>
     </message>
     <message>
         <source>- Avoir le même format que les fichiers à charger</source>
-        <translation type="vanished">- Have the same format as the files to load</translation>
+        <translation>- Have the same format as the files to load</translation>
     </message>
     <message>
         <source>- Avoir la même structure / version que les fichiers à charger</source>
-        <translation type="vanished">- Have the same structure / version as the files to load</translation>
+        <translation>- Have the same structure / version as the files to load</translation>
     </message>
     <message>
         <source>Résultat</source>
-        <translation type="vanished">Result</translation>
+        <translation>Result</translation>
     </message>
     <message>
         <source>Groupe</source>
@@ -2300,23 +2468,47 @@ You need to select a sample file, to allow reader configuration. </translation>
     </message>
     <message>
         <source>Item</source>
-        <translation type="vanished">Item</translation>
+        <translation>Item</translation>
     </message>
     <message>
         <source>Nom</source>
-        <translation type="vanished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Chargement du fichier %1</source>
-        <translation type="vanished">Loading file %1</translation>
+        <translation>Loading file %1</translation>
     </message>
     <message>
         <source>Fichier %1 inexistant ou non valide</source>
-        <translation type="vanished">Fichier %1 not existing or not valid</translation>
+        <translation>Fichier %1 not existing or not valid</translation>
     </message>
     <message>
         <source>Aucun reader disponible (*.error)</source>
         <translation type="vanished">No available reader (*.error)</translation>
+    </message>
+    <message>
+        <source>Erreur</source>
+        <translation type="unfinished">Error</translation>
+    </message>
+    <message>
+        <source>Entête</source>
+        <translation type="unfinished">Header</translation>
+    </message>
+    <message>
+        <source>Créer un sélecteur de fichier par attribut de nom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose file type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun reader sélectionné</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reader</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2480,7 +2672,7 @@ You need to select a sample file, to allow reader configuration. </translation>
     </message>
     <message>
         <source>Fichier texte (*.txt) ; Fichier texte (*.*)</source>
-        <translation type="vanished">Text file (*.txt) ; Text file (*.*)</translation>
+        <translation>Text file (*.txt) ; Text file (*.*)</translation>
     </message>
     <message>
         <source>Choisir un fichier exemple</source>
@@ -2504,7 +2696,7 @@ You need to select a sample file, to allow reader configuration. </translation>
     </message>
     <message>
         <source>Liste de readers</source>
-        <translation type="vanished">Readers list</translation>
+        <translation>Readers list</translation>
     </message>
     <message>
         <source>Groupe</source>
@@ -2517,6 +2709,98 @@ You need to select a sample file, to allow reader configuration. </translation>
     <message>
         <source>Fichier %1 inexistant ou non valide</source>
         <translation type="vanished">Fichier %1 not existing or not valid</translation>
+    </message>
+    <message>
+        <source>Erreur</source>
+        <translation type="unfinished">Error</translation>
+    </message>
+    <message>
+        <source>Fichiers</source>
+        <translation type="unfinished">Files</translation>
+    </message>
+    <message>
+        <source>Entête</source>
+        <translation type="unfinished">Header</translation>
+    </message>
+    <message>
+        <source>Boucle sur des groupes de fichiers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A chaque tour de boucle, créer une liste de fichiers appartenant à un même groupe.&lt;br&gt;Les groupes sont définis dans un fichier texte de paramétrage dont:&lt;br&gt;- la première colone indique le nom des groupe&lt;br&gt;- la seconde le chemin des fichiers.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choix du type de fichier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun reader sélectionné</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choisir le fichier décrivant les lots et fichiers à charger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>La première colonne doit contenir le nom du lot, la seconde colonne doit contenir le nom du fichier (avec ou sans extension). Le fichier ne doit pas avoir d&apos;en-tête.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choisir le dossier contenant les fichiers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fichier ou dossier non sélectionné</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun lot trouvé dans le fichier &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vérification des fichiers en cours...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Annuler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fichier &quot;%1&quot; non accepté par le reader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom du lot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ajout du fichier %1 du lot %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fichier %1 non valide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chemin du fichier contenant en première colonne les noms des lots et en deuxième colonne les noms des fichiers à traiter (le fichier ne doit pas avoir d&apos;en-tête).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chemin du dossier contenant les fichiers à traiter.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2527,7 +2811,7 @@ You need to select a sample file, to allow reader configuration. </translation>
     </message>
     <message>
         <source>Liste de readers</source>
-        <translation type="vanished">Readers list</translation>
+        <translation>Readers list</translation>
     </message>
     <message>
         <source>Groupe</source>
@@ -2540,6 +2824,70 @@ You need to select a sample file, to allow reader configuration. </translation>
     <message>
         <source>Fichier %1 inexistant ou non valide</source>
         <translation type="vanished">Fichier %1 not existing or not valid</translation>
+    </message>
+    <message>
+        <source>Erreur</source>
+        <translation type="unfinished">Error</translation>
+    </message>
+    <message>
+        <source>Fichiers</source>
+        <translation type="unfinished">Files</translation>
+    </message>
+    <message>
+        <source>Entête</source>
+        <translation type="unfinished">Header</translation>
+    </message>
+    <message>
+        <source>Boucle sur les fichiers d&apos;un dossier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choix du type de fichier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun reader sélectionné</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choix du répertoire contenant les fichiers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dossier vide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun fichier compatible dans le dossier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vérification des fichiers en cours...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Annuler</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fichier &quot;%1&quot; non accepté par le reader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ajout du fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fichier %1 non valide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chemin du dossier contenant les fichiers à traiter.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3159,23 +3507,35 @@ Please select parameters for slicing.</translation>
     </message>
     <message>
         <source>Conditionner le chargement à un attribut booléen</source>
-        <translation type="vanished">Conditionnal loading in function of boolean attribute</translation>
+        <translation>Conditionnal loading in function of boolean attribute</translation>
     </message>
     <message>
         <source>Fichiers</source>
-        <translation type="vanished">Files</translation>
+        <translation>Files</translation>
     </message>
     <message>
         <source>Item conditionnant le chargement</source>
-        <translation type="vanished">Item containing boolean attribute</translation>
+        <translation>Item containing boolean attribute</translation>
     </message>
     <message>
         <source>Attribut conditionnel</source>
-        <translation type="vanished">Boolean attribute</translation>
+        <translation>Boolean attribute</translation>
     </message>
     <message>
         <source>Chargement du fichier %1</source>
-        <translation type="vanished">Loading file %1</translation>
+        <translation>Loading file %1</translation>
+    </message>
+    <message>
+        <source>Fichier</source>
+        <translation type="unfinished">File</translation>
+    </message>
+    <message>
+        <source>Charger les fichiers d&apos;une liste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reader</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3209,7 +3569,7 @@ Please select parameters for slicing.</translation>
     </message>
     <message>
         <source>Séléction d&apos;items</source>
-        <translation type="vanished">Selection of items</translation>
+        <translation>Selection of items</translation>
     </message>
     <message>
         <source>Séléction classique (picking)</source>
@@ -3233,11 +3593,19 @@ Please select parameters for slicing.</translation>
     </message>
     <message>
         <source>Mode manuel</source>
-        <translation type="vanished">Manual mode</translation>
+        <translation>Manual mode</translation>
     </message>
     <message>
         <source>Bienvenue dans le mode manuel de cette étape de filtrage. Veuillez sélectionner les éléments dans la vue graphique puis valider en cliquant sur le pouce en haut de la fenêtre principale. Les éléments sélectionnés seront gardés dans le résultat de sortie.</source>
-        <translation type="vanished">Welcome to the manual mode of this filtering step. Please select the items in the graphical view and confirm by clicking on the thumb on top of the main window. Selected items will be kept in the output result.</translation>
+        <translation>Welcome to the manual mode of this filtering step. Please select the items in the graphical view and confirm by clicking on the thumb on top of the main window. Selected items will be kept in the output result.</translation>
+    </message>
+    <message>
+        <source>Item</source>
+        <translation type="unfinished">Item</translation>
+    </message>
+    <message>
+        <source>Sélection classique (picking)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3253,6 +3621,25 @@ Please select parameters for slicing.</translation>
     <message>
         <source>Mode manuel</source>
         <translation type="obsolete">Manual mode</translation>
+    </message>
+</context>
+<context>
+    <name>PB_TestBug</name>
+    <message>
+        <source>Groupe</source>
+        <translation type="unfinished">Group</translation>
+    </message>
+    <message>
+        <source>Item</source>
+        <translation type="unfinished">Item</translation>
+    </message>
+    <message>
+        <source>Test Bug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resultat</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3299,6 +3686,10 @@ Please select parameters for slicing.</translation>
     <message>
         <source>Attributs</source>
         <translation type="vanished">Attributes</translation>
+    </message>
+    <message>
+        <source>Plugin_Base initialized</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

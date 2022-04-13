@@ -154,7 +154,7 @@ FORMS += \
 TRANSLATIONS += languages/ctlibio_fr.ts \
                 languages/ctlibio_en.ts
 
-LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+# LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
 
 CONFIG += lrelease
 QMAKE_LRELEASE_FLAGS += -removeidentical

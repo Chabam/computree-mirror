@@ -36,7 +36,7 @@ FORMS += \
 TRANSLATIONS += languages/ctlibstructurewidget_fr.ts \
                 languages/ctlibstructurewidget_en.ts
 
-LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
+# LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
 
 CONFIG += lrelease
 QMAKE_LRELEASE_FLAGS += -removeidentical

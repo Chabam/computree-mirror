@@ -1,0 +1,31 @@
+@echo off
+
+set lupdate="C:\Qt\5.15.2\msvc2019_64\bin\lupdate.exe"
+
+%lupdate% "ComputreeGui\ComputreeGui.pro"
+%lupdate% "library\ctlibaction\ctlibaction.pro"
+%lupdate% "library\ctlibmodelsextraviews\ctlibmodelsextraviews.pro"
+%lupdate% "library\ctliblog\ctliblog.pro"
+%lupdate% "library\ctlibwidget\ctlibwidget.pro"
+%lupdate% "library\ctlibstructure\ctlibstructure.pro"
+%lupdate% "library\ctlibstep\ctlibstep.pro"
+%lupdate% "library\ctlibmath\ctlibmath.pro"
+%lupdate% "library\ctlibstructureaddon\ctlibstructureaddon.pro"
+%lupdate% "library\ctlibstepaddon\ctlibstepaddon.pro"
+%lupdate% "library\ctlibfilters\ctlibfilters.pro"
+%lupdate% "library\ctlibmetrics\ctlibmetrics.pro"
+%lupdate% "library\ctlibstructurewidget\ctlibstructurewidget.pro"
+%lupdate% "library\ctlibexporter\ctlibexporter.pro"
+%lupdate% "library\ctlibreader\ctlibreader.pro"
+%lupdate% "library\ctlibstdactions\ctlibstdactions.pro"
+%lupdate% "library\ctlibplugin\ctlibplugin.pro"
+%lupdate% "library\ctlibio\ctlibio.pro"
+%lupdate% "library\ctliblas\ctliblas.pro"
+%lupdate% "library\ctliblaz\ctliblaz.pro"
+%lupdate% "library\ctlibcore\ctlibcore.pro"
+rem %lupdate% "library\ctlibclouds\ctlibclouds.pro"
+rem %lupdate% "library\ctlibmodels\ctlibmodels.pro"
+%lupdate% "plugins\pluginbase\pluginbase.pro"
+%lupdate% "plugins\pluginshared\pluginshared.pro"
+
+pause
