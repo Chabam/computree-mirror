@@ -66,3 +66,16 @@ float CT_BoxData::getDepth() const
 {
     return _depth;
 }
+
+void CT_BoxData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+{
+    double dist = std::max(_width, _height);
+
+    min(0) = _center(0) - dist;
+    min(1) = _center(1) - dist;
+    min(2) = _center(2) - dist;
+
+    max(0) = _center(0) + dist;
+    max(1) = _center(1) + dist;
+    max(2) = _center(2) + dist;
+}

@@ -110,6 +110,18 @@ double CT_LineData::length() const
     return CT_MathPoint::distance3D(_p1, _p2);
 }
 
+void CT_LineData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+{
+    min(0) = std::min(_p1(0), _p2(0));
+    min(1) = std::min(_p1(1), _p2(1));
+    min(2) = std::min(_p1(2), _p2(2));
+
+    max(0) = std::max(_p1(0), _p2(0));
+    max(1) = std::max(_p1(1), _p2(1));
+    max(2) = std::max(_p1(2), _p2(2));
+}
+
+
 bool CT_LineData::intersectionWithRect3D  (double plan_x, double plan_y, double plan_z, Eigen::Vector3d& vect_plan, double* xi, double* yi, double* zi)
 {
     // intersection segment plan : http://www.softsurfer.com/Archive/algorithm_0104/algorithm_0104B.htm#intersect3D_SegPlane()

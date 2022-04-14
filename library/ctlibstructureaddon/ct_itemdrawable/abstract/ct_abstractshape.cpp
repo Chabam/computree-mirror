@@ -37,6 +37,13 @@ CT_AbstractShape::CT_AbstractShape() : SuperClass(),
 CT_AbstractShape::CT_AbstractShape(CT_ShapeData* data) : SuperClass(),
     _data(data)
 {
+    Q_ASSERT(_data != nullptr);
+
+    setCenterCoordinate(data->getCenter());
+
+    Eigen::Vector3d min, max;
+    data->getBoundingBox(min, max);
+    setBoundingBox(min, max);
 }
 
 CT_AbstractShape::CT_AbstractShape(const CT_AbstractShape& other) : SuperClass(other),
@@ -66,6 +73,21 @@ void CT_AbstractShape::setCenterCoordinate(const Eigen::Vector3d& center)
 {
     _data->setCenter(center);
     SuperClass::setCenterCoordinate(center);
+}
+
+double CT_AbstractShape::centerX() const
+{
+    return _data->getCenter()(0);
+}
+
+double CT_AbstractShape::centerY() const
+{
+    return _data->getCenter()(1);
+}
+
+double CT_AbstractShape::centerZ() const
+{
+    return _data->getCenter()(2);
 }
 
 const CT_ShapeData* CT_AbstractShape::getPointerData() const

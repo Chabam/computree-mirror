@@ -98,6 +98,19 @@ void CT_CylinderData::setCircleError(double error)
     _circleError  = error;
 }
 
+void CT_CylinderData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+{
+    double dist = std::max(_radius, _h/2.0);
+
+    min(0) = _center(0) - dist;
+    min(1) = _center(1) - dist;
+    min(2) = _center(2) - dist;
+
+    max(0) = _center(0) + dist;
+    max(1) = _center(1) + dist;
+    max(2) = _center(2) + dist;
+}
+
 CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloud(const CT_AbstractPointCloudIndex& pointCloudIndex,
                                                                            const Eigen::Vector3d& pointCloudBarycenter)
 {
@@ -218,3 +231,4 @@ CT_CylinderData* CT_CylinderData::staticCreate3DCylinderDataFromPointCloudAndDir
 
     return cylinderData;
 }
+

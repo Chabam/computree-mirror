@@ -74,6 +74,10 @@ public:
     void setCenterZ(double z) override;
     void setCenterCoordinate(const Eigen::Vector3d& center) override;
 
+    double centerX() const override;
+    double centerY() const override;
+    double centerZ() const override;
+
     const CT_ShapeData* getPointerData() const;
     const CT_ShapeData& getData() const;
     const Eigen::Vector3d& getCenter() const;

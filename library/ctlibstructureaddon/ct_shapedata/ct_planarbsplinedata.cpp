@@ -87,5 +87,11 @@ double CT_PlanarBSplineData::getNodalValueAt(int index) const
     return _nodalSequence.at(index);
 }
 
+void CT_PlanarBSplineData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+{
+    min = getCenter();
+    max = min;
+}
+
 
 

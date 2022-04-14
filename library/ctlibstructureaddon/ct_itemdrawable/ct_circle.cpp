@@ -39,7 +39,7 @@ CT_Circle::CT_Circle() : SuperClass()
 }
 
 CT_Circle::CT_Circle(CT_CircleData* data) : SuperClass(data)
-{
+{   
     setBaseDrawManager(&CIRCLE_DRAW_MANAGER);
 }
 

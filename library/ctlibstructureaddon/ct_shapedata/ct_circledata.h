@@ -55,6 +55,9 @@ public:
     double getRadius() const;
     double getError() const;
 
+    virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
+
+
     CT_SHAPEDATA_CLONE_IMP(CT_CircleData)
 
     CT_CircleData& operator= (const CT_CircleData& o);

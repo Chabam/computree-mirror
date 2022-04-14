@@ -75,6 +75,20 @@ double CT_CircleData::getError() const
     return _error;
 }
 
+void CT_CircleData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+{
+    double dist = getRadius();
+
+    min(0) = _center(0) - dist;
+    min(1) = _center(1) - dist;
+    min(2) = _center(2) - dist;
+
+    max(0) = _center(0) + dist;
+    max(1) = _center(1) + dist;
+    max(2) = _center(2) + dist;
+}
+
+
 CT_CircleData& CT_CircleData::operator= (const CT_CircleData& o)
 {
     setRadius(o.getRadius());
@@ -239,3 +253,5 @@ CT_CircleData* CT_CircleData::staticCreateZAxisAlignedCircleDataFromPointCloudWi
                              radiusT,
                              rmse);
 }
+
+

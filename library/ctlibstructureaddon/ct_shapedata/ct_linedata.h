@@ -68,6 +68,9 @@ public:
 
     bool intersectionWithRect3D  (double plan_x, double plan_y, double plan_z, Eigen::Vector3d& vect_plan, double* xi, double* yi, double* zi);
 
+    virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
+
+
     CT_SHAPEDATA_CLONE_IMP(CT_LineData)
 
     /**

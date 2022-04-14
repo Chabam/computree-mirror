@@ -305,6 +305,9 @@ void CT_AbstractStepPlugin::addNewMetric(CT_AbstractMetric *metric)
 
 void CT_AbstractStepPlugin::addNewStep(CT_VirtualAbstractStep *step, CT_StepsMenu::LevelOperationType levelOperation, const QString &subLevelDisplayableName)
 {
+    // Test Crash lancement
+    //qDebug() << step->name();
+
     CT_MenuLevel *level = menuOfSteps()->createOrGetRootLevel(levelOperation);
 
     if(!subLevelDisplayableName.isEmpty())
@@ -312,16 +315,23 @@ void CT_AbstractStepPlugin::addNewStep(CT_VirtualAbstractStep *step, CT_StepsMen
 
     if(level->addStepToCollectionOrDeleteIt(step))
         initStep(step);
+
+    //qDebug() << "ok";
 }
 
 void CT_AbstractStepPlugin::addNewStep(CT_VirtualAbstractStep *step, CT_StepsMenu::LevelOperationType levelOperation, CT_StepsMenu::LevelPredefined subLevelPredefined)
 {
+    // Test Crash lancement
+    //qDebug() << step->name();
+
     CT_MenuLevel *level = menuOfSteps()->createOrGetRootLevel(levelOperation);
 
     level = CT_MenuLevel::staticCreateOrGetLevelInParentLevel(subLevelPredefined, level);
 
     if(level->addStepToCollectionOrDeleteIt(step))
         initStep(step);
+
+    //qDebug() << "ok";
 }
 
 CT_StepsMenu* CT_AbstractStepPlugin::menuOfSteps() const

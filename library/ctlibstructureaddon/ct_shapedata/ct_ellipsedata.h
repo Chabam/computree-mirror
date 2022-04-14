@@ -46,6 +46,9 @@ public:
     const CT_LineData& getAxisB() const;
     double getError() const;
 
+    virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
+
+
     CT_SHAPEDATA_CLONE_IMP(CT_EllipseData)
 
     /**

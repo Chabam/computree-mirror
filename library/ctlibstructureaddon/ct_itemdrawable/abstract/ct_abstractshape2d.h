@@ -69,6 +69,7 @@ public:
      *          - Document list is not copied
      */
     CT_AbstractShape2D(const CT_AbstractShape2D& other);
+
     ~CT_AbstractShape2D() override;
 
     void setCenterX(double x) override;

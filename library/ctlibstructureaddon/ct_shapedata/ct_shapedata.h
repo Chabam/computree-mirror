@@ -54,9 +54,11 @@ public:
     void setCenter(const Eigen::Vector3d& center);
     void setDirection(const Eigen::Vector3d& direction);
 
+    virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const = 0;
+
     virtual CT_ShapeData* copy() const = 0;
 
-private:
+protected:
     Eigen::Vector3d   _center;
     Eigen::Vector3d   _direction;
 };

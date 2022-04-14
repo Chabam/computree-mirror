@@ -49,6 +49,8 @@ public:
     float getWidth() const;
     float getDepth() const;
 
+    virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
+
     CT_SHAPEDATA_CLONE_IMP(CT_BoxData)
 
 private:

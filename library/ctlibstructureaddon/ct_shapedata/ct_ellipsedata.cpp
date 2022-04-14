@@ -78,6 +78,20 @@ double CT_EllipseData::getError() const
     return _error;
 }
 
+void CT_EllipseData::getBoundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
+{
+    double dist = std::max(_axisA.length(), _axisB.length()) / 2.0;
+
+    min(0) = _center(0) - dist;
+    min(1) = _center(1) - dist;
+    min(2) = _center(2) - dist;
+
+    max(0) = _center(0) + dist;
+    max(1) = _center(1) + dist;
+    max(2) = _center(2) + dist;
+}
+
+
 CT_EllipseData* CT_EllipseData::staticCreateZAxisAlignedEllipseDataFromPointCloud(const CT_AbstractPointCloudIndex *pointCloudIndex)
 {
     if(pointCloudIndex == nullptr)
@@ -629,3 +643,4 @@ void CT_EllipseData::staticAperB_T(double **_A, double **_B, double **_res,
           _res[p][q]=_res[p][q]+_A[p][l]*_B[q][l];
       }
 }
+

@@ -51,6 +51,9 @@ public:
     void setLineError(double error);
     void setCircleError(double error);
 
+    virtual void getBoundingBox(Eigen::Vector3d& min, Eigen::Vector3d& max) const override;
+
+
     CT_SHAPEDATA_CLONE_IMP(CT_CylinderData)
 
     /**

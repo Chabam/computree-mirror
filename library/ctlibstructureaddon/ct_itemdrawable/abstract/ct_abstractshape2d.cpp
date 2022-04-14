@@ -45,6 +45,9 @@ CT_AbstractShape2D::CT_AbstractShape2D(CT_Shape2DData* data) : SuperClass(),
 {
     Q_ASSERT(_data != nullptr);
 
+    Eigen::Vector3d center(data->getCenter()(0), data->getCenter()(1), _zValue);
+    setCenterCoordinate(center);
+
     Eigen::Vector3d min, max;
     _data->getBoundingBox(min, max);
     setBoundingBox(min, max);

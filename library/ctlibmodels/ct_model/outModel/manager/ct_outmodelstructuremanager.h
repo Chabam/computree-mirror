@@ -9,6 +9,7 @@
 
 #include <type_traits>
 #include <functional>
+#include <QDebug>
 
 #define SECOND_NO_OUTPUT_STATIC_ASSERT_MESSAGE "It seems that the second handle does not contains an OUTPUT model. Please verify that you pass an OUTPUT handle !"
 
@@ -210,6 +211,7 @@ public:
                         shortDescription,
                         detailledDescription,
                         prototype);
+
     }
 
     template<class HandleResult, class HandleInItem>
