@@ -41,10 +41,6 @@ CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse() : SuperClass()
     _dataMax = false;
     _dataMin = true;
 
-    int ncells[1];
-    ncells[0] = 1;
-    this->_data.create(1, ncells);
-
     setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
 }
 
@@ -55,7 +51,12 @@ CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(const CT_Grid3D_Sparse<bool>& other) : 
     _initData = other._initData;
     _dataMax = other._dataMax;
     _dataMin = other._dataMin;
-    _data = other._data.clone();
+
+    if (other._data.size() > 0)
+    {
+        _data.insert(other._data.begin(), other._data.end());
+    }
+
     _colorMap = other._colorMap;
     _defaultColor = other._defaultColor;
 }
@@ -76,10 +77,6 @@ CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(double xmin,
     _dataMax = initValue;
     _dataMin = initValue;
 
-    int ncells[1];
-    ncells[0] = 1;
-    this->_data.create(1, ncells);
-
     setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
 }
 
@@ -98,10 +95,6 @@ CT_Grid3D_Sparse<bool>::CT_Grid3D_Sparse(double xmin,
     _initData = initValue;
     _dataMax = initValue;
     _dataMin = initValue;
-
-    int ncells[1];
-    ncells[0] = 1;
-    this->_data.create(1, ncells);
 
     setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
 }
@@ -150,7 +143,7 @@ bool CT_Grid3D_Sparse<bool>::setMinValueAtIndex(const size_t index, const bool v
 template<>
 bool CT_Grid3D_Sparse<bool>::addValueAtIndex(const size_t index, const bool value)
 {
-    bool currentValue = _data(int(index));
+    bool currentValue = valueAtIndex(index);
     return setValueAtIndex(index, value + currentValue);
 }
 

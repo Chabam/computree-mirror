@@ -30,9 +30,6 @@
 
 #include "ct_itemdrawable/abstract/ct_abstractgrid3d.h"
 
-#include "opencv2/core/core.hpp"
-#include <QMutex>
-
 template< typename DataT > class CT_StandardGrid3D_SparseDrawManager;
 
 /*!
@@ -344,11 +341,7 @@ public:
 
     inline QColor getColorForValue(DataT value) const {return _colorMap.value(value, _defaultColor);}
 
-    inline cv::SparseMatIterator_<DataT> beginIterator() { return _data.begin(); }
-    inline cv::SparseMatIterator_<DataT> endIterator() { return _data.end(); }
-    inline cv::SparseMatConstIterator_<DataT> beginIterator() const { return _data.begin(); }
-    inline cv::SparseMatConstIterator_<DataT> endIterator() const { return _data.end(); }
-    inline int countNonZeroCells() const { return _data.nzcount(); }
+    inline int countNonZeroCells() const { return _data.size(); }
 
     inline int xdim() const {return SuperClass::xdim();}
     inline int ydim() const {return SuperClass::ydim();}
@@ -361,12 +354,12 @@ public:
     CT_ITEM_COPY_IMP(CT_Grid3D_Sparse<DataT>)
 
 protected:
-    DataT       _NAdata;            /*!< Valeur codant NA */
-    DataT       _initData;            /*!< Valeur par defaut */
+    DataT       _NAdata;                                /*!< Valeur codant NA */
+    DataT       _initData;                              /*!< Valeur par defaut */
 
-    DataT       _dataMax;           /*!< valeur maximale du grid*/
-    DataT       _dataMin;           /*!< valeur minimale du grid*/
-    cv::SparseMat_<DataT> _data;       /*!< Tableau contenant les donnees pour chaque case de la grille*/
+    DataT       _dataMax;                               /*!< valeur maximale du grid*/
+    DataT       _dataMin;                               /*!< valeur minimale du grid*/
+    std::unordered_map<size_t, DataT>   _data;          /*!< Tableau contenant les donnees pour chaque case de la grille*/
 
     QMap<DataT, QColor> _colorMap;
     QColor              _defaultColor;

@@ -43,10 +43,6 @@ CT_Grid3D_Sparse<DataT>::CT_Grid3D_Sparse() : SuperClass()
     _dataMax = -1;
     _dataMin = -1;
 
-    int ncells[1];
-    ncells[0] = 1;
-    this->_data.create(1, ncells);
-
     setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
 }
 
@@ -57,7 +53,12 @@ CT_Grid3D_Sparse<DataT>::CT_Grid3D_Sparse(const CT_Grid3D_Sparse<DataT>& other) 
     _initData = other._initData;
     _dataMax = other._dataMax;
     _dataMin = other._dataMin;
-    _data = other._data.clone();
+
+    if (other._data.size() > 0)
+    {
+        _data.insert(other._data.begin(), other._data.end());
+    }
+
     _colorMap = other._colorMap;
     _defaultColor = other._defaultColor;
 }
@@ -78,10 +79,6 @@ CT_Grid3D_Sparse<DataT>::CT_Grid3D_Sparse(double xmin,
     _dataMax = initValue;
     _dataMin = initValue;
 
-    int ncells[1];
-    ncells[0] = 1;
-    this->_data.create(1, ncells);
-
     setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
 }
 
@@ -100,10 +97,6 @@ CT_Grid3D_Sparse<DataT>::CT_Grid3D_Sparse(double xmin,
     _initData = initValue;
     _dataMax = initValue;
     _dataMin = initValue;
-
-    int ncells[1];
-    ncells[0] = 1;
-    this->_data.create(1, ncells);
 
     setBaseDrawManager(&GRID3D_SPARSE_DRAW_MANAGER);
 }
@@ -126,7 +119,6 @@ CT_Grid3D_Sparse<DataT>* CT_Grid3D_Sparse<DataT>::createGrid3DFromXYZCoords(doub
 template< typename DataT>
 CT_Grid3D_Sparse<DataT>::~CT_Grid3D_Sparse()
 {
-    _data.release();
 }
 
 template< typename DataT>
@@ -142,10 +134,9 @@ void CT_Grid3D_Sparse<DataT>::computeMinMax()
     _dataMax = _initData;
 
     bool first = true;
-    cv::SparseMatConstIterator it = _data.begin(), it_end = _data.end();
-    for( ; it != it_end; ++it )
-    {
-        DataT val = it.value<DataT>();
+    for(auto iter = _data.begin(); iter != _data.end(); ++iter){
+        size_t index = iter->first;
+        DataT val = _data[index];
         if (first)
         {
             _dataMin = val;
@@ -162,7 +153,7 @@ template< typename DataT>
 bool CT_Grid3D_Sparse<DataT>::setValueAtIndex(const size_t index, const DataT value)
 {
     if (index >= nCells()) {return false;}
-    _data.ref(int(index)) = value;
+    _data.insert_or_assign(index, value);
 
     return true;
 }
@@ -195,10 +186,10 @@ DataT CT_Grid3D_Sparse<DataT>::valueAtIndex(const size_t index) const
 {
     if (index >= nCells()) {return NA();}
 
-    const DataT* val = _data.template find<DataT>(int(index));
-    if (val == nullptr) {return _initData;}
+    auto it = _data.find(index);
+    if (it == _data.end()) {return _initData;}
 
-    return _data(int(index));
+    return _data.at(index);
 }
 
 template< typename DataT>
@@ -259,7 +250,7 @@ bool CT_Grid3D_Sparse<DataT>::setMaxValueAtIndex(const size_t index, const DataT
 {
     if (index >= nCells()) {return false;}
 
-    DataT currentValue = _data(index);
+    DataT currentValue = valueAtIndex(index);
 
     if ((currentValue == NA()) || (value > currentValue)) {
         return setValueAtIndex(index, value);
@@ -284,7 +275,7 @@ bool CT_Grid3D_Sparse<DataT>::setMinValueAtIndex(const size_t index, DataT value
 {
     if (index >= nCells()) {return false;}
 
-    DataT currentValue = _data(index);
+    DataT currentValue = valueAtIndex(index);
 
     if ((currentValue == NA()) || (value < currentValue)) {
         return setValueAtIndex(index, value);
@@ -308,7 +299,7 @@ bool CT_Grid3D_Sparse<DataT>::addValueAtIndex(const size_t index, DataT value)
 {
     if (index >= nCells()) {return false;}
 
-    DataT currentValue = _data(int(index));
+    DataT currentValue = valueAtIndex(index);
 
     if (currentValue == NA())
     {
@@ -389,10 +380,8 @@ QList<DataT> CT_Grid3D_Sparse<DataT>::neighboursValues(const int colx, const int
 template< typename DataT>
 void CT_Grid3D_Sparse<DataT>::getIndicesWithData(QList<size_t> &list) const
 {
-    cv::SparseMatConstIterator it = _data.begin(), it_end = _data.end();
-    for( ; it != it_end; ++it )
-    {
-        size_t ind = size_t(it.node()->idx[0]);
-        list.append(ind);
+    for(auto iter = _data.begin(); iter != _data.end(); ++iter){
+        size_t index = iter->first;
+        list.append(index);
     }
 }
