@@ -1,5 +1,7 @@
 #include "ct_itemdrawable/ct_grid4d_sparse.h"
-
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 #include <typeinfo>
 

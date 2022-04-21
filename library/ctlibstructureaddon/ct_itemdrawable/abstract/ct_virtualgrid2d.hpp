@@ -30,6 +30,9 @@
 
 #include "ct_itemdrawable/abstract/ct_virtualgrid2d.h"
 
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 #include <typeinfo>
 #include <limits>

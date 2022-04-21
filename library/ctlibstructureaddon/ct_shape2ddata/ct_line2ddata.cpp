@@ -29,6 +29,9 @@
 
 #include "ct_math/ct_mathpoint.h"
 #include "ct_math/ct_math2dlines.h"
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 
 

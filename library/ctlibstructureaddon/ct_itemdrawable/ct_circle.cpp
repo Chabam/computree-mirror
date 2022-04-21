@@ -26,7 +26,7 @@
 *****************************************************************************/
 
 #include "ct_circle.h"
-
+#define _USE_MATH_DEFINES
 #include "math.h"
 
 const CT_StandardCircleDrawManager CT_Circle::CIRCLE_DRAW_MANAGER;

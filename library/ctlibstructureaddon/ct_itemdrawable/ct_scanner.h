@@ -29,9 +29,9 @@
 #ifndef CT_SCANNER_H
 #define CT_SCANNER_H
 
-#include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"                           // Inherits from CT_abstractItemDrawableWithoutPointCloud
+#include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h"  // Inherits from CT_abstractItemDrawableWithoutPointCloud
 #include "ct_point.h"                                                           // Used to get rays from a scanner
-#include "ct_itemdrawable/ct_beam.h"                                                             // A scan creates some rays
+#include "ct_itemdrawable/ct_beam.h"                                            // A scan creates some rays
 #include "ct_itemdrawable/tools/drawmanager/ct_standardscannerdrawmanager.h"
 #include "ct_itemdrawable/tools/scanner/ct_shootingpattern.h"
 

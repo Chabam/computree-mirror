@@ -8,6 +8,7 @@
 #include <Eigen/Core>
 
 // Using floor()
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 /*!

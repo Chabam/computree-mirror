@@ -26,7 +26,7 @@
 *****************************************************************************/
 
 #include "ct_box2d.h"
-
+#define _USE_MATH_DEFINES
 #include "math.h"
 
 const CT_StandardBox2DDrawManager CT_Box2D::BOX2D_DRAW_MANAGER;

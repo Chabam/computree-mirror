@@ -1,4 +1,5 @@
 #include "ct_grid3dwootraversalalgorithm.h"
+#define _USE_MATH_DEFINES
 #include "math.h"
 #include <QDebug>
 #include <limits>

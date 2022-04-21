@@ -32,6 +32,9 @@
 #include "ct_triangulation/ct_edget.h"
 #include "ct_iterator/ct_pointiterator.h"
 
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 #include <limits>
 #include <algorithm>

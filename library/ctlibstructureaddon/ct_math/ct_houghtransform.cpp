@@ -1,5 +1,5 @@
 #include "ct_houghtransform.h"
-
+#define _USE_MATH_DEFINES
 #include "math.h"
 #include "ct_math/ct_sphericalline3d.h"
 

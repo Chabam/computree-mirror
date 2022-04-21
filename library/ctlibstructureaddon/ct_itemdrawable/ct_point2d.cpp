@@ -26,7 +26,7 @@
 *****************************************************************************/
 
 #include "ct_point2d.h"
-
+#define _USE_MATH_DEFINES
 #include "math.h"
 
 const CT_StandardPoint2DDrawManager CT_Point2D::POINT2D_DRAW_MANAGER;
