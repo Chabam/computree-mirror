@@ -2,6 +2,7 @@
 #include "ct_trianglet.h"
 #include "ct_voronoinodet.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 CT_NodeT::CT_NodeT(Eigen::Vector3d *point, QObject *associate_object, bool toBeDeleted)

@@ -29,6 +29,7 @@
 
 #include <QFileDialog>
 #include <QDir>
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 CT_AbstractStepLoadFile::CT_AbstractStepLoadFile() : SuperClass()

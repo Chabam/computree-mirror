@@ -31,6 +31,7 @@
 #include "ct_itemattributes/tools/ct_defaultitemattributemanager.h"
 #include "ct_result/abstract/ct_abstractresult.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 quint32& CT_AbstractItemDrawable::NEXTID()

@@ -35,6 +35,7 @@
 #include "ct_cloudindex/registered/ct_standardmodifiablecloudindexregisteredt.h"
 
 #include <QDir>
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <limits>
 

@@ -11,18 +11,26 @@
 
 #define CHK_ERR(argFunc, argErrStr) if(!error && !argFunc) { error = true; PS_LOG->addErrorMessage(LogInterface::reader, argErrStr); }
 
+QString intensity_column_str = QObject::tr("Intensité");
+QString red_column_str = QObject::tr("Rouge");
+QString green_column_str = QObject::tr("Vert");
+QString blue_column_str = QObject::tr("Bleu");
+QString nx_column_str = QObject::tr("Normale X");
+QString ny_column_str = QObject::tr("Normale Y");
+QString nz_column_str = QObject::tr("Normale Z");
+QString nw_column_str = QObject::tr("Normale Curvature");
+
 #define X_COLUMN "X"
 #define Y_COLUMN "Y"
 #define Z_COLUMN "Z"
-#define INTENSITY_COLUMN tr("Intensité")
-#define RED_COLUMN tr("Rouge")
-#define GREEN_COLUMN tr("Vert")
-#define BLUE_COLUMN tr("Bleu")
-#define NX_COLUMN tr("Normale X")
-#define NY_COLUMN tr("Normale Y")
-#define NZ_COLUMN tr("Normale Z")
-#define NW_COLUMN tr("Normale Curvature")
-
+#define INTENSITY_COLUMN intensity_column_str
+#define RED_COLUMN red_column_str
+#define GREEN_COLUMN green_column_str
+#define BLUE_COLUMN blue_column_str
+#define NX_COLUMN nx_column_str
+#define NY_COLUMN ny_column_str
+#define NZ_COLUMN nz_column_str
+#define NW_COLUMN nw_column_str
 
 
 CT_Reader_Points_ASCII::CT_Reader_Points_ASCII(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()

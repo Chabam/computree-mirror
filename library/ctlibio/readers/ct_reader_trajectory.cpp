@@ -10,7 +10,7 @@
 #define X_COLUMN "Easting"
 #define Y_COLUMN "Northing"
 #define Z_COLUMN "Height"
-#define GPS_TIME_COLUMN tr("GPStime")
+#define GPS_TIME_COLUMN "GPStime"
 
 CT_Reader_Trajectory::CT_Reader_Trajectory(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {

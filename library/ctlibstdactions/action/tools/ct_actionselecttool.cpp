@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 #include <QIcon>
 #include <QPainter>
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 #include "views/actions/ct_actionselectitemdrawablegvoptions.h"

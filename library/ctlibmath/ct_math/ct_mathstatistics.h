@@ -1,6 +1,9 @@
 #ifndef CT_MATHSTATISTICS_H
 #define CT_MATHSTATISTICS_H
 
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 #include <algorithm>
 

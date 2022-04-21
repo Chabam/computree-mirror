@@ -2,11 +2,14 @@
 
 #include "ct_log/ct_logmanager.h"
 
+QString load_data_header_str_1 = QObject::tr("Line %1 must begin with \"%2\" but we read : \"%3\"");
+QString load_data_header_str_2 = QObject::tr("Unable to convert the ascii format to a %1 in header at line %2");
+
 #define LOAD_DATA_HEADER(VVV, LINESTART, DATATYPESTR, CONVERTTO)    ++line; \
                                                                     currentLine = stream.readLine().toLower(); \
                                                                     if(!currentLine.startsWith(LINESTART)) { \
                                                                         if(showLogMessage)\
-                                                                            PS_LOG->addErrorMessage(LogInterface::reader, tr("Line %1 must begin with \"%2\" but we read : \"%3\"").arg(line).arg(LINESTART).arg(currentLine) ); \
+                                                                            PS_LOG->addErrorMessage(LogInterface::reader, load_data_header_str_1.arg(line).arg(LINESTART).arg(currentLine) ); \
                                                                         return false; \
                                                                     } \
                                                                     splitline = currentLine.split(QRegExp("\\s+")); \
@@ -16,7 +19,7 @@
                                                                     \
                                                                     if( !read ) { \
                                                                         if(showLogMessage)\
-                                                                            PS_LOG->addErrorMessage(LogInterface::reader, tr("Unable to convert the ascii format to a %1 in header at line %2").arg(DATATYPESTR).arg(line) ); \
+                                                                            PS_LOG->addErrorMessage(LogInterface::reader, load_data_header_str_2.arg(DATATYPESTR).arg(line) ); \
                                                                         return false; \
                                                                     }
 
