@@ -60,10 +60,3 @@ FORMS += \
 
 TRANSLATIONS += languages/ctlibwidget_fr.ts \
                 languages/ctlibwidget_en.ts
-
-# LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
-
-CONFIG += lrelease
-QMAKE_LRELEASE_FLAGS += -removeidentical
-LRELEASE_DIR = $$DESTDIR/../../languages
-

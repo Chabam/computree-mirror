@@ -76,13 +76,5 @@ SOURCES += \
     mergers/ct_sameheaderformatmerger_las.cpp \
     exporters/private/ct_laspiecebypieceprivateexporter.cpp
 
-
-
 TRANSLATIONS += languages/ctliblas_fr.ts \
                 languages/ctliblas_en.ts
-
-# LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
-
-CONFIG += lrelease
-QMAKE_LRELEASE_FLAGS += -removeidentical
-LRELEASE_DIR = $$DESTDIR/../../languages

@@ -28,9 +28,3 @@ SOURCES += \
 
 TRANSLATIONS += languages/ctlibaction_fr.ts \
                 languages/ctlibaction_en.ts
-
-# LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
-
-CONFIG += lrelease
-QMAKE_LRELEASE_FLAGS += -removeidentical
-LRELEASE_DIR = $$DESTDIR/../../languages

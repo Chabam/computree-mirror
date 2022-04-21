@@ -1,4 +1,5 @@
 COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctliblaz ctlibstepaddon ctlibfilters ctlibmetrics
+# COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctliblaz ctlibbuffer ctlibstepaddon ctlibfilters ctlibmetrics
 
 CHECK_CAN_USE_GDAL = 1
 MUST_USE_LASZIP = 1
@@ -56,9 +57,3 @@ RESOURCES += resource.qrc
 
 TRANSLATIONS += languages/pluginbase_fr.ts \
                 languages/pluginbase_en.ts
-
-# LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
-
-CONFIG += lrelease
-QMAKE_LRELEASE_FLAGS += -removeidentical
-LRELEASE_DIR = $$DESTDIR/../languages

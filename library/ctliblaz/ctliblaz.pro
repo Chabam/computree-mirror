@@ -32,12 +32,6 @@ SOURCES += \
 TRANSLATIONS += languages/ctliblaz_fr.ts \
                 languages/ctliblaz_en.ts
 
-# LUPDATE = $$system($$[QT_INSTALL_BINS]/lupdate -ts $$TRANSLATIONS)
-
-CONFIG += lrelease
-QMAKE_LRELEASE_FLAGS += -removeidentical
-LRELEASE_DIR = $$DESTDIR/../../languages
-
 # c++14 for LASZIP
 CONFIG -= c++17
 CONFIG += c++14

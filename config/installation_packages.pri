@@ -33,6 +33,7 @@ win32 {
     # Usefull definitions of paths
     WIN_PATH = $$DESTDIRFULL
     WIN_PATH ~= s,/,\\,g
+    PWDC = $$PWD
 
     # Deployment using WinDeployQt
     qt_deploy_options = --force --no-translations --angle --compiler-runtime --plugindir $$LIB/Qt --libdir $$LIB/Qt
@@ -46,12 +47,9 @@ win32 {
     qt_deploy_cmd1 = $$[QT_INSTALL_BINS]/windeployqt.exe $$DESTDIR $$qt_deploy_options &&
     qt_deploy_cmd2 = copy "distrib\windows\qt.conf" $$WIN_PATH && copy "distrib\windows\CompuTreeGui.cmd" $$WIN_PATH &&
     qt_deploy_cmd3 = move $$WIN_PATH\libraries\Qt\opengl32sw.dll $$WIN_PATH\opengl32.dll &&
+    qt_deploy_cmd4 = cd .. && forfiles /s /m *_*.qm /c \"cmd /c copy @path $$WIN_PATH\languages\" && cd $$PWDC
     CONFIG(release, debug|release) {
-        qt_deploy_cmd4 = move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH &&
-        qt_deploy_cmd5 = move $$WIN_PATH\languages\release\*.qm $$WIN_PATH\languages\
-    }
-    CONFIG(debug,   debug|release) {
-        qt_deploy_cmd5 = move $$WIN_PATH\languages\debug\*.qm $$WIN_PATH\languages\
+        qt_deploy_cmd5 = && move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH
     }
 
     qt_deploy.path = $$DESTDIR
@@ -59,7 +57,7 @@ win32 {
         qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5
     }
     CONFIG(debug,   debug|release) {
-        qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd5
+        qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4
     }
 
     INSTALLS += qt_deploy
@@ -75,6 +73,7 @@ linux {
     DIR_LIBS    = $$APPDIR/lib
     DIR_PLUGINS = $$APPDIR/plugins
 
+    qt_deploy_cmd0 = find ../ -type f -name "*_*.qm" -exec cp {} $$DESTDIRFULL/languages \;
     qt_deploy_cmd1 = mkdir -p $$APPDIR/bin $$APPDIR/lib $$APPDIR/plugins $$APPDIR/languages $$APPDIR/share/applications $$APPDIR/share/icons/hicolor/256x256/apps & wait ;
     qt_deploy_cmd2 = cp distrib/linux/Computree.desktop $$APPDIR/share/applications/CompuTreeGui.desktop ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/share/icons/hicolor/256x256/apps/CompuTreeGui.png ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/../CompuTreeGui.png & wait ;
     qt_deploy_cmd3 = cp $$LIB/core/*.so $$APPDIR/lib ; cp $$DESTDIRFULL/plugins/*.so $$APPDIR/plugins ; cp $$DESTDIRFULL/CompuTreeGui $$APPDIR/bin/CompuTreeGui & wait ;
@@ -90,7 +89,7 @@ linux {
     qt_deploy_cmd11 = cd $$DESTDIRFULL ; $$DEPLOYTOOL_PATH/linuxdeployqt-7-x86_64.AppImage $$APPDIR/bin/CompuTreeGui -no-translations -unsupported-allow-new-glibc -appimage & wait ;
 
     qt_deploy.path = $$DESTDIR
-    qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5 $$qt_deploy_cmd6 $$qt_deploy_cmd7 $$qt_deploy_cmd8 $$qt_deploy_cmd9 $$qt_deploy_cmd10 $$qt_deploy_cmd11
+    qt_deploy.extra = $$qt_deploy_cmd0 $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5 $$qt_deploy_cmd6 $$qt_deploy_cmd7 $$qt_deploy_cmd8 $$qt_deploy_cmd9 $$qt_deploy_cmd10 $$qt_deploy_cmd11
 
     INSTALLS += qt_deploy
 }
@@ -102,6 +101,7 @@ macx {
     DIR_TRANSLATE  = $$DESTDIRFULL/CompuTreeGui.app/Contents/Languages
 
     # Deployment using MacDeployQt
+    qt_deploy_cmd0 = find ../ -type f -name "*_*.qm" -exec cp {} $$DESTDIRFULL/languages \;
     qt_deploy_cmd1 = mkdir -p $$DIR_FRAMEWORKS $$DIR_PLUGINS  & wait ; cp $$DESTDIRFULL/libraries/core/*.dylib $$DIR_FRAMEWORKS ; cp $$DESTDIRFULL/plugins/*.dylib $$DIR_PLUGINS ; cp $$DESTDIRFULL/languages/release/*.qm $$DIR_TRANSLATE & wait ;
     qt_deploy_cmd2 = cd $$DIR_FRAMEWORKS ; for target in $$DIR_FRAMEWORKS/libctli*; do for file in libctli*; do install_name_tool -change "\$\$file" @executable_path/../Frameworks/"\$\$file" "\$\$target"; done; done & wait ;
     qt_deploy_cmd3 = cd $$DIR_FRAMEWORKS ; for target in $$DIR_PLUGINS/libplug_*  ; do for file in libctli*; do install_name_tool -change "\$\$file" @executable_path/../Frameworks/"\$\$file" "\$\$target"; done; done & wait ;
@@ -111,7 +111,7 @@ macx {
     #qt_deploy_cmd5 = $$[QT_INSTALL_BINS]/macdeployqt $$DESTDIRFULL/CompuTreeGui.app -libpath=$$DIR_FRAMEWORKS -dmg & wait ;
 
     qt_deploy.path = $$DESTDIR
-    qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5
+    qt_deploy.extra = $$qt_deploy_cmd0 $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5
 
     INSTALLS += qt_deploy
 }
