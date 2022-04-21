@@ -1,7 +1,7 @@
 @echo off &setlocal
 
 rem We use the *-pro version of tools because the old ones are deprecated
-set lupdate=C:\Qt\5.15.2\msvc2019_64\bin\lupdate-pro.exe
+set lrelease=C:\Qt\5.15.2\msvc2019_64\bin\lrelease-pro.exe
 
 for %%i in (
     ComputreeGui\ComputreeGui.pro
@@ -32,7 +32,7 @@ for %%i in (
     ..\pluginsegma\pluginsegma\pluginsegma.pro
     ..\plugintoolkit\plugintoolkit\plugintoolkit.pro
         ) do (
-    %lupdate% %%i
+    %lrelease% %%i
 )
 
 rem The following project can't be processed by lupdate du to an unexpected endless loop
