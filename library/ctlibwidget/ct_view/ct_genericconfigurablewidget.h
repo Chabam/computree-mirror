@@ -245,7 +245,7 @@ public:
                          const QString &radioButtonText,
                          CT_ButtonGroup &group,
                          const int &id,
-                         const QString &description = "");
+                         const QString &description = "", bool leftRadio = false);
 
     /**
      * @brief Add a new empty line in the dialog. For separating differents parts in configurations dialog.

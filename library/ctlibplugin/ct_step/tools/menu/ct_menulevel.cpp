@@ -247,6 +247,8 @@ void CT_MenuLevel::defineHighPriorityStepsOrder()
 {
     CT_MenuLevel::STEPORDER.clear();
 
+    CT_MenuLevel::STEPORDER.append("PB_StepExportPointsByXYArea");
+
     CT_MenuLevel::STEPORDER.append("PB_StepCreateReaderList");
     CT_MenuLevel::STEPORDER.append("PB_StepUseReaderToLoadFiles");
     CT_MenuLevel::STEPORDER.append("PB_StepLoadFileByName");
@@ -258,6 +260,12 @@ void CT_MenuLevel::defineHighPriorityStepsOrder()
     CT_MenuLevel::STEPORDER.append("PB_StepLoopOnFiles");
     CT_MenuLevel::STEPORDER.append("PB_StepLoopOnFileSets");
     CT_MenuLevel::STEPORDER.append("CT_StepEndLoop");
+
+    CT_MenuLevel::STEPORDER.append("ONF_StepCreatePlotManagerGrid");
+    CT_MenuLevel::STEPORDER.append("ONF_StepCreatePlotsFromList");
+    CT_MenuLevel::STEPORDER.append("ONF_StepCreatePlotManagerFromFile");
+    CT_MenuLevel::STEPORDER.append("ONF_StepExtractPointsForPlots");
+    CT_MenuLevel::STEPORDER.append("ONF_StepAddLASDataToPlots");
 
     CT_MenuLevel::STEPORDER.append("PB_StepComputePointMetrics");
     CT_MenuLevel::STEPORDER.append("PB_StepComputeRasterMetrics");

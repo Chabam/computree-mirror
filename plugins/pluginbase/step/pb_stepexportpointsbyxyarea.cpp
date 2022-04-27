@@ -21,7 +21,7 @@ PB_StepExportPointsByXYArea::~PB_StepExportPointsByXYArea()
 
 QString PB_StepExportPointsByXYArea::description() const
 {
-    return tr("Redallage+Export de points dans une boucle");
+    return tr("Export des points de chaque emprise (boucle)");
 }
 
 QString PB_StepExportPointsByXYArea::detailledDescription() const
@@ -80,7 +80,7 @@ void PB_StepExportPointsByXYArea::fillPostInputConfigurationDialog(CT_StepConfig
     postInputConfigDialog->addFileChoice(tr("Répertoire d'export"), CT_FileChoiceButton::OneExistingFolder, QString(), _dir);
     postInputConfigDialog->addString(tr("Suffixe de nom de fichier"), QString(), _suffixFileName);
     postInputConfigDialog->addEmpty();
-    postInputConfigDialog->addBool(tr("Nommage selon coordonnées : Xmin_Ymin"), QString(), QString(), _nameByCoordinates);
+    postInputConfigDialog->addBool(tr("Renommer selon les coordonnées : Xmin_Ymin"), QString(), QString(), _nameByCoordinates);
     postInputConfigDialog->addDouble(tr("Offset sur les coodonnées Xmin et Ymin"), "m", -99999, 99999, 2, _nameByCoordinatesOffset);
 }
 

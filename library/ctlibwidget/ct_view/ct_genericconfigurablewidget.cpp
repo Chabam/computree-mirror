@@ -260,7 +260,8 @@ bool CT_GenericConfigurableWidget::addExcludeValue(const QString &beforeLabelTex
                                                    const QString &radioButtonText,
                                                    CT_ButtonGroup &group,
                                                    const int &id,
-                                                   const QString &description)
+                                                   const QString &description,
+                                                   bool leftRadio)
 {
     if(canEdit())
     {
@@ -275,9 +276,13 @@ bool CT_GenericConfigurableWidget::addExcludeValue(const QString &beforeLabelTex
         if(!m_ctWidget.contains(&group))
             m_ctWidget.append(&group);
 
-        addLabel(nRows(), 0, beforeLabelText);
-        addWidget(nRows(), 1, radioButton->createWidget(*this));
-        addLabel(nRows(), 2, afterLabelText);
+        if(leftRadio) {
+            addWidget(nRows(), 0, radioButton->createWidget(*this), 1, 2);
+        } else {
+            addLabel(nRows(), 0, beforeLabelText);
+            addWidget(nRows(), 1, radioButton->createWidget(*this));
+            addLabel(nRows(), 2, afterLabelText);
+        }
         addDescription(nRows(), description);
 
         addRow();
