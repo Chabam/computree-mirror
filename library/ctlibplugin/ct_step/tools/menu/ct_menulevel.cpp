@@ -248,6 +248,7 @@ void CT_MenuLevel::defineHighPriorityStepsOrder()
     CT_MenuLevel::STEPORDER.clear();
 
     CT_MenuLevel::STEPORDER.append("PB_StepExportPointsByXYArea");
+    CT_MenuLevel::STEPORDER.append("PB_StepExportAttributesInLoop");
 
     CT_MenuLevel::STEPORDER.append("PB_StepCreateReaderList");
     CT_MenuLevel::STEPORDER.append("PB_StepUseReaderToLoadFiles");

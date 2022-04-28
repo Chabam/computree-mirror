@@ -48,7 +48,7 @@
 #include "ct_step/ct_stependloop.h"
 #include "step/pb_stepbeginloopthroughgroups02.h"
 #include "step/pb_stepapplypointfilters.h"
-#include "step/pb_stepexportitemlist.h"
+//#include "step/pb_stepexportitemlist.h"
 #include "step/pb_stepexportpointsbyxyarea.h"
 #include "step/pb_stepexportattributesinloop.h"
 
@@ -224,7 +224,7 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewLoadStep<PB_StepUseReaderToLoadFiles>();
     addNewLoadStep<PB_StepLoadFileByName>();
 
-    addNewExportStep<PB_StepExportItemList>();
+    // addNewExportStep<PB_StepExportItemList>(); DEPRECATED
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
     addNewExportStep<PB_StepExportAttributesInLoop>();
 
@@ -274,8 +274,8 @@ bool PB_StepPluginManager::loadExporters()
 
     CT_StandardExporterSeparator *sep = addNewSeparator(new CT_StandardExporterSeparator("Exporters"));
     sep->addExporter(new PB_XYBExporter(CT_StepsMenu::LP_Points));
-    sep->addExporter(new PB_CSVExporter(CT_StepsMenu::LP_Items));
-    sep->addExporter(new PB_GroupDataExporter(CT_StepsMenu::LP_Items));
+    sep->addExporter(new PB_CSVExporter(-1));
+    sep->addExporter(new PB_GroupDataExporter(-1));
     sep->addExporter(new PB_ASCRGBExporter(CT_StepsMenu::LP_Points));
     sep->addExporter(new PB_ASCIDExporter(CT_StepsMenu::LP_Points));
     sep->addExporter(new PB_Grid2DExporter(CT_StepsMenu::LP_Raster));
@@ -412,11 +412,22 @@ bool PB_StepPluginManager::loadAfterAllPluginsLoaded()
     QList<CT_AbstractExporter*> exporters = m_exportersOfAllPlugins.values();
 
     for(CT_AbstractExporter* exporter : exporters) {
-        addNewStep(new PB_StepGenericExporter(exporter->copy()), CT_StepsMenu::LO_Export, CT_StepsMenu::LevelPredefined(exporter->subMenuLevel()));
+        if (exporter->subMenuLevel() == -1)
+        {
+            addNewStep(new PB_StepGenericExporter(exporter->copy()), CT_StepsMenu::LO_Export, "");
+        } else {
+            addNewStep(new PB_StepGenericExporter(exporter->copy()), CT_StepsMenu::LO_Export, CT_StepsMenu::LevelPredefined(exporter->subMenuLevel()));
+        }
     }
 
     for(CT_AbstractReader* reader : m_readersOfAllPlugins) {
-        addNewStep(new PB_StepGenericLoadFile(reader->copyFull()), CT_StepsMenu::LO_Load, CT_StepsMenu::LevelPredefined(reader->subMenuLevel()));
+        if (reader->subMenuLevel() == -1)
+        {
+            addNewStep(new PB_StepGenericLoadFile(reader->copyFull()), CT_StepsMenu::LO_Load, "");
+        } else {
+            addNewStep(new PB_StepGenericLoadFile(reader->copyFull()), CT_StepsMenu::LO_Load, CT_StepsMenu::LevelPredefined(reader->subMenuLevel()));
+        }
+
     }
 
     return true;

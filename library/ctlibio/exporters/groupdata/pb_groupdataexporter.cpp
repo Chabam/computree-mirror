@@ -28,7 +28,7 @@ PB_GroupDataExporter::PB_GroupDataExporter(const PB_GroupDataExporter& other) : 
 
 QString PB_GroupDataExporter::displayableName() const
 {
-    return tr("Attributs/Items d'un groupe");
+    return tr("Export des attributs des items d'un groupe");
 }
 
 void PB_GroupDataExporter::setGroupsToExport(const QList<const CT_StandardItemGroup*>& list)
