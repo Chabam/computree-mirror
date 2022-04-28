@@ -283,7 +283,14 @@ void PB_StepExportAttributesInLoop::compute()
                 const auto pair = indexedAttributes.value(key);
 
                 if(pair.first == nullptr)
+                {
+                    if (hasMetricsToExport && !streamASCII.isNull())
+                    {
+                        if(i < _modelsKeys.size() - 1) {(*streamASCII.data()) << "\t";} else {(*streamASCII.data()) << "\n";}
+                    }
+
                     continue;
+                }
 
                 if (hasMetricsToExport && !streamASCII.isNull())
                 {
