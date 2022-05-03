@@ -94,7 +94,7 @@ bool CT_Reader_LASV2::restoreSettings(SettingsReaderInterface &reader)
 void CT_Reader_LASV2::internalDeclareOutputModels(CT_ReaderOutModelStructureManager &manager)
 {
     manager.addItem(m_hOutScene, tr("Scène"));
-    manager.addItem(m_hOutAllAtt, tr("All Attributs"));
+    manager.addItem(m_hOutAllAtt, tr("Attributs LAS"));
 
     manager.addPointAttribute(m_hOutReturnNumber, tr("Return Number"));
     manager.addPointAttribute(m_hOutNumberOfReturn, tr("Number of Returns"));

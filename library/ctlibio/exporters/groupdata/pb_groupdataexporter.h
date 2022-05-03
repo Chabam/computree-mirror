@@ -30,7 +30,7 @@ protected:
     void clearAttributesClouds() final;
 
 private:
-    using HandleGroupType = CT_HandleInStdGroup<>;
+    using HandleGroupType = CT_HandleInStdGroup<1,-1>;
 
     HandleGroupType                      m_hInGroup;
 

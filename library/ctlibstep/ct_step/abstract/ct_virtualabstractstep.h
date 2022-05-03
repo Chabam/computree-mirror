@@ -806,6 +806,8 @@ public:
      */
     virtual void postWaitForAckIfInDebugMode() {}
 
+    virtual void generateHTMLDocumentation(QString directory) const;
+
 protected:
     /**
      * @brief Returns the current number of the break point. In other words the number of turn that the debug mode has made.

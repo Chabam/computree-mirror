@@ -116,27 +116,29 @@ QString PB_StepGenericExporter::createExportExtensionString() const
 
 void PB_StepGenericExporter::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
+    preInputConfigDialog->addBool(tr("Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)"), "", "", _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
+    preInputConfigDialog->addEmpty();
 
     const QString multiExportDesc = tr("Chaque item sera exporté dans un fichier différent\nLe nom du fichier à utiliser sera fonction du choix que vous allez faire ci-dessous.");
 
     if(_exporter->isExportEachItemInSeparateFileOptionnal())
     {
         preInputConfigDialog->addBool(tr("Exporter un item par fichier"), "", "", _multipleExport, tr("Si coché : \r%1").arg(multiExportDesc));
+
+        preInputConfigDialog->addText(tr("Si coché, comment déterminer le nom du fichier ?"), "", "");
+
     }
     else
     {
+        preInputConfigDialog->addText(tr("Un fichier sera créé pour chaque item. Comment déterminer le nom du fichier ?"), "", "");
+
         _multipleExport = true;
     }
 
-    preInputConfigDialog->addText(tr("Comment définir le nom du fichier :"), "", "", multiExportDesc);
-
     CT_ButtonGroup& bg = preInputConfigDialog->addButtonGroup(_multipleExportChoice);
-    preInputConfigDialog->addExcludeValue(tr("  - Choisir un nom du fichier"), "", "", bg, CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter, tr("Saisie manuelle du nom de fichier"));
-    preInputConfigDialog->addExcludeValue(tr("  - Nom du fichier contenu dans un attribut"), "", "", bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName, tr("Si coché : \nL'attribut à utiliser appartiendra à l'item à exporter"));
-    preInputConfigDialog->addExcludeValue(tr("  - Nom du fichier contenu dans un attribut d'un autre item"), "", "", bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName, tr("Si coché : \nL'attribut à utiliser appartiendra à un autre item que celui à exporter"));
-
-    preInputConfigDialog->addEmpty();
-    preInputConfigDialog->addBool(tr("Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)"), "", "", _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
+    preInputConfigDialog->addExcludeValue("", "", tr("Choisir un nom du fichier"), bg, CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter, tr("Saisie manuelle d'un nom de base.\nChaque item génére un fichier nommé NomDeBase_xx, avec xx allant de 0 à n. "), true);
+    preInputConfigDialog->addExcludeValue("", "", tr("Nom du fichier contenu dans un attribut"), bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName, tr("Si coché : \nL'attribut à utiliser appartiendra à l'item à exporter"), true);
+    preInputConfigDialog->addExcludeValue("", "", tr("Nom du fichier contenu dans un attribut d'un autre item"), bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName, tr("Si coché : \nL'attribut à utiliser appartiendra à un autre item que celui à exporter"), true);
 }
 
 void PB_StepGenericExporter::declareInputModels(CT_StepInModelStructureManager& manager)

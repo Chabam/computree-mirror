@@ -31,6 +31,8 @@
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 
 #include <QWaitCondition>
+#include <QFile>
+#include <QTextStream>
 
 int CT_VirtualAbstractStep::CURRENT_ID = 1;
 
@@ -801,6 +803,38 @@ void CT_VirtualAbstractStep::initManualMode()
 
 void CT_VirtualAbstractStep::useManualMode(bool)
 {
+}
+
+void CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory) const
+{
+    QFile f(QString("%1/%2.html").arg(directory, this->name()));
+    if (f.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream stream(&f);
+        stream << "<!DOCTYPE html>\n";
+        stream << "<html>\n";
+        stream << "<head>\n";
+        stream << "<metacharset=\"utf-8\">\n";
+        stream << "<title>Computree Documentation</title>";
+        stream << "<link rel=\"stylesheet\" href=\"css/style.css\" />";
+        stream << "</head>\n";
+        stream << "<body>";
+        stream << "<div class=\"mainBlock\">";
+        stream << "<article class=\"content\">";
+
+        stream << "<h1>" << this->description() << "</h1>\n";
+        stream << "<br>";
+        stream << this->detailledDescription() << "\n";
+
+        stream << "</article>";
+        stream << "<footer class=\"main-footer\">\n";
+        stream << "<a href=\"http://computree.onf.fr\" target=\"_blank\" rel=\"noopener noreferrer\">Site officiel de Computree</a>\n";
+        stream << "</footer>\n";
+        stream << "</div>\n";
+        stream << "</body>\n";
+        stream << "</html>";
+        f.close();
+    }
 }
 
 void CT_VirtualAbstractStep::createPreInputConfigurationDialog()
