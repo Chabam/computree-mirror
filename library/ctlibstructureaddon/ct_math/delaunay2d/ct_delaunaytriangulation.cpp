@@ -391,16 +391,9 @@ const QList<CT_DelaunayOutline *> &CT_DelaunayTriangulation::computeOutlines()
     {
         tri = lst.at(i);
 
-        okV1 = true;
-        okV2 = true;
-        okV3 = true;
-
-        for (int j = 0 ; j < 4 ; j++)
-        {
-            if (tri->_v1 == _corners[j]) {okV1 = false;}
-            if (tri->_v2 == _corners[j]) {okV2 = false;}
-            if (tri->_v3 == _corners[j]) {okV3 = false;}
-        }
+        okV1 = !isCorner(tri->_v1);
+        okV2 = !isCorner(tri->_v2);
+        okV3 = !isCorner(tri->_v3);
 
         if (okV1 && okV2 && !okV3) {sides.appendSide(tri, tri->_v1, tri->_v2);}
         if (okV2 && okV3 && !okV1) {sides.appendSide(tri, tri->_v2, tri->_v3);}
@@ -718,8 +711,9 @@ bool CT_DelaunayTriangulation::doInsertion()
 
 
 
-QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(double x, double y)
+QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(double x, double y, bool cornersIncluded)
 {
+
     QList<CT_DelaunayVertex*> neigbours;
 
     if (!_initialized) {return neigbours;} // we need 4 corners to continue
@@ -762,15 +756,15 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
 
         if (x == t1->_v1->x() && y == t1->_v1->y())
         {
-            neigbours.append(t1->_v1);
+            if (cornersIncluded || !isCorner(t1->_v1)) {neigbours.append(t1->_v1);}
             return neigbours;
         } else if (x == t1->_v2->x() && y == t1->_v2->y())
         {
-            neigbours.append(t1->_v2);
+            if (cornersIncluded || !isCorner(t1->_v2)) {neigbours.append(t1->_v2);}
             return neigbours;
         } else if (x == t1->_v3->x() && y == t1->_v3->y())
         {
-            neigbours.append(t1->_v3);
+            if (cornersIncluded || !isCorner(t1->_v3)) {neigbours.append(t1->_v3);}
             return neigbours;
         } else {
 
@@ -828,8 +822,8 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
             CT_DelaunayVertex* sd_v1 = borderLst.getRemovedV1();
             CT_DelaunayVertex* sd_v2 = borderLst.getRemovedV2();
 
-            neigbours.append(sd_v1);
-            neigbours.append(sd_v2);
+            if (cornersIncluded || !isCorner(sd_v1)) {neigbours.append(sd_v1);}
+            if (cornersIncluded || !isCorner(sd_v2)) {neigbours.append(sd_v2);}
 
             vFirst = sd_v1;
             vNext = sd_v2;
@@ -851,9 +845,9 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
 
                 if (sd_v1 == vBase)
                 {
-                    neigbours.append(sd_v2);
+                    if (cornersIncluded || !isCorner(sd_v2)) {neigbours.append(sd_v2);}
                 } else if (sd_v2 == vBase) {
-                    neigbours.append(sd_v1);
+                    if (cornersIncluded || !isCorner(sd_v1)) {neigbours.append(sd_v1);}
                 }
 
                 vNext = borderLst.swap(sdIndex, vBase);
@@ -864,6 +858,18 @@ QList<CT_DelaunayVertex*> CT_DelaunayTriangulation::getNeighboursForCoordinates(
 
     return neigbours;
 }
+
+
+bool CT_DelaunayTriangulation::isCorner(CT_DelaunayVertex *vertex) const
+{
+    bool isCornerVertex = false;
+    for (int j = 0 ; j < 4 && !isCornerVertex ; j++)
+    {
+        if (vertex == _corners[j]) {isCornerVertex = true;}
+    }
+    return isCornerVertex;
+}
+
 
 void CT_DelaunayTriangulation::updateCornersZValues()
 {
@@ -911,11 +917,13 @@ const CT_DelaunayTriangle* CT_DelaunayTriangulation::findTriangleContainingPoint
     return t1;
 }
 
-const CT_DelaunayTriangle *CT_DelaunayTriangulation::getZCoordForXY(double x, double y, double &outZ, CT_DelaunayTriangle* refTriangle)
+const CT_DelaunayTriangle *CT_DelaunayTriangulation::getZCoordForXY(double x, double y, double &outZ, CT_DelaunayTriangle* refTriangle, bool cornersIncluded)
 {
     const CT_DelaunayTriangle* triangle = findTriangleContainingPoint(x, y, refTriangle);
 
     if (!triangle->contains(x, y)) {outZ = NAN; return nullptr;}
+
+    if (!cornersIncluded && (isCorner(triangle->_v1) || isCorner(triangle->_v2) || isCorner(triangle->_v3))) {outZ = NAN; return nullptr;}
 
     Eigen::Vector3d vt1 = *(triangle->getVertex1()->getDataConst());
     Eigen::Vector3d vt2 = *(triangle->getVertex2()->getDataConst());

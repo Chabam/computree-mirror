@@ -135,9 +135,11 @@ public:
 
     const CT_DelaunayTriangle *findTriangleContainingPoint(double x, double y, CT_DelaunayTriangle *refTriangle = nullptr);
 
-    const CT_DelaunayTriangle* getZCoordForXY(double x, double y, double &outZ, CT_DelaunayTriangle *refTriangle = nullptr);
+    const CT_DelaunayTriangle* getZCoordForXY(double x, double y, double &outZ, CT_DelaunayTriangle *refTriangle = nullptr, bool cornersIncluded = true);
 
-    QList<CT_DelaunayVertex *> getNeighboursForCoordinates(double x, double y);
+    QList<CT_DelaunayVertex *> getNeighboursForCoordinates(double x, double y, bool cornersIncluded = true);
+
+    bool isCorner(CT_DelaunayVertex *vertex) const;
 
     inline double getMinX() const {return _minx;}
     inline double getMinY() const {return _miny;}
