@@ -898,7 +898,7 @@ void CT_DelaunayTriangulation::updateCornersZValues()
     }
 }
 
-const CT_DelaunayTriangle* CT_DelaunayTriangulation::findTriangleContainingPoint(double x, double y, CT_DelaunayTriangle* refTriangle)
+CT_DelaunayTriangle* CT_DelaunayTriangulation::findTriangleContainingPoint(double x, double y, CT_DelaunayTriangle* refTriangle)
 {
     if (refTriangle == nullptr)
     {
@@ -917,9 +917,9 @@ const CT_DelaunayTriangle* CT_DelaunayTriangulation::findTriangleContainingPoint
     return t1;
 }
 
-const CT_DelaunayTriangle *CT_DelaunayTriangulation::getZCoordForXY(double x, double y, double &outZ, CT_DelaunayTriangle* refTriangle, bool cornersIncluded)
+CT_DelaunayTriangle *CT_DelaunayTriangulation::getZCoordForXY(double x, double y, double &outZ, CT_DelaunayTriangle* refTriangle, bool cornersIncluded)
 {
-    const CT_DelaunayTriangle* triangle = findTriangleContainingPoint(x, y, refTriangle);
+    CT_DelaunayTriangle* triangle = findTriangleContainingPoint(x, y, refTriangle);
 
     if (!triangle->contains(x, y)) {outZ = NAN; return nullptr;}
 
