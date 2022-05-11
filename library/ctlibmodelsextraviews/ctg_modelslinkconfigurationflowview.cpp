@@ -326,6 +326,7 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
 
         QTreeWidgetItem* inTreeitem = new QTreeWidgetItem(inItems.value(child->parentModel(), nullptr), QStringList(displayableName));
         inTreeitem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(const_cast<CT_InAbstractModel*>(child))));
+        inTreeitem->setData(1, Qt::UserRole, QVariant::fromValue(static_cast<void*>(const_cast<CT_InAbstractModel*>(child))));
         int min_connection = child->minimumNumberOfPossibilityToSelect();
         int max_connection = child->maximumNumberOfPossibilityThatCanBeSelected();
         if(max_connection == -1)
@@ -337,6 +338,7 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
                 inTreeitem->setText(1, "0/"+QString().setNum(min_connection)+"-"+QString().setNum(max_connection));
         }
         inTreeitem->setData(0, Qt::UserRole+1, QString().setNum(inItems.size()*100));
+        inTreeitem->setData(1, Qt::UserRole+1, QString().setNum(inItems.size()*100));
         inTreeitem->setToolTip(0, tr("%1%2: %3\nDescription:\n%4").arg(displayableName, displayableType, child->shortDescription(), child->detailledDescription()));
 
         const bool obligatory = child->parentModel() == nullptr ? child->isObligatory() : child->recursiveAtLeastOneChildrenOrThisIsObligatory();
