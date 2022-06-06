@@ -599,6 +599,7 @@ private:
     class PluginToolForStep : public IPluginToolForStep {
     public:
         virtual QString url() const { return m_pointer->getPluginURL(); }
+        virtual QString officialName() const { return m_pointer->getPluginOfficialName(); }
 
         CT_AbstractStepPlugin* m_pointer;
     };

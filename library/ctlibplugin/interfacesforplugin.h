@@ -71,6 +71,11 @@ public:
     virtual QString getPluginName(int i = 0) const = 0;
 
     /*!
+     *  \brief Retourne le nom du plugin en fonction de son CT_AbstractStepPlugin.
+     */
+    virtual QString getPluginName(CT_AbstractStepPlugin *stepPluginManager) const = 0;
+
+    /*!
      *  \brief return the search path for plugins
      */
     virtual QString getSearchPath() const = 0;

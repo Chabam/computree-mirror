@@ -1,1 +1,2 @@
 COMPUTREE *= ctlibplugin
+COMPUTREE *= ctliblog

@@ -3,6 +3,8 @@ CT_PREFIX_INSTALL = ../..
 CT_PREFIX_LIB = ../library
 
 COMPUTREE = ctlibcore
+COMPUTREE *= ctliblog
+
 MUST_USE_EIGEN = 1
 MUST_USE_MUPARSER = 1
 

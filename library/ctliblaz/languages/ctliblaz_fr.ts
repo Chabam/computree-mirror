@@ -177,10 +177,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>All Attributs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Return Number</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,6 +282,10 @@
     </message>
     <message>
         <source>Intensity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attributs LAS</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

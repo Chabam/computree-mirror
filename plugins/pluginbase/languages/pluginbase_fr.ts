@@ -826,10 +826,6 @@
         <translation>Offset sur les coodonnées Xmin et Ymin (nommage)</translation>
     </message>
     <message>
-        <source>Redallage+Export de points dans une boucle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Parmi les points de la scène d&apos;entrée, séléctionne pour chaque emprise la liste des points à exporter.Cet étape fonctionne dans une boucle, gardant le même fichier de sortie pour chaque emprise, pour toutes les scènes d&apos;entrée (une par tour de boucle).</source>
         <translation type="unfinished"></translation>
     </message>
@@ -866,10 +862,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nommage selon coordonnées : Xmin_Ymin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Erreur</source>
         <translation type="unfinished"></translation>
     </message>
@@ -883,6 +875,14 @@
     </message>
     <message>
         <source>Erreur lors de  la finalisation de l&apos;export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export des points de chaque emprise (boucle)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Renommer selon les coordonnées : Xmin_Ymin</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1025,28 +1025,8 @@ Le nom du fichier à utiliser sera fonction du choix que vous allez faire ci-des
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Comment définir le nom du fichier :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>  - Choisir un nom du fichier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Saisie manuelle du nom de fichier</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>  - Nom du fichier contenu dans un attribut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Si coché : 
 L&apos;attribut à utiliser appartiendra à l&apos;item à exporter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>  - Nom du fichier contenu dans un attribut d&apos;un autre item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1056,6 +1036,31 @@ L&apos;attribut à utiliser appartiendra à un autre item que celui à exporter<
     </message>
     <message>
         <source>Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si coché, comment déterminer le nom du fichier ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Un fichier sera créé pour chaque item. Comment déterminer le nom du fichier ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choisir un nom du fichier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saisie manuelle d&apos;un nom de base.
+Chaque item génére un fichier nommé NomDeBase_xx, avec xx allant de 0 à n. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom du fichier contenu dans un attribut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom du fichier contenu dans un attribut d&apos;un autre item</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

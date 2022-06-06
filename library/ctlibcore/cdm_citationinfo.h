@@ -35,8 +35,6 @@ public:
     QString getPluginAndStepCitations();
     QString getPluginRIS();
 
-
-    static QString parseRIS(QString ris);
     static QString getComputreeCoreRis();
 
 private:

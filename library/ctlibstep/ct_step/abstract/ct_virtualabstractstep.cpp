@@ -29,6 +29,7 @@
 
 #include "ct_result/abstract/ct_abstractresult.h"
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
+#include "ct_risformat/ct_parseris.h"
 
 #include <QWaitCondition>
 #include <QFile>
@@ -162,6 +163,26 @@ QString CT_VirtualAbstractStep::URL() const
 QStringList CT_VirtualAbstractStep::getStepRISCitations() const
 {
     return QStringList();
+}
+
+QString CT_VirtualAbstractStep::parametersDescription() const
+{
+    return "";
+}
+
+QString CT_VirtualAbstractStep::inputDescription() const
+{
+    return "";
+}
+
+QString CT_VirtualAbstractStep::outputDescription() const
+{
+    return "";
+}
+
+QString CT_VirtualAbstractStep::detailsDescription() const
+{
+    return "";
 }
 
 void CT_VirtualAbstractStep::setPlugin(const IPluginForStep* plugin)
@@ -807,6 +828,9 @@ void CT_VirtualAbstractStep::useManualMode(bool)
 
 void CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory) const
 {
+    QString pluginName = this->plugin()->pluginToolForStep()->officialName();
+    QString pluginURL = this->plugin()->pluginToolForStep()->url();
+
     QFile f(QString("%1/%2.html").arg(directory, this->name()));
     if (f.open(QFile::WriteOnly | QFile::Text))
     {
@@ -820,16 +844,68 @@ void CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory) const
         stream << "</head>\n";
         stream << "<body>";
         stream << "<div class=\"mainBlock\">";
-        stream << "<article class=\"content\">";
 
         stream << "<h1>" << this->description() << "</h1>\n";
-        stream << "<br>";
-        stream << this->detailledDescription() << "\n";
 
-        stream << "</article>";
-        stream << "<footer class=\"main-footer\">\n";
-        stream << "<a href=\"http://computree.onf.fr\" target=\"_blank\" rel=\"noopener noreferrer\">Site officiel de Computree</a>\n";
-        stream << "</footer>\n";
+        stream << "<Strong>" << tr("Plugin : </Strong><a href=\"") << pluginURL << "\" target=\"_blank\" rel=\"noreferrer noopener\">"<< pluginName << "</a>\n";
+        stream << "<br>";
+        stream << "<Strong>" << tr("Nom de classe : </strong>") << this->name() << "\n";
+        stream << "<br><br>";
+
+        stream << "<section>\n";
+        stream << "<h2>" << tr("Description") << "</h2>\n";
+        stream << this->detailledDescription() << "\n";
+        stream << "</section>\n";
+
+        QString parameters = this->parametersDescription();
+        if (!parameters.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Paramètres") << "</h2>\n";
+            stream << parameters;
+            stream << "</section>\n";
+        }
+
+        QString inputResults = this->inputDescription();
+        if (!inputResults.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Données d'entrée") << "</h2>\n";
+            stream << inputResults;
+            stream << "</section>\n";
+        }
+
+        QString outputResults = this->outputDescription();
+        if (!inputResults.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Données de sortie") << "</h2>\n";
+            stream << outputResults;
+            stream << "</section>\n";
+        }
+
+        QString details = this->detailsDescription();
+        if (!details.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Détails") << "</h2>\n";
+            stream << details;
+            stream << "</section>\n";
+        }
+
+        QStringList references = this->getStepRISCitations();
+        if (!references.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Références") << "</h2>\n";
+            for (int i = 0 ; i < references.size() ; i++)
+            {
+                stream << CT_ParseRIS::parseRIS(references.at(i));
+                stream << "<br>";
+            }
+            stream << "</section>\n";
+        }
+
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>";

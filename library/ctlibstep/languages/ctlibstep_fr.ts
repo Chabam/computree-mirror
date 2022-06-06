@@ -53,6 +53,38 @@
         <source> - Computing completed, elapsed time:		%1h:%2m:%3s:%4ms</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Plugin : &lt;/Strong&gt;&lt;a href=&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom de classe : &lt;/strong&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paramètres</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Données d&apos;entrée</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Données de sortie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Détails</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Références</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>

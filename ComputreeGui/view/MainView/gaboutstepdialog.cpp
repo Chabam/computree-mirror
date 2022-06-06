@@ -8,7 +8,7 @@
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
 #include "ct_itemattributes/abstract/ct_abstractitemattribute.h"
 
-#include "cdm_citationinfo.h"
+#include "ct_risformat/ct_parseris.h"
 
 #include "ct_categories/abstract/ct_abstractcategory.h"
 #include "ct_global/ct_context.h"
@@ -63,7 +63,7 @@ void GAboutStepDialog::initView(CT_VirtualAbstractStep *step)
 
         for (int i = 0 ; i < citations.size() ; i++)
         {
-            citation.append(CDM_CitationInfo::parseRIS(citations.at(i)));
+            citation.append(CT_ParseRIS::parseRIS(citations.at(i)));
             if (i < citations.size() - 1) {citation.append("<br>");}
 
             risData.append(citations.at(i));

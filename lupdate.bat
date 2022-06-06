@@ -1,7 +1,7 @@
 @echo off &setlocal
 
 rem We use the *-pro version of tools because the old ones are deprecated
-set lupdate=C:\Qt\5.15.1\msvc2019_64\bin\lupdate-pro.exe
+set lupdate=C:\Qt\5.15.2\msvc2019_64\bin\lupdate-pro.exe
 
 for %%i in (
     ComputreeGui\ComputreeGui.pro
@@ -28,7 +28,7 @@ for %%i in (
     plugins\pluginbase\pluginbase.pro
     plugins\pluginshared\pluginshared.pro
     ..\pluginmk\pluginmk\pluginmk.pro
-    ..\pluginonf\dev_v6\pluginonf\pluginonf.pro
+    ..\pluginonf\pluginonf\pluginonf.pro
     ..\pluginsegma\pluginsegma\pluginsegma.pro
     ..\plugintoolkit\plugintoolkit\plugintoolkit.pro
         ) do (

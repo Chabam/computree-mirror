@@ -169,9 +169,45 @@ public:
     virtual QString URL() const;
 
     /**
-     * @brief TODO : comment it !
+     * @brief Returns citations for step (in RIS format) as a String list
+     *
+     *        Inherit this method to give citations
+     *
      */
     virtual QStringList getStepRISCitations() const;
+
+    /**
+     * @brief Returns parameters description for step
+     *
+     *        Inherit this method to describe parameters for this step
+     *
+     */
+    virtual QString parametersDescription() const;
+
+    /**
+     * @brief Returns description of inputs results for step
+     *
+     *        Inherit this method if you want to provide a ad-hoc input results description
+     *
+     */
+    virtual QString inputDescription() const;
+
+    /**
+     * @brief Returns description of output results for step
+     *
+     *        Inherit this method if you want to provide a ad-hoc output results description
+     *
+     */
+    virtual QString outputDescription() const;
+
+    /**
+     * @brief Returns details on how this step works
+     *
+     *        Inherit this method if you want to provide details on step working
+     *
+     */
+    virtual QString detailsDescription() const;
+
 
     /**
      * @brief Set the plugin of this step

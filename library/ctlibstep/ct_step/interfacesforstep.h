@@ -8,6 +8,7 @@ class IPluginToolForStep {
 public:
     virtual ~IPluginToolForStep() {}
     virtual QString url() const = 0;
+    virtual QString officialName() const = 0;
 };
 
 class IPluginForStep {

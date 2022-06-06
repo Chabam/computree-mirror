@@ -1006,7 +1006,7 @@
     </message>
     <message>
         <location filename="../exporters/groupdata/pb_groupdataexporter.cpp" line="31"/>
-        <source>Attributs/Items d&apos;un groupe</source>
+        <source>Export des attributs des items d&apos;un groupe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
