@@ -842,7 +842,10 @@ public:
      */
     virtual void postWaitForAckIfInDebugMode() {}
 
-    virtual void generateHTMLDocumentation(QString directory) const;
+    /**
+     * @brief Generate help file (html) for this step in specified directory
+     */
+    virtual QString generateHTMLDocumentation(QString directory, QString cssRelativeDirectory) const;
 
 protected:
     /**

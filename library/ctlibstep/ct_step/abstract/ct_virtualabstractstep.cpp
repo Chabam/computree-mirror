@@ -826,12 +826,13 @@ void CT_VirtualAbstractStep::useManualMode(bool)
 {
 }
 
-void CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory) const
+QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QString cssRelativeDirectory) const
 {
+    QString outFilename = QString("%1/%2.html").arg(directory, this->name());
     QString pluginName = this->plugin()->pluginToolForStep()->officialName();
     QString pluginURL = this->plugin()->pluginToolForStep()->url();
 
-    QFile f(QString("%1/%2.html").arg(directory, this->name()));
+    QFile f(outFilename);
     if (f.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&f);
@@ -840,7 +841,7 @@ void CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory) const
         stream << "<head>\n";
         stream << "<metacharset=\"utf-8\">\n";
         stream << "<title>Computree Documentation</title>";
-        stream << "<link rel=\"stylesheet\" href=\"css/style.css\" />";
+        stream << "<link rel=\"stylesheet\" href=\"" << cssRelativeDirectory << "/style.css\" />";
         stream << "</head>\n";
         stream << "<body>";
         stream << "<div class=\"mainBlock\">";
@@ -911,6 +912,8 @@ void CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory) const
         stream << "</html>";
         f.close();
     }
+
+    return outFilename;
 }
 
 void CT_VirtualAbstractStep::createPreInputConfigurationDialog()

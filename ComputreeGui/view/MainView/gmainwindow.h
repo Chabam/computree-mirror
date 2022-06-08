@@ -95,6 +95,8 @@ public slots:
     void showAboutDialog();
     void showAboutPluginsDialog();
     void showAboutMemory();
+    void openStepHelp();
+    void createStepHelp();
     void cleanItemDrawableOfAllDocuments();
     void showINeedHelpDialog();
     void showStepManagerOptions();

@@ -241,6 +241,69 @@ void GMainWindow::showAboutMemory()
     gMem->show();
 }
 
+void GMainWindow::openStepHelp()
+{
+    QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/doc/index.html"));
+}
+
+void GMainWindow::createStepHelp()
+{
+    QFile f("doc/summary.html");
+
+    if (f.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream stream(&f);
+        stream << "<!DOCTYPE html>\n";
+        stream << "<html>\n";
+        stream << "<head>\n";
+        stream << "<metacharset=\"utf-8\">\n";
+        stream << "<title>Documentation Summary</title>";
+        stream << "<link rel=\"stylesheet\" href=\"css/style.css\" />";
+        stream << "</head>\n";
+        stream << "<body>";
+        stream << "<div class=\"mainBlock\">";
+
+        CDM_PluginManager *pluginManager = getPluginManager();
+        CT_StepsMenu *menu = pluginManager->stepsMenu();
+        QList<CT_MenuLevel*> levels = menu->levels();
+        QListIterator<CT_MenuLevel*> it(levels);
+
+        while(it.hasNext())
+        {
+            CT_MenuLevel* level = it.next();
+            const QString favoritesName = CT_StepsMenu::staticOperationToDisplayableName(CT_StepsMenu::LO_Favorites);
+
+            if(level->displayableName() != favoritesName)
+            {
+                qDebug() << "level=" << level->displayableName();
+                stream << "<h1>" << level->displayableName() << "</h1>";
+
+                QList<CT_MenuLevel*> sublevels = level->levels();
+                QListIterator<CT_MenuLevel*> its(sublevels);
+                while(its.hasNext())
+                {
+                    CT_MenuLevel* subLevel = its.next();
+                    qDebug() << "sublevel=" << subLevel->displayableName();
+                    stream << "<h2>" << subLevel->displayableName() << "</h2>";
+
+                    const QList<CT_VirtualAbstractStep*> steps = subLevel->steps();
+
+                    for(CT_VirtualAbstractStep* step : steps)
+                    {
+                        qDebug() << "step=" << step->name();
+                        QString helpFileName = step->generateHTMLDocumentation("doc/steps", "../css");
+                        stream << "<a>" << subLevel->displayableName() << "</a>";
+                    }
+                }
+            }
+        }
+        stream << "</div>\n";
+        stream << "</body>\n";
+        stream << "</html>";
+        f.close();
+    }
+}
+
 void GMainWindow::cleanItemDrawableOfAllDocuments()
 {
     GUI_MANAGER->cleanItemDrawableOfAllDocuments();
@@ -423,9 +486,11 @@ void GMainWindow::initUI()
     QAction *actionArrangeDocksInColumn = new QAction(tr("Composants en colonne"), this);
     QAction *actionArrangeDocksInColumnWithLogAtBottom = new QAction(tr("Composants en colonne (Log en bas)"), this);
 
+    QAction *actionAboutSteps = new QAction(tr("Documentation des étapes"), this);
+    QAction *actionGenerateStepDocumentation = new QAction(tr("Recréer la documentation des étapes"), this);
+    actionAProposPlugin = new QAction(tr("Liste des plugins"), this);
+    QAction *actionAboutMemory = new QAction(tr("Utilisation mémoire"), this);
     QAction *actionAPropos = new QAction(tr("A propos de Computree..."), this);
-    actionAProposPlugin = new QAction(tr("A propos des plugins..."), this);
-    QAction *actionAboutMemory = new QAction(tr("A propos de la mémoire..."), this);
 
     actionSaveScript = new QAction(tr("Sauvegarder l'arbre des etapes (CTRL+S)"), this);
     actionSaveScript->setIcon(QIcon(":/Icones/Icones/media-floppy.png"));
@@ -512,10 +577,12 @@ void GMainWindow::initUI()
     ui->menuFenetre->addAction(actionArrangeDocksInColumnWithLogAtBottom);
     ui->menuFenetre->addAction(actionArrangeDocksInColumn);
 
-    ui->menuAide->addAction(actionAPropos);
+    ui->menuAide->addAction(actionAboutSteps);
+    ui->menuAide->addAction(actionGenerateStepDocumentation);
+    ui->menuAide->addAction(actionINeedHelp);
     ui->menuAide->addAction(actionAProposPlugin);
     ui->menuAide->addAction(actionAboutMemory);
-    ui->menuAide->addAction(actionINeedHelp);
+    ui->menuAide->addAction(actionAPropos);
 
     ui->horizontalLayoutDocumentView->addWidget(_docManagerView);
     ui->verticalLayoutStepTreeView->addWidget(m_newStepManagerView);
@@ -599,6 +666,8 @@ void GMainWindow::initUI()
     connect(actionAPropos, SIGNAL(triggered()), this, SLOT(showAboutDialog()));
     connect(actionAProposPlugin, SIGNAL(triggered()), this, SLOT(showAboutPluginsDialog()));
     connect(actionAboutMemory, SIGNAL(triggered()), this, SLOT(showAboutMemory()));
+    connect(actionAboutSteps, SIGNAL(triggered()), this, SLOT(openStepHelp()));
+    connect(actionGenerateStepDocumentation, SIGNAL(triggered()), this, SLOT(createStepHelp()));
 
     connect(getStepManager(), SIGNAL(started(bool)), actionStart, SLOT(setDisabled(bool)));
     connect(getStepManager(), SIGNAL(started(bool)), actionStop, SLOT(setEnabled(bool)));
@@ -744,34 +813,34 @@ void GMainWindow::loadConfiguration()
 
     CONFIG_FILE->beginGroup("MainWindow");
 
-        _defaultOpenDirPath = CONFIG_FILE->value("defaultOpenDirPath", "").toString();
-        _defaultSaveDirPath = CONFIG_FILE->value("defaultSaveDirPath", "").toString();
+    _defaultOpenDirPath = CONFIG_FILE->value("defaultOpenDirPath", "").toString();
+    _defaultSaveDirPath = CONFIG_FILE->value("defaultSaveDirPath", "").toString();
 
-        if(CONFIG_FILE->value("windowSize", QVariant()).isValid()) {
-            QSize size = CONFIG_FILE->value("windowSize", QSize()).toSize();
-            QPoint pos = CONFIG_FILE->value("windowPos", QPoint()).toPoint();
-            bool isMaximized = CONFIG_FILE->value("windowIsMaximized", false).toBool();
+    if(CONFIG_FILE->value("windowSize", QVariant()).isValid()) {
+        QSize size = CONFIG_FILE->value("windowSize", QSize()).toSize();
+        QPoint pos = CONFIG_FILE->value("windowPos", QPoint()).toPoint();
+        bool isMaximized = CONFIG_FILE->value("windowIsMaximized", false).toBool();
 
-            setWindowState(Qt::WindowNoState);
+        setWindowState(Qt::WindowNoState);
 
-            if(!isMaximized) {
-                resize(size);
-                move(pos);
-            } else if(!windowState().testFlag(Qt::WindowMaximized)) {
-                mustShowMaximized = true;
-            }
-
-        } else if(!windowState().testFlag(Qt::WindowMaximized)){
-            setWindowState(Qt::WindowNoState);
+        if(!isMaximized) {
+            resize(size);
+            move(pos);
+        } else if(!windowState().testFlag(Qt::WindowMaximized)) {
             mustShowMaximized = true;
         }
 
-        CONFIG_FILE->beginGroup("Document");
+    } else if(!windowState().testFlag(Qt::WindowMaximized)){
+        setWindowState(Qt::WindowNoState);
+        mustShowMaximized = true;
+    }
 
-        bool ok;
-        int nDoc = CONFIG_FILE->value("nDocument", 0).toInt(&ok);
+    CONFIG_FILE->beginGroup("Document");
 
-        CONFIG_FILE->endGroup(); // Document
+    bool ok;
+    int nDoc = CONFIG_FILE->value("nDocument", 0).toInt(&ok);
+
+    CONFIG_FILE->endGroup(); // Document
 
     CONFIG_FILE->endGroup(); // MainWindow
 
@@ -848,41 +917,41 @@ void GMainWindow::loadConfiguration()
 
     CONFIG_FILE->beginGroup("MainWindow");
 
-        restoreState(CONFIG_FILE->value("windowState").toByteArray());
+    restoreState(CONFIG_FILE->value("windowState").toByteArray());
 
-        CONFIG_FILE->beginGroup("StepsChooser");
+    CONFIG_FILE->beginGroup("StepsChooser");
 
-        QPoint defaultPos;
-        QSize defaultSize;
-        computeStepChooserDialogDefaults(defaultPos, defaultSize, true);
+    QPoint defaultPos;
+    QSize defaultSize;
+    computeStepChooserDialogDefaults(defaultPos, defaultSize, true);
 
-        bool defaultVisible = true;
+    bool defaultVisible = true;
 
-        QSize size = CONFIG_FILE->value("Size", defaultSize).toSize();
-        QPoint pos = CONFIG_FILE->value("Pos", defaultPos).toPoint();
+    QSize size = CONFIG_FILE->value("Size", defaultSize).toSize();
+    QPoint pos = CONFIG_FILE->value("Pos", defaultPos).toPoint();
 
-        m_stepChooserDialog->stepsChooserWidget()->setDisplayConfiguration((GStepViewDefault::DisplayNameConfigs)CONFIG_FILE->value("StepNameConfig", (int)m_stepChooserDialog->stepsChooserWidget()->displayConfiguration()).toInt());
-        m_stepChooserDialog->stepsChooserWidget()->proxy()->setFilterConfiguration((DM_StepTreeViewDefaultProxyModel::FilterConfigs)CONFIG_FILE->value("FilterConfig", (int)m_stepChooserDialog->stepsChooserWidget()->proxy()->filterConfiguration()).toInt());
-        m_stepChooserDialog->stepsChooserWidget()->setShowAtLastPositionCheckboxVisible(true);
-        m_stepChooserDialog->stepsChooserWidget()->setShowAtLastPosition(CONFIG_FILE->value("ShowAtLastPosition", m_stepChooserDialog->stepsChooserWidget()->showAtLastPosition()).toBool());
-        m_stepChooserDialog->stepsChooserWidget()->setShowAtLastPosition(CONFIG_FILE->value("ShowAtLastPosition", m_stepChooserDialog->stepsChooserWidget()->showAtLastPosition()).toBool());
-        defaultVisible = CONFIG_FILE->value("Visible", defaultVisible).toBool();
+    m_stepChooserDialog->stepsChooserWidget()->setDisplayConfiguration((GStepViewDefault::DisplayNameConfigs)CONFIG_FILE->value("StepNameConfig", (int)m_stepChooserDialog->stepsChooserWidget()->displayConfiguration()).toInt());
+    m_stepChooserDialog->stepsChooserWidget()->proxy()->setFilterConfiguration((DM_StepTreeViewDefaultProxyModel::FilterConfigs)CONFIG_FILE->value("FilterConfig", (int)m_stepChooserDialog->stepsChooserWidget()->proxy()->filterConfiguration()).toInt());
+    m_stepChooserDialog->stepsChooserWidget()->setShowAtLastPositionCheckboxVisible(true);
+    m_stepChooserDialog->stepsChooserWidget()->setShowAtLastPosition(CONFIG_FILE->value("ShowAtLastPosition", m_stepChooserDialog->stepsChooserWidget()->showAtLastPosition()).toBool());
+    m_stepChooserDialog->stepsChooserWidget()->setShowAtLastPosition(CONFIG_FILE->value("ShowAtLastPosition", m_stepChooserDialog->stepsChooserWidget()->showAtLastPosition()).toBool());
+    defaultVisible = CONFIG_FILE->value("Visible", defaultVisible).toBool();
 
-        if(!m_stepChooserDialog->stepsChooserWidget()->showAtLastPosition()) {
-            pos = defaultPos;
-            size = defaultSize;
-            defaultVisible = true;
-        }
+    if(!m_stepChooserDialog->stepsChooserWidget()->showAtLastPosition()) {
+        pos = defaultPos;
+        size = defaultSize;
+        defaultVisible = true;
+    }
 
-        m_stepChooserDialog->resize(size);
-        m_stepChooserDialog->move(pos);
+    m_stepChooserDialog->resize(size);
+    m_stepChooserDialog->move(pos);
 
-        if(defaultVisible)
-            showStepChooser();
-        else
-            hideStepChooser();
+    if(defaultVisible)
+        showStepChooser();
+    else
+        hideStepChooser();
 
-        CONFIG_FILE->endGroup(); // StepsChooser
+    CONFIG_FILE->endGroup(); // StepsChooser
     CONFIG_FILE->endGroup(); // MainWindow
 
     if(mustShowMaximized)
@@ -969,13 +1038,13 @@ void GMainWindow::writeConfiguration()
 
     CONFIG_FILE->beginGroup("StepsChooser");
 
-        CONFIG_FILE->setValue("Geometry", m_stepChooserDialog->saveGeometry());
-        CONFIG_FILE->setValue("Size", m_stepChooserDialog->size());
-        CONFIG_FILE->setValue("Pos", m_stepChooserDialog->pos());
-        CONFIG_FILE->setValue("FilterConfig", (int)m_stepChooserDialog->stepsChooserWidget()->proxy()->filterConfiguration());
-        CONFIG_FILE->setValue("StepNameConfig", (int)m_stepChooserDialog->stepsChooserWidget()->displayConfiguration());
-        CONFIG_FILE->setValue("ShowAtLastPosition", m_stepChooserDialog->stepsChooserWidget()->showAtLastPosition());
-        CONFIG_FILE->setValue("Visible", m_stepChooserDialog->isVisible());
+    CONFIG_FILE->setValue("Geometry", m_stepChooserDialog->saveGeometry());
+    CONFIG_FILE->setValue("Size", m_stepChooserDialog->size());
+    CONFIG_FILE->setValue("Pos", m_stepChooserDialog->pos());
+    CONFIG_FILE->setValue("FilterConfig", (int)m_stepChooserDialog->stepsChooserWidget()->proxy()->filterConfiguration());
+    CONFIG_FILE->setValue("StepNameConfig", (int)m_stepChooserDialog->stepsChooserWidget()->displayConfiguration());
+    CONFIG_FILE->setValue("ShowAtLastPosition", m_stepChooserDialog->stepsChooserWidget()->showAtLastPosition());
+    CONFIG_FILE->setValue("Visible", m_stepChooserDialog->isVisible());
 
     CONFIG_FILE->endGroup(); // StepsChooser
 
@@ -1019,7 +1088,7 @@ void GMainWindow::loadScriptError(CDM_ScriptProblem &problem)
             }
         }
 
-    // problem of type : step not found in the plugin
+        // problem of type : step not found in the plugin
     } else if(problem.getProblemType() == CDM_ScriptProblem::TOP_StepNotFound) {
 
         // solution is to choose a step
@@ -1078,7 +1147,7 @@ void GMainWindow::loadScriptError(CDM_ScriptProblem &problem)
             }
         }
 
-    // problem of type : step can not be configured with element of script
+        // problem of type : step can not be configured with element of script
     } else if((problem.getProblemType() == CDM_ScriptProblem::TOP_StepCanNotBeConfigured)
               || (problem.getProblemType() == CDM_ScriptProblem::TOP_StepPreParamsCanNotBeConfigured)
               || (problem.getProblemType() == CDM_ScriptProblem::TOP_StepInputParamsCanNotBeConfigured)
