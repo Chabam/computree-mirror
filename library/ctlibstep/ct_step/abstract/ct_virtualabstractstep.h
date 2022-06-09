@@ -44,6 +44,14 @@
 #include "ct_model/inModel/manager/ct_inmodelstructuremanager.h"
 #include "ct_model/outModel/manager/ct_outmodelstructuremanager.h"
 
+#include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractitemmodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
+#include "ct_model/inModel/abstract/ct_inabstractitemattributemodel.h"
+#include "ct_model/outModel/abstract/ct_outabstractitemattributemodel.h"
+
+
 #include <QObject>
 #include <QDateTime>
 #include <QElapsedTimer>
@@ -1119,6 +1127,26 @@ private:
      * @brief Returns the unique index generator to use with output models
      */
     CT_UniqueIndexGenerator* uniqueIndexGenerator() const;
+
+
+    /**
+     * @brief Methods for creating inModels and outModels hierachy documentation
+     */
+    void recursiveCreateHelpStrForModel(QString &str, int nbTab, const CT_OutAbstractModel *rModel) const;
+    void recursiveCreateHelpStrForModel(QString &str, int nbTab, const CT_InAbstractModel *rModel) const;
+
+    void recursiveCreateHelpStrForResultModel(QString &str, int nbTab, const CT_OutAbstractResultModel *rModel) const;
+    void recursiveCreateHelpStrForResultModel(QString &str, int nbTab, const CT_InAbstractResultModel *rModel) const;
+
+    void recursiveCreateHelpStrForItemModel(QString &str, int nbTab, const CT_OutAbstractItemModel *iModel) const;
+    void recursiveCreateHelpStrForItemModel(QString &str, int nbTab, const CT_InAbstractItemModel *iModel) const;
+
+    void recursiveCreateHelpStrForItemAttributesModel(QString &str, int nbTab, const CT_OutAbstractItemAttributeModel *iaModel) const;
+    void recursiveCreateHelpStrForItemAttributesModel(QString &str, int nbTab, const CT_InAbstractItemAttributeModel *iaModel) const;
+
+    void createHelpStrForChildrens(QString &str, int nbTab, const CT_OutAbstractModel *model) const;
+    void createHelpStrForChildrens(QString &str, int nbTab, const CT_InAbstractModel *model) const;
+
 
 signals:
 

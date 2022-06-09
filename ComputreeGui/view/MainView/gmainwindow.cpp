@@ -64,6 +64,7 @@
 #include <QDialogButtonBox>
 #include <QToolTip>
 #include <QDesktopWidget>
+#include <QDir>
 
 #include <QSpinBox>
 
@@ -248,10 +249,144 @@ void GMainWindow::openStepHelp()
 
 void GMainWindow::createStepHelp()
 {
-    QFile f("doc/summary.html");
+    // Create documentation directories if necessary and clean doc/steps content
+    QDir dir("doc");
+    if (!dir.exists()) {dir.mkpath(".");}
 
-    if (f.open(QFile::WriteOnly | QFile::Text))
+    QDir dir2("doc/steps");
+    if (!dir2.exists()) {
+        dir2.mkpath(".");
+    } else {
+        dir2.setNameFilters(QStringList() << "*.*");
+        dir2.setFilter(QDir::Files);
+        foreach(QString dirFile, dir2.entryList())
+        {
+            dir2.remove(dirFile);
+        }
+    }
+
+    QDir dir3("doc/css");
+    if (!dir3.exists()) {dir3.mkpath(".");}
+
+
+    // Create index.html
+    QFile findex("doc/index.html");
+    if (findex.open(QFile::WriteOnly | QFile::Text))
     {
+        QTextStream stream(&findex);
+
+        stream << "<!DOCTYPE html>\n";
+        stream << "<html>\n";
+        stream << "<head>\n";
+        stream << "<metacharset=\"utf-8\">\n";
+        stream << "<title>Computree Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+        stream << "<body>\n";
+        stream << "<script>\n";
+        stream << "    window.onload = function()\n";
+        stream << "    {\n";
+        stream << "        const queryString = window.location.search;\n";
+        stream << "        const urlParams = new URLSearchParams(queryString);\n";
+        stream << "        const page = urlParams.get('page')\n";
+        stream << "        if (page == null)\n";
+        stream << "        {\n";
+        stream << "            document.getElementById('frameContent').src = \"index_default.html\";\n";
+        stream << "        } else {\n";
+        stream << "            document.getElementById('frameContent').src = \"steps/\" + page + \".html\";\n";
+        stream << "        }\n";
+        stream << "    };\n";
+        stream << "</script>\n";
+        stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
+        stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"summary.html\"  style=\"width:33%; border:none; flex-grow:1;\"></iframe>\n";
+        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"\" style=\"width:65%; border:none; flex-grow:1;\"></iframe>\n";
+        stream << "</div>\n";
+        stream << "</body>\n";
+        stream << "</html>\n";
+
+        findex.close();
+    }
+
+    // Create index_default.html
+    QFile findexdefault("doc/index_default.html");
+    if (findexdefault.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream stream(&findexdefault);
+
+        stream << "<!DOCTYPE html>\n";
+        stream << "<html>\n";
+        stream << "<head>\n";
+        stream << "<metacharset=\"utf-8\">\n";
+        stream << "<title>Computree Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+        stream << "<body>\n";
+        stream << "<div class=\"mainBlock\">\n";
+        stream << "<h1>" << tr("Documentation des étapes Computree") << "</h1>\n";
+        stream << "<p>" << tr("Utiliser l'index sur la gauche pour séléctionner l'étape pour laquelle afficher la documentation. ") << "</p>\n";
+        stream << "</div>\n";
+        stream << "</body>\n";
+        stream << "</html>\n";
+
+        findexdefault.close();
+    }
+
+
+
+    // Create style.css
+    QFile fcss("doc/css/style.css");
+    if (fcss.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream stream(&fcss);
+
+        stream << ".mainBlock\n";
+        stream << "{\n";
+        stream << "    display: block;\n";
+        stream << "    margin-left: auto;\n";
+        stream << "    margin-right: auto;\n";
+        stream << "    padding-left: 1.25rem;\n";
+        stream << "    padding-right: 1.25rem;\n";
+        stream << "}\n";
+        stream << "\n";
+        stream << "h1\n";
+        stream << "{\n";
+        stream << "    color:darkred;\n";
+        stream << "}\n";
+        stream << "summary {\n";
+        stream << "  display: flex;\n";
+        stream << "  cursor: pointer;\n";
+        stream << "}\n";
+        stream << "summary::marker\n";
+        stream << "{\n";
+        stream << "  display: none;\n";
+        stream << "}\n";
+        stream << ".h1summary\n";
+        stream << "{\n";
+        stream << "    color:darkred;\n";
+        stream << "}\n";
+        stream << ".h2summary\n";
+        stream << "{\n";
+        stream << "    font-weight: 700;\n";
+        stream << "    margin-left: 20px;\n";
+        stream << "}\n";
+        stream << ".linksummary01\n";
+        stream << "{\n";
+        stream << "    margin-left: 20px;\n";
+        stream << "}\n";
+        stream << ".linksummary02\n";
+        stream << "{\n";
+        stream << "    margin-left: 40px;\n";
+        stream << "}\n";
+        stream << "\n";
+        stream << "fcss.close();\n";
+    }
+
+
+    // Create Summmary and steps documentation pages
+    QFile f("doc/summary.html");
+    QFile fst("doc/status.txt");
+
+    if (f.open(QFile::WriteOnly | QFile::Text) && fst.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream streamFst(&fst);
+        streamFst << "Step\tDescription\tDetailledDescription\tParameters\tInput\tOutput\tDetails\tReferences\n";
+
         QTextStream stream(&f);
         stream << "<!DOCTYPE html>\n";
         stream << "<html>\n";
@@ -262,6 +397,7 @@ void GMainWindow::createStepHelp()
         stream << "</head>\n";
         stream << "<body>";
         stream << "<div class=\"mainBlock\">";
+        stream << "<h1>" << tr("Index des étapes") << "</h1>\n";
 
         CDM_PluginManager *pluginManager = getPluginManager();
         CT_StepsMenu *menu = pluginManager->stepsMenu();
@@ -275,32 +411,68 @@ void GMainWindow::createStepHelp()
 
             if(level->displayableName() != favoritesName)
             {
-                qDebug() << "level=" << level->displayableName();
-                stream << "<h1>" << level->displayableName() << "</h1>";
+                stream << "<details>";
+                stream << "<summary><span class=\"h1summary\">" << level->displayableName() << "</span></summary>";
+
+                const QList<CT_VirtualAbstractStep*> steps = level->steps();
+
+                if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >";}
+                for(CT_VirtualAbstractStep* step : steps)
+                {
+                    stream << "<a target=\"frameContent\" href=\"steps/" << step->name() << ".html\">" << step->description() << "<br></a>\n";
+
+                    // Create documentation page for this step
+                    QString helpFileName = step->generateHTMLDocumentation("doc/steps", "../css");
+
+                    streamFst << step->name() << "\t";
+                    streamFst << step->description() << "\t";
+                    streamFst << (step->detailledDescription().size()) << "\t";
+                    streamFst << (step->parametersDescription().isEmpty()?"0":"1") << "\t";
+                    streamFst << (step->inputDescription().isEmpty()?"0":"1") << "\t";
+                    streamFst << (step->outputDescription().isEmpty()?"0":"1") << "\t";
+                    streamFst << (step->detailsDescription().isEmpty()?"0":"1") << "\t";
+                    streamFst << (step->getStepRISCitations().isEmpty()?"0":"1") << "\n";
+                }
+                if (steps.size() > 0) {stream << "</div>";}
 
                 QList<CT_MenuLevel*> sublevels = level->levels();
                 QListIterator<CT_MenuLevel*> its(sublevels);
                 while(its.hasNext())
                 {
                     CT_MenuLevel* subLevel = its.next();
-                    qDebug() << "sublevel=" << subLevel->displayableName();
-                    stream << "<h2>" << subLevel->displayableName() << "</h2>";
+                    stream << "<details>";
+                    stream << "<summary><span class=\"h2summary\">" << subLevel->displayableName() << "</span></summary>";
 
                     const QList<CT_VirtualAbstractStep*> steps = subLevel->steps();
 
+                    if (steps.size() > 0) {stream << "<div class=\"linksummary02\" >";}
                     for(CT_VirtualAbstractStep* step : steps)
                     {
-                        qDebug() << "step=" << step->name();
+                        stream << "<a target=\"frameContent\" href=\"steps/" << step->name() << ".html\">" << step->description() << "<br></a>\n";
+
+                        // Create documentation page for this step
                         QString helpFileName = step->generateHTMLDocumentation("doc/steps", "../css");
-                        stream << "<a>" << subLevel->displayableName() << "</a>";
+
+                        streamFst << step->name() << "\t";
+                        streamFst << step->description() << "\t";
+                        streamFst << (step->detailledDescription().size()) << "\t";
+                        streamFst << (step->parametersDescription().isEmpty()?"0":"1") << "\t";
+                        streamFst << (step->inputDescription().isEmpty()?"0":"1") << "\t";
+                        streamFst << (step->outputDescription().isEmpty()?"0":"1") << "\t";
+                        streamFst << (step->detailsDescription().isEmpty()?"0":"1") << "\t";
+                        streamFst << (step->getStepRISCitations().isEmpty()?"0":"1") << "\n";
                     }
+                    if (steps.size() > 0) {stream << "</div>";}
+                    stream << "</details>\n";
                 }
+                stream << "</details>\n";
             }
         }
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>";
         f.close();
+        fst.close();
     }
 }
 

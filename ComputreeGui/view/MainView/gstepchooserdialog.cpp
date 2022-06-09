@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QCloseEvent>
+#include <QDesktopServices>
 
 GStepChooserDialog::GStepChooserDialog(QWidget *parent) :
     QDialog(parent),
@@ -206,8 +207,11 @@ void GStepChooserDialog::showSelectedStepInformation()
     CT_VirtualAbstractStep *step = ui->stepChooserWidget->currentStepSelected();
 
     if(step != nullptr) {
-        GAboutStepDialog dialog(step);
-        dialog.exec();
+        QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/doc/index.html?page=" + step->name()));
+
+        // old system for help
+        //GAboutStepDialog dialog(step);
+        //dialog.exec();
     } else {
         QMessageBox::critical(this, tr("Erreur"), tr("Impossible d'afficher les informations de cette étape. L'étape n'a pas été trouvée dans le plugin ou le plugin n'est pas présent."));
     }

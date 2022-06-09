@@ -28,6 +28,9 @@
 #include "ct_virtualabstractstep.h"
 
 #include "ct_result/abstract/ct_abstractresult.h"
+#include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
+#include "ct_itemattributes/abstract/ct_abstractitemattribute.h"
+
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 #include "ct_risformat/ct_parseris.h"
 
@@ -172,12 +175,35 @@ QString CT_VirtualAbstractStep::parametersDescription() const
 
 QString CT_VirtualAbstractStep::inputDescription() const
 {
-    return "";
+    QString str;
+    int nbTab = 0;
+    this->visitInResultModels([this, &str, &nbTab](const CT_InAbstractResultModel* child) -> bool {
+        this->recursiveCreateHelpStrForResultModel(str, nbTab, child);
+        return true;
+    });
+
+    if (!str.isEmpty())
+    {
+        str = tr("Structure des données d'entrée recherchées :<br>") + str;
+    }
+    return str;
 }
 
 QString CT_VirtualAbstractStep::outputDescription() const
 {
-    return "";
+    QString str;
+    int nbTab = 0;
+    this->visitOutResultModels([this, &str, &nbTab](const CT_OutAbstractResultModel* child) -> bool {
+        this->recursiveCreateHelpStrForResultModel(str, nbTab, child);
+        return true;
+    });
+
+    if (!str.isEmpty())
+    {
+        str = tr("Structure des nouvelles données produites :<br>") + str;
+    }
+
+    return str;
 }
 
 QString CT_VirtualAbstractStep::detailsDescription() const
@@ -1125,3 +1151,130 @@ void CT_VirtualAbstractStep::setClearMemoryProgress(int progress)
     if(progress != m_currentClearMemoryProgressValue)
         m_currentClearMemoryProgressValue = progress;
 }
+
+void CT_VirtualAbstractStep::recursiveCreateHelpStrForModel(QString &str, int nbTab, const CT_OutAbstractModel *model) const
+{
+    const CT_OutAbstractResultModel *rModel = dynamic_cast<const CT_OutAbstractResultModel*>(model);
+
+    if(rModel != nullptr)
+    {
+        recursiveCreateHelpStrForResultModel(str, nbTab, rModel);
+    }
+    else
+    {
+        const CT_OutAbstractItemModel *iModel = dynamic_cast<const CT_OutAbstractItemModel*>(model);
+
+        if(iModel != nullptr)
+        {
+            recursiveCreateHelpStrForItemModel(str, nbTab, iModel);
+        }
+        else
+        {
+            const CT_OutAbstractItemAttributeModel *iaModel = dynamic_cast<const CT_OutAbstractItemAttributeModel*>(model);
+
+            if(iaModel != nullptr)
+                recursiveCreateHelpStrForItemAttributesModel(str, nbTab, iaModel);
+            else
+                qFatal("In CT_VirtualAbstractStep::recursiveCreateItemsForModel : model is not known");
+        }
+    }
+}
+
+void CT_VirtualAbstractStep::recursiveCreateHelpStrForModel(QString &str, int nbTab, const CT_InAbstractModel *model) const
+{
+    const CT_InAbstractResultModel *rModel = dynamic_cast<const CT_InAbstractResultModel*>(model);
+
+    if(rModel != nullptr)
+    {
+        recursiveCreateHelpStrForResultModel(str, nbTab, rModel);
+    }
+    else
+    {
+        const CT_InAbstractItemModel *iModel = dynamic_cast<const CT_InAbstractItemModel*>(model);
+
+        if(iModel != nullptr)
+        {
+            recursiveCreateHelpStrForItemModel(str, nbTab, iModel);
+        }
+        else
+        {
+            const CT_InAbstractItemAttributeModel *iaModel = dynamic_cast<const CT_InAbstractItemAttributeModel*>(model);
+
+            if(iaModel != nullptr)
+                recursiveCreateHelpStrForItemAttributesModel(str, nbTab, iaModel);
+            else
+                qFatal("In CT_VirtualAbstractStep::recursiveCreateItemsForModel : model is not known");
+        }
+    }
+}
+
+void CT_VirtualAbstractStep::recursiveCreateHelpStrForResultModel(QString &str, int nbTab, const CT_OutAbstractResultModel *rModel) const
+{
+    for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
+    str.append("<br>Result : " + rModel->displayableName());
+    str.append("<br>");
+
+    createHelpStrForChildrens(str, nbTab+1, rModel);
+}
+
+void CT_VirtualAbstractStep::recursiveCreateHelpStrForResultModel(QString &str, int nbTab, const CT_InAbstractResultModel *rModel) const
+{
+    for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
+    str.append("<br>Result : " + rModel->displayableName());
+    str.append("<br>");
+
+    createHelpStrForChildrens(str, nbTab+1, rModel);
+}
+
+void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, int nbTab, const CT_OutAbstractItemModel *iModel) const
+{
+    for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
+    str.append(iModel->displayableName() + " (" + iModel->itemDrawableStaticCastT<>()->name() + ")");
+    str.append("<br>");
+
+    createHelpStrForChildrens(str, nbTab+1, iModel);
+}
+
+void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, int nbTab, const CT_InAbstractItemModel *iModel) const
+{
+    for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
+    str.append(iModel->displayableName() + " [" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + "]");
+    str.append("<br>");
+
+    createHelpStrForChildrens(str, nbTab+1, iModel);
+}
+
+void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemAttributesModel(QString &str, int nbTab, const CT_OutAbstractItemAttributeModel *iaModel) const
+{
+    for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
+    str.append(iaModel->itemAttributeStaticCastT<>()->displayableName() + " [" + iaModel->itemAttributeStaticCastT<>()->valueTypeToString() + "]");
+    str.append("<br>");
+
+    createHelpStrForChildrens(str, nbTab+1, iaModel);
+}
+
+void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemAttributesModel(QString &str, int nbTab, const CT_InAbstractItemAttributeModel *iaModel) const
+{
+    for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
+    str.append(iaModel->displayableName() + " [" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + "]");
+    str.append("<br>");
+
+    createHelpStrForChildrens(str, nbTab+1, iaModel);
+}
+
+void CT_VirtualAbstractStep::createHelpStrForChildrens(QString &str, int nbTab, const CT_OutAbstractModel *model) const
+{
+    model->visitOutChildrens([this, &str, &nbTab](const CT_OutAbstractModel* child) -> bool {
+        this->recursiveCreateHelpStrForModel(str, nbTab+1, child);
+        return true;
+    });
+}
+
+void CT_VirtualAbstractStep::createHelpStrForChildrens(QString &str, int nbTab, const CT_InAbstractModel *model) const
+{
+    model->visitInChildrens([this, &str, &nbTab](const CT_InAbstractModel* child) -> bool {
+        this->recursiveCreateHelpStrForModel(str, nbTab+1, child);
+        return true;
+    });
+}
+
