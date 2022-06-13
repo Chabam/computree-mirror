@@ -168,9 +168,33 @@ QStringList CT_VirtualAbstractStep::getStepRISCitations() const
     return QStringList();
 }
 
-QString CT_VirtualAbstractStep::parametersDescription() const
+QString CT_VirtualAbstractStep::parametersDescription()
 {
-    return "";
+    QString str;
+
+    if (m_preInputConfigDialog == nullptr) {this->createPreInputConfigurationDialog();}
+    if (m_preInputConfigDialog != nullptr)
+    {
+       str.append(tr("<strong>Paramètres de pré-configuration</strong> (non modifiables une fois l'étape ajoutée) :<br><br>"));
+       str.append(m_preInputConfigDialog->helpText());
+    }
+    delete m_preInputConfigDialog;
+    m_preInputConfigDialog = nullptr;
+
+
+    if (m_postInputConfigDialog == nullptr) {this->createPostInputConfigurationDialog();}
+    if (m_postInputConfigDialog != nullptr)
+    {
+        if (m_preInputConfigDialog != nullptr) {str.append("<br>");}
+
+        str.append(tr("<strong>Paramètres de l'étape</strong> :<br><br>"));
+        str.append(m_postInputConfigDialog->helpText());
+    }
+    delete m_postInputConfigDialog;
+    m_postInputConfigDialog = nullptr;
+
+
+    return str;
 }
 
 QString CT_VirtualAbstractStep::inputDescription() const
@@ -852,7 +876,7 @@ void CT_VirtualAbstractStep::useManualMode(bool)
 {
 }
 
-QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QString cssRelativeDirectory) const
+QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QString cssRelativeDirectory)
 {
     QString outFilename = QString("%1/%2.html").arg(directory, this->name());
     QString pluginName = this->plugin()->pluginToolForStep()->officialName();

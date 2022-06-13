@@ -86,6 +86,8 @@ bool CT_GenericConfigurableWidget::addText(const QString &firstColumnLabelText,
 
         addRow();
 
+        m_helpText.append(description + "<br>");
+
         return true;
     }
 
@@ -95,6 +97,7 @@ bool CT_GenericConfigurableWidget::addText(const QString &firstColumnLabelText,
 bool CT_GenericConfigurableWidget::addTitle(const QString &text,
                                             const QString &description)
 {
+    m_helpText.append(description + "<br>");
     return addText(text, "", "", description);
 }
 
@@ -116,6 +119,11 @@ CT_SpinBox* CT_GenericConfigurableWidget::addInt(const QString &beforeLabelText,
         addDescription(nRows(), description);
 
         addRow();
+
+        QString sep = "";
+        if (beforeLabelText.back() == ":" || beforeLabelText.back() == "."  || beforeLabelText.back() == ",") {sep = " ";}
+        else if (beforeLabelText.back() != " ") {sep = ". ";}
+        m_helpText.append(beforeLabelText + sep + description + tr(" Valeur par défaut : %1 %2").arg(valueToUpdate).arg(afterLabelText) + "<br>");
 
         return spinBox;
     }
@@ -144,6 +152,11 @@ CT_DoubleSpinBox* CT_GenericConfigurableWidget::addDouble(const QString &beforeL
 
         addRow();
 
+        QString sep = "";
+        if (beforeLabelText.back() == ":" || beforeLabelText.back() == "."  || beforeLabelText.back() == ",") {sep = " ";}
+        else if (beforeLabelText.back() != " ") {sep = ". ";}
+        m_helpText.append(beforeLabelText + sep + description + tr(" Valeur par défaut : %1 %2").arg(valueToUpdate).arg(afterLabelText) + "<br>");
+
         return spinBox;
     }
 
@@ -168,6 +181,14 @@ CT_CheckBox* CT_GenericConfigurableWidget::addBool(const QString &beforeLabelTex
 
         addRow();
 
+        QString str = checkBoxText;
+        if (str.isEmpty()) {str = beforeLabelText;}
+
+        QString sep = "";
+        if (str.back() == ":" || str.back() == "."  || str.back() == ",") {sep = " ";}
+        else if (str.back() != " ") {sep = ". ";}
+        m_helpText.append(str + sep + description + tr(" Valeur par défaut : %1 %2").arg(valueToUpdate).arg(afterLabelText) + "<br>");
+
         return checkBox;
     }
 
@@ -191,6 +212,11 @@ CT_LineEdit* CT_GenericConfigurableWidget::addString(const QString &beforeLabelT
 
         addRow();
 
+        QString sep = "";
+        if (beforeLabelText.back() == ":" || beforeLabelText.back() == "."  || beforeLabelText.back() == ",") {sep = " ";}
+        else if (beforeLabelText.back() != " ") {sep = ". ";}
+        m_helpText.append(beforeLabelText + sep + description + tr(" Valeur par défaut : %1 %2").arg(valueToUpdate).arg(afterLabelText) + "<br>");
+
         return lineEdit;
     }
 
@@ -213,6 +239,11 @@ CT_MultiLineEdit* CT_GenericConfigurableWidget::addMultiString(const QString &be
         addDescription(nRows(), description);
 
         addRow();
+
+        QString sep = "";
+        if (beforeLabelText.back() == ":" || beforeLabelText.back() == "."  || beforeLabelText.back() == ",") {sep = " ";}
+        else if (beforeLabelText.back() != " ") {sep = ". ";}
+        m_helpText.append(beforeLabelText + sep + description + tr(" Valeur par défaut : %1 %2").arg(valueToUpdate).arg(afterLabelText) + "<br>");
 
         return lineEdit;
     }
@@ -239,6 +270,12 @@ CT_ComboBox* CT_GenericConfigurableWidget::addStringChoice(const QString &before
         addDescription(nRows(), description);
 
         addRow();
+
+        QString sep = "";
+        if (beforeLabelText.back() == ":" || beforeLabelText.back() == "."  || beforeLabelText.back() == ",") {sep = " ";}
+        else if (beforeLabelText.back() != " ") {sep = ". ";}
+        m_helpText.append(beforeLabelText + sep + description + tr(" Valeur par défaut : %1 %2").arg(valueToUpdate).arg(afterLabelText) + "<br>");
+
 
         if (!valueToUpdate.isEmpty())
             comboBox->setWidgetValue(valueToUpdate);
@@ -287,6 +324,15 @@ bool CT_GenericConfigurableWidget::addExcludeValue(const QString &beforeLabelTex
 
         addRow();
 
+        QString str = radioButtonText;
+        if (str.isEmpty()) {str = beforeLabelText;}
+        str.append(QString(" (%1)").arg(afterLabelText));
+
+        QString sep = "";
+        if (str.back() == ":" || str.back() == "."  || str.back() == ",") {sep = " ";}
+        else if (str.back() != " ") {sep = ". ";}
+        m_helpText.append(str + sep + description + "<br>");
+
         return true;
     }
 
@@ -322,6 +368,14 @@ CT_FileChoiceButton* CT_GenericConfigurableWidget::addFileChoice(const QString &
         addDescription(nRows(), description);
 
         addRow();
+
+        QString str = beforeLabelText;
+        if (str.isEmpty()) {str = btLabel;}
+
+        QString sep = "";
+        if (str.back() == ":" || str.back() == "."  || str.back() == ",") {sep = " ";}
+        else if (str.back() != " ") {sep = ". ";}
+        m_helpText.append(str + sep + description + tr(" Extension : %1.").arg(fileFilter) + "<br>");
 
         fileChoiceButton->setWidgetValue(valueToUpdate);
     }
@@ -365,6 +419,11 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
 
         addRow();
 
+        QString sep = "";
+        if (btlab.back() == ":" || btlab.back() == "."  || btlab.back() == ",") {sep = " ";}
+        else if (btlab.back() != " ") {sep = ". ";}
+        m_helpText.append(btlab + sep + description + tr(" Extension : %1.").arg(fileFilter) + "<br>");
+
         fileChoiceButton->setWidgetValue(fileName);
     }
 
@@ -405,6 +464,11 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
         addWidget(nRows(), 0, fileChoiceButton->createWidget(*this), 1, -1);
 
         addRow();
+
+        QString sep = "";
+        if (btlab.back() == ":" || btlab.back() == "."  || btlab.back() == ",") {sep = " ";}
+        else if (btlab.back() != " ") {sep = ". ";}
+        m_helpText.append(btlab + sep + description + tr(" Extension : %1.").arg(fileFilter) + "<br>");
 
         fileChoiceButton->setWidgetValue(fileName);
     }

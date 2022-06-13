@@ -341,6 +341,11 @@ public:
      */
     bool isSettingsModified() const;
 
+    /**
+     * @brief Returns help text for dialog.
+     */
+    QString helpText() const {return m_helpText;}
+
 private:
     QGridLayout                                     *m_gridLayout;
     bool                                            m_canEdit;
@@ -348,6 +353,8 @@ private:
     QList<CT_WidgetWithValueReferenceInterface*>    m_ctWidget;
     QList<CT_GroupBox*>                             m_groupBoxCollection;
     QWidget*                                        m_centralWidget;
+
+    QString                                         m_helpText;
 
 protected:
 

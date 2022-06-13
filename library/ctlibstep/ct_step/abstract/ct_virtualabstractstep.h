@@ -190,7 +190,7 @@ public:
      *        Inherit this method to describe parameters for this step
      *
      */
-    virtual QString parametersDescription() const;
+    virtual QString parametersDescription();
 
     /**
      * @brief Returns description of inputs results for step
@@ -853,7 +853,7 @@ public:
     /**
      * @brief Generate help file (html) for this step in specified directory
      */
-    virtual QString generateHTMLDocumentation(QString directory, QString cssRelativeDirectory) const;
+    virtual QString generateHTMLDocumentation(QString directory, QString cssRelativeDirectory);
 
 protected:
     /**
