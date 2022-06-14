@@ -87,7 +87,7 @@ bool CT_GenericConfigurableWidget::addText(const QString &firstColumnLabelText,
 
         addRow();
 
-        if (!m_helpTextFirst) {m_helpText.append("</ul><br>");}
+        if (!m_helpTextFirst) {m_helpText.append("</ul>");}
         m_helpTextFirst = true;
 
         m_helpText.append(description + "<br>");
@@ -101,10 +101,6 @@ bool CT_GenericConfigurableWidget::addText(const QString &firstColumnLabelText,
 bool CT_GenericConfigurableWidget::addTitle(const QString &text,
                                             const QString &description)
 {
-    if (!m_helpTextFirst) {m_helpText.append("</ul><br>");}
-    m_helpTextFirst = true;
-
-    m_helpText.append(description + "<br>");
     return addText(text, "", "", description);
 }
 
@@ -137,10 +133,10 @@ CT_SpinBox* CT_GenericConfigurableWidget::addInt(const QString &beforeLabelText,
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1 %2. ").arg(valueToUpdate).arg(afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
         return spinBox;
     }
@@ -179,10 +175,10 @@ CT_DoubleSpinBox* CT_GenericConfigurableWidget::addDouble(const QString &beforeL
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1 %2. ").arg(valueToUpdate).arg(afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
         return spinBox;
     }
@@ -221,10 +217,10 @@ CT_CheckBox* CT_GenericConfigurableWidget::addBool(const QString &beforeLabelTex
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1 %2. ").arg(valueToUpdate).arg(afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
         return checkBox;
     }
@@ -259,10 +255,10 @@ CT_LineEdit* CT_GenericConfigurableWidget::addString(const QString &beforeLabelT
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1 %2. ").arg(valueToUpdate).arg(afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
         return lineEdit;
     }
@@ -297,10 +293,10 @@ CT_MultiLineEdit* CT_GenericConfigurableWidget::addMultiString(const QString &be
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1 %2. ").arg(valueToUpdate).arg(afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
         return lineEdit;
     }
@@ -338,10 +334,10 @@ CT_ComboBox* CT_GenericConfigurableWidget::addStringChoice(const QString &before
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1 %2. ").arg(valueToUpdate).arg(afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
 
         if (!valueToUpdate.isEmpty())
@@ -393,7 +389,7 @@ bool CT_GenericConfigurableWidget::addExcludeValue(const QString &beforeLabelTex
 
         QString str = radioButtonText;
         if (str.isEmpty()) {str = beforeLabelText;}
-        str.append(QString(" (%1)").arg(afterLabelText));
+        if (!afterLabelText.isEmpty()) {str.append(QString(" (%1)").arg(afterLabelText));}
 
         QString sep = "";
         if (!str.isEmpty())
@@ -405,7 +401,7 @@ bool CT_GenericConfigurableWidget::addExcludeValue(const QString &beforeLabelTex
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
         m_helpText.append("<li>" + str + sep + description + "</li><br>");
@@ -459,7 +455,7 @@ CT_FileChoiceButton* CT_GenericConfigurableWidget::addFileChoice(const QString &
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
         m_helpText.append("<li>" + str + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
@@ -513,7 +509,7 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
         m_helpText.append("<li>" + btlab + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
@@ -569,7 +565,7 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
         if (m_helpTextFirst)
         {
             m_helpTextFirst = false;
-            m_helpText.append("<ul><br>");
+            m_helpText.append("<ul>");
         }
 
         m_helpText.append("<li>" + btlab + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
@@ -616,7 +612,7 @@ bool CT_GenericConfigurableWidget::isSettingsModified() const
 
 QString CT_GenericConfigurableWidget::helpText()
 {
-    if (!m_helpTextFirst) {m_helpText.append("</ul><br>");}
+    if (!m_helpTextFirst) {m_helpText.append("</ul>");}
     m_helpTextFirst = true;
 
     return m_helpText;
