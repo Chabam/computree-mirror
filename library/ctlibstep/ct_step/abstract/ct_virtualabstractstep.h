@@ -187,7 +187,8 @@ public:
     /**
      * @brief Returns parameters description for step
      *
-     *        Inherit this method to describe parameters for this step
+     *        By default parameters' help is generated automatically. So in general case this method should not be redefined
+     *        Inherit this method if you want to provide a ad-hoc parameters description
      *
      */
     virtual QString parametersDescription();
@@ -195,6 +196,7 @@ public:
     /**
      * @brief Returns description of inputs results for step
      *
+     *        By default input results help is generated automatically. So in general case this method should not be redefined
      *        Inherit this method if you want to provide a ad-hoc input results description
      *
      */
@@ -203,6 +205,7 @@ public:
     /**
      * @brief Returns description of output results for step
      *
+     *        By default output results help is generated automatically. So in general case this method should not be redefined
      *        Inherit this method if you want to provide a ad-hoc output results description
      *
      */

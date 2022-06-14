@@ -218,13 +218,13 @@ void CT_AbstractExporter::declareInputModels(CT_InModelStructureManager& manager
         {
             if(exporterManager.m_hAbstractInGroup != nullptr)
             {
-                manager.addItem(*exporterManager.m_hAbstractInGroup, m_handleItemWithNameExport, tr("ItemWithName"));
-                manager.addItemAttribute(m_handleItemWithNameExport, m_handleItemAttributeExport, CT_AbstractCategory::DATA_VALUE, tr("Name"));
+                manager.addItem(*exporterManager.m_hAbstractInGroup, m_handleItemWithNameExport, tr("Item avec attribut de nom"));
+                manager.addItemAttribute(m_handleItemWithNameExport, m_handleItemAttributeExport, CT_AbstractCategory::DATA_VALUE, tr("Nom"));
             }
         }
         else if(exporterManager.m_hAbstractInItem != nullptr)
         {
-            manager.addItemAttribute(*exporterManager.m_hAbstractInItem, m_handleItemAttributeExport, CT_AbstractCategory::DATA_VALUE, tr("Name"));
+            manager.addItemAttribute(*exporterManager.m_hAbstractInItem, m_handleItemAttributeExport, CT_AbstractCategory::DATA_VALUE, tr("Nom"));
         }
     }
 
@@ -232,7 +232,7 @@ void CT_AbstractExporter::declareInputModels(CT_InModelStructureManager& manager
     {
         manager.addResult(m_handleResultCounter, tr("Résultat compteur"), QString(), true);
         manager.setRootGroup(m_handleResultCounter, m_handleGroupCounter);
-        manager.addItem(m_handleGroupCounter, m_handleLoopCounter);
+        manager.addItem(m_handleGroupCounter, m_handleLoopCounter, tr("Compteur de boucle"));
     }
 }
 

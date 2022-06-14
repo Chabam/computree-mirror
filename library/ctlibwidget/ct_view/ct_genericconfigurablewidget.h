@@ -344,7 +344,7 @@ public:
     /**
      * @brief Returns help text for dialog.
      */
-    QString helpText() const {return m_helpText;}
+    QString helpText();
 
 private:
     QGridLayout                                     *m_gridLayout;
@@ -355,6 +355,7 @@ private:
     QWidget*                                        m_centralWidget;
 
     QString                                         m_helpText;
+    bool                                            m_helpTextFirst;
 
 protected:
 
