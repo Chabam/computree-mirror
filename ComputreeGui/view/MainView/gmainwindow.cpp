@@ -248,7 +248,16 @@ void GMainWindow::openStepHelp()
 }
 
 void GMainWindow::createStepHelp()
-{
+{    
+    QProgressDialog progressDialog(tr("Génération de la documentation des étapes en cours"), tr(""), 0, 100);
+    progressDialog.setCancelButton(nullptr);
+    progressDialog.setWindowTitle(tr("Génération de l'aide"));
+    progressDialog.setMinimumDuration(0);
+    progressDialog.setValue(1);
+    progressDialog.setModal(true);
+    progressDialog.show();
+    progressDialog.setValue(1);
+
     // Create documentation directories if necessary and clean doc/steps content
     QDir dir("doc");
     if (!dir.exists()) {dir.mkpath(".");}
@@ -404,6 +413,9 @@ void GMainWindow::createStepHelp()
         QList<CT_MenuLevel*> levels = menu->levels();
         QListIterator<CT_MenuLevel*> it(levels);
 
+        progressDialog.setMaximum(levels.size());
+
+        int cpt = 0;
         while(it.hasNext())
         {
             CT_MenuLevel* level = it.next();
@@ -467,6 +479,7 @@ void GMainWindow::createStepHelp()
                 }
                 stream << "</details>\n";
             }
+            progressDialog.setValue(++cpt);
         }
         stream << "</div>\n";
         stream << "</body>\n";
@@ -474,6 +487,9 @@ void GMainWindow::createStepHelp()
         f.close();
         fst.close();
     }
+
+    progressDialog.setValue(progressDialog.maximum());
+
 }
 
 void GMainWindow::cleanItemDrawableOfAllDocuments()
