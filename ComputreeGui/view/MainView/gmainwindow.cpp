@@ -244,11 +244,21 @@ void GMainWindow::showAboutMemory()
 
 void GMainWindow::openStepHelp()
 {
-    QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/doc/index.html"));
+    CDM_Internationalization* lm = GUI_MANAGER->getLanguageManager();
+    QStringList languages = lm->languageAvailable();
+    int currentLanguageIndex = lm->currentLanguage();
+    QString currentLanguage = "_" + languages.at(currentLanguageIndex);
+
+    QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/doc" + currentLanguage + "/index.html"));
 }
 
 void GMainWindow::createStepHelp()
 {    
+    CDM_Internationalization* lm = GUI_MANAGER->getLanguageManager();
+    QStringList languages = lm->languageAvailable();
+    int currentLanguageIndex = lm->currentLanguage();
+    QString currentLanguage = "_" + languages.at(currentLanguageIndex);
+
     QProgressDialog progressDialog(tr("Génération de la documentation des étapes en cours"), tr(""), 0, 100);
     progressDialog.setCancelButton(nullptr);
     progressDialog.setWindowTitle(tr("Génération de l'aide"));
@@ -258,11 +268,11 @@ void GMainWindow::createStepHelp()
     progressDialog.show();
     progressDialog.setValue(1);
 
-    // Create documentation directories if necessary and clean doc/steps content
-    QDir dir("doc");
+    // Create documentation directories if necessary and clean doc_xx/steps content
+    QDir dir("doc"+currentLanguage);
     if (!dir.exists()) {dir.mkpath(".");}
 
-    QDir dir2("doc/steps");
+    QDir dir2("doc" + currentLanguage + "/steps");
     if (!dir2.exists()) {
         dir2.mkpath(".");
     } else {
@@ -274,12 +284,12 @@ void GMainWindow::createStepHelp()
         }
     }
 
-    QDir dir3("doc/css");
+    QDir dir3("doc" + currentLanguage + "/css");
     if (!dir3.exists()) {dir3.mkpath(".");}
 
 
     // Create index.html
-    QFile findex("doc/index.html");
+    QFile findex("doc" + currentLanguage + "/index.html");
     if (findex.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&findex);
@@ -315,7 +325,7 @@ void GMainWindow::createStepHelp()
     }
 
     // Create index_default.html
-    QFile findexdefault("doc/index_default.html");
+    QFile findexdefault("doc" + currentLanguage + "/index_default.html");
     if (findexdefault.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&findexdefault);
@@ -339,7 +349,7 @@ void GMainWindow::createStepHelp()
 
 
     // Create style.css
-    QFile fcss("doc/css/style.css");
+    QFile fcss("doc" + currentLanguage + "/css/style.css");
     if (fcss.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&fcss);
@@ -388,8 +398,8 @@ void GMainWindow::createStepHelp()
 
 
     // Create Summmary and steps documentation pages
-    QFile f("doc/summary.html");
-    QFile fst("doc/status.txt");
+    QFile f("doc" + currentLanguage + "/summary.html");
+    QFile fst("doc" + currentLanguage + "/status.txt");
 
     if (f.open(QFile::WriteOnly | QFile::Text) && fst.open(QFile::WriteOnly | QFile::Text))
     {
@@ -434,7 +444,7 @@ void GMainWindow::createStepHelp()
                     stream << "<a target=\"frameContent\" href=\"steps/" << step->name() << ".html\">" << step->description() << "<br></a>\n";
 
                     // Create documentation page for this step
-                    QString helpFileName = step->generateHTMLDocumentation("doc/steps", "../css");
+                    QString helpFileName = step->generateHTMLDocumentation("doc" + currentLanguage + "/steps", "../css");
 
                     streamFst << step->name() << "\t";
                     streamFst << step->description() << "\t";
@@ -463,7 +473,7 @@ void GMainWindow::createStepHelp()
                         stream << "<a target=\"frameContent\" href=\"steps/" << step->name() << ".html\">" << step->description() << "<br></a>\n";
 
                         // Create documentation page for this step
-                        QString helpFileName = step->generateHTMLDocumentation("doc/steps", "../css");
+                        QString helpFileName = step->generateHTMLDocumentation("doc" + currentLanguage + "/steps", "../css");
 
                         streamFst << step->name() << "\t";
                         streamFst << step->description() << "\t";

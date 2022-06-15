@@ -34,6 +34,9 @@
 #include "dm_guimanager.h"
 #include "view/MainView/gaboutstepdialog.h"
 
+#include <QDesktopServices>
+#include <QCoreApplication>
+
 GTreeStepContextMenu::GTreeStepContextMenu(CDM_StepManager &stepManager, QWidget *parent) : QMenu(parent),
     m_stepManager(stepManager),
     _selectedStep(nullptr)
@@ -203,8 +206,24 @@ void GTreeStepContextMenu::configureStepRequired()
 
 void GTreeStepContextMenu::showStepInformations()
 {
-    if(selectedStep() != nullptr)
-        GAboutStepDialog(selectedStep()).exec();
+    CT_VirtualAbstractStep* step = selectedStep();
+    if (step != nullptr)
+    {
+        CDM_Internationalization* lm = GUI_MANAGER->getLanguageManager();
+        QStringList languages = lm->languageAvailable();
+        int currentLanguageIndex = lm->currentLanguage();
+        QString currentLanguage = "_" + languages.at(currentLanguageIndex);
+
+        QUrl url = QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/doc" + currentLanguage + "/index.html");
+        url.setQuery("page=" + step->name());
+
+        qDebug() << url;
+
+        QDesktopServices::openUrl(url);
+        // Old system
+        // GAboutStepDialog(selectedStep()).exec();
+    }
+
 }
 
 void GTreeStepContextMenu::deleteStepRequired()

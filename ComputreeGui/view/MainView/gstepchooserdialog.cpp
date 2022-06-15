@@ -207,7 +207,13 @@ void GStepChooserDialog::showSelectedStepInformation()
     CT_VirtualAbstractStep *step = ui->stepChooserWidget->currentStepSelected();
 
     if(step != nullptr) {
-        QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/doc/index.html?page=" + step->name()));
+
+        CDM_Internationalization* lm = GUI_MANAGER->getLanguageManager();
+        QStringList languages = lm->languageAvailable();
+        int currentLanguageIndex = lm->currentLanguage();
+        QString currentLanguage = "_" + languages.at(currentLanguageIndex);
+
+        QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/doc" + currentLanguage + "/index.html?page=" + step->name()));
 
         // old system for help
         //GAboutStepDialog dialog(step);
