@@ -209,17 +209,15 @@ void GTreeStepContextMenu::showStepInformations()
     CT_VirtualAbstractStep* step = selectedStep();
     if (step != nullptr)
     {
-        CDM_Internationalization* lm = GUI_MANAGER->getLanguageManager();
-        QStringList languages = lm->languageAvailable();
-        int currentLanguageIndex = lm->currentLanguage();
-        QString currentLanguage = "_" + languages.at(currentLanguageIndex);
+        QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
+        QString currentLanguageDir = "doc_" + languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
 
-        QUrl url = QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + "/doc" + currentLanguage + "/index.html");
-        url.setQuery("page=" + step->name());
+        QFile currentFile(currentLanguageDir + "/current.html");
+        if (currentFile.exists()) {currentFile.remove();}
+        QFile::copy(currentLanguageDir + "/steps/" + step->name() + ".html", currentLanguageDir + "/current.html");
 
-        qDebug() << url;
+        QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/" + currentLanguageDir + "/index.html"));
 
-        QDesktopServices::openUrl(url);
         // Old system
         // GAboutStepDialog(selectedStep()).exec();
     }

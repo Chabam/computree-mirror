@@ -244,20 +244,20 @@ void GMainWindow::showAboutMemory()
 
 void GMainWindow::openStepHelp()
 {
-    CDM_Internationalization* lm = GUI_MANAGER->getLanguageManager();
-    QStringList languages = lm->languageAvailable();
-    int currentLanguageIndex = lm->currentLanguage();
-    QString currentLanguage = "_" + languages.at(currentLanguageIndex);
+    QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
+    QString currentLanguageDir = "doc_" + languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
 
-    QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/doc" + currentLanguage + "/index.html"));
+    QFile currentFile(currentLanguageDir + "/current.html");
+    if (currentFile.exists()) {currentFile.remove();}
+    QFile::copy(currentLanguageDir + "/index_default.html", currentLanguageDir + "/current.html");
+
+    QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/" + currentLanguageDir + "/index.html"));
 }
 
 void GMainWindow::createStepHelp()
 {    
-    CDM_Internationalization* lm = GUI_MANAGER->getLanguageManager();
-    QStringList languages = lm->languageAvailable();
-    int currentLanguageIndex = lm->currentLanguage();
-    QString currentLanguage = "_" + languages.at(currentLanguageIndex);
+    QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
+    QString currentLanguageDir = "doc_" + languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
 
     QProgressDialog progressDialog(tr("Génération de la documentation des étapes en cours"), tr(""), 0, 100);
     progressDialog.setCancelButton(nullptr);
@@ -269,10 +269,10 @@ void GMainWindow::createStepHelp()
     progressDialog.setValue(1);
 
     // Create documentation directories if necessary and clean doc_xx/steps content
-    QDir dir("doc"+currentLanguage);
+    QDir dir(currentLanguageDir);
     if (!dir.exists()) {dir.mkpath(".");}
 
-    QDir dir2("doc" + currentLanguage + "/steps");
+    QDir dir2(currentLanguageDir + "/steps");
     if (!dir2.exists()) {
         dir2.mkpath(".");
     } else {
@@ -284,12 +284,12 @@ void GMainWindow::createStepHelp()
         }
     }
 
-    QDir dir3("doc" + currentLanguage + "/css");
+    QDir dir3(currentLanguageDir + "/css");
     if (!dir3.exists()) {dir3.mkpath(".");}
 
 
     // Create index.html
-    QFile findex("doc" + currentLanguage + "/index.html");
+    QFile findex(currentLanguageDir + "/index.html");
     if (findex.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&findex);
@@ -300,23 +300,9 @@ void GMainWindow::createStepHelp()
         stream << "<metacharset=\"utf-8\">\n";
         stream << "<title>Computree Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
         stream << "<body>\n";
-        stream << "<script>\n";
-        stream << "    window.onload = function()\n";
-        stream << "    {\n";
-        stream << "        const queryString = window.location.search;\n";
-        stream << "        const urlParams = new URLSearchParams(queryString);\n";
-        stream << "        const page = urlParams.get('page')\n";
-        stream << "        if (page == null)\n";
-        stream << "        {\n";
-        stream << "            document.getElementById('frameContent').src = \"index_default.html\";\n";
-        stream << "        } else {\n";
-        stream << "            document.getElementById('frameContent').src = \"steps/\" + page + \".html\";\n";
-        stream << "        }\n";
-        stream << "    };\n";
-        stream << "</script>\n";
         stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
         stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"summary.html\"  style=\"width:33%; border:none; flex-grow:1;\"></iframe>\n";
-        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"\" style=\"width:65%; border:none; flex-grow:1;\"></iframe>\n";
+        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"current.html\" style=\"width:65%; border:none; flex-grow:1;\"></iframe>\n";
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>\n";
@@ -325,7 +311,7 @@ void GMainWindow::createStepHelp()
     }
 
     // Create index_default.html
-    QFile findexdefault("doc" + currentLanguage + "/index_default.html");
+    QFile findexdefault(currentLanguageDir + "/index_default.html");
     if (findexdefault.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&findexdefault);
@@ -346,10 +332,11 @@ void GMainWindow::createStepHelp()
         findexdefault.close();
     }
 
+    QFile::copy(currentLanguageDir + "/index_default.html", currentLanguageDir + "/current.html");
 
 
     // Create style.css
-    QFile fcss("doc" + currentLanguage + "/css/style.css");
+    QFile fcss(currentLanguageDir + "/css/style.css");
     if (fcss.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&fcss);
@@ -398,8 +385,8 @@ void GMainWindow::createStepHelp()
 
 
     // Create Summmary and steps documentation pages
-    QFile f("doc" + currentLanguage + "/summary.html");
-    QFile fst("doc" + currentLanguage + "/status.txt");
+    QFile f(currentLanguageDir + "/summary.html");
+    QFile fst(currentLanguageDir + "/status.txt");
 
     if (f.open(QFile::WriteOnly | QFile::Text) && fst.open(QFile::WriteOnly | QFile::Text))
     {
@@ -444,7 +431,7 @@ void GMainWindow::createStepHelp()
                     stream << "<a target=\"frameContent\" href=\"steps/" << step->name() << ".html\">" << step->description() << "<br></a>\n";
 
                     // Create documentation page for this step
-                    QString helpFileName = step->generateHTMLDocumentation("doc" + currentLanguage + "/steps", "../css");
+                    QString helpFileName = step->generateHTMLDocumentation(currentLanguageDir + "/steps", "../css");
 
                     streamFst << step->name() << "\t";
                     streamFst << step->description() << "\t";
@@ -473,7 +460,7 @@ void GMainWindow::createStepHelp()
                         stream << "<a target=\"frameContent\" href=\"steps/" << step->name() << ".html\">" << step->description() << "<br></a>\n";
 
                         // Create documentation page for this step
-                        QString helpFileName = step->generateHTMLDocumentation("doc" + currentLanguage + "/steps", "../css");
+                        QString helpFileName = step->generateHTMLDocumentation(currentLanguageDir + "/steps", "../css");
 
                         streamFst << step->name() << "\t";
                         streamFst << step->description() << "\t";
@@ -916,6 +903,7 @@ void GMainWindow::initUI()
     timeAutoDebugSpinBox->setValue(getStepManager()->getOptions().getTimeToSleepInAutoDebugMode());
 
     showStepChooser();
+
 }
 
 void GMainWindow::loadPlugins(bool showMessageIfNoPluginsFounded)
@@ -1154,6 +1142,12 @@ void GMainWindow::loadConfiguration()
 
     if(mustShowMaximized)
         showMaximized();
+
+    QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
+    QString currentLanguage = languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
+
+    QDir docDir("doc_" + currentLanguage);
+    if (!docDir.exists()) {createStepHelp();}
 }
 
 void GMainWindow::computeStepChooserDialogDefaults(QPoint &defaultPos, QSize &defaultSize, bool left)

@@ -208,12 +208,14 @@ void GStepChooserDialog::showSelectedStepInformation()
 
     if(step != nullptr) {
 
-        CDM_Internationalization* lm = GUI_MANAGER->getLanguageManager();
-        QStringList languages = lm->languageAvailable();
-        int currentLanguageIndex = lm->currentLanguage();
-        QString currentLanguage = "_" + languages.at(currentLanguageIndex);
+        QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
+        QString currentLanguageDir = "doc_" + languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
 
-        QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/doc" + currentLanguage + "/index.html?page=" + step->name()));
+        QFile currentFile(currentLanguageDir + "/current.html");
+        if (currentFile.exists()) {currentFile.remove();}
+        QFile::copy(currentLanguageDir + "/steps/" + step->name() + ".html", currentLanguageDir + "/current.html");
+
+        QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/" + currentLanguageDir + "/index.html"));
 
         // old system for help
         //GAboutStepDialog dialog(step);
