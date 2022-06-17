@@ -1244,7 +1244,12 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForResultModel(QString &str, 
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForResultModel(QString &str, int nbTab, const CT_InAbstractResultModel *rModel) const
 {
     for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
-    str.append("<br>Result : " + rModel->displayableName());
+    if (rModel->isOptionnal())
+    {
+        str.append("<br><em>Result : " + rModel->displayableName() + " - " + tr("Optionnel") + "</em>");
+    } else {
+        str.append("<br>Result : " + rModel->displayableName());
+    }
     str.append("<br>");
 
     createHelpStrForChildrens(str, nbTab+1, rModel);
@@ -1262,7 +1267,17 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, in
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, int nbTab, const CT_InAbstractItemModel *iModel) const
 {
     for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
-    str.append(iModel->displayableName() + " [" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + "]");
+    if (iModel->displayableName() == "*")
+    {
+        str.append("...");
+    } else {
+        if (iModel->isOptionnal())
+        {
+            str.append("<em>" + iModel->displayableName() + " [" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + "] - " + tr("Optionnel") + "</em>");
+        } else {
+            str.append(iModel->displayableName() + " [" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + "]");
+        }
+    }
     str.append("<br>");
 
     createHelpStrForChildrens(str, nbTab+1, iModel);
@@ -1280,7 +1295,12 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemAttributesModel(QStrin
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemAttributesModel(QString &str, int nbTab, const CT_InAbstractItemAttributeModel *iaModel) const
 {
     for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
-    str.append(iaModel->displayableName() + " [" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + "]");
+    if (iaModel->isOptionnal())
+    {
+        str.append("<em>" + iaModel->displayableName() + " [" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + "] - " + tr("Optionnel") + "</em>");
+    } else {
+        str.append(iaModel->displayableName() + " [" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + "]");
+    }
     str.append("<br>");
 
     createHelpStrForChildrens(str, nbTab+1, iaModel);
