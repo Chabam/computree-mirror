@@ -31,7 +31,6 @@
 #include "ct_areashape2ddata.h"
 #include "ct_pointcloudindex/ct_pointcloudindexvector.h"
 #include "painterinterface.h"
-#include "ct_triangulation/ct_delaunayt.h"
 
 #include <QVector>
 #include <QStack>
@@ -62,9 +61,6 @@ public:
     bool contains(double x, double y) const override;
 
     void draw(PainterInterface& painter, bool drawPoints, bool drawLines, double zPlane) const;
-
-    static CT_Polygon2DData* createConvexHull(const CT_PointCloudIndexVector *indices);
-    static CT_Polygon2DData* createConvexHull(const CT_DelaunayT& triangulation);
 
     static void orderPointsByXY(QList<Eigen::Vector2d>& pointList);
     static void orderPointsByXY(QList<Eigen::Vector2d*>& pointList);

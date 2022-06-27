@@ -101,14 +101,9 @@ public:
     const QList<CT_DelaunayVertex*> &getCleanVoronoiDiagram ();
 
     // gives the outline defined by the triangulation (corners excluded)
-    const QList<CT_DelaunayOutline *> &getOutlines();
+    const CT_DelaunayOutline &getOutline();
 
     QMultiMap<CT_DelaunayVertex*, CT_DelaunayVertex*> getEdges();
-
-
-    // adds all triangles of the triangulation to an ArrayList
-    void computeTriangles ();
-
 
     // compute for each vertex its neighbors
     const QList<CT_DelaunayVertex*> &computeVerticesNeighbors ();
@@ -120,14 +115,14 @@ public:
 
 
     // compute the Outline of the triangulation
-    const QList<CT_DelaunayOutline*> &computeOutlines ();
+    const CT_DelaunayOutline &computeOutline ();
 
 
     // add a DelaunayVertex to the toInsert list
     CT_DelaunayVertex* addVertex (Eigen::Vector3d *data, bool deleteData);
 
     // add all vertices present in toInsert list to the triangulation
-    bool doInsertion ();
+    bool doInsertion (bool sort = false, double cellSize = 0);
 
     void updateCornersZValues();
 
@@ -165,11 +160,49 @@ private:
     CT_DelaunayTriangle* _refTriangle; // actual reference triangle
                                     // used as start point to find the inserted vertex triangle
 
-    QList<CT_DelaunayOutline*> _outlines; // outline defined by the triangulation
+    CT_DelaunayOutline      _outline; // outline defined by the triangulation
 
     bool _initialized; // check if bounds have been set
     bool _neighborsComputed; // check if neighbors are up to date
     bool _voronoiDiagramComputed; // check if voronoi diagram is up to date
+
+
+
+    class VertexSorter {
+    public:
+        VertexSorter(double cellSize)
+        {
+            _cellsize = cellSize;
+        }
+
+
+        void orderVerticesByXY(QList<CT_DelaunayVertex*>& pointList)
+        {
+            std::sort(pointList.begin(), pointList.end(), [this] (const CT_DelaunayVertex* a, const CT_DelaunayVertex* b) {
+                return compare(a, b); });
+        }
+
+    private:
+        bool compare(const CT_DelaunayVertex* p1, const CT_DelaunayVertex* p2)
+        {
+            if (std::fmod(p1->x(), _cellsize) == fmod(p2->x(), _cellsize))
+            {
+                return (p1->x() < p2->x());
+            } else {
+                return (p1->y() < p2->y());
+            }
+        }
+
+
+        double _cellsize;
+    };
+
+    static bool compareDelaunayVertices(const CT_DelaunayVertex* p1, const CT_DelaunayVertex* p2)
+    {
+         return (qFuzzyCompare(p1->x(), p2->x()) && p1->y() < p2->y()) ||  (p1->x() < p2->x());
+    }
+
+    static double cross(const CT_DelaunayVertex* O, const CT_DelaunayVertex* A, const CT_DelaunayVertex* B);
 
 
 };

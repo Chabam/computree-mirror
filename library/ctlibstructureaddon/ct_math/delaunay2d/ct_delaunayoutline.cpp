@@ -66,7 +66,7 @@ double CT_DelaunayOutline::area()
     return std::abs(sum / 2.0);
 }
 
-bool CT_DelaunayOutline::contains(double x, double y)
+bool CT_DelaunayOutline::contains(double x, double y) const
 {
 
     double a, b, a2, b2, xInter, yInter, maxx, maxy, minx, miny;
@@ -82,8 +82,6 @@ bool CT_DelaunayOutline::contains(double x, double y)
         if ((x == vt1->x()) && (y == vt1->y())) {return true;}
     }
 
-    _vertices.append(_vertices.at(0));
-
     while (!ok)
     {
         a = ((double) std::rand() / (RAND_MAX));
@@ -92,10 +90,16 @@ bool CT_DelaunayOutline::contains(double x, double y)
         ok = true;
         nbInter = 0;
 
-        for (int i = 0; i < (_vertices.size() - 1) ; i++)
+        for (int i = 0; i < _vertices.size() ; i++)
         {
             vt1 = _vertices.at(i);
-            vt2 = _vertices.at(i+1);
+
+            if (i == _vertices.size() - 1)
+            {
+                vt2 = _vertices.at(0);
+            } else {
+                vt2 = _vertices.at(i+1);
+            }
 
             if (vt1->x() != vt2->x())
             {
@@ -132,7 +136,7 @@ bool CT_DelaunayOutline::contains(double x, double y)
             }
 
 
-            for (int j = 0 ; j <_vertices.size() - 1 ; j++)
+            for (int j = 0 ; j < _vertices.size() ; j++)
             {
                 vt1 = _vertices.at(j);
 
@@ -145,10 +149,13 @@ bool CT_DelaunayOutline::contains(double x, double y)
         }
     }
 
-    _vertices.removeLast();
-
     if ((nbInter == 0) || ((nbInter % 2) == 0)) {return false;}
     else                                        {return true;}
+}
+
+void CT_DelaunayOutline::clear()
+{
+    _vertices.clear();
 }
 
 CT_Polygon2DData* CT_DelaunayOutline::getShape()

@@ -157,7 +157,6 @@ bool CT_DelaunayTriangulation::init()
 
 const QList<CT_DelaunayTriangle *> &CT_DelaunayTriangulation::getTriangles()
 {
-//    if (_triangles.isEmpty()) {computeTriangles();}
     return _triangles;
 }
 
@@ -200,12 +199,12 @@ const QList<CT_DelaunayVertex *> &CT_DelaunayTriangulation::getCleanVoronoiDiagr
     return _insertedVertices;
 }
 
-const QList<CT_DelaunayOutline*> &CT_DelaunayTriangulation::getOutlines()
+const CT_DelaunayOutline &CT_DelaunayTriangulation::getOutline()
 {
-    if (_outlines.isEmpty()) {
-        return computeOutlines();
+    if (_outline.getN() == 0) {
+        return computeOutline();
     } else {
-        return _outlines;
+        return _outline;
     }
 }
 
@@ -231,31 +230,6 @@ QMultiMap<CT_DelaunayVertex *, CT_DelaunayVertex *> CT_DelaunayTriangulation::ge
         }
     }
     return map;
-}
-
-void CT_DelaunayTriangulation::computeTriangles()
-{
-
-//    CT_DelaunayTriangle* tri = _refTriangle;
-//    CT_DelaunayTriangle* n1 = nullptr;
-
-//    if (tri != nullptr) {_triangles.append(tri);}
-
-//    for (int i = 0 ; i < _triangles.size() ; i++)
-//    {
-//        tri = _triangles.at(i);
-
-//        n1 = tri->_n12;
-//        if ((n1 != nullptr) && (!_triangles.contains(n1))) {_triangles.append(n1);}
-
-//        n1 = tri->_n23;
-//        if ((n1 != nullptr) && (!_triangles.contains(n1))) {_triangles.append(n1);}
-
-//        n1 = tri->_n31;
-//        if ((n1 != nullptr) && (!_triangles.contains(n1))) {_triangles.append(n1);}
-
-//    }
-
 }
 
 const QList<CT_DelaunayVertex *> &CT_DelaunayTriangulation::computeVerticesNeighbors()
@@ -376,116 +350,74 @@ const QList<CT_DelaunayVertex *> &CT_DelaunayTriangulation::computeVoronoiDiagra
     return _insertedVertices;
 }
 
-const QList<CT_DelaunayOutline *> &CT_DelaunayTriangulation::computeOutlines()
+const CT_DelaunayOutline& CT_DelaunayTriangulation::computeOutline()
 {
-    qDeleteAll(_outlines);
-    _outlines.clear();
+    _outline.clear();
 
-    const QList<CT_DelaunayTriangle *> &lst = getTriangles();
-    CT_DelaunaySideList sides;
-    CT_DelaunayTriangle* tri;
-    bool okV1, okV2, okV3;
-    CT_DelaunayOutline* outline;
+    if (!_neighborsComputed) {computeVerticesNeighbors();}
 
-    for (int i = 0 ; i < lst.size() ; i++)
+    QList<CT_DelaunayVertex*> sideVertices;
+    for (int i = 0 ; i < _corners.size() ; i++)
     {
-        tri = lst.at(i);
+         CT_DelaunayVertex* corner  = _corners[i];
 
-        okV1 = !isCorner(tri->_v1);
-        okV2 = !isCorner(tri->_v2);
-        okV3 = !isCorner(tri->_v3);
+         QList<CT_DelaunayVertex*> &neighbours = corner->getNeighbors();
 
-        if (okV1 && okV2 && !okV3) {sides.appendSide(tri, tri->_v1, tri->_v2);}
-        if (okV2 && okV3 && !okV1) {sides.appendSide(tri, tri->_v2, tri->_v3);}
-        if (okV3 && okV1 && !okV2) {sides.appendSide(tri, tri->_v3, tri->_v1);}
+         for (int j =0 ; j < neighbours.size() ; j++)
+         {
+             CT_DelaunayVertex* neighbour  = neighbours.at(j);
+             if (!_corners.contains(neighbour) && !sideVertices.contains(neighbour))
+             {
+                 sideVertices.append(neighbour);
+             }
+         }
     }
 
-    if (_insertedVertices.size () > 2)
-    {
-        for (int i = 0 ; i < sides.size() ; i++)
-        {
-            for (int j = i + 1 ; j < sides.size() ; j++)
-            {
-                if (sides.sidesEquals(i, j))
-                {
-                    sides.removeSide(j);
-                    sides.removeSide(i);
-                    break;
-                }
-            }
-        }
+    std::sort(sideVertices.begin(), sideVertices.end(), compareDelaunayVertices);
 
-        while (sides.size () > 2)
-        {
-            outline = new CT_DelaunayOutline ();
+    // Adapted from http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain
+    // And also: http://www.codecodex.com/wiki/Andrew's_Monotone_Chain_Algorithm
+    const int n = sideVertices.size();
 
-            int sdIndex = 0;
-            sides.removeSide(sdIndex, true);
+    if (n < 3) {return _outline;}
 
-            CT_DelaunayVertex* sd_v1 = sides.getRemovedV1();
-            CT_DelaunayVertex* sd_v2 = sides.getRemovedV2();
+    int k = 0;
 
-            CT_DelaunayVertex* first = sd_v1;
-            CT_DelaunayVertex* next = sd_v2;
+    QVector<CT_DelaunayVertex*> H(2*n);
 
-            while (next != first)
-            {
-                for (int j = 0 ; j < sides.size() ; j++)
-                {
-                    sdIndex = j;
-                    sd_v1 = sides.getV1(sdIndex);
-                    sd_v2 = sides.getV2(sdIndex);
-
-                    if ((sd_v1 == next) || (sd_v2 == next)) {break;}
-                }
-
-                outline->addVertex(next);
-                sides.removeSide(sdIndex);
-
-                next = sides.swap(sdIndex, next);
-            }
-
-            outline->addVertex (next);
-            _outlines.append(outline);
-
-        }
-
-        sides.clear();
+    // Build lower hull
+    for (int i = 0 ; i < n ; ++i) {
+        while (k >= 2 && cross(H[k-2], H[k-1], sideVertices[i]) <= 0) {k--;}
+        H[k++] = sideVertices[i];
     }
 
-    return _outlines;
+    // Build upper hull
+    for (int i = n-2, t = k + 1 ; i >= 0; i--) {
+        while (k >= t && cross(H[k-2], H[k-1], sideVertices[i]) <= 0) {k--;}
+        H[k++] = sideVertices[i];
+    }
+
+    H.resize(k-1);
+
+    for (int i = 0 ; i < H.size() ; i++)
+    {
+        _outline.addVertex(H[i]);
+    }
+
+    return _outline;
 }
 
 CT_DelaunayVertex *CT_DelaunayTriangulation::addVertex(Eigen::Vector3d *data, bool deleteData)
 {
     CT_DelaunayVertex *vt  = new CT_DelaunayVertex(data, deleteData);
 
-// Duplicates checks have been moved to doInsertion, for process time reasons
-//    for (int i = 0 ; i < _insertedVertices.size() ; i++)
-//    {
-//        if (vt->equals(_insertedVertices.at(i)))
-//        {
-//            _duplicatePositions.insert(vt, _insertedVertices.at(i));
-//            return vt;
-//        }
-//    }
-
-
-//    for (int i = 0 ; i < _toInsert.size () ; i++)
-//    {
-//        if (vt->equals(_toInsert.at(i)))
-//        {
-//            _duplicatePositions.insert(vt, _toInsert.at(i));
-//            return vt;
-//        }
-//    }
     _toInsert.append(vt);
 
     return vt;
 }
 
 
-bool CT_DelaunayTriangulation::doInsertion()
+bool CT_DelaunayTriangulation::doInsertion(bool sort, double cellSize)
 {
     if (!_initialized) {return false;} // we need 4 corners to continue
 
@@ -512,9 +444,11 @@ bool CT_DelaunayTriangulation::doInsertion()
     t1 = _refTriangle;
     t2 = nullptr;
 
-    QElapsedTimer time;
-
-    time.start();
+    if (sort)
+    {
+        VertexSorter sorter(cellSize);
+        sorter.orderVerticesByXY(_toInsert);
+    }
 
     // descending order to avoid multiples Time consuming ArrayList compression
     // so we always remove the last element
@@ -536,8 +470,7 @@ bool CT_DelaunayTriangulation::doInsertion()
             // if only one insertion, triangles list is not more up to date:
             //_triangles.clear();
 
-            qDeleteAll(_outlines);
-            _outlines.clear();
+            _outline.clear();
 
             _neighborsComputed = false;
             _voronoiDiagramComputed = false;
@@ -870,10 +803,16 @@ bool CT_DelaunayTriangulation::isCorner(CT_DelaunayVertex *vertex) const
     return isCornerVertex;
 }
 
+double CT_DelaunayTriangulation::cross(const CT_DelaunayVertex *O, const CT_DelaunayVertex *A, const CT_DelaunayVertex *B)
+{
+    return (A->x() - O->x()) * (B->y() - O->y()) - (A->y() - O->y()) * (B->x() - O->x());
+
+}
+
 
 void CT_DelaunayTriangulation::updateCornersZValues()
 {
-    computeVerticesNeighbors();
+    if (!_neighborsComputed) {computeVerticesNeighbors();}
     for (int i = 0 ; i < _corners.size() ; i++)
     {
          CT_DelaunayVertex* corner  = _corners[i];

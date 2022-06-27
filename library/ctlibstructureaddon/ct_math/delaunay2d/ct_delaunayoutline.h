@@ -53,11 +53,13 @@ public:
 
     inline int getN () {return _vertices.size ();}
 
-    const QList<CT_DelaunayVertex*> &getVertices () {return _vertices;}
+    const QList<CT_DelaunayVertex*> &getVertices () const {return _vertices;}
 
     double area ();
 
-    bool contains (double x, double y);
+    bool contains (double x, double y) const;
+
+    void clear();
 
     // returns a drawable shape (a general path) of the outline Polygon
     CT_Polygon2DData* getShape ();

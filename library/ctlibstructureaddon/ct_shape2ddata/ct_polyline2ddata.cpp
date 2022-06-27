@@ -27,8 +27,6 @@
 
 #include "ct_polyline2ddata.h"
 
-#include "ct_triangulation/ct_nodet.h"
-
 #include <math.h>
 #include <limits>
 #include <algorithm>

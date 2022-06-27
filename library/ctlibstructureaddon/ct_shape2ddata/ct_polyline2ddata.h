@@ -31,9 +31,6 @@
 #include "ct_shape2ddata.h"
 #include "ct_pointcloudindex/ct_pointcloudindexvector.h"
 
-#include "ct_triangulation/ct_delaunayt.h"
-
-
 #include <QVector>
 #include <QStack>
 

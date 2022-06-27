@@ -120,29 +120,25 @@ void CT_StandardTriangulation2DDrawManager::drawHull(GraphicsViewInterface &view
 
     CT_DelaunayTriangulation* delaunayT = item.getDelaunayT();
 
-    const QList<CT_DelaunayOutline*> &outlines = delaunayT->getOutlines();
+   const CT_DelaunayOutline &outline = delaunayT->getOutline();
 
-    for (int i = 0 ; i < outlines.size() ; i++)
-    {
-        CT_DelaunayOutline* outline = outlines.at(i);
+   const QList<CT_DelaunayVertex*> &vertices = outline.getVertices();
 
-        const QList<CT_DelaunayVertex*> &vertices = outline->getVertices();
+   for (int j = 0 ; j < vertices.size() ; j++)
+   {
+       Eigen::Vector3d *p1 = vertices.at(j)->getData();
+       Eigen::Vector3d *p2 = nullptr;
 
-        for (int j = 0 ; j < vertices.size() ; j++)
-        {
-            Eigen::Vector3d *p1 = vertices.at(j)->getData();
-            Eigen::Vector3d *p2 = nullptr;
+       if (j < vertices.size() - 1)
+       {
+           p2 = vertices.at(j+1)->getData();
+       } else {
+           p2 = vertices.at(0)->getData();
+       }
 
-            if (j < vertices.size() - 1)
-            {
-                p2 = vertices.at(j+1)->getData();
-            } else {
-                p2 = vertices.at(0)->getData();
-            }
+       painter.drawLine((*p1)(0), (*p1)(1), (*p1)(2), (*p2)(0), (*p2)(1), (*p2)(2));
+   }
 
-            painter.drawLine((*p1)(0), (*p1)(1), (*p1)(2), (*p2)(0), (*p2)(1), (*p2)(2));
-        }
-    }
 }
 
 void CT_StandardTriangulation2DDrawManager::drawVoronoi(GraphicsViewInterface &view, PainterInterface &painter, const CT_Triangulation2D &item) const

@@ -27,9 +27,6 @@
 
 #include "ct_polygon2ddata.h"
 
-#include "ct_triangulation/ct_nodet.h"
-#include "ct_triangulation/ct_trianglet.h"
-#include "ct_triangulation/ct_edget.h"
 #include "ct_iterator/ct_pointiterator.h"
 
 #ifdef _MSC_VER
@@ -263,45 +260,6 @@ void CT_Polygon2DData::draw(PainterInterface& painter, bool drawPoints, bool dra
             pt1 = pt2;
         }
     }
-}
-
-CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_PointCloudIndexVector *indices)
-{
-    // Compute triangulation
-    CT_DelaunayT delaunay;
-
-    CT_PointIterator it(indices);
-    while(it.hasNext())
-    {
-        const CT_Point& point = it.next().currentPoint();
-        Eigen::Vector3d* pt = new Eigen::Vector3d(point);
-
-        delaunay.insertNode(CT_NodeT::create(pt, nullptr, true));
-    }
-
-    return createConvexHull(delaunay);
-}
-
-CT_Polygon2DData* CT_Polygon2DData::createConvexHull(const CT_DelaunayT& triangulation)
-{
-    QVector<Eigen::Vector2d> convexHull;
-
-    // Retrieve Convex Hull
-    const QList< QSharedPointer<CT_NodeT> > nodes = triangulation.getHullNodes();
-
-    const int size = nodes.size();
-
-    if (size < 3)
-        return nullptr;
-
-    for (int i = 0 ; i < size ; i++)
-    {
-        QSharedPointer<CT_NodeT> node = nodes[i];
-        const Eigen::Vector3d* point = node.data()->getPoint();
-        convexHull.append(Eigen::Vector2d((*point)(0), (*point)(1)));
-    }
-
-    return new CT_Polygon2DData(convexHull);
 }
 
 void CT_Polygon2DData::orderPointsByXY(QList<Eigen::Vector2d>& pointList)
