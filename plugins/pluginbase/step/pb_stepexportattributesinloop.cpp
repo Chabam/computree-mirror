@@ -93,13 +93,15 @@ void PB_StepExportAttributesInLoop::declareInputModels(CT_StepInModelStructureMa
 
     manager.addGroup(mInGroupMain, mInGroupChild);
 
-    manager.addItem(mInGroupChild, mInItemWithXY, tr("Item (avec XY)"));
-    manager.addItemAttribute(mInItemWithXY, mInItemAttributeX, CT_AbstractCategory::DATA_X, tr("X"));
-    manager.addItemAttribute(mInItemWithXY, mInItemAttributeY, CT_AbstractCategory::DATA_Y, tr("Y"));
-    manager.addItemAttribute(mInItemWithXY, mInItemAttributeXY, CT_AbstractCategory::DATA_VALUE, tr("Attribut Item (avec XY)"));
+    if (_vectorExport)
+    {
+        manager.addItem(mInGroupChild, mInItemWithXY, tr("Item de position (avec XY)"));
+        manager.addItemAttribute(mInItemWithXY, mInItemAttributeX, CT_AbstractCategory::DATA_X, tr("X"));
+        manager.addItemAttribute(mInItemWithXY, mInItemAttributeY, CT_AbstractCategory::DATA_Y, tr("Y"));
+    }
 
-    manager.addItem(mInGroupChild, mInItemWithAttribute, tr("Item"));
-    manager.addItemAttribute(mInItemWithAttribute, mInItemAttribute, CT_AbstractCategory::DATA_VALUE, tr("Attribut Item"));
+    manager.addItem(mInGroupChild, mInItemWithAttribute, tr("Item avec des attributs"));
+    manager.addItemAttribute(mInItemWithAttribute, mInItemAttribute, CT_AbstractCategory::DATA_VALUE, tr("Attribut à exporter"));
 
     if(_exportInLoop)
     {
@@ -225,21 +227,17 @@ void PB_StepExportAttributesInLoop::compute()
             double x = std::numeric_limits<double>::max();
             double y = std::numeric_limits<double>::max();
 
-            const CT_AbstractSingularItemDrawable* itemXY = grp->singularItem(mInItemWithXY);
-
-            if (itemXY != nullptr)
+            if (_vectorExport)
             {
-                const CT_AbstractItemAttribute* attX = itemXY->itemAttribute(mInItemAttributeX);
-                const CT_AbstractItemAttribute* attY = itemXY->itemAttribute(mInItemAttributeY);
+                const CT_AbstractSingularItemDrawable* itemXY = grp->singularItem(mInItemWithXY);
 
-                if (attX != nullptr) {x = attX->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attX, indexedAttributes); }
-                if (attY != nullptr) {y = attY->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attY, indexedAttributes);}
-
-                auto iteratorAttributesXY = itemXY->itemAttributesByHandle(mInItemAttributeXY);
-
-                for(const CT_AbstractItemAttribute* attr : iteratorAttributesXY)
+                if (itemXY != nullptr)
                 {
-                    addToIndexedAttributesCollection(itemXY, attr, indexedAttributes);
+                    const CT_AbstractItemAttribute* attX = itemXY->itemAttribute(mInItemAttributeX);
+                    const CT_AbstractItemAttribute* attY = itemXY->itemAttribute(mInItemAttributeY);
+
+                    if (attX != nullptr) {x = attX->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attX, indexedAttributes); }
+                    if (attY != nullptr) {y = attY->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attY, indexedAttributes);}
                 }
             }
 
@@ -266,8 +264,6 @@ void PB_StepExportAttributesInLoop::compute()
                 pt.setX(x);
                 pt.setY(y);
                 vectorFeature->SetGeometry(&pt);
-
-                qDebug() << "01";
             }
 #endif
 
@@ -301,23 +297,19 @@ void PB_StepExportAttributesInLoop::compute()
                 if (vectorLayer != nullptr)
                 {
                     const std::string fieldName = _shortNames.value(key).toStdString();
-                    qDebug() << "02";
 
                     if (_ogrTypes.value(key) == OFTBinary)
                     {
                         vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
-                        qDebug() << "03";
                     }
                     else if (_ogrTypes.value(key) == OFTString)
                     {
                         const std::string text = replaceAccentCharacters(pair.second->toString(pair.first, nullptr)).toStdString();
                         vectorFeature->SetField(fieldName.data(), text.data());
-                        qDebug() << "04";
                     }
                     else if (_ogrTypes.value(key) == OFTInteger)
                     {
                         vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
-                        qDebug() << "05";
 //                        }
 //                        else if (_ogrTypes.value(key) == OFTInteger64)
 //                        {
@@ -326,10 +318,7 @@ void PB_StepExportAttributesInLoop::compute()
                     else
                     {
                         vectorFeature->SetField(fieldName.data(), pair.second->toDouble(pair.first, nullptr));
-                        qDebug() << "06";
                     }
-                    qDebug() << "07";
-
                 }
 #endif
 
@@ -440,9 +429,12 @@ void PB_StepExportAttributesInLoop::computeModelsKeysAndNamesAndOgrTypes()
 {
     // Iterate over models and not over items because it can be possible to have a model that doesn't have
     // an item at least.
-    computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeXY, true);
-    computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeX, false);
-    computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeY, false);
+
+    if (_vectorExport)
+    {
+        computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeX, false);
+        computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeY, false);
+    }
     computeModelsKeysAndNamesAndOgrTypes(mInItemAttribute, true);
 
     replaceBadCharacters(_names);

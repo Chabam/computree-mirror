@@ -78,7 +78,6 @@ private:
     CT_HandleInSingularItem<CT_AbstractSingularItemDrawable>        mInItemWithXY;
     CT_HandleInStdItemAttribute<CT_AbstractCategory::DOUBLE>        mInItemAttributeX;
     CT_HandleInStdItemAttribute<CT_AbstractCategory::DOUBLE>        mInItemAttributeY;
-    CT_HandleInStdItemAttribute<CT_AbstractCategory::ANY, 0, -1>    mInItemAttributeXY; // optionnal and multiple
 
     CT_HandleInSingularItem<CT_AbstractSingularItemDrawable, 0, -1> mInItemWithAttribute; // optionnal and multiple
     CT_HandleInStdItemAttribute<CT_AbstractCategory::ANY, 0, -1>    mInItemAttribute; // optionnal and multiple
