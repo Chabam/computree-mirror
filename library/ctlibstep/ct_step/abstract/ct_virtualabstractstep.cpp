@@ -905,7 +905,9 @@ QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QSt
 
         stream << "<section>\n";
         stream << "<h2>" << tr("Description") << "</h2>\n";
+        stream << "<div class=\"descBlock\">";
         stream << this->detailledDescription() << "\n";
+        stream << "</div>";
         stream << "</section>\n";
 
         QString parameters = this->parametersDescription();
@@ -913,7 +915,9 @@ QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QSt
         {
             stream << "<section>\n";
             stream << "<h2>" << tr("Paramètres") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
             stream << parameters;
+            stream << "</div>";
             stream << "</section>\n";
         }
 
@@ -922,7 +926,9 @@ QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QSt
         {
             stream << "<section>\n";
             stream << "<h2>" << tr("Données d'entrée") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
             stream << inputResults;
+            stream << "</div>";
             stream << "</section>\n";
         }
 
@@ -931,7 +937,9 @@ QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QSt
         {
             stream << "<section>\n";
             stream << "<h2>" << tr("Données de sortie") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
             stream << outputResults;
+            stream << "</div>";
             stream << "</section>\n";
         }
 
@@ -940,7 +948,9 @@ QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QSt
         {
             stream << "<section>\n";
             stream << "<h2>" << tr("Détails") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
             stream << details;
+            stream << "</div>";
             stream << "</section>\n";
         }
 
@@ -949,11 +959,13 @@ QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QSt
         {
             stream << "<section>\n";
             stream << "<h2>" << tr("Références") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
             for (int i = 0 ; i < references.size() ; i++)
             {
                 stream << CT_ParseRIS::parseRIS(references.at(i));
                 stream << "<br>";
             }
+            stream << "</div>";
             stream << "</section>\n";
         }
 
@@ -1235,7 +1247,7 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForModel(QString &str, int nb
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForResultModel(QString &str, int nbTab, const CT_OutAbstractResultModel *rModel) const
 {
     for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
-    str.append("<br>Result : " + rModel->displayableName());
+    str.append("<br><span class=\"resultOutDescr\">Result : " + rModel->displayableName() + "</span>");
     str.append("<br>");
 
     createHelpStrForChildrens(str, nbTab+1, rModel);
@@ -1244,13 +1256,19 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForResultModel(QString &str, 
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForResultModel(QString &str, int nbTab, const CT_InAbstractResultModel *rModel) const
 {
     for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
-    if (rModel->isOptionnal())
+
+    if (rModel->needOutputModel())
     {
-        str.append("<br><em>Result : " + rModel->displayableName() + " - " + tr("Optionnel") + "</em>");
+        if (rModel->isOptionnal())
+        {
+            str.append("<br><span class=\"resultInDescr\"><em>Result : " + rModel->displayableName() + " - " + tr("Optionnel") + "</em></span>");
+        } else {
+            str.append("<br><span class=\"resultInDescr\">Result : " + rModel->displayableName() + "</span>");
+        }
+        str.append("<br>");
     } else {
-        str.append("<br>Result : " + rModel->displayableName());
+        str.append(tr("<br>&nbsp;&nbsp;&nbsp;&nbsp;Aucune donnée nécessaire en entrée."));
     }
-    str.append("<br>");
 
     createHelpStrForChildrens(str, nbTab+1, rModel);
 }

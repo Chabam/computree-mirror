@@ -325,6 +325,8 @@ void GMainWindow::createStepHelp()
         stream << "<div class=\"mainBlock\">\n";
         stream << "<h1>" << tr("Documentation des étapes Computree") << "</h1>\n";
         stream << "<p>" << tr("Utiliser l'index sur la gauche pour séléctionner l'étape pour laquelle afficher la documentation. ") << "</p>\n";
+        stream << "<br>";
+        stream << "<p>" << "<a href=\"http://computree.onf.fr\"target=\"_blank\" rel=\"noopener noreferrer\"><strong>" << tr("Site internet officiel de Computree") << "</strong></a></p>\n";
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>\n";
@@ -353,6 +355,22 @@ void GMainWindow::createStepHelp()
         stream << "h1\n";
         stream << "{\n";
         stream << "    color:darkred;\n";
+        stream << "}\n";
+        stream << ".parameterDescr\n";
+        stream << "{\n";
+        stream << "    color:darkblue;\n";
+        stream << "}\n";
+        stream << ".resultInDescr\n";
+        stream << "{\n";
+        stream << "    color:darkblue;\n";
+        stream << "}\n";
+        stream << ".resultOutDescr\n";
+        stream << "{\n";
+        stream << "    color:darkblue;\n";
+        stream << "}\n";
+        stream << ".descBlock\n";
+        stream << "{\n";
+        stream << "    margin-left:10px;\n";
         stream << "}\n";
         stream << "summary {\n";
         stream << "  display: flex;\n";
@@ -435,7 +453,8 @@ void GMainWindow::createStepHelp()
 
                     streamFst << step->name() << "\t";
                     streamFst << step->description() << "\t";
-                    streamFst << (step->detailledDescription().size()) << "\t";
+                    if (step->detailledDescription() == "No detailled description for this step") {streamFst << "0\t";}
+                    else {streamFst << (step->detailledDescription().size()) << "\t";}
                     streamFst << (step->parametersDescription().isEmpty()?"0":"1") << "\t";
                     streamFst << (step->inputDescription().isEmpty()?"0":"1") << "\t";
                     streamFst << (step->outputDescription().isEmpty()?"0":"1") << "\t";
@@ -464,7 +483,8 @@ void GMainWindow::createStepHelp()
 
                         streamFst << step->name() << "\t";
                         streamFst << step->description() << "\t";
-                        streamFst << (step->detailledDescription().size()) << "\t";
+                        if (step->detailledDescription() == "No detailled description for this step") {streamFst << "0\t";}
+                        else {streamFst << (step->detailledDescription().size()) << "\t";}
                         streamFst << (step->parametersDescription().isEmpty()?"0":"1") << "\t";
                         streamFst << (step->inputDescription().isEmpty()?"0":"1") << "\t";
                         streamFst << (step->outputDescription().isEmpty()?"0":"1") << "\t";

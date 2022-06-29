@@ -90,7 +90,8 @@ bool CT_GenericConfigurableWidget::addText(const QString &firstColumnLabelText,
         if (!m_helpTextFirst) {m_helpText.append("</ul>");}
         m_helpTextFirst = true;
 
-        m_helpText.append(description + "<br>");
+        if (!description.isEmpty()) {m_helpText.append(description + "<br>");}
+        else if (!firstColumnLabelText.isEmpty()) {m_helpText.append(firstColumnLabelText + "<br>");}
 
         return true;
     }
@@ -136,7 +137,7 @@ CT_SpinBox* CT_GenericConfigurableWidget::addInt(const QString &beforeLabelText,
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
         return spinBox;
     }
@@ -178,7 +179,7 @@ CT_DoubleSpinBox* CT_GenericConfigurableWidget::addDouble(const QString &beforeL
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
         return spinBox;
     }
@@ -220,7 +221,7 @@ CT_CheckBox* CT_GenericConfigurableWidget::addBool(const QString &beforeLabelTex
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" <em>valeur par défaut = %1%2.</em> ").arg((valueToUpdate?tr("Activé"):tr("Désactivé"))).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
 
         return checkBox;
     }
@@ -258,7 +259,7 @@ CT_LineEdit* CT_GenericConfigurableWidget::addString(const QString &beforeLabelT
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + (valueToUpdate.isEmpty()?". ":tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ")) + afterLabelText) + description + "</li><br>");
 
         return lineEdit;
     }
@@ -296,7 +297,7 @@ CT_MultiLineEdit* CT_GenericConfigurableWidget::addMultiString(const QString &be
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + (valueToUpdate.isEmpty()?". ":tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ")) + afterLabelText) + description + "</li><br>");
 
         return lineEdit;
     }
@@ -337,7 +338,7 @@ CT_ComboBox* CT_GenericConfigurableWidget::addStringChoice(const QString &before
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + beforeLabelText + sep + tr(" valeur par défaut : %1%2. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + (valueToUpdate.isEmpty()?". ":tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ")) + afterLabelText) + description + "</li><br>");
 
 
         if (!valueToUpdate.isEmpty())
@@ -404,7 +405,7 @@ bool CT_GenericConfigurableWidget::addExcludeValue(const QString &beforeLabelTex
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + str + sep + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + description + "</li><br>");
 
         return true;
     }
@@ -458,7 +459,7 @@ CT_FileChoiceButton* CT_GenericConfigurableWidget::addFileChoice(const QString &
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + str + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
 
         fileChoiceButton->setWidgetValue(valueToUpdate);
     }
@@ -512,7 +513,7 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + btlab + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + btlab + "</span>" + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
 
         fileChoiceButton->setWidgetValue(fileName);
     }
@@ -568,7 +569,7 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li>" + btlab + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
+        m_helpText.append("<li><span class=\"parameterDescr\">" + btlab + "</span>" + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
 
         fileChoiceButton->setWidgetValue(fileName);
     }
