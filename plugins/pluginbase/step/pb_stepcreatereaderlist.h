@@ -52,6 +52,7 @@ private:
      * @brief Contains the classname of the selected reader
      */
     QString         m_readerSelectedUniqueName;
+    int             m_choiceMode;
 
     /**
      * @brief Contains the list of filepath of all files selected

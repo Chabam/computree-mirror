@@ -10,6 +10,7 @@
 PB_StepCreateReaderList::PB_StepCreateReaderList() : SuperClass(),
     mReader(nullptr)
 {
+    m_choiceMode = 0;
 }
 
 PB_StepCreateReaderList::~PB_StepCreateReaderList()
@@ -40,6 +41,12 @@ void PB_StepCreateReaderList::fillPreInputConfigurationDialog(CT_StepConfigurabl
     const QStringList list_readersList = CT_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
 
     preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedUniqueName);
+
+    CT_ButtonGroup &bg_choiceMode = preInputConfigDialog->addButtonGroup(m_choiceMode);
+
+    preInputConfigDialog->addText(tr("Méthode de choix des fichiers :"),"", "");
+    preInputConfigDialog->addExcludeValue("", "", tr("Sélection manuelle dans un répertoire"), bg_choiceMode, 0, "", true);
+    preInputConfigDialog->addExcludeValue("", "", tr("Utilisation d'un fichier contenant les chemins"), bg_choiceMode, 1, "", true);
 }
 
 void PB_StepCreateReaderList::finalizePreSettings()
@@ -75,11 +82,47 @@ bool PB_StepCreateReaderList::postInputConfigure()
 
     QStringList fileList = m_filepathCollection;
 
+
+    bool accepted = false;
     CT_GenericConfigurableWidget configDialog;
-    configDialog.addFileChoice(tr("Choisir les fichiers"), CT_FileChoiceButton::OneOrMoreExistingFiles, fileFilter, fileList);
+    if (m_choiceMode == 0)
+    {
+        configDialog.addFileChoice(tr("Choisir les fichiers"), CT_FileChoiceButton::OneOrMoreExistingFiles, fileFilter, fileList);
 
-    if(CT_ConfigurableWidgetToDialog::exec(&configDialog) == QDialog::Accepted) {
+        if(CT_ConfigurableWidgetToDialog::exec(&configDialog) == QDialog::Accepted)
+        {
+            accepted = true;
+        }
+    } else {
+        QStringList textFile;
+        configDialog.addFileChoice(tr("Choisir le fichier contenant les chemins"), CT_FileChoiceButton::OneExistingFile, tr("Fichier texte, *.*"), textFile);
 
+        if(CT_ConfigurableWidgetToDialog::exec(&configDialog) == QDialog::Accepted)
+        {
+            accepted = true;
+            if (textFile.size() > 0)
+            {
+                QFile ftxt(textFile.first());
+                if (ftxt.exists() && ftxt.open(QIODevice::ReadOnly | QIODevice::Text))
+                {
+                    QTextStream stream(&ftxt);
+                    while (!stream.atEnd())
+                    {
+                        QString line = stream.readLine();
+                        if (!line.isEmpty())
+                        {
+                            fileList.append(line);
+                        }
+                    }
+                    ftxt.close();
+                }
+            }
+        }
+    }
+
+
+    if (accepted)
+    {
         if(fileList.isEmpty()) {
             QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun fichier sélectionné"));
             return false;
