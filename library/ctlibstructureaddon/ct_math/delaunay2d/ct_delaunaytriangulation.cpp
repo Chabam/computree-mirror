@@ -404,6 +404,8 @@ const CT_DelaunayOutline& CT_DelaunayTriangulation::computeOutline()
         _outline.addVertex(H[i]);
     }
 
+    _outline.computeOptimizationGrid();
+
     return _outline;
 }
 

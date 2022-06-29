@@ -28,11 +28,13 @@
 
 CT_DelaunayOutline::CT_DelaunayOutline()
 {
+    _optimizationGrid = nullptr;
 }
 
 CT_DelaunayOutline::~CT_DelaunayOutline()
 {
     _vertices.clear();
+    if (_optimizationGrid != nullptr) {delete _optimizationGrid;}
 }
 
 void CT_DelaunayOutline::addVertex(CT_DelaunayVertex *vt)
@@ -66,8 +68,15 @@ double CT_DelaunayOutline::area()
     return std::abs(sum / 2.0);
 }
 
-bool CT_DelaunayOutline::contains(double x, double y) const
+bool CT_DelaunayOutline::contains(double x, double y, bool optimize) const
 {
+    if (optimize && _optimizationGrid != nullptr)
+    {
+        if (_optimizationGrid->valueAtCoords(x, y) == 4)
+        {
+            return true;
+        }
+    }
 
     double a, b, a2, b2, xInter, yInter, maxx, maxy, minx, miny;
     bool ok = false;
@@ -175,5 +184,62 @@ CT_Polygon2DData* CT_DelaunayOutline::getShape()
     }
 
     return new CT_Polygon2DData(vertices);
+}
+
+void CT_DelaunayOutline::computeOptimizationGrid()
+{
+    double minx = std::numeric_limits<double>::max();
+    double miny = std::numeric_limits<double>::max();
+    double maxx = -std::numeric_limits<double>::max();
+    double maxy = -std::numeric_limits<double>::max();
+
+    for (int i = 0 ; i < _vertices.size() ; i++)
+    {
+        CT_DelaunayVertex* vertex = _vertices.at(i);
+
+        if (vertex->x() < minx) {minx = vertex->x();}
+        if (vertex->y() < miny) {miny = vertex->y();}
+        if (vertex->x() > maxx) {maxx = vertex->x();}
+        if (vertex->y() > maxy) {maxy = vertex->y();}
+    }
+
+    double sizex = maxx - minx;
+    double sizey = maxy - miny;
+    double resolution = std::floor(100.0*std::min(sizex / 50.0, sizey / 50.0)) / 100.0;
+    if (resolution <= 0.25) {resolution = 0.25;}
+
+    minx = (std::floor(minx - 1) / resolution) * resolution - resolution;
+    miny = (std::floor(miny - 1) / resolution) * resolution - resolution;
+
+    maxx = minx + sizex + 2.0*resolution;
+    maxy = miny + sizey + 2.0*resolution;
+
+    if (_optimizationGrid != nullptr) {delete _optimizationGrid;}
+    _optimizationGrid = CT_Image2D<char>::createImage2DFromXYCoords(minx, miny, maxx, maxy, resolution, 0, -1, 0);
+
+    for (int yy = 0; yy < _optimizationGrid->ydim() ; yy++)
+    {
+        for (int xx = 0; xx < _optimizationGrid->xdim() ; xx++)
+        {
+            Eigen::Vector2d corner;
+            _optimizationGrid->getCellBottomLeftCorner(xx, yy, corner);
+
+            if (this->contains(corner(0), corner(1), false))
+            {
+                size_t index;
+                _optimizationGrid->index(xx    , yy    , index);
+                _optimizationGrid->addValueAtIndex(index, 1);
+
+                _optimizationGrid->index(xx    , yy - 1, index);
+                _optimizationGrid->addValueAtIndex(index, 1);
+
+                _optimizationGrid->index(xx - 1, yy    , index);
+                _optimizationGrid->addValueAtIndex(index, 1);
+
+                _optimizationGrid->index(xx - 1, yy - 1, index);
+                _optimizationGrid->addValueAtIndex(index, 1);
+            }
+        }
+    }
 }
 

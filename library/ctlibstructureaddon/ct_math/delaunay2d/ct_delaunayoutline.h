@@ -29,6 +29,7 @@
 
 #include "ct_shape2ddata/ct_polygon2ddata.h"
 #include "ct_delaunayvertex.h"
+#include "ct_itemdrawable/ct_image2d.h"
 
 #include <QList>
 
@@ -57,15 +58,19 @@ public:
 
     double area ();
 
-    bool contains (double x, double y) const;
+    bool contains (double x, double y, bool optimize = true) const;
 
     void clear();
 
     // returns a drawable shape (a general path) of the outline Polygon
     CT_Polygon2DData* getShape ();
 
+    void computeOptimizationGrid();
+
 private:
-    QList<CT_DelaunayVertex*> _vertices;
+    QList<CT_DelaunayVertex*> _vertices;    
+    CT_Image2D<char>*         _optimizationGrid;
+
 
 };
 
