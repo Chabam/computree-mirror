@@ -48,7 +48,6 @@
 #include "ct_step/ct_stependloop.h"
 #include "step/pb_stepbeginloopthroughgroups02.h"
 #include "step/pb_stepapplypointfilters.h"
-//#include "step/pb_stepexportitemlist.h"
 #include "step/pb_stepexportpointsbyxyarea.h"
 #include "step/pb_stepexportattributesinloop.h"
 
@@ -114,8 +113,6 @@
 #include "readers/tools/gdal/ct_gdaltools.h"
 #include "gdal_priv.h"
 #endif
-
-#include "step/pb_testbug.h"
 
 
 PB_StepPluginManager::PB_StepPluginManager() : CT_AbstractStepPlugin()
@@ -224,11 +221,8 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewLoadStep<PB_StepUseReaderToLoadFiles>();
     addNewLoadStep<PB_StepLoadFileByName>();
 
-    // addNewExportStep<PB_StepExportItemList>(); DEPRECATED
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
     addNewExportStep<PB_StepExportAttributesInLoop>();
-
-    addNewBetaStep<PB_TestBug>();
 
     return true;
 }

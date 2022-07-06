@@ -19,7 +19,6 @@ HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     step/pb_stepapplypointfilters.h \
     step/pb_stepcomputepointmetrics.h \
     step/pb_stepcomputerastermetrics.h \
-    step/pb_stepexportitemlist.h \
     step/pb_stepgenericexporter.h \
     step/pb_stepgenericloadfile.h \
     step/pb_stepuseritemselection.h \
@@ -30,8 +29,7 @@ HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     step/pb_steplooponfilesets.h \
     step/pb_steploadfilebyname.h \
     step/pb_stepusereadertoloadfiles.h \
-    step/pb_stepcreatereaderlist.h \
-    step/pb_testbug.h
+    step/pb_stepcreatereaderlist.h
 
 SOURCES += \
     pb_pluginentry.cpp \
@@ -39,7 +37,6 @@ SOURCES += \
     step/pb_stepapplypointfilters.cpp \
     step/pb_stepcomputepointmetrics.cpp \
     step/pb_stepcomputerastermetrics.cpp \
-    step/pb_stepexportitemlist.cpp \
     step/pb_stepgenericexporter.cpp \
     step/pb_stepgenericloadfile.cpp \
     step/pb_stepuseritemselection.cpp \
@@ -50,8 +47,7 @@ SOURCES += \
     step/pb_steplooponfilesets.cpp \
     step/pb_steploadfilebyname.cpp \
     step/pb_stepusereadertoloadfiles.cpp \
-    step/pb_stepcreatereaderlist.cpp \
-    step/pb_testbug.cpp
+    step/pb_stepcreatereaderlist.cpp
 
 RESOURCES += resource.qrc
 

@@ -16,6 +16,10 @@ public:
 
     QString detailledDescription() const final;
 
+    QString inputDescription() const override;
+    QString outputDescription() const override;
+    QString detailsDescription() const override;
+
     CT_VirtualAbstractStep* createNewInstance() const final;
 
 protected:

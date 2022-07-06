@@ -93,7 +93,7 @@ void PB_StepExportAttributesInLoop::declareInputModels(CT_StepInModelStructureMa
 
     manager.addGroup(mInGroupMain, mInGroupChild);
 
-    if (_vectorExport)
+    if (_vectorExport || _rasterExport)
     {
         manager.addItem(mInGroupChild, mInItemWithXY, tr("Item de position (avec XY)"));
         manager.addItemAttribute(mInItemWithXY, mInItemAttributeX, CT_AbstractCategory::DATA_X, tr("X"));
@@ -227,7 +227,7 @@ void PB_StepExportAttributesInLoop::compute()
             double x = std::numeric_limits<double>::max();
             double y = std::numeric_limits<double>::max();
 
-            if (_vectorExport)
+            if (_vectorExport || _rasterExport)
             {
                 const CT_AbstractSingularItemDrawable* itemXY = grp->singularItem(mInItemWithXY);
 
