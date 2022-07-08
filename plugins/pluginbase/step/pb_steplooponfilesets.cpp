@@ -27,7 +27,37 @@ QString PB_StepLoopOnFileSets::description() const
 
 QString PB_StepLoopOnFileSets::detailledDescription() const
 {
-    return tr("A chaque tour de boucle, créer une liste de fichiers appartenant à un même groupe.<br>Les groupes sont définis dans un fichier texte de paramétrage dont:<br>- la première colone indique le nom des groupe<br>- la seconde le chemin des fichiers.");
+    return tr("Cette étape démarre une boucle de script. "
+        "Pour cela elle utilise un fichier de correspondance entre des noms de groupes et des fichiers."
+        "A chaque tour de boucle, cette étape créée une liste des fichiers appartenant à l'un des groupes.<br>"
+        "Les groupes sont définis dans un fichier de paramétrage ASCII (sans ligne d'entête) où :"
+        "<ul>"
+        "<li>La première colone indique le nom des groupes.</li>"
+        "<li>La seconde le chemin des fichiers correspondants.</li>"
+        "</ul>");
+}
+
+QString PB_StepLoopOnFileSets::outputDescription() const
+{
+    return  SuperClass::outputDescription() + tr("<br><br>Cette étape génère deux résultats :<br>"
+                "<ul>"
+                "<li>Un résultat Compteur, permettant la gestion de la boucle. Ce compteur est en particulier utilisé pour connaître le nom du tour courant.</li>"
+                "<li>Un résultat contenant le nom du groupe, ainsi que la liste des fichiers de ce groupe (non chargés à ce stade)<./li>"
+                "</ul>");
+}
+
+QString PB_StepLoopOnFileSets::detailsDescription() const
+{
+    return tr("Cette étape est utile pour charger des séries de fichiers devant être traités ensembles.<br>"
+            "Le nom de groupe pourra également être utilisé, par exemple pour charger un autre fichier lié au groupe, en utilisant l'étape \"Créer un sélecteur de fichier par attribut de nom\".<br><br>"
+            "Un exemple d'utilisation : charger un nuage de point d'une placette LIDAR, ainsi que les nuages de points des arbres de cette placette (préalablement segmentés).<br>"
+            "Dans le fichier de correspondance on mettra<br>"
+            "<ul>"
+            "<li>Le nom dess placette en tant que noms de groupes en première colonne.</li>"
+            "<li>Le nom de chaque fichier arbre en tant que noms de fichiers en seconde colonne.</li>"
+            "</ul>"
+            "Cette étape créera la liste des fichiers pour chacune des placettes à chacun des tours de boucle. Ils pourront ensuite être chargés dans la boucle à l'aide de l'étape \"Charger les fichiers d'une liste\".<br>"
+            "Ensuite, en utilisant l'étape \"Créer un sélecteur de fichier par attribut de nom\", suivie de l'étape  \"Charger les fichiers d'une liste\", on pourra charger le fichier de la placette, pour peu que celui-ci soit nommé conformément au nom de placette utilisé comme nom de groupe. ");
 }
 
 
@@ -40,7 +70,7 @@ void PB_StepLoopOnFileSets::fillPreInputConfigurationDialog(CT_StepConfigurableD
 {
     const QStringList list_readersList = CT_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
 
-    preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedUniqueName);
+    preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedUniqueName, tr("Le type choisi doit correspondre aux fichiers listés dans le fichier de correspondance. "));
 }
 
 void PB_StepLoopOnFileSets::finalizePreSettings()
@@ -79,9 +109,9 @@ bool PB_StepLoopOnFileSets::postInputConfigure()
 
     CT_GenericConfigurableWidget configDialog;
 
-    configDialog.addFileChoice(tr("Choisir le fichier décrivant les lots et fichiers à charger"), CT_FileChoiceButton::OneExistingFile, tr("Fichier texte (*.txt) ; Fichier texte (*.*)"), setsFilePath, tr("La première colonne doit contenir le nom du lot, la seconde colonne doit contenir le nom du fichier (avec ou sans extension). Le fichier ne doit pas avoir d'en-tête."));
+    configDialog.addFileChoice(tr("Choix du fichier de correspondance entre groupes et fichiers"), CT_FileChoiceButton::OneExistingFile, tr("Fichier texte (*.txt) ; Fichier texte (*.*)"), setsFilePath, tr("La première colonne doit contenir le nom des groupes, la seconde colonne doit contenir le nom des fichiers du groupe (avec ou sans extension). Le fichier ne doit pas avoir de ligne d'en-tête."));
     configDialog.addEmpty();
-    configDialog.addFileChoice(tr("Choisir le dossier contenant les fichiers"), CT_FileChoiceButton::OneExistingFolder, "", folders);
+    configDialog.addFileChoice(tr("Choix du dossier contenant les fichiers listés dans le fichier de correspondance"), CT_FileChoiceButton::OneExistingFolder, "", folders);
 
     if(CT_ConfigurableWidgetToDialog::exec(&configDialog) == QDialog::Accepted) {
 
@@ -153,10 +183,10 @@ void PB_StepLoopOnFileSets::declareOutputModels(CT_StepOutModelStructureManager&
 
     manager.addResult(m_hOutResultLOFS, tr("Liste de readers"));
     manager.setRootGroup(m_hOutResultLOFS, m_hOutRootGroupLOFS);
-    manager.addGroup(m_hOutRootGroupLOFS, m_hOutSetGroupLOFS, tr("Lots"));
-    manager.addItem(m_hOutSetGroupLOFS, m_hOutSetItemLOFS, tr("Lot"));
-    manager.addItemAttribute(m_hOutSetItemLOFS, m_hOutSetItemAttributeLOFS, CT_AbstractCategory::DATA_VALUE, tr("Nom du lot"));
-    manager.addGroup(m_hOutRootGroupLOFS, m_hOutFileGroupLOFS, tr("Fichiers"));
+    manager.addGroup(m_hOutRootGroupLOFS, m_hOutSetGroupLOFS, tr("Groupes"));
+    manager.addItem(m_hOutSetGroupLOFS, m_hOutSetItemLOFS, tr("Groupe"));
+    manager.addItemAttribute(m_hOutSetItemLOFS, m_hOutSetItemAttributeLOFS, CT_AbstractCategory::DATA_VALUE, tr("Nom du Groupe"));
+    manager.addGroup(m_hOutRootGroupLOFS, m_hOutFileGroupLOFS, tr("Fichiers du groupe"));
 
     // if one reader was selected
     if(mReader != nullptr)

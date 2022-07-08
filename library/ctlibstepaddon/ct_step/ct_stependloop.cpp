@@ -15,7 +15,22 @@ QString CT_StepEndLoop::description() const
 
 QString CT_StepEndLoop::detailledDescription() const
 {
-    return tr("Nécessite une étape de début de boucle en amont");
+    return tr("Cette étape permet de terminer une boucle dans un script. Elle nécessite une étape de démarrage de boucle en amont.");
+}
+
+QString CT_StepEndLoop::inputDescription() const
+{
+    return CT_AbstractStep::inputDescription() + tr("<br><br>Le résultat compteur choisi détermine à quel début de boucle cette fin de boucle correspond.");
+}
+
+QString CT_StepEndLoop::outputDescription() const
+{
+    return tr("Cette étape génère une simple copie du résultat d'entrée, sans créer de nouvelle donnée. Cela permet de continuer le script après la boucle. ");
+}
+
+QString CT_StepEndLoop::detailsDescription() const
+{
+    return tr("Il est possible d'emboîter plusieurs boucles. Pour cela il faut bien séléctionner les bon résultats compteurs pour faire correspondre deux à deux les étapes d'ouverture et de fermeture de boucle.");
 }
 
 CT_VirtualAbstractStep* CT_StepEndLoop::createNewInstance() const

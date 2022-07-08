@@ -26,6 +26,30 @@ QString PB_StepLoopOnFiles::description() const
     return tr("Boucle sur les fichiers d'un dossier");
 }
 
+QString PB_StepLoopOnFiles::detailledDescription() const
+{
+    return tr("Cette étape permet d'effectuer des traitements par lots.<br>"
+            "Elle créée une boucle permettant de traiter successivement les fichiers choisis.<br>"
+            "IMPORTANT : la boucle devra être fermée avec l'étape \"Fin de boucle\".<br><br>"
+            "Cette étape est en fait une combinaison des étapes \"Créer une liste de fichiers\" et \"Boucle standard\". ");
+}
+
+QString PB_StepLoopOnFiles::outputDescription() const
+{
+    return SuperClass::outputDescription() + tr("<br><br>Cette étape génère deux résultats :<br>"
+                "<ul>"
+                "<li>Un résultat Compteur, permettant la gestion de la boucle. Ce compteur est en particulier utilisé pour connaître le nom du tour courant.</li>"
+                "<li>Un résultat contenant l'entête du fichier correspondant à ce tour de boucle. </li>"
+                "</ul>");
+}
+
+QString PB_StepLoopOnFiles::detailsDescription() const
+{
+    return tr("On préfèrera la combinaison des étapes \"Créer une liste de fichiers\" et \"Boucle standard\", dans les cas où la liste complète des fichiers à charger est également utile dans le script, par exemple s'il faut générer initialement l'ensemble des emprises des fichiers à charger.<br>"
+            "A l'inverse cette étape est plus simple s'il suffit de parcourir une liste de fichiers séquenciellement. ");
+}
+
+
 CT_VirtualAbstractStep* PB_StepLoopOnFiles::createNewInstance() const
 {
     return new PB_StepLoopOnFiles();

@@ -13,17 +13,27 @@
 PB_StepUserItemSelection::PB_StepUserItemSelection() : SuperClass()
 {
     m_doc = nullptr;
-    m_removeGroupsWithoutItemResearched = false;
-    m_removeParents = false;
-
-    _mode = 0;
-
     setManual(true);
 }
 
 QString PB_StepUserItemSelection::description() const
 {
-    return tr("Séléction d'items");
+    return tr("Séléction interactive d'items");
+}
+
+QString PB_StepUserItemSelection::detailledDescription() const
+{
+    return tr("Cette étape permet à l'utilisateur de faire une séléction manuelle interactive des items à conserver. ");
+}
+
+QString PB_StepUserItemSelection::inputDescription() const
+{
+    return SuperClass::inputDescription() + tr("<br><br>Il faut simplement choisir les items parmi lesquels faire la séléction interactive. ");
+}
+
+QString PB_StepUserItemSelection::outputDescription() const
+{
+    return tr("Cette étape génère une copie du résultat d'entrée, mais où seuls les items sélectionnés sont conservés. Le reste des données n'est pas impacté. ");
 }
 
 CT_VirtualAbstractStep* PB_StepUserItemSelection::createNewInstance() const
@@ -46,19 +56,6 @@ void PB_StepUserItemSelection::declareOutputModels(CT_StepOutModelStructureManag
     manager.addResultCopy(mInResultCpy);
 }
 
-void PB_StepUserItemSelection::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
-{
-    postInputConfigDialog->addText("Mode de séléction des items", "", "");
-    CT_ButtonGroup &bg_mode = postInputConfigDialog->addButtonGroup(_mode);
-
-//    dialog->addExcludeValue("", "", tr("Par proximité des centres des items"), bg_mode, 1);
-    postInputConfigDialog->addExcludeValue("", "", tr("Sélection classique (picking)"), bg_mode, 0);
-
-//    dialog->addEmpty();
-//    dialog->addBool("", "", tr("Supprimer les groupes ne contenant pas l'ItemDrawable recherché"), m_removeGroupsWithoutItemResearched);
-//    dialog->addBool("", "", tr("Supprimer les groupes parents si l'ItemDrawable recherché n'existe plus dans la structure sous-jacente"), m_removeParents);
-}
-
 void PB_StepUserItemSelection::compute()
 {
     m_doc = nullptr;
@@ -79,8 +76,6 @@ void PB_StepUserItemSelection::compute()
 
         if (itemOut_I != nullptr)
             m_itemDrawableToAdd.insert(itemOut_I, groupOut_G);
-        else if(m_removeGroupsWithoutItemResearched || m_removeParents)
-            groupsToRemove.append(groupOut_G);
 
         ++begin;
     }
@@ -104,7 +99,7 @@ void PB_StepUserItemSelection::compute()
     while(itE.hasNext())
     {
         CT_StandardItemGroup *group = itE.next();
-        group->removeFromParent(m_removeParents);
+        group->removeFromParent(false);
     }
 
     m_status = 1;
@@ -120,25 +115,17 @@ void PB_StepUserItemSelection::initManualMode()
     m_itemDrawableSelected.clear();
     m_doc->removeAllItemDrawable();
 
-    if (_mode == 0)
-    {
-        // TODO add async with GuiManagerInterface
-        QHashIterator<CT_AbstractGeometricalItem*, CT_StandardItemGroup*> it(m_itemDrawableToAdd);
-        m_doc->beginAddMultipleItemDrawable();
+    // TODO add async with GuiManagerInterface
+    QHashIterator<CT_AbstractGeometricalItem*, CT_StandardItemGroup*> it(m_itemDrawableToAdd);
+    m_doc->beginAddMultipleItemDrawable();
 
-        while(it.hasNext())
-            m_doc->addItemDrawable(*it.next().key());
+    while(it.hasNext())
+        m_doc->addItemDrawable(*it.next().key());
 
-        m_doc->endAddMultipleItemDrawable();
+    m_doc->endAddMultipleItemDrawable();
 
-        // set the action (a copy of the action is added at all graphics view, and the action passed in parameter is deleted)
-        m_doc->setCurrentAction(new CT_ActionSelectItemDrawableGV());
-    } else {
-
-        QList<CT_AbstractGeometricalItem*> keys = m_itemDrawableToAdd.keys();
-        m_doc->setCurrentAction(new PB_ActionPickItemsInList(keys, &m_itemDrawableSelected));
-
-    }
+    // set the action (a copy of the action is added at all graphics view, and the action passed in parameter is deleted)
+    m_doc->setCurrentAction(new CT_ActionSelectItemDrawableGV());
 
     QMessageBox::information(nullptr, tr("Mode manuel"), tr("Bienvenue dans le mode manuel de cette "
                                                          "étape de filtrage. Veuillez sélectionner les "
@@ -152,16 +139,13 @@ void PB_StepUserItemSelection::useManualMode(bool quit)
     if(m_status == 0)
     {
         if(quit)
-        {
-            if (_mode == 0)
-            {
-                const auto l = m_doc->getSelectedItemDrawable();
-                m_itemDrawableSelected.reserve(l.size());
+        {            
+            const auto l = m_doc->getSelectedItemDrawable();
+            m_itemDrawableSelected.reserve(l.size());
 
-                for(auto item : l)
-                {
-                    m_itemDrawableSelected.append(static_cast<CT_AbstractGeometricalItem*>(item));
-                }
+            for(auto item : l)
+            {
+                m_itemDrawableSelected.append(static_cast<CT_AbstractGeometricalItem*>(item));
             }
         }
     }
