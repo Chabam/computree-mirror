@@ -37,8 +37,12 @@
 #include <QWaitCondition>
 #include <QFile>
 #include <QTextStream>
+#include <QDesktopServices>
+#include <QCoreApplication>
+#include <QUrl>
 
 int CT_VirtualAbstractStep::CURRENT_ID = 1;
+QString CT_VirtualAbstractStep::CURRENT_LANGAGE = "en";
 
 CT_VirtualAbstractStep::CT_VirtualAbstractStep() :
 // Correction AP 10/09/2021 : pour que les numéros d'étapes commencent à 1 dans le script
@@ -568,7 +572,7 @@ bool CT_VirtualAbstractStep::restoreInputSettings(SettingsReaderInterface &reade
     if(!internalDeclareInputModels())
         return false;
 
-    return m_inputManager.restoreSettings(reader);
+    return m_inputManager.restoreSettings(reader, this->getHelpPageForStepPath());
 }
 
 bool CT_VirtualAbstractStep::restorePostSettings(SettingsReaderInterface &reader)
@@ -738,7 +742,7 @@ bool CT_VirtualAbstractStep::configureInputs(bool forceReadOnly)
             return false;
     }
 
-    const CT_InManager::ConfigureReturn ret = m_inputManager.configureInputs(hasChildrens() || forceReadOnly);
+    const CT_InManager::ConfigureReturn ret = m_inputManager.configureInputs(this, hasChildrens() || forceReadOnly);
 
     if(ret == CT_InManager::HasModification)
         setSettingsModified(true);
@@ -1339,4 +1343,22 @@ void CT_VirtualAbstractStep::createHelpStrForChildrens(QString &str, int nbTab, 
         return true;
     });
 }
+
+void CT_VirtualAbstractStep::openHelpPageForStep() const
+{
+    QDesktopServices::openUrl(getHelpPageForStepPath());
+}
+
+QUrl CT_VirtualAbstractStep::getHelpPageForStepPath() const
+{
+    QString currentLanguageDir = "doc_" + CURRENT_LANGAGE;
+
+    QFile currentFile(currentLanguageDir + "/current.html");
+    if (currentFile.exists()) {currentFile.remove();}
+    QFile::copy(currentLanguageDir + "/steps/" + this->name() + ".html", currentLanguageDir + "/current.html");
+
+    return QUrl("file:///" + QCoreApplication::applicationDirPath() + "/" + currentLanguageDir + "/index.html");
+
+}
+
 

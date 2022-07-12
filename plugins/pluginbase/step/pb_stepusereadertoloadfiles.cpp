@@ -12,6 +12,35 @@ QString PB_StepUseReaderToLoadFiles::description() const
     return tr("Charger les fichiers d'une liste");
 }
 
+QString PB_StepUseReaderToLoadFiles::detailledDescription() const
+{
+    return tr("Cette étape permet de charger effectivement un fichier, dont l'entête a préalablement été créée, par exemple avec l'étape \"Créer une liste de fichiers\".");
+}
+
+QString PB_StepUseReaderToLoadFiles::inputDescription() const
+{
+    return SuperClass::inputDescription() + tr("<br><br>L'item choisi définit sur quel fichier il faut charger. Ces fichiers doivent avoir été préalable listés. C'est l'objet \"reader\" qui est utilisé pour réaliser le chargement.");
+}
+
+QString PB_StepUseReaderToLoadFiles::outputDescription() const
+{
+    return tr("Cette étape charge les données du fichier. La structure de données dépend du format du fichier.");
+}
+
+QString PB_StepUseReaderToLoadFiles::detailsDescription() const
+{
+    return tr("L'utilisation la plus habituelle de charger un fichier par tour de boucle, à partie d'une liste de fichiers préalablement crée. "
+                "Dans ce cas, la structure du script est la suivante :"
+                "<ol>"
+                "<li>Créer une liste de fichier (séléction de la liste des fichiers à parcourir)</li>"
+                "<li>Boucle standard (début de la boucle)</li>"
+                "<li><strong>Charger les fichiers d'une liste</strong> (chargement du fichier correspondant au tour de boucle courant)</li>"
+                "<li>... (étapes de traitement et d'export)</li>"
+                "<li>Fin de boucle</li>"
+                "</ol><br>");
+}
+
+
 CT_VirtualAbstractStep* PB_StepUseReaderToLoadFiles::createNewInstance() const
 {
     return new PB_StepUseReaderToLoadFiles();

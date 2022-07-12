@@ -35,11 +35,11 @@ QString PB_StepBeginLoopThroughGroups02::outputDescription() const
 
 QString PB_StepBeginLoopThroughGroups02::detailsDescription() const
 {
-    return tr("L'utilisation la plus habituelle de cette étape est de traiter successivement une liste de fichier. "
+    return tr("L'utilisation la plus habituelle de cette étape est de traiter successivement une liste de fichiers. "
                 "Dans ce cas, la structure du script est la suivante :"
                 "<ol>"
                 "<li>Créer une liste de fichier (séléction de la liste des fichiers à parcourir)</li>"
-                "<li>Boucle standard (début de la boucle)</li>"
+                "<li><strong>Boucle standard</strong> (début de la boucle)</li>"
                 "<li>Charger les fichiers d'une liste (chargement du fichier correspondant au tour de boucle courant)</li>"
                 "<li>... (étapes de traitement et d'export)</li>"
                 "<li>Fin de boucle</li>"

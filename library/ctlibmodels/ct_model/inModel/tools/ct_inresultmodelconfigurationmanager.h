@@ -6,6 +6,8 @@
 #include "ct_model/inModel/views/ctg_inresultmodelconfiguration.h"
 #include "ct_model/inModel/tools/ct_instdmodelpossibility.h"
 
+#include <QUrl>
+
 /**
  * @brief This class manage the creation of the dialog that let the user choose all input models that he want to use
  *        among a list of possibilities
@@ -38,7 +40,7 @@ public:
      * @warning Call it in GUI thread
      */
     template<typename InModelPossibilitiesWidgetType>
-    CT_InResultModelConfigurationManager::CreateDialogReturn createInResultModelConfigurationDialog(const QString& extraTitle = QString())
+    CT_InResultModelConfigurationManager::CreateDialogReturn createInResultModelConfigurationDialog(const QString& extraTitle = QString(), const QUrl helpPath = QUrl())
     {
         CT_InResultModelConfigurationManager::CreateDialogReturn returnVal = CT_InResultModelConfigurationManager::CreateSuccess;
 
@@ -48,7 +50,7 @@ public:
 
         if(m_inputModelsConfigurationDialog == nullptr)
         {
-            m_inputModelsConfigurationDialog = new CTG_InResultModelConfiguration(new InModelPossibilitiesWidgetType());
+            m_inputModelsConfigurationDialog = new CTG_InResultModelConfiguration(new InModelPossibilitiesWidgetType(helpPath));
             m_inputModelsConfigurationDialog->setWindowState(m_inputModelsConfigurationDialog->windowState() | Qt::WindowMaximized);
             m_inputModelsConfigurationDialog->setInResultModelManager(&m_inModelsStructureManager);
             m_inputModelsConfigurationDialog->setWindowFlags(m_inputModelsConfigurationDialog->windowFlags() | Qt::WindowMaximizeButtonHint);
@@ -84,7 +86,7 @@ public:
      * @brief Restore the state
      */
     template<typename InModelPossibilitiesWidgetType>
-    bool restoreSettings(SettingsReaderInterface& reader)
+    bool restoreSettings(SettingsReaderInterface& reader, QUrl pathHelp)
     {
         // unselect all possibilities
         m_inModelsStructureManager.visitResults([](const CT_InAbstractResultModel* resultModel) -> bool {
@@ -100,7 +102,7 @@ public:
         delete m_inputModelsConfigurationDialog;
         m_inputModelsConfigurationDialog = nullptr;
 
-        createInResultModelConfigurationDialog<InModelPossibilitiesWidgetType>();
+        createInResultModelConfigurationDialog<InModelPossibilitiesWidgetType>(QString(), pathHelp);
 
         const bool restoreOK = m_inModelsStructureManager.visitResults([&reader](const CT_InAbstractResultModel* resultModel) -> bool {
             return const_cast<CT_InAbstractResultModel*>(resultModel)->restoreSettings(reader);

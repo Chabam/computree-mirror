@@ -68,7 +68,7 @@ public:
      * @param forceReadOnly : true to force to show the input configuration dialog in read only mode
      * @return Returns false if the user cancel the configuration.
      */
-    ConfigureReturn configureInputs(bool forceReadOnly = false);
+    ConfigureReturn configureInputs(const CT_VirtualAbstractStep* step, bool forceReadOnly = false);
 
     /**
      * @brief Returns true if all models (recursively) has the minimum number of selection necessary. In other words
@@ -119,7 +119,7 @@ public:
     /**
      * @brief Redefined to restore the item type
      */
-    bool restoreSettings(SettingsReaderInterface& reader);
+    bool restoreSettings(SettingsReaderInterface& reader, QUrl pathHelp);
 
 private:
 

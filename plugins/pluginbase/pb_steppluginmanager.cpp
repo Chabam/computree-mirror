@@ -218,8 +218,8 @@ bool PB_StepPluginManager::loadGenericsStep()
 
     addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter); // doc ok
 
-    addNewLoadStep<PB_StepCreateReaderList>();
-    addNewLoadStep<PB_StepUseReaderToLoadFiles>();
+    addNewLoadStep<PB_StepCreateReaderList>(); // doc ok
+    addNewLoadStep<PB_StepUseReaderToLoadFiles>(); // doc ok
     addNewLoadStep<PB_StepLoadFileByName>();
 
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);

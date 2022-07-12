@@ -8,6 +8,7 @@
 
 #include <QWidget>
 #include <QStyledItemDelegate>
+#include <QUrl>
 
 #include <memory>
 
@@ -72,13 +73,14 @@ public:
         PT_OUT = 2
     };
 
-    explicit CTG_ModelsLinkConfigurationFlowView(QWidget *parent = nullptr);
+    explicit CTG_ModelsLinkConfigurationFlowView(QUrl helpPath, QWidget *parent = nullptr);
     ~CTG_ModelsLinkConfigurationFlowView();
 
     bool isReadOnly() const final;
 
     void scaleUp();
     void scaleDown();
+    void askForHelp();
 
 public slots:
     /**
@@ -153,6 +155,8 @@ private:
     int                                         mFirstStatePressed;
 
     bool                                        mInDestructor;
+
+    QUrl                                        mhelpPath;
 
     /**
      * @brief Reset (clear all) before construct

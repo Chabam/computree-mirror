@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QKeyEvent>
 #include <QtGlobal>
+#include <QDesktopServices>
 
 using QtNodes::FlowView;
 using QtNodes::FlowScene;
@@ -48,7 +49,7 @@ using QtNodes::ConnectionStyle;
 #define TREE_WIDGET_ITEM_SPACING 21+2
 #endif
 
-CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget *parent) :
+CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QUrl helpPath, QWidget *parent) :
     SuperClass(parent),
     ui(new Ui::CTG_ModelsLinkConfigurationFlowView),
     mInResultModelGroup(nullptr),
@@ -72,10 +73,23 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
     mFlowScene = new FlowScene(ret);
     mFlowView = new FlowView(mFlowScene, this);
 
-    auto hgi = new CT_HelpGraphicsItem();
-    hgi->setPos(800, -100);
-    hgi->setToolTip(tr("Cette interface permet de faire correspondre à chaque donnée rechechée, une donnée disponible dans les données d'entrée.<br><br>Pour chaque donnée recherchée :<br>1. Séléctionner la donnée recherchée<br>2. Séléctionner la donnée disponible à lui attribuer<br><br>Cela crée un lien entre les deux éléments.<br><br><i>Les données recherchées en italique sont optionnelles.</i><br><br>Les compteurs à droite des données recherchées indiquent :<br>nombre d'éléments séléctionnés / nombre d'éléments nécessaires."));
-    mFlowScene->addItem(hgi);
+
+// replaced by QPushButton to allow onclick action
+//    auto hgi = new CT_HelpGraphicsItem();
+//    hgi->setPos(800, -100);
+//    hgi->setToolTip(tr("Cette interface permet de faire correspondre à chaque donnée rechechée, une donnée disponible dans les données d'entrée.<br><br>Pour chaque donnée recherchée :<br>1. Séléctionner la donnée recherchée<br>2. Séléctionner la donnée disponible à lui attribuer<br><br>Cela crée un lien entre les deux éléments.<br><br><i>Les données recherchées en italique sont optionnelles.</i><br><br>Les compteurs à droite des données recherchées indiquent :<br>nombre d'éléments séléctionnés / nombre d'éléments nécessaires."));
+//    mFlowScene->addItem(hgi);
+
+    QPushButton* hgi = new QPushButton();
+    QPixmap pixmapHgi(":/Icones/Icones/help.png");
+    QIcon iconHgi = QIcon(pixmapHgi);
+    hgi->setIcon(iconHgi);
+    hgi->setIconSize(QSize(48, 48));
+    hgi->setStyleSheet("border: 0px; background-color: rgba(0,0,0, 0);");
+    QGraphicsProxyWidget* itemHgi = mFlowScene->addWidget(hgi);
+    itemHgi->setPos(870, -90);
+    itemHgi->setZValue(1);
+    //hgi->setToolTip(tr("Cette interface permet de faire correspondre à chaque donnée rechechée, une donnée disponible dans les données d'entrée.<br><br>Pour chaque donnée recherchée :<br>1. Séléctionner la donnée recherchée<br>2. Séléctionner la donnée disponible à lui attribuer<br><br>Cela crée un lien entre les deux éléments.<br><br><i>Les données recherchées en italique sont optionnelles.</i><br><br>Les compteurs à droite des données recherchées indiquent :<br>nombre d'éléments séléctionnés / nombre d'éléments nécessaires."));
 
     // RM : Zoom buttons
     QPushButton* sizeUp = new QPushButton();
@@ -86,20 +100,23 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
     QIcon iconDown = QIcon(pixmapDown);
     sizeUp->setIcon(iconUp);
     sizeDown->setIcon(iconDown);
-    sizeUp->setIconSize(pixmapUp.rect().size());
-    sizeDown->setIconSize(pixmapDown.rect().size());
+    sizeUp->setIconSize(QSize(48, 48));
+    sizeDown->setIconSize(QSize(48, 48));
+//    sizeUp->setIconSize(pixmapUp.rect().size());
+//    sizeDown->setIconSize(pixmapDown.rect().size());
     sizeUp->setStyleSheet("border: 0px; background-color: rgba(0,0,0, 0);");
     sizeDown->setStyleSheet("border: 0px; background-color: rgba(0,0,0, 0);");
 
     QGraphicsProxyWidget* itemUp = mFlowScene->addWidget(sizeUp);
-    itemUp->setPos(900,-90);
+    itemUp->setPos(800,-90);
     itemUp->setZValue(1);
     QGraphicsProxyWidget* itemDown = mFlowScene->addWidget(sizeDown);
-    itemDown->setPos(900,-40);
+    itemDown->setPos(800,-40);
     itemDown->setZValue(1);
 
     connect(sizeUp, &QPushButton::pressed, this, &CTG_ModelsLinkConfigurationFlowView::scaleUp);
     connect(sizeDown, &QPushButton::pressed, this, &CTG_ModelsLinkConfigurationFlowView::scaleDown);
+    connect(hgi, &QPushButton::pressed, this, &CTG_ModelsLinkConfigurationFlowView::askForHelp);
 
     connect(mFlowScene, &FlowScene::connectionSelected, this, &CTG_ModelsLinkConfigurationFlowView::connectionSelected);
     connect(mFlowScene, &FlowScene::connectionDoubleClicked, this, &CTG_ModelsLinkConfigurationFlowView::connectionDoubleClicked);
@@ -111,6 +128,8 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QWidget
 
     // Nothing was already clicked
     mFirstStatePressed = 0;
+
+    mhelpPath = helpPath;
 }
 
 void CTG_ModelsLinkConfigurationFlowView::scaleUp()
@@ -121,6 +140,12 @@ void CTG_ModelsLinkConfigurationFlowView::scaleUp()
 void CTG_ModelsLinkConfigurationFlowView::scaleDown()
 {
     mFlowView->scaleDown();
+}
+
+void CTG_ModelsLinkConfigurationFlowView::askForHelp()
+{
+    qDebug() << mhelpPath;
+    QDesktopServices::openUrl(mhelpPath);
 }
 
 CTG_ModelsLinkConfigurationFlowView::~CTG_ModelsLinkConfigurationFlowView()

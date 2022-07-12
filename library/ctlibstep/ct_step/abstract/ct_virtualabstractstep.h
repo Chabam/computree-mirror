@@ -1151,6 +1151,14 @@ private:
     void createHelpStrForChildrens(QString &str, int nbTab, const CT_InAbstractModel *model) const;
 
 
+public:
+    void openHelpPageForStep() const;
+    QUrl getHelpPageForStepPath() const;
+
+    static void setCurrentLangage(QString lang) {CURRENT_LANGAGE = lang;}
+private:
+    static QString CURRENT_LANGAGE;
+
 signals:
 
     /**

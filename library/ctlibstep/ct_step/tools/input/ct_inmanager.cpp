@@ -90,10 +90,10 @@ bool CT_InManager::findInputsInOutputsOfThisStepOrRecursively(const CT_VirtualAb
     return findInputsInOutputsOfThisStepOrRecursivelyWithSpecifiedResultModels(step, resModels.begin(), resModels.end());
 }
 
-CT_InManager::ConfigureReturn CT_InManager::configureInputs(bool forceReadOnly)
+CT_InManager::ConfigureReturn CT_InManager::configureInputs(const CT_VirtualAbstractStep* step, bool forceReadOnly)
 {
     const QString extraTitle = QObject::tr(" de l'étape \"%1\"").arg(m_stepName);
-    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = m_inModelConfigurationManager->createInResultModelConfigurationDialog<InModelPossibilitiesChoiceWidgetType>(extraTitle);
+    const CT_InResultModelConfigurationManager::CreateDialogReturn crReturn = m_inModelConfigurationManager->createInResultModelConfigurationDialog<InModelPossibilitiesChoiceWidgetType>(extraTitle, step->getHelpPageForStepPath());
 
     // If it was an error (does not happen)
     if(crReturn == CT_InResultModelConfigurationManager::CreateError) {
@@ -182,9 +182,9 @@ void CT_InManager::saveSettings(SettingsWriterInterface& writer) const
     m_inModelConfigurationManager->saveSettings(writer);
 }
 
-bool CT_InManager::restoreSettings(SettingsReaderInterface& reader)
+bool CT_InManager::restoreSettings(SettingsReaderInterface& reader, QUrl pathHelp)
 {
-    return m_inModelConfigurationManager->restoreSettings<InModelPossibilitiesChoiceWidgetType>(reader);
+    return m_inModelConfigurationManager->restoreSettings<InModelPossibilitiesChoiceWidgetType>(reader, pathHelp);
 }
 
 bool CT_InManager::findInputsInOutputsOfThisStepOrRecursivelyWithSpecifiedResultModels(const CT_VirtualAbstractStep* step,

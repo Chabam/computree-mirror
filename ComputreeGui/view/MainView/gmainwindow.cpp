@@ -1166,6 +1166,8 @@ void GMainWindow::loadConfiguration()
     QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
     QString currentLanguage = languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
 
+    CT_AbstractStep::setCurrentLangage(currentLanguage);
+
     QDir docDir("doc_" + currentLanguage);
     if (!docDir.exists()) {createStepHelp();}
 }

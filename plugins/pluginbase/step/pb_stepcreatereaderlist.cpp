@@ -27,8 +27,32 @@ QString PB_StepCreateReaderList::description() const
 // Step detailled description
 QString PB_StepCreateReaderList::detailledDescription() const
 {
-    return tr("Cette étape créer une liste de readers (lecteur de fichier). Ces readers pourront par la suite être utilisés par d'autres étapes pour charger les fichiers.");
+    return tr("Cette étape créer une liste fichiers. Cette étape ne charge pas les fichiers, elle créée juste les entêtes. Il faut ensuite ajouter l'étape \"Charger les fichiers d'une liste\" pour les charger, soit directement, soit après un début de boucle. ");
 }
+
+QString PB_StepCreateReaderList::outputDescription() const
+{
+    return SuperClass::outputDescription() + tr("<br><br>Cette étape génère un résultat contenant la liste des fichiers.<br>"
+                                                "Pour chaque fichier deux éléments sont créés :<br>"
+                                                "<ul>"
+                                                "<li>Une entête contenant les informations générales sur le fichier, dépendant du format. A minima cette entête contient le nom et le chemin du fichier.</li>"
+                                                "<li>Un \"reader\", qui est l'objet utilisé pour faire le chargement effectif du fichier dans la suite du script.</li>"
+                                                "</ul>");
+}
+
+QString PB_StepCreateReaderList::detailsDescription() const
+{
+    return tr("L'utilisation la plus habituelle de cette étape est de traiter successivement une liste de fichiers, à l'aide d'une boucle ajoutée après cette étape. "
+                "Dans ce cas, la structure du script est la suivante :"
+                "<ol>"
+                "<li><strong>Créer une liste de fichier</strong> (séléction de la liste des fichiers à parcourir)</li>"
+                "<li>Boucle standard (début de la boucle)</li>"
+                "<li>Charger les fichiers d'une liste (chargement du fichier correspondant au tour de boucle courant)</li>"
+                "<li>... (étapes de traitement et d'export)</li>"
+                "<li>Fin de boucle</li>"
+                "</ol>");
+}
+
 
 // Step copy method
 CT_VirtualAbstractStep* PB_StepCreateReaderList::createNewInstance() const
@@ -45,8 +69,8 @@ void PB_StepCreateReaderList::fillPreInputConfigurationDialog(CT_StepConfigurabl
     CT_ButtonGroup &bg_choiceMode = preInputConfigDialog->addButtonGroup(m_choiceMode);
 
     preInputConfigDialog->addText(tr("Méthode de choix des fichiers :"),"", "");
-    preInputConfigDialog->addExcludeValue("", "", tr("Sélection manuelle dans un répertoire"), bg_choiceMode, 0, "", true);
-    preInputConfigDialog->addExcludeValue("", "", tr("Utilisation d'un fichier contenant les chemins"), bg_choiceMode, 1, "", true);
+    preInputConfigDialog->addExcludeValue("", "", tr("Sélection manuelle dans un répertoire"), bg_choiceMode, 0, tr("Si cette option est sélectionnée, l'utilisateur choisit manuellement les fichiers dans un répertoire."), true);
+    preInputConfigDialog->addExcludeValue("", "", tr("Utilisation d'un fichier contenant les chemins"), bg_choiceMode, 1, tr("Si cette option est sélectionnée, l'utilisateur doit choisir un fichier texte, qui contient sur chaque ligne un chemin de fichier. Cela permet de préparer des lots de fichiers prédéfinis."), true);
 }
 
 void PB_StepCreateReaderList::finalizePreSettings()
