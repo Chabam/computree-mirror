@@ -257,8 +257,6 @@ using Ply_CT_ScalarCloud_Wrapper = Ply_CT_GenericCloud_Wrapper<CT_DensePointScal
 
 bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
 {
-    m_readScenes.clear();
-
     PlyHeaderReader headerReader;
     headerReader.setFilePath(filepath());
 
@@ -358,7 +356,7 @@ bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
     CT_Scene* scene = new CT_Scene(wrapper.pcir);
     scene->updateBoundingBox();
 
-    m_readScenes.append(scene);
+    m_readScene = scene;
 
     // add the scene
     group->addSingularItem(m_outScene, scene);

@@ -144,8 +144,6 @@ void CT_Reader_ASCRGB::internalDeclareOutputModels(CT_ReaderOutModelStructureMan
 
 bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
 {
-    m_readScenes.clear();
-
     if (QFile::exists(filepath()))
     {
         QFile f(filepath());
@@ -215,7 +213,7 @@ bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
                 group->addSingularItem(m_hOutScene, scene);
                 group->addSingularItem(m_hOutColors, m_hOutColors.createAttributeInstance(pcir));
 
-                m_readScenes.append(scene);
+                m_readScene = scene;
 
                 return true;
             }

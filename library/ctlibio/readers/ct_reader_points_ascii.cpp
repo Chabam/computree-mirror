@@ -459,8 +459,6 @@ void CT_Reader_Points_ASCII::internalDeclareOutputModels(CT_ReaderOutModelStruct
 
 bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
 {
-    m_readScenes.clear();
-
     if(!canLoadPoints())
         return false;
 
@@ -539,7 +537,7 @@ bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
             CT_Scene* scene = new CT_Scene(pcir);
             group->addSingularItem(m_outPointCloud, scene);
 
-            m_readScenes.append(scene);
+            m_readScene = scene;
 
             if(intensitySetter != nullptr)
                 group->addSingularItem(m_outIntensity, m_outIntensity.createAttributeInstance(pcir, minIntensity, maxIntensity));

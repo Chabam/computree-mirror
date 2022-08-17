@@ -156,8 +156,6 @@ CT_FileHeader *CT_Reader_LAZ::internalReadHeader(const QString &filepath, QStrin
 
 bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
 {
-    m_readScenes.clear();
-
     QString error;
 
     CT_LAZHeader *header = static_cast<CT_LAZHeader*>(internalReadHeader(filepath(), error));
@@ -476,7 +474,7 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
     CT_Scene *scene = new CT_Scene(pcir);
     scene->updateBoundingBox();
 
-    m_readScenes.append(scene);
+    m_readScene = scene;
 
     // add the scene
     group->addSingularItem(m_hOutScene, scene);

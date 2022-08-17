@@ -8,7 +8,7 @@
 
 #include "ct_itemdrawable/ct_scene.h"
 
-class CTLIBIO_EXPORT CT_Reader_IDXYZ : public CT_AbstractReader, public CT_ReaderPointsFilteringExtension
+class CTLIBIO_EXPORT CT_Reader_IDXYZ : public CT_AbstractReader
 {
     Q_OBJECT
     typedef CT_AbstractReader SuperClass;

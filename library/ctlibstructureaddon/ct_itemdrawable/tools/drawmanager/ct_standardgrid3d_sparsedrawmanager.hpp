@@ -1,5 +1,4 @@
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_sparsedrawmanager.h"
-#include "ct_itemdrawable/ct_grid3d.h"
 #include "painterinterface.h"
 
 #include <typeinfo>
@@ -23,7 +22,7 @@ template< typename DataT > const QString CT_StandardGrid3D_SparseDrawManager<Dat
 
 template< typename DataT >
 CT_StandardGrid3D_SparseDrawManager<DataT>::CT_StandardGrid3D_SparseDrawManager(QString drawConfigurationName)
-    : SuperClass(drawConfigurationName.isEmpty() ? CT_Grid3D<DataT>::staticName() : drawConfigurationName)
+    : SuperClass(drawConfigurationName.isEmpty() ? CT_Grid3D_Sparse<DataT>::staticName() : drawConfigurationName)
 {
     
 }

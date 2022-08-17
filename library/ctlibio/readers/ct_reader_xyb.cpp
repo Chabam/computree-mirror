@@ -249,8 +249,6 @@ void CT_Reader_XYB::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
 
 bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
 {
-    m_readScenes.clear();
-
     if(QFile::exists(filepath()))
     {
         QFile f(filepath());
@@ -309,7 +307,7 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
             scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
             group->addSingularItem(m_hOutScene, scene);
 
-            m_readScenes.append(scene);
+            m_readScene = scene;
 
             // create and add intensity
             CT_PointsAttributesScalarTemplated<quint16>* pas = m_hOutIntensity.createAttributeInstance(pcir,

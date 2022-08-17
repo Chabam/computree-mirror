@@ -42,13 +42,13 @@ public:
     /**
      * @brief Return scenes created by the reader (call after internalReadFile)
      */
-    QList<CT_AbstractItemDrawableWithPointCloud*> scenes() {return m_readScenes;}
+    CT_AbstractItemDrawableWithPointCloud* scene() {return m_readScene;}
 
 private:
     filterPointsFunction    m_pointsFilter;
 
 protected:
-    QList<CT_AbstractItemDrawableWithPointCloud*>      m_readScenes;
+    CT_AbstractItemDrawableWithPointCloud*      m_readScene;
 
 };
 

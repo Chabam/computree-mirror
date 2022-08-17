@@ -178,8 +178,6 @@ void CT_Reader_PTX::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
 
 bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
 {
-    m_readScenes.clear();
-
     if(QFile::exists(filepath()))
     {
         QFile f(filepath());
@@ -337,7 +335,7 @@ bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
                 CT_Scene *scene = new CT_Scene(pcir);
                 scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
 
-                m_readScenes.append(scene);
+                m_readScene = scene;
 
                 // add the scene
                 group->addSingularItem(m_outScene, scene);

@@ -155,8 +155,6 @@ CT_FileHeader *CT_Reader_LASV2::internalReadHeader(const QString &filepath, QStr
 
 bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
 {
-    m_readScenes.clear();
-
     bool ok = false;
     QString error;
 
@@ -423,7 +421,7 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         CT_Scene *scene = new CT_Scene(pcir);
         scene->updateBoundingBox();
 
-        m_readScenes.append(scene);
+        m_readScene = scene;
 
         // add the scene
         group->addSingularItem(m_hOutScene, scene);
