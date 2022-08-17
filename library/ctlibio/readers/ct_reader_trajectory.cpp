@@ -12,7 +12,7 @@
 #define Z_COLUMN "Height"
 #define GPS_TIME_COLUMN "GPStime"
 
-CT_Reader_Trajectory::CT_Reader_Trajectory(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
+CT_Reader_Trajectory::CT_Reader_Trajectory(int subMenuLevel) : SuperClass(subMenuLevel)
 {
     m_firstConfiguration = true;
     m_columnXIndex = -1;

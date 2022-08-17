@@ -144,7 +144,9 @@ void CT_Reader_ASCRGB::internalDeclareOutputModels(CT_ReaderOutModelStructureMan
 
 bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
 {
-    if(QFile::exists(filepath()))
+    m_readScenes.clear();
+
+    if (QFile::exists(filepath()))
     {
         QFile f(filepath());
 
@@ -186,6 +188,10 @@ bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
                     continue;
 
                 readColor(values, color);
+
+                if (isPointFiltered(point))
+                    continue;
+
                 pointCloud->addPoint(point);
                 colorSetter.setLastValue(color);
 
@@ -208,6 +214,8 @@ bool CT_Reader_ASCRGB::internalReadFile(CT_StandardItemGroup* group)
                 scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
                 group->addSingularItem(m_hOutScene, scene);
                 group->addSingularItem(m_hOutColors, m_hOutColors.createAttributeInstance(pcir));
+
+                m_readScenes.append(scene);
 
                 return true;
             }

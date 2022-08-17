@@ -2,6 +2,8 @@
 #define CT_READER_PLY_H
 
 #include "ct_reader/abstract/ct_abstractreader.h"
+#include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
+
 
 #include "ctlibio/ctlibio_global.h"
 
@@ -13,7 +15,7 @@
 /**
  * @brief Reader that can load a ply file (*.ply) that represent a Mesh or a PointCloud
  */
-class CTLIBIO_EXPORT CT_Reader_PLY : public CT_AbstractReader, public IPlyReaderListener
+class CTLIBIO_EXPORT CT_Reader_PLY : public CT_AbstractReader, public IPlyReaderListener, public CT_ReaderPointsFilteringExtension
 {
     Q_OBJECT
     typedef CT_AbstractReader SuperClass;
@@ -51,6 +53,7 @@ public:
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
 
+
     READER_ALL_COPY_IMP(CT_Reader_PLY)
 
     /**
@@ -71,6 +74,7 @@ private:
     QVector<CT_HandleOutPointColorWithDenseManager* >           m_outColorVector;
     QVector<CT_HandleOutPointNormalWithDenseManager* >          m_outNormalVector;
     QVector<CT_HandleOutPointScalarWithDenseManager<float>* >   m_outScalarVector;
+
 
 protected:
 

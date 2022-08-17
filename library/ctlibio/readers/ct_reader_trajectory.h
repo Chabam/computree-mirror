@@ -15,7 +15,7 @@ class CT_NormalCloudStdVector;
 /**
  * @brief Reader that can load a ascii file (*.asc *.xyz *.csv etc...) that contains a point cloud and/or normals and/or colors and/or intensity
  */
-class CTLIBIO_EXPORT CT_Reader_Trajectory : public CT_AbstractReader, public CT_ReaderPointsFilteringExtension
+class CTLIBIO_EXPORT CT_Reader_Trajectory : public CT_AbstractReader
 {
     Q_OBJECT
     typedef CT_AbstractReader SuperClass;

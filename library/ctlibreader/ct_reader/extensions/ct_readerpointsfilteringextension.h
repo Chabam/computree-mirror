@@ -2,6 +2,7 @@
 #define CT_READERPOINTSFILTERINGEXTENSION_H
 
 #include "ctlibreader_global.h"
+#include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
 
 #include <functional>
 
@@ -29,12 +30,26 @@ public:
     filterPointsFunction pointsFilter() const;
 
     /**
-     * @brief Return true if points must be filtered, false otherwise
+     * @brief Return true if the filtering function has been set
+     */
+    bool filterSet() const {return m_pointsFilter != nullptr;}
+
+    /**
+     * @brief Return true if points must be filtered (removed), false otherwise
      */
     virtual bool isPointFiltered(const CT_Point& pt) const;
 
+    /**
+     * @brief Return scenes created by the reader (call after internalReadFile)
+     */
+    QList<CT_AbstractItemDrawableWithPointCloud*> scenes() {return m_readScenes;}
+
 private:
     filterPointsFunction    m_pointsFilter;
+
+protected:
+    QList<CT_AbstractItemDrawableWithPointCloud*>      m_readScenes;
+
 };
 
 #endif // CT_READERPOINTSFILTERINGEXTENSION_H

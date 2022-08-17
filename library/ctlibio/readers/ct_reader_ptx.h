@@ -2,6 +2,8 @@
 #define CT_READER_PTX_H
 
 #include "ct_reader/abstract/ct_abstractreader.h"
+#include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
+
 #include "ct_itemdrawable/ct_scanner.h"
 #include "ct_itemdrawable/ct_scene.h"
 #include "ct_itemdrawable/ct_transformationmatrix.h"
@@ -11,7 +13,7 @@
 /**
  * @brief Reader that can load a ptx file (*.ptx) that represent a PointCloud
  */
-class CTLIBIO_EXPORT CT_Reader_PTX : public CT_AbstractReader
+class CTLIBIO_EXPORT CT_Reader_PTX : public CT_AbstractReader, public CT_ReaderPointsFilteringExtension
 {
     Q_OBJECT
     typedef CT_AbstractReader SuperClass;

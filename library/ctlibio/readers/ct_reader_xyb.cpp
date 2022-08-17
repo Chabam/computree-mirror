@@ -20,7 +20,7 @@ CT_Reader_XYB::CT_Reader_XYB(int subMenuLevel) : SuperClass(subMenuLevel), CT_Re
     setToolTip(tr("Chargement de points depuis un fichier format binaire XYB (FARO)"));
 }
 
-CT_Reader_XYB::CT_Reader_XYB(const CT_Reader_XYB& other) : SuperClass(other)
+CT_Reader_XYB::CT_Reader_XYB(const CT_Reader_XYB& other) : SuperClass(other), CT_ReaderPointsFilteringExtension()
 {
     m_current = other.m_current;
     m_filterRadius = other.m_filterRadius;
@@ -249,6 +249,8 @@ void CT_Reader_XYB::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
 
 bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
 {
+    m_readScenes.clear();
+
     if(QFile::exists(filepath()))
     {
         QFile f(filepath());
@@ -306,6 +308,8 @@ bool CT_Reader_XYB::internalReadFile(CT_StandardItemGroup* group)
             CT_Scene* scene = new CT_Scene(pcir);
             scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
             group->addSingularItem(m_hOutScene, scene);
+
+            m_readScenes.append(scene);
 
             // create and add intensity
             CT_PointsAttributesScalarTemplated<quint16>* pas = m_hOutIntensity.createAttributeInstance(pcir,

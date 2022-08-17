@@ -12,7 +12,7 @@
 
 #include <QDebug>
 
-CT_Reader_LASV2::CT_Reader_LASV2(int subMenuLevel) : SuperClass(subMenuLevel)
+CT_Reader_LASV2::CT_Reader_LASV2(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {    
     m_headerFromConfiguration = nullptr;
 
@@ -21,7 +21,7 @@ CT_Reader_LASV2::CT_Reader_LASV2(int subMenuLevel) : SuperClass(subMenuLevel)
     setToolTip(tr("Charge des points depuis un fichier au format LAS (ASPRS)<br>http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html"));
 }
 
-CT_Reader_LASV2::CT_Reader_LASV2(const CT_Reader_LASV2 &other) : SuperClass(other)
+CT_Reader_LASV2::CT_Reader_LASV2(const CT_Reader_LASV2 &other) : SuperClass(other), CT_ReaderPointsFilteringExtension()
 {
     m_headerFromConfiguration = nullptr;
 
@@ -155,6 +155,8 @@ CT_FileHeader *CT_Reader_LASV2::internalReadHeader(const QString &filepath, QStr
 
 bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
 {
+    m_readScenes.clear();
+
     bool ok = false;
     QString error;
 
@@ -187,15 +189,63 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
     {
         setToolTip(header->toString());
 
+        bool mustTransformPoint = header->mustTransformPoints();
+
+        // If filtering function set, do a first scan of the file to count filtered point number
+        size_t numberOfFilteredPoints = 0;
+        if (filterSet())
+        {
+            f.seek(header->m_offsetToPointData);
+
+            QDataStream stream(&f);
+            stream.setByteOrder(QDataStream::LittleEndian);
+
+            qint64 pos = f.pos();
+
+            qint32 x, y, z;
+            double xc = 0;
+            double yc = 0;
+            double zc = 0;
+            CT_Point pAdded;
+
+            for (size_t i = 0; i < nPoints; ++i)
+            {
+                // READ ALL ATTRIBUTES
+                stream >> x >> y >> z;
+
+                // CONVERT POINT
+                if(mustTransformPoint)
+                {
+                    header->transformPoint(x, y, z, xc, yc, zc);
+                    pAdded(0) = xc;
+                    pAdded(1) = yc;
+                    pAdded(2) = zc;
+                } else
+                {
+                    pAdded(0) = x;
+                    pAdded(1) = y;
+                    pAdded(2) = z;
+                }
+
+                if (isPointFiltered(pAdded)) {++numberOfFilteredPoints;}
+
+                pos += header->m_pointDataRecordLength;
+                f.seek(pos);
+            }
+        }
+
+
+        // read data
         f.seek(header->m_offsetToPointData);
 
         QDataStream stream(&f);
         stream.setByteOrder(QDataStream::LittleEndian);
 
         qint64 pos = f.pos();
-        bool mustTransformPoint = header->mustTransformPoints();
 
-        CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPoints);
+        size_t cloudSize = nPoints - numberOfFilteredPoints;
+
+        CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(cloudSize);
 
         // VECTOR
         auto scanAngleSetter = m_hOutScanAngle.createAttributesSetter(pcir);
@@ -271,86 +321,98 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
         quint16 colG;
         quint16 colB;
 
-        for(size_t i=0; i<nPoints; ++i)
+        int currentLocalIndex = 0;
+        for (size_t i = 0; i < nPoints; ++i)
         {
             // READ ALL ATTRIBUTES
             stream >> x >> y >> z;
-            intensitySetter.setValueWithStreamWithLocalIndex(i, stream);
-
-            if (header->m_pointDataRecordFormat < 6)
-            {
-                stream >> valueUint8;
-                valuePointCore6_10.entire = valueUint8;
-                core6_10Setter.setValueWithLocalIndex(i, valuePointCore6_10);
-            }
-            else
-            {
-                stream >> valueUint16;
-                valuePointCore6_10.entire = valueUint16;
-                core6_10Setter.setValueWithLocalIndex(i, valuePointCore6_10);
-            }
-
-            classificationSetter.setValueWithStreamWithLocalIndex(i, stream);
-
-            if(header->m_pointDataRecordFormat < 6)
-            {
-                stream >> valueInt8;
-                scanAngleSetter.setValueWithLocalIndex(i, valueInt8);
-                userDataSetter.setValueWithStreamWithLocalIndex(i, stream);
-            }
-            else
-            {
-                // "user data" is before "scan angle" in version 6 to 10
-                userDataSetter.setValueWithStreamWithLocalIndex(i, stream);
-                scanAngleSetter.setValueWithStreamWithLocalIndex(i, stream);
-            }
-
-            pointSourceIDSetter.setValueWithStreamWithLocalIndex(i, stream);
-
-            // gps time is always after pointSourceID
-            if(gpsTimeSetter)
-                gpsTimeSetter->setValueWithStreamWithLocalIndex(i, stream);
-
-            // color is always after gpsTime if exist otherwise after pointSourceID
-            if(colorSetter)
-            {
-                stream >> colR >> colG >> colB;
-
-                redSetter->setValueWithLocalIndex(i, colR);
-                greenSetter->setValueWithLocalIndex(i, colG);
-                blueSetter->setValueWithLocalIndex(i, colB);
-
-                colRGBA.r() = colR/256;
-                colRGBA.g() = colG/256;
-                colRGBA.b() = colB/256;
-                colRGBA.a() = 255;
-
-                colorSetter->setValueWithLocalIndex(i, colRGBA);
-            }
-
-            // NIR is always after colors if exist
-            if(nirSetter)
-                nirSetter->setValueWithStreamWithLocalIndex(i, stream);
-
-            // wave packet is always after NIR if exist
-            if(wpdiSetter)
-            {
-                wpdiSetter->setValueWithStreamWithLocalIndex(i, stream);
-                botwdSetter->setValueWithStreamWithLocalIndex(i, stream);
-                wpsibSetter->setValueWithStreamWithLocalIndex(i, stream);
-                rpwlSetter->setValueWithStreamWithLocalIndex(i, stream);
-            }
 
             // CONVERT POINT
-
             if(mustTransformPoint)
+            {
                 header->transformPoint(x, y, z, xc, yc, zc);
+                pAdded(0) = xc;
+                pAdded(1) = yc;
+                pAdded(2) = zc;
+            } else
+            {
+                pAdded(0) = x;
+                pAdded(1) = y;
+                pAdded(2) = z;
+            }
 
-            pAdded(0) = xc;
-            pAdded(1) = yc;
-            pAdded(2) = zc;
+            if (!isPointFiltered(pAdded))
+            {
+                it.next().replaceCurrentPoint(pAdded);
 
-            it.next().replaceCurrentPoint(pAdded);
+                intensitySetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+
+                if (header->m_pointDataRecordFormat < 6)
+                {
+                    stream >> valueUint8;
+                    valuePointCore6_10.entire = valueUint8;
+                    core6_10Setter.setValueWithLocalIndex(currentLocalIndex, valuePointCore6_10);
+                }
+                else
+                {
+                    stream >> valueUint16;
+                    valuePointCore6_10.entire = valueUint16;
+                    core6_10Setter.setValueWithLocalIndex(currentLocalIndex, valuePointCore6_10);
+                }
+
+                classificationSetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+
+                if(header->m_pointDataRecordFormat < 6)
+                {
+                    stream >> valueInt8;
+                    scanAngleSetter.setValueWithLocalIndex(currentLocalIndex, valueInt8);
+                    userDataSetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+                }
+                else
+                {
+                    // "user data" is before "scan angle" in version 6 to 10
+                    userDataSetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+                    scanAngleSetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+                }
+
+                pointSourceIDSetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+
+                // gps time is always after pointSourceID
+                if(gpsTimeSetter)
+                    gpsTimeSetter->setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+
+                // color is always after gpsTime if exist otherwise after pointSourceID
+                if(colorSetter)
+                {
+                    stream >> colR >> colG >> colB;
+
+                    redSetter->setValueWithLocalIndex(currentLocalIndex, colR);
+                    greenSetter->setValueWithLocalIndex(currentLocalIndex, colG);
+                    blueSetter->setValueWithLocalIndex(currentLocalIndex, colB);
+
+                    colRGBA.r() = colR/256;
+                    colRGBA.g() = colG/256;
+                    colRGBA.b() = colB/256;
+                    colRGBA.a() = 255;
+
+                    colorSetter->setValueWithLocalIndex(currentLocalIndex, colRGBA);
+                }
+
+                // NIR is always after colors if exist
+                if(nirSetter)
+                    nirSetter->setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+
+                // wave packet is always after NIR if exist
+                if(wpdiSetter)
+                {
+                    wpdiSetter->setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+                    botwdSetter->setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+                    wpsibSetter->setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+                    rpwlSetter->setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+                }
+
+                ++currentLocalIndex;
+            }
 
             pos += header->m_pointDataRecordLength;
             f.seek(pos);
@@ -360,6 +422,8 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
 
         CT_Scene *scene = new CT_Scene(pcir);
         scene->updateBoundingBox();
+
+        m_readScenes.append(scene);
 
         // add the scene
         group->addSingularItem(m_hOutScene, scene);

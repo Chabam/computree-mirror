@@ -10,7 +10,7 @@
 
 #include <limits>
 
-CT_Reader_IDXYZ::CT_Reader_IDXYZ(int subMenuLevel) : SuperClass(subMenuLevel)
+CT_Reader_IDXYZ::CT_Reader_IDXYZ(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {
     addNewReadableFormat(FileFormat("asc", tr("Fichiers de points ASCII (XYZRGB, sans entête, RGB [0;1])")));
 
@@ -21,7 +21,7 @@ CT_Reader_IDXYZ::CT_Reader_IDXYZ(int subMenuLevel) : SuperClass(subMenuLevel)
                   "- Z  : Coordonnée Z<br>"));
 }
 
-CT_Reader_IDXYZ::CT_Reader_IDXYZ(const CT_Reader_IDXYZ& other) : SuperClass(other)
+CT_Reader_IDXYZ::CT_Reader_IDXYZ(const CT_Reader_IDXYZ& other) : SuperClass(other), CT_ReaderPointsFilteringExtension()
 {
 }
 
@@ -61,6 +61,8 @@ void CT_Reader_IDXYZ::internalDeclareOutputModels(CT_ReaderOutModelStructureMana
 
 bool CT_Reader_IDXYZ::internalReadFile(CT_StandardItemGroup* group)
 {
+    m_readScenes.clear();
+
     // Test File validity
     if(QFile::exists(filepath()))
     {
@@ -108,6 +110,9 @@ bool CT_Reader_IDXYZ::internalReadFile(CT_StandardItemGroup* group)
                         pReaded(0) = x;
                         pReaded(1) = y;
                         pReaded(2) = z;
+
+                        if (isPointFiltered(pReaded))
+                            continue;
 
                         pointCloud->addPoint(pReaded);
                         indices.append(id);
@@ -159,6 +164,9 @@ bool CT_Reader_IDXYZ::internalReadFile(CT_StandardItemGroup* group)
                             CT_StandardItemGroup* groupSc = new CT_StandardItemGroup();
                             group->addGroup(m_hOutSceneIdGroup, groupSc);
                             groupSc->addSingularItem(m_hOutSceneId, sceneId);
+
+                            m_readScenes.append(sceneId);
+
                         } else {
                             delete indexVector;
                         }

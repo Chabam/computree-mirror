@@ -26,6 +26,7 @@ private:
     CT_HandleOutStdGroup                        m_hOutSceneIdGroup;
     CT_HandleOutSingularItem<CT_Scene>          m_hOutSceneId;
 
+
 protected:
     bool preVerifyFile(const QString& filepath, QFile& fileOpenReadOnly) const override;
     void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;

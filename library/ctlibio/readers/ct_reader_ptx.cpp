@@ -13,7 +13,7 @@
 #define DEF_CT_Reader_PTX_scannerOut    "sca"
 #define DEF_CT_Reader_PTX_matrixOut     "mt"
 
-CT_Reader_PTX::CT_Reader_PTX(int subMenuLevel) : SuperClass(subMenuLevel)
+CT_Reader_PTX::CT_Reader_PTX(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {
     m_applyTransformation = true;
 
@@ -22,7 +22,7 @@ CT_Reader_PTX::CT_Reader_PTX(int subMenuLevel) : SuperClass(subMenuLevel)
     setToolTip(tr("Chargement de points depuis un fichier format ascii PTX"));
 }
 
-CT_Reader_PTX::CT_Reader_PTX(const CT_Reader_PTX &other) : SuperClass(other)
+CT_Reader_PTX::CT_Reader_PTX(const CT_Reader_PTX &other) : SuperClass(other), CT_ReaderPointsFilteringExtension()
 {
     m_applyTransformation = other.m_applyTransformation;
 }
@@ -178,21 +178,79 @@ void CT_Reader_PTX::internalDeclareOutputModels(CT_ReaderOutModelStructureManage
 
 bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
 {
+    m_readScenes.clear();
+
     if(QFile::exists(filepath()))
     {
         QFile f(filepath());
 
         if(f.open(QIODevice::ReadOnly))
         {
-            QTextStream stream(&f);
-
             int nColumn, nRow;
             Eigen::Matrix4d matrix;
             bool hasColors;
 
+            // If filtering function set, do a first scan of the file to count filtered point number
+            size_t numberOfFilteredPoints = 0;
+            if (filterSet())
+            {
+                QTextStream stream(&f);
+                while(readHeaderValues(stream, nColumn, nRow, matrix, hasColors))
+                {
+                    CT_Point pReaded;
+
+                    Eigen::Vector4d pXYZ;
+                    double reflectance;
+                    quint16 r,g,b;
+
+                    size_t a = 0;
+
+                    size_t nPoints = size_t(nRow)*size_t(nColumn);
+
+                    while((a < nPoints)
+                          && !stream.atEnd()
+                          && !isStopped())
+                    {
+                        stream >> pXYZ(0);
+                        stream >> pXYZ(1);
+                        stream >> pXYZ(2);
+                        stream >> reflectance;
+
+                        if(hasColors) {
+                            stream >> r;
+                            stream >> g;
+                            stream >> b;
+                        }
+
+                        if(m_applyTransformation) {
+                            //pXYZ = matrix * pXYZ;
+                            // FP corrected transformation: rotation+translation that apply just to position
+                            // Tested 19/10/2017
+                            pReaded(CT_Point::X) = pXYZ(0)*matrix(0,0)+pXYZ(1)*matrix(1,0)+pXYZ(2)*matrix(2,0)+matrix(3,0);//scan origin shift
+                            pReaded(CT_Point::Y) = pXYZ(0)*matrix(0,1)+pXYZ(1)*matrix(1,1)+pXYZ(2)*matrix(2,1)+matrix(3,1);//scan origin shift
+                            pReaded(CT_Point::Z) = pXYZ(0)*matrix(0,2)+pXYZ(1)*matrix(1,2)+pXYZ(2)*matrix(2,2)+matrix(3,2);//scan origin shift
+                        } else {
+                            pReaded(CT_Point::X) = pXYZ(0);
+                            pReaded(CT_Point::Y) = pXYZ(1);
+                            pReaded(CT_Point::Z) = pXYZ(2);
+                        }
+
+                        if (isPointFiltered(pReaded))
+                        {
+                            ++numberOfFilteredPoints;
+                        }
+
+                        ++a;
+                    }
+                }
+            }
+
+
+            QTextStream stream(&f);
+
             while(readHeaderValues(stream, nColumn, nRow, matrix, hasColors)) {
 
-                size_t nPoints = size_t(nRow)*size_t(nColumn);
+                size_t nPoints = size_t(nRow)*size_t(nColumn) - numberOfFilteredPoints;
 
                 CT_Point pReaded;
 
@@ -255,19 +313,22 @@ bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
                         pReaded(CT_Point::Z) = pXYZ(2);
                     }
 
-                    xmin = qMin(pReaded(CT_Point::X), xmin);
-                    ymin = qMin(pReaded(CT_Point::Y), ymin);
-                    zmin = qMin(pReaded(CT_Point::Z), zmin);
-                    xmax = qMax(pReaded(CT_Point::X), xmax);
-                    ymax = qMax(pReaded(CT_Point::Y), ymax);
-                    zmax = qMax(pReaded(CT_Point::Z), zmax);
-                    imin = qMin(reflectance, imin);
-                    imax = qMax(reflectance, imax);
+                    if (!isPointFiltered(pReaded))
+                    {
+                        xmin = qMin(pReaded(CT_Point::X), xmin);
+                        ymin = qMin(pReaded(CT_Point::Y), ymin);
+                        zmin = qMin(pReaded(CT_Point::Z), zmin);
+                        xmax = qMax(pReaded(CT_Point::X), xmax);
+                        ymax = qMax(pReaded(CT_Point::Y), ymax);
+                        zmax = qMax(pReaded(CT_Point::Z), zmax);
+                        imin = qMin(reflectance, imin);
+                        imax = qMax(reflectance, imax);
 
-                    it.next();
-                    it.replaceCurrentPoint(pReaded);
+                        it.next();
+                        it.replaceCurrentPoint(pReaded);
 
-                    intensitySetter.setValueWithLocalIndex(a, reflectance);
+                        intensitySetter.setValueWithLocalIndex(a, reflectance);
+                    }
 
                     ++a;
                     setProgress(int(a*100/nPoints));
@@ -275,6 +336,8 @@ bool CT_Reader_PTX::internalReadFile(CT_StandardItemGroup* group)
 
                 CT_Scene *scene = new CT_Scene(pcir);
                 scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
+
+                m_readScenes.append(scene);
 
                 // add the scene
                 group->addSingularItem(m_outScene, scene);

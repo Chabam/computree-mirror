@@ -13,7 +13,7 @@
 
 #include "laszip/laszip_api.h"
 
-CT_Reader_LAZ::CT_Reader_LAZ(int subMenuLevel) : SuperClass(subMenuLevel)
+CT_Reader_LAZ::CT_Reader_LAZ(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {    
     m_headerFromConfiguration = nullptr;
 
@@ -22,7 +22,7 @@ CT_Reader_LAZ::CT_Reader_LAZ(int subMenuLevel) : SuperClass(subMenuLevel)
     setToolTip(tr("Charge des points depuis un fichier au format LAZ (rapidlasso GmbH)<br>https://laszip.org/"));
 }
 
-CT_Reader_LAZ::CT_Reader_LAZ(const CT_Reader_LAZ &other) : SuperClass(other)
+CT_Reader_LAZ::CT_Reader_LAZ(const CT_Reader_LAZ &other) : SuperClass(other), CT_ReaderPointsFilteringExtension()
 {
     m_headerFromConfiguration = nullptr;
 
@@ -156,6 +156,8 @@ CT_FileHeader *CT_Reader_LAZ::internalReadHeader(const QString &filepath, QStrin
 
 bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
 {
+    m_readScenes.clear();
+
     QString error;
 
     CT_LAZHeader *header = static_cast<CT_LAZHeader*>(internalReadHeader(filepath(), error));
@@ -201,10 +203,57 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
     }
 
     setToolTip(header->toString());
-
     bool mustTransformPoint = header->mustTransformPoints();
 
-    CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPoints);
+
+    // If filtering function set, do a first scan of the file to count filtered point number
+    size_t numberOfFilteredPoints = 0;
+    if (filterSet())
+    {
+        qint32 x, y, z;
+        double xc = 0;
+        double yc = 0;
+        double zc = 0;
+        CT_Point pAdded;
+
+        for (size_t i = 0; i < nPoints; ++i)
+        {
+            // READ THE POINT
+            if (laszip_read_point(laszip_reader))
+            {
+                PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire le point"));
+                delete header;
+                return false;
+            }
+
+            x = point->X;
+            y = point->Y;
+            z = point->Z;
+
+            // CONVERT POINT
+            if(mustTransformPoint)
+            {
+                header->transformPoint(x, y, z, xc, yc, zc);
+                pAdded(0) = xc;
+                pAdded(1) = yc;
+                pAdded(2) = zc;
+            } else
+            {
+                pAdded(0) = x;
+                pAdded(1) = y;
+                pAdded(2) = z;
+            }
+
+            if (isPointFiltered(pAdded)) {++numberOfFilteredPoints;}
+        }
+
+        // restore first point position for real data reading
+        laszip_seek_point(laszip_reader, 0);
+    }
+
+
+    size_t cloudSize = nPoints - numberOfFilteredPoints;
+    CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(cloudSize);
 
     // VECTOR
     auto scanAngleSetter = m_hOutScanAngle.createAttributesSetter(pcir);
@@ -266,8 +315,9 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
 
     CT_MutablePointIterator it(pcir);
 
+    int currentLocalIndex = 0;
     // read the points and convert them from LASZIP to CT format
-    for(size_t i=0; i<nPoints; i++)
+    for(size_t i = 0; i < nPoints; i++)
     {
         // READ THE POINT
         if (laszip_read_point(laszip_reader))
@@ -281,102 +331,6 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
         qint32 x = point->X;
         qint32 y = point->Y;
         qint32 z = point->Z;
-
-        intensitySetter.setValueWithLocalIndex(i, point->intensity);
-
-        PointCore6_10 valuePointCore6_10;
-        if (header->m_pointDataRecordFormat < 6) // LAS <= 1.3
-        {
-            valuePointCore6_10.entire = point->return_number +
-                    (point->number_of_returns << 3) +
-                    (point->scan_direction_flag << 6) +
-                    (point->edge_of_flight_line << 7);
-        }
-        else // LAS 1.4
-        {
-            valuePointCore6_10.entire = (quint16)point->extended_return_number +
-                    ((quint16)point->extended_number_of_returns << 4) +
-                    ((quint16)point->extended_classification_flags << 8) +
-                    ((quint16)point->extended_scanner_channel << 12) +
-                    ((quint16)point->scan_direction_flag << 14) +
-                    ((quint16)point->edge_of_flight_line << 15);
-        }
-
-        core6_10Setter.setValueWithLocalIndex(i, valuePointCore6_10);
-
-        if (header->m_pointDataRecordFormat < 6) // LAS <= 1.3
-        {
-            classificationSetter.setValueWithLocalIndex(i, point->classification);
-        }
-        else // LAS 1.4
-        {
-            classificationSetter.setValueWithLocalIndex(i, point->extended_classification);
-        }
-
-        if(header->m_pointDataRecordFormat < 6) // LAS <= 1.3
-        {
-            scanAngleSetter.setValueWithLocalIndex(i, point->scan_angle_rank);
-            userDataSetter.setValueWithLocalIndex(i, point->user_data);
-        }
-        else // LAS 1.4
-        {
-            // "user data" is before "scan angle" in version 6 to 10
-            userDataSetter.setValueWithLocalIndex(i, point->user_data);
-            scanAngleSetter.setValueWithLocalIndex(i, point->extended_scan_angle);
-        }
-
-        pointSourceIDSetter.setValueWithLocalIndex(i, point->point_source_ID);
-
-        // gps time is always after pointSourceID
-        if(gpsTimeSetter)
-            gpsTimeSetter->setValueWithLocalIndex(i, point->gps_time);
-
-        // color is always after gpsTime if exist otherwise after pointSourceID
-        if(colorSetter)
-        {
-            redSetter->setValueWithLocalIndex(i, point->rgb[0]);
-            greenSetter->setValueWithLocalIndex(i, point->rgb[1]);
-            blueSetter->setValueWithLocalIndex(i, point->rgb[2]);
-
-            CT_Color colRGBA;
-            colRGBA.r() = point->rgb[0]/256;
-            colRGBA.g() = point->rgb[1]/256;
-            colRGBA.b() = point->rgb[2]/256;
-            colRGBA.a() = 255;
-
-            colorSetter->setValueWithLocalIndex(i, colRGBA);
-        }
-
-        // NIR is always after colors if exist
-        if(nirSetter)
-            nirSetter->setValueWithLocalIndex(i, point->rgb[3]);
-
-        // wave packet is always after NIR if exist
-        if(wpdiSetter)
-        {
-            quint8 wpdi = point->wave_packet[0];
-            quint64 botwd = (quint64)point->wave_packet[1] +
-                    ((quint64)point->wave_packet[2] << 8) +
-                    ((quint64)point->wave_packet[3] << 16) +
-                    ((quint64)point->wave_packet[4] << 24) +
-                    ((quint64)point->wave_packet[5] << 32) +
-                    ((quint64)point->wave_packet[6] << 40) +
-                    ((quint64)point->wave_packet[7] << 48) +
-                    ((quint64)point->wave_packet[8] << 56);
-            quint32 wpsi = (quint32)point->wave_packet[9] +
-                    ((quint32)point->wave_packet[10] << 8) +
-                    ((quint32)point->wave_packet[11] << 16) +
-                    ((quint32)point->wave_packet[12] << 24);
-            float rpwl = static_cast<float>((quint32)point->wave_packet[13] +
-                    ((quint32)point->wave_packet[14] << 8) +
-                    ((quint32)point->wave_packet[15] << 16) +
-                    ((quint32)point->wave_packet[16] << 24));
-
-            wpdiSetter->setValueWithLocalIndex(i, wpdi);
-            botwdSetter->setValueWithLocalIndex(i, botwd);
-            wpsibSetter->setValueWithLocalIndex(i, wpsi);
-            rpwlSetter->setValueWithLocalIndex(i, rpwl);
-        }
 
         // CONVERT POINT
         CT_Point pAdded;
@@ -397,7 +351,108 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
             pAdded(2) = z;
         }
 
-        it.next().replaceCurrentPoint(pAdded);
+        if (!isPointFiltered(pAdded))
+        {
+            it.next().replaceCurrentPoint(pAdded);
+
+            intensitySetter.setValueWithLocalIndex(currentLocalIndex, point->intensity);
+
+            PointCore6_10 valuePointCore6_10;
+            if (header->m_pointDataRecordFormat < 6) // LAS <= 1.3
+            {
+                valuePointCore6_10.entire = point->return_number +
+                        (point->number_of_returns << 3) +
+                        (point->scan_direction_flag << 6) +
+                        (point->edge_of_flight_line << 7);
+            }
+            else // LAS 1.4
+            {
+                valuePointCore6_10.entire = (quint16)point->extended_return_number +
+                        ((quint16)point->extended_number_of_returns << 4) +
+                        ((quint16)point->extended_classification_flags << 8) +
+                        ((quint16)point->extended_scanner_channel << 12) +
+                        ((quint16)point->scan_direction_flag << 14) +
+                        ((quint16)point->edge_of_flight_line << 15);
+            }
+
+            core6_10Setter.setValueWithLocalIndex(currentLocalIndex, valuePointCore6_10);
+
+            if (header->m_pointDataRecordFormat < 6) // LAS <= 1.3
+            {
+                classificationSetter.setValueWithLocalIndex(currentLocalIndex, point->classification);
+            }
+            else // LAS 1.4
+            {
+                classificationSetter.setValueWithLocalIndex(currentLocalIndex, point->extended_classification);
+            }
+
+            if(header->m_pointDataRecordFormat < 6) // LAS <= 1.3
+            {
+                scanAngleSetter.setValueWithLocalIndex(currentLocalIndex, point->scan_angle_rank);
+                userDataSetter.setValueWithLocalIndex(currentLocalIndex, point->user_data);
+            }
+            else // LAS 1.4
+            {
+                // "user data" is before "scan angle" in version 6 to 10
+                userDataSetter.setValueWithLocalIndex(currentLocalIndex, point->user_data);
+                scanAngleSetter.setValueWithLocalIndex(currentLocalIndex, point->extended_scan_angle);
+            }
+
+            pointSourceIDSetter.setValueWithLocalIndex(currentLocalIndex, point->point_source_ID);
+
+            // gps time is always after pointSourceID
+            if(gpsTimeSetter)
+                gpsTimeSetter->setValueWithLocalIndex(currentLocalIndex, point->gps_time);
+
+            // color is always after gpsTime if exist otherwise after pointSourceID
+            if(colorSetter)
+            {
+                redSetter->setValueWithLocalIndex(currentLocalIndex, point->rgb[0]);
+                greenSetter->setValueWithLocalIndex(currentLocalIndex, point->rgb[1]);
+                blueSetter->setValueWithLocalIndex(currentLocalIndex, point->rgb[2]);
+
+                CT_Color colRGBA;
+                colRGBA.r() = point->rgb[0]/256;
+                colRGBA.g() = point->rgb[1]/256;
+                colRGBA.b() = point->rgb[2]/256;
+                colRGBA.a() = 255;
+
+                colorSetter->setValueWithLocalIndex(currentLocalIndex, colRGBA);
+            }
+
+            // NIR is always after colors if exist
+            if(nirSetter)
+                nirSetter->setValueWithLocalIndex(currentLocalIndex, point->rgb[3]);
+
+            // wave packet is always after NIR if exist
+            if(wpdiSetter)
+            {
+                quint8 wpdi = point->wave_packet[0];
+                quint64 botwd = (quint64)point->wave_packet[1] +
+                        ((quint64)point->wave_packet[2] << 8) +
+                        ((quint64)point->wave_packet[3] << 16) +
+                        ((quint64)point->wave_packet[4] << 24) +
+                        ((quint64)point->wave_packet[5] << 32) +
+                        ((quint64)point->wave_packet[6] << 40) +
+                        ((quint64)point->wave_packet[7] << 48) +
+                        ((quint64)point->wave_packet[8] << 56);
+                quint32 wpsi = (quint32)point->wave_packet[9] +
+                        ((quint32)point->wave_packet[10] << 8) +
+                        ((quint32)point->wave_packet[11] << 16) +
+                        ((quint32)point->wave_packet[12] << 24);
+                float rpwl = static_cast<float>((quint32)point->wave_packet[13] +
+                        ((quint32)point->wave_packet[14] << 8) +
+                        ((quint32)point->wave_packet[15] << 16) +
+                        ((quint32)point->wave_packet[16] << 24));
+
+                wpdiSetter->setValueWithLocalIndex(currentLocalIndex, wpdi);
+                botwdSetter->setValueWithLocalIndex(currentLocalIndex, botwd);
+                wpsibSetter->setValueWithLocalIndex(currentLocalIndex, wpsi);
+                rpwlSetter->setValueWithLocalIndex(currentLocalIndex, rpwl);
+            }
+
+            ++currentLocalIndex;
+        }
 
         setProgress(int((100.0*i)/nPoints));
     }
@@ -420,6 +475,8 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
 
     CT_Scene *scene = new CT_Scene(pcir);
     scene->updateBoundingBox();
+
+    m_readScenes.append(scene);
 
     // add the scene
     group->addSingularItem(m_hOutScene, scene);

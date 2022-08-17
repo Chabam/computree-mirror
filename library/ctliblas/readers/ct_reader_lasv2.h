@@ -2,6 +2,8 @@
 #define CT_READER_LASV2_H
 
 #include "ct_reader/abstract/ct_abstractreader.h"
+#include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
+
 
 #include "ctliblas/ctliblas_global.h"
 #include "ctliblas/readers/headers/ct_lasheader.h"
@@ -12,7 +14,7 @@
 /**
  * @brief Read LAS File (http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html)
  */
-class CTLIBLAS_EXPORT CT_Reader_LASV2 : public CT_AbstractReader
+class CTLIBLAS_EXPORT CT_Reader_LASV2 : public CT_AbstractReader, public CT_ReaderPointsFilteringExtension
 {
     Q_OBJECT
     typedef CT_AbstractReader SuperClass;

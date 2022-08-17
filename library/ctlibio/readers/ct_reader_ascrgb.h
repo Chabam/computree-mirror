@@ -4,9 +4,7 @@
 #include "ctlibio/ctlibio_global.h"
 
 #include "ct_reader/abstract/ct_abstractreader.h"
-
 #include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
-
 #include "ct_itemdrawable/ct_scene.h"
 
 class CTLIBIO_EXPORT CT_Reader_ASCRGB : public CT_AbstractReader, public CT_ReaderPointsFilteringExtension

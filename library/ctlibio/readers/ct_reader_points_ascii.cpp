@@ -70,7 +70,7 @@ CT_Reader_Points_ASCII::CT_Reader_Points_ASCII(int subMenuLevel) : SuperClass(su
 
 }
 
-CT_Reader_Points_ASCII::CT_Reader_Points_ASCII(const CT_Reader_Points_ASCII &other) : SuperClass(other)
+CT_Reader_Points_ASCII::CT_Reader_Points_ASCII(const CT_Reader_Points_ASCII &other) : SuperClass(other), CT_ReaderPointsFilteringExtension()
 {
     m_firstConfiguration = other.m_firstConfiguration;
     m_columnXIndex = other.m_columnXIndex;
@@ -459,6 +459,8 @@ void CT_Reader_Points_ASCII::internalDeclareOutputModels(CT_ReaderOutModelStruct
 
 bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
 {
+    m_readScenes.clear();
+
     if(!canLoadPoints())
         return false;
 
@@ -520,6 +522,7 @@ bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
                 }
 
                 CHK_ERR(readPoint(wordsOfLine, locale, point), tr("Error loading point at line %1").arg(nLine));
+
                 if (isPointFiltered(point))
                     continue;
 
@@ -533,7 +536,10 @@ bool CT_Reader_Points_ASCII::internalReadFile(CT_StandardItemGroup* group)
             f.close();
 
             CT_PCIR pcir = PS_REPOSITORY->registerUndefinedSizePointCloud(uspc);
-            group->addSingularItem(m_outPointCloud, new CT_Scene(pcir));
+            CT_Scene* scene = new CT_Scene(pcir);
+            group->addSingularItem(m_outPointCloud, scene);
+
+            m_readScenes.append(scene);
 
             if(intensitySetter != nullptr)
                 group->addSingularItem(m_outIntensity, m_outIntensity.createAttributeInstance(pcir, minIntensity, maxIntensity));

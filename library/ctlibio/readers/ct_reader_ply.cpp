@@ -38,14 +38,14 @@
                                                 if(!ok) \
                                                     return false;
 
-CT_Reader_PLY::CT_Reader_PLY(int subMenuLevel) : SuperClass(subMenuLevel)
+CT_Reader_PLY::CT_Reader_PLY(int subMenuLevel) : SuperClass(subMenuLevel), CT_ReaderPointsFilteringExtension()
 {
     addNewReadableFormat(FileFormat("ply", tr("Fichiers de géométrie 3D .ply")));
 
     setToolTip(tr("Charge un nuage de points depuis un fichier au format PLY (Objet 3D)"));
 }
 
-CT_Reader_PLY::CT_Reader_PLY(const CT_Reader_PLY &other) : SuperClass(other)
+CT_Reader_PLY::CT_Reader_PLY(const CT_Reader_PLY &other) : SuperClass(other), CT_ReaderPointsFilteringExtension()
 {
 
 }
@@ -257,6 +257,8 @@ using Ply_CT_ScalarCloud_Wrapper = Ply_CT_GenericCloud_Wrapper<CT_DensePointScal
 
 bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
 {
+    m_readScenes.clear();
+
     PlyHeaderReader headerReader;
     headerReader.setFilePath(filepath());
 
@@ -348,8 +350,15 @@ bool CT_Reader_PLY::internalReadFile(CT_StandardItemGroup* group)
 
     partReader.process();
 
+    if (filterSet())
+    {
+        PS_LOG->addWarningMessage(LogInterface::step, tr("ATTENTION : les filtres ne sont pas pris en charges pour le format PLY pour le moment. Tous les points seront chargés."));
+    }
+
     CT_Scene* scene = new CT_Scene(wrapper.pcir);
     scene->updateBoundingBox();
+
+    m_readScenes.append(scene);
 
     // add the scene
     group->addSingularItem(m_outScene, scene);
