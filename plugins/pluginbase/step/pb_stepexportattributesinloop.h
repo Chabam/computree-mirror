@@ -30,6 +30,10 @@ public:
     PB_StepExportAttributesInLoop();
 
     QString description() const final;
+    QString detailledDescription() const final;
+    QString inputDescription() const final;
+    QString outputDescription() const final;
+    QString detailsDescription() const final;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 

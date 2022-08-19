@@ -48,6 +48,8 @@ public:
 
     QString getPluginURL() const override {return QString("http://rdinnovation.onf.fr/projects/plugin-base/wiki");}
 
+    virtual QString getPluginOfficialName() const override {return "Base";}
+
     bool init() override;
 
     QString getPluginRISCitation() const override;

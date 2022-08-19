@@ -56,6 +56,37 @@ QString PB_StepExportAttributesInLoop::description() const
 {
     return tr("Export d'attributs dans une boucle");
 }
+QString PB_StepExportAttributesInLoop::detailledDescription() const
+{
+    return tr("Cette étape permet d'exporter des données au sein d'une boucle, en prenant en compte les tours surccessifs. Tout attribut de n'importe quel item peut être exporté.<br>"
+                "Cette étape propose 3 types d'exports différents, pouvant être réalisés en parallèle ou non :<br>"
+                "<ul>"
+                "<li>Un export sous forme de fichier texte, avec une ligne par item et tour de boucle, et une colonne par attribut. Un seul fichier est produit, regroupant les données de tous les tours de boucle.</li>"
+                "<li>Un export sous forme de raster, produisant un fichier raster par attribut et par tour de boucle. Pour que cet export puisse être utilisé, il faut que les données soient organisées sous forme de grille spatiale.</li>"
+                "<li>Un export sous forme de vecteur (points en 2D avec attributs), produisant un fichier vecteur par tour de boucle, avec une ligne par item, et une colonne par attribut. Cela nécessite que parmi les attributs figurent des coordonnées (x;y), auquelles assosicer les autres attributs.</li>"
+                "</ul>"
+                "Il est possible d'utiliser cette étape en dehors d'une boucle, même si ce n'est pas son usage prévu, en sélectionnant l'option correspondante. ");
+}
+
+QString PB_StepExportAttributesInLoop::inputDescription() const
+{
+    return SuperClass::inputDescription() + tr("<br><br>Le type de données d'entrée nécessaire dépend des exports activés.<br>"
+                                               "Dans tous les cas il faut sélectionner les attributs à exporter.<br>"
+                                               "Pour les exports raster, il faut sélectionner un objet \"Grille de placettes\", par exemple généré par l'étape \"Créer une grille de placettes sur l'emprise\".<br>"
+                                               "Pour les exports vecteurs (et aussi raster), il faut également séléctionner des attributs pour les coordonnées (x;y) auxquelles les attributs seront associés spatialement.<br><br>"
+                                               "Comme il s'agit d'un export au sein d'une boucle, il faut également sélectionner le compteur de boucle (sauf si l'option d'export hors boucle a été choisi).");
+}
+
+QString PB_StepExportAttributesInLoop::outputDescription() const
+{
+    return SuperClass::outputDescription() + tr("Cette étape ne génère pas de nouvelles données.");
+}
+
+QString PB_StepExportAttributesInLoop::detailsDescription() const
+{
+    return tr("A noter que les trois types d'exports sont indépendants, même s'ils exportent les mêmes attributs.");
+}
+
 
 CT_VirtualAbstractStep* PB_StepExportAttributesInLoop::createNewInstance() const
 {
@@ -103,7 +134,7 @@ void PB_StepExportAttributesInLoop::declareInputModels(CT_StepInModelStructureMa
     manager.addItem(mInGroupChild, mInItemWithAttribute, tr("Item avec des attributs"));
     manager.addItemAttribute(mInItemWithAttribute, mInItemAttribute, CT_AbstractCategory::DATA_VALUE, tr("Attribut à exporter"));
 
-    if(_exportInLoop)
+    if(_exportInLoop && !isAPrototype())
     {
         manager.addResult(mInResultCounter, tr("Résultat compteur"), QString(), true);
         manager.setRootGroup(mInResultCounter, mInGroupCounter);
@@ -117,13 +148,13 @@ void PB_StepExportAttributesInLoop::declareOutputModels(CT_StepOutModelStructure
 
 void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
-    if (_asciiExport)
+    if (_asciiExport || isAPrototype())
     {
         postInputConfigDialog->addTitle(tr("Export ASCII tabulaire (1 fichier en tout)"));
-        postInputConfigDialog->addFileChoice(tr("Choix du fichier"), CT_FileChoiceButton::OneNewFile, tr("Fichier texte (*.txt)"), _outASCIIFileName);
+        postInputConfigDialog->addFileChoice(tr("Choix du fichier"), CT_FileChoiceButton::OneNewFile, tr("Fichier texte (*.txt)"), _outASCIIFileName, tr("S'il existe déjà, le fichier sera écrasé. Le fichier contiendra les données pour tous les tours de boucle. "));
     }
 
-    if (_rasterExport)
+    if (_rasterExport || isAPrototype())
     {
         QStringList driversR;
         driversR.append(mGrid2DExporterUniqueName);
@@ -134,23 +165,23 @@ void PB_StepExportAttributesInLoop::fillPostInputConfigurationDialog(CT_StepConf
 
         postInputConfigDialog->addEmpty();
         postInputConfigDialog->addTitle(tr("Export raster (1 fichier / tour / métrique)"));
-        postInputConfigDialog->addString(tr("Prefixe pour les fichiers exportés"), "", _rasterPrefix);
-        postInputConfigDialog->addStringChoice(tr("Choix du format d'export"), "", driversR, _rasterDriverName);
-        postInputConfigDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outRasterFolder);
-        postInputConfigDialog->addBool(tr("Créer un sous-dossier par métrique"), "", "", _subFolders);
+        postInputConfigDialog->addString(tr("Prefixe pour les fichiers exportés"), "", _rasterPrefix, tr("Un prefixe optionnel peut être ajouté à tous les noms de fichier, pour par exemple identifier différents lancements du script, exportant dans un même répertoire."));
+        postInputConfigDialog->addStringChoice(tr("Choix du format d'export"), "", driversR, _rasterDriverName, tr("Format raster à utiliser pour les exports."));
+        postInputConfigDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outRasterFolder, tr("Le contenu du dossier sélectionné ne sera pas effacé. Cependant pour plus de clarté il est préférable de choisir un dossier vide."));
+        postInputConfigDialog->addBool(tr("Créer un sous-dossier par métrique"), "", "", _subFolders, tr("Si cette case est cochée, un dossier séparé sera créé pour achaque attribut à exporter, contenant chacun un raster par tour de boucle."));
     }
 
 #ifdef USE_GDAL
-    if (_vectorExport)
+    if (_vectorExport || isAPrototype())
     {
         QStringList driversV;
         driversV.append(_gdalVectorDrivers.keys());
 
         postInputConfigDialog->addEmpty();
         postInputConfigDialog->addTitle(tr("Export vectoriel (1 fichier / tour)"));
-        postInputConfigDialog->addString(tr("Prefixe pour les fichiers exportés"), "", _vectorPrefix);
-        postInputConfigDialog->addStringChoice(tr("Choix du format d'export"), "", driversV, _vectorDriverName);
-        postInputConfigDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outVectorFolder);
+        postInputConfigDialog->addString(tr("Prefixe pour les fichiers exportés"), "", _vectorPrefix, tr("Un prefixe optionnel peut être ajouté à tous les noms de fichier, pour par exemple identifier différents lancements du script, exportant dans un même répertoire."));
+        postInputConfigDialog->addStringChoice(tr("Choix du format d'export"), "", driversV, _vectorDriverName, tr("Format vecteur à utiliser pour les exports."));
+        postInputConfigDialog->addFileChoice(tr("Répertoire d'export (vide de préférence)"), CT_FileChoiceButton::OneExistingFolder, "", _outVectorFolder, tr("Le contenu du dossier sélectionné ne sera pas effacé. Cependant pour plus de clarté il est préférable de choisir un dossier vide."));
     }
 #endif
 }

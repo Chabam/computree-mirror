@@ -205,8 +205,8 @@ CT_CheckBox* CT_GenericConfigurableWidget::addBool(const QString &beforeLabelTex
 
         addRow();
 
-        QString str = checkBoxText;
-        if (str.isEmpty()) {str = beforeLabelText;}
+        QString str = beforeLabelText;
+        if (str.isEmpty()) {str = checkBoxText;}
 
         QString sep = "";
         if (!str.isEmpty())
@@ -459,7 +459,12 @@ CT_FileChoiceButton* CT_GenericConfigurableWidget::addFileChoice(const QString &
             m_helpText.append("<ul>");
         }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
+        if (filetype == CT_FileChoiceButton::OneExistingFolder)
+        {
+            m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + description + "</li><br>");
+        } else {
+            m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
+        }
 
         fileChoiceButton->setWidgetValue(valueToUpdate);
     }

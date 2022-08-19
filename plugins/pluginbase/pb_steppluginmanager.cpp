@@ -220,7 +220,7 @@ bool PB_StepPluginManager::loadGenericsStep()
 
     addNewLoadStep<PB_StepCreateReaderList>(); // doc ok
     addNewLoadStep<PB_StepUseReaderToLoadFiles>(); // doc ok
-    addNewLoadStep<PB_StepLoadFileByName>();
+    addNewLoadStep<PB_StepLoadFileByName>(); // doc ok
 
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
     addNewExportStep<PB_StepExportAttributesInLoop>();

@@ -9,7 +9,6 @@
 
 #include <QFile>
 #include <QTextStream>
-#include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
 
@@ -30,7 +29,23 @@ QString PB_StepLoadFileByName::description() const
 
 QString PB_StepLoadFileByName::detailledDescription() const
 {
-    return tr("Create a file reader, using a base name obtained from checked field.\n You have to select a sample file, to allow reader configuration. ");
+    return tr("Cette étape charge l'entête d'un fichier, dont le nom est déterminé par un attribut choisi.<br>"
+                "L'utilisateur doit choisir un fichier exemple, qui est utilisé pour définir le répertoire de recherche et vérifier le format utilisé.");
+}
+
+QString PB_StepLoadFileByName::inputDescription() const
+{
+    return SuperClass::inputDescription() + tr("<br><br>L'attibut sélectionné doit contenir le nom de base du fichier recherché. Si l'attribut contient un chemin complet, cette étape en extraiera uniquement le nom de base (sans chemin d'accès et sans extension).<br>Il s'agit souvent d'un attribut nommé \"filename\" ou \"filepath\"");
+}
+
+QString PB_StepLoadFileByName::outputDescription() const
+{
+    return SuperClass::outputDescription() + tr("<br>Cette étape charge uniquement l'entête du fichier. <strong>Il faudra ensuite charger les données du fichier</strong>, en général à l'aide de l'étape \"Charger les fichiers d'une liste\".");
+}
+
+QString PB_StepLoadFileByName::detailsDescription() const
+{
+    return tr("En général, cette étape est utilisée dans une boucle, afin de charger un fichier correspondant au tour de boucle en cours.<br>Par exemple, si on a une boucle qui charge tour à tour des nuages de points LIDAR, cette étape peut être utilisée pour identifier à chaque tour de boucle le fichier modèle numérique de terrain (MNT) ayant le même nom que le fichier LIDAR en cours, dans un répertoire dédié.");
 }
 
 CT_VirtualAbstractStep* PB_StepLoadFileByName::createNewInstance() const
@@ -42,7 +57,7 @@ void PB_StepLoadFileByName::fillPreInputConfigurationDialog(CT_StepConfigurableD
 {
     const QStringList list_readersList = CT_ReadersTools::constructReadersUniqueNameList(pluginStaticCastT<PB_StepPluginManager>()->readersAvailable());
 
-    preInputConfigDialog->addStringChoice(tr("Choose file type"), "", list_readersList, m_readerSelectedClassName);
+    preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedClassName);
 }
 
 void PB_StepLoadFileByName::declareInputModels(CT_StepInModelStructureManager& manager)
@@ -67,7 +82,7 @@ bool PB_StepLoadFileByName::postInputConfigure()
     QStringList fileList;
 
     CT_GenericConfigurableWidget configDialog;
-    configDialog.addFileChoice(tr("Choisir un fichier exemple"), CT_FileChoiceButton::OneOrMoreExistingFiles, fileFilter, fileList);
+    configDialog.addFileChoice(tr("Choisir un fichier exemple"), CT_FileChoiceButton::OneOrMoreExistingFiles, fileFilter, fileList, tr("Ce fichier exemple doit être l'un des fichiers potentiels à charger (peu importe lequel). Il est analysé pour vérifier le format utilisé, mais aussi pour définir dans quel répertoire il faut chercher les fichiers. "));
     configDialog.addTitle(tr("Le fichier choisi doit :"));
     configDialog.addText("", tr("- Etre dans le répertoire des fichiers à charger"), "");
     configDialog.addText("", tr("- Avoir le même format que les fichiers à charger"), "");

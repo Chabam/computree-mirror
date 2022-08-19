@@ -17,8 +17,10 @@ public:
     ~PB_StepLoadFileByName() final;
 
     QString description() const final;
-
     QString detailledDescription() const final;
+    QString inputDescription() const final;
+    QString outputDescription() const override;
+    QString detailsDescription() const override;
 
     CT_VirtualAbstractStep* createNewInstance() const final;
 
