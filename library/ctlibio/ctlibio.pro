@@ -14,6 +14,10 @@ TARGET = ctlibio
 DEFINES += CTLIBIO_LIBRARY
 
 HEADERS +=  \
+    exporters/grid3d/pb_grid3dastableexporter.h \
+    exporters/grid3d/pb_grid3dexporter.h \
+    exporters/polygon2d/pb_polygon2dexporter.h \
+    exporters/profile/pb_profileexporter.h \
     readers/ct_reader_ascrgb.h \
     readers/ct_reader_gdal.h \
     readers/ct_reader_larchitect_grid.h \
@@ -89,6 +93,10 @@ HEADERS +=  \
 #    exporters/xyb/pb_multixybexporter.h
 
 SOURCES += \
+    exporters/grid3d/pb_grid3dastableexporter.cpp \
+    exporters/grid3d/pb_grid3dexporter.cpp \
+    exporters/polygon2d/pb_polygon2dexporter.cpp \
+    exporters/profile/pb_profileexporter.cpp \
     readers/ct_reader_ascrgb.cpp \
     readers/ct_reader_gdal.cpp \
     readers/ct_reader_larchitect_grid.cpp \

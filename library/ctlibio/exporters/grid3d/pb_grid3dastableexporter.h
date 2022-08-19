@@ -1,31 +1,48 @@
 #ifndef PB_GRID3DASTABLEEXPORTER_H
 #define PB_GRID3DASTABLEEXPORTER_H
 
+#include "ctlibio/ctlibio_global.h"
 #include "ct_exporter/abstract/ct_abstractexporter.h"
+#include "ct_itemdrawable/abstract/ct_abstractgrid3d.h"
 
-class PB_Grid3DAsTableExporter : public CT_AbstractExporter
+class CTLIBIO_EXPORT PB_Grid3DAsTableExporter : public CT_AbstractExporter
 {
     Q_OBJECT
-    typedef CT_AbstractExporter SuperClass;
+    using SuperClass = CT_AbstractExporter;
 
 public:
-    PB_Grid3DAsTableExporter();
-    PB_Grid3DAsTableExporter(const PB_Grid3DAsTableExporter& other) = default;
+    PB_Grid3DAsTableExporter(int subMenuLevel = 0);
+    PB_Grid3DAsTableExporter(const PB_Grid3DAsTableExporter& other);
 
-    QString getExporterCustomName() const override;
+    QString displayableName() const final;
 
-    CT_StepsMenu::LevelPredefined getExporterSubMenuName() const override;
+    bool isExportEachItemInSeparateFileOptionnal() const final;
 
-    void init() override;
-
-    bool setItemDrawableToExport(const QList<CT_AbstractItemDrawable*> &list) override;
-
-    bool configureExport() override;
+    void setItemsToExport(const QList<const CT_AbstractGrid3D*>& items);
 
     CT_EXPORTER_DECL_COPY(PB_Grid3DAsTableExporter)
 
 protected:
-    bool protectedExportToFile() override;
+        void internalDeclareInputModels(CT_ExporterInModelStructureManager& manager) final;
+
+        ExportReturn internalExportToFile() final;
+
+        void clearIterators() final;
+
+        void clearAttributesClouds() final;
+
+    private:
+        using HandleItemType = CT_HandleInSingularItem<CT_AbstractGrid3D>;
+
+        CT_HandleInStdGroup<>               m_hInGroup;
+        HandleItemType                      m_hInItem;
+
+        HandleItemType::const_iterator      mIteratorItemBegin;
+        HandleItemType::const_iterator      mIteratorItemEnd;
+
+        QList<const CT_AbstractGrid3D*>    mItems;
+
+        bool exportItem(const CT_AbstractGrid3D* item, const QString& prePath, const QString& indice);
 };
 
 #endif // PB_GRID3DASTABLEEXPORTER_H

@@ -55,13 +55,13 @@
 #include "ctlibstdactions/action/pb_actionshowitemdatagv.h"
 
 #include "exporters/csv/pb_csvexporter.h"
-//#include "exporters/profile/pb_profileexporter.h"
+#include "exporters/profile/pb_profileexporter.h"
 
 #include "exporters/grid2d/pb_grid2dexporter.h"
-/*
+
 #include "exporters/grid3d/pb_grid3dexporter.h"
 #include "exporters/grid3d/pb_grid3dastableexporter.h"
-*/
+
 #include "exporters/xyb/pb_xybexporter.h"
 #include "ctliblas/exporters/ct_exporter_las.h"
 #include "ctliblaz/exporters/ct_exporter_laz.h"
@@ -74,10 +74,10 @@
 #include "exporters/xyb/pb_multixybexporter.h"
 #include "exporters/pbm/pb_pbmexporter.h"
 #include "exporters/pgm/pb_pgmexporter.h"
-#include "exporters/polygon2d/pb_polygon2dexporter.h"
 */
 #include "exporters/gdal/pb_gdalexporter.h"
 #include "exporters/ascid/pb_ascidexporter.h"
+#include "exporters/polygon2d/pb_polygon2dexporter.h"
 
 #include "ctlibio/readers/ct_reader_xyb.h"
 #include "ctlibio/readers/ct_reader_ascrgb.h"
@@ -278,15 +278,16 @@ bool PB_StepPluginManager::loadExporters()
     sep->addExporter(new PB_OPFExporter(CT_StepsMenu::LP_Others));
     sep->addExporter(new CT_Exporter_LAS(CT_StepsMenu::LP_Points));
     sep->addExporter(new CT_Exporter_LAZ(CT_StepsMenu::LP_Points));
+    sep->addExporter(new PB_Grid3DExporter(CT_StepsMenu::LP_Voxels));
+    sep->addExporter(new PB_Grid3DAsTableExporter(CT_StepsMenu::LP_Voxels));
+    sep->addExporter(new PB_Polygon2DExporter(CT_StepsMenu::LP_Vector));
+    sep->addExporter(new PB_ProfileExporter());
 
-    //sep->addExporter(new PB_MultiXYBExporter());
-    //sep->addExporter(new PB_ProfileExporter());
     /*
-    sep->addExporter(new PB_Grid3DExporter());
-    sep->addExporter(new PB_Grid3DAsTableExporter());
-    sep->addExporter(new PB_Polygon2DExporter());
+    sep->addExporter(new PB_MultiXYBExporter());
     sep->addExporter(new PB_PbmExporter());
-    sep->addExporter(new PB_PgmExporter());*/
+    sep->addExporter(new PB_PgmExporter());
+    */
 
     // create gdal exporters
 #ifdef USE_GDAL
