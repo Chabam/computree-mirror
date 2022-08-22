@@ -1,10 +1,10 @@
 #include "ct_abstractfilter.h"
 
-CT_AbstractFilter::CT_AbstractFilter() : CT_AbstractConfigurableElement()
+CT_AbstractFilter::CT_AbstractFilter(QString pluginName) : CT_AbstractConfigurableElement(pluginName)
 {
 }
 
-CT_AbstractFilter::CT_AbstractFilter(const CT_AbstractFilter &other) : CT_AbstractConfigurableElement()
+CT_AbstractFilter::CT_AbstractFilter(const CT_AbstractFilter &other) : CT_AbstractConfigurableElement(pluginOfficialName())
 {
     Q_UNUSED(other);
 }

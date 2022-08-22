@@ -3,6 +3,7 @@
 
 #include "ct_global/ct_context.h"
 #include "ct_element/abstract/ct_abstractconfigurableelement.h"
+#include <QDebug>
 
 /**
  * @brief Class tools for CT_AbstractConfigurableElement with static methods to disable duplicated code
@@ -128,14 +129,22 @@ public:
 
         for(const CT_AbstractConfigurableElement* element : c) {
 
-            ret += QObject::tr("<b>%1</b><br/><br/><i>%2</i>").arg(element->getShortDisplayableName()).arg(element->getShortDescription());
+            ret += QObject::tr("<h3>%2</h3>"
+                               "<div class=\"descBlocklvl2\">"
+                               "<strong>Plugin</strong> : %5, <strong>Nom de classe</strong> : %1<br><br>"
+                               "<strong>Description</strong> : %3<br><br>"
+                               "%6%4<br>"
+                               "</div>")
+                    .arg(element->getUniqueName()) //%1
+                    .arg(element->getShortDisplayableName()) //%2
+                    .arg(element->getShortDescription()) //%3
+                    .arg(element->getDetailledDescription()) //%4
+                    .arg(element->pluginOfficialName()) //%5
+                    .arg(element->getDetailledDescription().isEmpty()?"":QObject::tr("<strong>Détails</strong> :<br><br>")); //%6
 
             if(it.hasNext())
                 ret += QObject::tr("<br/><br/>");
         }
-
-        if(ret.isEmpty())
-            ret = QObject::tr("No detailled description for this step");
 
         return ret;
     }

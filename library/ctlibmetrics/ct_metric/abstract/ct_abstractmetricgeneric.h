@@ -13,7 +13,7 @@ class CTLIBMETRICS_EXPORT CT_AbstractMetricGeneric : public CT_AbstractMetric
     typedef CT_AbstractMetric SuperClass;
 
 public:
-    CT_AbstractMetricGeneric() : CT_AbstractMetric() {}
+    CT_AbstractMetricGeneric(QString pluginName) : CT_AbstractMetric(pluginName) {}
     CT_AbstractMetricGeneric(const CT_AbstractMetricGeneric &other)  : CT_AbstractMetric(other) {}
     ~CT_AbstractMetricGeneric() override;
 

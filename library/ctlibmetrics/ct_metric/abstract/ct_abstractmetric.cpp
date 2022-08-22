@@ -2,11 +2,11 @@
 
 #include "ct_log/ct_logmanager.h"
 
-CT_AbstractMetric::CT_AbstractMetric() : CT_AbstractConfigurableElement()
+CT_AbstractMetric::CT_AbstractMetric(QString pluginName) : CT_AbstractConfigurableElement(pluginName)
 {
 }
 
-CT_AbstractMetric::CT_AbstractMetric(const CT_AbstractMetric& /*other*/)
+CT_AbstractMetric::CT_AbstractMetric(const CT_AbstractMetric& other) : CT_AbstractConfigurableElement(other)
 {
 }
 

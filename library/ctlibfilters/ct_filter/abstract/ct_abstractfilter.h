@@ -11,7 +11,7 @@ class CTLIBFILTERS_EXPORT CT_AbstractFilter : public CT_AbstractConfigurableElem
 {
     Q_OBJECT
 public:
-    CT_AbstractFilter();
+    CT_AbstractFilter(QString pluginName);
     CT_AbstractFilter(const CT_AbstractFilter &other);
 
     /**

@@ -41,7 +41,7 @@ public:
         double         minZ;
     };
 
-    CT_CloudMetrics();
+    CT_CloudMetrics(QString pluginName);
     CT_CloudMetrics(const CT_CloudMetrics &other);
 
     /**

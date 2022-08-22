@@ -1,9 +1,13 @@
 #include "ct_abstractmetric_xyz.h"
 
-CT_AbstractMetric_XYZ::CT_AbstractMetric_XYZ() : CT_AbstractMetricGeneric()
+CT_AbstractMetric_XYZ::CT_AbstractMetric_XYZ(QString pluginName) : CT_AbstractMetricGeneric(pluginName)
 {
     _inCloud = nullptr;
     _plotArea = nullptr;
+}
+
+CT_AbstractMetric_XYZ::CT_AbstractMetric_XYZ(const CT_AbstractMetric_XYZ &other) : CT_AbstractMetricGeneric(other)
+{
 }
 
 bool CT_AbstractMetric_XYZ::initDatas(const CT_AbstractPointCloudIndex* inCloud, const CT_AreaShape2DData* plotArea)

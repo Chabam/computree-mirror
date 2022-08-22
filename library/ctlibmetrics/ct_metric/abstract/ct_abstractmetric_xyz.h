@@ -12,8 +12,8 @@ class CTLIBMETRICS_EXPORT CT_AbstractMetric_XYZ : public CT_AbstractMetricGeneri
     Q_OBJECT
 
 public:
-    CT_AbstractMetric_XYZ();
-    CT_AbstractMetric_XYZ(const CT_AbstractMetric_XYZ &other) = default;
+    CT_AbstractMetric_XYZ(QString pluginName);
+    CT_AbstractMetric_XYZ(const CT_AbstractMetric_XYZ &other);
 
     bool initDatas(const CT_AbstractPointCloudIndex* inCloud, const CT_AreaShape2DData *plotArea);
 

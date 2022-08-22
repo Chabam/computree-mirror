@@ -12,7 +12,7 @@ class CTLIBMETRICS_EXPORT CT_AbstractMetric_Raster : public CT_AbstractMetricGen
     Q_OBJECT
 
 public:
-    CT_AbstractMetric_Raster();
+    CT_AbstractMetric_Raster(QString pluginName);
     CT_AbstractMetric_Raster(const CT_AbstractMetric_Raster &other);
 
     bool initDatas(const CT_AbstractImage2D* inRaster, const CT_AreaShape2DData *plotArea);

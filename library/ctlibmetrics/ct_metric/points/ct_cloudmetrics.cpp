@@ -5,7 +5,7 @@
 // percentiles must be in ascending order (25 and 75 must be kept to compute the interquartileDistance !)
 int CT_CloudMetrics::PERCENTILE_COEFF[CT_CloudMetrics::PERCENTILE_ARRAY_SIZE] = {1, 5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95, 99};
 
-CT_CloudMetrics::CT_CloudMetrics() : SuperClass()
+CT_CloudMetrics::CT_CloudMetrics(QString pluginName) : SuperClass(pluginName)
 {
     declareAttributes();
     m_configAndResults.minZ = -1;

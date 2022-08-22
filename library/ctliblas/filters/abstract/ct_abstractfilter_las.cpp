@@ -4,7 +4,7 @@
 #include "ct_pointcloudindex/ct_pointcloudindexvector.h"
 #include "ct_log/ct_logmanager.h"
 
-CT_AbstractFilter_LAS::CT_AbstractFilter_LAS() : CT_AbstractFilter_XYZ(),
+CT_AbstractFilter_LAS::CT_AbstractFilter_LAS(QString pluginName) : CT_AbstractFilter_XYZ(pluginName),
     _lasAttributes(nullptr)
 {
 }

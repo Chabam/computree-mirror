@@ -372,6 +372,10 @@ void GMainWindow::createStepHelp()
         stream << "{\n";
         stream << "    margin-left:10px;\n";
         stream << "}\n";
+        stream << ".descBlocklvl2\n";
+        stream << "{\n";
+        stream << "    margin-left:30px;\n";
+        stream << "}\n";
         stream << "summary {\n";
         stream << "  display: flex;\n";
         stream << "  cursor: pointer;\n";

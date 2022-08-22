@@ -15,7 +15,7 @@ class CTLIBMETRICS_EXPORT CT_AbstractMetric : public CT_AbstractConfigurableElem
     Q_OBJECT
 
 public:
-    CT_AbstractMetric();
+    CT_AbstractMetric(QString pluginName);
     CT_AbstractMetric(const CT_AbstractMetric &other);
     ~CT_AbstractMetric() override;
 

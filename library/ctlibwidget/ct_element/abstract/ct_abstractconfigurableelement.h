@@ -24,7 +24,10 @@ class CTLIBWIDGET_EXPORT CT_AbstractConfigurableElement : public QObject
     Q_OBJECT
 
 public:
-    CT_AbstractConfigurableElement();
+    CT_AbstractConfigurableElement(QString pluginName);
+
+    CT_AbstractConfigurableElement(const CT_AbstractConfigurableElement& other);
+
     virtual ~CT_AbstractConfigurableElement();
 
     /**
@@ -95,6 +98,14 @@ public:
      * @brief Called after configuration
      */
     virtual void finalizeConfiguration() = 0;
+
+    /**
+     * @brief Return official plugin Name
+     */
+    QString pluginOfficialName() const {return m_pluginName;}
+
+private:
+    QString         m_pluginName;
 };
 
 #endif // CT_ABSTRACTCONFIGURABLEELEMENT_H

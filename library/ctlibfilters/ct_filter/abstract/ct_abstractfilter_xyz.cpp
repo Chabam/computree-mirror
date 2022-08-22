@@ -3,7 +3,7 @@
 #include "ct_iterator/ct_pointiterator.h"
 #include "ct_log/ct_logmanager.h"
 
-CT_AbstractFilter_XYZ::CT_AbstractFilter_XYZ() : CT_AbstractFilter()
+CT_AbstractFilter_XYZ::CT_AbstractFilter_XYZ(QString pluginName) : CT_AbstractFilter(pluginName)
 {
     _inCloud = nullptr;
     _outCloud = new CT_PointCloudIndexVector();

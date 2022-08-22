@@ -393,7 +393,7 @@ bool PB_StepPluginManager::loadFilters()
 
 bool PB_StepPluginManager::loadMetrics()
 {
-    addNewMetric(new CT_CloudMetrics());
+    addNewMetric(new CT_CloudMetrics(getPluginOfficialName()));
     return true;
 }
 

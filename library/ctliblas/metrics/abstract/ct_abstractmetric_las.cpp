@@ -1,6 +1,6 @@
 #include "ct_abstractmetric_las.h"
 
-CT_AbstractMetric_LAS::CT_AbstractMetric_LAS() : CT_AbstractMetric_XYZ()
+CT_AbstractMetric_LAS::CT_AbstractMetric_LAS(QString pluginName) : CT_AbstractMetric_XYZ(pluginName)
 {
     _lasAttributes = nullptr;
 }

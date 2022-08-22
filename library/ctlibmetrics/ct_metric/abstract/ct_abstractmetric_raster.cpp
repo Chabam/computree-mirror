@@ -1,6 +1,6 @@
 #include "ct_abstractmetric_raster.h"
 
-CT_AbstractMetric_Raster::CT_AbstractMetric_Raster() : CT_AbstractMetricGeneric()
+CT_AbstractMetric_Raster::CT_AbstractMetric_Raster(QString pluginName) : CT_AbstractMetricGeneric(pluginName)
 {
     _inRaster = nullptr;
     _plotArea = nullptr;

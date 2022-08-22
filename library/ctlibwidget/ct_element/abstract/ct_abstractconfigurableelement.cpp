@@ -1,7 +1,13 @@
 #include "ct_abstractconfigurableelement.h"
 
-CT_AbstractConfigurableElement::CT_AbstractConfigurableElement()
+CT_AbstractConfigurableElement::CT_AbstractConfigurableElement(QString pluginName)
 {
+    m_pluginName = pluginName;
+}
+
+CT_AbstractConfigurableElement::CT_AbstractConfigurableElement(const CT_AbstractConfigurableElement &other)
+{
+    m_pluginName = other.pluginOfficialName();
 }
 
 CT_AbstractConfigurableElement::~CT_AbstractConfigurableElement()
