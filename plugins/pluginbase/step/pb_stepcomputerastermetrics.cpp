@@ -26,7 +26,33 @@ QString PB_StepComputeRasterMetrics::description() const
 
 QString PB_StepComputeRasterMetrics::detailledDescription() const
 {
-    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rasterMetricsAvailable());
+    return tr("Cette étape regroupe toutes les métriques de raster disponibles dans les différents plugins actifs.<br><br>"
+              "Dans Computree une \"métrique\" est un indicateur calculé sur un type de données précis. "
+              "Les métriques de raster sont calculées à partir raster (image 2D, où chaque pixel contient une valeur). "
+              "Une emprise peut optionnellement être fournie pour sélectionner la partie du raster à prendre en compte."
+              "<br><br>"
+              "Voici la liste des métriques de raster disponibles :"
+              "<br><br>"
+              "%1").arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rasterMetricsAvailable()));
+}
+
+QString PB_StepComputeRasterMetrics::inputDescription() const
+{
+    return SuperClass::inputDescription() + tr("<br><br>Toutes les métriques de raster prennent les mêmes données en entrée :<br>"
+                                               "<ul>"
+                                               "<li>Un rasterà partir duquel les métriques sont calculées.</li>"
+                                               "<li>Optionnellement une emprise. Si elle est sélectionnée, seuls la partie du raster incluse dans cette emprise est prise en compte pour le calcul.</li>"
+                                               "</ul>");
+}
+
+QString PB_StepComputeRasterMetrics::outputDescription() const
+{
+    return tr("Cette étape ajoute au résultat d'entrée un conteneur \"métriques\", contenant toutes les métriques calculées. ");
+}
+
+QString PB_StepComputeRasterMetrics::detailsDescription() const
+{
+    return tr("");
 }
 
 void PB_StepComputeRasterMetrics::savePostSettings(SettingsWriterInterface &writer) const

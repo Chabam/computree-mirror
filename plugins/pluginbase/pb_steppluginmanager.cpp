@@ -223,7 +223,7 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewLoadStep<PB_StepLoadFileByName>(); // doc ok
 
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
-    addNewExportStep<PB_StepExportAttributesInLoop>();
+    addNewExportStep<PB_StepExportAttributesInLoop>(); // doc ok
 
     return true;
 }

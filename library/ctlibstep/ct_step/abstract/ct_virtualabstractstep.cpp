@@ -1353,9 +1353,9 @@ QUrl CT_VirtualAbstractStep::getHelpPageForStepPath() const
 {
     QString currentLanguageDir = "doc_" + CURRENT_LANGAGE;
 
-    QFile currentFile(currentLanguageDir + "/current.html");
+    QFile currentFile(currentLanguageDir + "/steps/current.html");
     if (currentFile.exists()) {currentFile.remove();}
-    QFile::copy(currentLanguageDir + "/steps/" + this->name() + ".html", currentLanguageDir + "/current.html");
+    QFile::copy(currentLanguageDir + "/steps/" + this->name() + ".html", currentLanguageDir + "/steps/current.html");
 
     return QUrl("file:///" + QCoreApplication::applicationDirPath() + "/" + currentLanguageDir + "/index.html");
 

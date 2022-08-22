@@ -26,8 +26,10 @@ public:
     ~PB_StepComputePointMetrics() final;
 
     QString description() const final;
-
     QString detailledDescription() const final;
+    QString inputDescription() const override;
+    QString outputDescription() const override;
+    QString detailsDescription() const override;
 
     void savePostSettings(SettingsWriterInterface& writer) const override;
     bool restorePostSettings(SettingsReaderInterface &reader) override;

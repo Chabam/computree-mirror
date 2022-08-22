@@ -27,8 +27,56 @@ QString PB_StepComputePointMetrics::description() const
 
 QString PB_StepComputePointMetrics::detailledDescription() const
 {
-    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable());
+    return tr("Cette étape regroupe toutes les métriques de points disponibles dans les différents plugins actifs.<br><br>"
+              "Dans Computree une \"métrique\" est un indicateur calculé sur un type de données précis. "
+              "Les métriques de points sont calculées à partir d'un nuage de points. "
+              "A minima les coordonnées (x,y,z) des points, et dans certains cas d'autres attributs issus du format standard LAS. "
+              "De plus, une emprise peut optionnellement être fournie pour sélectionner les points à prendre en compte."
+              "<br><br>"
+              "Voici la liste des métriques de points disponibles :"
+              "<br><br>"
+              "%1").arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable()));
 }
+
+QString PB_StepComputePointMetrics::inputDescription() const
+{
+    return SuperClass::inputDescription() + tr("<br><br>Toutes les métriques de points prennent les mêmes données en entrée :<br>"
+                                               "<ul>"
+                                               "<li>Un nuage de points. C'est avec les coordonnées de ce nuage de points que les métriques sont calculées.</li>"
+                                               "<li>Optionnellement une emprise. Si elle est sélectionnée, seuls les points inclus dans cette emprise sont pris en compte pour le calcul.</li>"
+                                               "<li>Optionnellement des attributs LAS. Certaines métriques nécessitent des attributs complémentaires en plus des coordonnées. Si les attributs LAS ne sont pas sélectionnés, ces metriques seront fixées à leur valeur par défaut.</li>"
+                                               "</ul>");
+}
+
+QString PB_StepComputePointMetrics::outputDescription() const
+{
+    return tr("Cette étape ajoute au résultat d'entrée un conteneur \"métriques\", contenant toutes les métriques calculées. ");
+}
+
+QString PB_StepComputePointMetrics::detailsDescription() const
+{
+    return tr("Il faut prendre garde à deux aspects lors de l'utilisation des métriques de points.<br><br>"
+              "Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d'entrée, sous peine d'obtenir la valeur par défaut pour la métrique systématiquement.<br><br>"
+              "Deuxièmement, les nuages de points sont originellement codés en altitude absolue. Mais il est fréquent de modifier ces nuages en soutrayant l'altitude du sol, afin d'obtenir des nuages de points en hauteur, où le relief est \"retiré\".<br>"
+              "Il est donc important de savoir si un nuage des points est en Altitude (Alt) ou en Hauteur (Ht).<br>"
+              "<ul>"
+              "<li>Certaines métriques sont indifférentes, et fonctionnent dans les deux cas.</li>"
+              "<li>D'autres n'ont de sens que pour un nuage en altitude</li>"
+              "<li>D'autres n'ont de sens que pour un nuage en hauteur</li>"
+              "</ul>"
+              "C'est à l'utilisateur de vérifier les métriques adaptées au nuage de points fourni. <br>"
+              "Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alt, Ht ou les deux. S'il n'y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus)."
+              "<br><br>"
+              "<div class=\"container\">"
+              "<details>"
+              "<summary>"
+              "What is the meaning of life ?"
+              "</summary>"
+              "<div>42</div>"
+              "</details>"
+              "</div><br><br>");
+}
+
 
 void PB_StepComputePointMetrics::savePostSettings(SettingsWriterInterface &writer) const
 {
@@ -73,6 +121,8 @@ bool PB_StepComputePointMetrics::postInputConfigure()
     cd.setWindowTitle("Métriques séléctionnées");
     cd.setElementsAvailable(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable());
     cd.setElementsSelected(&m_selectedXYZMetrics);
+
+    QObject::connect(&cd, SIGNAL(showHelp()), this, SLOT(openHelpPageForStep()));
 
     if(cd.exec() == QDialog::Accepted)
     {

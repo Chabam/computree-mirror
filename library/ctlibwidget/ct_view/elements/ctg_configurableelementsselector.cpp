@@ -379,3 +379,9 @@ void CTG_ConfigurableElementsSelector::accept()
     if(readOnly() || (saveConfigurationOfAllElementsSelected() && updateSelectedElementContainerToModify()))
         QDialog::accept();
 }
+
+void CTG_ConfigurableElementsSelector::on_buttonBox_helpRequested()
+{
+    emit showHelp();
+}
+

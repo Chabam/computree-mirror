@@ -247,9 +247,9 @@ void GMainWindow::openStepHelp()
     QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
     QString currentLanguageDir = "doc_" + languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
 
-    QFile currentFile(currentLanguageDir + "/current.html");
+    QFile currentFile(currentLanguageDir + "/steps/current.html");
     if (currentFile.exists()) {currentFile.remove();}
-    QFile::copy(currentLanguageDir + "/index_default.html", currentLanguageDir + "/current.html");
+    QFile::copy(currentLanguageDir + "/index_default.html", currentLanguageDir + "/steps/current.html");
 
     QDesktopServices::openUrl(QUrl("file:///" + QCoreApplication::applicationDirPath() + "/" + currentLanguageDir + "/index.html"));
 }
@@ -302,7 +302,7 @@ void GMainWindow::createStepHelp()
         stream << "<body>\n";
         stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
         stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"summary.html\"  style=\"width:33%; border:none; flex-grow:1;\"></iframe>\n";
-        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"current.html\" style=\"width:65%; border:none; flex-grow:1;\"></iframe>\n";
+        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"steps/current.html\" style=\"width:65%; border:none; flex-grow:1;\"></iframe>\n";
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>\n";
@@ -334,7 +334,7 @@ void GMainWindow::createStepHelp()
         findexdefault.close();
     }
 
-    QFile::copy(currentLanguageDir + "/index_default.html", currentLanguageDir + "/current.html");
+    QFile::copy(currentLanguageDir + "/index_default.html", currentLanguageDir + "/steps/current.html");
 
 
     // Create style.css

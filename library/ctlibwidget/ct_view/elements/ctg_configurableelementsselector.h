@@ -148,8 +148,15 @@ private slots:
      */
     void on_listWidgetSelected_currentItemChanged(QListWidgetItem *current,QListWidgetItem *previous);
 
+    /**
+     * @brief Ask for showing help page
+     */
+    void on_buttonBox_helpRequested();
+
 public slots:
     void accept();
+signals:
+    void showHelp();
 };
 
 #endif // CTG_CONFIGURABLEELEMENTSSELECTOR_H
