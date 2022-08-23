@@ -43,16 +43,53 @@ bool CT_CloudMetrics::restoreSettings(SettingsReaderInterface &reader)
     return SuperClass::restoreSettings(reader);
 }
 
+QString CT_CloudMetrics::getShortDisplayableName() const
+{
+    return tr("Indicateurs statistiques standards (Ht)");
+}
+
 QString CT_CloudMetrics::getShortDescription() const
 {
-    return tr("Calcul des indicateurs statistiques standards (FUSION)");
+    return tr("Calcul des indicateurs statistiques standards, tels que le minimum, la maximum, la moyenne, l'écart-type,...<br>"
+              "Ces calculs sont effectués sur la coordonnée Z des points.<br>"
+              "Cependant ils n'ont d'intérêt que pour un nuage de points en Hauteur, et non en Altitude.<br>"
+              "Il faut donc s'assurer que le nuage de points a été pré-traité, pour soustraire l'altitude du sol à tous les points.");
+}
+
+QString CT_CloudMetrics::getDetailledDescription() const
+{
+    return tr("Les indicateurs suivants sont calculés :"
+              "<ul>"
+              "<li><strong>N</strong> : Nombre de points</li>"
+              "<li><strong>Min</strong> : Hauteur minimum</li>"
+              "<li><strong>Max</strong> : Hauteur maximum</li>"
+              "<li><strong>Mean</strong> : Hauteur moyenne</li>"
+              "<li><strong>Mode</strong> : Mode des hauteurs. La gamme de hauteur est divisée en 64 classes, le mode est le centre de la classe avec le plus grand nombre de points. En cas d'égalité, la classe la plus basse est renvoyée.</li>"
+              "<li><strong>StdDev</strong> : Ecart-type des hauteurs</li>"
+              "<li><strong>Variance</strong> : Variance des hauteurs</li>"
+              "<li><strong>CV</strong> : Coefficient de variation des hauteurs</li>"
+              "<li><strong>IQDist</strong> : Distance interquartile des hauteurs</li>"
+              "<li><strong>Skewness</strong> : Skewness des hauteurs</li>"
+              "<li><strong>Kurtosis</strong> : Kurtosis des hauteurs</li>"
+              "<li><strong>AAD</strong> : Moyenne des écarts absolus à la moyenne</li>"
+              "<li><strong>MAD_Median</strong> : Médiane des écarts absolus à la médiane</li>"
+              "<li><strong>MAD_Mode</strong> : Médiane des écarts absolus au mode</li>"
+              "<li><strong>L1 à L4</strong> : L-Moments</li>"
+              "<li><strong>L_CV</strong> : Coefficient de variation L-Moments des hauteurs</li>"
+              "<li><strong>L_Skewness</strong> : Skewness L-Moments des hauteurs</li>"
+              "<li><strong>L_Kurtosis</strong> : Kurtosis L-Moments des hauteurs</li>"
+              "<li><strong>P01 à P99</strong> : 1er, 5ième, 10ième, 15ième,... 90ième, 95ième et 99ième percentiles de hauteurs (interpolation linéaire entre les observations)</li>"
+              "<li><strong>Canopy_Relief_Ratio</strong> : ((Moyenne - Minimum) / (Maximum – Minimum))</li>"
+              "<li><strong>QuadraticMean</strong> : Moyenne quadratique des hauteurs</li>"
+              "<li><strong>CubicMean</strong> : Moyenne cubique des hauteurs</li>"
+              "</ul>");
 }
 
 CT_AbstractConfigurableWidget* CT_CloudMetrics::createConfigurationWidget()
 {
     CT_GenericConfigurableWidget *wid = new CT_GenericConfigurableWidget();
 
-    wid->addDouble(tr("Ne conserver que les points avec Z >= "), "m", -1e+10, 1e+10, 4, m_configAndResults.minZ);
+    wid->addDouble(tr("Ne conserver que les points avec H >= "), "m", -1e+10, 1e+10, 4, m_configAndResults.minZ);
     wid->addEmpty();
 
     addAllVaBToWidget(wid);
@@ -99,6 +136,8 @@ void CT_CloudMetrics::computeMetric()
             ++nPoints;
         }
     }
+
+    m_configAndResults.totalNumberOfReturns.value = nPoints;
 
     if(nPoints > 0) {
         double nD = nPoints;
@@ -272,6 +311,7 @@ void CT_CloudMetrics::computeMetric()
 
 void CT_CloudMetrics::initValues()
 {
+    m_configAndResults.totalNumberOfReturns.value = 0;
     m_configAndResults.minimum.value = std::numeric_limits<double>::max();
     m_configAndResults.maximum.value = -m_configAndResults.minimum.value;
     m_configAndResults.mean.value = 0;
@@ -303,7 +343,7 @@ void CT_CloudMetrics::initValues()
 
 double CT_CloudMetrics::computePercentile(const std::vector<double> &array, const size_t &arraySize, const double &p)
 {
-    // Second Variant, show wikipedia "Percentile"
+    // Second Variant, show wikipedia "Percentile", Numpy
     double v = ((double)(arraySize-1)) * p;
     int ip1 = (int)v;
     double f = (v-ip1); // (arraySize-1)*p = ip1+f
@@ -321,7 +361,7 @@ double CT_CloudMetrics::computePercentile(const std::vector<double> &array, cons
 
 double CT_CloudMetrics::computeMode(const std::vector<double> &array, const size_t &arraySize)
 {
-    int numberOfClasses = 63;
+    int numberOfClasses = 64;
 
     if(arraySize == 1)
     {
@@ -366,57 +406,37 @@ double CT_CloudMetrics::computeMode(const std::vector<double> &array, const size
         }
     }
 
-    return classes[maxOccurenceIndex];
-
-//    if(maxOccurenceIndex > 0) {
-//        std::vector<double>::const_iterator it = std::upper_bound(array.begin(), array.end(), classes[maxOccurenceIndex-1]);
-
-//        if(it == array.end())
-//            return array[arraySize-1];
-
-//        return (*it);
-//    }
-
-//    std::vector<double>::const_iterator it = std::lower_bound(array.begin(), array.end(), classes[maxOccurenceIndex]);
-
-//    if(it == array.end())
-//        return array[arraySize-1];
-
-//    return (*it);
+    return (classes[maxOccurenceIndex + 1] + classes[maxOccurenceIndex]) / 2.0;
 }
 
 void CT_CloudMetrics::declareAttributes()
 {
-    /*registerAttributeVaB(m_configAndResults.totalNumberOfReturns, CT_AbstractCategory::DATA_NUMBER, tr("Total return"));
-
-    for(int i=0; i<9; ++i)
-        registerAttributeVaB(m_configAndResults.countOfReturnsByReturnNumber[i], CT_AbstractCategory::DATA_NUMBER, tr("Return %1 count").arg(i+1));
-*/
-    registerAttributeVaB(m_configAndResults.minimum, CT_AbstractCategory::DATA_Z, tr("Elev minimum"));
-    registerAttributeVaB(m_configAndResults.maximum, CT_AbstractCategory::DATA_Z, tr("Elev maximum"));
-    registerAttributeVaB(m_configAndResults.mean, CT_AbstractCategory::DATA_Z, tr("Elev mean"));
-    registerAttributeVaB(m_configAndResults.mode, CT_AbstractCategory::DATA_Z, tr("Elev mode"));
-    registerAttributeVaB(m_configAndResults.standardDeviation, CT_AbstractCategory::DATA_Z, tr("Elev stddev"));
-    registerAttributeVaB(m_configAndResults.variance, CT_AbstractCategory::DATA_Z, tr("Elev variance"));
-    registerAttributeVaB(m_configAndResults.coeffOfVariation, CT_AbstractCategory::DATA_Z, tr("Elev CV"));
-    registerAttributeVaB(m_configAndResults.interquartileDistance, CT_AbstractCategory::DATA_Z, tr("Elev IQ"));
-    registerAttributeVaB(m_configAndResults.skewness, CT_AbstractCategory::DATA_Z, tr("Elev skewness"));
-    registerAttributeVaB(m_configAndResults.kurtosis, CT_AbstractCategory::DATA_Z, tr("Elev kurtosis"));
-    registerAttributeVaB(m_configAndResults.aad, CT_AbstractCategory::DATA_Z, tr("Elev AAD"));
-    registerAttributeVaB(m_configAndResults.madMedian, CT_AbstractCategory::DATA_Z, tr("Elev MAD median"));
-    registerAttributeVaB(m_configAndResults.madMode, CT_AbstractCategory::DATA_Z, tr("Elev MAD mode"));
+    registerAttributeVaB(m_configAndResults.totalNumberOfReturns, CT_AbstractCategory::DATA_NUMBER, tr("N"));
+    registerAttributeVaB(m_configAndResults.minimum, CT_AbstractCategory::DATA_Z, tr("Min"));
+    registerAttributeVaB(m_configAndResults.maximum, CT_AbstractCategory::DATA_Z, tr("Max"));
+    registerAttributeVaB(m_configAndResults.mean, CT_AbstractCategory::DATA_Z, tr("Mean"));
+    registerAttributeVaB(m_configAndResults.mode, CT_AbstractCategory::DATA_Z, tr("Mode"));
+    registerAttributeVaB(m_configAndResults.standardDeviation, CT_AbstractCategory::DATA_Z, tr("StdDev"));
+    registerAttributeVaB(m_configAndResults.variance, CT_AbstractCategory::DATA_Z, tr("Variance"));
+    registerAttributeVaB(m_configAndResults.coeffOfVariation, CT_AbstractCategory::DATA_Z, tr("CV"));
+    registerAttributeVaB(m_configAndResults.interquartileDistance, CT_AbstractCategory::DATA_Z, tr("IQDist"));
+    registerAttributeVaB(m_configAndResults.skewness, CT_AbstractCategory::DATA_Z, tr("Skewness"));
+    registerAttributeVaB(m_configAndResults.kurtosis, CT_AbstractCategory::DATA_Z, tr("Kurtosis"));
+    registerAttributeVaB(m_configAndResults.aad, CT_AbstractCategory::DATA_Z, tr("AAD"));
+    registerAttributeVaB(m_configAndResults.madMedian, CT_AbstractCategory::DATA_Z, tr("MAD_Median"));
+    registerAttributeVaB(m_configAndResults.madMode, CT_AbstractCategory::DATA_Z, tr("MAD_Mode"));
 
     for(int i=0; i<CT_CloudMetrics::LMOMENTS_ARRAY_SIZE; ++i)
-        registerAttributeVaB(m_configAndResults.lMoments[i], CT_AbstractCategory::DATA_Z, tr("Elev L%1").arg(i+1));
+        registerAttributeVaB(m_configAndResults.lMoments[i], CT_AbstractCategory::DATA_Z, tr("L%1").arg(i+1));
 
-    registerAttributeVaB(m_configAndResults.lMomentsCoeffOfVariation, CT_AbstractCategory::DATA_Z, tr("Elev L CV"));
-    registerAttributeVaB(m_configAndResults.lMomentsSkewness, CT_AbstractCategory::DATA_Z, tr("Elev L skewness"));
-    registerAttributeVaB(m_configAndResults.lMomentsKurtosis, CT_AbstractCategory::DATA_Z, tr("Elev L kurtosis"));
+    registerAttributeVaB(m_configAndResults.lMomentsCoeffOfVariation, CT_AbstractCategory::DATA_Z, tr("L_CV"));
+    registerAttributeVaB(m_configAndResults.lMomentsSkewness, CT_AbstractCategory::DATA_Z, tr("L_Skewness"));
+    registerAttributeVaB(m_configAndResults.lMomentsKurtosis, CT_AbstractCategory::DATA_Z, tr("L_Kurtosis"));
 
     for(int i=0; i<CT_CloudMetrics::PERCENTILE_ARRAY_SIZE; ++i)
-        registerAttributeVaB(m_configAndResults.percentileValues[i], CT_AbstractCategory::DATA_Z, tr("Elev P%1%2").arg((PERCENTILE_COEFF[i] < 10 ? "0" : "")).arg(PERCENTILE_COEFF[i]));
+        registerAttributeVaB(m_configAndResults.percentileValues[i], CT_AbstractCategory::DATA_Z, tr("P%1%2").arg((PERCENTILE_COEFF[i] < 10 ? "0" : "")).arg(PERCENTILE_COEFF[i]));
 
-    registerAttributeVaB(m_configAndResults.canopyReliefRatio, CT_AbstractCategory::DATA_Z, tr("Canopy relief ratio"));
-    registerAttributeVaB(m_configAndResults.elevationQuadraticMean, CT_AbstractCategory::DATA_Z, tr("Elev SQRT mean SQ"));
-    registerAttributeVaB(m_configAndResults.elevationCubicMean, CT_AbstractCategory::DATA_Z, tr("Elev CURT mean CUBE"));
+    registerAttributeVaB(m_configAndResults.canopyReliefRatio, CT_AbstractCategory::DATA_Z, tr("Canopy_Relief_Ratio"));
+    registerAttributeVaB(m_configAndResults.elevationQuadraticMean, CT_AbstractCategory::DATA_Z, tr("QuadraticMean"));
+    registerAttributeVaB(m_configAndResults.elevationCubicMean, CT_AbstractCategory::DATA_Z, tr("CubicMean"));
 }

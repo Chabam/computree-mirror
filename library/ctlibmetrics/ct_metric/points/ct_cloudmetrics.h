@@ -14,8 +14,7 @@ public:
     static const int LMOMENTS_ARRAY_SIZE = 4;
 
     struct CTLIBMETRICS_EXPORT Config {
-        //VaB<size_t>    totalNumberOfReturns;
-        //VaB<size_t>    countOfReturnsByReturnNumber[9];
+        VaB<size_t>    totalNumberOfReturns;
         VaB<double>    minimum;
         VaB<double>    maximum;
         VaB<double>    mean;
@@ -57,7 +56,9 @@ public:
     void saveSettings(SettingsWriterInterface& writer) const override;
     bool restoreSettings(SettingsReaderInterface& reader) override;
 
+    QString getShortDisplayableName() const override;
     QString getShortDescription() const override;
+    QString getDetailledDescription() const override;
 
     CT_AbstractConfigurableWidget* createConfigurationWidget() override;
 

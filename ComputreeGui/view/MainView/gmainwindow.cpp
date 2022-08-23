@@ -356,6 +356,14 @@ void GMainWindow::createStepHelp()
         stream << "{\n";
         stream << "    color:darkred;\n";
         stream << "}\n";
+        stream << "h2\n";
+        stream << "{\n";
+        stream << "    color:black;\n";
+        stream << "}\n";
+        stream << "h3\n";
+        stream << "{\n";
+        stream << "    color:darkblue;\n";
+        stream << "}\n";
         stream << ".parameterDescr\n";
         stream << "{\n";
         stream << "    color:darkblue;\n";

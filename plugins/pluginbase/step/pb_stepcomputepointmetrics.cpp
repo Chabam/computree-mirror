@@ -33,9 +33,8 @@ QString PB_StepComputePointMetrics::detailledDescription() const
               "A minima les coordonnées (x,y,z) des points, et dans certains cas d'autres attributs issus du format standard LAS. "
               "De plus, une emprise peut optionnellement être fournie pour sélectionner les points à prendre en compte."
               "<br><br>"
-              "Voici la liste des métriques de points disponibles :"
-              "<br><br>"
-              "%1").arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable()));
+              "<strong><a href=\"#metricsList\">La liste des métriques de points disponibles</a> est fournie en dernière partie de cette page.</strong>"
+              "<br><br>");
 }
 
 QString PB_StepComputePointMetrics::inputDescription() const
@@ -56,7 +55,8 @@ QString PB_StepComputePointMetrics::outputDescription() const
 QString PB_StepComputePointMetrics::detailsDescription() const
 {
     return tr("Il faut prendre garde à deux aspects lors de l'utilisation des métriques de points.<br><br>"
-              "Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d'entrée, sous peine d'obtenir la valeur par défaut pour la métrique systématiquement.<br><br>"
+              "Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d'entrée, sous peine d'obtenir la valeur par défaut pour la métrique systématiquement.<br>"
+              "Les métriques utilisant les attributs LAS, ont le mot clé LAS dans leur intitulé.<br><br>"
               "Deuxièmement, les nuages de points sont originellement codés en altitude absolue. Mais il est fréquent de modifier ces nuages en soutrayant l'altitude du sol, afin d'obtenir des nuages de points en hauteur, où le relief est \"retiré\".<br>"
               "Il est donc important de savoir si un nuage des points est en Altitude (Alt) ou en Hauteur (Ht).<br>"
               "<ul>"
@@ -67,14 +67,7 @@ QString PB_StepComputePointMetrics::detailsDescription() const
               "C'est à l'utilisateur de vérifier les métriques adaptées au nuage de points fourni. <br>"
               "Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alt, Ht ou les deux. S'il n'y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus)."
               "<br><br>"
-              "<div class=\"container\">"
-              "<details>"
-              "<summary>"
-              "What is the meaning of life ?"
-              "</summary>"
-              "<div>42</div>"
-              "</details>"
-              "</div><br><br>");
+              "<h2 id=\"metricsList\">Liste des métriques de points disponibles :</h2>%1").arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable()));
 }
 
 

@@ -21,7 +21,7 @@ QString CT_AbstractConfigurableElement::getUniqueName() const
 
 QString CT_AbstractConfigurableElement::getShortDisplayableName() const
 {
-    return getShortDescription();
+    return metaObject()->className();
 }
 
 QString CT_AbstractConfigurableElement::getDetailledDisplayableName() const

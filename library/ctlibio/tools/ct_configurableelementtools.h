@@ -132,18 +132,21 @@ public:
             ret += QObject::tr("<h3>%2</h3>"
                                "<div class=\"descBlocklvl2\">"
                                "<strong>Plugin</strong> : %5, <strong>Nom de classe</strong> : %1<br><br>"
-                               "<strong>Description</strong> : %3<br><br>"
-                               "%6%4<br>"
+                               "<strong>Description</strong>"
+                               "<br><br>"
+                               "%3"
+                               "<br><br>"
+                               "%6%4"
                                "</div>")
                     .arg(element->getUniqueName()) //%1
                     .arg(element->getShortDisplayableName()) //%2
                     .arg(element->getShortDescription()) //%3
                     .arg(element->getDetailledDescription()) //%4
                     .arg(element->pluginOfficialName()) //%5
-                    .arg(element->getDetailledDescription().isEmpty()?"":QObject::tr("<strong>Détails</strong> :<br><br>")); //%6
+                    .arg(element->getDetailledDescription().isEmpty()?"":QObject::tr("<strong>Détails</strong><br><br>")); //%6
 
             if(it.hasNext())
-                ret += QObject::tr("<br/><br/>");
+                ret += QObject::tr("<br>");
         }
 
         return ret;
