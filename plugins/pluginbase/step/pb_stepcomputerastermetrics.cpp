@@ -31,17 +31,16 @@ QString PB_StepComputeRasterMetrics::detailledDescription() const
               "Les métriques de raster sont calculées à partir raster (image 2D, où chaque pixel contient une valeur). "
               "Une emprise peut optionnellement être fournie pour sélectionner la partie du raster à prendre en compte."
               "<br><br>"
-              "Voici la liste des métriques de raster disponibles :"
-              "<br><br>"
-              "%1").arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rasterMetricsAvailable()));
+              "<strong><a href=\"#metricsList\">La liste des métriques de raster disponibles</a> est fournie en dernière partie de cette page.</strong>"
+              "<br><br>");
 }
 
 QString PB_StepComputeRasterMetrics::inputDescription() const
 {
     return SuperClass::inputDescription() + tr("<br><br>Toutes les métriques de raster prennent les mêmes données en entrée :<br>"
                                                "<ul>"
-                                               "<li>Un rasterà partir duquel les métriques sont calculées.</li>"
-                                               "<li>Optionnellement une emprise. Si elle est sélectionnée, seuls la partie du raster incluse dans cette emprise est prise en compte pour le calcul.</li>"
+                                               "<li>Un raster à partir duquel les métriques sont calculées.</li>"
+                                               "<li>Optionnellement une emprise. Si elle est sélectionnée, seule la partie du raster incluse dans cette emprise est prise en compte pour le calcul.</li>"
                                                "</ul>");
 }
 
@@ -52,7 +51,9 @@ QString PB_StepComputeRasterMetrics::outputDescription() const
 
 QString PB_StepComputeRasterMetrics::detailsDescription() const
 {
-    return tr("");
+    return tr("Attention : le comportement des métriques peut être influencé par la résolution des rasters fournis.<br>"
+              "</div><div><h2 id=\"metricsList\">Liste des métriques de raster disponibles :</h2>%1")
+            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rasterMetricsAvailable()));
 }
 
 void PB_StepComputeRasterMetrics::savePostSettings(SettingsWriterInterface &writer) const

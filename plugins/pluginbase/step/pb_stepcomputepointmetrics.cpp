@@ -58,16 +58,17 @@ QString PB_StepComputePointMetrics::detailsDescription() const
               "Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d'entrée, sous peine d'obtenir la valeur par défaut pour la métrique systématiquement.<br>"
               "Les métriques utilisant les attributs LAS, ont le mot clé LAS dans leur intitulé.<br><br>"
               "Deuxièmement, les nuages de points sont originellement codés en altitude absolue. Mais il est fréquent de modifier ces nuages en soutrayant l'altitude du sol, afin d'obtenir des nuages de points en hauteur, où le relief est \"retiré\".<br>"
-              "Il est donc important de savoir si un nuage des points est en Altitude (Alt) ou en Hauteur (Ht).<br>"
+              "Il est donc important de savoir si un nuage des points est en Altitude (Alti) ou en Hauteur (Ht).<br>"
               "<ul>"
               "<li>Certaines métriques sont indifférentes, et fonctionnent dans les deux cas.</li>"
               "<li>D'autres n'ont de sens que pour un nuage en altitude</li>"
               "<li>D'autres n'ont de sens que pour un nuage en hauteur</li>"
               "</ul>"
               "C'est à l'utilisateur de vérifier les métriques adaptées au nuage de points fourni. <br>"
-              "Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alt, Ht ou les deux. S'il n'y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus)."
-              "<br><br>"
-              "<h2 id=\"metricsList\">Liste des métriques de points disponibles :</h2>%1").arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable()));
+              "Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alti, Ht ou les deux. S'il n'y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus)."
+              "<br>"
+              "</div><div><h2 id=\"metricsList\">Liste des métriques de points disponibles :</h2>%1")
+            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable()));
 }
 
 

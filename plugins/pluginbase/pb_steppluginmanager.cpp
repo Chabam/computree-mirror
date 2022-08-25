@@ -213,8 +213,8 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewWorkflowStep<PB_StepLoopOnFiles>(); // doc ok
 
     addNewPointsStep<PB_StepApplyPointFilters>(CT_StepsMenu::LP_Filter);
-    addNewMetricStep<PB_StepComputePointMetrics>();
-    addNewMetricStep<PB_StepComputeRasterMetrics>();
+    addNewMetricStep<PB_StepComputePointMetrics>(); // doc ok
+    addNewMetricStep<PB_StepComputeRasterMetrics>(); // doc ok
 
     addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter); // doc ok
 
