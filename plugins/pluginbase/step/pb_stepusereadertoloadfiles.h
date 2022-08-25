@@ -18,7 +18,6 @@ public:
 
     QString description() const final;
     QString detailledDescription() const final;
-
     QString inputDescription() const override;
     QString outputDescription() const override;
     QString detailsDescription() const override;
