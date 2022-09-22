@@ -85,6 +85,30 @@
         <source>Références</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;strong&gt;Paramètres de pré-configuration&lt;/strong&gt; (non modifiables une fois l&apos;étape ajoutée) :&lt;br&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;strong&gt;Paramètres de l&apos;étape&lt;/strong&gt; :&lt;br&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Structure des données d&apos;entrée recherchées :&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Structure des nouvelles données produites :&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Optionnel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Aucune donnée nécessaire en entrée.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>

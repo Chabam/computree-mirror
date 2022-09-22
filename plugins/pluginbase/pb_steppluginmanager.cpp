@@ -142,9 +142,9 @@ QString PB_StepPluginManager::getPluginRISCitation() const
     return "TY  - COMP\n"
            "TI  - Plugin Base for Computree\n"
            "AU  - Computree Core Team\n"
-           "PY  - 2017\n"
-           "PB  - Office National des Forêts, RDI Department\n"
-           "UR  - http://rdinnovation.onf.fr/projects/computree\n"
+           "PY  - 2022\n"
+           "PB  - Computree Group\n"
+           "UR  - https://computree.onf.fr/?page_id=1344\n"
            "ER  - \n";
 }
 

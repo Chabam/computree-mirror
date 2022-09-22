@@ -209,7 +209,7 @@
 
 &lt;/body&gt;
 &lt;/html&gt;</source>
-        <translation>
+        <translation type="vanished">
 &lt;html&gt;
 &lt;head/&gt;
 &lt;body&gt;
@@ -389,6 +389,10 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Fermer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Computree v6.0&lt;br/&gt;&lt;br/&gt;Site officiel : &lt;/span&gt;&lt;a href=&quot;http://computree.onf.fr&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;computree.onf.fr&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;&lt;br/&gt;Géré par le Groupe Computree :&lt;/span&gt;&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GIP Ecofor&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ONF&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;IGN&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;INRA&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;University of Sherbrooke &lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;br/&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;La plateforme Computree (hors plugins) est sous license LGPL : &lt;/span&gt;&lt;a href=&quot;https://opensource.org/licenses/LGPL-3.0&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://opensource.org/licenses/LGPL-3.0&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;Pour connaître la licence d&apos;un plugin, se référer à sa documentation. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1588,14 +1592,6 @@ Cependant, coché ou non, tous les messages sont toujours envoyés au fichier lo
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>A propos des plugins...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A propos de la mémoire...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Sauvegarder l&apos;arbre des etapes (CTRL+S)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1695,6 +1691,46 @@ Cependant, coché ou non, tous les messages sont toujours envoyés au fichier lo
     </message>
     <message>
         <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Génération de la documentation des étapes en cours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Génération de l&apos;aide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Documentation des étapes Computree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Utiliser l&apos;index sur la gauche pour séléctionner l&apos;étape pour laquelle afficher la documentation. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Site internet officiel de Computree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Index des étapes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Documentation des étapes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recréer la documentation des étapes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Liste des plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Utilisation mémoire</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

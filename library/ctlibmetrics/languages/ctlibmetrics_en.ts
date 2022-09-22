@@ -19,95 +19,107 @@
 <context>
     <name>CT_CloudMetrics</name>
     <message>
-        <source>Calcul des indicateurs statistiques standards (FUSION)</source>
+        <source>Indicateurs statistiques standards (Ht)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Ne conserver que les points avec Z &gt;= </source>
+        <source>Calcul des indicateurs statistiques standards, tels que le minimum, la maximum, la moyenne, l&apos;écart-type,...&lt;br&gt;Ces calculs sont effectués sur la coordonnée Z des points.&lt;br&gt;Cependant ils n&apos;ont d&apos;intérêt que pour un nuage de points en Hauteur, et non en Altitude.&lt;br&gt;Il faut donc s&apos;assurer que le nuage de points a été pré-traité, pour soustraire l&apos;altitude du sol à tous les points.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev minimum</source>
+        <source>Les indicateurs suivants sont calculés :&lt;ul&gt;&lt;li&gt;&lt;strong&gt;N&lt;/strong&gt; : Nombre de points&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Min&lt;/strong&gt; : Hauteur minimum&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Max&lt;/strong&gt; : Hauteur maximum&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Mean&lt;/strong&gt; : Hauteur moyenne&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Mode&lt;/strong&gt; : Mode des hauteurs. La gamme de hauteur est divisée en 64 classes, le mode est le centre de la classe avec le plus grand nombre de points. En cas d&apos;égalité, la classe la plus basse est renvoyée.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;StdDev&lt;/strong&gt; : Ecart-type des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Variance&lt;/strong&gt; : Variance des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;CV&lt;/strong&gt; : Coefficient de variation des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;IQDist&lt;/strong&gt; : Distance interquartile des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Skewness&lt;/strong&gt; : Skewness des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Kurtosis&lt;/strong&gt; : Kurtosis des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;AAD&lt;/strong&gt; : Moyenne des écarts absolus à la moyenne&lt;/li&gt;&lt;li&gt;&lt;strong&gt;MAD_Median&lt;/strong&gt; : Médiane des écarts absolus à la médiane&lt;/li&gt;&lt;li&gt;&lt;strong&gt;MAD_Mode&lt;/strong&gt; : Médiane des écarts absolus au mode&lt;/li&gt;&lt;li&gt;&lt;strong&gt;L1 à L4&lt;/strong&gt; : L-Moments&lt;/li&gt;&lt;li&gt;&lt;strong&gt;L_CV&lt;/strong&gt; : Coefficient de variation L-Moments des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;L_Skewness&lt;/strong&gt; : Skewness L-Moments des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;L_Kurtosis&lt;/strong&gt; : Kurtosis L-Moments des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;P01 à P99&lt;/strong&gt; : 1er, 5ième, 10ième, 15ième,... 90ième, 95ième et 99ième percentiles de hauteurs (interpolation linéaire entre les observations)&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Canopy_Relief_Ratio&lt;/strong&gt; : ((Moyenne - Minimum) / (Maximum – Minimum))&lt;/li&gt;&lt;li&gt;&lt;strong&gt;QuadraticMean&lt;/strong&gt; : Moyenne quadratique des hauteurs&lt;/li&gt;&lt;li&gt;&lt;strong&gt;CubicMean&lt;/strong&gt; : Moyenne cubique des hauteurs&lt;/li&gt;&lt;/ul&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev maximum</source>
+        <source>Ne conserver que les points avec H &gt;= </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev mean</source>
+        <source>N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev mode</source>
+        <source>Min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev stddev</source>
+        <source>Max</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev variance</source>
+        <source>Mean</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev CV</source>
+        <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev IQ</source>
+        <source>StdDev</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev skewness</source>
+        <source>Variance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev kurtosis</source>
+        <source>CV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev AAD</source>
+        <source>IQDist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev MAD median</source>
+        <source>Skewness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev MAD mode</source>
+        <source>Kurtosis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev L%1</source>
+        <source>AAD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev L CV</source>
+        <source>MAD_Median</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev L skewness</source>
+        <source>MAD_Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev L kurtosis</source>
+        <source>L%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev P%1%2</source>
+        <source>L_CV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Canopy relief ratio</source>
+        <source>L_Skewness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev SQRT mean SQ</source>
+        <source>L_Kurtosis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Elev CURT mean CUBE</source>
+        <source>P%1%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Canopy_Relief_Ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>QuadraticMean</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CubicMean</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

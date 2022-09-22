@@ -8,10 +8,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cette interface permet de faire correspondre à chaque donnée rechechée, une donnée disponible dans les données d&apos;entrée.&lt;br&gt;&lt;br&gt;Pour chaque donnée recherchée :&lt;br&gt;1. Séléctionner la donnée recherchée&lt;br&gt;2. Séléctionner la donnée disponible à lui attribuer&lt;br&gt;&lt;br&gt;Cela crée un lien entre les deux éléments.&lt;br&gt;&lt;br&gt;&lt;i&gt;Les données recherchées en italique sont optionnelles.&lt;/i&gt;&lt;br&gt;&lt;br&gt;Les compteurs à droite des données recherchées indiquent :&lt;br&gt;nombre d&apos;éléments séléctionnés / nombre d&apos;éléments nécessaires.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Données recherchées</source>
         <translation type="unfinished"></translation>
     </message>

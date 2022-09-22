@@ -46,7 +46,7 @@ public:
     PB_StepPluginManager();
     ~PB_StepPluginManager() override;
 
-    QString getPluginURL() const override {return QString("http://rdinnovation.onf.fr/projects/plugin-base/wiki");}
+    QString getPluginURL() const override {return QString("https://computree.onf.fr/?page_id=1344");}
 
     virtual QString getPluginOfficialName() const override {return "Base";}
 

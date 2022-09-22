@@ -4,9 +4,8 @@ CT_AbstractFilter::CT_AbstractFilter(QString pluginName) : CT_AbstractConfigurab
 {
 }
 
-CT_AbstractFilter::CT_AbstractFilter(const CT_AbstractFilter &other) : CT_AbstractConfigurableElement(pluginOfficialName())
+CT_AbstractFilter::CT_AbstractFilter(const CT_AbstractFilter &other) : CT_AbstractConfigurableElement(other)
 {
-    Q_UNUSED(other);
 }
 
 void CT_AbstractFilter::saveSettings(SettingsWriterInterface& writer) const

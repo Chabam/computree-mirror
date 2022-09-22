@@ -254,43 +254,7 @@ p, li { white-space: pre-wrap; }
         <translation>Close</translation>
     </message>
     <message>
-        <source>
-&lt;html&gt;
-&lt;head/&gt;
-&lt;body&gt;
-
-&lt;p&gt;&lt;span style=&quot; font-famliy:&apos;Sans&apos;; font-size:10pt; font-weight:600;&quot;&gt;Computree v5.0&lt;/span&gt;&lt;/p&gt;
-
-&lt;p style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;Managed by the Computree Group:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt; GIP Ecofor&lt;/li&gt;
-&lt;li&gt; ONF&lt;/li&gt;
-&lt;li&gt; IGN&lt;/li&gt;
-&lt;li&gt; INRA&lt;/li&gt;
-&lt;li&gt; University of Sherbrooke&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; font-weight:600;&quot;&gt;The use of Computree is subject to the acceptance of the &lt;a href=&quot;http://rdinnovation.onf.fr/projects/computree/wiki/En_charte_v5&quot;&gt;Computree Charter&lt;/a&gt;&lt;/p&gt;
-
-&lt;br&gt;
-&lt;p style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;Computree GUI interface is licenced under GPL license: &lt;a href=&quot;https://opensource.org/licenses/GPL-3.0&quot;&gt;https://opensource.org/licenses/GPL-3.0&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;ComputreeCore, PluginShared and PluginBase are licenced under LGPL license: &lt;a href=&quot;https://opensource.org/licenses/LGPL-3.0&quot;&gt;https://opensource.org/licenses/LGPL-3.0&lt;/a&gt;&lt;/p&gt;
-
-&lt;br&gt;
-&lt;p style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;Computree uses following libraries:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt; AMKgl: &lt;a href=&quot;http://www.ic-arts.eu/arts/&quot;&gt;http://www.ic-arts.eu/arts&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt; MuParser: &lt;a href=&quot;http://muparser.beltoforion.de&quot;&gt;http://muparser.beltoforion.de&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt; PCL: &lt;a href=&quot;http://pointclouds.or/&quot;&gt;http://pointclouds.org&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt; OpenCV: &lt;a href=&quot;http://opencv.org&quot;&gt;http://opencv.org&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt; GDAL: &lt;a href=&quot;http://www.gdal.org&quot;&gt;http://www.gdal.org&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt; GEOS: &lt;a href=&quot;https://trac.osgeo.org/geos&quot;&gt;https://trac.osgeo.org/geos&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt; GSL: &lt;a href=&quot;https://www.gnu.org/software/gsl&quot;&gt;https://www.gnu.org/software/gsl&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Computree v6.0&lt;br/&gt;&lt;br/&gt;Site officiel : &lt;/span&gt;&lt;a href=&quot;http://computree.onf.fr&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;computree.onf.fr&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;&lt;br/&gt;Géré par le Groupe Computree :&lt;/span&gt;&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GIP Ecofor&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ONF&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;IGN&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;INRA&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;University of Sherbrooke &lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;br/&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;La plateforme Computree (hors plugins) est sous license LGPL : &lt;/span&gt;&lt;a href=&quot;https://opensource.org/licenses/LGPL-3.0&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://opensource.org/licenses/LGPL-3.0&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;Pour connaître la licence d&apos;un plugin, se référer à sa documentation. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1595,7 +1559,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>A propos des plugins...</source>
-        <translation>About plugins...</translation>
+        <translation type="vanished">About plugins...</translation>
     </message>
     <message>
         <source>Sauvegarder l&apos;arbre des etapes</source>
@@ -1645,7 +1609,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>A propos de la mémoire...</source>
-        <translation>About memory...</translation>
+        <translation type="vanished">About memory...</translation>
     </message>
     <message>
         <source>Indiquez le nombre de pas à sauter avant le prochain arrêt de l&apos;étape</source>
@@ -1827,6 +1791,46 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Génération de la documentation des étapes en cours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Génération de l&apos;aide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Documentation des étapes Computree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Utiliser l&apos;index sur la gauche pour séléctionner l&apos;étape pour laquelle afficher la documentation. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Site internet officiel de Computree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Index des étapes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Documentation des étapes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recréer la documentation des étapes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Liste des plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Utilisation mémoire</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

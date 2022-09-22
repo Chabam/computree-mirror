@@ -39,12 +39,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_ascrgb.cpp" line="220"/>
+        <location filename="../readers/ct_reader_ascrgb.cpp" line="226"/>
         <source>Le fichier %1 n&apos;est pas accessible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_ascrgb.cpp" line="223"/>
+        <location filename="../readers/ct_reader_ascrgb.cpp" line="229"/>
         <source>Le fichier %1 n&apos;existe pas.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -188,12 +188,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_idxyz.cpp" line="175"/>
+        <location filename="../readers/ct_reader_idxyz.cpp" line="176"/>
         <source>Le fichier %1 n&apos;est pas accessible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_idxyz.cpp" line="178"/>
+        <location filename="../readers/ct_reader_idxyz.cpp" line="179"/>
         <source>Le fichier %1 n&apos;existe pas.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -394,6 +394,11 @@
         <source>Scalar %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../readers/ct_reader_ply.cpp" line="353"/>
+        <source>ATTENTION : les filtres ne sont pas pris en charges pour le format PLY pour le moment. Tous les points seront chargés.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CT_Reader_PTX</name>
@@ -491,17 +496,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_points_ascii.cpp" line="527"/>
+        <location filename="../readers/ct_reader_points_ascii.cpp" line="528"/>
         <source>Error loading intensity at line %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_points_ascii.cpp" line="528"/>
+        <location filename="../readers/ct_reader_points_ascii.cpp" line="529"/>
         <source>Error loading color at line %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_points_ascii.cpp" line="529"/>
+        <location filename="../readers/ct_reader_points_ascii.cpp" line="530"/>
         <source>Error loading normal at line %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -993,6 +998,52 @@
     </message>
 </context>
 <context>
+    <name>PB_Grid3DAsTableExporter</name>
+    <message>
+        <location filename="../exporters/grid3d/pb_grid3dastableexporter.cpp" line="7"/>
+        <source>Fichiers txt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/grid3d/pb_grid3dastableexporter.cpp" line="8"/>
+        <source>Exporte des grilles 3D au format table ASCII. Les champs suivants sont exportés :&lt;br&gt;- X  : Coordonnée X de la cellule dans la grille (ligne)&lt;br&gt;- Y  : Coordonnée Y de la cellule dans la grille (colonne)&lt;br&gt;- Z  : Coordonnée Z de la cellule dans la grille (niveau Z)&lt;br&gt;- Valeur  : Valeur dans la cellule&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/grid3d/pb_grid3dastableexporter.cpp" line="23"/>
+        <source>Grilles 3D, table (X,Y,Z,Valeur)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/grid3d/pb_grid3dastableexporter.cpp" line="41"/>
+        <source>Item à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PB_Grid3DExporter</name>
+    <message>
+        <location filename="../exporters/grid3d/pb_grid3dexporter.cpp" line="7"/>
+        <source>Fichiers Grilles 3D (ASCII)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/grid3d/pb_grid3dexporter.cpp" line="8"/>
+        <source>Export des Grilles 3D au format ASCII, inspiré du format ASCII ESRI GRID pour les rasters (1 fichier par grille)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/grid3d/pb_grid3dexporter.cpp" line="18"/>
+        <source>Grilles 3D, ACSII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/grid3d/pb_grid3dexporter.cpp" line="36"/>
+        <source>Item à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PB_GroupDataExporter</name>
     <message>
         <location filename="../exporters/groupdata/pb_groupdataexporter.cpp" line="11"/>
@@ -1058,6 +1109,52 @@
     <message>
         <location filename="../exporters/topology/pb_opfexporter.cpp" line="55"/>
         <source>Groupe OPF à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PB_Polygon2DExporter</name>
+    <message>
+        <location filename="../exporters/polygon2d/pb_polygon2dexporter.cpp" line="7"/>
+        <source>Polygones 2D (ASCII)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/polygon2d/pb_polygon2dexporter.cpp" line="8"/>
+        <source>Exporte des Polygones 2D en format ASCII. Le fichier de sortie contient une ligne par polygones.&lt;br&gt;Pour chaque polygone, sont exportés :&lt;br&gt;- PolygonId : Identifiant Computree du polygone&lt;br&gt;- AreaOfPolygon : Aire du polygone&lt;br&gt;- Xcenter : Coordonnée X du centre de masse du polygone&lt;br&gt;- Ycenter : Coordonnée Y du centre de masse du polygone&lt;br&gt;- NumberOfVertice(N) : Nombre de sommets du polygone&lt;br&gt;- Xvertice1 : Coordonnée X du 1er sommet&lt;br&gt;- Yvertice1 : Coordonnée Y du 1er sommet&lt;br&gt;- Xvertice2 : Coordonnée X du 2ième sommet&lt;br&gt;- Yvertice2 : Coordonnée Y du 2ième sommet&lt;br&gt;...- XverticeN : Coordonnée X du Nième sommet&lt;br&gt;- YverticeN : Coordonnée Y du Nième sommet&lt;br&gt;N.B. : Le nombre de colonnes varie donc pour chaque ligne. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/polygon2d/pb_polygon2dexporter.cpp" line="32"/>
+        <source>Polygones 2D, ACSII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/polygon2d/pb_polygon2dexporter.cpp" line="44"/>
+        <source>Item à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PB_ProfileExporter</name>
+    <message>
+        <location filename="../exporters/profile/pb_profileexporter.cpp" line="7"/>
+        <source>Fichiers Profile (ASCII)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/profile/pb_profileexporter.cpp" line="8"/>
+        <source>Export de profils au format ASCII (1 fichier par profil).&lt;br&gt;Le fichier comporte d&apos;abord une entête inspirée du format ASCII ESRI GRID pour les rasters, décrivant l&apos;origine, la direction et la résolution du profil.&lt;br&gt;Ensuite, une table fournit les champs suivants :&lt;br&gt;- Level : Numéro de la cellule dans le profil&lt;br&gt;- Length : Longueur correspondant au centre de la cellule le long du profil&lt;br&gt;- Xc : Coordonnée X du centre de la cellule&lt;br&gt;- Yc : Coordonnée Y du centre de la cellule&lt;br&gt;- Zc : Coordonnée Z du centre de la cellule&lt;br&gt;- Value : Valeur de la cellule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/profile/pb_profileexporter.cpp" line="27"/>
+        <source>Profils, ACSII</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/profile/pb_profileexporter.cpp" line="45"/>
+        <source>Item à exporter</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1300,23 +1397,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/ct_configurableelementtools.h" line="131"/>
-        <source>&lt;b&gt;%1&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;&lt;i&gt;%2&lt;/i&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/ct_configurableelementtools.h" line="134"/>
-        <source>&lt;br/&gt;&lt;br/&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/ct_configurableelementtools.h" line="138"/>
-        <source>No detailled description for this step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../tools/ct_readerstools.h" line="126"/>
         <source>ERREUR : aucun reader disponible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/ct_configurableelementtools.h" line="132"/>
+        <source>&lt;h3&gt;%2&lt;/h3&gt;&lt;div class=&quot;descBlocklvl2&quot;&gt;&lt;strong&gt;Plugin&lt;/strong&gt; : %5, &lt;strong&gt;Nom de classe&lt;/strong&gt; : %1&lt;br&gt;&lt;br&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;br&gt;&lt;br&gt;%3&lt;br&gt;&lt;br&gt;%6%4&lt;/div&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/ct_configurableelementtools.h" line="146"/>
+        <source>&lt;strong&gt;Détails&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/ct_configurableelementtools.h" line="149"/>
+        <source>&lt;br&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

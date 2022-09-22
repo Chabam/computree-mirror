@@ -8,15 +8,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>ItemWithName</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Résultat compteur</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Item avec attribut de nom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compteur de boucle</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

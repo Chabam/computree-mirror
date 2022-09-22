@@ -64,6 +64,26 @@
         <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source> &lt;em&gt;valeur par défaut = %1%2&lt;/em&gt;. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> &lt;em&gt;valeur par défaut = %1%2.&lt;/em&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Activé</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Désactivé</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> extension : %1. </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CT_TextFileConfigurationDialog</name>

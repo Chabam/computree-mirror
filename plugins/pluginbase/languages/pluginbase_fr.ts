@@ -2,302 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
-    <name>PB_ASCRGBExporter</name>
-    <message>
-        <source>Exporte les points au format ASCII, avec les champs suivants :&lt;br&gt;- X  : Coordonnée X&lt;br&gt;- Y  : Coordonnée Y&lt;br&gt;- Z  : Coordonnée Z&lt;br&gt;- R  : Composante rouge&lt;br&gt;- V  : Composante verte&lt;br&gt;- B  : Composante Bleue&lt;br&gt;- NX : Coordonnée X de la normale au point&lt;br&gt;- NY : Coordonnée X de la normale au point&lt;br&gt;- NZ : Coordonnée X de la normale au point&lt;br&gt;&lt;br&gt;</source>
-        <translation type="vanished">Exporte les points au format ASCII, avec les champs suivants :&lt;br&gt;- X  : Coordonnée X&lt;br&gt;- Y  : Coordonnée Y&lt;br&gt;- Z  : Coordonnée Z&lt;br&gt;- R  : Composante rouge&lt;br&gt;- V  : Composante verte&lt;br&gt;- B  : Composante Bleue&lt;br&gt;- NX : Coordonnée X de la normale au point&lt;br&gt;- NY : Coordonnée Y de la normale au point&lt;br&gt;- NZ : Coordonnée Z de la normale au point&lt;br&gt;&lt;br&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionManualInventoryAttributesDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="obsolete">Configuration</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionManualInventoryOptions</name>
-    <message>
-        <source>Form</source>
-        <translation type="obsolete">Formulaire</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionMeasureCrownAttributes</name>
-    <message>
-        <source>Press &quot;y&quot; to apply, or &quot;n&quot; to cancel !</source>
-        <translation type="vanished">Appuyer sur &quot;y&quot; pour appliquer, ou sur &quot;n&quot; pour annuler !</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionModifyAffiliationsOptions</name>
-    <message>
-        <source>N&apos;afficher que les items sélectionnés (de référence et à affilier</source>
-        <translation type="vanished">N&apos;afficher que les items sélectionnés (de référence et à affilier)</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionModifyPositions2DOptions</name>
-    <message>
-        <source>Form</source>
-        <translation type="obsolete">Formulaire</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionPickItemsInListOptions</name>
-    <message>
-        <source>Form</source>
-        <translation type="vanished">Formulaire</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionSegmentCrownsOptions</name>
-    <message>
-        <source>Switch in &quot;free move&quot; mode (shortcut : f)</source>
-        <translation type="vanished">Passer en mode &quot;déplacement libre&quot; (raccourci : f)</translation>
-    </message>
-    <message>
-        <source>Density</source>
-        <translation type="vanished">Densité</translation>
-    </message>
-    <message>
-        <source>Active Cluster</source>
-        <translation type="vanished">Cluster actif</translation>
-    </message>
-    <message>
-        <source>Only shows selected cells</source>
-        <translation type="vanished">N&apos;afficher que les cellules sélectionnées</translation>
-    </message>
-    <message>
-        <source>CRTL Mousewheel</source>
-        <translation type="vanished">CTRL+Molette</translation>
-    </message>
-    <message>
-        <source>Choisir le cluster actif (S = Select)</source>
-        <translation type="vanished">Choisir le cluster actif (S = Selectionner)</translation>
-    </message>
-    <message>
-        <source>Dessiner une limite (D = Draw)</source>
-        <translation type="vanished">Dessiner une limite (D = Dessiner)</translation>
-    </message>
-    <message>
-        <source>Inclure une zone dans le cluster actif (F = Fill)</source>
-        <translation type="vanished">Inclure une zone dans le cluster actif (F = Remplir)</translation>
-    </message>
-    <message>
-        <source>Ajuster le plan de visualisation par étapes de 1 mètre</source>
-        <translation type="vanished">Ajuster le plan de visualisation par pas de 1 mètre</translation>
-    </message>
-    <message>
-        <source>Ajuster le plan de visualisation par étapes de 10 cm</source>
-        <translation type="vanished">Ajuster le plan de visualisation par pas de 10 cm</translation>
-    </message>
-    <message>
-        <source>Ajuster le plan de visualisation par étapes de 1 cm</source>
-        <translation type="vanished">Ajuster le plan de visualisation par pas de 1 cm</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionSegmentGapsOptions</name>
-    <message>
-        <source>Switch in &quot;free move&quot; mode (shortcut : f)</source>
-        <translation type="vanished">Passer en mode &quot;déplacement libre&quot; (raccourci : f)</translation>
-    </message>
-    <message>
-        <source>Density</source>
-        <translation type="vanished">Densité</translation>
-    </message>
-    <message>
-        <source>Active Cluster</source>
-        <translation type="vanished">Cluster actif</translation>
-    </message>
-    <message>
-        <source>Only shows selected cells</source>
-        <translation type="vanished">N&apos;afficher que les cellules sélectionnées</translation>
-    </message>
-    <message>
-        <source>CRTL Mousewheel</source>
-        <translation type="vanished">CTRL+Molette</translation>
-    </message>
-    <message>
-        <source>Ajuster le plan de visualisation par étapes de 1 mètre</source>
-        <translation type="vanished">Ajuster le plan de visualisation par pas de 1 mètre</translation>
-    </message>
-    <message>
-        <source>Ajuster le plan de visualisation par étapes de 10 cm</source>
-        <translation type="vanished">Ajuster le plan de visualisation par pas de 10 cm</translation>
-    </message>
-    <message>
-        <source>Ajuster le plan de visualisation par étapes de 1 cm</source>
-        <translation type="vanished">Ajuster le plan de visualisation par pas de 1 cm</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionSelectCellsInGrid3D</name>
-    <message>
-        <source>Press &quot;y&quot; to apply, or &quot;n&quot; to cancel !</source>
-        <translation type="vanished">Appuyer sur &quot;y&quot; pour appliquer, ou sur &quot;n&quot; pour annuler !</translation>
-    </message>
-    <message>
-        <source>Select a cell as new view center !</source>
-        <translation type="vanished">Choisir la cellule comme nouveau centre de la vue !</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionSelectCellsInGrid3DColonizeDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Configuration</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionSelectCellsInGrid3DOptions</name>
-    <message>
-        <source>Switch in &quot;add to selection&quot; mode (shortcut : a)</source>
-        <translation type="vanished">Passer en mode &quot;ajouter à la sélection&quot; (raccourci : a)</translation>
-    </message>
-    <message>
-        <source>Switch in &quot;colonize adjacent and not empty values&quot; mode (shortcut : z)</source>
-        <translation type="vanished">Passer en mode &quot;coloniser les adjacents et pas les valeurs vides&quot; (raccourci : z)</translation>
-    </message>
-    <message>
-        <source>Switch in &quot;Extends from selected cell&quot; mode (shortcut : e)</source>
-        <translation type="vanished">Passer en mode &quot;S&apos;étendre à partir de la cellule sélectionnée&quot; (raccourci : e)</translation>
-    </message>
-    <message>
-        <source>Switch in &quot;remove from selection&quot; mode (shortcut : r)</source>
-        <translation type="vanished">Passer en mode &quot;supprimer de la sélection&quot; (raccourci : r)</translation>
-    </message>
-    <message>
-        <source>Switch in &quot;free move&quot; mode (shortcut : f)</source>
-        <translation type="vanished">Passer en mode &quot;déplacement libre&quot; (raccourci : f)</translation>
-    </message>
-    <message>
-        <source>Only shows selected cells</source>
-        <translation type="vanished">N&apos;afficher que les cellules sélectionnées</translation>
-    </message>
-    <message>
-        <source>CRTL Mousewheel</source>
-        <translation type="vanished">CTRL+Molette</translation>
-    </message>
-    <message>
-        <source>SHIFT Mousewheel</source>
-        <translation type="vanished">SHIFT+Molette</translation>
-    </message>
-    <message>
-        <source>Set maximum level and thickness</source>
-        <translation type="vanished">Definir le niveau maximum et l&apos;épaisseur</translation>
-    </message>
-    <message>
-        <source>Copy active level selection to all visible levels (see thickness)</source>
-        <translation type="vanished">Copier la sélection du niveau actif à tous les niveaux visibles (voir épaisseur)</translation>
-    </message>
-    <message>
-        <source>Copy active level selection to ALL levels of the grid</source>
-        <translation type="vanished">Copier la sélection du niveau actif à tous les niveaux de la grille</translation>
-    </message>
-    <message>
-        <source>Niveau Z affiché, ou le plus bas si épaisseur &gt; 1 (CTRL MOLETTE)</source>
-        <translation type="vanished">Niveau Z affiché, ou le plus bas si épaisseur &gt; 1 (CTRL+Molette)</translation>
-    </message>
-    <message>
-        <source>Nombre de niveaux cumulés = épaisseur (SHIFT MOLETTE)</source>
-        <translation type="vanished">Nombre de niveaux cumulés = épaisseur (SHIFT+Molette)</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionSlicePointCloudOptions</name>
-    <message>
-        <source>Form</source>
-        <translation type="vanished">Formulaire</translation>
-    </message>
-    <message>
-        <source>exemple</source>
-        <translation type="vanished">Exemple</translation>
-    </message>
-    <message>
-        <source>Dessiner les scènes</source>
-        <translation type="vanished">Dessiner les scènes</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionValidateInventoryAttributesDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="obsolete">Configuration</translation>
-    </message>
-</context>
-<context>
-    <name>PB_ActionValidateInventoryOptions</name>
-    <message>
-        <source>Form</source>
-        <translation type="obsolete">Formulaire</translation>
-    </message>
-</context>
-<context>
-    <name>PB_GDALExporter</name>
-    <message>
-        <source>Aucun ItemDrawable exportable</source>
-        <translation type="vanished">Aucun Item exportable</translation>
-    </message>
-    <message>
-        <source>Creation of output file failed.</source>
-        <translation type="vanished">La création du fichier de sortie a échoué.</translation>
-    </message>
-    <message>
-        <source>Layer creation failed.</source>
-        <translation type="vanished">La création de Layer à échoué.</translation>
-    </message>
-    <message>
-        <source>Failed to create feature in shapefile.</source>
-        <translation type="vanished">La création d&apos;entités dans le shapefile a échoué.</translation>
-    </message>
-</context>
-<context>
-    <name>PB_GroupDataExporter</name>
-    <message>
-        <source>Attributs/Items d&apos;un groupe</source>
-        <translation type="vanished">Attributs/Items de groupes</translation>
-    </message>
-</context>
-<context>
-    <name>PB_LASExporter</name>
-    <message>
-        <source>- Aucun points à exporter</source>
-        <translation type="vanished">- Aucun point à exporter</translation>
-    </message>
-</context>
-<context>
-    <name>PB_MultiXYBExporter</name>
-    <message>
-        <source>- Aucun ItemDrawable du type CT_Scene</source>
-        <translation type="vanished">- Aucun Item du type CT_Scene</translation>
-    </message>
-</context>
-<context>
-    <name>PB_Polygon2DExporter</name>
-    <message>
-        <source>Aucun ItemDrawable du type CT_Polygon2D</source>
-        <translation type="vanished">Aucun Item du type CT_Polygon2D</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepAddAffiliationID</name>
-    <message>
-        <source>Ajout d&apos;un ID / groupe</source>
-        <translation type="vanished">Ajout d&apos;un ID / groupe</translation>
-    </message>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="vanished">Pas de description détaillé pour cette étape</translation>
-    </message>
-</context>
-<context>
     <name>PB_StepApplyPointFilters</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="vanished">Pas de description détaillé pour cette étape</translation>
-    </message>
     <message>
         <source>Groupe</source>
         <translation>Groupe</translation>
@@ -320,40 +25,7 @@
     </message>
 </context>
 <context>
-    <name>PB_StepApplyPointFiltersInGrid</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="vanished">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepBeginLoopThroughDataSource</name>
-    <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepBeginLoopThroughGroups</name>
-    <message>
-        <source>Résultat</source>
-        <translation type="vanished">Résultat</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="vanished">Item</translation>
-    </message>
-</context>
-<context>
     <name>PB_StepBeginLoopThroughGroups02</name>
-    <message>
-        <source>Résultat</source>
-        <translation type="vanished">Résultat</translation>
-    </message>
     <message>
         <source>Groupe</source>
         <translation>Groupe</translation>
@@ -367,109 +39,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>A chaque tour de boucle, cette étape conserve uniquement un élément de la liste séléctionnée en entrée.&lt;br&gt;L&apos;utilisateur doit choisir un attribut servant à nommer les tours, ce qui permet par exemple des exports adaptatifs.&lt;br&gt;Nécessite une étape &quot;Fin de boucle&quot; pour terminer la boucle. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Nom</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepCompare3DGridsContents</name>
     <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
+        <source>Cette étape permet d&apos;effectuer des traitements par lots.&lt;br&gt;Elle créée une boucle permettant de traiter successivement les différents éléments sélectionnés en entrée.&lt;br&gt;IMPORTANT : la boucle devra être fermée avec l&apos;étape &quot;Fin de boucle&quot;.&lt;br&gt;&lt;br&gt;Le cas d&apos;utilisation le plus classique est après l&apos;étape &quot;Créer une liste de fichiers&quot;, afin d&apos;itérer sur les fichiers de la liste.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Grille</source>
-        <translation type="obsolete">Grille</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepComputeCrownProjection</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
+        <source>&lt;br&gt;&lt;br&gt;L&apos;item choisi définit sur quelle liste d&apos;éléments il faut itérer.&lt;br&gt;Pour cet item il faut choisir un attribut &quot;Nom&quot;, qui permettra de nommer les tours de boucles.&lt;br&gt;Cela permet par exemple de créer dans la boucle des exports adaptatifs, dont les noms de fichiers de sortie seront constitués à partir du nom des items en entrée (nom du fichier en cours en général).</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Scène(s)</source>
-        <translation type="obsolete">Scène(s)</translation>
+        <source>Cette étape génère deux résultats :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Une copie du résultat d&apos;entrée, mais dans laquelle seul l&apos;item de l&apos;itération en cours est disponible,&lt;/li&gt;&lt;li&gt;Un résultat Compteur, permettant la gestion de la boucle. Ce compteur est en particulier utilisé pour connaître le nom du tour courant.&lt;/li&gt;&lt;/ul&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Scène</source>
-        <translation type="obsolete">Scène</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepComputeHitGrid</name>
-    <message>
-        <source>Cette étape génère une grille 3D à la &lt;b&gt;résolution&lt;/b&gt; spécifiée.&lt;br&gt;Chaque case reçoit le nombre de points de la scène d&apos;entrée qu&apos;elle contient.&lt;br&gt;Elle calcule également les profils 2D cumulés en XY, XZ et YZ. </source>
-        <translation type="vanished">Cette étape génère une grille 3D à la &lt;b&gt;résolution&lt;/b&gt; spécifiée.&lt;br&gt;Chaque case reçoit le nombre de points de la scène d&apos;entrée qu&apos;elle contient.&lt;br&gt;Elle calcule également les profils 2D cumulés en XY, XZ et YZ. </translation>
-    </message>
-    <message>
-        <source>Scène(s)</source>
-        <translation type="vanished">Scène(s)</translation>
-    </message>
-    <message>
-        <source>Scène</source>
-        <translation type="vanished">Scène</translation>
-    </message>
-    <message>
-        <source>Hits</source>
-        <translation type="vanished">Hits (retours)</translation>
-    </message>
-    <message>
-        <source>DensityXY</source>
-        <translation type="vanished">Densité XY</translation>
-    </message>
-    <message>
-        <source>Création d&apos;une grille 3D de densité de points</source>
-        <translation type="vanished">Création d&apos;une grille 3D de densité de points</translation>
-    </message>
-    <message>
-        <source>DensityXZ</source>
-        <translation type="vanished">Desnité XZ</translation>
-    </message>
-    <message>
-        <source>DensityYZ</source>
-        <translation type="vanished">Densité YZ</translation>
-    </message>
-    <message>
-        <source>ProfilX</source>
-        <translation type="vanished">Profile X</translation>
-    </message>
-    <message>
-        <source>ProfilY</source>
-        <translation type="vanished">Profile Y</translation>
-    </message>
-    <message>
-        <source>ProfilZ</source>
-        <translation type="vanished">Profile Z</translation>
-    </message>
-    <message>
-        <source>ProfilDiag</source>
-        <translation type="vanished">Profile en diagonale</translation>
-    </message>
-    <message>
-        <source>Résolution de la grille</source>
-        <translation type="vanished">Résolution de la grille</translation>
-    </message>
-    <message>
-        <source>meters</source>
-        <translation type="vanished">mètres</translation>
+        <source>L&apos;utilisation la plus habituelle de cette étape est de traiter successivement une liste de fichiers. Dans ce cas, la structure du script est la suivante :&lt;ol&gt;&lt;li&gt;Créer une liste de fichier (séléction de la liste des fichiers à parcourir)&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Boucle standard&lt;/strong&gt; (début de la boucle)&lt;/li&gt;&lt;li&gt;Charger les fichiers d&apos;une liste (chargement du fichier correspondant au tour de boucle courant)&lt;/li&gt;&lt;li&gt;... (étapes de traitement et d&apos;export)&lt;/li&gt;&lt;li&gt;Fin de boucle&lt;/li&gt;&lt;/ol&gt;&lt;br&gt;Cependant cette étape est générique et peut donc être utilisée dans de nombreux autres cas.&lt;br&gt;Il est même possible d&apos;emboiter plusieurs boucles, en prenant garde de bien gérer les correspondances de résultats compteurs entre chaque début et fin de boucle.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PB_StepComputePointMetrics</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="vanished">Pas de description détaillé pour cette étape</translation>
-    </message>
     <message>
         <source>Groupe</source>
         <translation>Groupe</translation>
@@ -502,24 +93,25 @@
         <source> (%1)</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepComputePointsMetrics</name>
     <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
+        <source>Cette étape regroupe toutes les métriques de points disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;Dans Computree une &quot;métrique&quot; est un indicateur calculé sur un type de données précis. Les métriques de points sont calculées à partir d&apos;un nuage de points. A minima les coordonnées (x,y,z) des points, et dans certains cas d&apos;autres attributs issus du format standard LAS. De plus, une emprise peut optionnellement être fournie pour sélectionner les points à prendre en compte.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des métriques de points disponibles&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Scène</source>
-        <translation type="obsolete">Scène</translation>
+        <source>&lt;br&gt;&lt;br&gt;Toutes les métriques de points prennent les mêmes données en entrée :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Un nuage de points. C&apos;est avec les coordonnées de ce nuage de points que les métriques sont calculées.&lt;/li&gt;&lt;li&gt;Optionnellement une emprise. Si elle est sélectionnée, seuls les points inclus dans cette emprise sont pris en compte pour le calcul.&lt;/li&gt;&lt;li&gt;Optionnellement des attributs LAS. Certaines métriques nécessitent des attributs complémentaires en plus des coordonnées. Si les attributs LAS ne sont pas sélectionnés, ces metriques seront fixées à leur valeur par défaut.&lt;/li&gt;&lt;/ul&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cette étape ajoute au résultat d&apos;entrée un conteneur &quot;métriques&quot;, contenant toutes les métriques calculées. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Il faut prendre garde à deux aspects lors de l&apos;utilisation des métriques de points.&lt;br&gt;&lt;br&gt;Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d&apos;entrée, sous peine d&apos;obtenir la valeur par défaut pour la métrique systématiquement.&lt;br&gt;Les métriques utilisant les attributs LAS, ont le mot clé LAS dans leur intitulé.&lt;br&gt;&lt;br&gt;Deuxièmement, les nuages de points sont originellement codés en altitude absolue. Mais il est fréquent de modifier ces nuages en soutrayant l&apos;altitude du sol, afin d&apos;obtenir des nuages de points en hauteur, où le relief est &quot;retiré&quot;.&lt;br&gt;Il est donc important de savoir si un nuage des points est en Altitude (Alti) ou en Hauteur (Ht).&lt;br&gt;&lt;ul&gt;&lt;li&gt;Certaines métriques sont indifférentes, et fonctionnent dans les deux cas.&lt;/li&gt;&lt;li&gt;D&apos;autres n&apos;ont de sens que pour un nuage en altitude&lt;/li&gt;&lt;li&gt;D&apos;autres n&apos;ont de sens que pour un nuage en hauteur&lt;/li&gt;&lt;/ul&gt;C&apos;est à l&apos;utilisateur de vérifier les métriques adaptées au nuage de points fourni. &lt;br&gt;Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alti, Ht ou les deux. S&apos;il n&apos;y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus).&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des métriques de points disponibles :&lt;/h2&gt;%1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PB_StepComputeRasterMetrics</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="vanished">Pas de description détaillé pour cette étape</translation>
-    </message>
     <message>
         <source>Groupe</source>
         <translation>Groupe</translation>
@@ -548,48 +140,27 @@
         <source> (%1)</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepCreateDataSource</name>
     <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepCreatePlotManagerFromFile</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
+        <source>Cette étape regroupe toutes les métriques de raster disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;Dans Computree une &quot;métrique&quot; est un indicateur calculé sur un type de données précis. Les métriques de raster sont calculées à partir raster (image 2D, où chaque pixel contient une valeur). Une emprise peut optionnellement être fournie pour sélectionner la partie du raster à prendre en compte.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des métriques de raster disponibles&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepCreatePlotManagerGrid</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
+        <source>&lt;br&gt;&lt;br&gt;Toutes les métriques de raster prennent les mêmes données en entrée :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Un raster à partir duquel les métriques sont calculées.&lt;/li&gt;&lt;li&gt;Optionnellement une emprise. Si elle est sélectionnée, seule la partie du raster incluse dans cette emprise est prise en compte pour le calcul.&lt;/li&gt;&lt;/ul&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
+        <source>Cette étape ajoute au résultat d&apos;entrée un conteneur &quot;métriques&quot;, contenant toutes les métriques calculées. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attention : le comportement des métriques peut être influencé par la résolution des rasters fournis.&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des métriques de raster disponibles :&lt;/h2&gt;%1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PB_StepCreateReaderList</name>
     <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
         <source>Créer une liste de fichiers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cette étape créer une liste de readers (lecteur de fichier). Ces readers pourront par la suite être utilisés par d&apos;autres étapes pour charger les fichiers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -636,6 +207,46 @@
         <source>Fichier %1 inexistant ou non valide</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Cette étape créer une liste fichiers. Cette étape ne charge pas les fichiers, elle créée juste les entêtes. Il faut ensuite ajouter l&apos;étape &quot;Charger les fichiers d&apos;une liste&quot; pour les charger, soit directement, soit après un début de boucle. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;&lt;br&gt;Cette étape génère un résultat contenant la liste des fichiers.&lt;br&gt;Pour chaque fichier deux éléments sont créés :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Une entête contenant les informations générales sur le fichier, dépendant du format. A minima cette entête contient le nom et le chemin du fichier.&lt;/li&gt;&lt;li&gt;Un &quot;reader&quot;, qui est l&apos;objet utilisé pour faire le chargement effectif du fichier dans la suite du script.&lt;/li&gt;&lt;/ul&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L&apos;utilisation la plus habituelle de cette étape est de traiter successivement une liste de fichiers, à l&apos;aide d&apos;une boucle ajoutée après cette étape. Dans ce cas, la structure du script est la suivante :&lt;ol&gt;&lt;li&gt;&lt;strong&gt;Créer une liste de fichier&lt;/strong&gt; (séléction de la liste des fichiers à parcourir)&lt;/li&gt;&lt;li&gt;Boucle standard (début de la boucle)&lt;/li&gt;&lt;li&gt;Charger les fichiers d&apos;une liste (chargement du fichier correspondant au tour de boucle courant)&lt;/li&gt;&lt;li&gt;... (étapes de traitement et d&apos;export)&lt;/li&gt;&lt;li&gt;Fin de boucle&lt;/li&gt;&lt;/ol&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Méthode de choix des fichiers :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sélection manuelle dans un répertoire</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si cette option est sélectionnée, l&apos;utilisateur choisit manuellement les fichiers dans un répertoire.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Utilisation d&apos;un fichier contenant les chemins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si cette option est sélectionnée, l&apos;utilisateur doit choisir un fichier texte, qui contient sur chaque ligne un chemin de fichier. Cela permet de préparer des lots de fichiers prédéfinis.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choisir le fichier contenant les chemins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fichier texte, *.*</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PB_StepExportAttributesInLoop</name>
@@ -644,20 +255,12 @@
         <translation>Résultat</translation>
     </message>
     <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation>Item</translation>
-    </message>
-    <message>
         <source>Export dans une boucle (cas normal)</source>
         <translation>Export dans une boucle (cas normal, décocher en cas d&apos;usage hors boucle)</translation>
     </message>
     <message>
         <source>Export d&apos;attributs dans une boucle</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Activer export ASCII tabulaire (1 fichier en tout)</source>
@@ -684,23 +287,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Item (avec XY)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Y</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attribut Item (avec XY)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Attribut Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -763,64 +354,61 @@
         <source> : Impossible de créer la couche &quot;point&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepExportItemList</name>
     <message>
-        <source>No detailled description for this step</source>
-        <translation type="vanished">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Résultat</source>
-        <translation type="vanished">Résultat</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nom</translation>
-    </message>
-    <message>
-        <source>Export avec nom de fichier adaptatif (DEPRECATED)</source>
+        <source>Cette étape permet d&apos;exporter des données au sein d&apos;une boucle, en prenant en compte les tours surccessifs. Tout attribut de n&apos;importe quel item peut être exporté.&lt;br&gt;Cette étape propose 3 types d&apos;exports différents, pouvant être réalisés en parallèle ou non :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Un export sous forme de fichier texte, avec une ligne par item et tour de boucle, et une colonne par attribut. Un seul fichier est produit, regroupant les données de tous les tours de boucle.&lt;/li&gt;&lt;li&gt;Un export sous forme de raster, produisant un fichier raster par attribut et par tour de boucle. Pour que cet export puisse être utilisé, il faut que les données soient organisées sous forme de grille spatiale.&lt;/li&gt;&lt;li&gt;Un export sous forme de vecteur (points en 2D avec attributs), produisant un fichier vecteur par tour de boucle, avec une ligne par item, et une colonne par attribut. Cela nécessite que parmi les attributs figurent des coordonnées (x;y), auquelles assosicer les autres attributs.&lt;/li&gt;&lt;/ul&gt;Il est possible d&apos;utiliser cette étape en dehors d&apos;une boucle, même si ce n&apos;est pas son usage prévu, en sélectionnant l&apos;option correspondante. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Permet un export avec nom de fichier adaptatif.&lt;br&gt;Cette étape peut utiliser n&apos;importe quel exporter.&lt;br&gt;Le nom du fichier de sorti, est déterminé à partir du compteur de boucle spécifié.</source>
+        <source>&lt;br&gt;&lt;br&gt;Le type de données d&apos;entrée nécessaire dépend des exports activés.&lt;br&gt;Dans tous les cas il faut sélectionner les attributs à exporter.&lt;br&gt;Pour les exports raster, il faut sélectionner un objet &quot;Grille de placettes&quot;, par exemple généré par l&apos;étape &quot;Créer une grille de placettes sur l&apos;emprise&quot;.&lt;br&gt;Pour les exports vecteurs (et aussi raster), il faut également séléctionner des attributs pour les coordonnées (x;y) auxquelles les attributs seront associés spatialement.&lt;br&gt;&lt;br&gt;Comme il s&apos;agit d&apos;un export au sein d&apos;une boucle, il faut également sélectionner le compteur de boucle (sauf si l&apos;option d&apos;export hors boucle a été choisi).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>ERREUR : aucun exporter disponible</source>
+        <source>Cette étape ne génère pas de nouvelles données.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Choix du type de fichier</source>
+        <source>A noter que les trois types d&apos;exports sont indépendants, même s&apos;ils exportent les mêmes attributs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Répertoire d&apos;export</source>
+        <source>Item de position (avec XY)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Préfixe de nom de fichier</source>
+        <source>Item avec des attributs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attribut à exporter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S&apos;il existe déjà, le fichier sera écrasé. Le fichier contiendra les données pour tous les tours de boucle. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Un prefixe optionnel peut être ajouté à tous les noms de fichier, pour par exemple identifier différents lancements du script, exportant dans un même répertoire.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Format raster à utiliser pour les exports.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Le contenu du dossier sélectionné ne sera pas effacé. Cependant pour plus de clarté il est préférable de choisir un dossier vide.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Si cette case est cochée, un dossier séparé sera créé pour achaque attribut à exporter, contenant chacun un raster par tour de boucle.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Format vecteur à utiliser pour les exports.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PB_StepExportPointsByXYArea</name>
-    <message>
-        <source>Scène</source>
-        <translation type="vanished">Scène</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
-        <source>Résultat</source>
-        <translation type="vanished">Résultat</translation>
-    </message>
     <message>
         <source>Offset sur les coodonnées Xmin et Ymin</source>
         <translation>Offset sur les coodonnées Xmin et Ymin (nommage)</translation>
@@ -887,110 +475,7 @@
     </message>
 </context>
 <context>
-    <name>PB_StepExtractLogBuffer</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepExtractPositionsFromDensity</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepFilterItemsByPosition</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="obsolete">Item</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepFilterPointsByBoolGrid</name>
-    <message>
-        <source>Filtrage d&apos;un nuage de points // grille 3D booléenne</source>
-        <translation type="vanished">Filtrage d&apos;un nuage de points // grille 3D booléenne</translation>
-    </message>
-    <message>
-        <source>Cette étape teste pour chaque point des scènes d&apos;entrée s&apos;il est contenu dans une case &quot;vraie&quot; de la grille booléenne choisie. Si oui, le point est conservé. Sinon, il n&apos;est pas conservé.&lt;br&gt;Plusieures scènes peuvent être traitées avec la même étape.&lt;br&gt;Chaque scène filtrée est ajoutée au groupe contenant la grille d&apos;entrée.Si le résultat d&apos;entrée contient plusieurs grilles, une scène est produite pour chacune (sur la base du cumul de toutes les scènes d&apos;entrée)</source>
-        <translation type="vanished">Cette étape teste pour chaque point des scènes d&apos;entrée s&apos;il est contenu dans une case &quot;vraie&quot; de la grille booléenne choisie. Si oui, le point est conservé. Sinon, il n&apos;est pas conservé.&lt;br&gt;Plusieures scènes peuvent être traitées avec la même étape.&lt;br&gt;Chaque scène filtrée est ajoutée au groupe contenant la grille d&apos;entrée.Si le résultat d&apos;entrée contient plusieurs grilles, une scène est produite pour chacune (sur la base du cumul de toutes les scènes d&apos;entrée)</translation>
-    </message>
-    <message>
-        <source>Scènes à filtrer</source>
-        <translation type="vanished">Scènes à filtrer</translation>
-    </message>
-    <message>
-        <source>Scène</source>
-        <translation type="vanished">Scène</translation>
-    </message>
-    <message>
-        <source>Grille(s) de filtrage</source>
-        <translation type="vanished">Grille(s) de filtrage</translation>
-    </message>
-    <message>
-        <source>Scène filtrée</source>
-        <translation type="vanished">Scène filtrée</translation>
-    </message>
-    <message>
-        <source>Grille %1, Scène %2:</source>
-        <translation type="vanished">Grille %1, Scène %2:</translation>
-    </message>
-    <message>
-        <source>La scène %1 points...</source>
-        <translation type="vanished">La scène contient %1 points...</translation>
-    </message>
-    <message>
-        <source>...%1 points ont été conservés</source>
-        <translation type="vanished">...%1 points ont été conservés</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepFitCylinderOnCluster</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-</context>
-<context>
     <name>PB_StepGenericExporter</name>
-    <message>
-        <source>Résultat</source>
-        <translation type="vanished">Résultat</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="vanished">Item</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nom</translation>
-    </message>
     <message>
         <source>Exporter sous...</source>
         <translation>Exporter sous...</translation>
@@ -1076,80 +561,10 @@ Chaque item génére un fichier nommé NomDeBase_xx, avec xx allant de 0 à n. <
     </message>
 </context>
 <context>
-    <name>PB_StepImportSegmaFilesForMatching</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadAsciiFile</name>
-    <message>
-        <source>Chargement d&apos;un fichier ascii</source>
-        <translation type="vanished">Chargement d&apos;un fichier ascii</translation>
-    </message>
-    <message>
-        <source>Ascii Files</source>
-        <translation type="vanished">Fichiers ASCII</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadAsciiFile02</name>
-    <message>
-        <source>Chargement d&apos;un fichier ascii</source>
-        <translation type="vanished">Chargement d&apos;un fichier ascii</translation>
-    </message>
-    <message>
-        <source>Ascii Files</source>
-        <translation type="vanished">Fichiers ASCII</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadDataFromItemPosition</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="obsolete">Item</translation>
-    </message>
-</context>
-<context>
     <name>PB_StepLoadFileByName</name>
-    <message>
-        <source>Create file reader from name</source>
-        <translation type="vanished">Créer un reader à partir d&apos;un nom</translation>
-    </message>
-    <message>
-        <source>3- Create file reader from name</source>
-        <translation type="vanished">3- Créer un reader à partir d&apos;un nom</translation>
-    </message>
-    <message>
-        <source>Create a file reader, using a base name obtained from checked field.
- You have to select a sample file, to allow reader configuration. </source>
-        <translation>Créez un reader en utilisant un nom de base obtenu à partir du champ coché.
-Vous devez sélectionner un fichier d&apos;exemple, pour permettre la configuration du lecteur.</translation>
-    </message>
-    <message>
-        <source>Choose file type</source>
-        <translation>Choisir le type de fichier</translation>
-    </message>
     <message>
         <source>Résultat</source>
         <translation>Résultat</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
     </message>
     <message>
         <source>Item</source>
@@ -1207,184 +622,39 @@ Vous devez sélectionner un fichier d&apos;exemple, pour permettre la configurat
         <source>Fichier %1 inexistant ou non valide</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepLoadGrid3dFile</name>
     <message>
-        <source>Chargement d&apos;un fichier grid3d</source>
-        <translation type="vanished">Chargement d&apos;un fichier grid3d</translation>
+        <source>Cette étape charge l&apos;entête d&apos;un fichier, dont le nom est déterminé par un attribut choisi.&lt;br&gt;L&apos;utilisateur doit choisir un fichier exemple, qui est utilisé pour définir le répertoire de recherche et vérifier le format utilisé.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Fichier Grid3d</source>
-        <translation type="vanished">Fichier Grid3D</translation>
+        <source>&lt;br&gt;&lt;br&gt;L&apos;attibut sélectionné doit contenir le nom de base du fichier recherché. Si l&apos;attribut contient un chemin complet, cette étape en extraiera uniquement le nom de base (sans chemin d&apos;accès et sans extension).&lt;br&gt;Il s&apos;agit souvent d&apos;un attribut nommé &quot;filename&quot; ou &quot;filepath&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Grid 3D Files</source>
-        <translation type="vanished">Fichier Grid3D</translation>
+        <source>&lt;br&gt;Cette étape charge uniquement l&apos;entête du fichier. &lt;strong&gt;Il faudra ensuite charger les données du fichier&lt;/strong&gt;, en général à l&apos;aide de l&apos;étape &quot;Charger les fichiers d&apos;une liste&quot;.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unable to convert the ascii format to a integer at line 1</source>
-        <translation type="vanished">Impossible de convertir le format ASCII en un nombre entier à la ligne 1</translation>
+        <source>En général, cette étape est utilisée dans une boucle, afin de charger un fichier correspondant au tour de boucle en cours.&lt;br&gt;Par exemple, si on a une boucle qui charge tour à tour des nuages de points LIDAR, cette étape peut être utilisée pour identifier à chaque tour de boucle le fichier modèle numérique de terrain (MNT) ayant le même nom que le fichier LIDAR en cours, dans un répertoire dédié.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unable to convert the ascii format to a integer at line 2</source>
-        <translation type="vanished">Impossible de convertir le format ASCII en un nombre entier à la ligne 2</translation>
+        <source>Choix du type de fichier</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unable to convert the ascii format to a integer at line 3</source>
-        <translation type="vanished">Impossible de convertir le format ASCII en un nombre entier à la ligne 3</translation>
-    </message>
-    <message>
-        <source>Unable to convert the ascii format to a floatting point at line 4</source>
-        <translation type="vanished">Impossible de convertir le format ASCII en un nombre réel à la ligne 4</translation>
-    </message>
-    <message>
-        <source>Unable to convert the ascii format to a floatting point at line 5</source>
-        <translation type="vanished">Impossible de convertir le format ASCII en un nombre réel à la ligne 5</translation>
-    </message>
-    <message>
-        <source>Unable to convert the ascii format to a floatting point at line 6</source>
-        <translation type="vanished">Impossible de convertir le format ASCII en un nombre réel à la ligne 6</translation>
-    </message>
-    <message>
-        <source>Unable to convert the ascii format to a floatting point at line 7</source>
-        <translation type="vanished">Impossible de convertir le format ASCII en un nombre réel à la ligne 7</translation>
-    </message>
-    <message>
-        <source>Unable to convert the ascii format to a floatting point at line 8</source>
-        <translation type="vanished">Impossible de convertir le format ASCII en un nombre réel à la ligne 8</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadMultiXYBFiles</name>
-    <message>
-        <source>Chargement d&apos;une liste de fichiers xyb</source>
-        <translation type="vanished">Chargement d&apos;une liste de fichiers xyb</translation>
-    </message>
-    <message>
-        <source>IndividualScenes</source>
-        <translation type="vanished">Scènes individuelles</translation>
-    </message>
-    <message>
-        <source>g</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
-        <source>IndividualScene</source>
-        <translation type="vanished">Scène individuelle</translation>
-    </message>
-    <message>
-        <source>IndividualIntensity</source>
-        <translation type="vanished">Intensité individuelle</translation>
-    </message>
-    <message>
-        <source>ScanPosition</source>
-        <translation type="vanished">Scanner</translation>
-    </message>
-    <message>
-        <source>MergedScene</source>
-        <translation type="vanished">Scènes assemblées</translation>
-    </message>
-    <message>
-        <source>gm</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadObjFile</name>
-    <message>
-        <source>Chargement d&apos;un fichier .obj (Mesh)</source>
-        <translation type="vanished">Chargement d&apos;un fichier .obj (Mesh)</translation>
-    </message>
-    <message>
-        <source>Obj Files</source>
-        <translation type="vanished">Fichiers OBJ</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadPbmFile</name>
-    <message>
-        <source>Chargement d&apos;un fichier pbm</source>
-        <translation type="vanished">Chargement d&apos;un fichier pbm</translation>
-    </message>
-    <message>
-        <source>PBM Files</source>
-        <translation type="vanished">Fichiers PBM</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadPgmFile</name>
-    <message>
-        <source>Chargement d&apos;un fichier pgm</source>
-        <translation type="vanished">Chargement d&apos;un fichier pgm</translation>
-    </message>
-    <message>
-        <source>PGM Files</source>
-        <translation type="vanished">Fichiers PGM</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadPositionsForMatching</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepLoadTreeMap</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
+        <source>Ce fichier exemple doit être l&apos;un des fichiers potentiels à charger (peu importe lequel). Il est analysé pour vérifier le format utilisé, mais aussi pour définir dans quel répertoire il faut chercher les fichiers. </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PB_StepLoopOnFileSets</name>
     <message>
-        <source>Loops on files sets defined in a text file</source>
-        <translation type="vanished">Boucle sur des groupes de fichiers définis dans un fichier de correspondance</translation>
-    </message>
-    <message>
-        <source>4- Loops on files sets defined in a text file</source>
-        <translation type="vanished">4- Boucle sur des groupes de fichiers définis dans un fichier de correspondance</translation>
-    </message>
-    <message>
-        <source>Choose file type</source>
-        <translation type="vanished">Choisir un type de fichier</translation>
-    </message>
-    <message>
-        <source>File with sets</source>
-        <translation type="vanished">Fichier de correspondance</translation>
-    </message>
-    <message>
-        <source>First column must contain set name, Second column must contain file path. No header.</source>
-        <translation type="vanished">La première colonne doit contenir le nom de groupe. La seconde colonne doit contenir le chemin des fichiers. Pas d&apos;entête. </translation>
-    </message>
-    <message>
         <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nom</translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="vanished">Fichier</translation>
+        <translation>Groupe</translation>
     </message>
     <message>
         <source>Boucle sur des groupes de fichiers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A chaque tour de boucle, créer une liste de fichiers appartenant à un même groupe.&lt;br&gt;Les groupes sont définis dans un fichier texte de paramétrage dont:&lt;br&gt;- la première colone indique le nom des groupe&lt;br&gt;- la seconde le chemin des fichiers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1400,19 +670,7 @@ Vous devez sélectionner un fichier d&apos;exemple, pour permettre la configurat
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Choisir le fichier décrivant les lots et fichiers à charger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Fichier texte (*.txt) ; Fichier texte (*.*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>La première colonne doit contenir le nom du lot, la seconde colonne doit contenir le nom du fichier (avec ou sans extension). Le fichier ne doit pas avoir d&apos;en-tête.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Choisir le dossier contenant les fichiers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1440,22 +698,6 @@ Vous devez sélectionner un fichier d&apos;exemple, pour permettre la configurat
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Lots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Lot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nom du lot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fichiers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Reader</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1479,33 +721,49 @@ Vous devez sélectionner un fichier d&apos;exemple, pour permettre la configurat
         <source>Chemin du dossier contenant les fichiers à traiter.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Cette étape démarre une boucle de script. Pour cela elle utilise un fichier de correspondance entre des noms de groupes et des fichiers.A chaque tour de boucle, cette étape créée une liste des fichiers appartenant à l&apos;un des groupes.&lt;br&gt;Les groupes sont définis dans un fichier de paramétrage ASCII (sans ligne d&apos;entête) où :&lt;ul&gt;&lt;li&gt;La première colone indique le nom des groupes.&lt;/li&gt;&lt;li&gt;La seconde le chemin des fichiers correspondants.&lt;/li&gt;&lt;/ul&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;&lt;br&gt;Cette étape génère deux résultats :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Un résultat Compteur, permettant la gestion de la boucle. Ce compteur est en particulier utilisé pour connaître le nom du tour courant.&lt;/li&gt;&lt;li&gt;Un résultat contenant le nom du groupe, ainsi que la liste des fichiers de ce groupe (non chargés à ce stade)&lt;./li&gt;&lt;/ul&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cette étape est utile pour charger des séries de fichiers devant être traités ensembles.&lt;br&gt;Le nom de groupe pourra également être utilisé, par exemple pour charger un autre fichier lié au groupe, en utilisant l&apos;étape &quot;Créer un sélecteur de fichier par attribut de nom&quot;.&lt;br&gt;&lt;br&gt;Un exemple d&apos;utilisation : charger un nuage de point d&apos;une placette LIDAR, ainsi que les nuages de points des arbres de cette placette (préalablement segmentés).&lt;br&gt;Dans le fichier de correspondance on mettra&lt;br&gt;&lt;ul&gt;&lt;li&gt;Le nom dess placette en tant que noms de groupes en première colonne.&lt;/li&gt;&lt;li&gt;Le nom de chaque fichier arbre en tant que noms de fichiers en seconde colonne.&lt;/li&gt;&lt;/ul&gt;Cette étape créera la liste des fichiers pour chacune des placettes à chacun des tours de boucle. Ils pourront ensuite être chargés dans la boucle à l&apos;aide de l&apos;étape &quot;Charger les fichiers d&apos;une liste&quot;.&lt;br&gt;Ensuite, en utilisant l&apos;étape &quot;Créer un sélecteur de fichier par attribut de nom&quot;, suivie de l&apos;étape  &quot;Charger les fichiers d&apos;une liste&quot;, on pourra charger le fichier de la placette, pour peu que celui-ci soit nommé conformément au nom de placette utilisé comme nom de groupe. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Le type choisi doit correspondre aux fichiers listés dans le fichier de correspondance. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choix du fichier de correspondance entre groupes et fichiers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>La première colonne doit contenir le nom des groupes, la seconde colonne doit contenir le nom des fichiers du groupe (avec ou sans extension). Le fichier ne doit pas avoir de ligne d&apos;en-tête.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choix du dossier contenant les fichiers listés dans le fichier de correspondance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Groupes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nom du Groupe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fichiers du groupe</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PB_StepLoopOnFiles</name>
-    <message>
-        <source>Loops on files in selected directory</source>
-        <translation type="vanished">Boucle sur les fichiers d&apos;un répertoire</translation>
-    </message>
-    <message>
-        <source>5- Loops on files in selected directory</source>
-        <translation type="vanished">5- Boucle sur les fichiers d&apos;un répertoire</translation>
-    </message>
-    <message>
-        <source>Choose file type</source>
-        <translation type="vanished">Choisir un type de fichier</translation>
-    </message>
-    <message>
-        <source>Choose directory containing files</source>
-        <translation type="vanished">Choisir le dossier contenant les fichiers</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="vanished">Fichier</translation>
-    </message>
     <message>
         <source>Boucle sur les fichiers d&apos;un dossier</source>
         <translation type="unfinished"></translation>
@@ -1574,532 +832,17 @@ Vous devez sélectionner un fichier d&apos;exemple, pour permettre la configurat
         <source>Chemin du dossier contenant les fichiers à traiter.</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepManualInventory</name>
     <message>
-        <source>Scène</source>
-        <translation type="obsolete">Scène</translation>
+        <source>Cette étape permet d&apos;effectuer des traitements par lots.&lt;br&gt;Elle créée une boucle permettant de traiter successivement les fichiers choisis.&lt;br&gt;IMPORTANT : la boucle devra être fermée avec l&apos;étape &quot;Fin de boucle&quot;.&lt;br&gt;&lt;br&gt;Cette étape est en fait une combinaison des étapes &quot;Créer une liste de fichiers&quot; et &quot;Boucle standard&quot;. </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Mode manuel</source>
-        <translation type="obsolete">Mode manuel</translation>
+        <source>&lt;br&gt;&lt;br&gt;Cette étape génère deux résultats :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Un résultat Compteur, permettant la gestion de la boucle. Ce compteur est en particulier utilisé pour connaître le nom du tour courant.&lt;/li&gt;&lt;li&gt;Un résultat contenant l&apos;entête du fichier correspondant à ce tour de boucle. &lt;/li&gt;&lt;/ul&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepMatchItemsPositions</name>
     <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Item de référence</source>
-        <translation type="obsolete">Item de référence</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepMeasureCrownAttributes</name>
-    <message>
-        <source>Mesure des attributs d&apos;un houppier</source>
-        <translation type="vanished">Mesure des attributs d&apos;un houppier</translation>
-    </message>
-    <message>
-        <source>Result</source>
-        <translation type="vanished">Résultat</translation>
-    </message>
-    <message>
-        <source>meters</source>
-        <translation type="vanished">mètres</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepMergeClustersFromPositions</name>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Scènes segmentées</source>
-        <translation type="obsolete">Scènes segmentées</translation>
-    </message>
-    <message>
-        <source>Mode manuel</source>
-        <translation type="obsolete">Mode manuel</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepMergeClustersFromPositions02</name>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Mode manuel</source>
-        <translation type="obsolete">Mode manuel</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepModifyPositions2D</name>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Mode manuel</source>
-        <translation type="obsolete">Mode manuel</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepReducePointsDensity</name>
-    <message>
-        <source>Réduction de la densité de points</source>
-        <translation type="vanished">Réduction de la densité de points</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepSegmentCrowns</name>
-    <message>
-        <source>Segmentation de houppiers en 2D</source>
-        <translation type="vanished">Segmentation de houppiers en 2D</translation>
-    </message>
-    <message>
-        <source>Cette étape permet de segmenter des houppiers manuellement dans un plan horizontal.&lt;br&gt;Une première phase manuelle permet de déteminer la tranche verticale sur laquelle les points seront analysés. On y définit un niveau Z minimum, un niveau Z maximum, ainsi qu&apos;une résolution pour les rasters de travail :&lt;ul&gt;&lt;li&gt;Le Modèle Numérique de Surface (MNS) = hauteur du point le plus haut pour chaque case&lt;/li&gt;&lt;li&gt;La densité de point par case&lt;/li&gt;&lt;/ul&gt;Les rasters sont ensuite utilisés dans une seconde phase, afin de segmenter les houppiers. Un système par couleurs permet de façon semi-automatique de délimiter l&apos;emprise horizontale de chaque houppier. Sur la base d&apos;une pré-segmentation, l&apos;opérateur peut modifier les groupes (houppiers) en les fusionnant ou en les divisant.&lt;br&gt;En sortie, cette étapes produit :&lt;ul&gt;&lt;li&gt;Un raster avec une valeur entière différente pour chaque houppier&lt;/li&gt;&lt;li&gt;Une scène de points extraite pour chaque houppier&lt;/li&gt;&lt;li&gt;Un polygone horizontal correspondant à l&apos;enveloppe convexe des pixels de chaque houppier&lt;/li&gt;&lt;li&gt;Deux métriques donnant respectivement la surface des pixels, et la surface de l&apos;enveloppe convexe pour chaque houppier&lt;/li&gt;&lt;/ul&gt;</source>
-        <translation type="vanished">Cette étape permet de segmenter des houppiers manuellement dans un plan horizontal.&lt;br&gt;Une première phase manuelle permet de déteminer la tranche verticale sur laquelle les points seront analysés. On y définit un niveau Z minimum, un niveau Z maximum, ainsi qu&apos;une résolution pour les rasters de travail :&lt;ul&gt;&lt;li&gt;Le Modèle Numérique de Surface (MNS) = hauteur du point le plus haut pour chaque case&lt;/li&gt;&lt;li&gt;La densité de point par case&lt;/li&gt;&lt;/ul&gt;Les rasters sont ensuite utilisés dans une seconde phase, afin de segmenter les houppiers. Un système par couleurs permet de façon semi-automatique de délimiter l&apos;emprise horizontale de chaque houppier. Sur la base d&apos;une pré-segmentation, l&apos;opérateur peut modifier les groupes (houppiers) en les fusionnant ou en les divisant.&lt;br&gt;En sortie, cette étapes produit :&lt;ul&gt;&lt;li&gt;Un raster avec une valeur entière différente pour chaque houppier&lt;/li&gt;&lt;li&gt;Une scène de points extraite pour chaque houppier&lt;/li&gt;&lt;li&gt;Un polygone horizontal correspondant à l&apos;enveloppe convexe des pixels de chaque houppier&lt;/li&gt;&lt;li&gt;Deux métriques donnant respectivement la surface des pixels, et la surface de l&apos;enveloppe convexe pour chaque houppier&lt;/li&gt;&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>Scène(s)</source>
-        <translation type="vanished">Scène(s)</translation>
-    </message>
-    <message>
-        <source>Scène</source>
-        <translation type="vanished">Scène</translation>
-    </message>
-    <message>
-        <source>Densité, MNS et clusters</source>
-        <translation type="vanished">Densité, MNS et clusters</translation>
-    </message>
-    <message>
-        <source>MNS</source>
-        <translation type="vanished">MNS</translation>
-    </message>
-    <message>
-        <source>Densité</source>
-        <translation type="vanished">Densité</translation>
-    </message>
-    <message>
-        <source>Clusters</source>
-        <translation type="vanished">Clusters</translation>
-    </message>
-    <message>
-        <source>Scènes segmentées</source>
-        <translation type="vanished">Scènes segmentées</translation>
-    </message>
-    <message>
-        <source>ConvexHull</source>
-        <translation type="vanished">Hull convexe</translation>
-    </message>
-    <message>
-        <source>Attributs du Houppier</source>
-        <translation type="vanished">Attributs du Houppier</translation>
-    </message>
-    <message>
-        <source>Aire du houppier</source>
-        <translation type="vanished">Aire du houppier</translation>
-    </message>
-    <message>
-        <source>Aire du houppier convexe</source>
-        <translation type="vanished">Aire du houppier convexe</translation>
-    </message>
-    <message>
-        <source>Z max</source>
-        <translation type="vanished">Z max</translation>
-    </message>
-    <message>
-        <source>ClusterID</source>
-        <translation type="vanished">ClusterID</translation>
-    </message>
-    <message>
-        <source>Selection de l&apos;épaisseur des houppiers</source>
-        <translation type="vanished">Selection de l&apos;épaisseur des houppiers</translation>
-    </message>
-    <message>
-        <source>Création des clusters</source>
-        <translation type="vanished">Création des clusters</translation>
-    </message>
-    <message>
-        <source>Démarrage des post_traitements</source>
-        <translation type="vanished">Démarrage des post_traitements</translation>
-    </message>
-    <message>
-        <source>Elimination des clusters vides</source>
-        <translation type="vanished">Elimination des clusters vides</translation>
-    </message>
-    <message>
-        <source>Création nuages de points par cluster</source>
-        <translation type="vanished">Création nuages de points par cluster</translation>
-    </message>
-    <message>
-        <source>Ajout des points aux scènes par cluster</source>
-        <translation type="vanished">Ajout des points aux scènes par cluster</translation>
-    </message>
-    <message>
-        <source>Enregistrement des clusters</source>
-        <translation type="vanished">Enregistrement des clusters</translation>
-    </message>
-    <message>
-        <source>Création des Convex Hulls</source>
-        <translation type="vanished">Création des Convex Hulls</translation>
-    </message>
-    <message>
-        <source>Calcul des métriques</source>
-        <translation type="vanished">Calcul des métriques</translation>
-    </message>
-    <message>
-        <source>Segmentation des houppiers</source>
-        <translation type="vanished">Segmentation des houppiers</translation>
-    </message>
-    <message>
-        <source>Phase 2 (Segmentation des houppiers) impossible à réaliser.</source>
-        <translation type="vanished">Phase 2 (Segmentation des houppiers) impossible à réaliser.</translation>
-    </message>
-    <message>
-        <source>Post-Traitements terminés</source>
-        <translation type="vanished">Post-Traitements terminés</translation>
-    </message>
-    <message>
-        <source>Mode manuel.
-Phase 1 : Calcul de la carte de densité et du MNS.
-L&apos;initialisation peut prendre un peu de temps...</source>
-        <translation type="vanished">Mode manuel.
-Phase 1 : Calcul de la carte de densité et du MNS.
-L&apos;initialisation peut prendre un peu de temps...</translation>
-    </message>
-    <message>
-        <source>Mode manuel.
-Phase 2 : Segmentation des houppiers.
-La pré-segmentation automatique peut prendre un peu de temps...</source>
-        <translation type="vanished">Mode manuel.
-Phase 2 : Segmentation des houppiers.
-La pré-segmentation automatique peut prendre un peu de temps...</translation>
-    </message>
-    <message>
-        <source>Fin du mode manuel, démarrage des post-traitements
-Cela peut prendre un peu de temps...</source>
-        <translation type="vanished">Fin du mode manuel, démarrage des post-traitements
-Cela peut prendre un peu de temps...</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepSegmentGaps</name>
-    <message>
-        <source>Segmentation de trouées en 2D</source>
-        <translation type="vanished">Segmentation de trouées en 2D</translation>
-    </message>
-    <message>
-        <source>Cette étape permet de segmenter des trouées manuellement dans un plan horizontal.&lt;br&gt;Une première phase manuelle permet de déteminer la tranche verticale sur laquelle les points seront analysés. On y définit un niveau Z minimum, un niveau Z maximum, ainsi qu&apos;une résolution pour les rasters de travail :&lt;ul&gt;&lt;li&gt;Le Modèle Numérique de Surface (MNS) = hauteur du point le plus haut pour chaque case&lt;/li&gt;&lt;li&gt;La densité de point par case&lt;/li&gt;&lt;/ul&gt;Les rasters sont ensuite utilisés dans une seconde phase, afin de segmenter les trouées. Un système par couleurs permet de façon semi-automatique de délimiter l&apos;emprise horizontale de chaque trouée. Sur la base d&apos;une pré-segmentation, l&apos;opérateur peut modifier les groupes (trouées) en les fusionnant ou en les divisant.&lt;br&gt;En sortie, cette étapes produit :&lt;ul&gt;&lt;li&gt;Un raster avec une valeur entière différente pour chaque trouée&lt;/li&gt;&lt;li&gt;Une métrique donnant la surface des pixels pour chaque trouée&lt;/li&gt;&lt;/ul&gt;</source>
-        <translation type="vanished">Cette étape permet de segmenter des trouées manuellement dans un plan horizontal.&lt;br&gt;Une première phase manuelle permet de déteminer la tranche verticale sur laquelle les points seront analysés. On y définit un niveau Z minimum, un niveau Z maximum, ainsi qu&apos;une résolution pour les rasters de travail :&lt;ul&gt;&lt;li&gt;Le Modèle Numérique de Surface (MNS) = hauteur du point le plus haut pour chaque case&lt;/li&gt;&lt;li&gt;La densité de point par case&lt;/li&gt;&lt;/ul&gt;Les rasters sont ensuite utilisés dans une seconde phase, afin de segmenter les trouées. Un système par couleurs permet de façon semi-automatique de délimiter l&apos;emprise horizontale de chaque trouée. Sur la base d&apos;une pré-segmentation, l&apos;opérateur peut modifier les groupes (trouées) en les fusionnant ou en les divisant.&lt;br&gt;En sortie, cette étapes produit :&lt;ul&gt;&lt;li&gt;Un raster avec une valeur entière différente pour chaque trouée&lt;/li&gt;&lt;li&gt;Une métrique donnant la surface des pixels pour chaque trouée&lt;/li&gt;&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>Scène(s)</source>
-        <translation type="vanished">Scène(s)</translation>
-    </message>
-    <message>
-        <source>Scène</source>
-        <translation type="vanished">Scène</translation>
-    </message>
-    <message>
-        <source>Densité, MNS et clusters</source>
-        <translation type="vanished">Densité, MNS et clusters</translation>
-    </message>
-    <message>
-        <source>MNS</source>
-        <translation type="vanished">MNS</translation>
-    </message>
-    <message>
-        <source>Densité</source>
-        <translation type="vanished">Densité</translation>
-    </message>
-    <message>
-        <source>Clusters</source>
-        <translation type="vanished">Clusters</translation>
-    </message>
-    <message>
-        <source>Aire de la trouée</source>
-        <translation type="vanished">Aire de la trouée</translation>
-    </message>
-    <message>
-        <source>Identifiant de la trouée</source>
-        <translation type="vanished">Identifiant de la trouée</translation>
-    </message>
-    <message>
-        <source>Selection de l&apos;épaisseur des houppiers</source>
-        <translation type="vanished">Selection de l&apos;épaisseur des houppiers</translation>
-    </message>
-    <message>
-        <source>Création des clusters</source>
-        <translation type="vanished">Création des clusters</translation>
-    </message>
-    <message>
-        <source>Démarrage des post_traitements</source>
-        <translation type="vanished">Démarrage des post_traitements</translation>
-    </message>
-    <message>
-        <source>Elimination des clusters vides</source>
-        <translation type="vanished">Elimination des clusters vides</translation>
-    </message>
-    <message>
-        <source>Enregistrement des clusters</source>
-        <translation type="vanished">Enregistrement des clusters</translation>
-    </message>
-    <message>
-        <source>Calcul des métriques</source>
-        <translation type="vanished">Calcul des métriques</translation>
-    </message>
-    <message>
-        <source>Segmentation des houppiers</source>
-        <translation type="vanished">Segmentation des trouées</translation>
-    </message>
-    <message>
-        <source>Post-Traitements terminés</source>
-        <translation type="vanished">Post-Traitements terminés</translation>
-    </message>
-    <message>
-        <source>Segmentation des trouées</source>
-        <translation type="vanished">Segmentation des trouées</translation>
-    </message>
-    <message>
-        <source>ClusterID</source>
-        <translation type="vanished">ClusterID</translation>
-    </message>
-    <message>
-        <source>Phase 2 (Segmentation des trouées) impossible à réaliser.</source>
-        <translation type="vanished">Phase 2 (Segmentation des trouées) impossible à réaliser.</translation>
-    </message>
-    <message>
-        <source>Mode manuel.
-Phase 1 : Calcul de la carte de densité et du MNS.
-L&apos;initialisation peut prendre un peu de temps...</source>
-        <translation type="vanished">Mode manuel.
-Phase 1 : Calcul de la carte de densité et du MNS.
-L&apos;initialisation peut prendre un peu de temps...</translation>
-    </message>
-    <message>
-        <source>Mode manuel.
-Phase 2 : Segmentation des trouées.
-La pré-segmentation automatique peut prendre un peu de temps...</source>
-        <translation type="vanished">Mode manuel.
-Phase 2 : Segmentation des trouées.
-La pré-segmentation automatique peut prendre un peu de temps...</translation>
-    </message>
-    <message>
-        <source>Fin du mode manuel, démarrage des post-traitements
-Cela peut prendre un peu de temps...</source>
-        <translation type="vanished">Fin du mode manuel, démarrage des post-traitements
-Cela peut prendre un peu de temps...</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepSelectCellsInGrid3D</name>
-    <message>
-        <source>Séléction d&apos;un sous-ensemble d&apos;une grille 3D</source>
-        <translation type="vanished">Séléction d&apos;un sous-ensemble d&apos;une grille 3D</translation>
-    </message>
-    <message>
-        <source>Cette étape permet de générer une grille booléenne, représentant une séléction de cellules parmi celles de la grille de référence choisie en entrée.&lt;br&gt;Elle utilise un actionner, permettant de faire des séléction soit par plans horizontaux 2D, soit directement en 3D.&lt;br&gt;En sortie elle fournie également une copie de la grille d&apos;entrée pour laquelle toute les cases non sélectionnées sont réinitialisées à la valeur 0. </source>
-        <translation type="vanished">Cette étape permet de générer une grille booléenne, représentant une séléction de cellules parmi celles de la grille de référence choisie en entrée.&lt;br&gt;Elle utilise un actionner, permettant de faire des séléction soit par plans horizontaux 2D, soit directement en 3D.&lt;br&gt;En sortie elle fournie également une copie de la grille d&apos;entrée pour laquelle toute les cases non sélectionnées sont réinitialisées à la valeur 0. </translation>
-    </message>
-    <message>
-        <source>http://rdinnovation.onf.fr/projects/plugin-base/wiki/Fr_action_selectcells</source>
-        <translation type="vanished">http://rdinnovation.onf.fr/projects/plugin-base/wiki/Fr_action_selectcells</translation>
-    </message>
-    <message>
-        <source>Result</source>
-        <translation type="vanished">Résultat</translation>
-    </message>
-    <message>
-        <source>Grille</source>
-        <translation type="vanished">Grille</translation>
-    </message>
-    <message>
-        <source>Grille filtrée</source>
-        <translation type="vanished">Grille filtrée</translation>
-    </message>
-    <message>
-        <source>Cases séléctionnées</source>
-        <translation type="vanished">Cases séléctionnées</translation>
-    </message>
-    <message>
-        <source>Mode manuel</source>
-        <translation type="vanished">Mode manuel</translation>
-    </message>
-    <message>
-        <source>Bienvenue dans le mode manuel de cette étape de filtrage.
-Seuls les voxels séléctionés (Rouges) seront conservés.
-Laisser la souris au-dessus d&apos;un bouton pour avoir des infos.</source>
-        <translation type="vanished">Bienvenue dans le mode manuel de cette étape de filtrage.
-Seuls les voxels séléctionés (Rouges) seront conservés.
-Laisser la souris au-dessus d&apos;un bouton pour avoir des infos.</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepSelectCellsInGrid3DByBinaryPattern</name>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="obsolete">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Grille</source>
-        <translation type="obsolete">Grille</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepSelectGroupsByReferenceHeight</name>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="obsolete">Item</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepSetAffiliationIDFromReference</name>
-    <message>
-        <source>Mise en correspondance d&apos;ID de deux résultats</source>
-        <translation type="vanished">Mise en correspondance d&apos;ID de deux résultats</translation>
-    </message>
-    <message>
-        <source>No detailled description for this step</source>
-        <translation type="vanished">Pas de description détaillé pour cette étape</translation>
-    </message>
-    <message>
-        <source>Résultat de référence</source>
-        <translation type="vanished">Résultat de référence</translation>
-    </message>
-    <message>
-        <source>Groupe de référence</source>
-        <translation type="vanished">Groupe de référence</translation>
-    </message>
-    <message>
-        <source>ID de référence</source>
-        <translation type="vanished">ID de référence</translation>
-    </message>
-    <message>
-        <source>Item de référence</source>
-        <translation type="vanished">Item de référence</translation>
-    </message>
-    <message>
-        <source>Résultat à affilier</source>
-        <translation type="vanished">Résultat à affilier</translation>
-    </message>
-    <message>
-        <source>Groupe à affilier</source>
-        <translation type="vanished">Groupe à affilier</translation>
-    </message>
-    <message>
-        <source>ID à affilier</source>
-        <translation type="vanished">ID à affilier</translation>
-    </message>
-    <message>
-        <source>Item à affilier</source>
-        <translation type="vanished">Item à affilier</translation>
-    </message>
-    <message>
-        <source>Affiliation par position 2D (3D sinon)</source>
-        <translation type="vanished">Affiliation par position 2D (3D sinon)</translation>
-    </message>
-    <message>
-        <source>Correction des affiliations en mode manuel</source>
-        <translation type="vanished">Correction des affiliations en mode manuel</translation>
-    </message>
-    <message>
-        <source>Modification des affiliations</source>
-        <translation type="vanished">Modification des affiliations</translation>
-    </message>
-    <message>
-        <source>Mode manuel.</source>
-        <translation type="vanished">Mode manuel.</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepSlicePointCloud</name>
-    <message>
-        <source>Découpage d&apos;une scène en tranches horizontales</source>
-        <translation type="vanished">Découpage d&apos;une scène en tranches horizontales</translation>
-    </message>
-    <message>
-        <source>Action manuelle permettant de découper une scène d&apos;entrée en tranches horizontales.&lt;br&gt;Il est possible d&apos;en régler intéractivement :&lt;br&gt;- L&apos;épaisseur (&lt;b&gt;_thickness&lt;/b&gt;)&lt;br&gt;- L&apos;espacement entre deux tranches (&lt;b&gt;_spacing&lt;/b&gt;)&lt;br&gt;&lt;br&gt;N.B. : Cette étape peut également fonctionner en mode non interactif, avec les paramètres choisis dans la boite de configuration. </source>
-        <translation type="vanished">Action manuelle permettant de découper une scène d&apos;entrée en tranches horizontales.&lt;br&gt;Il est possible de régler intéractivement :&lt;br&gt;- L&apos;épaisseur (&lt;b&gt;_thickness&lt;/b&gt;)&lt;br&gt;- L&apos;espacement entre deux tranches (&lt;b&gt;_spacing&lt;/b&gt;)&lt;br&gt;&lt;br&gt;N.B. : Cette étape peut également fonctionner en mode non interactif, avec les paramètres choisis dans la boite de configuration. </translation>
-    </message>
-    <message>
-        <source>Scène à découper</source>
-        <translation type="vanished">Scène à découper</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="vanished">Groupe</translation>
-    </message>
-    <message>
-        <source>Scène découpée</source>
-        <translation type="vanished">Scène découpée</translation>
-    </message>
-    <message>
-        <source>Tranche</source>
-        <translation type="vanished">Tranche</translation>
-    </message>
-    <message>
-        <source>Points de la tranche</source>
-        <translation type="vanished">Points de la tranche</translation>
-    </message>
-    <message>
-        <source>Epaisseur des tranches :</source>
-        <translation type="vanished">Epaisseur des tranches :</translation>
-    </message>
-    <message>
-        <source>cm</source>
-        <translation type="vanished">cm</translation>
-    </message>
-    <message>
-        <source>Espacement des tranches :</source>
-        <translation type="vanished">Espacement des tranches :</translation>
-    </message>
-    <message>
-        <source>Choix interactif des paramètres</source>
-        <translation type="vanished">Choix interactif des paramètres</translation>
-    </message>
-    <message>
-        <source>Mode manuel</source>
-        <translation type="vanished">Mode manuel</translation>
-    </message>
-    <message>
-        <source>Bienvenue dans le mode manuel de cette étape.
-Veuillez sélectionner les paramètres pour réaliser les tranches.</source>
-        <translation type="vanished">Bienvenue dans le mode manuel de cette étape.
-Veuillez sélectionner les paramètres pour réaliser les tranches.</translation>
-    </message>
-</context>
-<context>
-    <name>PB_StepTransformPointCloud</name>
-    <message>
-        <source>Scène(s)</source>
-        <translation type="obsolete">Scène(s)</translation>
-    </message>
-    <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Scène</source>
-        <translation type="obsolete">Scène</translation>
+        <source>On préfèrera la combinaison des étapes &quot;Créer une liste de fichiers&quot; et &quot;Boucle standard&quot;, dans les cas où la liste complète des fichiers à charger est également utile dans le script, par exemple s&apos;il faut générer initialement l&apos;ensemble des emprises des fichiers à charger.&lt;br&gt;A l&apos;inverse cette étape est plus simple s&apos;il suffit de parcourir une liste de fichiers séquenciellement. </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2124,32 +867,25 @@ Veuillez sélectionner les paramètres pour réaliser les tranches.</translation
         <source>Chargement du fichier %1</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepUserItemCopy</name>
     <message>
-        <source>Séléction d&apos;un sous-ensemble d&apos;items (dupliqués)</source>
-        <translation type="vanished">Séléction d&apos;un sous-ensemble d&apos;items (dupliqués)</translation>
+        <source>Cette étape permet de charger effectivement un fichier, dont l&apos;entête a préalablement été créée, par exemple avec l&apos;étape &quot;Créer une liste de fichiers&quot;.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Result</source>
-        <translation type="vanished">Résultat</translation>
+        <source>&lt;br&gt;&lt;br&gt;L&apos;item choisi définit sur quel fichier il faut charger. Ces fichiers doivent avoir été préalable listés. C&apos;est l&apos;objet &quot;reader&quot; qui est utilisé pour réaliser le chargement.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cylinder</source>
-        <translation type="vanished">Cylindre</translation>
+        <source>Cette étape charge les données du fichier. La structure de données dépend du format du fichier.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L&apos;utilisation la plus habituelle de charger un fichier par tour de boucle, à partie d&apos;une liste de fichiers préalablement crée. Dans ce cas, la structure du script est la suivante :&lt;ol&gt;&lt;li&gt;Créer une liste de fichier (séléction de la liste des fichiers à parcourir)&lt;/li&gt;&lt;li&gt;Boucle standard (début de la boucle)&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Charger les fichiers d&apos;une liste&lt;/strong&gt; (chargement du fichier correspondant au tour de boucle courant)&lt;/li&gt;&lt;li&gt;... (étapes de traitement et d&apos;export)&lt;/li&gt;&lt;li&gt;Fin de boucle&lt;/li&gt;&lt;/ol&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PB_StepUserItemSelection</name>
-    <message>
-        <source>Séléction d&apos;un sous-ensemble d&apos;items</source>
-        <translation type="vanished">Séléction d&apos;un sous-ensemble d&apos;items</translation>
-    </message>
-    <message>
-        <source>Result</source>
-        <translation type="vanished">Résultat</translation>
-    </message>
     <message>
         <source>Item</source>
         <translation type="unfinished">Item</translation>
@@ -2159,57 +895,24 @@ Veuillez sélectionner les paramètres pour réaliser les tranches.</translation
         <translation type="unfinished">Mode manuel</translation>
     </message>
     <message>
-        <source>Séléction d&apos;items</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sélection classique (picking)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Bienvenue dans le mode manuel de cette étape de filtrage. Veuillez sélectionner les éléments dans la vue graphique puis valider en cliquant sur le pouce en haut de la fenêtre principale. Les éléments sélectionnés seront gardés dans le résultat de sortie.</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_StepValidateInventory</name>
     <message>
-        <source>Groupe</source>
-        <translation type="obsolete">Groupe</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="obsolete">Item</translation>
-    </message>
-    <message>
-        <source>Mode manuel</source>
-        <translation type="obsolete">Mode manuel</translation>
-    </message>
-</context>
-<context>
-    <name>PB_TestBug</name>
-    <message>
-        <source>Groupe</source>
-        <translation type="unfinished">Groupe</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation type="unfinished">Item</translation>
-    </message>
-    <message>
-        <source>Test Bug</source>
+        <source>Séléction interactive d&apos;items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resultat</source>
+        <source>Cette étape permet à l&apos;utilisateur de faire une séléction manuelle interactive des items à conserver. </source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PB_XYBExporter</name>
     <message>
-        <source>- Aucun points à exporter</source>
-        <translation type="vanished">- Aucun point à exporter</translation>
+        <source>&lt;br&gt;&lt;br&gt;Il faut simplement choisir les items parmi lesquels faire la séléction interactive. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cette étape génère une copie du résultat d&apos;entrée, mais où seuls les items sélectionnés sont conservés. Le reste des données n&apos;est pas impacté. </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
