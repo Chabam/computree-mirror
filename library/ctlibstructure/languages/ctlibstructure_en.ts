@@ -5,67 +5,67 @@
     <name>QObject</name>
     <message>
         <source>Center X</source>
-        <translation type="unfinished"></translation>
+        <translation>Center X</translation>
     </message>
     <message>
         <source>Center Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Center Y</translation>
     </message>
     <message>
         <source>Center Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Center Z</translation>
     </message>
     <message>
         <source>Min X</source>
-        <translation type="unfinished"></translation>
+        <translation>Min X</translation>
     </message>
     <message>
         <source>Max X</source>
-        <translation type="unfinished"></translation>
+        <translation>Max X</translation>
     </message>
     <message>
         <source>Min Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Min Y</translation>
     </message>
     <message>
         <source>Max Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Max Y</translation>
     </message>
     <message>
         <source>Min Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Min Z</translation>
     </message>
     <message>
         <source>Max Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Max Z</translation>
     </message>
     <message>
         <source>Size X</source>
-        <translation type="unfinished"></translation>
+        <translation>Size X</translation>
     </message>
     <message>
         <source>Size Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Size Y</translation>
     </message>
     <message>
         <source>Size Z</source>
-        <translation type="unfinished"></translation>
+        <translation>Size Z</translation>
     </message>
     <message>
         <source>ID</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Anciens Items</source>
-        <translation type="unfinished"></translation>
+        <translation>Older Items</translation>
     </message>
     <message>
         <source>Nouveaux Items</source>
-        <translation type="unfinished"></translation>
+        <translation>New Items</translation>
     </message>
 </context>
 </TS>

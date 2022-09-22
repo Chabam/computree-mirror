@@ -5,44 +5,46 @@
     <name>CTG_ModelsLinkConfigurationFlowView</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Form</translation>
     </message>
     <message>
         <source>Données recherchées</source>
-        <translation type="unfinished"></translation>
+        <translation>Searched data</translation>
     </message>
     <message>
         <source>Données disponibles</source>
-        <translation type="unfinished"></translation>
+        <translation>Available data</translation>
     </message>
     <message>
         <source> (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation> (%1)</translation>
     </message>
     <message>
         <source>%1%2: %3
 Description:
 %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1%2: %3
+Description:
+%4</translation>
     </message>
     <message>
         <source>Tout sélectionner sur ce niveau</source>
-        <translation type="unfinished"></translation>
+        <translation>Select all on this level</translation>
     </message>
     <message>
         <source>Tout dé-sélectionner sur ce niveau</source>
-        <translation type="unfinished"></translation>
+        <translation>Unselect all on this level</translation>
     </message>
 </context>
 <context>
     <name>QtNodes::FlowScene</name>
     <message>
         <source>Open Flow Scene</source>
-        <translation type="unfinished"></translation>
+        <translation>Open Flow Scene</translation>
     </message>
     <message>
         <source>Flow Scene Files (*.flow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Flow Scene Files (*.flow)</translation>
     </message>
 </context>
 </TS>

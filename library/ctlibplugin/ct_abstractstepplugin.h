@@ -178,7 +178,7 @@ public:
     virtual bool configure() { return false; }
 
     /**
-     * @brief Get the official plugin url (= project ex.: http://rdinnovation.onf.fr/projects/plugin-base for Plugin Base)
+     * @brief Get the official plugin url (= project ex.: https://computree.onf.fr/?page_id=1344 for Plugin Base)
      * @return Project URL
      */
     virtual QString getPluginURL() const = 0;

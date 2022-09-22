@@ -794,9 +794,9 @@ void GMainWindow::initUI()
     ui->menuFenetre->addAction(actionArrangeDocksInColumnWithLogAtBottom);
     ui->menuFenetre->addAction(actionArrangeDocksInColumn);
 
+    ui->menuAide->addAction(actionINeedHelp);
     ui->menuAide->addAction(actionAboutSteps);
     ui->menuAide->addAction(actionGenerateStepDocumentation);
-    ui->menuAide->addAction(actionINeedHelp);
     ui->menuAide->addAction(actionAProposPlugin);
     ui->menuAide->addAction(actionAboutMemory);
     ui->menuAide->addAction(actionAPropos);

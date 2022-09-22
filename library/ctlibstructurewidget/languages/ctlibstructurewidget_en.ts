@@ -5,27 +5,27 @@
     <name>CT_ItemDrawableHierarchyCollectionWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Form</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Documents</translation>
     </message>
     <message>
         <source>Nom</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Utiliser</source>
-        <translation type="unfinished"></translation>
+        <translation>Use</translation>
     </message>
     <message>
         <source>Couleur</source>
-        <translation type="unfinished"></translation>
+        <translation>Colour</translation>
     </message>
     <message>
         <source>Normale</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
 </context>
 </TS>

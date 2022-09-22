@@ -54,11 +54,8 @@ private:
 
 private slots:
     void on_checkBoxForceInResultModelRecursivity_toggled(bool e);
-    void on_cb_locale_currentIndexChanged(const QString &arg1);
     void on_pushButtonInitStepChooserPosition_clicked();
 
-signals:
-    void localeChanged(QString locale);
 };
 
 #endif // GSTEPMANAGEROPTIONS_H

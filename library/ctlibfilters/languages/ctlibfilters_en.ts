@@ -5,7 +5,7 @@
     <name>CT_AbstractFilter_XYZ</name>
     <message>
         <source>%1 points filtrés sur %2 points</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 points filtered on %2 points</translation>
     </message>
 </context>
 </TS>

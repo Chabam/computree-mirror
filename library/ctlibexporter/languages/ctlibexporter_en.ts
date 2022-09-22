@@ -5,30 +5,30 @@
     <name>CT_AbstractExporter</name>
     <message>
         <source>Résultat (Exporter : %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Result (Export: %1)</translation>
     </message>
     <message>
         <source>Résultat compteur</source>
-        <translation type="unfinished"></translation>
+        <translation>Counter result</translation>
     </message>
     <message>
         <source>Item avec attribut de nom</source>
-        <translation type="unfinished"></translation>
+        <translation>Item with name attribute</translation>
     </message>
     <message>
         <source>Nom</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <source>Compteur de boucle</source>
-        <translation type="unfinished"></translation>
+        <translation>Loop counter</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source> de l&apos;exporteur %1</source>
-        <translation type="unfinished"></translation>
+        <translation> of the exporter %1</translation>
     </message>
 </context>
 </TS>

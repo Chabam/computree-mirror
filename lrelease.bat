@@ -26,9 +26,12 @@ for %%i in (
     library\ctliblaz\ctliblaz.pro
     library\ctlibcore\ctlibcore.pro
     plugins\pluginbase\pluginbase.pro
-    plugins\pluginshared\pluginshared.pro
+    ..\plugingenerate\plugingenerate\plugingenerate.pro
+    ..\pluginignlif\pluginignlif\pluginignlif.pro
+    ..\pluginlvox\pluginlvox\pluginlvox.pro
     ..\pluginmk\pluginmk\pluginmk.pro
-    ..\pluginonf\dev_v6\pluginonf\pluginonf.pro
+    ..\pluginonf\pluginonf\pluginonf.pro
+    ..\pluginonfdev\pluginonfdev\pluginonfdev.pro
     ..\pluginsegma\pluginsegma\pluginsegma.pro
     ..\plugintoolkit\plugintoolkit\plugintoolkit.pro
         ) do (

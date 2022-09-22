@@ -43,8 +43,6 @@ GStepManagerOptions::GStepManagerOptions(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->cb_locale->addItem("fr_FR");
-    ui->cb_locale->addItem("en_GB");
 
     ui->checkBoxForceInResultModelRecursivity->setChecked(CT_InAbstractResultModel::FORCE_RECURSIVITY);
 }
@@ -57,35 +55,17 @@ GStepManagerOptions::~GStepManagerOptions()
 void GStepManagerOptions::setOptions(CDM_StepManagerOptions options)
 {
     _options = options;
-
-    ui->checkBoxClearResultFromMemory->setChecked(_options.isAutoClearResultFromMemoryEnable());
-
-    if (ui->cb_locale->findText(_options.getQLocale()) < 0)
-    {
-        ui->cb_locale->addItem(_options.getQLocale());
-    }
-    ui->cb_locale->setCurrentIndex(ui->cb_locale->findText(_options.getQLocale()));
 }
 
 
 CDM_StepManagerOptions GStepManagerOptions::getOptions()
 {
-    _options.setAutoClearResultFromMemory(ui->checkBoxClearResultFromMemory->isChecked());
-    _options.setQLocale(ui->cb_locale->currentText());
-
     return _options;
 }
 
 void GStepManagerOptions::on_checkBoxForceInResultModelRecursivity_toggled(bool e)
 {
     CT_InAbstractResultModel::FORCE_RECURSIVITY = e;
-}
-
-void GStepManagerOptions::on_cb_locale_currentIndexChanged(const QString &arg1)
-{
-    Q_UNUSED(arg1)
-
-    emit localeChanged(ui->cb_locale->currentText());
 }
 
 void GStepManagerOptions::on_pushButtonInitStepChooserPosition_clicked()

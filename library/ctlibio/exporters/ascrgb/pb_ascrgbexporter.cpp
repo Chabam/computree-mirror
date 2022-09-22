@@ -29,8 +29,8 @@ PB_ASCRGBExporter::PB_ASCRGBExporter(int subMenuLevel) : SuperClass(subMenuLevel
                   "- V  : Composante verte<br>"
                   "- B  : Composante Bleue<br>"
                   "- NX : Coordonnée X de la normale au point<br>"
-                  "- NY : Coordonnée X de la normale au point<br>"
-                  "- NZ : Coordonnée X de la normale au point<br><br>"));
+                  "- NY : Coordonnée Y de la normale au point<br>"
+                  "- NZ : Coordonnée Z de la normale au point<br><br>"));
 }
 
 PB_ASCRGBExporter::PB_ASCRGBExporter(const PB_ASCRGBExporter& other) : SuperClass(other),

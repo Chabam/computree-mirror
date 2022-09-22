@@ -165,9 +165,9 @@ QString CDM_CitationInfo::getComputreeCoreRis()
     QString computreeCitationRIS = "TY  - COMP\n"
                             "TI  - Computree platform\n"
                             "AU  - Computree Core Team\n"
-                            "PB  - Office National des Forêts, RDI Department\n"
-                            "PY  - 2017\n"
-                            "UR  - http://rdinnovation.onf.fr/computree\n"
+                            "PB  - Office National des Forêts, Département RDI\n"
+                            "PY  - 2022\n"
+                            "UR  - https://computree.onf.fr\n"
                             "ER  - \n";
 
     return computreeCitationRIS;

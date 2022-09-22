@@ -5,135 +5,135 @@
     <name>QObject</name>
     <message>
         <source>Charger</source>
-        <translation type="unfinished"></translation>
+        <translation>Load</translation>
     </message>
     <message>
         <source>Exporter</source>
-        <translation type="unfinished"></translation>
+        <translation>Export</translation>
     </message>
     <message>
         <source>Boucles</source>
-        <translation type="unfinished"></translation>
+        <translation>Loops</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation type="unfinished"></translation>
+        <translation>Points</translation>
     </message>
     <message>
         <source>Géométrie 3D</source>
-        <translation type="unfinished"></translation>
+        <translation>3D geometry</translation>
     </message>
     <message>
         <source>Voxels</source>
-        <translation type="unfinished"></translation>
+        <translation>Voxels</translation>
     </message>
     <message>
         <source>Géométrie 2D</source>
-        <translation type="unfinished"></translation>
+        <translation>2D geometry</translation>
     </message>
     <message>
         <source>Rasters / Images</source>
-        <translation type="unfinished"></translation>
+        <translation>Rasters / Images</translation>
     </message>
     <message>
         <source>Maillages</source>
-        <translation type="unfinished"></translation>
+        <translation>Meshes</translation>
     </message>
     <message>
         <source>Métriques</source>
-        <translation type="unfinished"></translation>
+        <translation>Metrics</translation>
     </message>
     <message>
         <source>Autres</source>
-        <translation type="unfinished"></translation>
+        <translation>Other</translation>
     </message>
     <message>
         <source>Travaux en cours (Beta)</source>
-        <translation type="unfinished"></translation>
+        <translation>Work in progress (Beta)</translation>
     </message>
     <message>
         <source>Favoris</source>
-        <translation type="unfinished"></translation>
+        <translation>Favourites</translation>
     </message>
     <message>
         <source>Inconnu TODO !</source>
-        <translation type="unfinished"></translation>
+        <translation>Unknown TODO!</translation>
     </message>
     <message>
         <source>Filtrer</source>
-        <translation type="unfinished"></translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <source>Créer / Fusionner</source>
-        <translation type="unfinished"></translation>
+        <translation>Create / Merge</translation>
     </message>
     <message>
         <source>Extraire</source>
-        <translation type="unfinished"></translation>
+        <translation>Extract</translation>
     </message>
     <message>
         <source>Détecter</source>
-        <translation type="unfinished"></translation>
+        <translation>Detect</translation>
     </message>
     <message>
         <source>Transformer</source>
-        <translation type="unfinished"></translation>
+        <translation>Transform</translation>
     </message>
     <message>
         <source>Classifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Classify</translation>
     </message>
     <message>
         <source>Analyser</source>
-        <translation type="unfinished"></translation>
+        <translation>Analyse</translation>
     </message>
     <message>
         <source>Ajuster</source>
-        <translation type="unfinished"></translation>
+        <translation>Adjust</translation>
     </message>
     <message>
         <source>Coloriser</source>
-        <translation type="unfinished"></translation>
+        <translation>Colorize</translation>
     </message>
     <message>
         <source>Clusteriser</source>
-        <translation type="unfinished"></translation>
+        <translation>Clustering</translation>
     </message>
     <message>
         <source>Placettes</source>
-        <translation type="unfinished"></translation>
+        <translation>Plots</translation>
     </message>
     <message>
         <source>Emprises</source>
-        <translation type="unfinished"></translation>
+        <translation>Footprints</translation>
     </message>
     <message>
         <source>Détécter (houppiers)</source>
-        <translation type="unfinished"></translation>
+        <translation>Detect (crowns)</translation>
     </message>
     <message>
         <source>Détécter (tiges)</source>
-        <translation type="unfinished"></translation>
+        <translation>Detect (stems)</translation>
     </message>
     <message>
         <source>GDAL Raster</source>
-        <translation type="unfinished"></translation>
+        <translation>GDAL Raster</translation>
     </message>
     <message>
         <source>GDAL Vecteur</source>
-        <translation type="unfinished"></translation>
+        <translation>GDAL Vector</translation>
     </message>
     <message>
         <source>GDAL Divers</source>
-        <translation type="unfinished"></translation>
+        <translation>GDAL Miscellaneous</translation>
     </message>
     <message>
         <source>Attributs</source>
-        <translation type="unfinished"></translation>
+        <translation>Attributes</translation>
     </message>
     <message>
         <source>Inconnu (TODO)</source>
-        <translation type="unfinished"></translation>
+        <translation>Unknown (TODO)</translation>
     </message>
 </context>
 </TS>

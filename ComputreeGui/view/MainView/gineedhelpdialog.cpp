@@ -8,24 +8,18 @@ GINeedHelpDialog::GINeedHelpDialog(QWidget *parent) :
     ui->setupUi(this);
 
 
-    ui->content->append(tr("Pour le <b>sommaire de l'aide Computree</b> :"));
-    ui->content->append(tr("-> <a href=\"http://rdinnovation.onf.fr/projects/computree/wiki\">Sommaire de la Wiki Computree</a>"));
+    ui->content->append(tr("<strong>Site officiel de Computree</strong> : aide sur l'utilisation de l'interface, tutoriels, liste des plugins,..."));
+    ui->content->append(tr("-> <a href=\'https://computree.onf.fr'>computree.onf.fr</a>"));
     ui->content->append("<br>");
 
-    ui->content->append(tr("Pour de l'aide sur <b>une étape insérée</b> :"));
-    ui->content->append(tr("-> Faire un clic droit sur l'étape insérée, puis <i>Documentation de l'étape</i>"));
+    ui->content->append(tr("<strong>Aide sur les étapes de traitement</strong> :"));
+    ui->content->append(tr("-> Index : Aller dans le menu Aide, puis cliquer sur <em>Documentation des étapes</em>"));
+    ui->content->append(tr("-> Aide sur une étape insérée : faire un clic droit sur l'étape insérée, puis <em>Documentation de l'étape</em>"));
+    ui->content->append(tr("-> Aide sur une étape du menu (pas encore insérée) : faire un clic droit sur l'étape dans le menu, puis <em>Documentation de l'étape</em>"));
     ui->content->append("<br>");
 
-    ui->content->append(tr("Pour de l'aide sur <b>une étape du menu (pas encore insérée)</b> :"));
-    ui->content->append(tr("-> Faire un clic droit sur l'étape dans le menu, puis <i>Documentation de l'étape</i>"));
-    ui->content->append("<br>");
-
-    ui->content->append(tr("Pour <b>signaler un bug</b> ou <b>suggérer une amélioration</b> :"));
-    ui->content->append(tr("-> Créer une nouvelle demande : <a href=\"http://rdinnovation.onf.fr/projects/computree/issues/new\">Nouvelle demande</a>"));
-    ui->content->append("<br>");
-
-    ui->content->append(tr("Pour <b>poster un message sur le forum Computree</b> :"));
-    ui->content->append(tr("-> <a href=\"http://rdinnovation.onf.fr/projects/computree/boards\">Forum Computree</a>"));
+    ui->content->append(tr("<strong>Discord Computree</strong> : pour échanger avec la communauté, poser des questions, signaler un bug ou proposer une amélioration :"));
+    ui->content->append(tr("-> <a href=\'https://discord.gg/T55URXTYX8'>Discord Computree</a>"));
     ui->content->append("<br>");
 }
 

@@ -5,26 +5,26 @@
     <name>CT_AbstractReader</name>
     <message>
         <source>Entête de fichier</source>
-        <translation type="unfinished"></translation>
+        <translation>File header</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>FileName</source>
-        <translation type="unfinished"></translation>
+        <translation>FileName</translation>
     </message>
     <message>
         <source>Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Directory</translation>
     </message>
     <message>
         <source>ReaderType</source>
-        <translation type="unfinished"></translation>
+        <translation>ReaderType</translation>
     </message>
     <message>
         <source>FilePath</source>
-        <translation type="unfinished"></translation>
+        <translation>FilePath</translation>
     </message>
 </context>
 </TS>

@@ -26,13 +26,16 @@ for %%i in (
     library\ctliblaz\ctliblaz.pro
     library\ctlibcore\ctlibcore.pro
     plugins\pluginbase\pluginbase.pro
-    plugins\pluginshared\pluginshared.pro
+    ..\plugingenerate\plugingenerate\plugingenerate.pro
+    ..\pluginignlif\pluginignlif\pluginignlif.pro
+    ..\pluginlvox\pluginlvox\pluginlvox.pro
     ..\pluginmk\pluginmk\pluginmk.pro
     ..\pluginonf\pluginonf\pluginonf.pro
+    ..\pluginonfdev\pluginonfdev\pluginonfdev.pro
     ..\pluginsegma\pluginsegma\pluginsegma.pro
     ..\plugintoolkit\plugintoolkit\plugintoolkit.pro
         ) do (
-    %lupdate% %%i
+    %lupdate% %%i -no-obsolete
 )
 
 rem The following project can't be processed by lupdate du to an unexpected endless loop
