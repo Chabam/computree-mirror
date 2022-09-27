@@ -106,7 +106,6 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                     // Dessiner le relief
                     if (!qFuzzyCompare(value, double(item.NA())))
                     {
-
                         if (relief)
                         {
                             x0 = item.getCellCenterColCoord(cx);
@@ -120,34 +119,43 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                             z2 = item.value(cx+1, ly+1);
                             z3 = item.value(cx+1, ly);
 
-                            c0 = ((z0 - double(item.dataMin()) / amplitude)*255);
-                            c1 = ((z1 - double(item.dataMin()) / amplitude)*255);
-                            c2 = ((z2 - double(item.dataMin()) / amplitude)*255);
-                            c3 = ((z3 - double(item.dataMin()) / amplitude)*255);
 
-                            if (echelle)
+                            if (!qFuzzyCompare(z0, double(item.NA())) &&
+                                !qFuzzyCompare(z1, double(item.NA())) &&
+                                !qFuzzyCompare(z2, double(item.NA())) &&
+                                !qFuzzyCompare(z3, double(item.NA())))
                             {
-                                z0 = (z0 - item.dataMin()) * scaling + zmin;
-                                z1 = (z1 - item.dataMin()) * scaling + zmin;
-                                z2 = (z2 - item.dataMin()) * scaling + zmin;
-                                z3 = (z3 - item.dataMin()) * scaling + zmin;
-                            }
+                                c0 = int(((z0 - double(item.dataMin())) / amplitude)*255.0);
+                                c1 = int(((z1 - double(item.dataMin())) / amplitude)*255.0);
+                                c2 = int(((z2 - double(item.dataMin())) / amplitude)*255.0);
+                                c3 = int(((z3 - double(item.dataMin())) / amplitude)*255.0);
 
-                            painter.fillQuadFace( x0, y0, z0, c0, c0, c0,
-                                                  x0, y1, z1, c1, c1, c1,
-                                                  x1, y1, z2, c2, c2, c2,
-                                                  x1, y0, z3, c3, c3, c3 );
+                                if (echelle)
+                                {
+                                    z0 = (z0 - double(item.dataMin())) * scaling + zmin;
+                                    z1 = (z1 - double(item.dataMin())) * scaling + zmin;
+                                    z2 = (z2 - double(item.dataMin())) * scaling + zmin;
+                                    z3 = (z3 - double(item.dataMin())) * scaling + zmin;
+                                }
+
+                                painter.fillQuadFace( x0, y0, z0, c0, c0, c0,
+                                                      x0, y1, z1, c1, c1, c1,
+                                                      x1, y1, z2, c2, c2, c2,
+                                                      x1, y0, z3, c3, c3, c3 );
 
 
-                            // Si le mode relier est active on affiche aussi les contours des carrés
-                            // Ca peut aider a visualiser
-                            if ( relier )
-                            {
-                                painter.setColor(0,0,0);
-                                painter.drawQuadFace( x0, y0, z0+0.001, 255, 0, 0,
-                                                      x0, y1, z1+0.001, 255, 0, 0,
-                                                      x1, y1, z2+0.001, 255, 0, 0,
-                                                      x1, y0, z3+0.001, 255, 0, 0 );
+
+
+                                // Si le mode relier est active on affiche aussi les contours des carrés
+                                // Ca peut aider a visualiser
+                                if ( relier )
+                                {
+                                    painter.setColor(0,0,0);
+                                    painter.drawQuadFace( x0, y0, z0+0.001, 255, 0, 0,
+                                                          x0, y1, z1+0.001, 255, 0, 0,
+                                                          x1, y1, z2+0.001, 255, 0, 0,
+                                                          x1, y0, z3+0.001, 255, 0, 0 );
+                                }
                             }
                         }
                     }
