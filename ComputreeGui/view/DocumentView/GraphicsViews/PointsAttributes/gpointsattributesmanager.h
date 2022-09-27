@@ -103,7 +103,7 @@ private slots:
     void on_pushButtonAddColor_clicked();
     void on_pushButtonDeleteColor_clicked();
     void on_pushButtonSave_clicked();
-    void on_pushButtonGradientColorPicker_colorChanged(const QColor &color);
+    void colorChanged(const QColor &color);
     void on_colorGradientView_newFocusColor(const QColor &color, int arrowIndex);
     void on_colorGradientView_arrowMove(qreal lastPos, const GradientArrow &arrow);
     void on_checkBoxShowNormals_stateChanged(int state);

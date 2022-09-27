@@ -41,6 +41,9 @@ public:
     void setColor( const QColor& color );
     const QColor& getColor();
 
+signals:
+    void colorChanged(const QColor& color);
+
 public slots:
     void updateColor();
     void changeColor();

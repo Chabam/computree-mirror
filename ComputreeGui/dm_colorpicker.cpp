@@ -37,6 +37,7 @@ QtColorPicker::QtColorPicker( QWidget* parent )
 void QtColorPicker::updateColor()
 {
     setStyleSheet( "background-color: " + color.name() );
+    emit colorChanged(color);
 }
 
 void QtColorPicker::changeColor()

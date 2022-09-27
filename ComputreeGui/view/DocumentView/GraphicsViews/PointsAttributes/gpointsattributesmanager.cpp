@@ -45,6 +45,8 @@ GPointsAttributesManager::GPointsAttributesManager(QWidget *parent) :
 
     connect(ui->gradientManagerView, SIGNAL(newGradientSelected(QLinearGradient)), ui->colorGradientView, SLOT(fromLinearGradient(QLinearGradient)));
     connect(ui->colorGradientView, SIGNAL(arrowMove(qreal,GradientArrow)), this, SLOT(updateArrowValue(qreal,GradientArrow)));
+    connect(ui->pushButtonGradientColorPicker, SIGNAL(colorChanged(const QColor&)), this, SLOT(colorChanged(const QColor&)));
+
 }
 
 GPointsAttributesManager::~GPointsAttributesManager()
@@ -656,31 +658,36 @@ void GPointsAttributesManager::itemChanged(QStandardItem *item)
     }
 }
 
-void GPointsAttributesManager::on_pushButtonGradientColorPicker_colorChanged(const QColor &color)
+void GPointsAttributesManager::colorChanged(const QColor &color)
 {
+    qDebug() << "aa01";
     if(!m_internalSetColor)
     {
+        qDebug() << "aa02";
         GradientArrow arrow = ui->colorGradientView->currentArrow();
         arrow.setColor(color);
 
         ui->colorGradientView->changeArrow(arrow);
         ui->pushButtonSave->setEnabled(true);
     }
-
+    qDebug() << "aa03";
     m_internalSetColor = false;
 }
 
 void GPointsAttributesManager::on_colorGradientView_newFocusColor(const QColor &color, int arrowIndex)
 {
+    qDebug() << "bb01";
     Q_UNUSED(arrowIndex)
 
     if(ui->pushButtonGradientColorPicker->getColor() != color)
     {
+        qDebug() << "bb02";
         m_internalSetColor = true;
         ui->pushButtonGradientColorPicker->setColor(color);
     }
 
     GradientArrow arr = ui->colorGradientView->arrowByIndex(arrowIndex);
+    qDebug() << "bb03";
 
     updateArrowValue(arr.position(), arr);
 }
@@ -899,3 +906,4 @@ QStandardItem* GPointsAttributesManager::getOrCreateNormalRootItemForType<CT_Abs
 #pragma GCC diagnostic ignored "-Wextra"
 #pragma GCC diagnostic ignored "-Wint-in-bool-context"
 #endif
+
