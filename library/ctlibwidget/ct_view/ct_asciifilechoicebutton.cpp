@@ -30,6 +30,7 @@
 #include "settingsinterfaces.h"
 
 #include <QFileDialog>
+#include <QDebug>
 
 CT_AsciiFileChoiceButton::CT_AsciiFileChoiceButton(QString btlab,
                                                    QString fileFilter,
@@ -179,8 +180,17 @@ bool CT_AsciiFileChoiceButton::restoreSettings(SettingsReaderInterface &reader)
             _columns->insert(columnName, value.toInt());
     }
 
+    _dialog->setHeader(*_header);
+    _dialog->setSeparator(*_separator);
+    _dialog->setDecimal(*_decimal);
+    *_locale = QLocale(_dialog->getQLocaleName());
+
+    _dialog->setNLinesToSkip(*_skip);
+    _dialog->setFileNameWithPath(*_fileName);
     _dialog->setFieldColumnsSelected(*_columns);
     _labelCreated->setText(*_fileName);
+
+    _columnsAsString = _dialog->getFieldColumnsSelectedAsString(*_columns);
 
     return true;
 }
@@ -259,7 +269,6 @@ void CT_AsciiFileChoiceButton::chooseFile()
     _dialog->setDecimal(*_decimal);
     _dialog->setNLinesToSkip(*_skip);
     _dialog->setFileNameWithPath(*_fileName);
-    _dialog->extractFieldsNames();
 
     if (!_columnsAsString.isEmpty())
     {

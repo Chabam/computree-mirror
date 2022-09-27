@@ -165,8 +165,10 @@ void CT_TextFileConfigurationDialog::extractFieldsNames()
         QRegExp regNumeric("\\d+");
 
         QString headerLine = _stream->readLine();
+
         QStringList headers = headerLine.split(_separator);
         int size = headers.size();
+
         for (int i = 0 ; i < size ; i++)
         {
             QString value = headers.at(i);
@@ -174,12 +176,13 @@ void CT_TextFileConfigurationDialog::extractFieldsNames()
             if(regNumeric.indexIn(value) != -1)
                 ++headerNNumericValues;
 
-            if (hasHeader())
-            {
+            if (hasHeader() && !value.isEmpty())
+            {     
                 int cpt = 2;
+                QString valueBase = value;
                 while (_headers.contains(value))
                 {
-                    value.append(QString("_%1").arg(cpt++));
+                    value = QString("%1_%2").arg(valueBase, cpt++);
                 }
             } else {
                 value = QString("COL_%1").arg(i+1);
@@ -188,6 +191,7 @@ void CT_TextFileConfigurationDialog::extractFieldsNames()
             _headers.insert(value, i);
             _headersNames.append(value);
         }
+
         _headers.insert("NODATA", -1);
         _headersNames.append("NODATA");
 
