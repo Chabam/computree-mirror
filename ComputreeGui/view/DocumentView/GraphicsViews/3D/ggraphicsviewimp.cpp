@@ -1375,29 +1375,31 @@ void GGraphicsViewImp::wheelEvent(QWheelEvent *e)
 
 void GGraphicsViewImp::keyPressEvent(QKeyEvent *e)
 {
-    if(actionsHandler()->keyPressEvent(e))
+    if (actionsHandler()->keyPressEvent(e))
         return;
 
-    if((e->key() == Qt::Key_D)
-            && e->modifiers().testFlag(Qt::ControlModifier)
-            && e->modifiers().testFlag(Qt::AltModifier)) {
-        setDebugModeEnabled(!isDebugModeEnabled());
-    }
-    else if(e->key() == Qt::Key_A)
-    {
-        DM_GraphicsViewOptions opt;
-        opt.updateFromOtherOptions(constGetOptionsInternal());
-        opt.setDrawAxis(!opt.drawAxis());
-        setOptions(opt);
-    }
-    else if(e->key() == Qt::Key_G)
-    {
-        DM_GraphicsViewOptions opt;
-        opt.updateFromOtherOptions(constGetOptionsInternal());
-        opt.setDrawGrid(!opt.drawGrid());
-        setOptions(opt);
-    }
-    else if(e->key() == Qt::Key_Delete) {
+//    if((e->key() == Qt::Key_D)
+//            && e->modifiers().testFlag(Qt::ControlModifier)
+//            && e->modifiers().testFlag(Qt::AltModifier)) {
+//        setDebugModeEnabled(!isDebugModeEnabled());
+//    }
+//    else if(e->key() == Qt::Key_A)
+//    {
+//        DM_GraphicsViewOptions opt;
+//        opt.updateFromOtherOptions(constGetOptionsInternal());
+//        opt.setDrawAxis(!opt.drawAxis());
+//        setOptions(opt);
+//    }
+//    else if(e->key() == Qt::Key_G)
+//    {
+//        DM_GraphicsViewOptions opt;
+//        opt.updateFromOtherOptions(constGetOptionsInternal());
+//        opt.setDrawGrid(!opt.drawGrid());
+//        setOptions(opt);
+//    }
+    //    else
+
+    if (e->key() == Qt::Key_Delete) {
         int ret = QMessageBox::question(nullptr, tr("Suppression"), tr("Voulez-vous supprimer les items sélectionnés de la vue ?"), QMessageBox::Yes | QMessageBox::Cancel);
 
         if(ret == QMessageBox::Yes)
