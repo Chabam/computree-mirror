@@ -520,6 +520,7 @@ DocumentInterface *GDocumentManagerView::newTreeViewDocument(bool fromGui, bool 
     treeView->init();
 
     connect(treeView, SIGNAL(syncWith(const GItemModelView*)), m_syncMan, SLOT(syncItemModelWith(const GItemModelView*)));
+    connect(treeView, SIGNAL(newGradientSelected(QLinearGradient)), this, SLOT(newGradientSelected(QLinearGradient)));
 
     addDocumentView(*doc, fromGui, inLoadConfigurationFromMainWindow);
 
@@ -614,6 +615,11 @@ bool GDocumentManagerView::canAddItemDrawable(const DM_Document *document, const
     Q_UNUSED(item)
 
     return ((DM_DocumentView*)document)->isVisible();
+}
+
+QColor GDocumentManagerView::intermediateColorFromSelectedGradient(double key)
+{
+    return m_colorLinearInterpolator.intermediateColor(key);
 }
 
 QMdiSubWindow* GDocumentManagerView::subWindowFromDocument(DocumentInterface *doc) const
@@ -711,4 +717,9 @@ void GDocumentManagerView::verifyNumberWindow()
     {
         m_timer.start();
     }
+}
+
+void GDocumentManagerView::newGradientSelected(QLinearGradient gradient)
+{
+    m_colorLinearInterpolator.constructFromQGradient(gradient);
 }

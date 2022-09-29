@@ -28,6 +28,10 @@
 
 #include "dm_graphicsview.h"
 
+#include "dm_documentmanager.h"
+
+#include <QDebug>
+
 DM_GraphicsView::DM_GraphicsView()
 {
     _options = new DM_GraphicsViewOptions();
@@ -79,4 +83,9 @@ GraphicsViewOptionsInterface& DM_GraphicsView::getOptions()
 const DM_GraphicsViewOptions& DM_GraphicsView::constGetOptionsInternal() const
 {
     return *_options;
+}
+
+QColor DM_GraphicsView::intermediateColorFromSelectedGradient(double key)
+{
+    return _document->getManager()->intermediateColorFromSelectedGradient(key);
 }

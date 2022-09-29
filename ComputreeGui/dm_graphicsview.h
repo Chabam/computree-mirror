@@ -77,6 +77,9 @@ public:
     virtual void setVisible(const CT_AbstractItemDrawable *item, bool visible) = 0;
     virtual bool isVisible(const CT_AbstractItemDrawable *item) const = 0;
 
+    QColor intermediateColorFromSelectedGradient(double key);
+
+
 protected:
 
     DM_DocumentView         *_document;

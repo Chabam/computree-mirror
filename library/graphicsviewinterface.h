@@ -923,7 +923,7 @@ public:
     virtual void removeActionOptions(ActionOptionsInterface *options) = 0;
 
     /**
-     * @brief Return the width of the graphics
+     * @brief eturn the width of the graphics
      */
     virtual int width() const = 0;
 
@@ -936,6 +936,13 @@ public:
      * @brief Allow to force 2D mode (top view and orthographic)
      */
     virtual void active2DView(bool e) = 0;
+
+    /**
+     * @brief get intermediate color from current selected gradient
+     * @param key : number between 0 and 1, specifing color to retrieve
+     */
+    virtual QColor intermediateColorFromSelectedGradient(double key) = 0;
+
 
 };
 

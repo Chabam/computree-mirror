@@ -37,6 +37,8 @@ class DM_DocumentManager : public DocumentManagerInterface
 public:
     virtual void redrawAllDocument() = 0;
     virtual bool containsDocument(DM_Document *document) const = 0;
+    virtual QColor intermediateColorFromSelectedGradient(double key) = 0;
+
 };
 
 #endif // DM_DOCUMENTMANAGER_H

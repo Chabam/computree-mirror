@@ -24,6 +24,8 @@ public:
     
     bool containsResult(const CT_AbstractResult *res) const final;
 
+    QLinearGradient gradientSelected() const;
+
 public slots:
     void addResult(const CT_AbstractResult *res);
     bool removeResult(const CT_AbstractResult *res);
@@ -52,6 +54,8 @@ private slots:
 
 signals:
     void internalRemoveResult(const CT_AbstractResult* r);
+    void newGradientSelected(QLinearGradient gradient);
+
 };
 
 #endif // GMULTIPLEITEMDRAWABLEMODELMANAGER_H

@@ -1,5 +1,6 @@
 #include "ct_itemdrawable/tools/drawmanager/ct_standardimage2ddrawmanager.h"
 #include "painterinterface.h"
+#include "graphicsviewinterface.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -23,6 +24,7 @@ template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::I
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_CLUSTER_MODE = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeClusterMode();
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_APPLY_THRESHOLD = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeApplyThreshold();
 template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_MAP_MODE_THRESHOLD = CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeThreshold();
+template< typename DataT > const QString CT_StandardImage2DDrawManager<DataT>::INDEX_CONFIG_USE_SELECTED_GRADIENT = CT_StandardImage2DDrawManager<DataT>::staticInitConfigUseSelectedGradient();
 
 template< typename DataT >
 CT_StandardImage2DDrawManager<DataT>::CT_StandardImage2DDrawManager(QString drawConfigurationName, bool mapMode, bool scale)
@@ -54,6 +56,7 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
 
     bool applyThreshold = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_APPLY_THRESHOLD).toBool();
     double threshold = drawConfiguration()->variableValue(INDEX_CONFIG_MAP_MODE_THRESHOLD).toDouble();
+    bool useSelectedGradient = drawConfiguration()->variableValue(INDEX_CONFIG_USE_SELECTED_GRADIENT).toBool();
 
 
     double amplitude = item.dataMax() - item.dataMin();
@@ -96,6 +99,8 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
             double value;
             double x0, x1, y0, y1, z0, z1, z2, z3;
             int c0, c1, c2, c3;
+            double cr0, cr1, cr2, cr3;
+            QColor col0, col1, col2, col3;
 
             for (int cx = 0 ; cx < item.xdim()-1 ; cx++)
             {
@@ -125,10 +130,11 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                                 !qFuzzyCompare(z2, double(item.NA())) &&
                                 !qFuzzyCompare(z3, double(item.NA())))
                             {
-                                c0 = int(((z0 - double(item.dataMin())) / amplitude)*255.0);
-                                c1 = int(((z1 - double(item.dataMin())) / amplitude)*255.0);
-                                c2 = int(((z2 - double(item.dataMin())) / amplitude)*255.0);
-                                c3 = int(((z3 - double(item.dataMin())) / amplitude)*255.0);
+
+                                cr0 = (z0 - double(item.dataMin())) / amplitude;
+                                cr1 = (z1 - double(item.dataMin())) / amplitude;
+                                cr2 = (z2 - double(item.dataMin())) / amplitude;
+                                cr3 = (z3 - double(item.dataMin())) / amplitude;
 
                                 if (echelle)
                                 {
@@ -138,10 +144,30 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                                     z3 = (z3 - double(item.dataMin())) * scaling + zmin;
                                 }
 
-                                painter.fillQuadFace( x0, y0, z0, c0, c0, c0,
-                                                      x0, y1, z1, c1, c1, c1,
-                                                      x1, y1, z2, c2, c2, c2,
-                                                      x1, y0, z3, c3, c3, c3 );
+
+                                if (useSelectedGradient)
+                                {
+                                    col0 = view.intermediateColorFromSelectedGradient(cr0);
+                                    col1 = view.intermediateColorFromSelectedGradient(cr1);
+                                    col2 = view.intermediateColorFromSelectedGradient(cr2);
+                                    col3 = view.intermediateColorFromSelectedGradient(cr3);
+
+                                    painter.fillQuadFace( x0, y0, z0, col0.red(), col0.green(), col0.blue(),
+                                                          x0, y1, z1, col1.red(), col1.green(), col1.blue(),
+                                                          x1, y1, z2, col2.red(), col2.green(), col2.blue(),
+                                                          x1, y0, z3, col3.red(), col3.green(), col3.blue());
+
+                                } else {
+                                    c0 = int(cr0*255.0);
+                                    c1 = int(cr1*255.0);
+                                    c2 = int(cr2*255.0);
+                                    c3 = int(cr3*255.0);
+
+                                    painter.fillQuadFace( x0, y0, z0, c0, c0, c0,
+                                                          x0, y1, z1, c1, c1, c1,
+                                                          x1, y1, z2, c2, c2, c2,
+                                                          x1, y0, z3, c3, c3, c3 );
+                                }
 
 
 
@@ -281,18 +307,40 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                     {
                         if (value < threshold)
                         {
-                            painter.setColor(colors.value(value, QColor(0, 0, 0)));
+                            if (useSelectedGradient)
+                            {
+                                painter.setColor(colors.value(value, view.intermediateColorFromSelectedGradient(0)));
+                            } else {
+                                painter.setColor(colors.value(value, QColor(0, 0, 0)));
+                            }
                         } else {
-                            painter.setColor(colors.value(value, QColor(255, 255, 255)));
+                            if (useSelectedGradient)
+                            {
+                                painter.setColor(colors.value(value, view.intermediateColorFromSelectedGradient(1)));
+                            } else {
+                                painter.setColor(colors.value(value, QColor(255, 255, 255)));
+                            }
                         }
                     } else if (clusterMode)
                     {
-                        painter.setColor(colors.value(value, QColor(255, 255, 255)));
+                        if (useSelectedGradient)
+                        {
+                            painter.setColor(colors.value(value, view.intermediateColorFromSelectedGradient(1)));
+                        } else {
+                            painter.setColor(colors.value(value, QColor(255, 255, 255)));
+                        }
                     } else {
-                        int colorLevel = ((value - double(item.dataMin())) / amplitude)*255;
-                        if (colorLevel < 0) {colorLevel = 0;}
-                        if (colorLevel > 255) {colorLevel = 255;}
-                        painter.setColor(QColor(colorLevel, colorLevel, colorLevel));
+                        double cr = (value - double(item.dataMin())) / amplitude;
+
+                        if (useSelectedGradient)
+                        {
+                            painter.setColor(colors.value(value, view.intermediateColorFromSelectedGradient(cr)));
+                        } else {
+                            int colorLevel = cr*255;
+                            if (colorLevel < 0) {colorLevel = 0;}
+                            if (colorLevel > 255) {colorLevel = 255;}
+                            painter.setColor(QColor(colorLevel, colorLevel, colorLevel));
+                        }
                     }
                 }
 
@@ -337,6 +385,7 @@ CT_ItemDrawableConfiguration CT_StandardImage2DDrawManager<DataT>::createDrawCon
     item.addNewConfiguration(staticInitConfig3DModeZMinScaleValue(), QObject::tr("Mode 3D    : Z min de l'échelle (m)"), CT_ItemDrawableConfiguration::Double, 0);
     item.addNewConfiguration(staticInitConfig3DModeZMaxScaleValue(), QObject::tr("Mode 3D    : Z max de l'échelle (m)"), CT_ItemDrawableConfiguration::Double, 5);
     item.addNewConfiguration(staticInitConfigMapModeClusterMode(), QObject::tr("Colorisation par valeurs uniques"), CT_ItemDrawableConfiguration::Bool, false);
+    item.addNewConfiguration(staticInitConfigUseSelectedGradient(), QObject::tr("Utiliser gradient actif"), CT_ItemDrawableConfiguration::Bool, true);
 
     return item;
 }
@@ -427,3 +476,8 @@ QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigMapModeThreshold()
     return "IM2D_THRES";
 }
 
+template< typename DataT >
+QString CT_StandardImage2DDrawManager<DataT>::staticInitConfigUseSelectedGradient()
+{
+    return "IM2D_GRD";
+}

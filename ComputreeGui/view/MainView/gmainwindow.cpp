@@ -808,6 +808,9 @@ void GMainWindow::initUI()
     _itemDrawableModelView->setDocumentManagerView(_docManagerView);
     ui->verticalLayoutItemDrawableModelView->addWidget(_itemDrawableModelView);
 
+    connect(_itemDrawableModelView, SIGNAL(newGradientSelected(QLinearGradient)), _docManagerView, SLOT(newGradientSelected(QLinearGradient)));
+    _docManagerView->newGradientSelected(_itemDrawableModelView->gradientSelected());
+
     _itemDrawableConfigurationView = new GItemDrawableConfigurationManagerView(this);
     ui->verticalLayoutItemDrawableConfigurationManager->addWidget(_itemDrawableConfigurationView);
 

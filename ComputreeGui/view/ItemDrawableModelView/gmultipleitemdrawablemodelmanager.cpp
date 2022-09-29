@@ -21,6 +21,8 @@ GMultipleItemDrawableModelManager::GMultipleItemDrawableModelManager(QWidget *pa
     connect(ui->gradientManagerView, SIGNAL(newGradientSelected(QLinearGradient)), ui->widgetModelManager->contextMenuColouristAdder(), SLOT(setLinearGradientToUseForColorization(QLinearGradient)));
     ui->widgetModelManager->contextMenuColouristAdder()->setGradientToUseForColorization(ui->gradientManagerView->gradientSelected());
 
+    connect(ui->gradientManagerView, SIGNAL(newGradientSelected(QLinearGradient)), this, SIGNAL(newGradientSelected(QLinearGradient)));
+
     setEmptyComboBoxText();
 }
 
@@ -37,6 +39,11 @@ void GMultipleItemDrawableModelManager::setDocumentManagerView(const GDocumentMa
 bool GMultipleItemDrawableModelManager::containsResult(const CT_AbstractResult* res) const
 {
     return (indexOfResultInComboBox(res) != -1);
+}
+
+QLinearGradient GMultipleItemDrawableModelManager::gradientSelected() const
+{
+    return ui->gradientManagerView->gradientSelected();
 }
 
 void GMultipleItemDrawableModelManager::addResult(const CT_AbstractResult *res)

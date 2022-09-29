@@ -32,6 +32,8 @@
 #include "dm_documentmanagerview.h"
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 
+#include "tools/graphicsview/dm_colorlinearinterpolator.h"
+
 #include <QMdiArea>
 #include <QMutex>
 #include <QTimer>
@@ -90,6 +92,9 @@ public:
     // DM_IDocumentAddFilter
     bool canAddItemDrawable(const DM_Document *document, const CT_AbstractItemDrawable *item) const;
 
+    virtual QColor intermediateColorFromSelectedGradient(double key) override;
+
+
 private:
 
     QMutex                          *m_mutex;
@@ -103,12 +108,15 @@ private:
     QList<GDocumentView*>           m_docFromGuiAddedInManualMode;
     QList<GDocumentView*>           m_docToCloseAfterQuitManualMode;
 
+    DM_ColorLinearInterpolator      m_colorLinearInterpolator;
+
     void addDocumentView(GDocumentView &view, bool fromGui, bool inLoadConfigurationFromMainWindow);
     QMdiSubWindow* subWindowFromDocument(DocumentInterface *doc) const;
 
 public slots:
     void stepRequiredManualMode(CT_VirtualAbstractStep *step);
     void stepFinished(CT_VirtualAbstractStep *step);
+    void newGradientSelected(QLinearGradient gradient);
 
 signals:
 
