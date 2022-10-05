@@ -42,7 +42,7 @@ void CT_LASPointFormat0::write(QDataStream &stream, CT_LASHeader* header, const 
     stream << tmp;
 
     // classification
-    CT_WRITE_LAS_SCALAR(CT_LasDefine::Scanner_Channel, quint8);
+    CT_WRITE_LAS_SCALAR(CT_LasDefine::Classification, quint8);
 
     // scan angle rank
     CT_WRITE_LAS_SCALAR(CT_LasDefine::Scan_Angle_Rank, qint8);
