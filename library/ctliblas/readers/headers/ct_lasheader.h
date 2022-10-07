@@ -209,6 +209,7 @@ private:
     CT_DEFAULT_IA_V2(CT_LASHeader, CT_AbstractCategory::staticInitDataValue(), &CT_LASHeader::get_numberOfPointsByReturn, QObject::tr("Number of points by return"))
     CT_DEFAULT_IA_END(CT_LASHeader)
 
+    double computeOffset(double minVal, double maxVal);
 };
 
 #endif // CT_LASHEADER_H

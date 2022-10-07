@@ -358,12 +358,12 @@ bool CT_LASHeader::write(QDataStream &stream, QString &error) const
     stream << m_xOffset;
     stream << m_yOffset;
     stream << m_zOffset;
-    stream << get_maxX();
-    stream << get_minX();
-    stream << get_maxY();
-    stream << get_minY();
-    stream << get_maxZ();
-    stream << get_minZ();
+    stream << QString::number(std::ceil(get_maxX()/m_xScaleFactor)*m_xScaleFactor, 'f', qAbs(std::log10(m_xScaleFactor))).toDouble();
+    stream << QString::number(std::floor(get_minX()/m_xScaleFactor)*m_xScaleFactor, 'f', qAbs(std::log10(m_xScaleFactor))).toDouble();
+    stream << QString::number(std::ceil(get_maxY()/m_yScaleFactor)*m_yScaleFactor, 'f', qAbs(std::log10(m_yScaleFactor))).toDouble();
+    stream << QString::number(std::floor(get_minY()/m_yScaleFactor)*m_yScaleFactor, 'f', qAbs(std::log10(m_yScaleFactor))).toDouble();
+    stream << QString::number(std::ceil(get_maxZ()/m_zScaleFactor)*m_zScaleFactor, 'f', qAbs(std::log10(m_zScaleFactor))).toDouble();
+    stream << QString::number(std::floor(get_minZ()/m_zScaleFactor)*m_zScaleFactor, 'f', qAbs(std::log10(m_zScaleFactor))).toDouble();
 
     if((m_versionMajor == 1) && (m_versionMinor <= 2))
         return true;
@@ -440,18 +440,55 @@ void CT_LASHeader::updateScaleFactorFromBoundingBox()
 //        // scale factor is the optimized to convert a point to be the most accurate
 //        scaleFactor = qMin((scaleFactor/(std::numeric_limits<qint32>::max()-1)), 1.0);
 
-    double scaleFactor = 0.00001;
-    double maxCoord = qMax( qMax(qMax(m_minCoordinates(0), m_minCoordinates(1)), m_minCoordinates(2)), qMax(qMax(qAbs(m_minCoordinates(0)),qAbs(m_minCoordinates(1))),qAbs(m_minCoordinates(2))));
+    m_xOffset = computeOffset(m_minCoordinates(0), m_maxCoordinates(0));
+    m_yOffset = computeOffset(m_minCoordinates(1), m_maxCoordinates(1));
+    m_zOffset = computeOffset(m_minCoordinates(2), m_maxCoordinates(2));
 
-    if (maxCoord > 9999.0) {scaleFactor = 0.0001;}
-    if (maxCoord > 99999.0) {scaleFactor = 0.001;}
-    if (maxCoord > 999999.0) {scaleFactor = 0.01;}
-    if (maxCoord > 9999999.0) {scaleFactor = 0.1;}
-    if (maxCoord > 99999999.0) {scaleFactor = 1.0;}
+    if ((m_maxCoordinates(0) - m_minCoordinates(0)) < 1.0 && (m_maxCoordinates(1) - m_minCoordinates(1)) < 1.0)
+    {
+        m_xScaleFactor = 0.00000001;
+        m_yScaleFactor = 0.00000001;
+    } else {
+        m_xScaleFactor = 0.001;
+        m_yScaleFactor = 0.001;
+    }
+    m_zScaleFactor = 0.001;
 
-    m_xScaleFactor = scaleFactor;
-    m_yScaleFactor = scaleFactor;
-    m_zScaleFactor = scaleFactor;
+
+    double maxCoordXY = qMax( qMax(qAbs(m_maxCoordinates(0) - m_xOffset), qAbs(m_maxCoordinates(1) - m_yOffset)), qMax(qAbs(m_minCoordinates(0) - m_xOffset),qAbs(m_minCoordinates(1) - m_yOffset)) );
+//    m_xScaleFactor = 0.00000001;
+//    if (maxCoordXY > 9.9) {m_xScaleFactor = 0.0000001;}
+//    if (maxCoordXY > 99.9) {m_xScaleFactor = 0.000001;}
+//    if (maxCoordXY > 999.9) {m_xScaleFactor = 0.00001;}
+//    if (maxCoordXY > 9999.9) {m_xScaleFactor = 0.0001;}
+//    if (maxCoordXY > 99999.9) {m_xScaleFactor = 0.001;}
+    if (maxCoordXY > 999999.9) {m_xScaleFactor = 0.01;}
+    if (maxCoordXY > 9999999.9) {m_xScaleFactor = 0.1;}
+    if (maxCoordXY > 99999999.9) {m_xScaleFactor = 1.0;}
+
+    m_yScaleFactor = m_xScaleFactor;
+
+
+    double maxCoordZ = qMax(qAbs(m_maxCoordinates(2) - m_zOffset), qAbs(m_minCoordinates(2) - m_zOffset));
+//    m_zScaleFactor = 0.00000001;
+//    if (maxCoordZ > 9.9) {m_zScaleFactor = 0.0000001;}
+//    if (maxCoordZ > 99.9) {m_zScaleFactor = 0.000001;}
+//    if (maxCoordZ > 999.9) {m_zScaleFactor = 0.00001;}
+//    if (maxCoordZ > 9999.9) {m_zScaleFactor = 0.0001;}
+//    if (maxCoordZ > 99999.9) {m_zScaleFactor = 0.001;}
+    if (maxCoordZ > 999999.9) {m_zScaleFactor = 0.01;}
+    if (maxCoordZ > 9999999.9) {m_zScaleFactor = 0.1;}
+    if (maxCoordZ > 99999999.9) {m_zScaleFactor = 1.0;}
+
+    if (m_zScaleFactor < m_xScaleFactor) {m_zScaleFactor = m_xScaleFactor;}
+}
+
+double CT_LASHeader::computeOffset(double minVal, double maxVal)
+{
+    double meanVal = (maxVal + minVal) / 2.0;
+    if (meanVal < 1000.0) {return std::round(meanVal);}
+
+    return 1000.0*std::round(meanVal / 1000.0);
 }
 
 QString CT_LASHeader::toString() const
