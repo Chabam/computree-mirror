@@ -355,15 +355,17 @@ bool CT_LASHeader::write(QDataStream &stream, QString &error) const
     stream << m_xScaleFactor;
     stream << m_yScaleFactor;
     stream << m_zScaleFactor;
+
     stream << m_xOffset;
     stream << m_yOffset;
     stream << m_zOffset;
-    stream << QString::number(std::ceil(get_maxX()/m_xScaleFactor)*m_xScaleFactor, 'f', qAbs(std::log10(m_xScaleFactor))).toDouble();
-    stream << QString::number(std::floor(get_minX()/m_xScaleFactor)*m_xScaleFactor, 'f', qAbs(std::log10(m_xScaleFactor))).toDouble();
-    stream << QString::number(std::ceil(get_maxY()/m_yScaleFactor)*m_yScaleFactor, 'f', qAbs(std::log10(m_yScaleFactor))).toDouble();
-    stream << QString::number(std::floor(get_minY()/m_yScaleFactor)*m_yScaleFactor, 'f', qAbs(std::log10(m_yScaleFactor))).toDouble();
-    stream << QString::number(std::ceil(get_maxZ()/m_zScaleFactor)*m_zScaleFactor, 'f', qAbs(std::log10(m_zScaleFactor))).toDouble();
-    stream << QString::number(std::floor(get_minZ()/m_zScaleFactor)*m_zScaleFactor, 'f', qAbs(std::log10(m_zScaleFactor))).toDouble();
+
+    stream << ceil(get_maxX()/m_xScaleFactor)*m_xScaleFactor;
+    stream << floor(get_minX()/m_xScaleFactor)*m_xScaleFactor;
+    stream << ceil(get_maxY()/m_yScaleFactor)*m_yScaleFactor;
+    stream << floor(get_minY()/m_yScaleFactor)*m_yScaleFactor;
+    stream << ceil(get_maxZ()/m_zScaleFactor)*m_zScaleFactor;
+    stream << floor(get_minZ()/m_zScaleFactor)*m_zScaleFactor;
 
     if((m_versionMajor == 1) && (m_versionMinor <= 2))
         return true;
@@ -447,10 +449,8 @@ void CT_LASHeader::updateScaleFactorFromBoundingBox()
     if ((m_maxCoordinates(0) - m_minCoordinates(0)) < 1.0 && (m_maxCoordinates(1) - m_minCoordinates(1)) < 1.0)
     {
         m_xScaleFactor = 0.00000001;
-        m_yScaleFactor = 0.00000001;
     } else {
         m_xScaleFactor = 0.001;
-        m_yScaleFactor = 0.001;
     }
     m_zScaleFactor = 0.001;
 
