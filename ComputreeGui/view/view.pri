@@ -1,4 +1,5 @@
 SOURCES += \
+    $$PWD/MainView/gscriptdocinfodialog.cpp \
     view/MainView/gmainwindow.cpp \
     view/MainView/gguimanager.cpp \
     view/MainView/gmainprogressdialog.cpp \
@@ -51,6 +52,7 @@ SOURCES += \
     $$PWD/StepResultTreeView/gstepmanager2.cpp
 	
 HEADERS += \
+    $$PWD/MainView/gscriptdocinfodialog.h \
     view/MainView/gmainwindow.h \
     view/MainView/gguimanager.h \
     view/MainView/gmainprogressdialog.h \
@@ -103,6 +105,7 @@ HEADERS += \
     $$PWD/StepResultTreeView/gstepmanager2.h
 	
 FORMS += view/DocumentView/GraphicsViews/ggraphicsviewoptions.ui \
+    $$PWD/MainView/gscriptdocinfodialog.ui \
     view/DocumentView/gcameragraphicsoptions.ui \
     view/ItemDrawableView/gitemdrawablemanageroptionscolor.ui \
     view/MainView/gmainwindow.ui \

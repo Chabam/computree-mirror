@@ -48,6 +48,7 @@
 #include "gineedhelpdialog.h"
 #include "gfavoritesmenudialog.h"
 #include "gaboutmemory.h"
+#include "gscriptdocinfodialog.h"
 
 #include "ct_abstractstepplugin.h"
 #include "ct_step/abstract/ct_abstractsteploadfile.h"
@@ -176,7 +177,7 @@ void GMainWindow::openFile(QString &loadDirectory)
     }
 }
 
-void GMainWindow::saveScript()
+void GMainWindow::saveScriptUsingDefaultPath()
 {
     saveScript(_defaultSaveDirPath);
 }
@@ -196,6 +197,7 @@ void GMainWindow::saveScript(QString &saveDirectory)
 
         saveDirectory = info.path();
 
+
         if(getScriptManager()->acceptFile(s))
         {
             getScriptManager()->writeScript(s, true, *getStepManager());
@@ -203,15 +205,192 @@ void GMainWindow::saveScript(QString &saveDirectory)
     }
 }
 
+void GMainWindow::saveScriptInDir(QString saveDirectory, QString name)
+{
+    QDir outDir(saveDirectory);
+
+    if(!saveDirectory.isEmpty() && !name.isEmpty() && outDir.exists())
+    {
+        QString s = saveDirectory + "/" + name + getScriptManager()->getFileExtensionAccepted().first();
+
+        if(getScriptManager()->acceptFile(s))
+        {
+            getScriptManager()->writeScript(s, true, *getStepManager());
+        }
+    }
+}
+
+
 void GMainWindow::citationInfo()
 {
-    CDM_CitationInfo citationInfo(getStepManager(), getPluginManager());
+    QString mainDirPath = QFileDialog::getExistingDirectory(this, tr("Sauvegarder le script dans le dossier..."), _defaultSaveDirPath);
+    QDir mainDir(mainDirPath);
 
-    QList<CDM_CitationInfo::StepCitationInfo> stepInfos = citationInfo.getScriptTable();
+    if(mainDir.exists())
+    {
+        GScriptDocInfoDialog dialog(mainDirPath);
 
-    GCitationDialog dialog(stepInfos, citationInfo.getPluginAndStepCitations(), citationInfo.getPluginRIS(), this);
+        if (dialog.exec())
+        {
+            QString scriptFileName = dialog.filename();
 
-    dialog.exec();
+            QString outDirPath = mainDirPath + "/" + scriptFileName;
+            QDir outDir(outDirPath);
+            if (!outDir.exists()) {mainDir.mkdir(scriptFileName);;}
+
+            QString scriptName = dialog.title();
+            if (scriptName.isEmpty()) {scriptName = scriptFileName;}
+
+            QString author = dialog.author();
+            QString description = dialog.description();
+
+            CDM_CitationInfo citationInfo(getStepManager(), getPluginManager());
+
+            QDateTime date = QDateTime::currentDateTime();
+            QString formattedTime = date.toString("dd/MM/yyyy, hh:mm");
+
+
+            // export script in subdir
+            saveScriptInDir(outDirPath, scriptFileName);
+
+
+            // export RIS information in subir
+            QString RISPath = QString("%1/%2.ris").arg(outDirPath, scriptFileName);
+            QFile exportRISFile(RISPath);
+            if (exportRISFile.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&exportRISFile);
+                stream << citationInfo.getPluginRIS();
+                exportRISFile.close();
+            }
+
+            outDir.mkdir("content");
+            outDir.mkdir("steps");
+            outDir.mkdir("css");
+
+
+            // export css file
+            createCSS(outDirPath + "/css/style.css");
+
+
+            // create index html file
+            QFile findex(outDirPath + "/" + scriptFileName + ".html");
+            if (findex.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&findex);
+
+                stream << "<!DOCTYPE html>\n";
+                stream << "<html>\n";
+                stream << "<head>\n";
+                stream << "<metacharset=\"utf-8\">\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<body>\n";
+                stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
+                stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"content/summary.html\"  style=\"width:33%; border:none; flex-grow:1;\"></iframe>\n";
+                stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"content/mainContent.html\" style=\"width:65%; border:none; flex-grow:1;\"></iframe>\n";
+                stream << "</div>\n";
+                stream << "</body>\n";
+                stream << "</html>\n";
+
+                findex.close();
+            }
+
+
+            // Create mainContent.html file
+            QFile fMainContent(outDirPath + "/content/mainContent.html");
+            if (fMainContent.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&fMainContent);
+
+                stream << "<!DOCTYPE html>\n";
+                stream << "<html>\n";
+                stream << "<head>\n";
+                stream << "<metacharset=\"utf-8\">\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
+                stream << "<body>\n";
+                stream << "<div class=\"mainBlock\">\n";
+                stream << "<h1>" << tr("Documentation du script") << "</h1>\n";
+                stream << "<h2>" << tr("Informations sur le script") << "</h1>\n";
+                stream << "<p><em>" << tr("Titre du script : ") << "</em><strong>" << scriptName << "</strong></p>";
+
+                if (!author.isEmpty())
+                {
+                    stream << "<p><em>" << tr("Auteur : ") << "</em><strong>" << author << "</strong></p>";
+                }
+                stream << "<p><em>" << tr("Fichier script Computree : ") << "</em>" << scriptFileName << ".cts</p>";
+                stream << "<p><em>" << tr("Fichier de citations : ") << "</em>" << scriptFileName << ".ris</p>";
+                stream << "<p><em>" << tr("Date d'enregistrement : ") << "</em>" << formattedTime << "</p>";
+
+                if (!description.isEmpty())
+                {
+                    stream << "<p><em>" << tr("Description : ") << "</em>" << "</p>";
+                    stream << "<p>" << description << "</p>";
+                }
+
+                stream << "<br>\n";
+                stream << "<h2>" << tr("Structure du script") << "</h1>\n";
+                stream << "<p>" << tr("Le script est composé de l'enchaînement d'étapes suivant :") << "</p>";
+                stream << citationInfo.getScriptStepList();
+                stream << "<br>";
+                stream << "<h2>" << tr("Informations de citation") << "</h1>\n";
+                stream << citationInfo.getPluginAndStepCitations();
+                stream << "<p><em>" << tr("Note : L'ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier %1.ris (au format bibliographique standard RIS). Ce fichier est situé dans le même dossier que le fichier script %1.cts et que ce fichier de documentation %1.html. ").arg(scriptFileName) << "</em></p>";
+                stream << "</div>\n";
+                stream << "</body>\n";
+                stream << "</html>\n";
+
+                fMainContent.close();
+            }
+
+
+            // Create Summmary and steps documentation pages
+            QFile f(outDirPath + "/content/summary.html");
+
+            if (f.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&f);
+                stream << "<!DOCTYPE html>\n";
+                stream << "<html>\n";
+                stream << "<head>\n";
+                stream << "<metacharset=\"utf-8\">\n";
+                stream << "<title>Documentation Summary</title>";
+                stream << "<link rel=\"stylesheet\" href=\"../css/style.css\" />";
+                stream << "</head>\n";
+                stream << "<body>";
+                stream << "<div class=\"mainBlock\">";
+                stream << "<h1>" << tr("Documentation du script") << "</h1>\n";
+                stream << "<div class=\"linksummary01\" >";
+                stream << "<a target=\"frameContent\" href=\"mainContent.html\">" + tr("Documentation du script") + "<br><br></a>\n";
+                stream << "</div>";
+                stream << "<h1>" << tr("Etapes du script") << "</h1>\n";
+
+                QList<CT_VirtualAbstractStep*> steps = citationInfo.steps();
+
+                if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >";}
+                for(CT_VirtualAbstractStep* step : steps)
+                {
+                    stream << "<a target=\"frameContent\" href=\"../steps/" << step->name() << ".html\">" << step->description() << "<br><br></a>\n";
+
+                    // Create documentation page for this step
+                    step->generateHTMLDocumentation(outDirPath + "/steps", "../css");
+                }
+                if (steps.size() > 0) {stream << "</div>";}
+
+                if (steps.size() > 0) {stream << "</div>\n";}
+                stream << "</body>\n";
+                stream << "</html>";
+                f.close();
+            }
+
+            // Open script documentation
+            QDesktopServices::openUrl(QUrl("file:///" + outDirPath + "/" + scriptFileName + ".html"));
+        }
+    }
+
+    // Old version
+//    QList<CDM_CitationInfo::StepCitationInfo> stepInfos = citationInfo.getScriptTable();
+//    GCitationDialog dialog(stepInfos, citationInfo.getPluginAndStepCitations(), citationInfo.getPluginRIS(), this);
+//    dialog.exec();
 }
 
 void GMainWindow::showAboutDialog()
@@ -338,81 +517,7 @@ void GMainWindow::createStepHelp()
 
 
     // Create style.css
-    QFile fcss(currentLanguageDir + "/css/style.css");
-    if (fcss.open(QFile::WriteOnly | QFile::Text))
-    {
-        QTextStream stream(&fcss);
-
-        stream << ".mainBlock\n";
-        stream << "{\n";
-        stream << "    display: block;\n";
-        stream << "    margin-left: auto;\n";
-        stream << "    margin-right: auto;\n";
-        stream << "    padding-left: 1.25rem;\n";
-        stream << "    padding-right: 1.25rem;\n";
-        stream << "}\n";
-        stream << "\n";
-        stream << "h1\n";
-        stream << "{\n";
-        stream << "    color:darkred;\n";
-        stream << "}\n";
-        stream << "h2\n";
-        stream << "{\n";
-        stream << "    color:black;\n";
-        stream << "}\n";
-        stream << "h3\n";
-        stream << "{\n";
-        stream << "    color:darkblue;\n";
-        stream << "}\n";
-        stream << ".parameterDescr\n";
-        stream << "{\n";
-        stream << "    color:darkblue;\n";
-        stream << "}\n";
-        stream << ".resultInDescr\n";
-        stream << "{\n";
-        stream << "    color:darkblue;\n";
-        stream << "}\n";
-        stream << ".resultOutDescr\n";
-        stream << "{\n";
-        stream << "    color:darkblue;\n";
-        stream << "}\n";
-        stream << ".descBlock\n";
-        stream << "{\n";
-        stream << "    margin-left:10px;\n";
-        stream << "}\n";
-        stream << ".descBlocklvl2\n";
-        stream << "{\n";
-        stream << "    margin-left:30px;\n";
-        stream << "}\n";
-        stream << "summary {\n";
-        stream << "  display: flex;\n";
-        stream << "  cursor: pointer;\n";
-        stream << "}\n";
-        stream << "summary::marker\n";
-        stream << "{\n";
-        stream << "  display: none;\n";
-        stream << "}\n";
-        stream << ".h1summary\n";
-        stream << "{\n";
-        stream << "    color:darkred;\n";
-        stream << "}\n";
-        stream << ".h2summary\n";
-        stream << "{\n";
-        stream << "    font-weight: 700;\n";
-        stream << "    margin-left: 20px;\n";
-        stream << "}\n";
-        stream << ".linksummary01\n";
-        stream << "{\n";
-        stream << "    margin-left: 20px;\n";
-        stream << "}\n";
-        stream << ".linksummary02\n";
-        stream << "{\n";
-        stream << "    margin-left: 40px;\n";
-        stream << "}\n";
-        stream << "\n";
-        stream << "fcss.close();\n";
-    }
-
+    createCSS(currentLanguageDir + "/css/style.css");
 
     // Create Summmary and steps documentation pages
     QFile f(currentLanguageDir + "/summary.html");
@@ -519,6 +624,83 @@ void GMainWindow::createStepHelp()
 
     progressDialog.setValue(progressDialog.maximum());
 
+}
+void GMainWindow::createCSS(QString filename)
+{
+    QFile fcss(filename);
+    if (fcss.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream stream(&fcss);
+
+        stream << ".mainBlock\n";
+        stream << "{\n";
+        stream << "    display: block;\n";
+        stream << "    margin-left: auto;\n";
+        stream << "    margin-right: auto;\n";
+        stream << "    padding-left: 1.25rem;\n";
+        stream << "    padding-right: 1.25rem;\n";
+        stream << "}\n";
+        stream << "\n";
+        stream << "h1\n";
+        stream << "{\n";
+        stream << "    color:darkred;\n";
+        stream << "}\n";
+        stream << "h2\n";
+        stream << "{\n";
+        stream << "    color:black;\n";
+        stream << "}\n";
+        stream << "h3\n";
+        stream << "{\n";
+        stream << "    color:darkblue;\n";
+        stream << "}\n";
+        stream << ".parameterDescr\n";
+        stream << "{\n";
+        stream << "    color:darkblue;\n";
+        stream << "}\n";
+        stream << ".resultInDescr\n";
+        stream << "{\n";
+        stream << "    color:darkblue;\n";
+        stream << "}\n";
+        stream << ".resultOutDescr\n";
+        stream << "{\n";
+        stream << "    color:darkblue;\n";
+        stream << "}\n";
+        stream << ".descBlock\n";
+        stream << "{\n";
+        stream << "    margin-left:10px;\n";
+        stream << "}\n";
+        stream << ".descBlocklvl2\n";
+        stream << "{\n";
+        stream << "    margin-left:30px;\n";
+        stream << "}\n";
+        stream << "summary {\n";
+        stream << "  display: flex;\n";
+        stream << "  cursor: pointer;\n";
+        stream << "}\n";
+        stream << "summary::marker\n";
+        stream << "{\n";
+        stream << "  display: none;\n";
+        stream << "}\n";
+        stream << ".h1summary\n";
+        stream << "{\n";
+        stream << "    color:darkred;\n";
+        stream << "}\n";
+        stream << ".h2summary\n";
+        stream << "{\n";
+        stream << "    font-weight: 700;\n";
+        stream << "    margin-left: 20px;\n";
+        stream << "}\n";
+        stream << ".linksummary01\n";
+        stream << "{\n";
+        stream << "    margin-left: 20px;\n";
+        stream << "}\n";
+        stream << ".linksummary02\n";
+        stream << "{\n";
+        stream << "    margin-left: 40px;\n";
+        stream << "}\n";
+        stream << "\n";
+        fcss.close();
+    }
 }
 
 void GMainWindow::cleanItemDrawableOfAllDocuments()
@@ -709,11 +891,11 @@ void GMainWindow::initUI()
     QAction *actionAboutMemory = new QAction(tr("Utilisation mémoire"), this);
     QAction *actionAPropos = new QAction(tr("A propos de Computree..."), this);
 
-    actionSaveScript = new QAction(tr("Sauvegarder l'arbre des etapes (CTRL+S)"), this);
+    actionSaveScript = new QAction(tr("Exporter script (CTRL+S)"), this);
     actionSaveScript->setIcon(QIcon(":/Icones/Icones/media-floppy.png"));
     actionSaveScript->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
 
-    actionGetCitationInfo = new QAction(tr("Informations de citation"), this);
+    actionGetCitationInfo = new QAction(tr("Exporter script documenté (dont citations)"), this);
     actionGetCitationInfo->setIcon(QIcon(":/Icones/Icones/citation.png"));
 
     ui->toolBar->addAction(actionOpenFile);
@@ -852,7 +1034,7 @@ void GMainWindow::initUI()
 
     connect(actionStart, SIGNAL(triggered()), m_newStepManagerView, SLOT(executeStep()));
     connect(actionStop, SIGNAL(triggered()), getStepManager(), SLOT(stop()));
-    connect(actionSaveScript, SIGNAL(triggered()), this, SLOT(saveScript()));
+    connect(actionSaveScript, SIGNAL(triggered()), this, SLOT(saveScriptUsingDefaultPath()));
     connect(actionGetCitationInfo, SIGNAL(triggered()), this, SLOT(citationInfo()));
 
     connect(actionAckManualMode, SIGNAL(triggered()), getStepManager(), SLOT(quitManualMode()));

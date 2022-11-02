@@ -65,11 +65,13 @@ QString CT_ParseRIS::parseRIS(QString ris)
 
     if (fields.contains("PY"))
     {
-        str.append(fields.values("PY").first());
+        QList<QString> vals = fields.values("PY");;
+        str.append(vals.first());
         str.append(". ");
     }else if (fields.contains("Y1"))
     {
-        str.append(fields.values("Y1").first());
+        QList<QString> vals = fields.values("Y1");;
+        str.append(vals.first());
         str.append(". ");
     }
 
@@ -81,29 +83,40 @@ QString CT_ParseRIS::parseRIS(QString ris)
     if (fields.contains("TI"))
     {
         str.append("<em>");
-        str.append(fields.values("TI").first());
+        QList<QString> vals = fields.values("TI");;
+        str.append(vals.first());
         str.append("</em>. ");
     } else if (fields.contains("T1"))
     {
         str.append("<em>");
-        str.append(fields.values("T1").first());
+        QList<QString> vals = fields.values("T1");;
+        str.append(vals.first());
         str.append("</em>. ");
     }
 
     if (fields.contains("PB"))
     {
-        str.append(fields.values("PB").first());
+        QList<QString> vals = fields.values("PB");;
+        str.append(vals.first());
         str.append(". ");
     }
+
+    if (fields.contains("JO"))
+    {
+        QList<QString> vals = fields.values("JO");;
+        str.append(vals.first());
+        str.append(". ");
+    }
+
     if (fields.contains("UR"))
     {
-        str.append("<br><a href=\"");
-        str.append(fields.values("UR").first());
+        str.append("<a href=\"");
+        QList<QString> vals = fields.values("UR");;
+        str.append(vals.first());
         str.append("\">");
-        str.append(fields.values("UR").first());
+        str.append(vals.first());
         str.append("</a>. ");
     }
-    str.append("<br>");
 
     return str;
 }

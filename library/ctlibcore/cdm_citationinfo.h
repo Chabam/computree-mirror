@@ -31,14 +31,18 @@ public:
 
     CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager);
 
+    QString getScriptStepList();
     QList<CDM_CitationInfo::StepCitationInfo> getScriptTable();
     QString getPluginAndStepCitations();
     QString getPluginRIS();
+
+    QList<CT_VirtualAbstractStep *> steps() {return _stepList;}
 
     static QString getComputreeCoreRis();
 
 private:
     QList<CT_VirtualAbstractStep *> _stepList;
+    QList<int>                      _stepIndent;
     CDM_StepManager*                _stepManager;
     CDM_PluginManager*              _pluginManager;
 

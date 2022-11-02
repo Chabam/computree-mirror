@@ -89,8 +89,7 @@ public slots:
     void newItemModelDocument();
     void openFile();
     void openFile(QString &loadDirectory);
-    void saveScript();
-    void saveScript(QString &saveDirectory);
+    void saveScriptUsingDefaultPath();
     void citationInfo();
     void showAboutDialog();
     void showAboutPluginsDialog();
@@ -141,6 +140,11 @@ private:
     QString createScriptManagerExtension(QString preString, QString postString) const;
 
     void computeStepChooserDialogDefaults(QPoint &defaultPos, QSize &defaultSize, bool left);
+
+    void saveScript(QString &saveDirectory);
+    void saveScriptInDir(QString saveDirectory, QString name);
+    void createCSS(QString filename);
+
 private slots:
 
     /**
