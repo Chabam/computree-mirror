@@ -7,6 +7,26 @@
         <source>&lt;em&gt;No official citation was provided&lt;/em&gt;&lt;br&gt;</source>
         <translation>&lt;em&gt;No official citation was provided&lt;/em&gt;&lt;br&gt;</translation>
     </message>
+    <message>
+        <source>Citation de la plateforme Computree :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Citation des plugins :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugin %1 :&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Etape &lt;b&gt;%1&lt;/b&gt; &lt;em&gt;(plugin %2)&lt;/em&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Citations spécifiques pour les étapes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CDM_PluginManager</name>
@@ -100,6 +120,11 @@
     <message>
         <source>All Valid Files (</source>
         <translation>All Valid Files (</translation>
+    </message>
+    <message>
+        <source><byte value="xd"/>
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

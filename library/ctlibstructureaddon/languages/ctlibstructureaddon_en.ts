@@ -677,5 +677,9 @@
         <source>Triangulation2D</source>
         <translation>Triangulation2D</translation>
     </message>
+    <message>
+        <source>Utiliser gradient actif</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

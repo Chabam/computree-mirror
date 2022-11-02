@@ -756,10 +756,6 @@
 <context>
     <name>GGraphicsViewOptions</name>
     <message>
-        <source>Configuration du graphique</source>
-        <translation>Graphic configuration</translation>
-    </message>
-    <message>
         <source>Nombres de points maximum en mode simplifié :</source>
         <translation>Maximum number of displayed points in simplified mode:</translation>
     </message>
@@ -894,6 +890,10 @@
     <message>
         <source>FPS</source>
         <translation>FPS</translation>
+    </message>
+    <message>
+        <source>Configuration graphique</source>
+        <translation>Graphic configuration</translation>
     </message>
 </context>
 <context>
@@ -1323,10 +1323,6 @@
         <translation>Add a step (show step choosing dialog, F2)</translation>
     </message>
     <message>
-        <source>Sauvegarder l&apos;arbre des etapes (CTRL+S)</source>
-        <translation>Save the steps tree (CTRL+S)</translation>
-    </message>
-    <message>
         <source>Voud devez redémarrer l&apos;application pour prendre en compte le changement de langue.</source>
         <translation>You must restart the application to reflect the language change.</translation>
     </message>
@@ -1409,6 +1405,66 @@
     <message>
         <source>Utilisation mémoire</source>
         <translation>Memory usage</translation>
+    </message>
+    <message>
+        <source>Sauvegarder le script dans le dossier...</source>
+        <translation>Save the script in the folder...</translation>
+    </message>
+    <message>
+        <source>Documentation du script</source>
+        <translation>Script Documentation</translation>
+    </message>
+    <message>
+        <source>Informations sur le script</source>
+        <translation>Information about the script</translation>
+    </message>
+    <message>
+        <source>Titre du script : </source>
+        <translation>Script Title: </translation>
+    </message>
+    <message>
+        <source>Auteur : </source>
+        <translation>Author:</translation>
+    </message>
+    <message>
+        <source>Fichier script Computree : </source>
+        <translation>Computree script file: </translation>
+    </message>
+    <message>
+        <source>Fichier de citations : </source>
+        <translation>Citation File: </translation>
+    </message>
+    <message>
+        <source>Date d&apos;enregistrement : </source>
+        <translation>Date saved: </translation>
+    </message>
+    <message>
+        <source>Description : </source>
+        <translation>Description: </translation>
+    </message>
+    <message>
+        <source>Structure du script</source>
+        <translation>Structure of the script</translation>
+    </message>
+    <message>
+        <source>Le script est composé de l&apos;enchaînement d&apos;étapes suivant :</source>
+        <translation>The script consists of the following sequence of steps:</translation>
+    </message>
+    <message>
+        <source>Note : L&apos;ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier %1.ris (au format bibliographique standard RIS). Ce fichier est situé dans le même dossier que le fichier script %1.cts et que ce fichier de documentation %1.html. </source>
+        <translation>Note: All the bibliographic references provided in this page are available in the file %1.ris (in the standard RIS bibliographic format). This file is located in the same folder as the script file %1.cts and this documentation file %1.html. </translation>
+    </message>
+    <message>
+        <source>Etapes du script</source>
+        <translation>Steps of the script</translation>
+    </message>
+    <message>
+        <source>Exporter script (CTRL+S)</source>
+        <translation>Export script (CTRL+S)</translation>
+    </message>
+    <message>
+        <source>Exporter script documenté (dont citations)</source>
+        <translation>Export documented script (including citations)</translation>
     </message>
 </context>
 <context>
@@ -1573,6 +1629,75 @@
     <message>
         <source>Gradients</source>
         <translation>Gradients</translation>
+    </message>
+</context>
+<context>
+    <name>GScriptDocInfoDialog</name>
+    <message>
+        <source>Saisie des informations pour le script à documenter et à exporter :</source>
+        <translation>Entering information for the script to be documented and exported:</translation>
+    </message>
+    <message>
+        <source>Exporter</source>
+        <translation>Export</translation>
+    </message>
+    <message>
+        <source>Informations complémentaires</source>
+        <translation>Additional information</translation>
+    </message>
+    <message>
+        <source>(obligatoire)</source>
+        <translation>(mandatory)</translation>
+    </message>
+    <message>
+        <source>Description :</source>
+        <translation>Description:</translation>
+    </message>
+    <message>
+        <source>Auteur(s) :</source>
+        <translation>Author(s):</translation>
+    </message>
+    <message>
+        <source>Nom du fichier script : </source>
+        <translation>Name of the script file: </translation>
+    </message>
+    <message>
+        <source>Titre : </source>
+        <translation>Title:</translation>
+    </message>
+    <message>
+        <source>Annuler</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Un sous-dossier du dossier précédement choisi, ayant le même nom que le fichier script, sera créé. Le fichier script, ainsi que les fichiers de documentation, seront placés dans ce sous-dossier</source>
+        <translation>A subfolder of the previously chosen folder, with the same name as the script file, will be created. The script file, as well as the documentation files, will be placed in this subfolder</translation>
+    </message>
+    <message>
+        <source>Erreur</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <source>Aucun nom de fichier choisi !</source>
+        <translation>No file name chosen!</translation>
+    </message>
+    <message>
+        <source>Le choix d&apos;un nom de fichier est obligatoire.</source>
+        <translation>The choice of a file name is mandatory.</translation>
+    </message>
+    <message>
+        <source>Attention</source>
+        <translation>Warning</translation>
+    </message>
+    <message>
+        <source>Attention un dossier avec ce nom existe déjà !</source>
+        <translation>Attention a folder with this name already exists!</translation>
+    </message>
+    <message>
+        <source>Le sous-dossier %1 existe déjà dans le dossier %2.
+Etes-vous sûr de vouloir l&apos;écraser ?</source>
+        <translation>The subfolder %1 already exists in the folder %2.
+Are you sure you want to overwrite it?</translation>
     </message>
 </context>
 <context>
