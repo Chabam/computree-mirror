@@ -309,7 +309,7 @@ void GMainWindow::citationInfo()
                 stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
-                stream << "<h1>" << tr("Documentation du script") << "</h1>\n";
+                stream << "<h1>" << tr("Description du script") << "</h1>\n";
                 stream << "<h2>" << tr("Informations sur le script") << "</h1>\n";
                 stream << "<p><em>" << tr("Titre du script : ") << "</em><strong>" << scriptName << "</strong></p>";
 
@@ -328,18 +328,58 @@ void GMainWindow::citationInfo()
                 }
 
                 stream << "<br>\n";
+                stream << "<p>" + tr("Pour savoir comment référencer les travaux utilisés dans ce script, merci de consulter la page ") + "<a target=\"frameContent\" href=\"citations.html\">" + tr("Comment citer ce script.") + "<br><br></a>\n";
+
+                stream << "<br>\n";
                 stream << "<h2>" << tr("Structure du script") << "</h1>\n";
                 stream << "<p>" << tr("Le script est composé de l'enchaînement d'étapes suivant :") << "</p>";
                 stream << citationInfo.getScriptStepList();
                 stream << "<br>";
-                stream << "<h2>" << tr("Informations de citation") << "</h1>\n";
-                stream << citationInfo.getPluginAndStepCitations();
-                stream << "<p><em>" << tr("Note : L'ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier %1.ris (au format bibliographique standard RIS). Ce fichier est situé dans le même dossier que le fichier script %1.cts et que ce fichier de documentation %1.html. ").arg(scriptFileName) << "</em></p>";
+                stream << "<h2>" << tr("Plugins utilisés") << "</h1>\n";
+                stream << "<p>" << tr("Ce script utilise les plugins Computree suivants :") << "</p>";
+                stream << "<div class=\"linksummary01\" >";
+                stream << citationInfo.getUsedPlugins();
+                stream << "</div>";
+                stream << "<br>";
                 stream << "</div>\n";
                 stream << "</body>\n";
                 stream << "</html>\n";
 
                 fMainContent.close();
+            }
+
+
+            // Create citation.html file
+            QFile fcitations(outDirPath + "/content/citations.html");
+            if (fcitations.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&fcitations);
+
+                stream << "<!DOCTYPE html>\n";
+                stream << "<html>\n";
+                stream << "<head>\n";
+                stream << "<metacharset=\"utf-8\">\n";
+                stream << "<title>Computree Script Citation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
+                stream << "<body>\n";
+                stream << "<div class=\"mainBlock\">\n";
+                stream << "<h1>" << tr("Comment citer ce script") << "</h1>\n";
+                stream << "<p>" << tr("Pour référencer les travaux utilisés dans ce script, il faut citer :<br>") << "</p>";
+                stream << "<ul>";
+                stream << "<li>" + tr("La plateforme Computree") + "</li>";
+                stream << "<li>" + tr("Les plugins utilisés : <strong>%1</strong>").arg(citationInfo.getPluginListToCite()) + "</li>";
+                if (citationInfo.hasStepCitation())
+                {
+                    stream << "<li>" + tr("Les citations spécifiques liées à certaines étapes utilisées") + "</li>";
+                }
+                stream << "</ul>";
+                stream << "<p>" << tr("L'ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier %1.ris (au format bibliographique standard RIS).").arg(scriptFileName) << "</p>";
+                stream << "<br>";
+                stream << citationInfo.getPluginAndStepCitations();
+                stream << "</div>\n";
+                stream << "</body>\n";
+                stream << "</html>\n";
+
+                fcitations.close();
             }
 
 
@@ -360,7 +400,8 @@ void GMainWindow::citationInfo()
                 stream << "<div class=\"mainBlock\">";
                 stream << "<h1>" << tr("Documentation du script") << "</h1>\n";
                 stream << "<div class=\"linksummary01\" >";
-                stream << "<a target=\"frameContent\" href=\"mainContent.html\">" + tr("Documentation du script") + "<br><br></a>\n";
+                stream << "<a target=\"frameContent\" href=\"mainContent.html\">" + tr("Description du script") + "<br><br></a>\n";
+                stream << "<a target=\"frameContent\" href=\"citations.html\">" + tr("Comment citer ce script") + "<br><br></a>\n";
                 stream << "</div>";
                 stream << "<h1>" << tr("Etapes du script") << "</h1>\n";
 

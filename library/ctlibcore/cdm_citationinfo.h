@@ -36,17 +36,25 @@ public:
     QString getPluginAndStepCitations();
     QString getPluginRIS();
 
+    QString getUsedPlugins();
+    QString getPluginListToCite();
+
     QList<CT_VirtualAbstractStep *> steps() {return _stepList;}
 
     static QString getComputreeCoreRis();
 
-private:
-    QList<CT_VirtualAbstractStep *> _stepList;
-    QList<int>                      _stepIndent;
-    CDM_StepManager*                _stepManager;
-    CDM_PluginManager*              _pluginManager;
+    bool hasStepCitation();
 
-    QString                         _computreeCitationRIS;
+private:
+    QList<CT_VirtualAbstractStep *>         _stepList;
+    QList<int>                              _stepIndent;
+    QMap<QString, CT_AbstractStepPlugin*>   _pluginList;
+    QList<QString>                          _corePluginList;
+
+    CDM_StepManager*                        _stepManager;
+    CDM_PluginManager*                      _pluginManager;
+
+    QString                                 _computreeCitationRIS;
 };
 
 #endif // CDM_CITATIONINFO_H

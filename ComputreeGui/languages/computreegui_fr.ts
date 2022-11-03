@@ -1117,10 +1117,6 @@
         <translation>Fichier script (</translation>
     </message>
     <message>
-        <source>Informations de citation</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Composants en colonne</source>
         <translation>Composants en colonnes</translation>
     </message>
@@ -1447,10 +1443,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Note : L&apos;ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier %1.ris (au format bibliographique standard RIS). Ce fichier est situé dans le même dossier que le fichier script %1.cts et que ce fichier de documentation %1.html. </source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Etapes du script</source>
         <translation></translation>
     </message>
@@ -1460,6 +1452,50 @@
     </message>
     <message>
         <source>Exporter script documenté (dont citations)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Description du script</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Pour savoir comment référencer les travaux utilisés dans ce script, merci de consulter la page </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Comment citer ce script.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Plugins utilisés</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ce script utilise les plugins Computree suivants :</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Comment citer ce script</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Pour référencer les travaux utilisés dans ce script, il faut citer :&lt;br&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>La plateforme Computree</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Les plugins utilisés : &lt;strong&gt;%1&lt;/strong&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Les citations spécifiques liées à certaines étapes utilisées</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>L&apos;ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier %1.ris (au format bibliographique standard RIS).</source>
         <translation></translation>
     </message>
 </context>
@@ -1638,10 +1674,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Informations complémentaires</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>(obligatoire)</source>
         <translation></translation>
     </message>
@@ -1663,10 +1695,6 @@
     </message>
     <message>
         <source>Annuler</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Un sous-dossier du dossier précédement choisi, ayant le même nom que le fichier script, sera créé. Le fichier script, ainsi que les fichiers de documentation, seront placés dans ce sous-dossier</source>
         <translation></translation>
     </message>
     <message>
@@ -1692,6 +1720,14 @@
     <message>
         <source>Le sous-dossier %1 existe déjà dans le dossier %2.
 Etes-vous sûr de vouloir l&apos;écraser ?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Informations complémentaires pour documenter le script</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Un sous-dossier du dossier précédemment choisi, ayant le même nom que le fichier script, sera créé. Le fichier script, ainsi que les fichiers de documentation, seront placés dans ce sous-dossier.</source>
         <translation></translation>
     </message>
 </context>

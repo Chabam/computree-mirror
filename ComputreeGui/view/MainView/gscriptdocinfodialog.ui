@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>667</width>
-    <height>420</height>
+    <width>721</width>
+    <height>412</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,13 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="5" column="1" colspan="3">
-    <widget class="QLineEdit" name="le_title"/>
+    <widget class="QLineEdit" name="le_title">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
    </item>
    <item row="9" column="2">
     <widget class="QPushButton" name="pb_export">
@@ -28,16 +34,23 @@
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <italic>true</italic>
       </font>
      </property>
      <property name="text">
-      <string>Informations complémentaires</string>
+      <string>Informations complémentaires pour documenter le script</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0" colspan="4">
-    <widget class="QPlainTextEdit" name="pt_description"/>
+    <widget class="QPlainTextEdit" name="pt_description">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
     <spacer name="verticalSpacer">
@@ -55,15 +68,13 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="3">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>(obligatoire)</string>
-     </property>
-    </widget>
-   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_5">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Description :</string>
      </property>
@@ -71,13 +82,24 @@
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_4">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Auteur(s) :</string>
      </property>
     </widget>
    </item>
    <item row="6" column="1" colspan="3">
-    <widget class="QLineEdit" name="le_author"/>
+    <widget class="QLineEdit" name="le_author">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <spacer name="verticalSpacer_2">
@@ -95,11 +117,13 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="le_filename"/>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Nom du fichier script : </string>
      </property>
@@ -107,6 +131,11 @@
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="label_3">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Titre : </string>
      </property>
@@ -123,14 +152,36 @@
     <widget class="QLabel" name="label_7">
      <property name="font">
       <font>
+       <pointsize>10</pointsize>
        <italic>true</italic>
       </font>
      </property>
      <property name="text">
-      <string>Un sous-dossier du dossier précédement choisi, ayant le même nom que le fichier script, sera créé. Le fichier script, ainsi que les fichiers de documentation, seront placés dans ce sous-dossier</string>
+      <string>Un sous-dossier du dossier précédemment choisi, ayant le même nom que le fichier script, sera créé. Le fichier script, ainsi que les fichiers de documentation, seront placés dans ce sous-dossier.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLabel" name="label_6">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>(obligatoire)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="2">
+    <widget class="QLineEdit" name="le_filename">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
      </property>
     </widget>
    </item>

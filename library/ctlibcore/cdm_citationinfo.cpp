@@ -25,11 +25,31 @@ CDM_CitationInfo::CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManag
         });
     }
 
-    // Compute step indentation
+    // Compute step indentation and plugin list
     for (int i = 0 ; i < _stepList.size() ; i++)
     {
         const CT_VirtualAbstractStep *step = _stepList.at(i);
 
+        // Compute plugin list
+        CT_AbstractStepPlugin* plugin = step->pluginStaticCastT<>();
+        QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
+        QString pluginOfficialName = plugin->getPluginOfficialName();
+
+        if (pluginName.left(5) == "plug_")
+        {
+            pluginName.remove(0, 5);
+        }
+        if (pluginOfficialName != "")
+        {
+            pluginName = pluginOfficialName;
+        }
+
+        if (!_pluginList.contains(pluginName))
+        {
+            _pluginList.insert(pluginName, plugin);
+        }
+
+        // Compute indentation
         int indent = -1;
         while (step != nullptr)
         {
@@ -38,6 +58,12 @@ CDM_CitationInfo::CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManag
         }
         _stepIndent.append(indent);
     }
+
+    // Create Core plugin list
+    _corePluginList.append("Base");
+    _corePluginList.append("Toolkit");
+    _corePluginList.append("Generate");
+
 }
 
 QString CDM_CitationInfo::getScriptStepList()
@@ -104,10 +130,14 @@ QString CDM_CitationInfo::getPluginAndStepCitations()
     QString str;
     QString str2;
 
-    str.append("<h3>" + tr("Citation de la plateforme Computree :") + "</h3>");
+    str.append("<h3>" + tr("Citation de la plateforme Computree") + "</h3>");
+    str.append("<p>" + tr("Pour citer la plateforme Computree :") + "</p>");
+    str.append("<p class=\"descBlock\">");
     str.append(CT_ParseRIS::parseRIS(getComputreeCoreRis()));
+    str2.append("</p>");
     str.append("<br><br>");
-    str.append("<h3>" + tr("Citation des plugins :") + "</h3>");
+    str.append("<h3>" + tr("Citation des plugins") + "</h3>");
+    str.append("<p>" + tr("Pour citer les plugins utilisés :") + "</p>");
 
     for (int i = 0 ; i < _stepList.size() ; i++)
     {
@@ -131,26 +161,29 @@ QString CDM_CitationInfo::getPluginAndStepCitations()
         {
             pluginDone.append(plugin);
 
-            str.append(tr("Plugin %1 :<br>").arg(pluginName));
-            QStringList pluginRIS = plugin->getPluginRISCitationList();
-            if (pluginRIS.isEmpty())
+            if (!_corePluginList.contains(pluginName)) // core plugins don't need to be cite individually
             {
-                str.append(tr("<em>No official citation was provided</em><br>"));
-            } else {
-                for (int pp = 0 ; pp < pluginRIS.size() ; pp++)
+                str.append(tr("Plugin %1 :<br>").arg(pluginName));
+                QStringList pluginRIS = plugin->getPluginRISCitationList();
+                if (pluginRIS.isEmpty())
                 {
-                    str.append("<p class=\"descBlock\">");
-                    str.append(CT_ParseRIS::parseRIS(pluginRIS.at(pp)));
-                    str.append("</p>");
+                    str.append(tr("<em>No official citation was provided</em><br>"));
+                } else {
+                    for (int pp = 0 ; pp < pluginRIS.size() ; pp++)
+                    {
+                        str.append("<p class=\"descBlock\">");
+                        str.append(CT_ParseRIS::parseRIS(pluginRIS.at(pp)));
+                        str.append("</p>");
+                    }
                 }
+                str.append("<br>");
             }
-            str.append("<br>");
         }
 
         QStringList stepsRis = currentStep->getStepRISCitations();
         if (stepsRis.size() > 0)
         {
-            str2.append(tr("Etape <b>%1</b> <em>(plugin %2)</em><br>").arg(stepName, pluginName));
+            str2.append(tr("Etape <b>%1</b> <em>(plugin %2)</em> : <br>").arg(stepName, pluginName));
         }
 
         for (int i = 0 ; i < stepsRis.size() ; i++)
@@ -165,11 +198,24 @@ QString CDM_CitationInfo::getPluginAndStepCitations()
     if (!str2.isEmpty())
     {
         str.append("<h3>" + tr("Citations spécifiques pour les étapes") + "</h3>");
+        str.append("<p>" + tr("Ci-dessous, la liste des étapes fournissant des références bibliographiques spécifiques (une même référence peut être liée à plusieurs étapes) :") + "</p>");
         str.append(str2);
     }
 
 
     return str;
+}
+
+bool CDM_CitationInfo::hasStepCitation()
+{
+    for (int i = 0 ; i < _stepList.size() ; i++)
+    {
+        CT_VirtualAbstractStep* currentStep = _stepList.at(i);
+
+        QStringList stepsRis = currentStep->getStepRISCitations();
+        if (stepsRis.size() > 0) {return true;}
+    }
+    return false;
 }
 
 QString CDM_CitationInfo::getPluginRIS()
@@ -178,16 +224,25 @@ QString CDM_CitationInfo::getPluginRIS()
 
     str.append(getComputreeCoreRis());
 
+    QMapIterator<QString, CT_AbstractStepPlugin*> it(_pluginList);
+    while (it.hasNext())
+    {
+        it.next();
+        if (!_corePluginList.contains(it.key()))
+        {
+            QStringList citationList = it.value()->getPluginRISCitationList();
+            for (int pp = 0 ; pp < citationList.size() ; pp++)
+            {
+                str.append(citationList.at(pp));
+            }
+        }
+    }
+
     QList<QString> stepCitations;
 
-    QMap<QString, CT_AbstractStepPlugin*> plugins;
     for (int i = 0 ; i < _stepList.size() ; i++)
     {
         CT_VirtualAbstractStep* currentStep = _stepList.at(i);
-        CT_AbstractStepPlugin* plugin = currentStep->pluginStaticCastT<>();
-        QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
-
-        plugins.insert(pluginName, plugin);
 
         QStringList stepsRis = currentStep->getStepRISCitations();
         for (int i = 0 ; i < stepsRis.size() ; i++)
@@ -198,23 +253,51 @@ QString CDM_CitationInfo::getPluginRIS()
                 stepCitations.append(ris);
             }
         }
-
-    }
-
-    QMapIterator<QString, CT_AbstractStepPlugin*> it(plugins);
-    while (it.hasNext())
-    {
-        it.next();
-        QStringList citationList = it.value()->getPluginRISCitationList();
-        for (int pp = 0 ; pp < citationList.size() ; pp++)
-        {
-            str.append(citationList.at(pp));
-        }
     }
 
     for (int i = 0 ; i < stepCitations.size() ; i++)
     {
         str.append(stepCitations.at(i));
+    }
+
+    return str;
+}
+
+QString CDM_CitationInfo::getUsedPlugins()
+{
+    QString str;
+
+    QMapIterator<QString, CT_AbstractStepPlugin*> it(_pluginList);
+    while (it.hasNext())
+    {
+        it.next();
+        QString pluginName = it.key();
+        CT_AbstractStepPlugin* plugin = it.value();
+
+        str.append(tr("<strong>Plugin %1</strong> : <a href=\"%2\" target=\"_blank\" rel=\"noreferrer noopener\">%2</a><br><br>").arg(pluginName, plugin->getPluginURL()));
+    }
+
+    return str;
+}
+
+QString CDM_CitationInfo::getPluginListToCite()
+{
+    QString str;
+
+    QMapIterator<QString, CT_AbstractStepPlugin*> it(_pluginList);
+    while (it.hasNext())
+    {
+        it.next();
+        QString pluginName = it.key();
+        if (!_corePluginList.contains(pluginName))
+        {
+            if (str.isEmpty())
+            {
+                str.append(pluginName);
+            } else {
+                str.append(", " + pluginName);
+            }
+        }
     }
 
     return str;

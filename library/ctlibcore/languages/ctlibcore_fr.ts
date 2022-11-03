@@ -8,24 +8,40 @@
         <translation>&lt;em&gt;Aucune citation officielle n&apos;a été fournie&lt;/em&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <source>Citation de la plateforme Computree :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Citation des plugins :</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Plugin %1 :&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Etape &lt;b&gt;%1&lt;/b&gt; &lt;em&gt;(plugin %2)&lt;/em&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Citations spécifiques pour les étapes</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Citation de la plateforme Computree</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Pour citer la plateforme Computree :</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Citation des plugins</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Pour citer les plugins utilisés :</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Etape &lt;b&gt;%1&lt;/b&gt; &lt;em&gt;(plugin %2)&lt;/em&gt; : &lt;br&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ci-dessous, la liste des étapes fournissant des références bibliographiques spécifiques (une même référence peut être liée à plusieurs étapes) :</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href=&quot;%2&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -124,7 +140,7 @@
     <message>
         <source><byte value="xd"/>
 </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

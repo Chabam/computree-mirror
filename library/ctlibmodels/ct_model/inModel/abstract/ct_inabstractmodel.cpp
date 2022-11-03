@@ -213,7 +213,7 @@ bool CT_InAbstractModel::hasTheMinimumNumberOfPossibilityRequired(QStringList* e
 
     if(nSaved < int(minimumNumberOfPossibilityToSelect())) {
         if(errors != nullptr)
-            errors->append(tr("Le modèle %1 a %2 possibilité(s) disponibles(s) sur %3 minimum").arg(displayableName()).arg(nSaved).arg(minimumNumberOfPossibilityToSelect()));
+            errors->append(tr("Model %1 has %2 possibilities available on %3 minimum").arg(displayableName()).arg(nSaved).arg(minimumNumberOfPossibilityToSelect()));
 
         return false;
     }
@@ -243,7 +243,7 @@ bool CT_InAbstractModel::hasTheMinimumNumberOfSelectedPossibilityRequired(QStrin
 
     if(nSelected < int(minimumNumberOfPossibilityToSelect())) {
         if(errors != nullptr)
-            errors->append(tr("Le modèle %1 a %2 possibilité(s) sélectionnée(s) sur %3 minimum (%4 disponibles)").arg(displayableName()).arg(nSelected).arg(minimumNumberOfPossibilityToSelect()).arg(nPossibilitySaved()));
+            errors->append(tr("Model %1 has %2 option(s) selected on %3 minimum (%4 available)").arg(displayableName()).arg(nSelected).arg(minimumNumberOfPossibilityToSelect()).arg(nPossibilitySaved()));
 
         return false;
     }

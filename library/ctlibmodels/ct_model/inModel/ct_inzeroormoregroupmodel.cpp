@@ -7,7 +7,7 @@ CT_InZeroOrMoreGroupModel::CT_InZeroOrMoreGroupModel(const QString& groupType,
                                                                                                     groupNameFromType,
                                                                                                     tr("*"))
 {
-    setShortDescription(tr("Aucun ou un groupe"));
+    setShortDescription(tr("None or one group"));
     setMinimumNumberOfPossibilityToSelect(0);
     setMaximumNumberOfPossibilityThatCanBeSelected(0);
 }

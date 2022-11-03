@@ -87,9 +87,9 @@ void CTG_InResultModelPossibilities::constructModel()
 void CTG_InResultModelPossibilities::constructHeader()
 {
     QStringList header;
-    header << tr("Nom des résultats");
-    header << tr("Etape");
-    header << tr("Aide"); // if you change the header don't missing to change HELP_COLUMN defined at the top of this file
+    header << tr("Name of the results");
+    header << tr("Step");
+    header << tr("Help"); // if you change the header don't missing to change HELP_COLUMN defined at the top of this file
 
     m_treeViewModel.setHorizontalHeaderLabels(header);
 
@@ -316,7 +316,7 @@ void CTG_InResultModelPossibilities::on_treeView_clicked(const QModelIndex &inde
         // get the item on the first column
         const QStandardItem* item = m_treeViewModel.invisibleRootItem()->child(index.row(), 0);
 
-        QMessageBox::information(this, tr("Aide"), tr("<html>Description du résultat d'entrée : <br/><br/>%1</html>").arg(item->data(Qt::UserRole + 2).toString()));
+        QMessageBox::information(this, tr("Help"), tr("<html>Description of the input result : <br/><br/>%1</html>").arg(item->data(Qt::UserRole + 2).toString()));
     }
 }
 

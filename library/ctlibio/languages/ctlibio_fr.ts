@@ -858,7 +858,7 @@
     <message>
         <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="24"/>
         <source>Exporte les points au format ASCII, avec les champs suivants :&lt;br&gt;- X  : Coordonnée X&lt;br&gt;- Y  : Coordonnée Y&lt;br&gt;- Z  : Coordonnée Z&lt;br&gt;- R  : Composante rouge&lt;br&gt;- V  : Composante verte&lt;br&gt;- B  : Composante Bleue&lt;br&gt;- NX : Coordonnée X de la normale au point&lt;br&gt;- NY : Coordonnée Y de la normale au point&lt;br&gt;- NZ : Coordonnée Z de la normale au point&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="43"/>

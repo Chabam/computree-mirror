@@ -435,11 +435,11 @@ CTG_InModelPossibilitiesChoice::CTG_InModelPossibilitiesChoice(QWidget *parent) 
     ui->treeView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     ui->treeView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    QAction* act = new QAction(tr("Sélectionner"), nullptr);
+    QAction* act = new QAction(tr("Select"), nullptr);
     connect(act, SIGNAL(triggered(bool)), this, SLOT(checkAllItemSelected()));
     ui->treeView->addAction(act);
 
-    act = new QAction(tr("Désélectionner"), nullptr);
+    act = new QAction(tr("Unselect"), nullptr);
     connect(act, SIGNAL(triggered(bool)), this, SLOT(uncheckAllItemSelected()));
     ui->treeView->addAction(act);
 
@@ -532,10 +532,10 @@ void CTG_InModelPossibilitiesChoice::constructHeader()
 //    }
 
     QStringList header;
-    //header << (tr("Sortie") + (!stepName.isEmpty() ? (tr(" de ") + stepName) : ""));
-    header << tr("Données disponibles");
-    header << tr("Sél.");
-    header << tr("Données recherchées");
+    //header << (tr("Output") + (!stepName.isEmpty() ? (tr(" de ") + stepName) : ""));
+    header << tr("Available data");
+    header << tr("Sel.");
+    header << tr("Searched Data");
 
     _viewModel.setHorizontalHeaderLabels(header);
 

@@ -679,7 +679,7 @@
     </message>
     <message>
         <source>Utiliser gradient actif</source>
-        <translation type="unfinished"></translation>
+        <translation>Use active gradient</translation>
     </message>
 </context>
 </TS>

@@ -10,6 +10,8 @@ GScriptDocInfoDialog::GScriptDocInfoDialog(QString mainPath, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->le_filename->setFocus();
+
     _mainPath = mainPath;
 }
 
