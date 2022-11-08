@@ -7,10 +7,11 @@ TEMPLATE = subdirs
 SUBDIRS = plugins/pluginbase
 
 # Comment/uncomment the plugins you want to use/compile. You can also add you own plugin here
-#SUBDIRS += ../plugingenerate/plugingenerate
 SUBDIRS += ../pluginmk/pluginmk
 SUBDIRS += ../pluginonf/pluginonf
 SUBDIRS += ../pluginsegma/pluginsegma
 #SUBDIRS += ../pluginignlif/pluginignlif
 SUBDIRS += ../plugintoolkit/plugintoolkit
+#SUBDIRS += ../plugingenerate/plugingenerate
+#SUBDIRS += ../pluginonfdev/pluginonfdev
 " > plugins.pro
