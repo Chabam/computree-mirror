@@ -1,6 +1,7 @@
 TEMPLATE = aux
 
-INSTALLER = computree_6_0_installer_x86_64_WIN
+INSTALLER = Computree_Installer_WINDOWS_6.0.302
+# version : Major.Minor.commit
 
 # Usefull definitions of paths
 PATH_SRC = $$PWD/../../../ComputreeInstallRelease
@@ -24,7 +25,9 @@ CLEAN_DATA += (if exist plugin.A\data\    rd /s /q plugin.A\data\   ) &&
 CLEAN_DATA += (if exist plugin.C\data\    rd /s /q plugin.C\data\   ) &&
 CLEAN_DATA += (if exist plugin.D\data\    rd /s /q plugin.D\data\   ) &&
 CLEAN_DATA += (if exist plugin.E\data\    rd /s /q plugin.E\data\   ) &&
-CLEAN_DATA += (if exist plugin.G\data\    rd /s /q plugin.G\data\   )
+CLEAN_DATA += (if exist plugin.G\data\    rd /s /q plugin.G\data\   ) &&
+CLEAN_DATA += (if exist plugin.L\data\    rd /s /q plugin.L\data\   ) &&
+CLEAN_DATA += (if exist plugin.M\data\    rd /s /q plugin.M\data\   )
 
 PREPARE_DATA  = && cd $$PATH_SRC &&
 PREPARE_DATA += xcopy /s /i /y CompuTreeGui.*              $$PATH_DST\computree.A\data\                        &&
@@ -49,12 +52,15 @@ PREPARE_DATA += xcopy /s /i /y libraries\pcl\pcl_*         $$PATH_DST\library.E\
 PREPARE_DATA += mkdir $$PATH_DST\library.E\data\libraries\core\ &&
 PREPARE_DATA += move $$PATH_DST\library.A\data\libraries\core\ctlibpcl.dll $$PATH_DST\library.E\data\libraries\core\ &&
 PREPARE_DATA += xcopy /s /i /y plugins\plug_base.dll       $$PATH_DST\plugin.A\data\plugins\                   &&
+PREPARE_DATA += xcopy /s /i /y plugins\plug_generate.dll   $$PATH_DST\plugin.B\data\plugins\                   &&
 PREPARE_DATA += xcopy /s /i /y plugins\plug_toolkit.dll    $$PATH_DST\plugin.C\data\plugins\                   &&
 PREPARE_DATA += xcopy /s /i /y plugins\plug_onf.dll        $$PATH_DST\plugin.D\data\plugins\                   &&
 PREPARE_DATA += xcopy /s /i /y plugins\plug_segma.dll      $$PATH_DST\plugin.E\data\plugins\                   &&
 PREPARE_DATA += xcopy /s /i /y plugins\plug_mk.dll         $$PATH_DST\plugin.G\data\plugins\                   &&
+PREPARE_DATA += xcopy /s /i /y plugins\plug_onfdev.dll     $$PATH_DST\plugin.L\data\plugins\                   &&
+PREPARE_DATA += xcopy /s /i /y plugins\plug_ignlif.dll     $$PATH_DST\plugin.M\data\plugins\                   &&
 
-GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.0/bin/binarycreator.exe -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../$$INSTALLER &&
+GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.1/bin/binarycreator.exe -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../$$INSTALLER &&
 GENERATE_BIN ~= s,/,\\,g
 
 INPUT = $$PWD/config/config.xml $$PWD/packages

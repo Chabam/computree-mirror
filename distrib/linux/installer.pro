@@ -1,6 +1,7 @@
 TEMPLATE = aux
 
-INSTALLER = computree_6_0_installer_x86_64_LINUX
+INSTALLER = Computree_Installer_LINUX_6.0.302
+# version : Major.Minor.commit
 
 # Usefull definitions of paths
 PATH_SRC = $$PWD/../../../ComputreeInstallRelease/CompuTree.appdir/usr/
@@ -19,7 +20,9 @@ CLEAN_DATA += rm -rf plugin.A/data/    ;
 CLEAN_DATA += rm -rf plugin.C/data/    ;
 CLEAN_DATA += rm -rf plugin.D/data/    ;
 CLEAN_DATA += rm -rf plugin.E/data/    ;
-CLEAN_DATA += rm -rf plugin.G/data/
+CLEAN_DATA += rm -rf plugin.G/data/    ;
+CLEAN_DATA += rm -rf plugin.L/data/    ;
+CLEAN_DATA += rm -rf plugin.M/data/
 
 PREPARE_DATA  = ; mkdir computree.A/data/ computree.A/data/languages/ ;
 PREPARE_DATA += mkdir computree.B/data/ computree.B/data/examples/  ;
@@ -33,6 +36,8 @@ PREPARE_DATA += mkdir plugin.C/data/    plugin.C/data/plugins/ ;
 PREPARE_DATA += mkdir plugin.D/data/    plugin.D/data/plugins/ ;
 PREPARE_DATA += mkdir plugin.E/data/    plugin.E/data/plugins/ ;
 PREPARE_DATA += mkdir plugin.G/data/    plugin.G/data/plugins/ ;
+PREPARE_DATA += mkdir plugin.L/data/    plugin.L/data/plugins/ ;
+PREPARE_DATA += mkdir plugin.M/data/    plugin.M/data/plugins/ ;
 PREPARE_DATA += cd $$PATH_SRC ;
 PREPARE_DATA += cp $$PATH_DST/computree/meta/*.sh    $$PATH_DST/computree.A/data/         ;
 PREPARE_DATA += cp $$PATH_DST/computree/meta/qt.conf $$PATH_DST/computree.A/data/         ;
@@ -53,8 +58,10 @@ PREPARE_DATA += cp plugins/libplug_toolkit.*  $$PATH_DST/plugin.C/data/plugins/ 
 PREPARE_DATA += cp plugins/libplug_onf.*      $$PATH_DST/plugin.D/data/plugins/           ;
 PREPARE_DATA += cp plugins/libplug_segma.*    $$PATH_DST/plugin.E/data/plugins/           ;
 PREPARE_DATA += cp plugins/libplug_mk.*       $$PATH_DST/plugin.G/data/plugins/           ;
+PREPARE_DATA += cp plugins/plug_onfdev.*      $$PATH_DST/plugin.L/data/plugins/           ;
+PREPARE_DATA += cp plugins/plug_ignlif.*      $$PATH_DST/plugin.M/data/plugins/           ;
 
-GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.0/bin/binarycreator -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../../$$INSTALLER ;
+GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.1/bin/binarycreator -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../../$$INSTALLER ;
 
 INPUT = $$PWD/config/config.xml $$PWD/packages
 generation.input = INPUT
