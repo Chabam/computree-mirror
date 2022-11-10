@@ -68,7 +68,7 @@ protected:
 
     void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
 
-    virtual CT_FileHeader* internalReadHeader(const QString& filepath, QString& error) const;
+    virtual CT_FileHeader* internalReadHeader(const QString& filepath, QString& error) const override;
 
     bool internalReadFile(CT_StandardItemGroup* group) override;
 

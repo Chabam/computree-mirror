@@ -30,9 +30,9 @@ protected:
 
     void compute() final;
 
-    void initManualMode();
+    void initManualMode() override;
 
-    void useManualMode(bool quit = false);
+    void useManualMode(bool quit = false) override;
 
 private:
 

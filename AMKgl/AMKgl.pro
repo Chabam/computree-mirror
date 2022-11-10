@@ -406,13 +406,9 @@ FORMS    += \
 
 INCLUDEPATH += poly2tri/poly2tri
 
-win32 {
-    LIBS += -lopengl32 -lglu32
-}
-
-linux|macx {
-    LIBS += -lGL -lGLU -lm
-}
+win32 : LIBS += -lopengl32 -lglu32
+linux : LIBS += -lGL -lGLU -lm
+macx  : LIBS += -framework OpenGL
 
 RESOURCES += \
     resource.qrc

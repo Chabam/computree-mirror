@@ -1,7 +1,11 @@
 #include "amkglcamera.h"
 
 #include <Eigen/Geometry>
+#ifdef Q_OS_MAC
+#include <OpenGL/glu.h>
+#else
 #include <gl/GLU.h>
+#endif
 #include <limits>
 
 #include "tools/math.h"

@@ -133,4 +133,5 @@ macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 11.0
     # Silent OpenGL warning for MacOS > 10.14
     DEFINES += GL_SILENCE_DEPRECATION
+    CONFIG += sdk_no_version_check
 }

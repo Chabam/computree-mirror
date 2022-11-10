@@ -122,6 +122,9 @@ void PB_Polygon2DExporter::clearAttributesClouds()
 
 void PB_Polygon2DExporter::exportItem(const CT_Polygon2D* item, QTextStream& stream, const int& nExported, const int& totalToExport)
 {
+    Q_UNUSED(nExported);
+    Q_UNUSED(totalToExport);
+
     item->computeCentroid();
 
     stream << item->id() << "\t";

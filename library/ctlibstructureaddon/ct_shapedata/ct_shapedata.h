@@ -44,6 +44,7 @@ public:
     CT_ShapeData() = default;
     CT_ShapeData(const Eigen::Vector3d& center, const Eigen::Vector3d& direction);
     CT_ShapeData(const CT_ShapeData& other) = default;
+    virtual ~CT_ShapeData() = 0;
 
     const Eigen::Vector3d& getCenter() const;
     const Eigen::Vector3d& getDirection() const;

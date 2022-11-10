@@ -34,6 +34,8 @@ CT_ShapeData::CT_ShapeData(const Eigen::Vector3d& center, const Eigen::Vector3d&
     _direction.normalize();
 }
 
+CT_ShapeData::~CT_ShapeData() {};
+
 const Eigen::Vector3d& CT_ShapeData::getCenter() const
 {
     return _center;

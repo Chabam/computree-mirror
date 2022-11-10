@@ -29,6 +29,7 @@
 #define CT_GRID3D_SPARSE_H
 
 #include "ct_itemdrawable/abstract/ct_abstractgrid3d.h"
+#include <unordered_map>
 
 template< typename DataT > class CT_StandardGrid3D_SparseDrawManager;
 

@@ -73,7 +73,7 @@ QVariant CG_CustomTreeItemModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags CG_CustomTreeItemModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return 0;
+        return Qt::NoItemFlags;
 
     return itemFromIndex(index)->flags();
 }

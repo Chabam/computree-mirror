@@ -51,46 +51,46 @@ public:
 
     void setSyncManager(const GGraphicsViewSynchronizedGroup *syncMan);
 
-    bool addAllItemDrawableOfResultToActiveDocument(CT_AbstractResult &res, DM_AsynchroneProgress &progress);
-    bool addAllItemDrawableOfModelToDocument(CT_AbstractResult &res, CT_OutAbstractItemModel &model, DM_DocumentView *doc, DM_AsynchroneProgress &progress);
-    bool addAllItemDrawableOfResultToDocument(CT_AbstractResult &res, DM_DocumentView *doc, DM_AsynchroneProgress &progress);
+    bool addAllItemDrawableOfResultToActiveDocument(CT_AbstractResult &res, DM_AsynchroneProgress &progress) override;
+    bool addAllItemDrawableOfModelToDocument(CT_AbstractResult &res, CT_OutAbstractItemModel &model, DM_DocumentView *doc, DM_AsynchroneProgress &progress) override;
+    bool addAllItemDrawableOfResultToDocument(CT_AbstractResult &res, DM_DocumentView *doc, DM_AsynchroneProgress &progress) override;
 
-    bool addAllItemDrawableOfListToActiveDocument(QList<CT_AbstractItemDrawable*> &itemList, DM_AsynchroneProgress &progress);
-    bool addAllItemDrawableOfListToDocument(QList<CT_AbstractItemDrawable*> &itemList, DM_DocumentView *doc, DM_AsynchroneProgress &progress);
+    bool addAllItemDrawableOfListToActiveDocument(QList<CT_AbstractItemDrawable*> &itemList, DM_AsynchroneProgress &progress) override;
+    bool addAllItemDrawableOfListToDocument(QList<CT_AbstractItemDrawable*> &itemList, DM_DocumentView *doc, DM_AsynchroneProgress &progress) override;
 
-    bool removeAllItemDrawableOfResultFromDocuments(CT_AbstractResult &res, DM_AsynchroneProgress &progress);
-    bool removeAllItemDrawableOfModelFromDocuments(CT_OutAbstractItemModel &model, DM_AsynchroneProgress &progress);
-    bool removeAllItemDrawableOfModelFromDocument(CT_OutAbstractItemModel &model, DM_DocumentView *doc, DM_AsynchroneProgress &progress);
-    bool removeAllItemDrawableOfListFromDocuments(QList<CT_AbstractItemDrawable *> &itemList, DM_AsynchroneProgress &progress);
-    bool removeAllItemDrawableOfListFromDocument(QList<CT_AbstractItemDrawable *> &itemList, DM_DocumentView *doc, DM_AsynchroneProgress &progress);
+    bool removeAllItemDrawableOfResultFromDocuments(CT_AbstractResult &res, DM_AsynchroneProgress &progress) override;
+    bool removeAllItemDrawableOfModelFromDocuments(CT_OutAbstractItemModel &model, DM_AsynchroneProgress &progress) override;
+    bool removeAllItemDrawableOfModelFromDocument(CT_OutAbstractItemModel &model, DM_DocumentView *doc, DM_AsynchroneProgress &progress) override;
+    bool removeAllItemDrawableOfListFromDocuments(QList<CT_AbstractItemDrawable *> &itemList, DM_AsynchroneProgress &progress) override;
+    bool removeAllItemDrawableOfListFromDocument(QList<CT_AbstractItemDrawable *> &itemList, DM_DocumentView *doc, DM_AsynchroneProgress &progress) override;
 
-    DM_DocumentView* getActiveDocumentView();
-    DM_DocumentView* getDocumentView(int index) const;
-    int nbDocumentView() const;
-    bool containsDocument(DM_Document *document) const;
+    DM_DocumentView* getActiveDocumentView() override;
+    DM_DocumentView* getDocumentView(int index) const override;
+    int nbDocumentView() const override;
+    bool containsDocument(DM_Document *document) const override;
 
-    void redrawAllDocument();
+    void redrawAllDocument() override;
 
     DocumentInterface* new3DDocument(bool fromGui, bool inLoadConfigurationFromMainWindow, float pointSize = 1.0, bool orthographic = true, QColor *color = nullptr);
     DocumentInterface* new2DDocument(bool fromGui, bool inLoadConfigurationFromMainWindow);
     DocumentInterface* newTreeViewDocument(bool fromGui, bool inLoadConfigurationFromMainWindow);
 
-    DocumentInterface* new3DDocument(float pointSize = 1.0, bool orthographic = true, QColor *color = nullptr);
-    DocumentInterface* new2DDocument();
-    DocumentInterface* newTreeViewDocument();
-    int nDocuments() const;
-    DocumentInterface* documentAt(const int &index) const;
-    QList<DocumentInterface*> documents() const;
-    DocumentInterface* activeDocument();
-    void activateDocument(DocumentInterface *doc);
-    bool closeDocument(DocumentInterface *doc);
-    bool closeDocument(const int &index);
+    DocumentInterface* new3DDocument(float pointSize = 1.0, bool orthographic = true, QColor *color = nullptr) override;
+    DocumentInterface* new2DDocument() override;
+    DocumentInterface* newTreeViewDocument() override;
+    int nDocuments() const override;
+    DocumentInterface* documentAt(const int &index) const override;
+    QList<DocumentInterface*> documents() const override;
+    DocumentInterface* activeDocument() override;
+    void activateDocument(DocumentInterface *doc) override;
+    bool closeDocument(DocumentInterface *doc) override;
+    bool closeDocument(const int &index) override;
 
     // DM_IDocumentCloseFilter
-    bool canClose(const DM_Document *document) const;
+    bool canClose(const DM_Document *document) const override;
 
     // DM_IDocumentAddFilter
-    bool canAddItemDrawable(const DM_Document *document, const CT_AbstractItemDrawable *item) const;
+    bool canAddItemDrawable(const DM_Document *document, const CT_AbstractItemDrawable *item) const override;
 
     virtual QColor intermediateColorFromSelectedGradient(double key) override;
 

@@ -14,7 +14,7 @@ win32 {
 }
 
 macx {
-    GDAL_BASE_PATH = "/usr/local/Cellar/gdal/3.2.0/"
+    GDAL_BASE_PATH = "/usr/local/Cellar/gdal/3.3.0_1/"
 
     GDAL_INC_PATH = "$${GDAL_BASE_PATH}include"
     GDAL_LIBS_PATH = "$${GDAL_BASE_PATH}lib"

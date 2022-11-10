@@ -3,6 +3,8 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include <QDebug>
+
 QDomElement AMKglDomUtils::QColorDomElement(const QColor& color, const QString& name, QDomDocument& doc)
 {
     QDomElement de = doc.createElement(name);
@@ -47,21 +49,21 @@ double AMKglDomUtils::doubleFromDom(const QDomElement& e, const QString& attribu
         bool ok;
         value = s.toDouble(&ok);
         if (!ok) {
-            qWarning(QString("'%1' is not a valid double syntax for attribute \"%2\" in initialization of \"%3\". Setting value to %4.")
-                    .arg(s).arg(attribute).arg(e.tagName()).arg(QString::number(defValue)).toUtf8());
+            qWarning() << QString("'%1' is not a valid double syntax for attribute \"%2\" in initialization of \"%3\". Setting value to %4.")
+                    .arg(s).arg(attribute).arg(e.tagName()).arg(QString::number(defValue)).toUtf8();
             value = defValue;
         }
     } else {
-        qWarning(QString("\"%1\" attribute missing in initialization of \"%2\". Setting value to %3.")
-                .arg(attribute).arg(e.tagName()).arg(QString::number(value)).toUtf8());
+        qWarning() << QString("\"%1\" attribute missing in initialization of \"%2\". Setting value to %3.")
+                .arg(attribute).arg(e.tagName()).arg(QString::number(value)).toUtf8();
     }
 
 #if defined(isnan)
     // The "isnan" method may not be available on all platforms.
     // Find its equivalent or simply remove these two lines
     if (isnan(value))
-        qWarning(QString("Warning, attribute \"%1\" initialized to Not a Number in \"%2\"")
-                .arg(attribute).arg(e.tagName()).toUtf8());
+        qWarning() << QString("Warning, attribute \"%1\" initialized to Not a Number in \"%2\"")
+                .arg(attribute).arg(e.tagName()).toUtf8();
 #endif
 
     return value;
@@ -76,13 +78,13 @@ int AMKglDomUtils::intFromDom(const QDomElement& e, const QString& attribute, in
         bool ok;
         value = s.toInt(&ok);
         if (!ok) {
-            qWarning(QString("'%1' is not a valid integer syntax for attribute \"%2\" in initialization of \"%3\". Setting value to %4.")
-                    .arg(s).arg(attribute).arg(e.tagName()).arg(QString::number(defValue)).toUtf8());
+            qWarning() << QString("'%1' is not a valid integer syntax for attribute \"%2\" in initialization of \"%3\". Setting value to %4.")
+                    .arg(s).arg(attribute).arg(e.tagName()).arg(QString::number(defValue)).toUtf8();
             value = defValue;
         }
     } else {
-        qWarning(QString("\"%1\" attribute missing in initialization of \"%2\". Setting value to %3.")
-                .arg(attribute).arg(e.tagName()).arg(QString::number(value)).toUtf8());
+        qWarning() << QString("\"%1\" attribute missing in initialization of \"%2\". Setting value to %3.")
+                .arg(attribute).arg(e.tagName()).arg(QString::number(value)).toUtf8();
     }
 
     return value;
@@ -97,13 +99,13 @@ unsigned int AMKglDomUtils::uintFromDom(const QDomElement& e, const QString& att
         bool ok;
         value = s.toUInt(&ok);
         if (!ok) {
-            qWarning(QString("'%1' is not a valid unsigned integer syntax for attribute \"%2\" in initialization of \"%3\". Setting value to %4.")
-                    .arg(s).arg(attribute).arg(e.tagName()).arg(QString::number(defValue)).toUtf8());
+            qWarning() << QString("'%1' is not a valid unsigned integer syntax for attribute \"%2\" in initialization of \"%3\". Setting value to %4.")
+                    .arg(s).arg(attribute).arg(e.tagName()).arg(QString::number(defValue)).toUtf8();
             value = defValue;
         }
     } else {
-        qWarning(QString("\"%1\" attribute missing in initialization of \"%2\". Setting value to %3.")
-                .arg(attribute).arg(e.tagName()).arg(QString::number(value)).toUtf8());
+        qWarning() << QString("\"%1\" attribute missing in initialization of \"%2\". Setting value to %3.")
+                .arg(attribute).arg(e.tagName()).arg(QString::number(value)).toUtf8();
     }
 
     return value;
@@ -121,12 +123,12 @@ bool AMKglDomUtils::boolFromDom(const QDomElement& e, const QString& attribute, 
             value = false;
         else
         {
-            qWarning(QString("'%1' is not a valid boolean syntax for attribute \"%2\" in initialization of \"%3\". Setting value to %4.")
-                    .arg(s).arg(attribute).arg(e.tagName()).arg(defValue?"true":"false").toUtf8());
+            qWarning() << QString("'%1' is not a valid boolean syntax for attribute \"%2\" in initialization of \"%3\". Setting value to %4.")
+                    .arg(s).arg(attribute).arg(e.tagName()).arg(defValue?"true":"false").toUtf8();
         }
     } else {
-        qWarning(QString("\"%1\" attribute missing in initialization of \"%2\". Setting value to %3.")
-                .arg(attribute).arg(e.tagName()).arg(value?"true":"false").toUtf8());
+        qWarning() << QString("\"%1\" attribute missing in initialization of \"%2\". Setting value to %3.")
+                .arg(attribute).arg(e.tagName()).arg(value?"true":"false").toUtf8();
     }
 
     return value;
