@@ -52,10 +52,19 @@ int CT_AbstractSingularItemDrawable::nChildrens() const
 void CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel(const CT_OutAbstractItemAttributeModel* outModel, CT_AbstractItemAttribute* itemAttribute)
 {
     Q_ASSERT(itemAttribute != nullptr);
+    if (itemAttribute == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel" << ", " << "itemAttribute == nullptr";}
+
     Q_ASSERT(outModel != nullptr);
+    if (outModel == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel" << ", " << "outModel == nullptr";}
+
     Q_ASSERT(outModel->parentModel() != nullptr);
+    if (outModel->parentModel() == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel" << ", " << "outModel->parentModel() == nullptr";}
+
     Q_ASSERT(static_cast<CT_OutAbstractModel*>(outModel->parentModel())->recursiveOriginalModel() == model()->recursiveOriginalModel());
+    if (static_cast<CT_OutAbstractModel*>(outModel->parentModel())->recursiveOriginalModel() != model()->recursiveOriginalModel()) {qDebug() << "CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel" << ", " << "static_cast<CT_OutAbstractModel*>(outModel->parentModel())->recursiveOriginalModel() != model()->recursiveOriginalModel()";}
+
     Q_ASSERT(outModel->itemAttribute()->itemAttributeToolForModel()->category() == itemAttribute->category());
+    if (outModel->itemAttribute()->itemAttributeToolForModel()->category() != itemAttribute->category()) {qDebug() << "CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel" << ", " << "outModel->itemAttribute()->itemAttributeToolForModel()->category() != itemAttribute->category()";}
 
     itemAttribute->setModel(outModel);
     itemAttribute->setResult(static_cast<CT_AbstractResult*>(outModel->result()));
@@ -66,6 +75,7 @@ void CT_AbstractSingularItemDrawable::addItemAttributeWithOutModel(const CT_OutA
 CT_AbstractItemAttribute* CT_AbstractSingularItemDrawable::itemAttributeWithOutModel(const CT_OutAbstractItemAttributeModel* outModel) const
 {
     Q_ASSERT(outModel != nullptr);
+    if (outModel == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::itemAttributeWithOutModel" << ", " << "outModel == nullptr";}
 
     if(outModel->isADefaultItemAttributeModel())
         return PS_DIAM->itemAttributeFromOutModel(outModel, type());
@@ -94,6 +104,7 @@ bool CT_AbstractSingularItemDrawable::visitItemAttributesAdded(const CT_ItemAttr
 bool CT_AbstractSingularItemDrawable::visitItemAttributesInSelectedPossibilitiesOfInModel(const CT_InAbstractItemAttributeModel* inModel, const CT_ItemAttributeContainer::ItemAttributesVisitor& visitor) const
 {
     Q_ASSERT(inModel != nullptr);
+    if (inModel == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::visitItemAttributesInSelectedPossibilitiesOfInModel" << ", " << "inModel == nullptr";}
 
     if(!PS_DIAM->visitItemAttributesForTypeInSelectedPossibilitiesOfInModel(type(), inModel, visitor))
         return false;
@@ -119,6 +130,7 @@ int CT_AbstractSingularItemDrawable::nItemAttributesAdded() const
 QList<CT_AbstractItemAttribute*> CT_AbstractSingularItemDrawable::itemAttributes(const CT_InAbstractItemAttributeModel *inModel) const
 {
     Q_ASSERT(inModel != nullptr);
+    if (inModel == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::itemAttributes" << ", " << "inModel == nullptr";}
 
     QList<CT_AbstractItemAttribute*> l = m_itemAttributes.itemAttributesFromInModel(inModel);
     l.append(PS_DIAM->itemAttributesFromInModel(inModel, type()));
@@ -156,6 +168,7 @@ QList<CT_AbstractItemAttribute *> CT_AbstractSingularItemDrawable::itemAttribute
 CT_AbstractItemAttribute* CT_AbstractSingularItemDrawable::firstItemAttribute(const CT_InAbstractItemAttributeModel* inModel) const
 {
     Q_ASSERT(inModel != nullptr);
+    if (inModel == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::firstItemAttribute" << ", " << "inModel == nullptr";}
 
     if(!inModel->isAtLeastOnePossibilitySelected())
         return nullptr;

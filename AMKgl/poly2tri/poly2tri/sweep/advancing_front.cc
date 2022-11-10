@@ -83,6 +83,7 @@ Node* AdvancingFront::LocatePoint(const Point* point)
         node = node->next;
       } else {
         assert(0);
+        qDebug() << "AdvancingFront::LocatePoint" << ", " <<  "Bad case";
       }
     }
   } else if (px < nx) {

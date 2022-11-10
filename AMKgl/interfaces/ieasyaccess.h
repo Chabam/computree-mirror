@@ -22,6 +22,7 @@ public:
     template<typename ICloudManager>
     ICloudManager* getGlobalCloudManager() const {
         Q_ASSERT_X(false, "IEasyAccess::getGlobalCloudManager", "Developper forget to specialize this method with a special type of global cloud manager.");
+        qDebug() << "ASSERT failure in " << "IEasyAccess::getGlobalCloudManager" << ", " <<  "Developper forget to specialize this method with a special type of global cloud manager.";
         return nullptr;
     }
 

@@ -372,9 +372,8 @@ bool CT_AbstractExporter::exportToFile()
 
                 if(isExportEachItemInSeparateFileOptionnal())
                 {
-                    #define QT_FORCE_ASSERTS
                     Q_ASSERT_X(mMaximumItemToExportCalled, "CT_AbstractExporter::exportToFile", "The developper of the exporter has not called the method \"maximumItemToExportInFile\" but he must !");
-                    #undef QT_FORCE_ASSERTS
+                    if (!mMaximumItemToExportCalled) {qDebug() << "CT_AbstractExporter::exportToFile" << ", " <<  "The developper of the exporter has not called the method \"maximumItemToExportInFile\" but he must !"; return false;}
                 }
 
             } while((ret != NoMoreItemToExport) && !m_stop);
@@ -449,9 +448,8 @@ bool CT_AbstractExporter::exportToFile()
 
                 if(isExportEachItemInSeparateFileOptionnal())
                 {
-                    #define QT_FORCE_ASSERTS
                     Q_ASSERT_X(mMaximumItemToExportCalled, "CT_AbstractExporter::exportToFile", "The developper of the exporter has not called the method \"maximumItemToExportInFile\" but he must !");
-                    #undef QT_FORCE_ASSERTS
+                    if (!mMaximumItemToExportCalled) {qDebug() << "CT_AbstractExporter::exportToFile" << ", " <<  "The developper of the exporter has not called the method \"maximumItemToExportInFile\" but he must !"; return false;}
                 }
 
                 if(ret == NoMoreItemToExport)

@@ -82,6 +82,7 @@ public:
     template<typename OutHandleType>
     void addItemAttribute(const OutHandleType& outItemAttributeHandle, CT_AbstractItemAttribute* itemAttribute) {
         Q_ASSERT(model() != nullptr);
+        if (model() == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::addItemAttribute" << ", " << "model() == nullptr";}
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this item
@@ -172,6 +173,7 @@ public:
     template<typename HandleType>
     const typename HandleType::ItemAttributeType* itemAttribute(const HandleType& itemAttHandle) const {
         Q_ASSERT(model() != nullptr);
+        if (model() == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::itemAttribute" << ", " << "model() == nullptr";}
 
         return internalItemAttribute(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::value>());
     }
@@ -183,6 +185,7 @@ public:
     template<typename HandleType>
     ChildrensCollectionT<const typename HandleType::ItemAttributeType> itemAttributesByHandle(const HandleType& itemAttHandle) const {
         Q_ASSERT(model() != nullptr);
+        if (model() == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::itemAttributesByHandle" << ", " << "model() == nullptr";}
 
         return internalItemAttributes(itemAttHandle, std::integral_constant<bool, IsAnOutputModel<typename HandleType::ModelType>::value>());
     }
@@ -312,6 +315,7 @@ private:
         const DEF_CT_OutAbstractIAModel* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
 
         Q_ASSERT(outModelToUse != nullptr);
+        if (outModelToUse == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::internalItemAttribute" << ", " << "outModelToUse == nullptr";}
 
         return static_cast<typename OutHandleType::ItemAttributeType*>(itemAttributeWithOutModel(outModelToUse));
     }
@@ -362,6 +366,7 @@ private:
         const DEF_CT_OutAbstractIAModel* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
 
         Q_ASSERT(outModelToUse != nullptr);
+        if (outModelToUse == nullptr) {qDebug() << "CT_AbstractSingularItemDrawable::internalItemAttributes" << ", " << "outModelToUse == nullptr";}
 
         QList<const typename OutHandleType::ItemAttributeType*> founds;
         founds.append(static_cast<typename OutHandleType::ItemAttributeType*>(itemAttributeWithOutModel(outModelToUse)));

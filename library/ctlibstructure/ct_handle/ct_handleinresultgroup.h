@@ -28,6 +28,7 @@ public:
         const CT_HandleInResultGroup<>::ModelType* inResultModel = this->model();
 
         MODELS_ASSERT(inResultModel != nullptr);
+        if (inResultModel == nullptr) {qDebug() << "CT_HandleInResultGroup::iterateInputs" << ", " <<  "inResultModel == nullptr";}
 
         outModels.resize(inResultModel->nPossibilitySelected());
 

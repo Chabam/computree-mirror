@@ -13,6 +13,7 @@ QHash<CT_InAbstractResultModel*, CT_ModelSelectionHelper::CacheResult*> CT_Model
 CT_ModelSelectionHelper::CT_ModelSelectionHelper(const CT_InAbstractResultModel* inResultModel)
 {
     Q_ASSERT(inResultModel != nullptr);
+    if (inResultModel == nullptr) {qDebug() << "CT_ModelSelectionHelper::CT_ModelSelectionHelper" << ", " <<  "inResultModel == nullptr"; return;}
 
     m_rootInResultModel = const_cast<CT_InAbstractResultModel*>(inResultModel);
 
@@ -151,6 +152,7 @@ bool CT_ModelSelectionHelper::recursiveCanSelectAllPossibilitiesByDefault() cons
 bool CT_ModelSelectionHelper::recursiveSelectAllPossibilitiesByDefault()
 {
     Q_ASSERT(recursiveCanSelectAllPossibilitiesByDefault() == true);
+    if (!recursiveCanSelectAllPossibilitiesByDefault()) {qDebug() << "CT_ModelSelectionHelper::recursiveSelectAllPossibilitiesByDefault" << ", " <<  "!recursiveCanSelectAllPossibilitiesByDefault()"; return false;}
 
     if(m_rootInResultModel->nPossibilitySaved() > 0) {
         m_rootInResultModel->possibilitySavedAt(0)->setSelected(true);

@@ -282,8 +282,12 @@ void ChunkGenericCloudObjectForOutliers::createObjectColorCloudMemberIfNot()
 {
     if(m_objectColorCloud == nullptr) {
         Q_ASSERT(m_objectCloudProvider != nullptr);
+        if (m_objectCloudProvider == nullptr) {qDebug() << "ChunkGenericCloudObjectForOutliers::createObjectColorCloudMemberIfNot" << ", " <<  "m_objectCloudProvider == nullptr"; return;}
+
         GlobalColorCloud *gcc = m_objectCloudProvider->createOrGetColorCloud();
         Q_ASSERT(gcc != nullptr);
+        if (gcc == nullptr) {qDebug() << "ChunkGenericCloudObjectForOutliers::createObjectColorCloudMemberIfNot" << ", " <<  "gcc == nullptr"; return;}
+
         Q_UNUSED(gcc)
         m_objectColorCloud = new ObjectFuncPointerCloudIndexed<GlobalColor, GlobalGlIndexCloud>([](void* object) -> GlobalColor* { return ((ChunkGenericCloudObjectForOutliers*)object)->getFirstObjectColor(); },
                                                                                                 this,
@@ -296,8 +300,12 @@ void ChunkGenericCloudObjectForOutliers::createObjectNormalCloudMemberIfNot()
 {
     if(m_objectNormalCloud == nullptr) {
         Q_ASSERT(m_objectCloudProvider != nullptr);
+        if (m_objectCloudProvider == nullptr) {qDebug() << "ChunkGenericCloudObjectForOutliers::createObjectNormalCloudMemberIfNot" << ", " <<  "m_objectCloudProvider == nullptr"; return;}
+
         GlobalNormalCloud* gnc = m_objectCloudProvider->createOrGetNormalCloud();
         Q_ASSERT(gnc != nullptr);
+        if (gnc == nullptr) {qDebug() << "ChunkGenericCloudObjectForOutliers::createObjectNormalCloudMemberIfNot" << ", " <<  "gnc == nullptr"; return;}
+
         Q_UNUSED(gnc)
         m_objectNormalCloud = new ObjectFuncPointerCloudIndexed<GlobalNormal, GlobalGlIndexCloud>([](void* object) -> GlobalNormal* { return ((ChunkGenericCloudObjectForOutliers*)object)->getFirstObjectNormal(); },
                                                                                                   this,
@@ -310,8 +318,12 @@ void ChunkGenericCloudObjectForOutliers::createObjectInfoCloudMemberIfNot()
 {
     if(m_objectInfoCloud == nullptr) {
         Q_ASSERT(m_objectCloudProvider != nullptr);
+        if (m_objectCloudProvider == nullptr) {qDebug() << "ChunkGenericCloudObjectForOutliers::createObjectInfoCloudMemberIfNot" << ", " <<  "m_objectCloudProvider == nullptr"; return;}
+
         GlobalInfoCloud *gic = m_objectCloudProvider->createOrGetInfoCloud();
         Q_ASSERT(gic != nullptr);
+        if (gic == nullptr) {qDebug() << "ChunkGenericCloudObjectForOutliers::createObjectInfoCloudMemberIfNot" << ", " <<  "gic == nullptr"; return;}
+
         Q_UNUSED(gic)
         m_objectInfoCloud = new ObjectFuncPointerCloudIndexed<ElementInfo, GlobalGlIndexCloud>([](void* object) -> ElementInfo* { return ((ChunkGenericCloudObjectForOutliers*)object)->createOrGetFirstObjectInfo(); },
                                                                                                this,

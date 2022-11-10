@@ -7,6 +7,7 @@ template<typename FoundedCloudIndex>
 MeshObjectsTestInfoVisitor<FoundedCloudIndex>::MeshObjectsTestInfoVisitor(Scene::ObjectType type)
 {
     Q_ASSERT((type == Scene::TriangleGlobalCloud) || (type == Scene::LineGlobalCloud));
+    if ((type != Scene::TriangleGlobalCloud) && (type != Scene::LineGlobalCloud)) {qDebug() << "MeshObjectsTestInfoVisitor<FoundedCloudIndex>::MeshObjectsTestInfoVisitor" << ", " <<  "(type != Scene::TriangleGlobalCloud) && (type != Scene::LineGlobalCloud)"; return;}
 
     m_objectType = type;
     m_testFunction = nullptr;
@@ -29,6 +30,7 @@ template<typename FoundedCloudIndex>
 void MeshObjectsTestInfoVisitor<FoundedCloudIndex>::visitChunk(const IChunk* chunk)
 {
     Q_ASSERT(m_testFunction != nullptr);
+    if (m_testFunction == nullptr) {qDebug() << "MeshObjectsTestInfoVisitor<FoundedCloudIndex>::visitChunk" << ", " <<  "m_testFunction == nullptr"; return;}
 
     const AbstractChunkGenericCloudObject* objectChunk = dynamic_cast<const AbstractChunkGenericCloudObject*>(chunk);
 

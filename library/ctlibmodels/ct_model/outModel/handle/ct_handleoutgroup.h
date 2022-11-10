@@ -6,6 +6,8 @@
 
 #include <type_traits>
 
+#include <QDebug>
+
 // CT_AbstractHandleOutGroup can only be used with method to add a group in a result or in another group. It can
 // not be used with other handle to add a group handle !
 using CT_AbstractHandleOutGroup = CT_HandleWithMultipleAbstractModel<DEF_CT_AbstractGroupModelOut>;

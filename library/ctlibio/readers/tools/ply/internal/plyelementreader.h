@@ -9,6 +9,7 @@
 #include <QHashIterator>
 #include <QSet>
 #include <QVector>
+#include <QDebug>
 
 /**
  * @brief This class can be used to read an entire element.
@@ -91,6 +92,7 @@ public:
                 value = PlyReaderTools::staticReadProperty<Streamer>(stream, properties[propertyIndex]);
 
                 Q_ASSERT(!qIsNaN(value));
+                if (qIsNaN(value)) {qDebug() << "PlyElementReader::process" << ", " <<  "qIsNaN(value)"; return false;}
 
                 passValueToSetter(value,
                                   propertyIndex,
@@ -132,6 +134,7 @@ public:
                 const qint8 nBytes = PlyReaderTools::staticPropertySizeInByte(property);
 
                 Q_ASSERT(nBytes != -1);
+                if (nBytes == -1) {qDebug() << "PlyElementReader::skipElement" << ", " <<  "nBytes == -1"; return false;}
 
                 jump += nBytes;
             } else {
@@ -142,6 +145,7 @@ public:
         jump *= m_element.getNumberOfElements();
 
         Q_ASSERT(stream.skipRawData(jump) == jump);
+        if (stream.skipRawData(jump) != jump) {qDebug() << "PlyElementReader::skipElement" << ", " <<  "stream.skipRawData(jump) != jump"; return false;}
 
         return true;
     }

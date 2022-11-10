@@ -5,7 +5,8 @@
 
 MeshObjectsSetInfoVisitor::MeshObjectsSetInfoVisitor(Scene::ObjectType type)
 {
-    Q_ASSERT((type == Scene::TriangleGlobalCloud) || (type == Scene::LineGlobalCloud));
+    Q_ASSERT((type == Scene::TriangleGlobalCloud) || (type == Scene::LineGlobalCloud));   
+    if ((type != Scene::TriangleGlobalCloud) && (type != Scene::LineGlobalCloud)) {qDebug() << "MeshObjectsSetInfoVisitor::MeshObjectsSetInfoVisitor" << ", " <<  "(type != Scene::TriangleGlobalCloud) && (type != Scene::LineGlobalCloud)"; return;}
 
     m_objectType = type;
     m_setFunction = nullptr;
@@ -30,6 +31,7 @@ void MeshObjectsSetInfoVisitor::compute(PermanentItemSceneByModel *scene)
 void MeshObjectsSetInfoVisitor::visitChunk(const IChunk* chunk)
 {
     Q_ASSERT(m_setFunction != nullptr);
+    if (m_setFunction == nullptr) {qDebug() << "MeshObjectsSetInfoVisitor::visitChunk" << ", " <<  "m_setFunction == nullptr"; return;}
 
     const AbstractChunkGenericCloudObject* objectChunk = dynamic_cast<const AbstractChunkGenericCloudObject*>(chunk);
 

@@ -118,4 +118,5 @@ void CT_AbstractCategory::internalTestAttributes(const QString & where)
 {
     Q_UNUSED(where);
     Q_ASSERT_X(!m_uName.isEmpty(), qPrintable(where), "uniqueName is empty");
+    if (m_uName.isEmpty()) {qDebug() << "CT_AbstractCategory::internalTestAttributes" << ", " <<  "uniqueName is empty"; return;}
 }

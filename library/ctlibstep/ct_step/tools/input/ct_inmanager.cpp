@@ -145,7 +145,10 @@ int CT_InManager::nResults() const
             const CT_OutAbstractModel* outModel = p->outModel();
 
             Q_ASSERT(outModel != nullptr);
+            if (outModel == nullptr) {qDebug() << "CT_InManager::nResults" << ", " <<  "outModel == nullptr";}
+
             Q_ASSERT(dynamic_cast<CT_AbstractResult*>(outModel->result()) != nullptr);
+            if (dynamic_cast<CT_AbstractResult*>(outModel->result()) == nullptr) {qDebug() << "CT_InManager::nResults" << ", " <<  "dynamic_cast<CT_AbstractResult*>(outModel->result()) == nullptr";}
 
             ++n;
 
@@ -163,7 +166,10 @@ void CT_InManager::setResultsBusy(bool busy)
             const CT_OutAbstractModel* outModel = p->outModel();
 
             Q_ASSERT(outModel != nullptr);
+            if (outModel == nullptr) {qDebug() << "CT_InManager::setResultsBusy" << ", " <<  "outModel == nullptr";}
+
             Q_ASSERT(dynamic_cast<CT_AbstractResult*>(outModel->result()) != nullptr);
+            if (dynamic_cast<CT_AbstractResult*>(outModel->result()) == nullptr) {qDebug() << "CT_InManager::setResultsBusy" << ", " <<  "dynamic_cast<CT_AbstractResult*>(outModel->result()) == nullptr";}
 
             static_cast<CT_AbstractResult*>(outModel->result())->setBusy(busy);
 

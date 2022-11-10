@@ -4,6 +4,8 @@
 #include "ct_model/handle/ct_handlewithmultiplemodelt.h"
 #include "ct_model/outModel/ct_outstditemattributemodel.h"
 
+#include <QDebug>
+
 // CT_AbstractHandleOutItemAttribute can only be used with method to add an item attribute in an item. It can
 // not be used with other handle to add an item attribute handle !
 using CT_AbstractHandleOutItemAttribute = CT_HandleWithMultipleAbstractModel<DEF_CT_OutAbstractIAModel>;

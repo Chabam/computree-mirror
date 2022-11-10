@@ -96,6 +96,7 @@ void ChunkedGenericCloud::addObjectVertexes(const size_t& globalObjectIndex,
                                             IChunk** chunk)
 {
     Q_ASSERT(globalObjectIndex >= m_beginObjectGlobalIndex);
+    if (globalObjectIndex < m_beginObjectGlobalIndex) {qDebug() << "ChunkedGenericCloud::addObjectVertexes" << ", " <<  "globalObjectIndex >= m_beginObjectGlobalIndex"; return;}
 
     setUpdated(false);
 
@@ -353,8 +354,12 @@ void ChunkedGenericCloud::createObjectColorCloudMemberIfNot()
 {
     if(m_objectColorCloud == nullptr) {
         Q_ASSERT(m_objectCloudProvider != nullptr);
+        if (m_objectCloudProvider == nullptr) {qDebug() << "ChunkedGenericCloud::createObjectColorCloudMemberIfNot" << ", " <<  "m_objectCloudProvider == nullptr"; return;}
+
         GlobalColorCloud *gcc = m_objectCloudProvider->createOrGetColorCloud();
         Q_ASSERT(gcc != nullptr);
+        if (gcc == nullptr) {qDebug() << "ChunkedGenericCloud::createObjectColorCloudMemberIfNot" << ", " <<  "gcc == nullptr"; return;}
+
         Q_UNUSED(gcc)
         m_objectColorCloud = new ObjectFuncPointerCloudIndexed<Color, IndicesCollection>([](void* object) -> Color* { return ((ChunkedGenericCloud*)object)->getFirstObjectColor(); },
                                                                                          this,
@@ -367,8 +372,12 @@ void ChunkedGenericCloud::createObjectNormalCloudMemberIfNot()
 {
     if(m_objectNormalCloud == nullptr) {
         Q_ASSERT(m_objectCloudProvider != nullptr);
+        if (m_objectCloudProvider == nullptr) {qDebug() << "ChunkedGenericCloud::createObjectNormalCloudMemberIfNot" << ", " <<  "m_objectCloudProvider == nullptr"; return;}
+
         GlobalNormalCloud* gnc = m_objectCloudProvider->createOrGetNormalCloud();
         Q_ASSERT(gnc != nullptr);
+        if (gnc == nullptr) {qDebug() << "ChunkedGenericCloud::createObjectNormalCloudMemberIfNot" << ", " <<  "gnc == nullptr"; return;}
+
         Q_UNUSED(gnc)
         m_objectNormalCloud = new ObjectFuncPointerCloudIndexed<Normal, IndicesCollection>([](void* object) -> Normal* { return ((ChunkedGenericCloud*)object)->getFirstObjectNormal(); },
                                                                                            this,
@@ -381,8 +390,12 @@ void ChunkedGenericCloud::createObjectInfoCloudMemberIfNot()
 {
     if(m_objectInfoCloud == nullptr) {
         Q_ASSERT(m_objectCloudProvider != nullptr);
+        if (m_objectCloudProvider == nullptr) {qDebug() << "ChunkedGenericCloud::createObjectInfoCloudMemberIfNot" << ", " <<  "m_objectCloudProvider == nullptr"; return;}
+
         GlobalInfoCloud *gic = m_objectCloudProvider->createOrGetInfoCloud();
         Q_ASSERT(gic != nullptr);
+        if (gic == nullptr) {qDebug() << "ChunkedGenericCloud::createObjectInfoCloudMemberIfNot" << ", " <<  "gic == nullptr"; return;}
+
         Q_UNUSED(gic)
         m_objectInfoCloud = new ObjectFuncPointerCloudIndexed<Info, IndicesCollection>([](void* object) -> Info* { return ((ChunkedGenericCloud*)object)->createOrGetFirstObjectInfo(); },
                                                                                         this,

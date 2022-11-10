@@ -30,10 +30,12 @@ DM_GlobalPointsModifier::DM_GlobalPointsModifier(const PermanentItemSceneByModel
     const CT_IAccessPointCloud* pointAccess = dynamic_cast<const CT_IAccessPointCloud*>(itemWithPC);
 
     Q_ASSERT((itemWithPC == nullptr) || (pointAccess != nullptr));
+    if ((itemWithPC != nullptr) && (pointAccess == nullptr)) {qDebug() << "DM_GlobalPointsModifier::DM_GlobalPointsModifier" << ", " <<  "(itemWithPC != nullptr) && (pointAccess == nullptr)"; return;}
 
     if(pointAccess != nullptr) {
         m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractPointCloudIndex*)pointAccess->pointCloudIndex());
         Q_ASSERT(m_cloudIndex != nullptr);
+        if ((m_cloudIndex == nullptr) && (pointAccess == nullptr)) {qDebug() << "DM_GlobalPointsModifier::DM_GlobalPointsModifier" << ", " <<  "m_cloudIndex == nullptr"; return;}
     }
 }
 

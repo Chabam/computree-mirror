@@ -1,6 +1,7 @@
 #include "ct_cloudindex/ct_cloudindexstdvectort.h"
 
 #include <functional>
+#include <QDebug>
 
 template<typename T>
 CT_CloudIndexStdVectorT<T>::CT_CloudIndexStdVectorT(const size_t &size) : CT_AbstractModifiableCloudIndexT<T>()

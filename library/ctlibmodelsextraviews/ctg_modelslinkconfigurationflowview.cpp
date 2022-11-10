@@ -662,6 +662,8 @@ void CTG_ModelsLinkConfigurationFlowView::setInputDataForNodeDataModel(QtNodes::
         {
             possibility = findPossibilityBetweenInAndOutModels(inModel, outModel);
             Q_ASSERT(possibility != nullptr);
+            if (possibility == nullptr) {qDebug() << "CTG_ModelsLinkConfigurationFlowView::setInputDataForNodeDataModel" << ", " <<  "possibility == nullptr"; return;}
+
             const_cast<QtNodes::Connection*>(connection)->setData(possibility);
             mConnectionByPossibility.insert(possibility, const_cast<QtNodes::Connection*>(connection));
 

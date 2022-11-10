@@ -3,6 +3,7 @@
 
 #include <QFile>
 #include <QDataStream>
+#include <QDebug>
 
 PLY_FILE_PART_READER_TEMPLATES_DEFINITION
 PlyFilePartReaderT::PlyFilePartReader(const PlyHeader& header)
@@ -111,6 +112,7 @@ bool PlyFilePartReaderT::addVertexScalarPart(ScalarManager* scalarM,
 {
 
     Q_ASSERT_X(false, "PlyFilePartReaderT::addVertexScalarPart", "TODO");
+    qDebug() << "PlyFilePartReaderT::addVertexScalarPart" << ", " <<  "TODO"; return false;
 
     if(m_vertexElementReader == nullptr)
         return false;

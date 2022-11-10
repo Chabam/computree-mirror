@@ -38,6 +38,7 @@ CT_InResultModelGroupToCopy::ToolToModifyResultModelCopiesType* CT_InResultModel
     const auto visitor = [this](const CT_InStdModelPossibility* possibility) -> bool {
 
         MODELS_ASSERT(dynamic_cast<const CT_InStdResultModelPossibility*>(possibility) != nullptr);
+        if (dynamic_cast<const CT_InStdResultModelPossibility*>(possibility) == nullptr) {qDebug() << "CT_InResultModelGroupToCopy::createOutResultModelCopiesAccordingToNumberOfPossibility" << ", " <<  "dynamic_cast<const CT_InStdResultModelPossibility*>(possibility) == nullptr"; return false;}
 
         // the possibility is always a possibility for a result model
         const CT_InStdResultModelPossibility* resultPossibility = static_cast<const CT_InStdResultModelPossibility*>(possibility);

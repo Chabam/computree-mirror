@@ -121,8 +121,9 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
       triangle = &triangle->NeighborAcross(point);
       EdgeEvent( tcx, ep, *p1, triangle, *p1 );
     } else {
-      std::runtime_error("EdgeEvent - collinear points not supported");
+      //std::runtime_error("EdgeEvent - collinear points not supported");
       assert(0);
+      qDebug() << "Sweep::EdgeEvent" << ", " <<  "collinear points not supported"; return;
     }
     return;
   }
@@ -138,8 +139,9 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
       triangle = &triangle->NeighborAcross(point);
       EdgeEvent( tcx, ep, *p2, triangle, *p2 );
     } else {
-      std::runtime_error("EdgeEvent - collinear points not supported");
+      //std::runtime_error("EdgeEvent - collinear points not supported");
       assert(0);
+      qDebug() << "Sweep::EdgeEvent" << ", " <<  "collinear points not supported"; return;
     }
     return;
   }
@@ -715,6 +717,7 @@ void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, 
     // With current implementation we should never get here
     //throw new RuntimeException( "[BUG:FIXME] FLIP failed due to missing triangle");
     assert(0);
+    qDebug() << "Sweep::FlipEdgeEvent" << ", " <<  "[BUG:FIXME] FLIP failed due to missing triangle"; return;
   }
 #if defined(_WIN32) && defined(_MSC_VER)
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
@@ -783,6 +786,7 @@ Point& Sweep::NextFlipPoint(Point& ep, Point& eq, Triangle& ot, Point& op)
 
   //throw new RuntimeException("[Unsupported] Opposing point on constrained edge");
   assert(0);
+  qDebug() << "Sweep::NextFlipPoint" << ", " <<  "[Unsupported] Opposing point on constrained edge";
 
   return op;
 }
@@ -802,6 +806,7 @@ void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle&
     // With current implementation we should never get here
     //throw new RuntimeException( "[BUG:FIXME] FLIP failed due to missing triangle");
     assert(0);
+    qDebug() << "Sweep::FlipScanEdgeEvent" << ", " <<  "[BUG:FIXME] FLIP failed due to missing triangle"; return;
   }
 #if defined(__APPLE__)
 #pragma GCC diagnostic pop

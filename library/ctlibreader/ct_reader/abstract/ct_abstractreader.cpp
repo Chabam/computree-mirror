@@ -200,6 +200,7 @@ CT_FileHeader* CT_AbstractReader::readHeader()
 bool CT_AbstractReader::readFile(CT_StandardItemGroup* group)
 {
     Q_ASSERT(group != nullptr);
+    if (group == nullptr) {qDebug() << "CT_AbstractReader::readFile" << ", " <<  "group == nullptr"; return false;}
 
     emit started();
 
@@ -215,6 +216,7 @@ bool CT_AbstractReader::readFile(CT_StandardItemGroup* group)
         CT_FileHeader* header = readHeader();
 
         Q_ASSERT(header != nullptr);
+        if (header == nullptr) {qDebug() << "CT_AbstractReader::readFile" << ", " <<  "header == nullptr"; return false;}
 
         group->addSingularItem(m_hOutFileHeader, header);
     }

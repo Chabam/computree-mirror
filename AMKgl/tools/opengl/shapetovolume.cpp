@@ -134,6 +134,7 @@ void ShapeToVolume::staticConvert2DPointTo3DLine(const AMKglCamera &camera,
                                                                                           true);
 
     Q_ASSERT_X(ok, "ShapeToVolume", "Segment don't intersect Near plane");
+    if (!ok) {qDebug() << "ShapeToVolume::staticConvert2DPointTo3DLine" << ", " <<  "Segment don't intersect Near plane"; return;}
 
     ok = IntersectionChecker::staticDoesASegmentIntersectWithAPlane<Eigen::Vector3d>(orig,
                                                                                      orig+dir,
@@ -146,6 +147,7 @@ void ShapeToVolume::staticConvert2DPointTo3DLine(const AMKglCamera &camera,
                                                                                      true);
 
     Q_ASSERT_X(ok, "ShapeToVolume", "Segment don't intersect Far plane");
+    if (!ok) {qDebug() << "ShapeToVolume::staticConvert2DPointTo3DLine" << ", " <<  "Segment don't intersect Far plane"; return;}
 
     nearV = nearPointIntersect;
     farV = farPointIntersect;

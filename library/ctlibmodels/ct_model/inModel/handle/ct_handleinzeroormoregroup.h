@@ -4,6 +4,8 @@
 #include "ct_model/handle/ct_handlewithmodelt.h"
 #include "ct_model/inModel/ct_inzeroormoregroupmodel.h"
 
+#include <QDebug>
+
 template<class GroupT>
 class CT_HandleInZeroOrMoreGroup : public CT_HandleWithModelT<CT_InZeroOrMoreGroupModel> {
 

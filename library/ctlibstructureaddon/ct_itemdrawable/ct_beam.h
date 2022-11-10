@@ -144,6 +144,7 @@ public:
     inline void setDirection ( const Eigen::Vector3d& direction )
     {
         Q_ASSERT( !(direction(0) == 0 && direction(1) == 0 && direction(2) == 0) );
+        if (direction(0) == 0 && direction(1) == 0 && direction(2) == 0) {qDebug() << "CT_Beam::setDirection" << ", " << "direction(0) == 0 && direction(1) == 0 && direction(2) == 0";}
         m_shot.setDirection(direction);
     }
 

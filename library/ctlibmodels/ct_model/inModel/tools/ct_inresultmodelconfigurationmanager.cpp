@@ -17,6 +17,8 @@ CT_InResultModelConfigurationManager::ConfigureReturn CT_InResultModelConfigurat
 {
     if(checkIfMustCreateOrShowConfigurationDialog()) {
         Q_ASSERT(m_inputModelsConfigurationDialog != nullptr);
+        if (m_inputModelsConfigurationDialog == nullptr) {qDebug() << "CT_InResultModelConfigurationManager::ConfigureReturn" << ", " <<  "m_inputModelsConfigurationDialog == nullptr";}
+
         return (m_inputModelsConfigurationDialog->exec() == QDialog::Accepted) ? CT_InResultModelConfigurationManager::ConfigureSuccess : CT_InResultModelConfigurationManager::ConfigureCanceled;
     }
 
@@ -33,6 +35,8 @@ CT_InResultModelConfigurationManager::ConfigureReturn CT_InResultModelConfigurat
 
     if(forceShow && ok) {
         Q_ASSERT(m_inputModelsConfigurationDialog != nullptr);
+        if (m_inputModelsConfigurationDialog == nullptr) {qDebug() << "CT_InResultModelConfigurationManager::configureInResultModel" << ", " <<  "m_inputModelsConfigurationDialog == nullptr";}
+
         return (m_inputModelsConfigurationDialog->exec() == QDialog::Accepted) ? CT_InResultModelConfigurationManager::ConfigureSuccess : CT_InResultModelConfigurationManager::ConfigureCanceled;
     }
 

@@ -1,6 +1,7 @@
 #include "permanentsceneelementtype.h"
 
 #include <QObject>
+#include <QDebug>
 
 namespace Scene {
 QString objectTypeToString(const ObjectType& type) {
@@ -30,6 +31,8 @@ QString objectTypeToString(const ObjectType& type) {
         return QObject::tr("Faces du nuage global");
 
     Q_ASSERT_X(false, "Scene::objectTypeToString", QString("Object type to QString not implemented for type %1, contact the developper !").arg(type).toUtf8());
+    qDebug() << "Scene::objectTypeToString" << ", " <<  "Object type to QString not implemented for type %1, contact the developper !"; return "";
+
     return QObject::tr("Unknown !");
 }
 }

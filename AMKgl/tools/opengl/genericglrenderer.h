@@ -203,7 +203,10 @@ public:
                                   float currentColor[4]) {
 
         Q_ASSERT(fv != nullptr);
+        if (fv == nullptr) {qDebug() << "GenericGLRenderer::staticBasicRender" << ", " <<  "fv == nullptr"; return;}
+
         Q_ASSERT(fi != nullptr);
+        if (fi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicRender" << ", " <<  "fi == nullptr"; return;}
 
         glColor4fv(currentColor);
 
@@ -281,7 +284,10 @@ public:
                                       float currentColor[4]) {
 
         Q_ASSERT(fv != nullptr);
+        if (fv == nullptr) {qDebug() << "GenericGLRenderer::staticBasicFastRender" << ", " <<  "fv == nullptr"; return;}
+
         Q_ASSERT(fi != nullptr);
+        if (fi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicFastRender" << ", " <<  "fi == nullptr"; return;}
 
         glColor4fv(currentColor);
 
@@ -358,7 +364,10 @@ public:
                                         float currentColor[4]) {
 
         Q_ASSERT(fv != nullptr);
+        if (fv == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectRender" << ", " <<  "fv == nullptr"; return;}
+
         Q_ASSERT(ofi != nullptr);
+        if (ofi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectRender" << ", " <<  "ofi == nullptr"; return;}
 
         quint8 nVertexPerObject = 0;
 
@@ -508,7 +517,10 @@ public:
                                               float currentColor[4]) {
 
         Q_ASSERT(fv != nullptr);
+        if (fv == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectVertexRender" << ", " <<  "fv == nullptr"; return;}
+
         Q_ASSERT(ofi != nullptr);
+        if (ofi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectVertexRender" << ", " <<  "ofi == nullptr"; return;}
 
         quint8 nVertexPerObject = 0;
 
@@ -520,6 +532,7 @@ public:
             nVertexPerObject = 3;
 
         Q_ASSERT(nVertexPerObject != 0);
+        if (nVertexPerObject == 0) {qDebug() << "GenericGLRenderer::staticBasicObjectVertexRender" << ", " <<  "nVertexPerObject == 0"; return;}
 
         quint8 j;
         size_t currentIndex = 0;
@@ -666,7 +679,10 @@ public:
                                         float currentColor[4]) {
 
         Q_ASSERT(fv != nullptr);
+        if (fv == nullptr) {qDebug() << "GenericGLRenderer::staticBasicNormalRender" << ", " <<  "fv == nullptr"; return;}
+
         Q_ASSERT(fi != nullptr);
+        if (fi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicNormalRender" << ", " <<  "fi == nullptr"; return;}
 
         if(fn != nullptr) {
             bool modified = false;
@@ -721,7 +737,10 @@ public:
                                             float currentColor[4]) {
 
         Q_ASSERT(fv != nullptr);
+        if (fv == nullptr) {qDebug() << "GenericGLRenderer::staticBasicNormalFastRender" << ", " <<  "fv == nullptr"; return;}
+
         Q_ASSERT(fi != nullptr);
+        if (fi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicNormalFastRender" << ", " <<  "fi == nullptr"; return;}
 
         if(fn != nullptr) {
             bool modified = false;
@@ -778,7 +797,10 @@ public:
                                                     float currentColor[4]) {
 
         Q_ASSERT(fv != nullptr);
+        if (fv == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectVertexNormalRender" << ", " <<  "fv == nullptr"; return;}
+
         Q_ASSERT(foi != nullptr);
+        if (foi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectVertexNormalRender" << ", " <<  "foi == nullptr"; return;}
 
         if(fn != nullptr) {
             quint8 j;
@@ -845,7 +867,10 @@ public:
                                               float currentColor[4]) {
 
         Q_ASSERT(fv != nullptr);
+        if (fv == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectNormalRender" << ", " <<  "fv == nullptr"; return;}
+
         Q_ASSERT(ofi != nullptr);
+        if (ofi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectNormalRender" << ", " <<  "ofi == nullptr"; return;}
 
         if(ofn != nullptr) {
             quint8 j;
@@ -926,6 +951,7 @@ public:
                                                       float currentColor[4]) {
 
         Q_ASSERT(ofi != nullptr);
+        if (ofi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectVertexOutliersRender" << ", " <<  "ofi == nullptr"; return;}
 
         quint8 nVertexPerObject = 0;
 
@@ -937,6 +963,7 @@ public:
             nVertexPerObject = 3;
 
         Q_ASSERT(nVertexPerObject != 0);
+        if (nVertexPerObject == 0) {qDebug() << "GenericGLRenderer::staticBasicObjectVertexOutliersRender" << ", " <<  "nVertexPerObject == 0"; return;}
 
         quint8 j;
         size_t currentIndex = 0;
@@ -1109,6 +1136,7 @@ public:
                                                 float currentColor[4]) {
 
         Q_ASSERT(ofi != nullptr);
+        if (ofi == nullptr) {qDebug() << "GenericGLRenderer::staticBasicObjectOutliersRender" << ", " <<  "ofi == nullptr"; return;}
 
         quint8 nVertexPerObject = 0;
 

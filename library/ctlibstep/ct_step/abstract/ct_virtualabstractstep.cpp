@@ -332,6 +332,7 @@ bool CT_VirtualAbstractStep::acceptAddAfterThisStep(const CT_VirtualAbstractStep
 bool CT_VirtualAbstractStep::appendStep(CT_VirtualAbstractStep* step)
 {
     Q_ASSERT(step->parentStep() == this);
+    if (step->parentStep() != this) {qDebug() << "CT_VirtualAbstractStep::appendStep" << ", " <<  "step->parentStep() != this";}
 
     if(!step->acceptAddAfterThisStep(this))
         return false;

@@ -297,6 +297,7 @@ private:
         const CT_AbstractCategory* cat = PS_CATEGORY_MANAGER->findByUniqueName(categoryUniqueName);
 
         Q_ASSERT_X(cat != nullptr, "CT_DefaultItemAttributeManager::addItemAttribute", qPrintable(QString("You created a default item attribute but the category with name \"") + categoryUniqueName + "\" was not registered !"));
+        if (cat == nullptr) {qDebug() << "CT_DefaultItemAttributeManager::staticInternalGetCategoryFromUniqueName" << ", " << "cat == nullptr";}
 
         return cat;
     }

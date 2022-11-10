@@ -201,6 +201,7 @@ private:
         const CT_InAbstractModel* inModelForSearch = recursiveSearchTheInModelThatWasACopiedModelFromThisOriginalInModel(inModel);
 
         MODELS_ASSERT(inModelForSearch != nullptr);
+        if (inModelForSearch == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::internalVisitOutModelThatCanBeModified" << ", " <<  "inModelForSearch == nullptr"; return;}
 
         const CT_InStdModelPossibilitySelectionGroup* selectionGroup = inModelForSearch->possibilitiesGroup();
 

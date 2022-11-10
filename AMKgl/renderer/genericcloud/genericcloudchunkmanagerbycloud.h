@@ -192,6 +192,8 @@ protected:
         typename GenericCloudChunkManagerByCloudSuperClass::ChunkCollection::const_iterator end = this->m_chunks.end();
 
         Q_ASSERT(it != end);
+        if (it == end) {qDebug() << "GenericCloudChunkManagerByCloud::getChunkUniqueIndexForObjectAt" << ", " <<  "it == end"; return 0;}
+
 
         ChunkT* r = nullptr;
 

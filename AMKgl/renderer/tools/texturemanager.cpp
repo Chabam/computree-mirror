@@ -55,6 +55,7 @@ QOpenGLTexture* TextureManager::getTextureAndUpdateDataIfNecessary(const QString
     TextureInfo* info = getTextureByName(uniqueName);
 
     Q_ASSERT(info != nullptr);
+    if (info == nullptr) {qDebug() << "TextureManager::getTextureAndUpdateDataIfNecessary" << ", " <<  "info == nullptr"; return nullptr;}
 
     TextureData newData(data, dataSize);
 
@@ -75,6 +76,7 @@ void TextureManager::setDataToBeUpdated(const QString &uniqueName)
     TextureInfo* info = getTextureByName(uniqueName);
 
     Q_ASSERT(info != nullptr);
+    if (info == nullptr) {qDebug() << "TextureManager::setDataToBeUpdated" << ", " <<  "info == nullptr"; return;}
 
     info->lastData = TextureData();
 }

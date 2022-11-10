@@ -132,6 +132,7 @@ void PermanentItemSceneRemover::compute()
         Item* item = itI.next();
         PermanentItemInformation* info = m_scene.m_itemsWithInfo.value(item, nullptr);
         Q_ASSERT_X(info->getIndex() == offsetForIndex, "PermanentItemSceneRemover", QString("Index Error, must be %1 and is %2").arg(offsetForIndex).arg(info->getIndex()).toLatin1());
+
         ++offsetForIndex;
     }
 #endif

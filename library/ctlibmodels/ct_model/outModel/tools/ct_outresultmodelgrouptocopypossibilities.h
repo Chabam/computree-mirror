@@ -57,6 +57,7 @@ public:
                       CollectionType& allOutModelsCreated)
     {
         MODELS_ASSERT(outRootGroupToCopy != nullptr);
+        if (outRootGroupToCopy == nullptr) {qDebug() << "CT_OutResultModelGroupToCopyPossibilities::setRootGroup" << ", " <<  "outRootGroupToCopy == nullptr"; return;}
 
         for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
             GroupToCopyType* rootGroupCopy = static_cast<GroupToCopyType*>(outRootGroupToCopy->copy());
@@ -84,6 +85,7 @@ public:
                   CollectionType& allOutModelsCreated)
     {
         MODELS_ASSERT((inParentGroup != nullptr) && (outChildGroupToCopy != nullptr));
+        if ((inParentGroup == nullptr) || (outChildGroupToCopy == nullptr)) {qDebug() << "CT_OutResultModelGroupToCopyPossibilities::addGroup" << ", " <<  "(inParentGroup == nullptr) || (outChildGroupToCopy == nullptr)"; return;}
 
         for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
             outResultModel->addGroup(inParentGroup,
@@ -112,6 +114,7 @@ public:
                  CollectionType& allOutModelsCreated)
     {
         MODELS_ASSERT((inParentGroup != nullptr) && (outChildItemToCopy != nullptr));
+        if ((inParentGroup == nullptr) || (outChildItemToCopy == nullptr)) {qDebug() << "CT_OutResultModelGroupToCopyPossibilities::addItem" << ", " <<  "(inParentGroup == nullptr) || (outChildItemToCopy == nullptr)"; return;}
 
         for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
             outResultModel->addItem(inParentGroup,
@@ -140,6 +143,7 @@ public:
                           CollectionType& allOutModelsCreated)
     {
         MODELS_ASSERT((inParentItem != nullptr) && (outChildItemAttributeToCopy != nullptr));
+        if ((inParentItem == nullptr) || (outChildItemAttributeToCopy == nullptr)) {qDebug() << "CT_OutResultModelGroupToCopyPossibilities::addItemAttribute" << ", " <<  "(inParentItem == nullptr) || (outChildItemAttributeToCopy == nullptr)"; return;}
 
         for(CT_OutResultModelGroupCopy* outResultModel : m_models) {
             outResultModel->addItemAttribute(inParentItem,

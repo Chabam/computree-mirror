@@ -4,6 +4,8 @@
 #include "ct_model/handle/ct_handlewithmodelt.h"
 #include "ct_model/outModel/ct_outresultmodelgroup.h"
 
+#include <QDebug>
+
 template<class ResultT>
 class CT_HandleOutResult : public CT_HandleWithModelT<CT_OutResultModelGroup<ResultT>> {
 

@@ -12,19 +12,28 @@ CT_OutResultModelGroupCopy::CT_OutResultModelGroupCopy(const CT_InResultModelGro
 {
 
     MODELS_ASSERT(m_inResultModel != nullptr);
+    if (m_inResultModel == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::CT_OutResultModelGroupCopy" << ", " <<  "m_inResultModel == nullptr"; return;}
+
     MODELS_ASSERT(m_inResultModel->nPossibilitySaved() == 1);
+    if (m_inResultModel->nPossibilitySaved() != 1) {qDebug() << "CT_OutResultModelGroupCopy::CT_OutResultModelGroupCopy" << ", " <<  "m_inResultModel->nPossibilitySaved() != 1"; return;}
+
     MODELS_ASSERT(m_inResultModel->nPossibilitySelected() == 1);
+    if (m_inResultModel->nPossibilitySelected() != 1) {qDebug() << "CT_OutResultModelGroupCopy::CT_OutResultModelGroupCopy" << ", " <<  "m_inResultModel->nPossibilitySelected() != 1"; return;}
+
     MODELS_ASSERT(dynamic_cast<CT_InStdResultModelPossibility*>(m_inResultModel->getPossibilitiesSelected().first()) != nullptr);
+    if (dynamic_cast<CT_InStdResultModelPossibility*>(m_inResultModel->getPossibilitiesSelected().first()) == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::CT_OutResultModelGroupCopy" << ", " <<  "dynamic_cast<CT_InStdResultModelPossibility*>(m_inResultModel->getPossibilitiesSelected().first()) == nullptr"; return;}
 
     // get the possibility linked with the input result model
     const CT_InStdResultModelPossibility* resultPossibility = static_cast<CT_InStdResultModelPossibility*>(m_inResultModel->getPossibilitiesSelected().first());
 
     MODELS_ASSERT(dynamic_cast<CT_OutAbstractResultModelGroup*>(resultPossibility->outResultModel()) != nullptr);
+    if (dynamic_cast<CT_OutAbstractResultModelGroup*>(resultPossibility->outResultModel()) == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::CT_OutResultModelGroupCopy" << ", " <<  "dynamic_cast<CT_OutAbstractResultModelGroup*>(resultPossibility->outResultModel()) == nullptr"; return;}
 
     // get the output result model of this possibility
     const CT_OutAbstractResultModelGroup* originalOutResultModel = static_cast<CT_OutAbstractResultModelGroup*>(resultPossibility->outResultModel());
 
     MODELS_ASSERT(originalOutResultModel != nullptr);
+    if (originalOutResultModel == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::CT_OutResultModelGroupCopy" << ", " <<  "originalOutResultModel == nullptr"; return;}
 
     // copy the root group of this possibility because it can be modified by the developper in the step
     m_rootGroupForModification = originalOutResultModel->rootGroup();
@@ -110,6 +119,7 @@ void CT_OutResultModelGroupCopy::removeGroup(const DEF_CT_AbstractGroupModelIn* 
             resultGroup->setRootGroup(nullptr);
 
             MODELS_ASSERT(!it.hasNext());
+            if (it.hasNext()) {qDebug() << "CT_OutResultModelGroupCopy::removeGroup" << ", " <<  "it.hasNext()"; return;}
         }
     }
 }
@@ -138,6 +148,7 @@ void CT_OutResultModelGroupCopy::removeItem(const DEF_CT_AbstractItemDrawableMod
 CT_OutAbstractModel* CT_OutResultModelGroupCopy::recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(const CT_OutAbstractModel* originalModel) const
 {
     Q_ASSERT(originalModel != nullptr);
+    if (originalModel == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel" << ", " <<  "originalModel == nullptr"; return nullptr;}
 
     const CT_OutAbstractModel* firstOriginalOutModel = originalModel->recursiveOriginalModel();
 
@@ -165,12 +176,17 @@ CT_OutAbstractModel* CT_OutResultModelGroupCopy::recursiveSearchTheModelThatWasA
 IResultForModel* CT_OutResultModelGroupCopy::createResult()
 {
     MODELS_ASSERT(m_inResultModel != nullptr);
+    if (m_inResultModel == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::createResult" << ", " <<  "m_inResultModel == nullptr"; return nullptr;}
+
     MODELS_ASSERT(m_inResultModel->nPossibilitySaved() == 1);
+    if (m_inResultModel->nPossibilitySaved() != 1) {qDebug() << "CT_OutResultModelGroupCopy::createResult" << ", " <<  "m_inResultModel->nPossibilitySaved() != 1"; return nullptr;}
 
     IResultForModel* res = nullptr;
 
     const auto visitor = [&res](const IResultForModel* result) -> bool {
         MODELS_ASSERT(res == nullptr);
+        if (res != nullptr) {qDebug() << "CT_OutResultModelGroupCopy::createResult" << ", " <<  "res == nullptr"; return false;}
+
         res = const_cast<IResultForModel*>(result);
         return true;
     };
@@ -179,6 +195,7 @@ IResultForModel* CT_OutResultModelGroupCopy::createResult()
     m_inResultModel->visitRealResultsThatMatchWithSelectedPossibilities(visitor);
 
     MODELS_ASSERT(res != nullptr);
+    if (res == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::createResult" << ", " <<  "res == nullptr"; return nullptr;}
 
     // create the copy
     res = res->resultToolForModel()->copyResult(this);
@@ -197,6 +214,7 @@ CT_OutAbstractResultModel* CT_OutResultModelGroupCopy::copy() const
 CT_InAbstractModel* CT_OutResultModelGroupCopy::recursiveSearchTheInModelThatWasACopiedModelFromThisOriginalInModel(const CT_InAbstractModel* originalModel) const
 {
     MODELS_ASSERT(m_inResultModel != nullptr);
+    if (m_inResultModel == nullptr) {qDebug() << "CT_OutResultModelGroupCopy::recursiveSearchTheInModelThatWasACopiedModelFromThisOriginalInModel" << ", " <<  "m_inResultModel == nullptr"; return nullptr;}
 
     return m_inResultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(originalModel);
 }

@@ -4,6 +4,8 @@
 #include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
 #include "ct_model/outModel/abstract/ct_outabstractresultmodel.h"
 
+#include <QDebug>
+
 bool CT_InAbstractResultModel::FORCE_RECURSIVITY = false;
 
 CT_InAbstractResultModel::CT_InAbstractResultModel(const QString &displayableName) : SuperClass(displayableName),
@@ -127,6 +129,7 @@ bool CT_InAbstractResultModel::visitRealResultsThatMatchWithThisPossibility(cons
                                                                             const CT_InAbstractResultModel::RealResultVisitor& visitor) const
 {
     MODELS_ASSERT(possibilitiesGroup()->indexOf(const_cast<CT_InStdModelPossibility*>(possibility)) != -1);
+    if (possibilitiesGroup()->indexOf(const_cast<CT_InStdModelPossibility*>(possibility)) == -1) {qDebug() << "CT_InAbstractResultModel::visitRealResultsThatMatchWithThisPossibility" << ", " <<  "possibilitiesGroup()->indexOf(const_cast<CT_InStdModelPossibility*>(possibility)) == -1"; return false;}
 
     CT_OutAbstractResultModel* outModel = static_cast<CT_OutAbstractResultModel*>(possibility->outModel());
 
@@ -136,6 +139,7 @@ bool CT_InAbstractResultModel::visitRealResultsThatMatchWithThisPossibility(cons
 CT_InAbstractModel* CT_InAbstractResultModel::recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(const CT_InAbstractModel* originalModel) const
 {
     Q_ASSERT(originalModel != nullptr);
+    if (originalModel == nullptr) {qDebug() << "CT_InAbstractResultModel::recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel" << ", " <<  "originalModel == nullptr"; return nullptr;}
 
     const CT_InAbstractModel* firstOriginalOutModel = originalModel->recursiveOriginalModel();
 
@@ -215,6 +219,7 @@ bool CT_InAbstractResultModel::visitRealResultForModel(const CT_OutAbstractResul
     IStepForModel* step = model->step();
 
     MODELS_ASSERT(step != nullptr);
+    if (step == nullptr) {qDebug() << "CT_InAbstractResultModel::visitRealResultForModel" << ", " <<  "step == nullptr"; return false;}
 
     return step->stepToolForModel()->visitStepHisOutResults([&model, &visitor](const IResultForModel* result) -> bool {
 

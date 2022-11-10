@@ -32,6 +32,7 @@ GLint OpenGlInfo::getMaxTextureSizeInByte() const
 bool OpenGlInfo::staticCheckOpenglVersionMinimumVersion(const QOpenGLContext *context, int majorV, int minorV)
 {
     Q_ASSERT(context != nullptr);
+    if (context == nullptr) {qDebug() << "OpenGlInfo::staticCheckOpenglVersionMinimumVersion" << ", " <<  "context == nullptr"; return false;}
 
     return (context->format().majorVersion() > majorV) || ((context->format().majorVersion() == majorV) && (context->format().minorVersion() >= minorV));
 }

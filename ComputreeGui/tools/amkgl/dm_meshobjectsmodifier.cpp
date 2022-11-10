@@ -17,6 +17,7 @@ DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* 
     // TODO : modify it to use all clouds of all scenes
 
     Q_ASSERT((objectType == Scene::LineGlobalCloud) || (objectType == Scene::TriangleGlobalCloud));
+    if ((objectType != Scene::LineGlobalCloud) && (objectType != Scene::TriangleGlobalCloud)) {qDebug() << "DM_MeshObjectsModifier::DM_MeshObjectsModifier" << ", " <<  "(objectType != Scene::LineGlobalCloud) && (objectType != Scene::TriangleGlobalCloud)"; return;}
 
     m_cloudIndex = nullptr;
 
@@ -38,10 +39,12 @@ DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* 
         const CT_IAccessEdgeCloud* edgeAccess = dynamic_cast<const CT_IAccessEdgeCloud*>(mesh);
 
         Q_ASSERT((mesh == nullptr) || (edgeAccess != nullptr));
+        if ((mesh != nullptr) && (edgeAccess == nullptr)) {qDebug() << "DM_MeshObjectsModifier::DM_MeshObjectsModifier" << ", " <<  "(mesh != nullptr) && (edgeAccess == nullptr)"; return;}
 
         if(edgeAccess != nullptr) {
             m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractEdgeCloudIndex*)edgeAccess->edgeCloudIndex());
             Q_ASSERT(m_cloudIndex != nullptr);
+            if (m_cloudIndex == nullptr) {qDebug() << "DM_MeshObjectsModifier::DM_MeshObjectsModifier" << ", " <<  "m_cloudIndex == nullptr"; return;}
         }
 
     } else if(objectType == Scene::TriangleGlobalCloud) {
@@ -60,10 +63,12 @@ DM_MeshObjectsModifier::DM_MeshObjectsModifier(const PermanentItemSceneByModel* 
         const CT_IAccessFaceCloud* faceAccess = dynamic_cast<const CT_IAccessFaceCloud*>(mesh);
 
         Q_ASSERT((mesh == nullptr) || (faceAccess != nullptr));
+        if ((mesh != nullptr) && (faceAccess == nullptr)) {qDebug() << "DM_MeshObjectsModifier::DM_MeshObjectsModifier" << ", " <<  "(mesh != nullptr) && (faceAccess == nullptr)"; return;}
 
         if(faceAccess != nullptr) {
             m_cloudIndex = dynamic_cast<CT_AbstractCloudIndex*>((CT_AbstractEdgeCloudIndex*)faceAccess->faceCloudIndex());
             Q_ASSERT(m_cloudIndex != nullptr);
+            if (m_cloudIndex == nullptr) {qDebug() << "DM_MeshObjectsModifier::DM_MeshObjectsModifier" << ", " <<  "m_cloudIndex == nullptr"; return;}
         }
     }
 }

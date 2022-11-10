@@ -247,6 +247,7 @@ const Chunk& InstancedPermanentRenderer<Chunk>::createOrGetChunkForShape(const E
 
     if(ch == nullptr) {
         Q_ASSERT(m_vertexArray != nullptr);
+        if (m_vertexArray == nullptr) {qDebug() << "InstancedPermanentRenderer<Chunk>::createOrGetChunkForShape" << ", " <<  "m_vertexArray == nullptr";}
 
         ch = new Chunk(uniqueKey,
                        this->getTypeOfObjectDrawn(),

@@ -96,6 +96,7 @@ bool DM_ObjectsModifier::isColorsAvailable() const
 const CT_Color& DM_ObjectsModifier::getColor(const size_t &objectIndex, const size_t &vertexIndex) const
 {
     Q_ASSERT(isColorsAvailable());
+    if (!isColorsAvailable()) {qDebug() << "DM_ObjectsModifier::getColor" << ", " <<  "!isColorsAvailable()";}
 
     return (*m_colorcloud)[objectIndex + m_from][vertexIndex];
 }
@@ -130,6 +131,7 @@ bool DM_ObjectsModifier::isNormalsAvailable() const
 const CT_Normal& DM_ObjectsModifier::getNormal(const size_t &objectIndex, const size_t &vertexIndex) const
 {
     Q_ASSERT(isNormalsAvailable());
+    if (!isNormalsAvailable()) {qDebug() << "DM_ObjectsModifier::getNormal" << ", " <<  "!isNormalsAvailable()";}
 
     return (*m_normalcloud)[objectIndex + m_from][vertexIndex];
 }

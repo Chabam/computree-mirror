@@ -287,36 +287,48 @@ void AbstractChunkGenericCloudObject::setNumberOfObjects(const size_t &n)
 AbstractChunkGenericCloudObject::GlobalColorCloud* AbstractChunkGenericCloudObject::getVertexGlobalColorCloud() const
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::getVertexGlobalColorCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     return m_pointCloudProvider->getColorCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalNormalCloud* AbstractChunkGenericCloudObject::getVertexGlobalNormalCloud() const
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::getVertexGlobalNormalCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     return m_pointCloudProvider->getNormalCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalInfoCloud* AbstractChunkGenericCloudObject::getVertexGlobalInfoCloud() const
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::getVertexGlobalInfoCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     return m_pointCloudProvider->getInfoCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalColorCloud *AbstractChunkGenericCloudObject::createOrGetVertexGlobalColorCloud()
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::createOrGetVertexGlobalColorCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     return m_pointCloudProvider->createOrGetColorCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalNormalCloud *AbstractChunkGenericCloudObject::createOrGetVertexGlobalNormalCloud()
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::createOrGetVertexGlobalNormalCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     return m_pointCloudProvider->createOrGetNormalCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalInfoCloud *AbstractChunkGenericCloudObject::createOrGetVertexGlobalInfoCloud()
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::createOrGetVertexGlobalInfoCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     return m_pointCloudProvider->createOrGetInfoCloud();
 }
 
@@ -358,24 +370,32 @@ AbstractChunkGenericCloudObject::Info* AbstractChunkGenericCloudObject::getFirst
 AbstractChunkGenericCloudObject::GlobalColorCloud* AbstractChunkGenericCloudObject::getObjectGlobalColorCloud() const
 {
     Q_ASSERT(m_objectCloudProvider != nullptr);
+    if (m_objectCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::getObjectGlobalColorCloud" << ", " <<  "m_objectCloudProvider == nullptr"; return nullptr;}
+
     return m_objectCloudProvider->getColorCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalNormalCloud* AbstractChunkGenericCloudObject::getObjectGlobalNormalCloud() const
 {
     Q_ASSERT(m_objectCloudProvider != nullptr);
+    if (m_objectCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::getObjectGlobalNormalCloud" << ", " <<  "m_objectCloudProvider == nullptr"; return nullptr;}
+
     return m_objectCloudProvider->getNormalCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalInfoCloud* AbstractChunkGenericCloudObject::getObjectGlobalInfoCloud() const
 {
     Q_ASSERT(m_objectCloudProvider != nullptr);
+    if (m_objectCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::getObjectGlobalInfoCloud" << ", " <<  "m_objectCloudProvider == nullptr"; return nullptr;}
+
     return m_objectCloudProvider->getInfoCloud();
 }
 
 AbstractChunkGenericCloudObject::GlobalColorCloud* AbstractChunkGenericCloudObject::createOrGetObjectGlobalColorCloud()
 {
     Q_ASSERT(m_objectCloudProvider != nullptr);
+    if (m_objectCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::createOrGetObjectGlobalColorCloud" << ", " <<  "m_objectCloudProvider == nullptr"; return nullptr;}
+
     GlobalColorCloud* gcc = m_objectCloudProvider->createOrGetColorCloud();
     createObjectColorCloudMemberIfNot();
     return gcc;
@@ -384,6 +404,8 @@ AbstractChunkGenericCloudObject::GlobalColorCloud* AbstractChunkGenericCloudObje
 AbstractChunkGenericCloudObject::GlobalNormalCloud* AbstractChunkGenericCloudObject::createOrGetObjectGlobalNormalCloud()
 {
     Q_ASSERT(m_objectCloudProvider != nullptr);
+    if (m_objectCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::createOrGetObjectGlobalNormalCloud" << ", " <<  "m_objectCloudProvider == nullptr"; return nullptr;}
+
     GlobalNormalCloud* gnc = m_objectCloudProvider->createOrGetNormalCloud();
     createObjectNormalCloudMemberIfNot();
     return gnc;
@@ -392,6 +414,8 @@ AbstractChunkGenericCloudObject::GlobalNormalCloud* AbstractChunkGenericCloudObj
 AbstractChunkGenericCloudObject::GlobalInfoCloud* AbstractChunkGenericCloudObject::createOrGetObjectGlobalInfoCloud()
 {
     Q_ASSERT(m_objectCloudProvider != nullptr);
+    if (m_objectCloudProvider == nullptr) {qDebug() << "AbstractChunkGenericCloudObject::createOrGetObjectGlobalInfoCloud" << ", " <<  "m_objectCloudProvider == nullptr"; return nullptr;}
+
     GlobalInfoCloud* gic = m_objectCloudProvider->createOrGetInfoCloud();
     createObjectInfoCloudMemberIfNot();
     return gic;

@@ -74,6 +74,7 @@ public:
     template<typename OutHandleType>
     void addRootGroup(const OutHandleType& outRootGroupHandle, CT_StandardItemGroup* rootGroup) {
         Q_ASSERT(outRootGroupHandle.nModels() == 1);
+        if (outRootGroupHandle.nModels() != 1) {qDebug() << "CT_ResultGroup::addRootGroup" << ", " << "outRootGroupHandle.nModels() != 1";}
 
         addRootGroupWithOutModel(outRootGroupHandle.firstModel(), rootGroup);
     }
@@ -87,6 +88,7 @@ public:
     template<typename OutHandleType>
     void addRootGroups(const OutHandleType& outRootGroupHandle, const QList<CT_StandardItemGroup*>& rootGroups) {
         Q_ASSERT(outRootGroupHandle.nModels() == 1);
+        if (outRootGroupHandle.nModels() != 1) {qDebug() << "CT_ResultGroup::outRootGroupHandle" << ", " << "outRootGroupHandle.nModels() != 1";}
 
         addRootGroupsWithOutModel(outRootGroupHandle.firstModel(), rootGroups);
     }

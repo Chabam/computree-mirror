@@ -44,6 +44,7 @@ CT_AbstractShape2D::CT_AbstractShape2D(CT_Shape2DData* data) : SuperClass(),
     _zValueDefined(false)
 {
     Q_ASSERT(_data != nullptr);
+    if (_data == nullptr) {qDebug() << "CT_AbstractShape2D::CT_AbstractShape2D" << ", " << "_data == nullptr";}
 
     Eigen::Vector3d center(data->getCenter()(0), data->getCenter()(1), _zValue);
     setCenterCoordinate(center);

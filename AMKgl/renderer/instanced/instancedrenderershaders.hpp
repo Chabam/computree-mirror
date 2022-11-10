@@ -53,7 +53,10 @@ InstancedRendererShaders<ShaderParams>::InstancedRendererShaders(const GLint& gl
         m_sizeOfParams = 8;
 
     if(m_sizeOfParams == 0)
+    {
         assert(false);
+        qDebug() << "InstancedRendererShaders<ShaderParams>::InstancedRendererShaders" << ", " <<  "Bad case"; return;
+    }
 
     m_rowSize = m_glValueRowSize;
 
@@ -61,7 +64,10 @@ InstancedRendererShaders<ShaderParams>::InstancedRendererShaders(const GLint& gl
         m_rowSize = 4;
 
     if(m_rowSize == 0)
+    {
         assert(false);
+        qDebug() << "InstancedRendererShaders<ShaderParams>::InstancedRendererShaders" << ", " <<  "Bad case"; return;
+    }
 }
 
 template<typename ShaderParams>

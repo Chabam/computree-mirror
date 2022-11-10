@@ -8,6 +8,7 @@ RendererContext<Shaders>::RendererContext(const IGraphicsDocument *doc,
                                           const QOpenGLContext *newOpenglContext)
 {
     Q_ASSERT(newOpenglContext != nullptr);
+    if (newOpenglContext == nullptr) {qDebug() << "RendererContext<Shaders>::RendererContext" << ", " <<  "newOpenglContext == nullptr"; return;}
 
     m_document = const_cast<IGraphicsDocument*>(doc);
     m_newContext = const_cast<QOpenGLContext*>(newOpenglContext);

@@ -26,6 +26,7 @@
 *****************************************************************************/
 
 #include "ct_abstractresult.h"
+#include <QDebug>
 
 CT_AbstractResult::CT_AbstractResult() :
     m_parentStep(nullptr),
@@ -142,6 +143,7 @@ void CT_AbstractResult::clearFromMemory()
 void CT_AbstractResult::setComplete()
 {
     Q_ASSERT(m_clearFromMemoryProgressValue != 0);
+    if (m_clearFromMemoryProgressValue == 0) {qDebug() << "CT_AbstractResult::setComplete" << ", " << "m_clearFromMemoryProgressValue == 0";}
 
     m_clearFromMemoryProgressValue = 0;
 }

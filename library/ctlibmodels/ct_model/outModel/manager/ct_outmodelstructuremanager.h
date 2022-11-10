@@ -23,16 +23,19 @@
                                             using InResultModelCopyType = typename HandleParent::InResultModelCopyType; \
                                          \
                                             MODELS_ASSERT(inParent.isValid() && !outHandle.isValid()); \
+                                            if (!inParent.isValid() || outHandle.isValid()) {qDebug() << "CT_OutModelStructureManager" << ", " <<  "!inParent.isValid() || outHandle.isValid()"; return;} \
                                          \
                                             auto inParentModel = inParent.model(); \
                                          \
                                             auto inResultModelCopy = dynamic_cast<InResultModelCopyType*>(inParentModel->rootModel()); \
                                          \
                                             MODELS_ASSERT(inResultModelCopy != nullptr); \
+                                            if (inResultModelCopy == nullptr) {qDebug() << "CT_OutModelStructureManager" << ", " <<  "inResultModelCopy == nullptr"; return;} \
                                          \
                                             auto tool = inResultModelCopy->toolToModifyResultModelCopies(); \
                                          \
                                             MODELS_ASSERT(tool != nullptr); \
+                                            if (tool == nullptr) {qDebug() << "CT_OutModelStructureManager" << ", " <<  "tool == nullptr"; return;} \
                                          \
                                             FuncNameInputTool(inParentModel, tool, outHandle, std::forward<ConstructorArgs>(constructorArgs)...); \
                                         } \
@@ -62,6 +65,7 @@
                                                       ConstructorArgs&& ...constructorArgs) { \
                                      \
                                             MODELS_ASSERT(m_ignoreInvalidParentHandle || (outParent.isValid() && !outHandle.isValid())); \
+                                            if (!m_ignoreInvalidParentHandle && (!outParent.isValid() || outHandle.isValid())) {qDebug() << "CT_OutModelStructureManager" << ", " <<  "!m_ignoreInvalidParentHandle && (!outParent.isValid() || outHandle.isValid())"; return;} \
                                      \
                                             auto outModelPrototypeToCopy = new typename HandleOut::ModelType(std::forward<ConstructorArgs>(constructorArgs)...); \
                                      \
@@ -408,6 +412,7 @@ protected:
     void internalAddResultCopyModel(ResultCopyModel* inModel)
     {
         MODELS_ASSERT(!m_inResultsCopy.contains(inModel) || (inModel->toolToModifyResultModelCopies() == nullptr));
+        if (m_inResultsCopy.contains(inModel) && (inModel->toolToModifyResultModelCopies() != nullptr)) {qDebug() << "CT_OutModelStructureManager::internalAddResultCopyModel" << ", " <<  "m_inResultsCopy.contains(inModel) && (inModel->toolToModifyResultModelCopies() != nullptr)"; return;}
 
         m_inResultsCopy.insert(inModel);
 
@@ -440,6 +445,7 @@ private:
                            std::true_type, // is an output model
                            ConstructorArgs&& ...constructorArgs) {
         MODELS_ASSERT(!handleResult.isValid());
+        if (handleResult.isValid()) {qDebug() << "CT_OutModelStructureManager::internalAddResult" << ", " <<  "handleResult.isValid()"; return;}
 
         // nullptr = no root group model to pass to the output result model
         auto resultModel = new typename HandleOutResult::ModelType(nullptr, std::forward<ConstructorArgs>(constructorArgs)...);
@@ -465,6 +471,7 @@ private:
         static_assert(IsAResultModelCopy<typename HandleInResultCopy::ModelType>::value, "It seems that the specified handle doesn't contains a model that was an input result model COPY.");
 
         MODELS_ASSERT(handleInResultCopy.isValid());
+        if (!handleInResultCopy.isValid()) {qDebug() << "CT_OutModelStructureManager::internalAddResultCopy" << ", " <<  "It seems that the specified handle doesn't contains a model that was an input result model COPY."; return;}
 
         internalAddResultCopyModel(handleInResultCopy.model());
     }
@@ -478,12 +485,13 @@ private:
                                     ConstructorArgs&& ...constructorArgs) {
         static_assert(IsAResultModelCopy<typename HandleResult::ModelType>::value, "It seems that the specified handle doesn't contains a model that was an input result model COPY. Please verify that you pass an INPUT COPY handle !");
 
-        MODELS_ASSERT((handleResult.model() != nullptr)
-                 && !rootGroupHandle.isValid());
+        MODELS_ASSERT((handleResult.model() != nullptr) && !rootGroupHandle.isValid());
+        if ((handleResult.model() == nullptr) || rootGroupHandle.isValid()) {qDebug() << "CT_OutModelStructureManager::internalSetRootGroupToCopy" << ", " <<  "(handleResult.model() == nullptr) || rootGroupHandle.isValid()"; return;}
 
         auto tool = handleResult.model()->toolToModifyResultModelCopies();
 
         MODELS_ASSERT(tool != nullptr);
+        if (tool == nullptr) {qDebug() << "CT_OutModelStructureManager::internalSetRootGroupToCopy" << ", " <<  "tool == nullptr"; return;}
 
         auto rootGroupModelPrototypeToCopy = new typename HandleOutGroup::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);
 
@@ -515,6 +523,7 @@ private:
         MODELS_ASSERT((handleResult.model() != nullptr)
                  && (handleResult.model()->rootGroup() == nullptr)
                  && !rootGroupHandle.isValid());
+        if ((handleResult.model() == nullptr) || (handleResult.model()->rootGroup() != nullptr) || rootGroupHandle.isValid()) {qDebug() << "CT_OutModelStructureManager::internalSetRootGroupTo" << ", " <<  "(handleResult.model() == nullptr) || (handleResult.model()->rootGroup() != nullptr) || rootGroupHandle.isValid()"; return;}
 
         auto rootGroupModel = new typename HandleOutGroup::ModelType(std::forward<ConstructorArgs>(constructorArgs)...);
 

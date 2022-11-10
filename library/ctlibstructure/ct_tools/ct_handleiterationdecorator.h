@@ -102,6 +102,7 @@ private:
         InResultToolType* tool = inResultModel->toolToModifyResultModelCopies();
 
         MODELS_ASSERT(tool != nullptr);
+        if (tool == nullptr) {qDebug() << "CT_ResultGroup::findOutModelsFromResultCopy" << ", " << "tool == nullptr";}
 
         const int nResultPossibility = inResultModel->nPossibilitySelected();
 
@@ -118,6 +119,7 @@ private:
                     CT_OutAbstractModel* copiedOutModel = outResultModel->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(originalOutModel);
 
                     Q_ASSERT(copiedOutModel != nullptr);
+                    if (copiedOutModel == nullptr) {qDebug() << "CT_ResultGroup::findOutModelsFromResultCopy" << ", " << "copiedOutModel == nullptr";}
 
                     outModels[currentIndex++] = static_cast<DEF_CT_AbstractGroupModelOut*>(copiedOutModel);
                     return true;

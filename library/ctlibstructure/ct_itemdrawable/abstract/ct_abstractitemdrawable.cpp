@@ -120,7 +120,10 @@ void CT_AbstractItemDrawable::setDisplayed(const bool& value)
 bool CT_AbstractItemDrawable::addDocumentParent(const IDocumentForModel* doc)
 {
     Q_ASSERT(doc != nullptr);
+    if (doc == nullptr) {qDebug() << "CT_AbstractItemDrawable::addDocumentParent" << ", " << "doc == nullptr";}
+
     Q_ASSERT(model() != nullptr);
+    if (model() == nullptr) {qDebug() << "CT_AbstractItemDrawable::addDocumentParent" << ", " << "model() == nullptr";}
 
     auto ret = m_documentsWhereThisItemIs.insert(const_cast<IDocumentForModel*>(doc));
 
@@ -137,7 +140,10 @@ bool CT_AbstractItemDrawable::addDocumentParent(const IDocumentForModel* doc)
 void CT_AbstractItemDrawable::removeDocumentParent(const IDocumentForModel* doc)
 {
     Q_ASSERT(doc != nullptr);
+    if (doc == nullptr) {qDebug() << "CT_AbstractItemDrawable::removeDocumentParent" << ", " << "doc == nullptr";}
+
     Q_ASSERT(model() != nullptr);
+    if (model() == nullptr) {qDebug() << "CT_AbstractItemDrawable::removeDocumentParent" << ", " << "model() == nullptr";}
 
     if(m_documentsWhereThisItemIs.erase(const_cast<IDocumentForModel*>(doc)) != 0) {
         model()->decrementVisibilityInDocument(doc);
@@ -167,6 +173,7 @@ QString CT_AbstractItemDrawable::displayableName() const
         return m_displayableName;
 
     Q_ASSERT(model() != nullptr);
+    if (model() == nullptr) {qDebug() << "CT_AbstractItemDrawable::displayableName" << ", " << "model() == nullptr";}
 
     return QString("%1_%2").arg(model()->displayableName()).arg(QVariant(id()).toString());
 

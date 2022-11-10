@@ -49,6 +49,7 @@ CT_Beam::CT_Beam(const Eigen::Vector3d& origin,
     m_shot(origin, direction.normalized())
 {
     Q_ASSERT( !(direction(0) == 0 && direction(1) == 0 && direction(2) == 0) );
+    if (direction(0) == 0 && direction(1) == 0 && direction(2) == 0) {qDebug() << "CT_Beam::CT_Beam" << ", " << "direction(0) == 0 && direction(1) == 0 && direction(2) == 0";}
 
     setCenterCoordinate(origin);
 

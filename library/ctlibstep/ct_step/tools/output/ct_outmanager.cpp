@@ -67,6 +67,7 @@ bool CT_OutManager::createOutputModels(CT_VirtualAbstractStep& step)
     CT_VirtualAbstractStep::UniqueIndexGeneratorPtr uig = step.uniqueIndexGenerator();
 
     Q_ASSERT(uig != nullptr);
+    if (uig == nullptr) {qDebug() << "CT_OutManager::createOutputModels" << ", " <<  "uig == nullptr";}
 
     uig->resetIndexOfObject(&step);
     uig->setCurrentObject(&step);
@@ -105,6 +106,7 @@ bool CT_OutManager::createOutputResults(CT_VirtualAbstractStep& step)
         CT_AbstractResult* result = static_cast<CT_AbstractResult*>(rm->createResult());
 
         Q_ASSERT(result != nullptr);
+        if (result == nullptr) {qDebug() << "CT_OutManager::createOutputResults" << ", " <<  "result == nullptr";}
 
         result->setParentStep(&step);
         results.append(result);

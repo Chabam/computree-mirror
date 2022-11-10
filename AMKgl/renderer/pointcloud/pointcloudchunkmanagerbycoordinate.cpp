@@ -93,6 +93,7 @@ void PointCloudChunkManagerByCoordinate::initChunk(PointCloudChunk *chunk)
 void PointCloudChunkManagerByCoordinate::mustUpdateInfoBO(GenericChunkManager::RendererContext *currentContext)
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "PointCloudChunkManagerByCoordinate::mustUpdateInfoBO" << ", " <<  "m_pointCloudProvider == nullptr"; return;}
 
     ElementInfo* info = &(*m_pointCloudProvider->createOrGetInfoCloud())[getBeginningOfCloud()];
 
@@ -103,6 +104,7 @@ void PointCloudChunkManagerByCoordinate::mustUpdateInfoBO(GenericChunkManager::R
 void PointCloudChunkManagerByCoordinate::mustUpdateColorBO(GenericChunkManager::RendererContext *currentContext)
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "PointCloudChunkManagerByCoordinate::mustUpdateColorBO" << ", " <<  "m_pointCloudProvider == nullptr"; return;}
 
     Basic::LocalColor* color = nullptr;
 
@@ -118,6 +120,7 @@ void PointCloudChunkManagerByCoordinate::mustUpdateColorBO(GenericChunkManager::
 void PointCloudChunkManagerByCoordinate::mustUpdateNormalBO(GenericChunkManager::RendererContext *currentContext)
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "PointCloudChunkManagerByCoordinate::mustUpdateNormalBO" << ", " <<  "m_pointCloudProvider == nullptr"; return;}
 
     Basic::LocalNormal* normal = nullptr;
 

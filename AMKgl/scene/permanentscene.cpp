@@ -207,7 +207,10 @@ void PermanentScene::setDrawModeToUse(Scene::ObjectType type, DrawMode mode)
     if(r != nullptr)
         r->setDrawModeToUse(mode);
     else
+    {
         Q_ASSERT_X(false, "Contact developper !", QString("Object Type (%1) not implement in this method").arg(type).toUtf8());
+        qDebug() << "PermanentScene::setDrawModeToUse" << ", " <<  "Contact developper !"; return;
+    }
 
     emit changesHaveOccured();
 }
@@ -280,7 +283,10 @@ void PermanentScene::clearObjectsOfType(Scene::ObjectType el)
     if(r != nullptr)
         r->clearObjects();
     else
+    {
         Q_ASSERT_X(false, "Contact developper !", "Type not implement in this method");
+        qDebug() << "PermanentScene::clearObjectsOfType" << ", " <<  "Type not implement in this method"; return;
+    }
 
     emit changesHaveOccured();
 }
@@ -302,7 +308,10 @@ size_t PermanentScene::countObject(Scene::ObjectType el) const
     if(r != nullptr)
         return r->countObjects();
     else
+    {
         Q_ASSERT_X(false, "Contact developper !", "Type not implement in this method");
+        qDebug() << "PermanentScene::countObject" << ", " <<  "Type not implement in this method"; return 0;
+    }
 
     return 0;
 }
@@ -552,7 +561,8 @@ ICloudAttributesProvider* PermanentScene::getCloudAttributesProvider(Scene::Obje
     else if(type == Scene::TriangleGlobalCloud)
         return getFaceCloudAttributesProvider();
 
-    Q_ASSERT_X(false, "PermanentScene::getCloudAttributesProvider", "Not implemented yet ! contact the developper or AMKgl");
+    Q_ASSERT_X(false, "PermanentScene::getCloudAttributesProvider", "Not implemented yet ! contact the developper of AMKgl");
+    qDebug() << "PermanentScene::getCloudAttributesProvider" << ", " <<  "Not implemented yet ! contact the developper of AMKgl"; return nullptr;
 
     return nullptr;
 }

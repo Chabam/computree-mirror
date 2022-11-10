@@ -53,6 +53,7 @@ void PermanentItemSceneByModel::addedTo(const IGraphicsDocument* doc, const QOpe
     QMutexLocker locker(m_mutex);
 
     Q_ASSERT(newContext != nullptr);
+    if (newContext == nullptr) {qDebug() << "PermanentItemSceneByModel::addedTo" << ", " <<  "newContext == nullptr"; return;}
 
     SceneCollectionIterator it(getPermanentItemScenes());
 
@@ -786,6 +787,7 @@ PermanentItemScene& PermanentItemSceneByModel::createOrGetPermanentItemSceneForM
     if(scene == nullptr)
     {
         Q_ASSERT_X(QThread::currentThread() == qApp->thread(), "PermanentItemSceneByModel", "You cannot create a scene in a different thread that the main thread !");
+        if (QThread::currentThread() != qApp->thread()) {qDebug() << "PermanentItemSceneByModel::createOrGetPermanentItemSceneForModel" << ", " <<  "You cannot create a scene in a different thread that the main thread !";}
 
         scene = new PermanentItemScene();
 

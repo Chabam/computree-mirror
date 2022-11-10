@@ -220,6 +220,8 @@ void PB_StepCreateReaderList::compute()
                 if(m_hOutFileHeader.isValid()) {
                     CT_FileHeader* header = readerCpy->readHeader();
                     Q_ASSERT(header != nullptr);
+                    if (header == nullptr) {qDebug() << "PB_StepCreateReaderList::compute" << ", " << "header == nullptr";}
+
                     grpHeader->addSingularItem(m_hOutFileHeader, header);
                 }
 

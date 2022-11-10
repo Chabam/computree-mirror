@@ -39,6 +39,7 @@ bool PolygonMeshObjectsPicker::isValid() const
 void PolygonMeshObjectsPicker::visitChunk(const IChunk *chunk)
 {
     Q_ASSERT(isValid());
+    if (!isValid()) {qDebug() << "PolygonMeshObjectsPicker::visitChunk" << ", " <<  "!isValid()"; return;}
 
     const AbstractChunkGenericCloudObject* objectChunk = dynamic_cast<const AbstractChunkGenericCloudObject*>(chunk);
 

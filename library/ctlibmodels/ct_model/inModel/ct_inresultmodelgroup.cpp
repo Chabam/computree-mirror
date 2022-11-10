@@ -87,8 +87,13 @@ CT_InStdGroupModel* CT_InResultModelGroup::addStdGroupModel(DEF_CT_AbstractGroup
                                                             const int& maxPossibility)
 {
     MODELS_ASSERT(parentGroup != nullptr);
+    if (parentGroup == nullptr) {qDebug() << "CT_InResultModelGroup::addStdGroupModel" << ", " <<  "parentGroup == nullptr"; return nullptr;}
+
     MODELS_ASSERT(!groupType.isEmpty());
+    if (groupType.isEmpty()) {qDebug() << "CT_InResultModelGroup::addStdGroupModel" << ", " <<  "groupType.isEmpty()"; return nullptr;}
+
     MODELS_ASSERT(!displayableName.isEmpty());
+    if (displayableName.isEmpty()) {qDebug() << "CT_InResultModelGroup::addStdGroupModel" << ", " <<  "displayableName.isEmpty()"; return nullptr;}
 
     CT_InStdGroupModel* newModel = new CT_InStdGroupModel(groupType,
                                                           groupNameFromType,
@@ -113,8 +118,13 @@ CT_InStdSingularItemModel* CT_InResultModelGroup::addStdItemModel(DEF_CT_Abstrac
                                                                   const int& maxPossibility)
 {
     MODELS_ASSERT(parentGroup != nullptr);
+    if (parentGroup == nullptr) {qDebug() << "CT_InResultModelGroup::addStdItemModel" << ", " <<  "parentGroup == nullptr"; return nullptr;}
+
     MODELS_ASSERT(!itemType.isEmpty());
+    if (itemType.isEmpty()) {qDebug() << "CT_InResultModelGroup::addStdItemModel" << ", " <<  "itemType.isEmpty()"; return nullptr;}
+
     MODELS_ASSERT(!displayableName.isEmpty());
+    if (displayableName.isEmpty()) {qDebug() << "CT_InResultModelGroup::addStdItemModel" << ", " <<  "displayableName.isEmpty()"; return nullptr;}
 
     CT_InStdSingularItemModel* newModel = new CT_InStdSingularItemModel(itemType,
                                                                         itemNameFromType,
@@ -139,8 +149,13 @@ CT_InStdItemAttributeModel* CT_InResultModelGroup::addStdItemAttributeModel(DEF_
                                                                             const int& maxPossibility)
 {
     MODELS_ASSERT(parentItem != nullptr);
+    if (parentItem == nullptr) {qDebug() << "CT_InResultModelGroup::addStdItemAttributeModel" << ", " <<  "parentItem == nullptr"; return nullptr;}
+
     MODELS_ASSERT(!categoriesType.isEmpty());
+    if (categoriesType.isEmpty()) {qDebug() << "CT_InResultModelGroup::addStdItemAttributeModel" << ", " <<  "categoriesType.isEmpty()"; return nullptr;}
+
     MODELS_ASSERT(!displayableName.isEmpty());
+    if (displayableName.isEmpty()) {qDebug() << "CT_InResultModelGroup::addStdItemAttributeModel" << ", " <<  "displayableName.isEmpty()"; return nullptr;}
 
     CT_InStdItemAttributeModel* newModel = new CT_InStdItemAttributeModel(valueType, categoriesType, displayableName, shortDescription, detailledDescription, minPossibility, maxPossibility);
 

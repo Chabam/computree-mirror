@@ -8,6 +8,7 @@
 
 #include "ct_attributes/managers/abstract/ct_abstractxattributemanager.h"
 #include "ct_attributes/setters/ct_denseattributesetter.h"
+#include <QDebug>
 
 template<typename T, typename TCIR, int syncWithT>
 class CT_DenseAttributeManager : public CT_AbstractXAttributeManager<T>
@@ -181,7 +182,9 @@ template<typename T, typename TCIR, int syncWithT>
 bool CT_DenseAttributeManager<T, TCIR, syncWithT>::copyAndModifyAttributesOfSForD(CT_CIR source, CT_CIR destination, typename SuperClass::AttributeModificator modificator)
 {
     if(mAttributes.isNull()
-            || source.dynamicCast<typename TCIR::element_type>().isNull()
+//            || source.dynamicCast<typename TCIR::element_type>().isNull() // correction AP 09/11/2022
+            || source.isNull()
+            || destination.isNull()
             || destination.dynamicCast<typename TCIR::element_type>().isNull())
         return false;
 

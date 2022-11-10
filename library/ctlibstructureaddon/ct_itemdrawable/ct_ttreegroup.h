@@ -68,6 +68,7 @@ public:
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
         Q_ASSERT(model() != nullptr);
+        if (model() == nullptr) {qDebug() << "CT_TTreeGroup::setRootNode" << ", " << "model() == nullptr";}
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group

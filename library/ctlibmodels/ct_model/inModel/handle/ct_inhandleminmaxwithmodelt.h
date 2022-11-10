@@ -5,6 +5,8 @@
 
 #include "ct_model/inModel/handle/abstract/ct_abstractinhandlewithmodelt.h"
 
+#include <QDebug>
+
 template<class ModelType, int min = 1, int max = 1>
 class CT_InHandleMinMaxWithModelT : public CT_AbstractInHandleWithModelT<ModelType> {
 
@@ -19,6 +21,7 @@ public:
     CT_InHandleMinMaxWithModelT() : SuperClass() {
         constexpr bool testMinAndMaxValid = (min <= max) || (max == -1);
         static_assert(testMinAndMaxValid, "Value of min and max was invalid ! Max must be greather than min or -1 for your handle.");
+
         static_assert(!testMinAndMaxValid || (min != max) || (min != 0), "Value of max is invalid ! Must be -1 or greather than 0 for your handle.");
     }
 

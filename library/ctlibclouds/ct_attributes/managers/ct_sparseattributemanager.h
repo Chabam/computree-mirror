@@ -8,6 +8,7 @@
 
 #include "ct_attributes/managers/abstract/ct_abstractxattributemanager.h"
 #include "ct_attributes/setters/ct_sparseattributesetter.h"
+#include <QDebug>
 
 template<typename T, typename TCIR>
 class CT_SparseAttributeManager : public CT_AbstractXAttributeManager<T>
@@ -190,7 +191,9 @@ template<typename T, typename TCIR>
 bool CT_SparseAttributeManager<T, TCIR>::copyAndModifyAttributesOfSForD(CT_CIR source, CT_CIR destination, typename SuperClass::AttributeModificator modificator)
 {
     if(mAttributes.isNull()
-            || source.dynamicCast<typename TCIR::element_type>().isNull()
+//            || source.dynamicCast<typename TCIR::element_type>().isNull() // correction AP 09/11/2022
+            || source.isNull()
+            || destination.isNull()
             || destination.dynamicCast<typename TCIR::element_type>().isNull())
         return false;
 

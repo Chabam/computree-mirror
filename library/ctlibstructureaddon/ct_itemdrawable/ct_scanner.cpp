@@ -61,6 +61,7 @@ CT_Scanner::CT_Scanner(int scanID,
     _scanID(scanID)
 {
     Q_ASSERT(pattern != nullptr);
+    if (pattern == nullptr) {qDebug() << "CT_Scanner::CT_Scanner" << ", " << "pattern == nullptr";}
 
     const Eigen::Vector3d& center = pattern->centerCoordinate();
 

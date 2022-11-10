@@ -62,6 +62,7 @@ public:
         QMutexLocker locker(this->m_mutex);
 
         Q_ASSERT(getChunkMaxSize() != 0);
+        if (getChunkMaxSize() == 0) {qDebug() << "GenericCloudChunkManagerByMemoryLimit::init" << ", " <<  "getChunkMaxSize() == 0"; return;}
 
         this->deleteChunksFromMemory();
 
@@ -93,6 +94,7 @@ public:
         }
 
         Q_ASSERT(globalObjectIndex >= this->getBeginningOfCloud());
+        if (globalObjectIndex < this->getBeginningOfCloud()) {qDebug() << "GenericCloudChunkManagerByMemoryLimit::getChunkUniqueIndexForObjectAt" << ", " <<  "globalObjectIndex < this->getBeginningOfCloud()"; return 0;}
 
         size_t localIndex = globalObjectIndex - this->getBeginningOfCloud();
         size_t chunkIndex = localIndex/getChunkMaxSize();

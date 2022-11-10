@@ -58,6 +58,7 @@ void ItemColorizer::visitChunk(const IChunk* chunk)
         DispatchInformation* objInfos = m_itemInfo->getObjectInformationForChunk(chunk);
 
         Q_ASSERT(objInfos != nullptr);
+        if (objInfos == nullptr) {qDebug() << "ItemColorizer::visitChunk" << ", " <<  "objInfos == nullptr"; return;}
 
         const size_t count = objInfos->count();
 
@@ -65,13 +66,14 @@ void ItemColorizer::visitChunk(const IChunk* chunk)
             Basic::AbstractColorCloud* colorCloud = ((IChunk*)chunk)->createOrGetObjectColorCloud();
 
             Q_ASSERT(colorCloud != nullptr);
+            if (colorCloud == nullptr) {qDebug() << "ItemColorizer::visitChunk" << ", " <<  "colorCloud == nullptr"; return;}
 
             const size_t begin = objInfos->begin();
             size_t index = objInfos->begin() + count;
 
             do  {
                 (*colorCloud)[--index] = m_color;
-            }while(index != begin);
+            } while(index != begin);
         }
     }
 }

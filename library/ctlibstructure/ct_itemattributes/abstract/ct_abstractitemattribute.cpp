@@ -34,6 +34,8 @@ CT_AbstractItemAttribute::CT_AbstractItemAttribute(const CT_AbstractCategory* ca
     m_iaTool.m_pointer = this;
 
     Q_ASSERT_X(category != nullptr, "CT_AbstractItemAttribute constructor", "When you create a ItemAttribute the category must not be null !");
+    if (category == nullptr) {qDebug() << "CT_AbstractItemAttribute::CT_AbstractItemAttribute" << ", " << "When you create a ItemAttribute the category must not be null !";}
+
     m_category = const_cast<CT_AbstractCategory*>(category);
 }
 
@@ -59,6 +61,7 @@ QString CT_AbstractItemAttribute::displayableName() const
 void CT_AbstractItemAttribute::setCategory(const CT_AbstractCategory* category)
 {
     Q_ASSERT(m_category == nullptr);
+    if (category == nullptr) {qDebug() << "CT_AbstractItemAttribute::setCategory" << ", " << "category == nullptr";}
 
     m_category = const_cast<CT_AbstractCategory*>(category);
 }

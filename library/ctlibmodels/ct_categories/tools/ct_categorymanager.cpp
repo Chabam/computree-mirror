@@ -12,6 +12,7 @@ CT_CategoryManager* CT_CategoryManager::CM()
 CT_CategoryManager::CT_CategoryManager()
 {
     assert(UNIQUE_INSTANCE == nullptr);
+    if (UNIQUE_INSTANCE != nullptr) {qDebug() << "CT_CategoryManager::CT_CategoryManager" << ", " <<  "UNIQUE_INSTANCE != nullptr";}
 
     UNIQUE_INSTANCE = this;
 }

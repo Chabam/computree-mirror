@@ -51,14 +51,17 @@ public:
         CT_InStdSingularItemModel* inParentModel = hInItem.model();
 
         Q_ASSERT(inParentModel != nullptr);
+        if (inParentModel == nullptr) {qDebug() << "CT_MetricOutModelStructureManager::createFromInHandle" << ", " <<  "inParentModel == nullptr";}
 
         InResultModelCopyType* inResultModelCopy = dynamic_cast<InResultModelCopyType*>(inParentModel->rootModel());
 
         Q_ASSERT(inResultModelCopy != nullptr);
+        if (inResultModelCopy == nullptr) {qDebug() << "CT_MetricOutModelStructureManager::createFromInHandle" << ", " <<  "inResultModelCopy == nullptr";}
 
         ToolToModifyResultModelCopiesType* inTool = inResultModelCopy->toolToModifyResultModelCopies();
 
         Q_ASSERT(inTool != nullptr);
+        if (inTool == nullptr) {qDebug() << "CT_MetricOutModelStructureManager::createFromInHandle" << ", " <<  "inTool == nullptr";}
 
         return CT_MetricOutModelStructureManager(manager, inParentModel, inTool);
     }

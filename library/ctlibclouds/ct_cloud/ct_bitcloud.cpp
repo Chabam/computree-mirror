@@ -2,6 +2,7 @@
 #include <cmath>
 
 #include <cmath>
+#include <QDebug>
 
 #define TO_NUMBER_OF_BYTES(V) size_t(std::ceil(double(V)/8.0))
 
@@ -35,6 +36,7 @@ void CT_BitCloud::set(const size_t& bitIndex, bool value)
     const size_t indexOfByte = bitIndex / 8;
 
     Q_ASSERT(indexOfByte < m_collection.size());
+    if (indexOfByte >= m_collection.size()) {qDebug() << "CT_BitCloud::set" << ", " <<  "indexOfByte >= m_collection.size()"; return;}
 
     const quint8 indexOfBitInByte = bitIndex % 8;
 
@@ -49,6 +51,7 @@ bool CT_BitCloud::value(const size_t& bitIndex) const
     const size_t indexOfByte = bitIndex / 8;
 
     Q_ASSERT(indexOfByte < m_collection.size());
+    if (indexOfByte >= m_collection.size()) {qDebug() << "CT_BitCloud::value" << ", " <<  "indexOfByte >= m_collection.size()"; return false;}
 
     const quint8 indexOfBitInByte = bitIndex % 8;
 

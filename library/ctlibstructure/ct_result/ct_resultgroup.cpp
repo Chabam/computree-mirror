@@ -45,8 +45,13 @@ int CT_ResultGroup::nRootGroupsToBeRemovedLater() const
 void CT_ResultGroup::addRootGroupWithOutModel(const DEF_CT_AbstractGroupModelOut* outModel, CT_StandardItemGroup* rootGroup)
 {
     Q_ASSERT(rootGroup != nullptr);
+    if (rootGroup == nullptr) {qDebug() << "CT_ResultGroup::addRootGroupWithOutModel" << ", " << "rootGroup == nullptr";}
+
     Q_ASSERT(outModel != nullptr);
+    if (outModel == nullptr) {qDebug() << "CT_ResultGroup::addRootGroupWithOutModel" << ", " << "outModel == nullptr";}
+
     Q_ASSERT(outModel->parentModel() == model());
+    if (outModel->parentModel() != model()) {qDebug() << "CT_ResultGroup::addRootGroupWithOutModel" << ", " << "outModel->parentModel() != model()";}
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
@@ -63,7 +68,10 @@ void CT_ResultGroup::addRootGroupsWithOutModel(const DEF_CT_AbstractGroupModelOu
         return;
 
     Q_ASSERT(outModel != nullptr);
+    if (outModel == nullptr) {qDebug() << "CT_ResultGroup::addRootGroupsWithOutModel" << ", " << "outModel == nullptr";}
+
     Q_ASSERT(outModel->parentModel() == model());
+    if (outModel->parentModel() != model()) {qDebug() << "CT_ResultGroup::addRootGroupsWithOutModel" << ", " << "outModel->parentModel() != model()";}
 
     QMutexLocker locker(m_lockAccessTool.m_mutexAccessGroup);
 
@@ -111,8 +119,13 @@ int CT_ResultGroup::nChildrens() const
 CT_AbstractItem::ChildrensCollection CT_ResultGroup::childrensThatUseOutModel(const CT_OutAbstractModel* outModel) const
 {
     Q_ASSERT(model() != nullptr);
+    if (model() == nullptr) {qDebug() << "CT_ResultGroup::childrensThatUseOutModel" << ", " << "model() == nullptr";}
+
     Q_ASSERT(outModel != nullptr);
+    if (outModel == nullptr) {qDebug() << "CT_ResultGroup::childrensThatUseOutModel" << ", " << "outModel == nullptr";}
+
     Q_ASSERT(outModel == static_cast<CT_OutAbstractResultModelGroup*>(model())->rootGroup());
+    if (outModel != static_cast<CT_OutAbstractResultModelGroup*>(model())->rootGroup()) {qDebug() << "CT_ResultGroup::childrensThatUseOutModel" << ", " << "outModel != static_cast<CT_OutAbstractResultModelGroup*>(model())->rootGroup()";}
 
     return CT_AbstractItem::ChildrensCollection(CT_AbstractItem::IChildrensIteratorQtStylePtr(new GroupIterator(m_rootGroups->begin(), m_rootGroups->end())));
 }
@@ -120,6 +133,7 @@ CT_AbstractItem::ChildrensCollection CT_ResultGroup::childrensThatUseOutModel(co
 CT_AbstractResult* CT_ResultGroup::copy(const CT_OutAbstractResultModel* newModelToUse) const
 {
     Q_ASSERT(dynamic_cast<const CT_OutAbstractResultModelGroup*>(newModelToUse) != nullptr);
+    if (dynamic_cast<const CT_OutAbstractResultModelGroup*>(newModelToUse) == nullptr) {qDebug() << "CT_ResultGroup::copy" << ", " << "dynamic_cast<const CT_OutAbstractResultModelGroup*>(newModelToUse) == nullptr";}
 
     CT_ResultGroup* c = new CT_ResultGroup(*this);
     c->setModel(newModelToUse);

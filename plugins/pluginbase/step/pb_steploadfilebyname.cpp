@@ -165,6 +165,8 @@ void PB_StepLoadFileByName::compute()
                 if(m_hOutFileHeader.isValid()) {
                     CT_FileHeader* header = readerCpy->readHeader();
                     Q_ASSERT(header != nullptr);
+                    if (header == nullptr) {qDebug() << "PB_StepLoadFileByName::compute" << ", " << "header == nullptr";}
+
                     group->addSingularItem(m_hOutFileHeader, header);
                 }
 

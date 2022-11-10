@@ -252,6 +252,8 @@ void PB_StepLoopOnFileSets::compute()
                     if(m_hOutFileHeaderLOFS.isValid()) {
                         CT_FileHeader* header = readerCpy->readHeader();
                         Q_ASSERT(header != nullptr);
+                        if (header == nullptr) {qDebug() << "PB_StepLoopOnFileSets::compute" << ", " << "header == nullptr";}
+
                         grpHeader->addSingularItem(m_hOutFileHeaderLOFS, header);
                     }
 

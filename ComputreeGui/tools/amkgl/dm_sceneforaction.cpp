@@ -117,6 +117,7 @@ void DM_SceneForAction::updateActionObjects()
 void DM_SceneForAction::createNewElementInformation(quint32 uniqueIndex)
 {
     Q_ASSERT(m_currentPainter != nullptr);
+    if (m_currentPainter == nullptr) {qDebug() << "DM_SceneForAction::createNewElementInformation" << ", " <<  "m_currentPainter == nullptr"; return;}
 
     PermanentItemInformation* info = m_elementsInformations.value(uniqueIndex, nullptr);
 

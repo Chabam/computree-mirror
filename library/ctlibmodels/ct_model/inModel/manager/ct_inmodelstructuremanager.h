@@ -48,6 +48,7 @@ public:
         static_assert(IsAnInputModel<typename HandleInResult::ModelType>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
 
         MODELS_ASSERT(!handleResult.isValid());
+        if (handleResult.isValid()) {qDebug() << "CT_InModelStructureManager::addResult" << ", " <<  "handleResult.isValid()"; return;}
 
         auto resultModel = new typename HandleInResult::ModelType(displayableName,
                                                                   shortDescription,
@@ -111,6 +112,7 @@ public:
         static_assert(SFINAE_And_<IsAnInputModel<typename HandleInResult::ModelType>, IsAnInputModel<typename HandleInGroup::ModelType>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
 
         MODELS_ASSERT((handleResult.model()->rootGroup() == nullptr) && !rootGroupHandle.isValid());
+        if ((handleResult.model()->rootGroup() != nullptr) || rootGroupHandle.isValid()) {qDebug() << "CT_InModelStructureManager::setRootGroup" << ", " <<  "(handleResult.model()->rootGroup() != nullptr) || rootGroupHandle.isValid()"; return;}
 
         auto rootGroupModel = new typename HandleInGroup::ModelType(HandleInGroup::GroupType::staticType(),
                                                                     HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()),
@@ -147,6 +149,7 @@ public:
         checkStructureValidityAtRunTime<HandleInGroupParent, HandleInGroup>(parentGroup, groupHandle);
 
         MODELS_ASSERT(parentGroup.isValid() && !groupHandle.isValid());
+        if (!parentGroup.isValid() || groupHandle.isValid()) {qDebug() << "CT_InModelStructureManager::addGroup" << ", " <<  "!parentGroup.isValid() || groupHandle.isValid()"; return;}
 
         auto groupModel = new typename HandleInGroup::ModelType(HandleInGroup::GroupType::staticType(),
                                                                 HandleInGroup::GroupType::nameFromType(HandleInGroup::GroupType::staticType()),
@@ -206,11 +209,13 @@ public:
         checkNotNeedInputResultIsNotPresent();
 
         static_assert(SFINAE_And_<IsAnInputModel<typename HandleInItemParent::ModelType>, IsAnInputModel<typename HandleInItemAttribute::ModelType>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+        if (!SFINAE_And_<IsAnInputModel<typename HandleInItemParent::ModelType>, IsAnInputModel<typename HandleInItemAttribute::ModelType>>::value) {qDebug() << "CT_InModelStructureManager::addItemAttribute" << ", " <<  NO_INPUT_STATIC_ASSERT_MESSAGE; return;}
 
         checkStructureValidity<HandleInItemParent, HandleInItemAttribute>();
         checkStructureValidityAtRunTime<HandleInItemParent, HandleInItemAttribute>(parentItem, itemAttributeHandle);
 
         MODELS_ASSERT(parentItem.isValid() && !itemAttributeHandle.isValid());
+        if (!parentItem.isValid() || itemAttributeHandle.isValid()) {qDebug() << "CT_InModelStructureManager::addItemAttribute" << ", " <<  "!parentItem.isValid() || itemAttributeHandle.isValid()"; return;}
 
         auto itemAttributeModel = HandleInItemAttribute::ModelType::create(HandleInItemAttribute::ValueType,
                                                                            categories,
@@ -243,6 +248,7 @@ public:
         checkNotNeedInputResultIsNotPresent();
 
         static_assert(SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInPointAttribute::ModelType>, HasApplicableToPoint<HandleInPointAttribute>>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
+        if (!SFINAE_And_<IsAnInputModel<typename HandleInGroupParent::ModelType>, IsAnInputModel<typename HandleInPointAttribute::ModelType>, HasApplicableToPoint<HandleInPointAttribute>>::value) {qDebug() << "CT_InModelStructureManager::addItemAttribute" << ", " <<  NO_INPUT_STATIC_ASSERT_MESSAGE; return;}
 
         internalAddItem(parentGroup,
                         itemHandle,
@@ -363,10 +369,9 @@ private:
 
     template<class Parent, class Child>
     static void checkStructureValidityAtRunTime(const Parent& parent, const Child& child) {
-        #define QT_FORCE_ASSERTS
         Q_ASSERT_X((parent.minimum() > 0)
                       || ((parent.minimum() == 0) && (child.minimum() == 0)), "checkStructureValidityAtRunTime", "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0).");
-        #undef QT_FORCE_ASSERTS
+        if ((parent.minimum() <= 0) && ((parent.minimum() != 0) || (child.minimum() != 0))) {qDebug() << "CT_InModelStructureManager::checkStructureValidityAtRunTime" << ", " <<  "checkStructureValidityAtRunTime", "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0)."; return;}
 
         Q_UNUSED(parent);
         Q_UNUSED(child);
@@ -381,6 +386,7 @@ private:
         static_assert(IsAnInputModel<typename HandleInResult::ModelType>::value, NO_INPUT_STATIC_ASSERT_MESSAGE);
 
         MODELS_ASSERT((handleResult.model()->rootGroup() == nullptr) && !handleRootGroup.isValid());
+        if ((handleResult.model()->rootGroup() != nullptr) || handleRootGroup.isValid()) {qDebug() << "CT_InModelStructureManager::internalSetZeroOrMoreRootGroup" << ", " <<  "(handleResult.model()->rootGroup() != nullptr) || handleRootGroup.isValid()"; return;}
 
         auto rootGroupModel = new typename HandleZeroOrMore::ModelType(HandleZeroOrMore::GroupType::staticType(), HandleZeroOrMore::GroupType::nameFromType(HandleZeroOrMore::GroupType::staticType()));
 
@@ -400,6 +406,7 @@ private:
         checkStructureValidityAtRunTime<HandleInGroupParent, HandleInItem>(parentGroup, itemHandle);
 
         MODELS_ASSERT(parentGroup.isValid() && !itemHandle.isValid());
+        if (!parentGroup.isValid() || itemHandle.isValid()) {qDebug() << "CT_InModelStructureManager::internalAddItem" << ", " <<  "!parentGroup.isValid() || itemHandle.isValid()"; return;}
 
         auto itemModel = new typename HandleInItem::ModelType(HandleInItem::ItemType::staticType(),
                                                               HandleInItem::ItemType::nameFromType(HandleInItem::ItemType::staticType()),

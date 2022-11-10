@@ -890,18 +890,24 @@ void ChunkedPointCloud::updateOnlyVAO()
 GlobalColorCloud* ChunkedPointCloud::getGlobalColorCloud() const
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::getGlobalColorCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     return m_pointCloudProvider->getColorCloud();
 }
 
 GlobalNormalCloud* ChunkedPointCloud::getGlobalNormalCloud() const
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::getGlobalNormalCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     return m_pointCloudProvider->getNormalCloud();
 }
 
 GlobalInfoCloud* ChunkedPointCloud::getGlobalInfoCloud() const
 {
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::getGlobalInfoCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     GlobalInfoCloud* gic = m_pointCloudProvider->getInfoCloud();
 
     if(m_globalInfoCloud == nullptr)
@@ -915,6 +921,8 @@ GlobalColorCloud* ChunkedPointCloud::createOrGetColorCloud()
     QMutexLocker locker(m_mutex);
 
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::createOrGetColorCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     GlobalColorCloud* gcc = m_pointCloudProvider->createOrGetColorCloud();
     createObjectColorCloudMemberIfNot();
     return gcc;
@@ -925,6 +933,8 @@ GlobalNormalCloud* ChunkedPointCloud::createOrGetNormalCloud()
     QMutexLocker locker(m_mutex);
 
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::createOrGetNormalCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     GlobalNormalCloud* gnc = m_pointCloudProvider->createOrGetNormalCloud();
     createObjectNormalCloudMemberIfNot();
     return gnc;
@@ -935,6 +945,8 @@ GlobalInfoCloud* ChunkedPointCloud::createOrGetInfoCloud()
     QMutexLocker locker(m_mutex);
 
     Q_ASSERT(m_pointCloudProvider != nullptr);
+    if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::createOrGetInfoCloud" << ", " <<  "m_pointCloudProvider == nullptr"; return nullptr;}
+
     GlobalInfoCloud* gic = m_pointCloudProvider->createOrGetInfoCloud();
     createObjectInfoCloudMemberIfNot();
     return gic;
@@ -1034,8 +1046,12 @@ void ChunkedPointCloud::createObjectColorCloudMemberIfNot()
 
     if(m_objectColorCloud == nullptr) {
         Q_ASSERT(m_pointCloudProvider != nullptr);
+        if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::createObjectColorCloudMemberIfNot" << ", " <<  "m_pointCloudProvider == nullptr"; return;}
+
         GlobalColorCloud *gcc = m_pointCloudProvider->createOrGetColorCloud();
         Q_ASSERT(gcc != nullptr);
+        if (gcc == nullptr) {qDebug() << "ChunkedPointCloud::createObjectColorCloudMemberIfNot" << ", " <<  "gcc == nullptr"; return;}
+
         Q_UNUSED(gcc)
         m_objectColorCloud = new ObjectFuncPointerCloudIndexed<GlobalColor, IndicesCollection>([](void* object) -> GlobalColor* { return ((ChunkedPointCloud*)object)->getFirstColor(); },
                                                                                            this,
@@ -1050,8 +1066,12 @@ void ChunkedPointCloud::createObjectNormalCloudMemberIfNot()
 
     if(m_objectNormalCloud == nullptr) {
         Q_ASSERT(m_pointCloudProvider != nullptr);
+        if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::createObjectNormalCloudMemberIfNot" << ", " <<  "m_pointCloudProvider == nullptr"; return;}
+
         GlobalNormalCloud* gnc = m_pointCloudProvider->createOrGetNormalCloud();
         Q_ASSERT(gnc != nullptr);
+        if (gnc == nullptr) {qDebug() << "ChunkedPointCloud::createObjectNormalCloudMemberIfNot" << ", " <<  "gnc == nullptr"; return;}
+
         Q_UNUSED(gnc)
         m_objectNormalCloud = new ObjectFuncPointerCloudIndexed<GlobalNormal, IndicesCollection>([](void* object) -> GlobalNormal* { return ((ChunkedPointCloud*)object)->getFirstNormal(); },
                                                                                              this,
@@ -1066,8 +1086,12 @@ void ChunkedPointCloud::createObjectInfoCloudMemberIfNot()
 
     if(m_objectInfoCloud == nullptr) {
         Q_ASSERT(m_pointCloudProvider != nullptr);
+        if (m_pointCloudProvider == nullptr) {qDebug() << "ChunkedPointCloud::createObjectInfoCloudMemberIfNot" << ", " <<  "m_pointCloudProvider == nullptr"; return;}
+
         GlobalInfoCloud *gic = m_pointCloudProvider->createOrGetInfoCloud();
         Q_ASSERT(gic != nullptr);
+        if (gic == nullptr) {qDebug() << "ChunkedPointCloud::createObjectInfoCloudMemberIfNot" << ", " <<  "gic == nullptr"; return;}
+
         m_objectInfoCloud = new ObjectFuncPointerCloudIndexed<ElementInfo, IndicesCollection>([](void* object) -> ElementInfo* { return ((ChunkedPointCloud*)object)->createOrGetFirstInfo(); },
                                                                                           this,
                                                                                           getNumberOfElementPerObject(),

@@ -8,6 +8,7 @@ QList<QString> CT_MenuLevel::STEPORDER;
 CT_MenuLevel* CT_MenuLevel::staticCreateOrGetLevelInParentLevel(const QString &customDisplayableName, CT_MenuLevel *parentLevel, bool isCustom)
 {
     Q_ASSERT(parentLevel != nullptr);
+    if (parentLevel == nullptr) {qDebug() << "CT_MenuLevel::staticCreateOrGetLevelInParentLevel" << ", " <<  "parentLevel == nullptr"; return nullptr;}
 
     CT_MenuLevel* level = parentLevel->levelFromDisplayableName(customDisplayableName);
 

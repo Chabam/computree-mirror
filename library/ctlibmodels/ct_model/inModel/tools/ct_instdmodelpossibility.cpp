@@ -3,6 +3,8 @@
 #include "ct_model/inModel/tools/ct_instdmodelpossibilityselectiongroup.h"
 #include "ct_model/outModel/abstract/ct_outabstractmodel.h"
 
+#include <QDebug>
+
 CT_InStdModelPossibility::CT_InStdModelPossibility()
 {
     m_outModel = nullptr;
@@ -52,6 +54,7 @@ CT_OutAbstractModel* CT_InStdModelPossibility::outModel() const
 bool CT_InStdModelPossibility::isSelected() const
 {
     MODELS_ASSERT(m_selectionGroup != nullptr);
+    if (m_selectionGroup == nullptr) {qDebug() << "CT_InStdModelPossibility::isSelected" << ", " <<  "m_selectionGroup == nullptr"; return false;}
 
     return m_selectionGroup->isSelected(const_cast<CT_InStdModelPossibility*>(this));
 }
@@ -59,6 +62,7 @@ bool CT_InStdModelPossibility::isSelected() const
 bool CT_InStdModelPossibility::setSelected(bool check)
 {
     MODELS_ASSERT(m_selectionGroup != nullptr);
+    if (m_selectionGroup == nullptr) {qDebug() << "CT_InStdModelPossibility::setSelected" << ", " <<  "m_selectionGroup == nullptr"; return false;}
 
     const bool lastValue = isSelected();
 

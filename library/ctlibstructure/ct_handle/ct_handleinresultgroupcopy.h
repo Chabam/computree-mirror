@@ -32,6 +32,7 @@ public:
         const CT_HandleInResultGroupCopy<>::ModelType* inResultModel = this->model();
 
         MODELS_ASSERT(inResultModel != nullptr);
+        if (inResultModel == nullptr) {qDebug() << "CT_HandleInResultGroupCopy::iterateInputs" << ", " <<  "inResultModel == nullptr";}
 
         outModels.resize(inResultModel->nPossibilitySelected());
 
@@ -56,10 +57,12 @@ public:
         const CT_HandleInResultGroupCopy<>::ModelType* inResultModel = this->model();
 
         MODELS_ASSERT(inResultModel != nullptr);
+        if (inResultModel == nullptr) {qDebug() << "CT_HandleInResultGroupCopy::iterateOutputs" << ", " <<  "inResultModel == nullptr";}
 
         InResultToolType* tool = inResultModel->toolToModifyResultModelCopies();
 
         MODELS_ASSERT(tool != nullptr);
+        if (tool == nullptr) {qDebug() << "CT_HandleInResultGroupCopy::iterateOutputs" << ", " <<  "tool == nullptr";}
 
         outModels.resize(tool->nResultModels());
 

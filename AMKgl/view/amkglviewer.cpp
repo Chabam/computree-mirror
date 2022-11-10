@@ -500,6 +500,7 @@ void AMKglViewer::initializeGL()
     m_newOpenglContext = context();
 
     Q_ASSERT(m_newOpenglContext != nullptr);
+    if (m_newOpenglContext == nullptr) {qDebug() << "AMKglViewer::initializeGL" << ", " <<  "m_newOpenglContext == nullptr"; return;}
 
     connect(m_newOpenglContext, SIGNAL(aboutToBeDestroyed()), this, SLOT(teardownGL()), Qt::DirectConnection);
 

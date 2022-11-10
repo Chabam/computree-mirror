@@ -4,6 +4,8 @@
 
 #include <QMetaEnum>
 
+#include <QDebug>
+
 CT_StepsMenu::CT_StepsMenu()
 {
 }
@@ -44,6 +46,7 @@ QList<CT_MenuLevel*> CT_StepsMenu::levels() const
 bool CT_StepsMenu::removeLevelFromFavorites(CT_MenuLevel* level)
 {
     Q_ASSERT(level != nullptr);
+    if (level == nullptr) {qDebug() << "CT_StepsMenu::removeLevelFromFavorites" << ", " <<  "level == nullptr"; return false;}
 
     CT_MenuLevel* favorites = levelFromOperation(LO_Favorites);
 

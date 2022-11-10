@@ -1,5 +1,7 @@
 #include "ct_outstditemattributemodel.h"
 
+#include <QDebug>
+
 template<class ItemAttribute>
 CT_OutStdItemAttributeModel<ItemAttribute>::CT_OutStdItemAttributeModel(const ICategoryForModel* category,
                                                                         const QString& displayableName,
@@ -13,6 +15,7 @@ CT_OutStdItemAttributeModel<ItemAttribute>::CT_OutStdItemAttributeModel(const IC
     }
 
     Q_ASSERT(prototype->category() == category);
+    if (prototype->category() != category) {qDebug() << "CT_OutStdItemAttributeModel<ItemAttribute>::CT_OutStdItemAttributeModel" << ", " <<  "prototype->category() != category"; return;}
 
     setPrototype(prototype);
     setShortDescription(shortDescription);

@@ -38,6 +38,7 @@ CT_AbstractShape::CT_AbstractShape(CT_ShapeData* data) : SuperClass(),
     _data(data)
 {
     Q_ASSERT(_data != nullptr);
+    if (_data == nullptr) {qDebug() << "CT_AbstractShape::CT_AbstractShape" << ", " << "_data == nullptr";}
 
     setCenterCoordinate(data->getCenter());
 

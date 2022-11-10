@@ -22,10 +22,12 @@ public:
 
     CT_SingleModelIteratorStdStyleForResultGroup(const OutModelType* outModel) : m_result(nullptr), m_currentValue(nullptr), m_currentParent(nullptr), m_currentIndexInHierarchy(-1) {
         Q_ASSERT(outModel != nullptr);
+        if (outModel == nullptr) {qDebug() << "CT_SingleModelIteratorStdStyleForResultGroup::CT_SingleModelIteratorStdStyleForResultGroup" << ", " << "outModel == nullptr";}
 
         m_result = static_cast<CT_ResultGroup*>(outModel->result());
 
         Q_ASSERT(m_result != nullptr);
+        if (m_result == nullptr) {qDebug() << "CT_SingleModelIteratorStdStyleForResultGroup::CT_SingleModelIteratorStdStyleForResultGroup" << ", " << "m_result == nullptr";}
 
         OutModelType* m = const_cast<OutModelType*>(outModel);
 
@@ -35,6 +37,7 @@ public:
         }
 
         Q_ASSERT(m_result->model() == m_modelsHierarchy[0]);
+        if (m_result->model() != m_modelsHierarchy[0]) {qDebug() << "CT_SingleModelIteratorStdStyleForResultGroup::CT_SingleModelIteratorStdStyleForResultGroup" << ", " << "m_result->model() != m_modelsHierarchy[0]";}
 
         if(m_modelsHierarchy.size() > 1) {
 

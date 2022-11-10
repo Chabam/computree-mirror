@@ -1,4 +1,5 @@
 #include "ct_inabstractitemmodel.h"
+#include <QDebug>
 
 #include "ct_model/outModel/abstract/ct_outabstractitemmodel.h"
 
@@ -9,7 +10,10 @@ CT_InAbstractItemModel::CT_InAbstractItemModel(const QString& displayableName) :
 void CT_InAbstractItemModel::setItemType(const QString& itemType)
 {
     MODELS_ASSERT_X(!itemType.isEmpty(), "setItemType", "You pass an empty item type !");
+    if (itemType.isEmpty()) {qDebug() << "CT_InAbstractItemModel::setItemType" << ", " <<  "You pass an empty item type !"; return;}
+
     MODELS_ASSERT(itemType.at(itemType.size()-1) != '/');
+    if (itemType.at(itemType.size()-1) == '/') {qDebug() << "CT_InAbstractItemModel::setItemType" << ", " <<  "itemType.at(itemType.size()-1) == '/'"; return;}
 
     m_itemType = itemType;
     m_itemShortType = itemType.split("/").last();

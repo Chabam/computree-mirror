@@ -164,6 +164,7 @@ bool CT_TNodeGroup::removeComponent(CT_TNodeGroup *component, bool recursively)
         anc->internalSetSuccessor(suc);
     else {
         Q_ASSERT(component == m_rootComponent);
+        if (component != m_rootComponent) {qDebug() << "CT_TNodeGroup::removeComponent" << ", " << "component != m_rootComponent";}
 
         m_rootComponent = suc;
         m_lastComponent = m_rootComponent;

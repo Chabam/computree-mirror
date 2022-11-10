@@ -37,6 +37,7 @@
 #include <cstddef>
 #include <assert.h>
 #include <cmath>
+#include <QDebug>
 
 namespace p2t {
 
@@ -137,6 +138,7 @@ struct Edge {
       } else if (p1.x == p2.x) {
         // Repeat points
         assert(false);
+        qDebug() << "Shapes / Edge" << ", " <<  "Bad case";
       }
     }
 

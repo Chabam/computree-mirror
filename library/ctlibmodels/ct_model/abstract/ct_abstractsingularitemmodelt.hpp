@@ -1,4 +1,5 @@
 #include "ct_abstractsingularitemmodelt.h"
+#include <QDebug>
 
 template <class GroupModelT, class AttributModelT, class InheritedT>
 CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::CT_AbstractSingularItemModelT(const QString &displayableName) : InheritedT(displayableName)
@@ -15,6 +16,7 @@ template <class GroupModelT, class AttributModelT, class InheritedT>
 void CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::addItemAttribute(AttributModelT* attribute)
 {
     MODELS_ASSERT(attribute != nullptr);
+    if (attribute == nullptr) {qDebug() << "CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::addItemAttribute" << ", " <<  "attribute == nullptr"; return;}
 
     attribute->setParentModel(this);
     m_attributes.append(attribute);
@@ -25,6 +27,7 @@ template <class GroupModelT, class AttributModelT, class InheritedT>
 bool CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::removeItemAttribute(AttributModelT *attribute)
 {
     MODELS_ASSERT(attribute != nullptr);
+    if (attribute == nullptr) {qDebug() << "CT_AbstractSingularItemModelT<GroupModelT, AttributModelT, InheritedT>::removeItemAttribute" << ", " <<  "attribute == nullptr"; return false;}
 
     if(m_attributes.removeOne(attribute))
     {

@@ -52,6 +52,7 @@ bool BufferObjectManager::createBO(void* objectThatCreateIt,
                                    const size_t& arraySize)
 {
     Q_ASSERT(func != nullptr);
+    if (func == nullptr) {qDebug() << "BufferObjectManager::createBO" << ", " <<  "func == nullptr"; return false;}
 
     if(func(objectThatCreateIt) == nullptr)
         return false;
@@ -268,6 +269,7 @@ BufferObjectManager::BOOwnerInfo::BOOwnerInfo(void* objectThatCreateIt,
                                               const size_t& arraySize)
 {
     Q_ASSERT(func != nullptr);
+    if (func == nullptr) {qDebug() << "BufferObjectManager::BOOwnerInfo" << ", " <<  "func == nullptr"; return;}
 
     m_objectThatCreateIt = objectThatCreateIt;
     m_getFirstValueFunc = func;
@@ -388,6 +390,7 @@ size_t BufferObjectManager::BOAndProperty::getSizeOfOneValueInByte() const
 void* BufferObjectManager::BOAndProperty::getFirstValue() const
 {
     Q_ASSERT(!m_owners.isEmpty());
+    if (m_owners.isEmpty()) {qDebug() << "BOAndProperty::getFirstValue" << ", " <<  "m_owners.isEmpty()"; return nullptr;}
 
     return m_owners.first().getFirstValue();
 }

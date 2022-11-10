@@ -4,6 +4,8 @@
 #include "ct_model/inModel/handle/ct_inhandleminmaxwithmodelt.h"
 #include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
 
+#include <QDebug>
+
 template<class ModelType, int min = 1, int max = 1>
 class CT_HandleInBase : public CT_InHandleMinMaxWithModelT<ModelType, min, max> {
 public:
@@ -20,9 +22,16 @@ public:
     template<class HandleInResult>
     ModelType* inModelForSavedPossibilities(const HandleInResult& inResult, const int& inResultPossibilityIndex = 0) const {
         MODELS_ASSERT(this->model() != nullptr);
+        if (this->model() == nullptr) {qDebug() << "CT_HandleInBase::inModelForSavedPossibilities" << ", " <<  "this->model() == nullptr"; return nullptr;}
+
         MODELS_ASSERT(inResult.model() != nullptr);
+        if (inResult.model() == nullptr) {qDebug() << "CT_HandleInBase::inModelForSavedPossibilities" << ", " <<  "inResult.model() == nullptr"; return nullptr;}
+
         MODELS_ASSERT(inResult.model()->nPossibilitySaved() > inResultPossibilityIndex);
+        if (inResult.model()->nPossibilitySaved() <= inResultPossibilityIndex) {qDebug() << "CT_HandleInBase::inModelForSavedPossibilities" << ", " <<  "inResult.model()->nPossibilitySaved() <= inResultPossibilityIndex"; return nullptr;}
+
         MODELS_ASSERT(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel() != nullptr);
+        if (static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel() == nullptr) {qDebug() << "CT_HandleInBase::inModelForSavedPossibilities" << ", " <<  "static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel() == nullptr"; return nullptr;}
 
         return static_cast<ModelType*>(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySavedAt(inResultPossibilityIndex))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(this->model()));
     }
@@ -39,9 +48,16 @@ public:
     template<class HandleInResult>
     ModelType* inModelForSelectedPossibilities(const HandleInResult& inResult, const int& inResultSelectedPossibilityIndex = 0) const {
         MODELS_ASSERT(this->model() != nullptr);
+        if (this->model() == nullptr) {qDebug() << "CT_HandleInBase::inModelForSelectedPossibilities" << ", " <<  "this->model() == nullptr"; return nullptr;}
+
         MODELS_ASSERT(inResult.model() != nullptr);
+        if (inResult.model() == nullptr) {qDebug() << "CT_HandleInBase::inModelForSelectedPossibilities" << ", " <<  "inResult.model() == nullptr"; return nullptr;}
+
         MODELS_ASSERT(inResult.model()->nPossibilitySelected() > inResultSelectedPossibilityIndex);
+        if (inResult.model()->nPossibilitySelected() <= inResultSelectedPossibilityIndex) {qDebug() << "CT_HandleInBase::inModelForSelectedPossibilities" << ", " <<  "inResult.model()->nPossibilitySelected() <= inResultSelectedPossibilityIndex"; return nullptr;}
+
         MODELS_ASSERT(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel() != nullptr);
+        if (static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel() == nullptr) {qDebug() << "CT_HandleInBase::inModelForSelectedPossibilities" << ", " <<  "static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel() == nullptr"; return nullptr;}
 
         return static_cast<ModelType*>(static_cast<CT_InStdResultModelPossibility*>(inResult.model()->possibilitySelectedAt(inResultSelectedPossibilityIndex))->inResultModel()->recursiveSearchTheModelThatWasACopiedModelFromThisOriginalModel(this->model()));
     }

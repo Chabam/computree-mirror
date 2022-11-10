@@ -39,6 +39,8 @@
 #include <QString>
 #include <QMutex>
 
+#include <QDebug>
+
 #include <set>
 
 #include <Eigen/Core>
@@ -522,6 +524,7 @@ protected:
         const CT_InAbstractResultModel* inOriginalResultModel = dynamic_cast<CT_InAbstractResultModel*>(inOriginalModel->rootModel());
 
         Q_ASSERT(inOriginalResultModel != nullptr);
+        if (inOriginalResultModel == nullptr) {qDebug() << "CT_AbstractItemDrawable::visitInModelWithPossibilitiesFromInHandle" << ", " << "inOriginalResultModel == nullptr";}
 
         const int nResultPossibility = inOriginalResultModel->nPossibilitySelected();
 

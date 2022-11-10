@@ -28,6 +28,7 @@
 #include "ct_planarbsplinedata.h"
 
 #include <math.h>
+#include <QDebug>
 
 CT_PlanarBSplineData::CT_PlanarBSplineData() : SuperClass(),
     _degree(1),
@@ -55,6 +56,7 @@ void CT_PlanarBSplineData::reset(int nCP, int degree)
 void CT_PlanarBSplineData::setCP(int index, double x, double y, double z)
 {
     Q_ASSERT_X(index > 0 && index <= _nCP, "CT_PlanarBSplineData", "When getting control point, you must choose a valid index");
+    if (index <= 0 || index > _nCP) {qDebug() << "CT_PlanarBSplineData::setCP" << ", " << "When getting control point, you must choose a valid index";}
 
     _controlPoints[index](0) = x;
     _controlPoints[index](1) = y;
@@ -69,6 +71,7 @@ void CT_PlanarBSplineData::setCP(int index, const Eigen::Vector3d& value)
 void CT_PlanarBSplineData::setNodalValue(int index, double value)
 {
     Q_ASSERT_X(index > 0 && index <= _nCP, "CT_PlanarBSplineData", "When getting control point, you must choose a valid index");
+    if (index <= 0 || index > _nCP) {qDebug() << "CT_PlanarBSplineData::setNodalValue" << ", " << "When getting control point, you must choose a valid index";}
 
     _nodalSequence[index] = value;
 }
@@ -76,6 +79,7 @@ void CT_PlanarBSplineData::setNodalValue(int index, double value)
 const Eigen::Vector3d& CT_PlanarBSplineData::getCPAt(int index) const
 {
     Q_ASSERT_X(index > 0 && index <= _nCP, "CT_PlanarBSplineData", "When getting control point, you must choose a valid index");
+    if (index <= 0 || index > _nCP) {qDebug() << "CT_PlanarBSplineData::getCPAt" << ", " << "When getting control point, you must choose a valid index";}
 
     return _controlPoints.at(index);
 }
@@ -83,6 +87,7 @@ const Eigen::Vector3d& CT_PlanarBSplineData::getCPAt(int index) const
 double CT_PlanarBSplineData::getNodalValueAt(int index) const
 {
     Q_ASSERT_X(index > 0 && index <= _nCP, "CT_PlanarBSplineData", "When getting control point, you must choose a valid index");
+    if (index <= 0 || index > _nCP) {qDebug() << "CT_PlanarBSplineData::getNodalValueAt" << ", " << "When getting control point, you must choose a valid index";}
 
     return _nodalSequence.at(index);
 }
