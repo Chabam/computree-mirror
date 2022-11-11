@@ -3,8 +3,10 @@
 #include <Eigen/Geometry>
 #ifdef Q_OS_MAC
 #include <OpenGL/glu.h>
-#else
+#elif Q_OS_WIN
 #include <gl/GLU.h>
+#else
+#include <GL/glu.h>
 #endif
 #include <limits>
 
@@ -48,7 +50,7 @@ AMKglCamera::AMKglCamera() :
     computeProjectionMatrix();
 }
 
-AMKglCamera::AMKglCamera(const AMKglCamera& other)
+AMKglCamera::AMKglCamera(const AMKglCamera& other): QObject()
 {
     for (unsigned short j = 0; j < 16; ++j)
     {

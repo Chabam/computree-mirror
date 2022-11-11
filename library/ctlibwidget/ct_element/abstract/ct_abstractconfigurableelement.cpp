@@ -5,7 +5,7 @@ CT_AbstractConfigurableElement::CT_AbstractConfigurableElement(QString pluginNam
     m_pluginName = pluginName;
 }
 
-CT_AbstractConfigurableElement::CT_AbstractConfigurableElement(const CT_AbstractConfigurableElement &other)
+CT_AbstractConfigurableElement::CT_AbstractConfigurableElement(const CT_AbstractConfigurableElement &other): QObject()
 {
     m_pluginName = other.pluginOfficialName();
 }

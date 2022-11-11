@@ -117,10 +117,10 @@ bool PB_Grid3DAsTableExporter::exportItem(const CT_AbstractGrid3D* item, const Q
             for (size_t zz = 0 ; zz < zdim ; zz++)
             {
 
-                size_t sIndex;
+                size_t sIndex = 0;
                 item->index(xx, yy, zz, sIndex);
 
-                Eigen::Vector3d corner;
+                Eigen::Vector3d corner = Eigen::Vector3d(0.0, 0.0, 0.0);
                 item->getCellBottomLeftCorner(xx, yy, zz, corner);
 
                 stream << corner(0) << "\t";

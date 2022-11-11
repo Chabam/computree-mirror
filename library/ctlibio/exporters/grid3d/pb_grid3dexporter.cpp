@@ -120,7 +120,7 @@ bool PB_Grid3DExporter::exportItem(const CT_AbstractGrid3D* item, const QString&
         {
             for (size_t xx = 0 ; xx < xdim ; xx++)
             {
-                size_t sIndex;
+                size_t sIndex = 0;
                 item->index(xx, ydim - yy - 1, zz, sIndex);
                 stream << item->valueAtIndexAsString(sIndex);
 

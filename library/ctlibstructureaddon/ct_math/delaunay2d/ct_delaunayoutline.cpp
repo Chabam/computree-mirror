@@ -221,12 +221,12 @@ void CT_DelaunayOutline::computeOptimizationGrid()
     {
         for (int xx = 0; xx < _optimizationGrid->xdim() ; xx++)
         {
-            Eigen::Vector2d corner;
+            Eigen::Vector2d corner = Eigen::Vector2d(0.0, 0.0);
             _optimizationGrid->getCellBottomLeftCorner(xx, yy, corner);
 
             if (this->contains(corner(0), corner(1), false))
             {
-                size_t index;
+                size_t index = 0;
                 _optimizationGrid->index(xx    , yy    , index);
                 _optimizationGrid->addValueAtIndex(index, 1);
 
@@ -242,4 +242,3 @@ void CT_DelaunayOutline::computeOptimizationGrid()
         }
     }
 }
-

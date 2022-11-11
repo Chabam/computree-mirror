@@ -12,8 +12,10 @@
 
 #ifdef Q_OS_MAC
 #include <OpenGL/glu.h>
-#else
+#elif Q_OS_WIN
 #include <gl/GLU.h>
+#else
+#include <GL/glu.h>
 #endif
 
 AMKglViewer::AMKglViewer(QWidget* parent) : AMKglViewer(nullptr, parent)
