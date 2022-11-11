@@ -6,7 +6,7 @@ linux {
 }
 
 win32 {
-    BOOST_BASE_PATH = "../3rdparty/pcl/3rdParty/Boost/"
+    BOOST_BASE_PATH = "../3rdparty/boost/"
 
     BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}lib"
     BOOST_INC_PATH = "$${BOOST_BASE_PATH}include/boost-1_74"

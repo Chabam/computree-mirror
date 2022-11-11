@@ -8,8 +8,8 @@ echo # Comment/uncomment the plugins you want to use/compile. You can also add y
 echo SUBDIRS += ../pluginmk/pluginmk>> plugins.pro
 echo SUBDIRS += ../pluginonf/pluginonf>> plugins.pro
 echo SUBDIRS += ../pluginsegma/pluginsegma>> plugins.pro
-echo #SUBDIRS += ../pluginignlif/pluginignlif>> plugins.pro
+echo SUBDIRS += ../pluginignlif/pluginignlif>> plugins.pro
 echo SUBDIRS += ../plugintoolkit/plugintoolkit>> plugins.pro
-echo #SUBDIRS += ../plugingenerate/plugingenerate>> plugins.pro
-echo #SUBDIRS += ../pluginonfdev/pluginonfdev>> plugins.pro
+echo SUBDIRS += ../plugingenerate/plugingenerate>> plugins.pro
+echo SUBDIRS += ../pluginonfdev/pluginonfdev>> plugins.pro
 echo.>> plugins.pro
