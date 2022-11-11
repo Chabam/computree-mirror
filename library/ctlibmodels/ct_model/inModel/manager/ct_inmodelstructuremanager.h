@@ -371,7 +371,7 @@ private:
     static void checkStructureValidityAtRunTime(const Parent& parent, const Child& child) {
         Q_ASSERT_X((parent.minimum() > 0)
                       || ((parent.minimum() == 0) && (child.minimum() == 0)), "checkStructureValidityAtRunTime", "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0).");
-        if ((parent.minimum() <= 0) && ((parent.minimum() != 0) || (child.minimum() != 0))) {qDebug() << "CT_InModelStructureManager::checkStructureValidityAtRunTime" << ", " <<  "checkStructureValidityAtRunTime", "Structure not allowed ! Parent is optionnal (min == 0) but child is set to be obligatory (min > 0)."; return;}
+        if ((parent.minimum() <= 0) && ((parent.minimum() != 0) || (child.minimum() != 0))) {qDebug() << "CT_InModelStructureManager::checkStructureValidityAtRunTime" << ", " <<  "checkStructureValidityAtRunTime"; return;}
 
         Q_UNUSED(parent);
         Q_UNUSED(child);
