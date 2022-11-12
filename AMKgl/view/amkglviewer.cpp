@@ -12,10 +12,10 @@
 
 #ifdef Q_OS_MAC
 #include <OpenGL/glu.h>
-#elif Q_OS_WIN
-#include <gl/GLU.h>
-#else
+#elif Q_OS_LINUX
 #include <GL/glu.h>
+#else
+#include <gl/GLU.h>
 #endif
 
 AMKglViewer::AMKglViewer(QWidget* parent) : AMKglViewer(nullptr, parent)

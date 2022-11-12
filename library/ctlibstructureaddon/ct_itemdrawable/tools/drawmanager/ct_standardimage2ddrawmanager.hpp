@@ -347,7 +347,7 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                 Eigen::Vector2d tLeft(x - demiRes, y + demiRes);
                 Eigen::Vector2d bRight(tLeft(0)+item.resolution(), tLeft(1)-item.resolution());
 
-                if (value != item.NA() || show_na)
+                if (value != static_cast<double>(item.NA()) || show_na)
                 {
                     painter.fillRectXY(tLeft, bRight, z_val);
                 }

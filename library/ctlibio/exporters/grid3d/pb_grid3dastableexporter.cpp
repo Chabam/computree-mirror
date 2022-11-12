@@ -103,20 +103,19 @@ bool PB_Grid3DAsTableExporter::exportItem(const CT_AbstractGrid3D* item, const Q
     QTextStream stream(&file);
 
     // write header
-    size_t xdim = item->xdim();
-    size_t ydim = item->ydim();
-    size_t zdim = item->zdim();
+    int xdim = item->xdim();
+    int ydim = item->ydim();
+    int zdim = item->zdim();
 
     stream << "Xcorner\tYcorner\tZcorner\tXcenter\tYcenter\tZcenter\tColX\tRowY\tLevZ\tValue\n";
 
     // write data
-    for (size_t xx = 0 ; xx < xdim ; xx++)
+    for (int xx = 0 ; xx < xdim ; xx++)
     {
-        for (size_t yy = 0 ; yy < ydim ; yy++)
+        for (int yy = 0 ; yy < ydim ; yy++)
         {
-            for (size_t zz = 0 ; zz < zdim ; zz++)
+            for (int zz = 0 ; zz < zdim ; zz++)
             {
-
                 size_t sIndex = 0;
                 item->index(xx, yy, zz, sIndex);
 

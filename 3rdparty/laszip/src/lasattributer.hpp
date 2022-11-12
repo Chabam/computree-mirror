@@ -77,11 +77,20 @@ public:
     memset(this, 0, sizeof(LASattribute));
     scale[0] = scale[1] = scale[2] = 1.0;
     this->data_type = type+1;
+
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+    strncpy_s(this->name, name, 32);
+    if (description) strncpy_s(this->description, description, 32);
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
     strncpy(this->name, name, 32);
     if (description) strncpy(this->description, description, 32);
 #pragma GCC diagnostic pop
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+    strncpy(this->name, name, 32);
+    if (description) strncpy(this->description, description, 32);
+#endif
   };
 
   inline BOOL set_no_data(U8  no_data) { if (0 == get_type()) { this->no_data[0].u64 = no_data; options |= 0x01; return TRUE; } return FALSE; };

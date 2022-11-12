@@ -1,7 +1,9 @@
 #include "ct_itemdrawable/tools/drawmanager/ct_standardgrid4ddrawmanager.h"
 #include "ct_itemdrawable/ct_grid4d.h"
 #ifdef _MSC_VER
+#ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
+#endif
 #endif
 #include <math.h>
 #include <typeinfo>

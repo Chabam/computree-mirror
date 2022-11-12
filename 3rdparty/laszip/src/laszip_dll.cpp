@@ -1500,18 +1500,30 @@ laszip_add_vlr(
     // copy the VLR
 
     laszip_dll->header.vlrs[i].reserved = 0x0;
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+    strncpy_s(laszip_dll->header.vlrs[i].user_id, user_id, 16);
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
     strncpy(laszip_dll->header.vlrs[i].user_id, user_id, 16);
 #pragma GCC diagnostic pop
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+    strncpy(laszip_dll->header.vlrs[i].user_id, user_id, 16);
+#endif
     laszip_dll->header.vlrs[i].record_id = record_id;
     laszip_dll->header.vlrs[i].record_length_after_header = record_length_after_header;
     if (description)
     {
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+    strncpy_s(laszip_dll->header.vlrs[i].description, description, 32);
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
       strncpy(laszip_dll->header.vlrs[i].description, description, 32);
 #pragma GCC diagnostic pop
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+    strncpy(laszip_dll->header.vlrs[i].description, description, 32);
+#endif
     }
     else
     {

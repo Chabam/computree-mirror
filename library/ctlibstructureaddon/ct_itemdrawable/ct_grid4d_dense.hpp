@@ -1,6 +1,8 @@
 #include "ct_itemdrawable/ct_grid4d_dense.h"
 #ifdef _MSC_VER
+#ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
+#endif
 #endif
 #include <math.h>
 #include <typeinfo>
@@ -9,7 +11,7 @@ template< typename DataT>
 CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense() : SuperClass()
 {
     int ncells[1];
-    ncells[0] = this->nCells();
+    ncells[0] = static_cast<int>(this->nCells());
     this->_data.create(1, ncells);
 }
 
@@ -48,7 +50,7 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(double wmin,
                                                                             na)
 {
     int ncells[1];
-    ncells[0] = this->nCells();
+    ncells[0] = static_cast<int>(this->nCells());
     this->_data.create(1, ncells);
     initGridWithValue(initValue);
 }
@@ -140,11 +142,10 @@ CT_Grid4D_Dense<DataT>::~CT_Grid4D_Dense()
 template< typename DataT>
 void CT_Grid4D_Dense<DataT>::initGridWithValue(const DataT val)
 {
-    for (size_t  i = 0 ; i < this->nCells() ; i++)
+    for (int  i = 0 ; i < this->nCells() ; i++)
     {
         _data(i) = val;
     }
     this->_dataMin = val;
     this->_dataMax = val;
 }
-
