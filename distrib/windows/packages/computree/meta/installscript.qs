@@ -215,7 +215,7 @@ Component.prototype.installationFinished = function() {
             if (checkboxForm && checkboxForm.checkBox_msvc.checked && checkboxForm.checkBox_msvc.enabled) {
                 QDesktopServices.openUrl("file:///" + installer.value("TargetDir") + "/vc_redist.x64.exe");
             }
-			if (checkboxForm && checkboxForm.checkBox_chart.checked) {
+            if (checkboxForm && checkboxForm.checkBox_chart.checked) {
                 QDesktopServices.openUrl("file:///" + installer.value("TargetDir") + "/Computree_Charter_v2018_08_eng.pdf");
             }
             if (checkboxForm && checkboxForm.checkBox_run.checked && checkboxForm.checkBox_run.enabled) {

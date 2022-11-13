@@ -40,6 +40,7 @@
 #include <QDesktopServices>
 #include <QCoreApplication>
 #include <QUrl>
+#include <QDir>
 
 int CT_VirtualAbstractStep::CURRENT_ID = 1;
 QString CT_VirtualAbstractStep::CURRENT_LANGAGE = "en";
@@ -1353,6 +1354,9 @@ void CT_VirtualAbstractStep::openHelpPageForStep() const
 QUrl CT_VirtualAbstractStep::getHelpPageForStepPath() const
 {
     QString currentLanguageDir = "doc_" + CURRENT_LANGAGE;
+#if defined(__linux__) // Linux
+    currentLanguageDir = QDir::homePath() + "/.computree/" + currentLanguageDir;
+#endif
 
     QFile currentFile(currentLanguageDir + "/steps/current.html");
     if (currentFile.exists()) {currentFile.remove();}

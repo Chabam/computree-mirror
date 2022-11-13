@@ -167,11 +167,14 @@ Component.prototype.installationFinished = function() {
 		// Final checkbox options
         if (installer.isInstaller() && installer.status == QInstaller.Success) {
             var checkboxForm = component.userInterface( "FinishedWidget" );
-			if (checkboxForm && checkboxForm.checkBox_chart.checked) {
+            if (checkboxForm && checkboxForm.checkBox_shortcut.checked) {
+                installer.executeDetached("bash", ["desktop.sh"], "@TargetDir@");
+            }
+            if (checkboxForm && checkboxForm.checkBox_chart.checked) {
                 QDesktopServices.openUrl("file:///" + installer.value("TargetDir") + "/Computree_Charter_v2018_08_eng.pdf");
             }
             if (checkboxForm && checkboxForm.checkBox_run.checked && checkboxForm.checkBox_run.enabled) {
-                installer.executeDetached("bash", ["@TargetDir@/Computree.sh"]);
+                installer.executeDetached("bash", ["Computree.sh"], "@TargetDir@");
             }
         }
     } catch(e) {

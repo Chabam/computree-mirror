@@ -118,8 +118,11 @@
 PB_StepPluginManager::PB_StepPluginManager() : CT_AbstractStepPlugin()
 {
     _logListener = new CT_FileLogListener();
+#if defined(__linux__) // Linux
+    _logListener->setFilePath(QDir::homePath() + "/.computree/" + "log_computree.log");
+#else
     _logListener->setFilePath("log_computree.log");
-
+#endif
 
 //    m_fileLog.setFilePath("./logPB.txt");
 //    m_fileLog.setSeverityAccepted(QVector<int>() << LogInterface::debug);

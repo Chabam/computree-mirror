@@ -466,6 +466,9 @@ void GMainWindow::openStepHelp()
 {
     QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
     QString currentLanguageDir = "doc_" + languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
+#if defined(__linux__) // Linux
+    currentLanguageDir = QDir::homePath() + "/.computree/" + currentLanguageDir;
+#endif
 
     QFile currentFile(currentLanguageDir + "/steps/current.html");
     if (currentFile.exists()) {currentFile.remove();}
@@ -478,6 +481,9 @@ void GMainWindow::createStepHelp()
 {    
     QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
     QString currentLanguageDir = "doc_" + languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
+#if defined(__linux__) // Linux
+    currentLanguageDir = QDir::homePath() + "/.computree/" + currentLanguageDir;
+#endif
 
     QProgressDialog progressDialog(tr("Génération de la documentation des étapes en cours"), tr(""), 0, 100);
     progressDialog.setCancelButton(nullptr);
@@ -1402,11 +1408,16 @@ void GMainWindow::loadConfiguration()
         showMaximized();
 
     QStringList languages = GUI_MANAGER->getLanguageManager()->languageAvailable();
+    if(languages.length() == 0) {return;}
     QString currentLanguage = languages.at(GUI_MANAGER->getLanguageManager()->currentLanguage());
 
     CT_AbstractStep::setCurrentLangage(currentLanguage);
 
-    QDir docDir("doc_" + currentLanguage);
+    QString currentLanguageDir = "doc_" + currentLanguage;
+#if defined(__linux__) // Linux
+    currentLanguageDir = QDir::homePath() + "/.computree/" + currentLanguageDir;
+#endif
+    QDir docDir(currentLanguageDir);
     if (!docDir.exists()) {createStepHelp();}
 }
 

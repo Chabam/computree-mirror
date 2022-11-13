@@ -18,11 +18,11 @@
 CDM_PluginManager::CDM_PluginManager()
 {
 #if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-    _defaultPluginDirPath = qApp->applicationDirPath()+"/plugins";
+    _defaultPluginDirPath = "/plugins";
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-    _defaultPluginDirPath = qApp->applicationDirPath()+"/../plugins";
+    _defaultPluginDirPath = "/../plugins";
 #elif defined(__APPLE__) // Clang Compiler (Apple)
-    _defaultPluginDirPath = qApp->applicationDirPath()+"/PlugIns";
+    _defaultPluginDirPath = "/PlugIns";
 #endif
     m_guiManager = nullptr;
     m_stepsMenuManager.setPluginManager(this);
@@ -100,7 +100,7 @@ bool CDM_PluginManager::load()
 
         emit beginLoading();
 
-        QDir dir(_defaultPluginDirPath);
+        QDir dir(qApp->applicationDirPath() + _defaultPluginDirPath);
 
         QStringList nameFilters;
 

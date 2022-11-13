@@ -13,11 +13,11 @@ CDM_Internationalization::CDM_Internationalization()
     m_saveLanguageIndex = -1;
     m_currentLanguageBaseName = "en";
 #if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-    m_languageDirectory = qApp->applicationDirPath() + "/languages";
+    m_languageDirectory = "/languages";
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-    m_languageDirectory = qApp->applicationDirPath()+"/../languages";
+    m_languageDirectory = "/../languages";
 #elif defined(__APPLE__) // Clang Compiler (Apple)
-    m_languageDirectory = qApp->applicationDirPath()+"/../Languages";
+    m_languageDirectory = "/../Languages";
 #endif
 }
 
@@ -75,7 +75,7 @@ void CDM_Internationalization::loadConfiguration()
     m_currentLanguageBaseName = CONFIG_FILE->value("CurrentLanguage", m_currentLanguageBaseName).toString();
     CONFIG_FILE->endGroup();
 
-    QDir dir(m_languageDirectory);
+    QDir dir(qApp->applicationDirPath() + m_languageDirectory);
     QFileInfoList il = dir.entryInfoList(QStringList() << "*.qm");
 
     // Multiple translation files is used because we have at least one translation file by plugin

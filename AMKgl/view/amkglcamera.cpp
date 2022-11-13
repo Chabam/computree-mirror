@@ -3,7 +3,7 @@
 #include <Eigen/Geometry>
 #ifdef Q_OS_MAC
 #include <OpenGL/glu.h>
-#elif Q_OS_LINUX
+#elif defined(Q_OS_LINUX)
 #include <GL/glu.h>
 #else
 #include <gl/GLU.h>

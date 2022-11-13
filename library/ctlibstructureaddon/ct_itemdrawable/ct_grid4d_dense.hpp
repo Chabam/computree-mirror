@@ -142,7 +142,7 @@ CT_Grid4D_Dense<DataT>::~CT_Grid4D_Dense()
 template< typename DataT>
 void CT_Grid4D_Dense<DataT>::initGridWithValue(const DataT val)
 {
-    for (int  i = 0 ; i < this->nCells() ; i++)
+    for (size_t  i = 0 ; i < this->nCells() ; i++)
     {
         _data(i) = val;
     }
