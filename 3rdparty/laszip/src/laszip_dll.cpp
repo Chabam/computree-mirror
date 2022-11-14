@@ -1868,8 +1868,10 @@ laszip_prepare_header_for_write(
     {
       if (laszip_dll->header.number_of_point_records != 0)
       {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
         sprintf(laszip_dll->error, "inconsistent number_of_point_records %u and extended_number_of_point_records %I64d", laszip_dll->header.number_of_point_records, laszip_dll->header.extended_number_of_point_records);
+#elif defined(__APPLE__)
+        sprintf(laszip_dll->error, "inconsistent number_of_point_records %u and extended_number_of_point_records %llu", laszip_dll->header.number_of_point_records, laszip_dll->header.extended_number_of_point_records);
 #else
         sprintf(laszip_dll->error, "inconsistent number_of_point_records %u and extended_number_of_point_records %lu", laszip_dll->header.number_of_point_records, laszip_dll->header.extended_number_of_point_records);
 #endif
@@ -1886,8 +1888,10 @@ laszip_prepare_header_for_write(
       {
         if (laszip_dll->header.number_of_points_by_return[i] != 0)
         {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
           sprintf(laszip_dll->error, "inconsistent number_of_points_by_return[%u] %u and extended_number_of_points_by_return[%u] %I64d", i, laszip_dll->header.number_of_points_by_return[i], i, laszip_dll->header.extended_number_of_points_by_return[i]);
+#elif defined(__APPLE__)
+          sprintf(laszip_dll->error, "inconsistent number_of_points_by_return[%u] %u and extended_number_of_points_by_return[%u] %llu", i, laszip_dll->header.number_of_points_by_return[i], i, laszip_dll->header.extended_number_of_points_by_return[i]);
 #else
           sprintf(laszip_dll->error, "inconsistent number_of_points_by_return[%u] %u and extended_number_of_points_by_return[%u] %lu", i, laszip_dll->header.number_of_points_by_return[i], i, laszip_dll->header.extended_number_of_points_by_return[i]);
 #endif
@@ -1935,8 +1939,10 @@ laszip_prepare_point_for_write(
 
       if (laszip_dll->header.extended_number_of_point_records > U32_MAX)
       {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
         sprintf(laszip_dll->error, "extended_number_of_point_records of %I64d is too much for 32-bit counters of compatibility mode", laszip_dll->header.extended_number_of_point_records);
+#elif defined(__APPLE__)
+        sprintf(laszip_dll->error, "extended_number_of_point_records of %llu is too much for 32-bit counters of compatibility mode", laszip_dll->header.extended_number_of_point_records);
 #else
         sprintf(laszip_dll->error, "extended_number_of_point_records of %lu is too much for 32-bit counters of compatibility mode", laszip_dll->header.extended_number_of_point_records);
 #endif
@@ -2608,8 +2614,10 @@ laszip_write_header(
     {
       if (laszip_dll->header.start_of_waveform_data_packet_record != 0)
       {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
         sprintf(laszip_dll->warning, "header.start_of_waveform_data_packet_record is %I64d. writing 0 instead.", laszip_dll->header.start_of_waveform_data_packet_record);
+#elif defined(__APPLE__)
+        sprintf(laszip_dll->warning, "header.start_of_waveform_data_packet_record is %llu. writing 0 instead.", laszip_dll->header.start_of_waveform_data_packet_record);
 #else
         sprintf(laszip_dll->warning, "header.start_of_waveform_data_packet_record is %lu. writing 0 instead.", laszip_dll->header.start_of_waveform_data_packet_record);
 #endif
@@ -4566,8 +4574,10 @@ laszip_seek_point(
     // seek to the point
     if (!laszip_dll->reader->seek((U32)laszip_dll->p_count, (U32)index))
     {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(_WIN64)
       sprintf(laszip_dll->error, "seeking from index %I64d to index %I64d for file with %I64d points", laszip_dll->p_count, index, laszip_dll->npoints);
+#elif defined(__APPLE__)
+      sprintf(laszip_dll->error, "seeking from index %lld to index %lld for file with %lld points", laszip_dll->p_count, index, laszip_dll->npoints);
 #else
       sprintf(laszip_dll->error, "seeking from index %lld to index %ld for file with %lld points", laszip_dll->p_count, index, laszip_dll->npoints);
 #endif

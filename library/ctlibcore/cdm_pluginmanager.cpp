@@ -22,7 +22,7 @@ CDM_PluginManager::CDM_PluginManager()
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
     _defaultPluginDirPath = "/../plugins";
 #elif defined(__APPLE__) // Clang Compiler (Apple)
-    _defaultPluginDirPath = "/PlugIns";
+    _defaultPluginDirPath = "/../PlugIns";
 #endif
     m_guiManager = nullptr;
     m_stepsMenuManager.setPluginManager(this);

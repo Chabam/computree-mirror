@@ -24,7 +24,7 @@ function Component() {
             return;
         }
         if (systemInfo.productType != "osx") {
-			var infoText = qsTr("Installation on %1 is not supported by this installer.").arg(systemInfo.productType);
+			var infoText = qsTr("Installation on %1 is not supported by Computree.").arg(systemInfo.productType);
             cancelInstaller(infoText);
             return;
         }
@@ -167,7 +167,7 @@ Component.prototype.installationFinished = function() {
 		// Final checkbox options
         if (installer.isInstaller() && installer.status == QInstaller.Success) {
             var checkboxForm = component.userInterface( "FinishedWidget" );
-			if (checkboxForm && checkboxForm.checkBox_chart.checked) {
+            if (checkboxForm && checkboxForm.checkBox_chart.checked) {
                 QDesktopServices.openUrl("file:///" + installer.value("TargetDir") + "/Computree_Charter_v2018_08_eng.pdf");
             }
             if (checkboxForm && checkboxForm.checkBox_run.checked && checkboxForm.checkBox_run.enabled) {
