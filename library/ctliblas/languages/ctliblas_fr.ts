@@ -242,7 +242,7 @@
     </message>
     <message>
         <source>Error while loading the file </source>
-        <translation>Erreur lors du chargement du fichier</translation>
+        <translation>Erreur lors du chargement du fichier </translation>
     </message>
     <message>
         <source>Intensity</source>

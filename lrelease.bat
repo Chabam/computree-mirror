@@ -1,7 +1,7 @@
 @echo off &setlocal
 
 rem We use the *-pro version of tools because the old ones are deprecated
-set lrelease=C:\Qt\5.15.2\msvc2019_64\bin\lrelease-pro.exe
+set lrelease=C:\Qt\5.15.1\msvc2019_64\bin\lrelease-pro.exe
 
 for %%i in (
     ComputreeGui\ComputreeGui.pro

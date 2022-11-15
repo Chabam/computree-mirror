@@ -117,7 +117,7 @@
     <message>
         <location filename="../readers/ct_reader_gdal.cpp" line="300"/>
         <source>Impossible de charger des éléments du type : </source>
-        <translation>Unable to load items of type :</translation>
+        <translation>Unable to load items of type : </translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_gdal.cpp" line="606"/>
@@ -142,7 +142,7 @@
     <message>
         <location filename="../readers/ct_reader_gdal.cpp" line="621"/>
         <source>Extension : </source>
-        <translation>Extension :</translation>
+        <translation>Extension : </translation>
     </message>
 </context>
 <context>
@@ -344,7 +344,7 @@
     <message>
         <location filename="../readers/ct_reader_opf.cpp" line="394"/>
         <source>Charger le modèle 3D ? (lent si activé)</source>
-        <translation>Load 3D model (slow if enabled)?</translation>
+        <translation>Load 3D model (slow if enabled)</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_opf.cpp" line="394"/>
@@ -934,7 +934,7 @@
     <message>
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="71"/>
         <source>Extension : </source>
-        <translation>Extension :</translation>
+        <translation>Extension : </translation>
     </message>
     <message>
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="233"/>
@@ -1122,7 +1122,7 @@
     <message>
         <location filename="../exporters/polygon2d/pb_polygon2dexporter.cpp" line="8"/>
         <source>Exporte des Polygones 2D en format ASCII. Le fichier de sortie contient une ligne par polygones.&lt;br&gt;Pour chaque polygone, sont exportés :&lt;br&gt;- PolygonId : Identifiant Computree du polygone&lt;br&gt;- AreaOfPolygon : Aire du polygone&lt;br&gt;- Xcenter : Coordonnée X du centre de masse du polygone&lt;br&gt;- Ycenter : Coordonnée Y du centre de masse du polygone&lt;br&gt;- NumberOfVertice(N) : Nombre de sommets du polygone&lt;br&gt;- Xvertice1 : Coordonnée X du 1er sommet&lt;br&gt;- Yvertice1 : Coordonnée Y du 1er sommet&lt;br&gt;- Xvertice2 : Coordonnée X du 2ième sommet&lt;br&gt;- Yvertice2 : Coordonnée Y du 2ième sommet&lt;br&gt;...- XverticeN : Coordonnée X du Nième sommet&lt;br&gt;- YverticeN : Coordonnée Y du Nième sommet&lt;br&gt;N.B. : Le nombre de colonnes varie donc pour chaque ligne. </source>
-        <translation>Exports 2D Polygons in ASCII format. The output file contains one line per polygon.&lt;br&gt;For each polygon, are exported :&lt;br&gt;- PolygonId : Computree identifier of the polygon&lt;br&gt;- AreaOfPolygon : Area of the polygon&lt;br&gt;- Xcenter : X coordinate of the centre of mass of the polygon&lt;br&gt;- Ycenter : Y coordinate of the centre of mass of the polygon&lt;br&gt;- NumberOfVertice(N): Number of vertices in the polygon&lt;br&gt;- Xvertice1 : X coordinate of the 1st vertex&lt;br&gt;- Yvertice1 : Y coordinate of the 1st vertex&lt;br&gt;- Xvertice2 : X coordinate of the 2nd vertex&lt;br&gt;- Yvertice2 : Y coordinate of the 2nd vertex&lt;br&gt;...- XverticeN : X coordinate of the Nth vertex&lt;br&gt;- YverticeN : Y coordinate of the Nth vertex&lt;br&gt;N.B. : The number of columns therefore varies for each row.</translation>
+        <translation>Exports 2D Polygons in ASCII format. The output file contains one line per polygon.&lt;br&gt;For each polygon, are exported :&lt;br&gt;- PolygonId : Computree identifier of the polygon&lt;br&gt;- AreaOfPolygon : Area of the polygon&lt;br&gt;- Xcenter : X coordinate of the centre of mass of the polygon&lt;br&gt;- Ycenter : Y coordinate of the centre of mass of the polygon&lt;br&gt;- NumberOfVertice(N): Number of vertices in the polygon&lt;br&gt;- Xvertice1 : X coordinate of the 1st vertex&lt;br&gt;- Yvertice1 : Y coordinate of the 1st vertex&lt;br&gt;- Xvertice2 : X coordinate of the 2nd vertex&lt;br&gt;- Yvertice2 : Y coordinate of the 2nd vertex&lt;br&gt;...- XverticeN : X coordinate of the Nth vertex&lt;br&gt;- YverticeN : Y coordinate of the Nth vertex&lt;br&gt;N.B. : The number of columns therefore varies for each row. </translation>
     </message>
     <message>
         <location filename="../exporters/polygon2d/pb_polygon2dexporter.cpp" line="32"/>

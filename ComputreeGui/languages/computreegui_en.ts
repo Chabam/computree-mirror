@@ -400,7 +400,7 @@
     </message>
     <message>
         <source>rw : </source>
-        <translation>rw:</translation>
+        <translation>rw: </translation>
     </message>
     <message>
         <source>RAZ</source>
@@ -502,21 +502,20 @@
     </message>
     <message>
         <source>Num	</source>
-        <translation>Num</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Plugin	</source>
-        <translation>Plugin</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Step Name	</source>
-        <translation>Step Name</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Step Description
 </source>
-        <translation>Step Description
-</translation>
+        <translation></translation>
     </message>
     <message>
         <source>RIS file (*.ris)</source>
@@ -609,7 +608,7 @@
     </message>
     <message>
         <source>Ajouter les items sélectionnés au document</source>
-        <translation>Add selected items to document #...</translation>
+        <translation>Add selected items to document</translation>
     </message>
     <message>
         <source>Configurer l&apos;affichage</source>
@@ -769,7 +768,7 @@
     </message>
     <message>
         <source>Mode de dessin simplifié préféré :</source>
-        <translation>Prefered simplified mode</translation>
+        <translation>Prefered simplified mode:</translation>
     </message>
     <message>
         <source>Mode simplifié (lors de l&apos;arrêt du mouvement)</source>
@@ -927,15 +926,15 @@
     </message>
     <message>
         <source>-&gt; Index : Aller dans le menu Aide, puis cliquer sur &lt;em&gt;Documentation des étapes&lt;/em&gt;</source>
-        <translation>-&gt; Index: Go to the Help menu, then click on &lt;em&gt;Step documentation&lt;/em&gt;.</translation>
+        <translation>-&gt; Index: Go to the Help menu, then click on &lt;em&gt;Step documentation&lt;/em&gt;</translation>
     </message>
     <message>
         <source>-&gt; Aide sur une étape insérée : faire un clic droit sur l&apos;étape insérée, puis &lt;em&gt;Documentation de l&apos;étape&lt;/em&gt;</source>
-        <translation>-&gt; Help on an inserted step: right click on the inserted step, then &lt;em&gt;Step documentation&lt;/em&gt;.</translation>
+        <translation>-&gt; Help on an inserted step: right click on the inserted step, then &lt;em&gt;Step documentation&lt;/em&gt;</translation>
     </message>
     <message>
         <source>-&gt; Aide sur une étape du menu (pas encore insérée) : faire un clic droit sur l&apos;étape dans le menu, puis &lt;em&gt;Documentation de l&apos;étape&lt;/em&gt;</source>
-        <translation>-&gt; Help on a menu step (not yet inserted): right-click on the step in the menu, then &lt;em&gt;Step documentation&lt;/em&gt;.</translation>
+        <translation>-&gt; Help on a menu step (not yet inserted): right-click on the step in the menu, then &lt;em&gt;Step documentation&lt;/em&gt;</translation>
     </message>
     <message>
         <source>&lt;strong&gt;Discord Computree&lt;/strong&gt; : pour échanger avec la communauté, poser des questions, signaler un bug ou proposer une amélioration :</source>
@@ -1376,7 +1375,7 @@
     </message>
     <message>
         <source>Utiliser l&apos;index sur la gauche pour séléctionner l&apos;étape pour laquelle afficher la documentation. </source>
-        <translation>Use the index on the left to select the step for which to display the documentation.</translation>
+        <translation>Use the index on the left to select the step for which to display the documentation. </translation>
     </message>
     <message>
         <source>Site internet officiel de Computree</source>
@@ -1695,7 +1694,7 @@
     </message>
     <message>
         <source>Titre : </source>
-        <translation>Title:</translation>
+        <translation>Title: </translation>
     </message>
     <message>
         <source>Annuler</source>
@@ -1792,7 +1791,7 @@ Are you sure you want to overwrite it?</translation>
     </message>
     <message>
         <source>Impossible d&apos;afficher les informations de cette étape. L&apos;étape n&apos;a pas été trouvée dans le plugin ou le plugin n&apos;est pas présent.</source>
-        <translation>Impossible to show informations for this step. The step has not been found in the plugin or the plugin is absent. </translation>
+        <translation>Impossible to show informations for this step. The step has not been found in the plugin or the plugin is absent.</translation>
     </message>
     <message>
         <source>F1</source>
@@ -1819,11 +1818,11 @@ Are you sure you want to overwrite it?</translation>
     </message>
     <message>
         <source> après l&apos;étape %2 car elles ne sont pas compatible !</source>
-        <translation>after step %2 because they are not compatible</translation>
+        <translation> after step %2 because they are not compatible!</translation>
     </message>
     <message>
         <source> à la racine !</source>
-        <translation>at the root !</translation>
+        <translation> at the root !</translation>
     </message>
     <message>
         <source>Supprimer toutes les étapes</source>
@@ -1839,7 +1838,7 @@ Are you sure you want to overwrite it?</translation>
     </message>
     <message>
         <source>L&apos;étape n&apos;est pas débogable.</source>
-        <translation>Step is not debbugable</translation>
+        <translation>Step is not debbugable.</translation>
     </message>
     <message>
         <source>Form</source>
@@ -1986,7 +1985,9 @@ Are you sure you want to overwrite it?</translation>
         <source>L&apos;étape ne peut être configurée pour la raison suivante :<byte value="xd"/>
 <byte value="xd"/>
 %1</source>
-        <translation>The step cannot be configured for the following reason:</translation>
+        <translation>The step cannot be configured for the following reason:
+
+%1</translation>
     </message>
     <message>
         <source>Continuer quand même</source>

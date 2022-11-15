@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>Cette étape génère une simple copie du résultat d&apos;entrée, sans créer de nouvelle donnée. Cela permet de continuer le script après la boucle. </source>
-        <translation>This step generates a simple copy of the input result, without creating any new data. This allows the script to continue after the loop.</translation>
+        <translation>This step generates a simple copy of the input result, without creating any new data. This allows the script to continue after the loop. </translation>
     </message>
     <message>
         <source>Il est possible d&apos;emboîter plusieurs boucles. Pour cela il faut bien séléctionner les bon résultats compteurs pour faire correspondre deux à deux les étapes d&apos;ouverture et de fermeture de boucle.</source>

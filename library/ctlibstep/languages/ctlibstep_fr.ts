@@ -39,11 +39,11 @@
     </message>
     <message>
         <source> enter manual mode</source>
-        <translation>Entrer en mode manuel</translation>
+        <translation> Entrer en mode manuel</translation>
     </message>
     <message>
         <source> quit manual mode</source>
-        <translation>Quitter le mode manuel</translation>
+        <translation> Quitter le mode manuel</translation>
     </message>
     <message>
         <source> - Start computing at 	%1</source>

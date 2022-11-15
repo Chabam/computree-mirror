@@ -61,7 +61,7 @@
     </message>
     <message>
         <source>Point Source </source>
-        <translation>Point Source</translation>
+        <translation>Point Source </translation>
     </message>
     <message>
         <source>Scan Angle</source>
@@ -210,7 +210,7 @@
     </message>
     <message>
         <source>Point Source </source>
-        <translation>Point Source</translation>
+        <translation>Point Source </translation>
     </message>
     <message>
         <source>Scan Angle</source>

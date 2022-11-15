@@ -66,11 +66,11 @@
     </message>
     <message>
         <source> &lt;em&gt;valeur par défaut = %1%2&lt;/em&gt;. </source>
-        <translation> &lt;em&gt;default value = %1%2&lt;/em&gt;.</translation>
+        <translation> &lt;em&gt;default value = %1%2&lt;/em&gt;. </translation>
     </message>
     <message>
         <source> &lt;em&gt;valeur par défaut = %1%2.&lt;/em&gt; </source>
-        <translation> &lt;em&gt;default value = %1%2.&lt;/em&gt;</translation>
+        <translation> &lt;em&gt;default value = %1%2.&lt;/em&gt; </translation>
     </message>
     <message>
         <source>Activé</source>
@@ -82,7 +82,7 @@
     </message>
     <message>
         <source> extension : %1. </source>
-        <translation> extension: %1.</translation>
+        <translation> extension: %1. </translation>
     </message>
 </context>
 <context>
@@ -101,7 +101,7 @@
     </message>
     <message>
         <source>Extrait du fichier : </source>
-        <translation>Extract from the file:</translation>
+        <translation>Extract from the file: </translation>
     </message>
     <message>
         <source>Premières lignes</source>
@@ -121,7 +121,7 @@
     </message>
     <message>
         <source>Nombre de lignes à ignorer avant la ligne d&apos;entêtes : </source>
-        <translation>Number of lines to be ignored before the header line:</translation>
+        <translation>Number of lines to be ignored before the header line: </translation>
     </message>
     <message>
         <source>Séparateur décimal :</source>
@@ -192,7 +192,7 @@
 %1<byte value="xd"/>
 <byte value="xd"/>
 </source>
-        <translation> :</translation>
+        <translation></translation>
     </message>
     <message>
         <source>.</source>

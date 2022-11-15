@@ -103,7 +103,7 @@
     </message>
     <message>
         <source>Cette étape ajoute au résultat d&apos;entrée un conteneur &quot;métriques&quot;, contenant toutes les métriques calculées. </source>
-        <translation>This step adds a &quot;metrics&quot; container to the input result, containing all calculated metrics.</translation>
+        <translation>This step adds a &quot;metrics&quot; container to the input result, containing all calculated metrics. </translation>
     </message>
     <message>
         <source>Il faut prendre garde à deux aspects lors de l&apos;utilisation des métriques de points.&lt;br&gt;&lt;br&gt;Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d&apos;entrée, sous peine d&apos;obtenir la valeur par défaut pour la métrique systématiquement.&lt;br&gt;Les métriques utilisant les attributs LAS, ont le mot clé LAS dans leur intitulé.&lt;br&gt;&lt;br&gt;Deuxièmement, les nuages de points sont originellement codés en altitude absolue. Mais il est fréquent de modifier ces nuages en soutrayant l&apos;altitude du sol, afin d&apos;obtenir des nuages de points en hauteur, où le relief est &quot;retiré&quot;.&lt;br&gt;Il est donc important de savoir si un nuage des points est en Altitude (Alti) ou en Hauteur (Ht).&lt;br&gt;&lt;ul&gt;&lt;li&gt;Certaines métriques sont indifférentes, et fonctionnent dans les deux cas.&lt;/li&gt;&lt;li&gt;D&apos;autres n&apos;ont de sens que pour un nuage en altitude&lt;/li&gt;&lt;li&gt;D&apos;autres n&apos;ont de sens que pour un nuage en hauteur&lt;/li&gt;&lt;/ul&gt;C&apos;est à l&apos;utilisateur de vérifier les métriques adaptées au nuage de points fourni. &lt;br&gt;Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alti, Ht ou les deux. S&apos;il n&apos;y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus).&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des métriques de points disponibles :&lt;/h2&gt;%1</source>
@@ -150,7 +150,7 @@
     </message>
     <message>
         <source>Cette étape ajoute au résultat d&apos;entrée un conteneur &quot;métriques&quot;, contenant toutes les métriques calculées. </source>
-        <translation>This step adds a &quot;metrics&quot; container to the input result, containing all calculated metrics.</translation>
+        <translation>This step adds a &quot;metrics&quot; container to the input result, containing all calculated metrics. </translation>
     </message>
     <message>
         <source>Attention : le comportement des métriques peut être influencé par la résolution des rasters fournis.&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des métriques de raster disponibles :&lt;/h2&gt;%1</source>
@@ -209,7 +209,7 @@
     </message>
     <message>
         <source>Cette étape créer une liste fichiers. Cette étape ne charge pas les fichiers, elle créée juste les entêtes. Il faut ensuite ajouter l&apos;étape &quot;Charger les fichiers d&apos;une liste&quot; pour les charger, soit directement, soit après un début de boucle. </source>
-        <translation>This step creates a file list. This step does not load the files, it just creates the headers. You then need to add the &quot;Load files from a list&quot; step to load them, either directly or after a loop start.</translation>
+        <translation>This step creates a file list. This step does not load the files, it just creates the headers. You then need to add the &quot;Load files from a list&quot; step to load them, either directly or after a loop start. </translation>
     </message>
     <message>
         <source>&lt;br&gt;&lt;br&gt;Cette étape génère un résultat contenant la liste des fichiers.&lt;br&gt;Pour chaque fichier deux éléments sont créés :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Une entête contenant les informations générales sur le fichier, dépendant du format. A minima cette entête contient le nom et le chemin du fichier.&lt;/li&gt;&lt;li&gt;Un &quot;reader&quot;, qui est l&apos;objet utilisé pour faire le chargement effectif du fichier dans la suite du script.&lt;/li&gt;&lt;/ul&gt;</source>
@@ -356,7 +356,7 @@
     </message>
     <message>
         <source>Cette étape permet d&apos;exporter des données au sein d&apos;une boucle, en prenant en compte les tours surccessifs. Tout attribut de n&apos;importe quel item peut être exporté.&lt;br&gt;Cette étape propose 3 types d&apos;exports différents, pouvant être réalisés en parallèle ou non :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Un export sous forme de fichier texte, avec une ligne par item et tour de boucle, et une colonne par attribut. Un seul fichier est produit, regroupant les données de tous les tours de boucle.&lt;/li&gt;&lt;li&gt;Un export sous forme de raster, produisant un fichier raster par attribut et par tour de boucle. Pour que cet export puisse être utilisé, il faut que les données soient organisées sous forme de grille spatiale.&lt;/li&gt;&lt;li&gt;Un export sous forme de vecteur (points en 2D avec attributs), produisant un fichier vecteur par tour de boucle, avec une ligne par item, et une colonne par attribut. Cela nécessite que parmi les attributs figurent des coordonnées (x;y), auquelles assosicer les autres attributs.&lt;/li&gt;&lt;/ul&gt;Il est possible d&apos;utiliser cette étape en dehors d&apos;une boucle, même si ce n&apos;est pas son usage prévu, en sélectionnant l&apos;option correspondante. </source>
-        <translation>This step allows you to export data within a loop, taking into account the successive turns. Any attribute of any item can be exported.&lt;br&gt;This step offers 3 different types of exports, which can be performed in parallel or not:&lt;br&gt;&lt;ul&gt;&lt;li&gt;An export in the form of a text file, with one line per item and per loop turn, and one column per attribute. A single file is produced, grouping the data from all the loop turns.&lt;/li&gt;&lt;li&gt;An export in raster form, producing one raster file per attribute and per loop turn. For this export to be used, the data must be organised as a spatial grid.&lt;/li&gt;&lt;li&gt;An export as a vector (2D points with attributes), producing one vector file per loop turn, with one row per item, and one column per attribute. This requires that the attributes include (x;y) coordinates, to which the other attributes are assigned.&lt;/li&gt;&lt;/ul&gt;It is possible to use this step outside of a loop, even if this is not its intended use, by selecting the corresponding option.</translation>
+        <translation>This step allows you to export data within a loop, taking into account the successive turns. Any attribute of any item can be exported.&lt;br&gt;This step offers 3 different types of exports, which can be performed in parallel or not:&lt;br&gt;&lt;ul&gt;&lt;li&gt;An export in the form of a text file, with one line per item and per loop turn, and one column per attribute. A single file is produced, grouping the data from all the loop turns.&lt;/li&gt;&lt;li&gt;An export in raster form, producing one raster file per attribute and per loop turn. For this export to be used, the data must be organised as a spatial grid.&lt;/li&gt;&lt;li&gt;An export as a vector (2D points with attributes), producing one vector file per loop turn, with one row per item, and one column per attribute. This requires that the attributes include (x;y) coordinates, to which the other attributes are assigned.&lt;/li&gt;&lt;/ul&gt;It is possible to use this step outside of a loop, even if this is not its intended use, by selecting the corresponding option. </translation>
     </message>
     <message>
         <source>&lt;br&gt;&lt;br&gt;Le type de données d&apos;entrée nécessaire dépend des exports activés.&lt;br&gt;Dans tous les cas il faut sélectionner les attributs à exporter.&lt;br&gt;Pour les exports raster, il faut sélectionner un objet &quot;Grille de placettes&quot;, par exemple généré par l&apos;étape &quot;Créer une grille de placettes sur l&apos;emprise&quot;.&lt;br&gt;Pour les exports vecteurs (et aussi raster), il faut également séléctionner des attributs pour les coordonnées (x;y) auxquelles les attributs seront associés spatialement.&lt;br&gt;&lt;br&gt;Comme il s&apos;agit d&apos;un export au sein d&apos;une boucle, il faut également sélectionner le compteur de boucle (sauf si l&apos;option d&apos;export hors boucle a été choisi).</source>
@@ -384,7 +384,7 @@
     </message>
     <message>
         <source>S&apos;il existe déjà, le fichier sera écrasé. Le fichier contiendra les données pour tous les tours de boucle. </source>
-        <translation>If it already exists, the file will be overwritten. The file will contain the data for all loop turns.</translation>
+        <translation>If it already exists, the file will be overwritten. The file will contain the data for all loop turns. </translation>
     </message>
     <message>
         <source>Un prefixe optionnel peut être ajouté à tous les noms de fichier, pour par exemple identifier différents lancements du script, exportant dans un même répertoire.</source>
@@ -498,7 +498,8 @@
     </message>
     <message>
         <source>Si coché : <byte value="xd"/>%1</source>
-        <translation>If checked :</translation>
+        <translation>If checked: 
+%1</translation>
     </message>
     <message>
         <source>Chaque item sera exporté dans un fichier différent
@@ -542,7 +543,7 @@ The attribute to be used will belong to another item than the one to be exported
         <source>Saisie manuelle d&apos;un nom de base.
 Chaque item génére un fichier nommé NomDeBase_xx, avec xx allant de 0 à n. </source>
         <translation>Manual entry of a base name.
-Each item generates a file named BaseName_xx, with xx ranging from 0 to n.</translation>
+Each item generates a file named BaseName_xx, with xx ranging from 0 to n. </translation>
     </message>
     <message>
         <source>Nom du fichier contenu dans un attribut</source>
@@ -648,7 +649,7 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n.</tran
     </message>
     <message>
         <source>Ce fichier exemple doit être l&apos;un des fichiers potentiels à charger (peu importe lequel). Il est analysé pour vérifier le format utilisé, mais aussi pour définir dans quel répertoire il faut chercher les fichiers. </source>
-        <translation>This example file must be one of the potential files to be uploaded (it does not matter which one). It is analysed to check the format used, but also to define in which directory to look for the files.</translation>
+        <translation>This example file must be one of the potential files to be uploaded (it does not matter which one). It is analysed to check the format used, but also to define in which directory to look for the files. </translation>
     </message>
 </context>
 <context>
@@ -735,11 +736,11 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n.</tran
     </message>
     <message>
         <source>Cette étape est utile pour charger des séries de fichiers devant être traités ensembles.&lt;br&gt;Le nom de groupe pourra également être utilisé, par exemple pour charger un autre fichier lié au groupe, en utilisant l&apos;étape &quot;Créer un sélecteur de fichier par attribut de nom&quot;.&lt;br&gt;&lt;br&gt;Un exemple d&apos;utilisation : charger un nuage de point d&apos;une placette LIDAR, ainsi que les nuages de points des arbres de cette placette (préalablement segmentés).&lt;br&gt;Dans le fichier de correspondance on mettra&lt;br&gt;&lt;ul&gt;&lt;li&gt;Le nom dess placette en tant que noms de groupes en première colonne.&lt;/li&gt;&lt;li&gt;Le nom de chaque fichier arbre en tant que noms de fichiers en seconde colonne.&lt;/li&gt;&lt;/ul&gt;Cette étape créera la liste des fichiers pour chacune des placettes à chacun des tours de boucle. Ils pourront ensuite être chargés dans la boucle à l&apos;aide de l&apos;étape &quot;Charger les fichiers d&apos;une liste&quot;.&lt;br&gt;Ensuite, en utilisant l&apos;étape &quot;Créer un sélecteur de fichier par attribut de nom&quot;, suivie de l&apos;étape  &quot;Charger les fichiers d&apos;une liste&quot;, on pourra charger le fichier de la placette, pour peu que celui-ci soit nommé conformément au nom de placette utilisé comme nom de groupe. </source>
-        <translation>This step is useful for loading series of files that need to be processed together.&lt;br&gt;The group name can also be used, for example, to load another file related to the group, using the step &quot;Create a file selector by name attribute&quot;.&lt;br&gt;&lt;br&gt;An example of use: loading a point cloud of a LIDAR plot, as well as the point clouds of the trees of this plot (previously segmented).&lt;br&gt;In the correspondence file we will put&lt;br&gt;&lt;ul&gt;&lt;li&gt;The plot name as group names in the first column.&lt;/li&gt;&lt;li&gt;The name of each tree file as file names in the second column.&lt;/li&gt;&lt;/ul&gt;This step will create the list of files for each of the plots at each loop turn. These can then be loaded into the loop using the &quot;Load files from a list&quot; step.&lt;br&gt;Then, using the &quot;Create a file selector by name attribute&quot; step, followed by the &quot;Load files from a list&quot; step, the plot file can be loaded, provided it is named in accordance with the plot name used as the group name.</translation>
+        <translation>This step is useful for loading series of files that need to be processed together.&lt;br&gt;The group name can also be used, for example, to load another file related to the group, using the step &quot;Create a file selector by name attribute&quot;.&lt;br&gt;&lt;br&gt;An example of use: loading a point cloud of a LIDAR plot, as well as the point clouds of the trees of this plot (previously segmented).&lt;br&gt;In the correspondence file we will put&lt;br&gt;&lt;ul&gt;&lt;li&gt;The plot name as group names in the first column.&lt;/li&gt;&lt;li&gt;The name of each tree file as file names in the second column.&lt;/li&gt;&lt;/ul&gt;This step will create the list of files for each of the plots at each loop turn. These can then be loaded into the loop using the &quot;Load files from a list&quot; step.&lt;br&gt;Then, using the &quot;Create a file selector by name attribute&quot; step, followed by the &quot;Load files from a list&quot; step, the plot file can be loaded, provided it is named in accordance with the plot name used as the group name. </translation>
     </message>
     <message>
         <source>Le type choisi doit correspondre aux fichiers listés dans le fichier de correspondance. </source>
-        <translation>The type chosen must match the files listed in the correspondence file.</translation>
+        <translation>The type chosen must match the files listed in the correspondence file. </translation>
     </message>
     <message>
         <source>Choix du fichier de correspondance entre groupes et fichiers</source>
@@ -838,7 +839,7 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n.</tran
     </message>
     <message>
         <source>Cette étape permet d&apos;effectuer des traitements par lots.&lt;br&gt;Elle créée une boucle permettant de traiter successivement les fichiers choisis.&lt;br&gt;IMPORTANT : la boucle devra être fermée avec l&apos;étape &quot;Fin de boucle&quot;.&lt;br&gt;&lt;br&gt;Cette étape est en fait une combinaison des étapes &quot;Créer une liste de fichiers&quot; et &quot;Boucle standard&quot;. </source>
-        <translation>This step allows batch processing.&lt;br&gt;It creates a loop to successively process the selected files.&lt;br&gt;IMPORTANT: the loop will have to be closed with the &quot;End of loop&quot; step.&lt;br&gt;&lt;br&gt;This step is actually a combination of the &quot;Create a file list&quot; and &quot;Standard loop&quot; steps.</translation>
+        <translation>This step allows batch processing.&lt;br&gt;It creates a loop to successively process the selected files.&lt;br&gt;IMPORTANT: the loop will have to be closed with the &quot;End of loop&quot; step.&lt;br&gt;&lt;br&gt;This step is actually a combination of the &quot;Create a file list&quot; and &quot;Standard loop&quot; steps. </translation>
     </message>
     <message>
         <source>&lt;br&gt;&lt;br&gt;Cette étape génère deux résultats :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Un résultat Compteur, permettant la gestion de la boucle. Ce compteur est en particulier utilisé pour connaître le nom du tour courant.&lt;/li&gt;&lt;li&gt;Un résultat contenant l&apos;entête du fichier correspondant à ce tour de boucle. &lt;/li&gt;&lt;/ul&gt;</source>
@@ -846,7 +847,7 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n.</tran
     </message>
     <message>
         <source>On préfèrera la combinaison des étapes &quot;Créer une liste de fichiers&quot; et &quot;Boucle standard&quot;, dans les cas où la liste complète des fichiers à charger est également utile dans le script, par exemple s&apos;il faut générer initialement l&apos;ensemble des emprises des fichiers à charger.&lt;br&gt;A l&apos;inverse cette étape est plus simple s&apos;il suffit de parcourir une liste de fichiers séquenciellement. </source>
-        <translation>The combination of the &quot;Create File List&quot; and &quot;Standard Loop&quot; steps is preferred in cases where the complete list of files to be uploaded is also useful in the script, for example if the entire set of extents of the files to be uploaded must be generated initially.&lt;br&gt;Inversely, this step is simpler if it is sufficient to go through a list of files sequentially.</translation>
+        <translation>The combination of the &quot;Create File List&quot; and &quot;Standard Loop&quot; steps is preferred in cases where the complete list of files to be uploaded is also useful in the script, for example if the entire set of extents of the files to be uploaded must be generated initially.&lt;br&gt;Inversely, this step is simpler if it is sufficient to go through a list of files sequentially. </translation>
     </message>
 </context>
 <context>
@@ -908,15 +909,15 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n.</tran
     </message>
     <message>
         <source>Cette étape permet à l&apos;utilisateur de faire une séléction manuelle interactive des items à conserver. </source>
-        <translation>This step allows the user to make an interactive manual selection of items to be retained.</translation>
+        <translation>This step allows the user to make an interactive manual selection of items to be retained. </translation>
     </message>
     <message>
         <source>&lt;br&gt;&lt;br&gt;Il faut simplement choisir les items parmi lesquels faire la séléction interactive. </source>
-        <translation>&lt;br&gt;&lt;br&gt;You simply choose the items from which to make the interactive selection.</translation>
+        <translation>&lt;br&gt;&lt;br&gt;You simply choose the items from which to make the interactive selection. </translation>
     </message>
     <message>
         <source>Cette étape génère une copie du résultat d&apos;entrée, mais où seuls les items sélectionnés sont conservés. Le reste des données n&apos;est pas impacté. </source>
-        <translation>This step generates a copy of the input result, but only the selected items are retained. The rest of the data is not affected.</translation>
+        <translation>This step generates a copy of the input result, but only the selected items are retained. The rest of the data is not affected. </translation>
     </message>
 </context>
 <context>

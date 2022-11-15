@@ -951,27 +951,27 @@
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="471"/>
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="478"/>
         <source>Creation of output file failed.</source>
-        <translation>La création du fichier de sortie échoué. </translation>
+        <translation>La création du fichier de sortie échoué.</translation>
     </message>
     <message>
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="359"/>
         <source>Layer creation failed.</source>
-        <translation>La création de la couche a échoué. </translation>
+        <translation>La création de la couche a échoué.</translation>
     </message>
     <message>
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="419"/>
         <source>Creation of a field failed.</source>
-        <translation>La création du champ a échoué. </translation>
+        <translation>La création du champ a échoué.</translation>
     </message>
     <message>
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="430"/>
         <source>Creation of output file (fields names) failed.</source>
-        <translation>La création du fichier de sortie (noms de champs) a échoué. </translation>
+        <translation>La création du fichier de sortie (noms de champs) a échoué.</translation>
     </message>
     <message>
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="709"/>
         <source>Failed to create feature in shapefile.</source>
-        <translation>Echec de la création de l&apos;attribut (feature) dans le shapefile. </translation>
+        <translation>Echec de la création de l&apos;attribut (feature) dans le shapefile.</translation>
     </message>
 </context>
 <context>

@@ -68,7 +68,7 @@
     </message>
     <message>
         <source>Point Source </source>
-        <translation>Point Source</translation>
+        <translation>Point Source </translation>
     </message>
     <message>
         <source>Scan Angle</source>
@@ -186,7 +186,7 @@
     </message>
     <message>
         <source>Point Source </source>
-        <translation>Point Source</translation>
+        <translation>Point Source </translation>
     </message>
     <message>
         <source>Scan Angle</source>
@@ -242,7 +242,7 @@
     </message>
     <message>
         <source>Error while loading the file </source>
-        <translation>Error while loading the file</translation>
+        <translation>Error while loading the file </translation>
     </message>
     <message>
         <source>Intensity</source>
@@ -273,7 +273,7 @@
     </message>
     <message>
         <source>Impossible d&apos;ouvrir le fichier &quot;%1&quot;</source>
-        <translation>Unable to open file &quot;%1&quot;.</translation>
+        <translation>Unable to open file &quot;%1&quot;</translation>
     </message>
     <message>
         <source>L&apos;en-tête du fichier &quot;%1&quot; n&apos;est pas compatible avec l&apos;en-tête du fichier &quot;%2&quot;</source>

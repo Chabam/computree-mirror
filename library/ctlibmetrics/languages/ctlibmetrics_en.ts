@@ -5,7 +5,7 @@
     <name>CT_AbstractMetric</name>
     <message>
         <source> : </source>
-        <translation> :</translation>
+        <translation> : </translation>
     </message>
     <message>
         <source>Impossible de trouver l&apos;attribut recherché (métrique : %2) !</source>
@@ -32,7 +32,7 @@
     </message>
     <message>
         <source>Ne conserver que les points avec H &gt;= </source>
-        <translation>Keep only points with H &gt;=</translation>
+        <translation>Keep only points with H &gt;= </translation>
     </message>
     <message>
         <source>N</source>

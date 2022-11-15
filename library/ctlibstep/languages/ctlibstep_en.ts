@@ -114,7 +114,7 @@
     <name>QObject</name>
     <message>
         <source> de l&apos;étape &quot;%1&quot;</source>
-        <translation> of step &quot;%1&quot;.</translation>
+        <translation> of step &quot;%1&quot;</translation>
     </message>
 </context>
 </TS>

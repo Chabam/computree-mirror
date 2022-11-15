@@ -708,7 +708,7 @@
     <name>GGraphicsViewImp</name>
     <message>
         <source>Save to file error : State file name (%1) references a directory instead of a file.</source>
-        <translation>Erreur lors de la sauvegarde de fichier : le chemin (%1) référence un répertoire au lieu d&apos;un fichier</translation>
+        <translation>Erreur lors de la sauvegarde de fichier : le chemin (%1) référence un répertoire au lieu d&apos;un fichier.</translation>
     </message>
     <message>
         <source>Save to file error : Unable to create directory %1</source>
@@ -720,7 +720,7 @@
     </message>
     <message>
         <source>Problem in state restoration : File %1 is not readable.</source>
-        <translation>Problème lors de la restauration : Fichier %1 non lisible</translation>
+        <translation>Problème lors de la restauration : Fichier %1 non lisible.</translation>
     </message>
     <message>
         <source>Problem in state restoration when set xml content : %1 at line %2 column %3</source>
