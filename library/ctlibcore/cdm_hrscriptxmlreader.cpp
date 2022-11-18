@@ -44,6 +44,8 @@ void CDM_HRScriptXmlReader::readFile(const QString &absoluteFilePath)
     m_errors = "";
 
     QFile f(absoluteFilePath);
+    QFileInfo info(absoluteFilePath);
+    m_scriptPath = info.absolutePath();
 
     if(f.open(QIODevice::ReadOnly))
     {
@@ -75,6 +77,8 @@ void CDM_HRScriptXmlReader::verifyFile(const QString &absoluteFilePath)
     m_errors = "";
 
     QFile f(absoluteFilePath);
+    QFileInfo info(absoluteFilePath);
+    m_scriptPath = info.absolutePath();
 
     if(f.open(QIODevice::ReadOnly))
     {
@@ -264,13 +268,25 @@ void CDM_HRScriptXmlReader::loadPrePath()
     m_prePath.clear();
 
     if(!m_domPrePath.isNull()) {
+        QDomElement el_relative = m_domPrePath.firstChildElement("RelativeToScriptPath");
+        bool isRelative = !el_relative.isNull();
+
         QDomElement el = m_domPrePath.firstChildElement("Path");
 
         while(!el.isNull()) {
             const int prePathID = el.attribute("prePathID", "-1").toInt();
 
             if(prePathID >= 0 && !el.firstChild().toText().isNull())
-                m_prePath.insert(prePathID, el.firstChild().toText().data());
+            {
+                QString path = el.firstChild().toText().data();
+
+                if (isRelative)
+                {
+                    path = m_scriptPath + "/" + path;
+                }
+
+                m_prePath.insert(prePathID, path);
+            }
 
             el = el.nextSiblingElement("Path");
         }

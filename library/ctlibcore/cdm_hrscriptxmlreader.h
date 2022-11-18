@@ -101,6 +101,8 @@ private:
     QDomElement                     m_domOthersParameters;
     QDomElement                     m_domWorkflow;
 
+    QString                         m_scriptPath;
+
     mutable QString                 m_errors;
     QString                         mLastErrorAction;
 
