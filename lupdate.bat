@@ -35,7 +35,7 @@ for %%i in (
     ..\pluginsegma\pluginsegma\pluginsegma.pro
     ..\plugintoolkit\plugintoolkit\plugintoolkit.pro
         ) do (
-    %lupdate% %%i -no-obsolete
+    %lupdate% %%i
 )
 
 rem The following project can't be processed by lupdate du to an unexpected endless loop
