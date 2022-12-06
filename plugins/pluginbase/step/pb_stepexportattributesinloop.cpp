@@ -20,7 +20,7 @@ PB_StepExportAttributesInLoop::PB_StepExportAttributesInLoop() : SuperClass()
     _asciiExport = true;
     _vectorExport = false;
     _rasterExport = false;
-    _exportInLoop = true;
+    _exportInLoop = false;
 
     _vectorPrefix = "";
     _rasterPrefix = "";
