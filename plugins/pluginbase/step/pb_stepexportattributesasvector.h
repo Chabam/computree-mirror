@@ -66,7 +66,6 @@ private:
     CT_HandleInStdZeroOrMoreGroup                                   mInRootGroup;
     CT_HandleInStdGroup<>                                           mInGroupMain;
     CT_HandleInSingularItem<CT_PlotListInGrid>                      mInPlotListInGrid;
-    CT_HandleInStdGroup<>                                           mInGroupChild;
     CT_HandleInSingularItem<CT_AbstractSingularItemDrawable>        mInItemWithXY;
     CT_HandleInStdItemAttribute<CT_AbstractCategory::DOUBLE>        mInItemAttributeX;
     CT_HandleInStdItemAttribute<CT_AbstractCategory::DOUBLE>        mInItemAttributeY;
@@ -83,6 +82,7 @@ private:
 
     QMap<QString, QString>  _names;
     QMap<QString, QString>  _shortNames;
+    QMap<QString, QString>  _itemNames;
 
     // Step parameters
     bool        _replaceSpecialCharacters;

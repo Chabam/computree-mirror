@@ -47,27 +47,22 @@ PB_StepExportAttributesAsRaster::PB_StepExportAttributesAsRaster() : SuperClass(
 
 QString PB_StepExportAttributesAsRaster::description() const
 {
-    return tr("Export d'attributs dans une boucle");
+    return tr("Export d'attributs - Raster");
 }
 QString PB_StepExportAttributesAsRaster::detailledDescription() const
 {
-    return tr("Cette étape permet d'exporter des données au sein d'une boucle, en prenant en compte les tours surccessifs. Tout attribut de n'importe quel item peut être exporté.<br>"
-                "Cette étape propose 3 types d'exports différents, pouvant être réalisés en parallèle ou non :<br>"
-                "<ul>"
-                "<li>Un export sous forme de fichier texte, avec une ligne par item et tour de boucle, et une colonne par attribut. Un seul fichier est produit, regroupant les données de tous les tours de boucle.</li>"
-                "<li>Un export sous forme de raster, produisant un fichier raster par attribut et par tour de boucle. Pour que cet export puisse être utilisé, il faut que les données soient organisées sous forme de grille spatiale.</li>"
-                "<li>Un export sous forme de vecteur (points en 2D avec attributs), produisant un fichier vecteur par tour de boucle, avec une ligne par item, et une colonne par attribut. Cela nécessite que parmi les attributs figurent des coordonnées (x;y), auquelles assosicer les autres attributs.</li>"
-                "</ul>"
-                "Il est possible d'utiliser cette étape en dehors d'une boucle, même si ce n'est pas son usage prévu, en sélectionnant l'option correspondante. ");
+    return tr("Cette étape permet d'exporter des attributs d'items situés dans un même groupe. Cette étape fonctionne également au sein d'une boucle, en prenant en compte les tours surccessifs. Tout attribut de n'importe quel item peut être exporté.<br>"
+                "L'export est réalisé sous forme de raster, produisant un fichier raster par attribut (et par tour de boucle le cas échéant). Pour que cet export puisse être utilisé, il faut que les données soient organisées sous forme de grille spatiale.");
 }
 
 QString PB_StepExportAttributesAsRaster::inputDescription() const
 {
-    return SuperClass::inputDescription() + tr("<br><br>Le type de données d'entrée nécessaire dépend des exports activés.<br>"
-                                               "Dans tous les cas il faut sélectionner les attributs à exporter.<br>"
-                                               "Pour les exports raster, il faut sélectionner un objet \"Grille de placettes\", par exemple généré par l'étape \"Créer une grille de placettes sur l'emprise\".<br>"
-                                               "Pour les exports vecteurs (et aussi raster), il faut également séléctionner des attributs pour les coordonnées (x;y) auxquelles les attributs seront associés spatialement.<br><br>"
-                                               "Comme il s'agit d'un export au sein d'une boucle, il faut également sélectionner le compteur de boucle (sauf si l'option d'export hors boucle a été choisi).");
+    return SuperClass::inputDescription() + tr("<br><br>Il faut sélectionner les attributs à exporter.<br>"
+                                               "Ces attributs peuvent appartenir à plusieurs items, tant que ces items sont dans un même groupe.<br>"
+                                               "Il faut également séléctionner des attributs pour les coordonnées (X,Y) auxquelles les attributs seront associés spatialement.<br>"
+                                               "Il faut de plus sélectionner un objet \"Grille de placettes\", par exemple généré par l'étape \"Créer une grille de placettes sur l'emprise\".<br>"
+                                               "Enfin, lorsque l'export est au sein d'une boucle, il faut sélectionner le compteur de boucle.");
+
 }
 
 QString PB_StepExportAttributesAsRaster::outputDescription() const
@@ -77,7 +72,7 @@ QString PB_StepExportAttributesAsRaster::outputDescription() const
 
 QString PB_StepExportAttributesAsRaster::detailsDescription() const
 {
-    return tr("A noter que les trois types d'exports sont indépendants, même s'ils exportent les mêmes attributs.");
+    return tr("N.B. : les noms d'attributs sont simplifiés : suppression des accents, remplacement des espaces et caractères spéciaux par \"_\".");
 }
 
 
@@ -145,21 +140,27 @@ void PB_StepExportAttributesAsRaster::compute()
     {
         _names.clear();
         _modelsKeys.clear();
+
         computeModelsKeysAndNamesAndOgrTypes();
+        PB_Tools::renameDuplicates(_names, _itemNames);
+
+        if (_shortenNames) {_shortNames =  PB_Tools::computeShortNames(_names);}
+
+        if (_replaceSpecialCharacters)
+        {
+            replaceSpecialCharacters(_names);
+            if (_shortenNames) {replaceSpecialCharacters(_shortNames);}
+        }
+
+        if (_shortenNames && !_outRasterFolder.isEmpty())
+        {
+            PB_Tools::createCorrespondanceFile(QString("%1/raster").arg(_outRasterFolder.first()), _names, _shortNames);
+        }
+
+        std::sort(_modelsKeys.begin(), _modelsKeys.end());
 
         if(isStopped()) {return;}
-
-        if (_shortenNames)
-        {
-            _shortNames =  PB_Tools::computeShortNames(_names);
-
-            if (!_outRasterFolder.isEmpty())
-            {
-                PB_Tools::createCorrespondanceFile(_outRasterFolder.first(), _shortNames);
-            }
-        }
     }
-
 
     // IN results browsing
     for(const CT_StandardItemGroup* grpMain : mInGroupMain.iterateInputs(mInResult))
@@ -207,36 +208,36 @@ void PB_StepExportAttributesAsRaster::compute()
 
                 if (attX != nullptr) {x = attX->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attX, indexedAttributes); }
                 if (attY != nullptr) {y = attY->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attY, indexedAttributes);}
-            }
 
 
-            auto iteratorItemWithAttribute = grp->singularItems(mInItemWithAttribute);
+                auto iteratorItemWithAttribute = grp->singularItems(mInItemWithAttribute);
 
-            for(const CT_AbstractSingularItemDrawable* item : iteratorItemWithAttribute)
-            {
-                auto iteratorAttributes = item->itemAttributesByHandle(mInItemAttribute);
-
-                for(const CT_AbstractItemAttribute* attr : iteratorAttributes)
+                for(const CT_AbstractSingularItemDrawable* item : iteratorItemWithAttribute)
                 {
-                    addToIndexedAttributesCollection(item, attr, indexedAttributes);
+                    auto iteratorAttributes = item->itemAttributesByHandle(mInItemAttribute);
+
+                    for(const CT_AbstractItemAttribute* attr : iteratorAttributes)
+                    {
+                        addToIndexedAttributesCollection(item, attr, indexedAttributes);
+                    }
                 }
-            }
 
-            for (int i = 0 ; i < _modelsKeys.size() ; i++)
-            {
-                const QString key = _modelsKeys.at(i);
+                for (int i = 0 ; i < _modelsKeys.size() ; i++)
+                {
+                    const QString key = _modelsKeys.at(i);
 
-                const auto pair = indexedAttributes.value(key);
+                    const auto pair = indexedAttributes.value(key);
 
 
-                CT_Image2D<double>* raster = rasters.value(key, nullptr);
+                    CT_Image2D<double>* raster = rasters.value(key, nullptr);
 
-                const double val = pair.second->toDouble(pair.first, nullptr);
+                    const double val = pair.second->toDouble(pair.first, nullptr);
 
-                if (std::isnan(val))
-                    raster->setValueAtCoords(x, y, DEF_NA);
-                else
-                    raster->setValueAtCoords(x, y, val);
+                    if (std::isnan(val))
+                        raster->setValueAtCoords(x, y, DEF_NA);
+                    else
+                        raster->setValueAtCoords(x, y, val);
+                }
             }
         }
 
@@ -251,7 +252,7 @@ void PB_StepExportAttributesAsRaster::compute()
             QString metricName;
 
             if (_shortenNames) {metricName = _shortNames.value(key);}
-                          else {metricName = _names.value(key);}
+            else {metricName = _names.value(key);}
 
 
             QString fileName = QString("%1/%2%3_%4").arg(_outRasterFolder.first()).arg(_rasterPrefix).arg(metricName).arg(exportBaseName);
@@ -319,17 +320,11 @@ void PB_StepExportAttributesAsRaster::computeModelsKeysAndNamesAndOgrTypes()
     // an item at least.
 
     computeModelsKeysAndNamesAndOgrTypes(mInItemAttribute, true);
-
-    if (_replaceSpecialCharacters)
-    {
-        replaceSpecialCharacters(_names);
-    }
-
-    std::sort(_modelsKeys.begin(), _modelsKeys.end());
 }
 
 void PB_StepExportAttributesAsRaster::computeModelsKeysAndNamesAndOgrTypesForModels(const CT_OutAbstractModel* itemModel, const CT_OutAbstractItemAttributeModel* attModel, bool isNotXOrYAttribute)
 {
+    const QString itemDN = itemModel->displayableName();
     const QString attrDN = attModel->displayableName();
 
     const QString key = computeKeyForModels(itemModel, attModel);
@@ -339,9 +334,10 @@ void PB_StepExportAttributesAsRaster::computeModelsKeysAndNamesAndOgrTypesForMod
         _modelsKeys.append(key);
 
         if(isNotXOrYAttribute)
-            _modelsKeysWithoutXOrYAttribute.append(key);
+           _modelsKeysWithoutXOrYAttribute.append(key);
 
         _names.insert(key, attrDN);
+        _itemNames.insert(key, itemDN);
     }
 }
 

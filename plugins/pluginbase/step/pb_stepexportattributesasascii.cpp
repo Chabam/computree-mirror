@@ -82,8 +82,9 @@ void PB_StepExportAttributesAsASCII::compute()
     QScopedPointer<QFile> fileASCII;
     QScopedPointer<QTextStream> streamASCII;
     bool firstTurnFromCounter = true;
+    _inLoop = false;
 
-    const QString exportBaseName = createExportBaseName(firstTurnFromCounter);
+    const QString exportBaseName = createExportBaseName(firstTurnFromCounter, _inLoop);
 
     if (firstTurnFromCounter)
     {
@@ -91,31 +92,24 @@ void PB_StepExportAttributesAsASCII::compute()
         _modelsKeys.clear();
 
         computeModelsKeysAndNames(mInItemAttribute);
+        PB_Tools::renameDuplicates(_names, _itemNames);
 
-        if (_shortenNames)
-        {
-            _shortNames =  PB_Tools::computeShortNames(_names);
-
-            if (!_outASCIIFileName.isEmpty())
-            {
-                QString folder = QDir(_outASCIIFileName.first()).path();
-
-                PB_Tools::createCorrespondanceFile(folder, _shortNames);
-            }
-        }
-
+        if (_shortenNames) {_shortNames =  PB_Tools::computeShortNames(_names);}
 
         if (_replaceSpecialCharacters)
         {
             replaceSpecialCharacters(_names);
+            if (_shortenNames) {replaceSpecialCharacters(_shortNames);}
+        }
+
+        if (_shortenNames && !_outASCIIFileName.isEmpty())
+        {
+            PB_Tools::createCorrespondanceFile(_outASCIIFileName.first(), _names, _shortNames);
         }
 
         std::sort(_modelsKeys.begin(), _modelsKeys.end());
 
-        if(isStopped())
-            return;
-
-
+        if (isStopped()) {return;}
     }
 
     if(isStopped() || !exportInAscii(fileASCII, streamASCII, firstTurnFromCounter))
@@ -142,7 +136,7 @@ void PB_StepExportAttributesAsASCII::compute()
 
         const bool hasMetricsToExport = !(indexedAttributes.isEmpty());
 
-        if (!streamASCII.isNull())
+        if (!streamASCII.isNull() && _inLoop)
         {
             (*streamASCII.data()) << exportBaseName << "\t";
         }
@@ -173,10 +167,13 @@ void PB_StepExportAttributesAsASCII::compute()
     }
 }
 
-QString PB_StepExportAttributesAsASCII::createExportBaseName(bool& first) const
+QString PB_StepExportAttributesAsASCII::createExportBaseName(bool& first, bool& inLoop) const
 {
+    inLoop = false;
     for(const CT_LoopCounter* counter : mInLoopCounter.iterateInputs(mInResultCounter))
     {
+        inLoop = true;
+
         if (counter->currentTurn() > 1)
             first = false;
 
@@ -193,6 +190,7 @@ QString PB_StepExportAttributesAsASCII::createExportBaseName(bool& first) const
 
 void PB_StepExportAttributesAsASCII::computeModelsKeysAndNamesForModels(const CT_OutAbstractModel* itemModel, const CT_OutAbstractItemAttributeModel* attModel)
 {
+    const QString itemDN = itemModel->displayableName();
     const QString attrDN = attModel->displayableName();
 
     const QString key = computeKeyForModels(itemModel, attModel);
@@ -201,6 +199,7 @@ void PB_StepExportAttributesAsASCII::computeModelsKeysAndNamesForModels(const CT
     {
         _modelsKeys.append(key);
         _names.insert(key, attrDN);
+        _itemNames.insert(key, itemDN);
     }
 }
 
@@ -220,7 +219,11 @@ bool PB_StepExportAttributesAsASCII::exportInAscii(QScopedPointer<QFile>& fileAS
             if (fileASCII->open(QIODevice::WriteOnly | QIODevice::Text))
             {
                 streamASCII.reset(new QTextStream(fileASCII.data()));
-                (*streamASCII) << "Name\t";
+
+                if (_inLoop)
+                {
+                    (*streamASCII) << "Name\t";
+                }
 
                 for (int i = 0 ; i < _modelsKeys.size() ; i++)
                 {

@@ -48,14 +48,17 @@ private:
     QList<QString>          _modelsKeys;
     QList<QString>          _modelsKeysWithoutXOrYAttribute;
     QMap<QString, QString>  _names;
-    QMap<QString, QString> _shortNames;
+    QMap<QString, QString>  _shortNames;
+    QMap<QString, QString>  _itemNames;
+
+    bool                    _inLoop;
 
     // Step parameters
     bool        _replaceSpecialCharacters;
     bool        _shortenNames;
     QStringList _outASCIIFileName;
 
-    QString createExportBaseName(bool& first) const;
+    QString createExportBaseName(bool& first, bool &inLoop) const;
 
     template<typename InHandleT>
     void computeModelsKeysAndNames(InHandleT& handle)

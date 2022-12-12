@@ -231,8 +231,8 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
     addNewExportStep<PB_StepExportAttributesInLoop>(); // doc ok
     addNewExportStep<PB_StepExportAttributesAsASCII>();
-    addNewExportStep<PB_StepExportAttributesAsRaster>();
     addNewExportStep<PB_StepExportAttributesAsVector>();
+    addNewExportStep<PB_StepExportAttributesAsRaster>();
 
     return true;
 }

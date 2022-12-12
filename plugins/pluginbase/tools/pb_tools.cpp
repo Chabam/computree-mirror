@@ -1,8 +1,11 @@
 #include "pb_tools.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QVariant>
+
+#include <QDebug>
 
 QString PB_Tools::replaceSpecialCharacters(const QString &name)
 {
@@ -31,48 +34,101 @@ QString PB_Tools::replaceAccentCharacters(const QString &name)
         return value;
 }
 
-QMap<QString, QString> PB_Tools::computeShortNames(const QMap<QString, QString> &names)
+
+void PB_Tools::renameDuplicates(QMap<QString, QString> &names, const QMap<QString, QString> &itemNames)
 {
-   QMap<QString, QString> shortNames;
-   QList<QString> existing;
+   QMultiMap<QString, QString> keysForNames;
 
    QMapIterator<QString, QString> it(names);
    while (it.hasNext())
    {
        it.next();
        QString key = it.key();
-       QString value = it.value();
+       QString fieldName = it.value();
 
-       if (value.size() <= 10)
-       {
-           shortNames.insert(key, value);
-           existing.append(value.toLower());
-       } else {
-           QString newValue = value.left(10);
-           int cpt = 2;
-           while (existing.contains(newValue.toLower()))
-           {
-               QString number = QVariant(cpt++).toString();
-               newValue = QString("%1%2").arg(value.left(10 - number.length())).arg(number);
-           }
-           shortNames.insert(key, newValue);
-           existing.append(newValue.toLower());
-       }
+       keysForNames.insert(fieldName, key);
    }
 
-   return shortNames;
+   for (QString nm : keysForNames.uniqueKeys())
+   {
+       QList<QString> keysForValue = keysForNames.values(nm);
+
+       if (keysForValue.size() > 1)
+       {
+           QList<QString> newNames;
+           for (QString key : keysForValue)
+           {
+               QString newName = QString("%1_%2").arg(nm, itemNames.value(key));
+
+               int cpt = 1;
+               for (int i = 0 ; i < newNames.size() ; i++)
+               {
+                   if (newName == newNames.at(i)) {++cpt;}
+               }
+
+               newNames.append(newName);
+               if (cpt > 1) {newName.append(QString("_%1").arg(cpt));}
+
+               names.insert(key, newName);
+           }
+       }
+   }
 }
 
 
-void PB_Tools::createCorrespondanceFile(QString folder, const QMap<QString, QString>  &names)
+QMap<QString, QString> PB_Tools::computeShortNames(const QMap<QString, QString> &names)
 {
+    QMap<QString, QString> shortNames;
+
+    QMultiMap<QString, QString> keysForNames;
+
+    QMapIterator<QString, QString> it(names);
+    while (it.hasNext())
+    {
+        it.next();
+        QString key = it.key();
+        QString fieldName = it.value();
+
+        QString newName = fieldName.left(10);
+
+        shortNames.insert(key, newName);
+        keysForNames.insert(newName, key);
+    }
+
+    for (QString nm : keysForNames.uniqueKeys())
+    {
+        QList<QString> keysForValue = keysForNames.values(nm);
+
+        if (keysForValue.size() > 1)
+        {
+            QString number = QVariant(keysForValue.size()).toString();
+            nm = nm.left(10 - number.length() - 1);
+
+            int cpt = 1;
+            for (QString key : keysForValue)
+            {
+                QString newName = QString("%1_%2").arg(nm).arg(cpt++);
+                shortNames.insert(key, newName);
+            }
+        }
+    }
+
+    return shortNames;
+}
+
+
+void PB_Tools::createCorrespondanceFile(QString fileName, const QMap<QString, QString>  &names, const QMap<QString, QString>  &shortNames)
+{
+    QFileInfo info(fileName);
+    QString folder = info.path();
+
     if (!folder.isEmpty())
     {
-        QFile ffields(QString("%1/fields_names.txt").arg(folder));
+        QFile ffields(QString("%1/%2_fields_names.txt").arg(folder).arg(info.baseName()));
         QTextStream fstream(&ffields);
         if (ffields.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            QMapIterator<QString, QString> itF(names);
+            QMapIterator<QString, QString> itF(shortNames);
             while (itF.hasNext())
             {
                 itF.next();

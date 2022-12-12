@@ -37,27 +37,20 @@ PB_StepExportAttributesAsVector::PB_StepExportAttributesAsVector() : SuperClass(
 
 QString PB_StepExportAttributesAsVector::description() const
 {
-    return tr("Export d'attributs dans une boucle");
+    return tr("Export d'attributs - Vectoriel");
 }
 QString PB_StepExportAttributesAsVector::detailledDescription() const
 {
-    return tr("Cette étape permet d'exporter des données au sein d'une boucle, en prenant en compte les tours surccessifs. Tout attribut de n'importe quel item peut être exporté.<br>"
-                "Cette étape propose 3 types d'exports différents, pouvant être réalisés en parallèle ou non :<br>"
-                "<ul>"
-                "<li>Un export sous forme de fichier texte, avec une ligne par item et tour de boucle, et une colonne par attribut. Un seul fichier est produit, regroupant les données de tous les tours de boucle.</li>"
-                "<li>Un export sous forme de raster, produisant un fichier raster par attribut et par tour de boucle. Pour que cet export puisse être utilisé, il faut que les données soient organisées sous forme de grille spatiale.</li>"
-                "<li>Un export sous forme de vecteur (points en 2D avec attributs), produisant un fichier vecteur par tour de boucle, avec une ligne par item, et une colonne par attribut. Cela nécessite que parmi les attributs figurent des coordonnées (x;y), auquelles assosicer les autres attributs.</li>"
-                "</ul>"
-                "Il est possible d'utiliser cette étape en dehors d'une boucle, même si ce n'est pas son usage prévu, en sélectionnant l'option correspondante. ");
+    return tr("Cette étape permet d'exporter des attributs d'items situés dans un même groupe. Cette étape fonctionne également au sein d'une boucle, en prenant en compte les tours surccessifs. Tout attribut de n'importe quel item peut être exporté.<br>"
+                "L'export est réalisé sous forme de vecteur (points en 2D avec attributs), produisant un fichier vecteur (par tour de boucle le cas échéant), avec une ligne par item, et une colonne par attribut. Cela nécessite que parmi les attributs figurent des coordonnées (x;y), auquelles assosicer les autres attributs.");
 }
 
 QString PB_StepExportAttributesAsVector::inputDescription() const
 {
-    return SuperClass::inputDescription() + tr("<br><br>Le type de données d'entrée nécessaire dépend des exports activés.<br>"
-                                               "Dans tous les cas il faut sélectionner les attributs à exporter.<br>"
-                                               "Pour les exports raster, il faut sélectionner un objet \"Grille de placettes\", par exemple généré par l'étape \"Créer une grille de placettes sur l'emprise\".<br>"
-                                               "Pour les exports vecteurs (et aussi raster), il faut également séléctionner des attributs pour les coordonnées (x;y) auxquelles les attributs seront associés spatialement.<br><br>"
-                                               "Comme il s'agit d'un export au sein d'une boucle, il faut également sélectionner le compteur de boucle (sauf si l'option d'export hors boucle a été choisi).");
+    return SuperClass::inputDescription() + tr("<br><br>Il faut sélectionner les attributs à exporter.<br>"
+                                               "Ces attributs peuvent appartenir à plusieurs items, tant que ces items sont dans un même groupe.<br>"
+                                               "Il faut également séléctionner des attributs pour les coordonnées (X,Y) auxquelles les attributs seront associés spatialement.<br>"
+                                               "Enfin, lorsque l'export est au sein d'une boucle, il faut sélectionner le compteur de boucle.");
 }
 
 QString PB_StepExportAttributesAsVector::outputDescription() const
@@ -67,7 +60,7 @@ QString PB_StepExportAttributesAsVector::outputDescription() const
 
 QString PB_StepExportAttributesAsVector::detailsDescription() const
 {
-    return tr("A noter que les trois types d'exports sont indépendants, même s'ils exportent les mêmes attributs.");
+    return tr("N.B. : les noms d'attributs sont simplifiés : suppression des accents, remplacement des espaces et caractères spéciaux par \"_\".");
 }
 
 
@@ -85,19 +78,16 @@ void PB_StepExportAttributesAsVector::declareInputModels(CT_StepInModelStructure
     manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
     manager.addGroup(mInRootGroup, mInGroupMain);
 
-    manager.addGroup(mInGroupMain, mInGroupChild);
-
-    manager.addItem(mInGroupChild, mInItemWithXY, tr("Item de position (avec XY)"));
+    manager.addItem(mInGroupMain, mInItemWithXY, tr("Item de position (avec XY)"));
     manager.addItemAttribute(mInItemWithXY, mInItemAttributeX, CT_AbstractCategory::DATA_X, tr("X"));
     manager.addItemAttribute(mInItemWithXY, mInItemAttributeY, CT_AbstractCategory::DATA_Y, tr("Y"));
 
-    manager.addItem(mInGroupChild, mInItemWithAttribute, tr("Item avec des attributs"));
+    manager.addItem(mInGroupMain, mInItemWithAttribute, tr("Item avec des attributs"));
     manager.addItemAttribute(mInItemWithAttribute, mInItemAttribute, CT_AbstractCategory::DATA_VALUE, tr("Attribut à exporter"));
 
     manager.addResult(mInResultCounter, tr("Résultat compteur"), QString(), true);
     manager.setRootGroup(mInResultCounter, mInGroupCounter);
     manager.addItem(mInGroupCounter, mInLoopCounter, tr("Compteur"));
-
 }
 
 void PB_StepExportAttributesAsVector::declareOutputModels(CT_StepOutModelStructureManager&)
@@ -130,19 +120,26 @@ void PB_StepExportAttributesAsVector::compute()
     {
         _names.clear();
         _modelsKeys.clear();
+
         computeModelsKeysAndNamesAndOgrTypes();
+        PB_Tools::renameDuplicates(_names, _itemNames);
+
+        if (_shortenNames) {_shortNames =  PB_Tools::computeShortNames(_names);}
+
+        if (_replaceSpecialCharacters)
+        {
+            replaceSpecialCharacters(_names);
+            if (_shortenNames) {replaceSpecialCharacters(_shortNames);}
+        }
+
+        if (_shortenNames && !_outVectorFolder.isEmpty())
+        {
+            PB_Tools::createCorrespondanceFile(QString("%1/vector").arg(_outVectorFolder.first()), _names, _shortNames);
+        }
+
+        std::sort(_modelsKeys.begin(), _modelsKeys.end());
 
         if (isStopped()) {return;}
-
-        if (_shortenNames)
-        {
-            _shortNames =  PB_Tools::computeShortNames(_names);
-
-            if (!_outVectorFolder.isEmpty())
-            {
-                PB_Tools::createCorrespondanceFile(_outVectorFolder.first(), _shortNames);
-            }
-        }
     }
 
 
@@ -160,33 +157,25 @@ void PB_StepExportAttributesAsVector::compute()
 #endif
 
     // IN results browsing
-    for(const CT_StandardItemGroup* grpMain : mInGroupMain.iterateInputs(mInResult))
+    for(const CT_StandardItemGroup* grp : mInGroupMain.iterateInputs(mInResult))
     {
         if(isStopped())
             return;
 
-        auto iteratorGroupsChild = grpMain->groups(mInGroupChild);
+        QMap<QString, QPair<const CT_AbstractSingularItemDrawable*, const CT_AbstractItemAttribute*> > indexedAttributes;
 
-        for(const CT_StandardItemGroup* grp : iteratorGroupsChild)
+        double x = std::numeric_limits<double>::max();
+        double y = std::numeric_limits<double>::max();
+
+        const CT_AbstractSingularItemDrawable* itemXY = grp->singularItem(mInItemWithXY);
+
+        if (itemXY != nullptr)
         {
-            if(isStopped())
-                return;
+            const CT_AbstractItemAttribute* attX = itemXY->itemAttribute(mInItemAttributeX);
+            const CT_AbstractItemAttribute* attY = itemXY->itemAttribute(mInItemAttributeY);
 
-            QMap<QString, QPair<const CT_AbstractSingularItemDrawable*, const CT_AbstractItemAttribute*> > indexedAttributes;
-
-            double x = std::numeric_limits<double>::max();
-            double y = std::numeric_limits<double>::max();
-
-            const CT_AbstractSingularItemDrawable* itemXY = grp->singularItem(mInItemWithXY);
-
-            if (itemXY != nullptr)
-            {
-                const CT_AbstractItemAttribute* attX = itemXY->itemAttribute(mInItemAttributeX);
-                const CT_AbstractItemAttribute* attY = itemXY->itemAttribute(mInItemAttributeY);
-
-                if (attX != nullptr) {x = attX->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attX, indexedAttributes); }
-                if (attY != nullptr) {y = attY->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attY, indexedAttributes);}
-            }
+            if (attX != nullptr) {x = attX->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attX, indexedAttributes); }
+            if (attY != nullptr) {y = attY->toDouble(itemXY, nullptr); addToIndexedAttributesCollection(itemXY, attY, indexedAttributes);}
 
             auto iteratorItemWithAttribute = grp->singularItems(mInItemWithAttribute);
 
@@ -214,7 +203,6 @@ void PB_StepExportAttributesAsVector::compute()
             }
 #endif
 
-
             for (int i = 0 ; i < _modelsKeys.size() ; i++)
             {
                 const QString key = _modelsKeys.at(i);
@@ -222,11 +210,11 @@ void PB_StepExportAttributesAsVector::compute()
                 const auto pair = indexedAttributes.value(key);
 
 #ifdef USE_GDAL
-                if (vectorLayer != nullptr)
+                if (vectorLayer != nullptr && pair.first != nullptr && pair.second != nullptr)
                 {
                     std::string fieldName;
                     if (_shortenNames) {fieldName = _shortNames.value(key).toStdString();}
-                                  else {fieldName = _names.value(key).toStdString();}
+                    else {fieldName = _names.value(key).toStdString();}
 
                     if (_ogrTypes.value(key) == OFTBinary)
                     {
@@ -240,18 +228,17 @@ void PB_StepExportAttributesAsVector::compute()
                     else if (_ogrTypes.value(key) == OFTInteger)
                     {
                         vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
-//                        }
-//                        else if (_ogrTypes.value(key) == OFTInteger64)
-//                        {
-//                            vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
+                        //                        }
+                        //                        else if (_ogrTypes.value(key) == OFTInteger64)
+                        //                        {
+                        //                            vectorFeature->SetField(fieldName.data(), pair.second->toInt(pair.first, nullptr));
                     }
                     else
                     {
                         vectorFeature->SetField(fieldName.data(), pair.second->toDouble(pair.first, nullptr));
                     }
                 }
-#endif
-
+#endif                
             }
 
 #ifdef USE_GDAL
@@ -296,16 +283,11 @@ void PB_StepExportAttributesAsVector::computeModelsKeysAndNamesAndOgrTypes()
     computeModelsKeysAndNamesAndOgrTypes(mInItemAttributeY, false);
 
     computeModelsKeysAndNamesAndOgrTypes(mInItemAttribute, true);
-
-    if (_replaceSpecialCharacters)
-    {
-        replaceSpecialCharacters(_names);
-    }
-    std::sort(_modelsKeys.begin(), _modelsKeys.end());
 }
 
 void PB_StepExportAttributesAsVector::computeModelsKeysAndNamesAndOgrTypesForModels(const CT_OutAbstractModel* itemModel, const CT_OutAbstractItemAttributeModel* attModel, bool isNotXOrYAttribute)
 {
+    const QString itemDN = itemModel->displayableName();
     const QString attrDN = attModel->displayableName();
 
     const QString key = computeKeyForModels(itemModel, attModel);
@@ -318,6 +300,7 @@ void PB_StepExportAttributesAsVector::computeModelsKeysAndNamesAndOgrTypesForMod
             _modelsKeysWithoutXOrYAttribute.append(key);
 
         _names.insert(key, attrDN);
+        _itemNames.insert(key, itemDN);
 
 #ifdef USE_GDAL
         if (!_outVectorFolder.isEmpty())
@@ -388,7 +371,7 @@ void PB_StepExportAttributesAsVector::preExportVectorIfNecessary(const QString& 
 
                 std::string fieldName;
                 if (_shortenNames) {fieldName = _shortNames.value(key).toStdString();}
-                              else {fieldName = _names.value(key).toStdString();}
+                else {fieldName = _names.value(key).toStdString();}
 
                 OGRFieldDefn oField(fieldName.data(), ogrType );
 

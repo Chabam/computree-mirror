@@ -94,6 +94,7 @@ private:
     QList<QString>          _modelsKeysWithoutXOrYAttribute;
     QMap<QString, QString>  _names;
     QMap<QString, QString>  _shortNames;
+    QMap<QString, QString>  _itemNames;
 
     // Step parameters
     bool        _replaceSpecialCharacters;
