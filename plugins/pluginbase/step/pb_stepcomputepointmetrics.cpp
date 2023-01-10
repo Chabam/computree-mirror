@@ -15,7 +15,7 @@ PB_StepComputePointMetrics::PB_StepComputePointMetrics() : SuperClass()
 
 PB_StepComputePointMetrics::~PB_StepComputePointMetrics()
 {
-    qDeleteAll(m_selectedXYZMetrics.begin(), m_selectedXYZMetrics.end());
+    qDeleteAll(m_selectedXYZMetrics);
     m_selectedXYZMetrics.clear();
 }
 

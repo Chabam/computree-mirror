@@ -5,6 +5,11 @@ CT_AbstractMetric_LAS::CT_AbstractMetric_LAS(QString pluginName) : CT_AbstractMe
     _lasAttributes = nullptr;
 }
 
+CT_AbstractMetric_LAS::CT_AbstractMetric_LAS(const CT_AbstractMetric_LAS &other) : CT_AbstractMetric_XYZ(other)
+{
+
+}
+
 bool CT_AbstractMetric_LAS::initLasDatas(const CT_AbstractPointCloudIndex *inCloud, const CT_AreaShape2DData *plotArea, const CT_StdLASPointsAttributesContainer *lasAttributes)
 {
     if((lasAttributes == nullptr) || lasAttributes->lasPointsAttributes().isEmpty() || !initDatas(inCloud, plotArea))

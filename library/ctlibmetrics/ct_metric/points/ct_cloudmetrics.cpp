@@ -280,6 +280,7 @@ void CT_CloudMetrics::computeMetric()
             m_configAndResults.canopyReliefRatio.value = doubleInfinity;
     }
 
+    setAttributeValueVaB(m_configAndResults.totalNumberOfReturns);
     setAttributeValueVaB(m_configAndResults.minimum);
     setAttributeValueVaB(m_configAndResults.maximum);
     setAttributeValueVaB(m_configAndResults.mean);

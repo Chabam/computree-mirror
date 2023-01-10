@@ -124,6 +124,7 @@ void PB_StepExportAttributesAsASCII::compute()
 
         auto iteratorItemWithAttribute = grp->singularItems(mInItemWithAttribute);
 
+
         for(const CT_AbstractSingularItemDrawable* item : iteratorItemWithAttribute)
         {
             auto iteratorAttributes = item->itemAttributesByHandle(mInItemAttribute);
@@ -147,21 +148,14 @@ void PB_StepExportAttributesAsASCII::compute()
 
             const auto pair = indexedAttributes.value(key);
 
-            if(pair.first == nullptr)
-            {
-                if (hasMetricsToExport && !streamASCII.isNull())
-                {
-                    if(i < _modelsKeys.size() - 1) {(*streamASCII.data()) << "\t";} else {(*streamASCII.data()) << "\n";}
-                }
-
-                continue;
-            }
-
             if (hasMetricsToExport && !streamASCII.isNull())
             {
-                (*streamASCII.data()) << pair.second->toString(pair.first, nullptr);
+                if (pair.first != nullptr)
+                {
+                    (*streamASCII.data()) << pair.second->toString(pair.first, nullptr);
+                }
 
-                if(i < _modelsKeys.size() - 1) {(*streamASCII.data()) << "\t";} else {(*streamASCII.data()) << "\n";}
+                if (i < _modelsKeys.size() - 1) {(*streamASCII.data()) << "\t";} else {(*streamASCII.data()) << "\n";}
             }
         }
     }
