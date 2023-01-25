@@ -107,6 +107,74 @@ QString CT_AbstractReader::filepath() const
     return m_filePath;
 }
 
+bool CT_AbstractReader::setMultipleFilePath(const QList<FileBuffer>& fileBufferList)
+{
+    // Check that the list is not empty
+    if(fileBufferList.length() == 0)
+        return false;
+
+    // List all possible suffix
+    QStringList allSuffixes;
+    for(const FileFormat& fileFormat : readableFormats()) {
+        const QList<QString>& suffixes = fileFormat.suffixes();
+        allSuffixes.append(suffixes);
+    }
+
+    // Now check every file path from the list
+    for(auto &fileBuffer: qAsConst(fileBufferList))
+    {
+        if(!allSuffixes.contains("*") && !allSuffixes.contains(QFileInfo(fileBuffer.filename).completeSuffix().toLower()))
+            return false;
+
+        // Verify that the file exist and can be opened
+        if (QFile::exists(fileBuffer.filename))
+        {
+            QFile file(fileBuffer.filename);
+
+            if(file.open(QIODevice::ReadOnly))
+            {
+                const bool ok = preVerifyFile(fileBuffer.filename, file);
+
+                file.close();
+
+                if(!ok)
+                    return false;
+
+                if(!postVerifyFile(fileBuffer.filename))
+                    return false;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+
+    // If all path are ok, we can save the buffer list.
+    m_fileBufferList = fileBufferList;
+
+    // Associate the filepath to the first reference file (nPoints = 0) in the list
+    for(auto &fileBuffer: qAsConst(fileBufferList))
+    {
+        if(fileBuffer.nPoints == 0)
+        {
+            m_filePath = fileBuffer.filename;
+            break;
+        }
+    }
+
+    // Check that the filepath is not empty
+    if(m_filePath.isEmpty())
+        m_filePath = m_fileBufferList[0].filename;
+
+    return true;
+}
+
+QList<CT_AbstractReader::FileBuffer> CT_AbstractReader::multipleFilepath() const
+{
+    return m_fileBufferList;
+}
+
 void CT_AbstractReader::setFilePathCanBeModified(bool enable)
 {
     m_filepathCanBeModified = enable;
@@ -210,7 +278,10 @@ bool CT_AbstractReader::readFile(CT_StandardItemGroup* group)
     m_error = false;
     m_stop = false;
 
-    m_error = internalReadFile(group);
+    if(m_fileBufferList.length() == 0)
+        m_error = internalReadFile(group);
+    else
+        m_error = internalReadMultiFile(group);
 
     if(m_hOutFileHeader.isValid()) {
         CT_FileHeader* header = readHeader();
@@ -281,4 +352,10 @@ CT_FileHeader* CT_AbstractReader::internalReadHeader(const QString& filepath, QS
     f->setFilePath(filepath);
 
     return f;
+}
+
+bool CT_AbstractReader::internalReadMultiFile(CT_StandardItemGroup* group)
+{
+    Q_UNUSED(group);
+    return true;
 }

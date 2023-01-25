@@ -64,6 +64,24 @@ public:
       */
     QString filepath() const;
 
+    // For buffer including multiples files
+    struct FileBuffer {
+        QString       filename;
+        size_t        nPoints;
+        QList<size_t> indexList;
+    };
+
+    /**
+      * @brief Set the multiple files information for buffer to read.
+      * @return false if one of the file can not be read or open or does not exist. True otherwise.
+      */
+    virtual bool setMultipleFilePath(const QList<FileBuffer>& fileBufferList);
+
+    /**
+      * @brief Return the multiple files information for buffer
+      */
+    QList<FileBuffer> multipleFilepath() const;
+
     /**
      * @brief Enable/Disable the modification of the filepath
      */
@@ -290,6 +308,12 @@ protected:
      */
     virtual bool internalReadFile(CT_StandardItemGroup* group) = 0;
 
+    /**
+     * @brief Inherit this method to read multiple file at once.
+     *        You must add item or group in the rootGroup passed in parameter.
+     */
+    virtual bool internalReadMultiFile(CT_StandardItemGroup* group);
+
 private:
     QList<FileFormat>                                       m_formats;
     QString                                                 m_tooltip;
@@ -301,6 +325,7 @@ private:
     bool                                                    m_filepathCanBeModified;
     int                                                     m_subMenuLevel;
     QHash<QString, AbstractHandleManager*>                  m_allHandles;
+    QList<FileBuffer>                                       m_fileBufferList;
 
 signals:
     /**

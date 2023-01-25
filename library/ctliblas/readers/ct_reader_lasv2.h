@@ -62,6 +62,8 @@ protected:
 
     bool internalReadFile(CT_StandardItemGroup* group) override;
 
+    bool internalReadMultiFile(CT_StandardItemGroup* group) override;
+
 private:
     CT_LASHeader*                                                   m_headerFromConfiguration;
 
@@ -96,6 +98,8 @@ private:
     CT_HandleOutPointScalarWithDenseManager<float>                  m_hOutReturnPointWaveformLocation;
 
     CT_HandleOutPointScalarWithDenseManager<quint16>                m_hOutNIR;
+
+    QList<FileBuffer>                                               m_fileBufferList;
 };
 
 CT_TYPEINFO_MACRO(CT_Reader_LASV2::PointCore0_5, CT_Reader_LASV2::PointCore0_5)
