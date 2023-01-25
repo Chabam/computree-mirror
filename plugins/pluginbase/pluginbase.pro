@@ -1,5 +1,4 @@
-COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctliblaz ctlibstepaddon ctlibfilters ctlibmetrics
-# COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctliblaz ctlibbuffer ctlibstepaddon ctlibfilters ctlibmetrics
+COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctliblaz ctlibbuffer ctlibstepaddon ctlibfilters ctlibmetrics
 
 CHECK_CAN_USE_GDAL = 1
 MUST_USE_LASZIP = 1
@@ -27,6 +26,7 @@ HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     step/pb_stepuseritemselection.h \
     step/pb_stepexportattributesinloop.h \
     step/pb_stepexportpointsbyxyarea.h \
+    step/pb_stepexportpointstobuffer.h \
     step/pb_stepbeginloopthroughgroups02.h \
     step/pb_steplooponfiles.h \
     step/pb_steplooponfilesets.h \
@@ -49,6 +49,7 @@ SOURCES += \
     step/pb_stepuseritemselection.cpp \
     step/pb_stepexportattributesinloop.cpp \
     step/pb_stepexportpointsbyxyarea.cpp \
+    step/pb_stepexportpointstobuffer.cpp \
     step/pb_stepbeginloopthroughgroups02.cpp \
     step/pb_steplooponfiles.cpp \
     step/pb_steplooponfilesets.cpp \

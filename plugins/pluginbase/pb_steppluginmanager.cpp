@@ -49,6 +49,7 @@
 #include "step/pb_stepbeginloopthroughgroups02.h"
 #include "step/pb_stepapplypointfilters.h"
 #include "step/pb_stepexportpointsbyxyarea.h"
+#include "step/pb_stepexportpointstobuffer.h"
 #include "step/pb_stepexportattributesinloop.h"
 #include "step/pb_stepexportattributesasascii.h"
 #include "step/pb_stepexportattributesasraster.h"
@@ -229,6 +230,7 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewLoadStep<PB_StepLoadFileByName>(); // doc ok
 
     addNewExportStep<PB_StepExportPointsByXYArea>(CT_StepsMenu::LP_Points);
+    //addNewExportStep<PB_StepExportPointsToBuffer>(CT_StepsMenu::LP_Points);
     addNewExportStep<PB_StepExportAttributesInLoop>(); // doc ok
     addNewExportStep<PB_StepExportAttributesAsASCII>();
     addNewExportStep<PB_StepExportAttributesAsVector>();
