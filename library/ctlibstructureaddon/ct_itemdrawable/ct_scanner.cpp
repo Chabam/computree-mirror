@@ -114,6 +114,11 @@ CT_Scanner::CT_Scanner(const CT_Scanner& other) : SuperClass(other),
 {
 }
 
+CT_Scanner::~CT_Scanner()
+{
+    m_shootingPattern.release();
+}
+
 CT_ShootingPattern* CT_Scanner::shootingPattern() const
 {
     return m_shootingPattern.get();

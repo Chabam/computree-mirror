@@ -21,7 +21,8 @@ CT_ShootingPatternD::CT_ShootingPatternD(const CT_ShootingPatternD& other) : Sup
 
 CT_ShootingPatternD::~CT_ShootingPatternD()
 {
-    delete m_pattern;
+    if(m_pattern != nullptr)
+        delete m_pattern;
 }
 
 CT_ShootingPattern* CT_ShootingPatternD::getShootingPattern() const
