@@ -1,11 +1,29 @@
-# linux : LASZIP_INC_PATH = "/usr/include/"
-linux : LASZIP_INC_PATH = "../3rdparty/laszip/include/" # already included in package, but could be removed later
-win32 : LASZIP_INC_PATH = "../3rdparty/laszip/include/" # already included in package, but could be removed later
-macx  : LASZIP_INC_PATH = "../3rdparty/laszip/include/" # already included in package, but could be removed later
-# macx  : LASZIP_INC_PATH = "/usr/local/Cellar/laszip/3.4.3/include/"
+linux {
+    LASZIP_BASE_PATH = "/usr/"
 
-# linux : LASZIP_LIBS_PATH = "/usr/lib/x86_64-linux-gnu/"
-linux : LASZIP_LIBS_PATH = "../3rdparty/laszip/lib/" # already included in package, but could be removed later
-win32 : LASZIP_LIBS_PATH = "../3rdparty/laszip/lib/" # already included in package, but could be removed later
-macx  : LASZIP_LIBS_PATH = "../3rdparty/laszip/lib/" # already included in package, but could be removed later
-# macx  : LASZIP_LIBS_PATH = "/usr/local/Cellar/laszip/3.4.3/lib/"
+    LASZIP_LIBS_PATH = "$${LASZIP_BASE_PATH}lib/x86_64-linux-gnu"
+    LASZIP_INC_PATH = "$${LASZIP_BASE_PATH}include"
+    LASZIP_BIN_PATH = "$${LASZIP_BASE_PATH}bin"
+}
+
+win32 {
+    LASZIP_BASE_PATH = "$${VCPKG_PATH}/"
+
+    LASZIP_INC_PATH = "$${LASZIP_BASE_PATH}include"
+
+    CONFIG(debug, debug|release) {
+        LASZIP_LIBS_PATH = "$${LASZIP_BASE_PATH}debug/lib"
+        LASZIP_BIN_PATH = "$${LASZIP_BASE_PATH}debug/bin"
+    } else {
+        LASZIP_LIBS_PATH = "$${LASZIP_BASE_PATH}lib"
+        LASZIP_BIN_PATH = "$${LASZIP_BASE_PATH}bin"
+    }
+}
+
+macx {
+    LASZIP_BASE_PATH = "/usr/local/Cellar/laszip/3.4.3/"
+
+    LASZIP_LIBS_PATH = "$${LASZIP_BASE_PATH}lib"
+    LASZIP_INC_PATH = "$${LASZIP_BASE_PATH}include"
+    LASZIP_BIN_PATH = "$${LASZIP_BASE_PATH}bin"
+}

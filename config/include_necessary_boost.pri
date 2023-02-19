@@ -27,4 +27,6 @@ isEmpty(USE_BOOST_ERROR_MSG) {
             LIBS += -L$$BOOST_LIBS_PATH
         }
     }
+} else {
+    error($$USE_BOOST_ERROR_MSG)
 }

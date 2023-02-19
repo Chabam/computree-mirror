@@ -10,25 +10,140 @@ LIB = $$DESTDIR/libraries
 # Final deployment of binaries : make a standalone package (this avoid to do the usual 'make install')
 win32 {
     # Copy other libraries dependencies
-    include(default_path_opencv.pri)
-    CONFIG(release, debug|release) : lib_opencv.files += $$PWD/$$OPENCV_LIBS_PATH/../bin/opencv_world450.dll
-    CONFIG(debug,   debug|release) : lib_opencv.files += $$PWD/$$OPENCV_LIBS_PATH/../bin/opencv_world450d.dll
-    lib_opencv.path = $$LIB/opencv
+    VCPKG_PATH = $$(VCPKG)
+    VCPKG_PATH ~= s,/,\\,g
 
-    include(default_path_gdal.pri)
-    lib_gdal.files += $$PWD/$$GDAL_BASE_PATH/bin/*.dll
-    lib_gdal.path = $$LIB/gdal
+    # TODO : this 'dirty' list of binary dependencies will be simplified when CMake will be used
 
-    INSTALLS += lib_opencv lib_gdal
+    CONFIG(release, debug|release) {
+        lib_bin.files += $$VCPKG_PATH/bin/boost_*.dll
+        lib_bin.files += $$VCPKG_PATH/bin/bz2.dll
+        lib_bin.files += $$VCPKG_PATH/bin/gsl*.dll
+        lib_bin.files += $$VCPKG_PATH/bin/jpeg*.dll
+        lib_bin.files += $$VCPKG_PATH/bin/laszip3.dll
+        lib_bin.files += $$VCPKG_PATH/bin/liblzma.dll
+        lib_bin.files += $$VCPKG_PATH/bin/libpng16.dll
+        lib_bin.files += $$VCPKG_PATH/bin/libsharpyuv.dll
+        lib_bin.files += $$VCPKG_PATH/bin/libwebp*.dll
+        lib_bin.files += $$VCPKG_PATH/bin/lz4.dll
+        lib_bin.files += $$VCPKG_PATH/bin/muparser.dll
+        lib_bin.files += $$VCPKG_PATH/bin/qhull_r.dll
+        lib_bin.files += $$VCPKG_PATH/bin/tiff.dll
+        lib_bin.files += $$VCPKG_PATH/bin/turbojpeg.dll
+        lib_bin.files += $$VCPKG_PATH/bin/zlib1.dll
+        lib_bin.files += $$VCPKG_PATH/bin/zstd.dll
+        lib_bin.path = $$LIB/bin
 
-    include(default_path_pcl.pri)
-    exists($$PCL_BASE_PATH) {
-        CONFIG(release, debug|release) : lib_pcl.files += $$PWD/$$PCL_BASE_PATH/bin/*[^d].dll
-        CONFIG(debug,   debug|release) : lib_pcl.files += $$PWD/$$PCL_BASE_PATH/bin/*d.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/charset*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/freexl*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/gdal.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/geos*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/geotiff.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/gif.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/hdf5*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/iconv*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/json-c.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/legacy.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/Lerc.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libcrypto*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libcurl.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libecpg*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libexpat.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libffi.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libpgtypes.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libpq.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libssl*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/libxml2.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/netcdf.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/openjp2.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/pcre2*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/pkgconf*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/proj.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/python*.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/spatialite.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/sqlite3.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/szip.dll
+        lib_gdal.files += $$VCPKG_PATH/bin/uriparser.dll
+        lib_gdal.path = $$LIB/gdal
+
+        lib_opencv.files += $$VCPKG_PATH/bin/libproto*.dll
+        lib_opencv.files += $$VCPKG_PATH/bin/opencv_*.dll
+        lib_opencv.path = $$LIB/opencv
+
+        lib_pcl.files += $$VCPKG_PATH/bin/flann*.dll
+        lib_pcl.files += $$VCPKG_PATH/bin/pcl_*.dll
         lib_pcl.path = $$LIB/pcl
 
-        INSTALLS += lib_pcl
+#        lib_pdal.files += $$VCPKG_PATH/bin/libpdal*.dll
+#        lib_pdal.files += $$VCPKG_PATH/bin/pdal*.dll
+#        lib_pdal.files += $$VCPKG_PATH/bin/xerces*.dll
+#        lib_pdal.path = $$LIB/pdal
+    } else {
+        lib_bin.files += $$VCPKG_PATH/debug/bin/boost_*.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/bz2d.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/gsl*.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/jpeg62.*
+        lib_bin.files += $$VCPKG_PATH/debug/bin/laszip3.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/liblzma.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/libpng16d.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/libsharpyuv.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/libwebp*.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/lz4d.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/muparser.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/qhull_rd.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/tiffd.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/turbojpeg.*
+        lib_bin.files += $$VCPKG_PATH/debug/bin/zlibd1.dll
+        lib_bin.files += $$VCPKG_PATH/debug/bin/zstd.dll
+        lib_bin.path = $$LIB/bin
+
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/charset*.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/freexl*.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/gdald.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/geos*.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/geotiff_d.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/gif.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/hdf5*.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/iconv*.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/json-c.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/legacy.*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/Lerc.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libcrypto*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libcurl-d.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libecpg*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libexpatd.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libffi.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libpgtypes.*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libpq.*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libssl*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/libxml2.*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/netcdf.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/openjp2.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/pcre2*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/pkgconf*
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/proj_d.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/python*.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/spatialite.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/sqlite3.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/szip_D.dll
+        lib_gdal.files += $$VCPKG_PATH/debug/bin/uriparser.dll
+        lib_gdal.path = $$LIB/gdal
+
+        lib_opencv.files += $$VCPKG_PATH/debug/bin/libproto*.dll
+        lib_opencv.files += $$VCPKG_PATH/debug/bin/opencv_*.dll
+        lib_opencv.path = $$LIB/opencv
+
+        lib_pcl.files += $$VCPKG_PATH/debug/bin/flann*.dll
+        lib_pcl.files += $$VCPKG_PATH/debug/bin/pcl_*.dll
+        lib_pcl.path = $$LIB/pcl
+
+#        lib_pdal.files += $$VCPKG_PATH/debug/bin/libpdal*.dll
+#        lib_pdal.files += $$VCPKG_PATH/debug/bin/pdal*.dll
+#        lib_pdal.files += $$VCPKG_PATH/debug/bin/xerces*.dll
+#        lib_pdal.path = $$LIB/pdal
     }
+
+    INSTALLS += lib_bin lib_gdal lib_opencv lib_pcl #lib_pdal
 
     # Usefull definitions of paths
     WIN_PATH = $$DESTDIRFULL
@@ -37,28 +152,18 @@ win32 {
 
     # Deployment using WinDeployQt
     qt_deploy_options = --force --no-translations --angle --compiler-runtime --plugindir $$LIB/Qt --libdir $$LIB/Qt
-    CONFIG(release, debug|release) {
-        qt_deploy_options += --release
-    }
-    CONFIG(debug,   debug|release) {
-        qt_deploy_options += --debug
-    }
+    CONFIG(release, debug|release) : qt_deploy_options += --release
+    CONFIG(debug,   debug|release) : qt_deploy_options += --debug
 
     qt_deploy_cmd1 = $$[QT_INSTALL_BINS]/windeployqt.exe $$DESTDIR $$qt_deploy_options &&
     qt_deploy_cmd2 = copy "distrib\windows\qt.conf" $$WIN_PATH && copy "distrib\windows\CompuTreeGui.cmd" $$WIN_PATH &&
     qt_deploy_cmd3 = move $$WIN_PATH\libraries\Qt\opengl32sw.dll $$WIN_PATH\opengl32.dll &&
-    qt_deploy_cmd4 = if not exist $$WIN_PATH\languages\ mkdir $$WIN_PATH\languages\ && call lrelease.bat && cd .. && forfiles /s /m *_*.qm /c \"cmd /c copy @path $$WIN_PATH\languages\" && cd $$PWDC
-    CONFIG(release, debug|release) {
-        qt_deploy_cmd5 = && move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH
-    }
+    qt_deploy_cmd4 = if not exist $$WIN_PATH\languages\ mkdir $$WIN_PATH\languages\ && call lrelease.bat && cd .. &&
+    qt_deploy_cmd5 = forfiles /s /m *_*.qm /c \"cmd /c copy @path $$WIN_PATH\languages\" && cd $$PWDC &&
+    qt_deploy_cmd6 = move $$WIN_PATH\libraries\Qt\vc_redist.x64.exe $$WIN_PATH
 
     qt_deploy.path = $$DESTDIR
-    CONFIG(release, debug|release) {
-        qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5
-    }
-    CONFIG(debug,   debug|release) {
-        qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4
-    }
+    qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5 $$qt_deploy_cmd6
 
     INSTALLS += qt_deploy
 }

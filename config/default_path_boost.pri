@@ -3,13 +3,21 @@ linux {
 
     BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}lib/x86_64-linux-gnu"
     BOOST_INC_PATH = "$${BOOST_BASE_PATH}include"
+    BOOST_BIN_PATH = "$${BOOST_BASE_PATH}bin"
 }
 
 win32 {
-    BOOST_BASE_PATH = "../3rdparty/boost/"
+    BOOST_BASE_PATH = "$${VCPKG_PATH}/"
 
-    BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}lib"
-    BOOST_INC_PATH = "$${BOOST_BASE_PATH}include/boost-1_74"
+    BOOST_INC_PATH = "$${BOOST_BASE_PATH}include"
+
+    CONFIG(debug, debug|release) {
+        BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}debug/lib"
+        BOOST_BIN_PATH = "$${BOOST_BASE_PATH}debug/bin"
+    } else {
+        BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}lib"
+        BOOST_BIN_PATH = "$${BOOST_BASE_PATH}bin"
+    }
 }
 
 macx {
@@ -17,4 +25,5 @@ macx {
 
     BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}lib"
     BOOST_INC_PATH = "$${BOOST_BASE_PATH}include"
+    BOOST_BIN_PATH = "$${BOOST_BASE_PATH}bin"
 }

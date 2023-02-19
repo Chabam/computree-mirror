@@ -24,7 +24,7 @@ equals(QT_ARCH, x86_64)|equals(QT_ARCH, x86) {
 }
 
 # Check platform
-linux|win32| macx {
+linux|win32|macx {
     linux {
         platform = "Linux"
     }

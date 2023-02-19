@@ -2,23 +2,22 @@ PCL_LIB_ADD =
 PCL_LIB_ADD += pcl_common
 PCL_LIB_ADD += pcl_features
 PCL_LIB_ADD += pcl_filters
-PCL_LIB_ADD += pcl_io_ply
 PCL_LIB_ADD += pcl_io
+PCL_LIB_ADD += pcl_io_ply
 PCL_LIB_ADD += pcl_kdtree
 PCL_LIB_ADD += pcl_keypoints
+PCL_LIB_ADD += pcl_ml
 PCL_LIB_ADD += pcl_octree
-PCL_LIB_ADD += pcl_outofcore
-PCL_LIB_ADD += pcl_people
 PCL_LIB_ADD += pcl_recognition
 PCL_LIB_ADD += pcl_registration
 PCL_LIB_ADD += pcl_sample_consensus
 PCL_LIB_ADD += pcl_search
 PCL_LIB_ADD += pcl_segmentation
+PCL_LIB_ADD += pcl_stereo
 PCL_LIB_ADD += pcl_surface
 PCL_LIB_ADD += pcl_tracking
-PCL_LIB_ADD += pcl_visualization
 
-PCL_LIBS_FOUNDED =
+PCL_LIBS_FOUND =
 
 linux {
     for(a, PCL_LIB_ADD) {
@@ -26,13 +25,13 @@ linux {
             !exists($$PCL_LIBS_PATH/lib$${a}*) {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/lib$${a} was not found"
             } else {
-                PCL_LIBS_FOUNDED += $$PCL_LIBS_PATH/lib$${a}.so
+                PCL_LIBS_FOUND += $$PCL_LIBS_PATH/lib$${a}.so
             }
         } else {
             !exists($$PCL_LIBS_PATH/lib$${a}*) {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/lib$${a} was not found"
             } else {
-                PCL_LIBS_FOUNDED += $$PCL_LIBS_PATH/lib$${a}.so
+                PCL_LIBS_FOUND += $$PCL_LIBS_PATH/lib$${a}.so
             }
         }
     }
@@ -44,13 +43,13 @@ macx {
             !exists($$PCL_LIBS_PATH/lib$${a}*) {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/lib$${a} was not found"
             } else {
-                PCL_LIBS_FOUNDED += $$PCL_LIBS_PATH/lib$${a}.dylib
+                PCL_LIBS_FOUND += $$PCL_LIBS_PATH/lib$${a}.dylib
             }
         } else {
             !exists($$PCL_LIBS_PATH/lib$${a}*) {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/lib$${a} was not found"
             } else {
-                PCL_LIBS_FOUNDED += $$PCL_LIBS_PATH/lib$${a}.dylib
+                PCL_LIBS_FOUND += $$PCL_LIBS_PATH/lib$${a}.dylib
             }
         }
     }
@@ -59,25 +58,16 @@ macx {
 windows {
     for(a, PCL_LIB_ADD) {
         CONFIG(debug, debug|release) {
-            !exists($$PCL_LIBS_PATH/$${a}*) {
-                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a} was not found"
+            !exists($$PCL_LIBS_PATH/$${a}d*) {
+                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a}d was not found"
             } else {
-                exists($$PCL_LIBS_PATH/$${a}_debug*) {
-                    PCL_LIBS_FOUNDED += -l$${a}_debug
-                } else {
-                    PCL_LIBS_FOUNDED += -l$${a}
-                }
+                PCL_LIBS_FOUND += -l$${a}d
             }
         } else {
-
             !exists($$PCL_LIBS_PATH/$${a}*) {
                 USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a} was not found"
             } else {
-                exists($$PCL_LIBS_PATH/$${a}_release*) {
-                    PCL_LIBS_FOUNDED += -l$${a}_release
-                } else {
-                    PCL_LIBS_FOUNDED += -l$${a}
-                }
+                PCL_LIBS_FOUND += -l$${a}
             }
         }
     }
@@ -102,13 +92,14 @@ isEmpty(USE_PCL_ERROR_MSG) {
             !isEmpty(PCL_BIN_PATH) {
                 LIBS += -L$${TMP_LIB_PATH}$$PCL_BIN_PATH
             }
-
         } else {
             INCLUDEPATH += $$PCL_INC_PATH
             TR_EXCLUDE  += $$PCL_INC_PATH/*
             LIBS += -L$$PCL_LIBS_PATH
         }
 
-        LIBS += $$PCL_LIBS_FOUNDED
+        LIBS += $$PCL_LIBS_FOUND
     }
+} else {
+    error($$USE_PCL_ERROR_MSG)
 }

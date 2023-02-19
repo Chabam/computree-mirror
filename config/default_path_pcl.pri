@@ -3,14 +3,21 @@ linux {
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib/x86_64-linux-gnu"
     PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.10"
+    PCL_INC_PATH = "$${PCL_BASE_PATH}bin"
 }
 
 win32 {
-    PCL_BASE_PATH = "../3rdparty/pcl/"
+    PCL_BASE_PATH = "$${VCPKG_PATH}/"
 
-    PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
-    PCL_BIN_PATH = "$${PCL_BASE_PATH}bin"
-    PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.11"
+    PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl"
+
+    CONFIG(debug, debug|release) {
+        PCL_LIBS_PATH = "$${PCL_BASE_PATH}debug/lib"
+        PCL_BIN_PATH = "$${PCL_BASE_PATH}debug/bin"
+    } else {
+        PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
+        PCL_BIN_PATH = "$${PCL_BASE_PATH}bin"
+    }
 }
 
 macx {
@@ -18,4 +25,5 @@ macx {
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
     PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.11"
+    PCL_INC_PATH = "$${PCL_BASE_PATH}bin"
 }

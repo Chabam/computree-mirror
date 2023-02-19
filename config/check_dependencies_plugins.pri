@@ -30,6 +30,9 @@ defineTest(checkMandatoryDependence) {
 # Default relative path for libs
 isEmpty(LIB_PATH) : LIB_PATH = # empty
 
+VCPKG_PATH = $$(VCPKG)
+VCPKG_PATH ~= s,/,\\,g
+
 # Check mandatory libraries
 #checkMandatoryDependence(dgtal)
 checkMandatoryDependence(flann)

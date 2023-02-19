@@ -4,4 +4,4 @@ include(config/check_dependencies_base.pri)
 TEMPLATE = subdirs
 SUBDIRS += AMKgl library ComputreeGui
 
-ComputreeGui.depends = AMKgl library 3rdparty/muparser
+ComputreeGui.depends = AMKgl library

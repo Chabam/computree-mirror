@@ -1,5 +1,6 @@
 GDAL_LIB_ADD = gdal
-GDAL_LIBS_FOUNDED =
+
+GDAL_LIBS_FOUND =
 
 linux {
     for(a, GDAL_LIB_ADD) {
@@ -7,13 +8,13 @@ linux {
             !exists($$GDAL_LIBS_PATH/lib$${a}*) {
                 USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/lib$${a} was not found"
             } else {
-                GDAL_LIBS_FOUNDED += $$GDAL_LIBS_PATH/lib$${a}.so
+                GDAL_LIBS_FOUND += $$GDAL_LIBS_PATH/lib$${a}.so
             }
         } else {
             !exists($$GDAL_LIBS_PATH/lib$${a}*) {
                 USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/lib$${a} was not found"
             } else {
-                GDAL_LIBS_FOUNDED += $$GDAL_LIBS_PATH/lib$${a}.so
+                GDAL_LIBS_FOUND += $$GDAL_LIBS_PATH/lib$${a}.so
             }
         }
     }
@@ -25,13 +26,13 @@ macx {
             !exists($$GDAL_LIBS_PATH/lib$${a}*) {
                 USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/lib$${a} was not found"
             } else {
-                GDAL_LIBS_FOUNDED += $$GDAL_LIBS_PATH/lib$${a}.dylib
+                GDAL_LIBS_FOUND += $$GDAL_LIBS_PATH/lib$${a}.dylib
             }
         } else {
             !exists($$GDAL_LIBS_PATH/lib$${a}*) {
                 USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/lib$${a} was not found"
             } else {
-                GDAL_LIBS_FOUNDED += $$GDAL_LIBS_PATH/lib$${a}.dylib
+                GDAL_LIBS_FOUND += $$GDAL_LIBS_PATH/lib$${a}.dylib
             }
         }
     }
@@ -40,17 +41,16 @@ macx {
 windows {
     for(a, GDAL_LIB_ADD) {
         CONFIG(debug, debug|release) {
-            !exists($$GDAL_LIBS_PATH/$${a}_i*) {
-                USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/$${a}_i was not found"
+            !exists($$GDAL_LIBS_PATH/$${a}d*) {
+                USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/$${a}d was not found"
             } else {
-                GDAL_LIBS_FOUNDED += -l$${a}_i
+                GDAL_LIBS_FOUND += -l$${a}d
             }
         } else {
-
-            !exists($$GDAL_LIBS_PATH/$${a}_i*) {
-                USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/$${a}_i was not found"
+            !exists($$GDAL_LIBS_PATH/$${a}*) {
+                USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/$${a} was not found"
             } else {
-                GDAL_LIBS_FOUNDED += -l$${a}_i
+                GDAL_LIBS_FOUND += -l$${a}
             }
         }
     }
@@ -61,7 +61,6 @@ isEmpty(USE_GDAL_ERROR_MSG) {
         DEFINES += USE_GDAL
 
         win32 {
-
             ABS_PATH = $$absolute_path($$GDAL_INC_PATH)
             TMP_LIB_PATH = $$LIB_PATH/
 
@@ -78,11 +77,12 @@ isEmpty(USE_GDAL_ERROR_MSG) {
             }
         } else {
             INCLUDEPATH += $$GDAL_INC_PATH
-
             TR_EXCLUDE  += $$GDAL_INC_PATH/*
-
             LIBS += -L$$GDAL_LIBS_PATH
         }
-        LIBS += $$GDAL_LIBS_FOUNDED
+
+        LIBS += $$GDAL_LIBS_FOUND
     }
+} else {
+    error($$USE_GDAL_ERROR_MSG)
 }

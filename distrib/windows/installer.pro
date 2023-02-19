@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_WINDOWS_6.0.310
+INSTALLER = Computree_Installer_WINDOWS_6.0.328
 # version : Major.Minor.commit
 
 # Usefull definitions of paths
@@ -38,6 +38,7 @@ PREPARE_DATA += xcopy /s /i /y languages\*                 $$PATH_DST\computree.
 PREPARE_DATA += xcopy /s /i /y $$PATH_RCS\examples\*       $$PATH_DST\computree.B\data\examples\               &&
 PREPARE_DATA += xcopy /s /i /y vc_redist.x64.exe           $$PATH_DST\computree.C\data\                        &&
 PREPARE_DATA += xcopy /s /i /y libraries\core\ctlib*.dll   $$PATH_DST\library.A\data\libraries\core\           &&
+PREPARE_DATA += xcopy /s /i /y libraries\bin\*.dll         $$PATH_DST\library.A\data\libraries\bin\            &&
 PREPARE_DATA += xcopy /s /i /y libraries\Qt\Qt5*.dll       $$PATH_DST\library.B\data\libraries\Qt\             &&
 PREPARE_DATA += xcopy /s /i /y libraries\Qt\iconengines\*  $$PATH_DST\library.B\data\libraries\Qt\iconengines  &&
 PREPARE_DATA += xcopy /s /i /y libraries\Qt\imageformats\* $$PATH_DST\library.B\data\libraries\Qt\imageformats &&

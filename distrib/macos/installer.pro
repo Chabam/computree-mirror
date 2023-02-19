@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_MACOS_6.0.313
+INSTALLER = Computree_Installer_MACOS_6.0.328
 # version : Major.Minor.commit
 
 # Usefull definitions of paths
