@@ -75,9 +75,12 @@ QString CT_Reader_GDAL::getTypeOfDriver() const
 
 CT_FileHeader* CT_Reader_GDAL::createHeaderPrototype() const
 {
+#ifdef USE_GDAL
     return new CT_GDALHeader();
+#else
+    return nullptr;
+#endif
 }
-
 
 bool CT_Reader_GDAL::postVerifyFile(const QString& filepath)
 {
@@ -145,13 +148,16 @@ void CT_Reader_GDAL::internalDeclareOutputModels(CT_ReaderOutModelStructureManag
 
         GDALClose(data);
     }
+#else
+    Q_UNUSED(manager)
 #endif
 }
 
-#ifdef USE_GDAL
+
 CT_FileHeader *CT_Reader_GDAL::internalReadHeader(const QString &filepath, QString &error) const
 {
     Q_UNUSED(error);
+#ifdef USE_GDAL
     GDALDataset *data = getDataSet(filepath);
 
     if(data == nullptr)
@@ -219,8 +225,11 @@ CT_FileHeader *CT_Reader_GDAL::internalReadHeader(const QString &filepath, QStri
     GDALClose(data);
 
     return f;
-}
+#else
+    Q_UNUSED(filepath);
+    return nullptr;
 #endif
+}
 
 
 #ifdef USE_GDAL
@@ -491,7 +500,7 @@ bool CT_Reader_GDAL::internalReadFile(CT_StandardItemGroup* group)
 
     return true;
 #else
-
+    Q_UNUSED(group);
     return false;
 #endif
 }

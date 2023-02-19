@@ -452,6 +452,8 @@ bool PB_GDALExporter::exportVectors(const QList<const CT_AbstractShape2D*> vecto
 
     return true;
 #else
+    Q_UNUSED(suffix);
+    Q_UNUSED(filePathWithoutSuffix);
     return false;
 #endif
 }
@@ -532,6 +534,8 @@ bool PB_GDALExporter::exportRaster(const CT_AbstractImage2D* grid, const QString
 
     return true;
 #else
+    Q_UNUSED(filePath);
+    Q_UNUSED(grid);
     return false;
 #endif
 }

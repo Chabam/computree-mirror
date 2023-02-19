@@ -8,6 +8,8 @@
 #include "ctlibpcl/ctlibpcl_global.h"
 #include "ctlibpcl/ct_pcldefines.h"
 
+#include <boost/shared_ptr.hpp>
+
 class CTLIBPCL_EXPORT CT_PCLTools
 {
 public:

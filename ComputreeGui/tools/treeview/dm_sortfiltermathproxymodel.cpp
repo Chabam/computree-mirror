@@ -4,6 +4,14 @@
 
 #include <QLocale>
 
+#if defined(_UNICODE)
+std::string wide_string_to_string(const std::wstring& wide_string)
+{
+    QString buf = QString::fromWCharArray(wide_string.c_str());
+    return buf.toStdString();
+}
+#endif
+
 DM_SortFilterMathProxyModel::DM_SortFilterMathProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
@@ -31,7 +39,7 @@ bool DM_SortFilterMathProxyModel::canSetMathExpression(const QString &expression
     tmp.replace(m_var, "1");
 
     #if defined(_UNICODE)
-    mu::string_type expression_buffer = tmp.toStdWString();
+    mu::string_type expression_buffer = wide_string_to_string(tmp.toStdWString());
     #else
     mu::string_type expression_buffer = tmp.toStdString();
     #endif
@@ -44,11 +52,7 @@ bool DM_SortFilterMathProxyModel::canSetMathExpression(const QString &expression
     }
     catch(mu::Parser::exception_type &e)
     {
-        #if defined(_UNICODE)
-        QString msg = QString::fromStdWString(e.GetMsg());
-        #else
         QString msg = QString::fromStdString(e.GetMsg());
-        #endif
 
         if(verbose)
             GUI_LOG->addMessage(LogInterface::debug, LogInterface::gui, tr("Erreur dans l'expression mathématique : ") + msg);
@@ -119,7 +123,7 @@ bool DM_SortFilterMathProxyModel::filterAcceptsRow(int source_row, const QModelI
     tmp.replace(',', QLocale::system().decimalPoint());
 
     #if defined(_UNICODE)
-    mu::string_type expression_buffer = tmp.toStdWString();
+    mu::string_type expression_buffer = wide_string_to_string(tmp.toStdWString());
     #else
     mu::string_type expression_buffer = tmp.toStdString();
     #endif
@@ -133,11 +137,7 @@ bool DM_SortFilterMathProxyModel::filterAcceptsRow(int source_row, const QModelI
     }
     catch(mu::Parser::exception_type &e)
     {
-        #if defined(_UNICODE)
-        QString msg = QString::fromStdWString(e.GetMsg());
-        #else
         QString msg = QString::fromStdString(e.GetMsg());
-        #endif
 
         GUI_LOG->addErrorMessage(LogInterface::gui, tr("Exception muParser : %1").arg(msg));
         return false;

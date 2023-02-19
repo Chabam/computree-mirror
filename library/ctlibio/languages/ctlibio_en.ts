@@ -95,52 +95,52 @@
 <context>
     <name>CT_Reader_GDAL</name>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="118"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="121"/>
         <source>Layer %1</source>
         <translation>Layer %1</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="244"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="253"/>
         <source>Points</source>
         <translation>Points</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="256"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="265"/>
         <source>Polygones</source>
         <translation>Polygons</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="268"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="277"/>
         <source>Polylignes</source>
         <translation>Polylines</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="300"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="309"/>
         <source>Impossible de charger des éléments du type : </source>
         <translation>Unable to load items of type : </translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="606"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="615"/>
         <source>Reader GDAL de type : %1</source>
         <translation>Reader GDAL type: %1</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="606"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="615"/>
         <source>Inconnu</source>
         <translation>Unknown</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="612"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="621"/>
         <source>Pour plus de détails voir : http://www.gdal.org/formats_list.html</source>
         <translation>For more details see: http://www.gdal.org/formats_list.html</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="617"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="626"/>
         <source>Pour plus de détails voir : http://www.gdal.org/ogr_formats.html</source>
         <translation>For more details see: http://www.gdal.org/ogr_formats.html</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="621"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="630"/>
         <source>Extension : </source>
         <translation>Extension : </translation>
     </message>
@@ -948,8 +948,8 @@
     </message>
     <message>
         <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="350"/>
-        <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="471"/>
-        <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="478"/>
+        <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="473"/>
+        <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="480"/>
         <source>Creation of output file failed.</source>
         <translation>Creation of output file failed.</translation>
     </message>
@@ -969,7 +969,7 @@
         <translation>Creation of output file (fields names) failed.</translation>
     </message>
     <message>
-        <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="709"/>
+        <location filename="../exporters/gdal/pb_gdalexporter.cpp" line="713"/>
         <source>Failed to create feature in shapefile.</source>
         <translation>Failed to create feature in shapefile.</translation>
     </message>

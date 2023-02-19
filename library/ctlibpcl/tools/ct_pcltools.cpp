@@ -21,7 +21,7 @@
 #pragma GCC diagnostic ignored "-Wextra"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-#include <boost/shared_ptr.hpp>
+
 #if defined(_WIN32) && defined(_MSC_VER)
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
 #pragma GCC diagnostic pop

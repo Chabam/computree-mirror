@@ -4,9 +4,9 @@
 #include "ctlibio/ctlibio_global.h"
 
 #include "ct_reader/abstract/ct_abstractreader.h"
+#include "ct_itemdrawable/ct_image2d.h"
 
 #ifdef USE_GDAL
-#include "ct_itemdrawable/ct_image2d.h"
 #include "ct_itemdrawable/ct_point2d.h"
 #include "ct_itemdrawable/ct_polygon2d.h"
 #include "ct_itemdrawable/ct_polyline2d.h"
@@ -52,7 +52,6 @@ public:
     READER_ALL_COPY_IMP(CT_Reader_GDAL)
 
     virtual CT_FileHeader* createHeaderPrototype() const override;
-
 
     /**
      * @brief Returns first Raster band if exist otherwise returns null

@@ -97,7 +97,9 @@ void PB_StepExportAttributesAsVector::declareOutputModels(CT_StepOutModelStructu
 void PB_StepExportAttributesAsVector::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {        
     QStringList driversV;
+#ifdef USE_GDAL
     driversV.append(_gdalVectorDrivers.keys());
+#endif
 
     postInputConfigDialog->addEmpty();
     postInputConfigDialog->addTitle(tr("Export vectoriel (1 fichier / tour)"));
