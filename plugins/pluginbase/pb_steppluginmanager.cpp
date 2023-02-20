@@ -55,6 +55,8 @@
 #include "step/pb_stepexportattributesasraster.h"
 #include "step/pb_stepexportattributesasvector.h"
 
+//#include "step/pb_stepcreatepointfileindex.h"
+
 #include "ctlibstdactions/action/ct_actionselectitemdrawablegv.h"
 #include "ctlibstdactions/action/pb_actionshowitemdatagv.h"
 
@@ -235,6 +237,8 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewExportStep<PB_StepExportAttributesAsASCII>();
     addNewExportStep<PB_StepExportAttributesAsVector>();
     addNewExportStep<PB_StepExportAttributesAsRaster>();
+//    addNewExportStep<PB_StepCreatePointFileIndex>();
+
 
     return true;
 }

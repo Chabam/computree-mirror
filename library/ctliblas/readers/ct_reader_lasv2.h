@@ -1,9 +1,10 @@
 #ifndef CT_READER_LASV2_H
 #define CT_READER_LASV2_H
 
-#include "ct_reader/abstract/ct_abstractreader.h"
-#include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
+#include "ct_reader/extensions/ct_indexablepointsreader.h"
 
+#include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
+#include "ct_shape2ddata/ct_box2ddata.h"
 
 #include "ctliblas/ctliblas_global.h"
 #include "ctliblas/readers/headers/ct_lasheader.h"
@@ -15,10 +16,10 @@
 /**
  * @brief Read LAS File (http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html)
  */
-class CTLIBLAS_EXPORT CT_Reader_LASV2 : public CT_AbstractReader, public CT_ReaderPointsFilteringExtension
+class CTLIBLAS_EXPORT CT_Reader_LASV2 : public CT_IndexablePointsReader, public CT_ReaderPointsFilteringExtension
 {
     Q_OBJECT
-    typedef CT_AbstractReader SuperClass;
+    typedef CT_IndexablePointsReader SuperClass;
 
 public:
 
@@ -49,6 +50,10 @@ public:
     CT_FileHeader* createHeaderPrototype() const override;
 
     virtual bool hasBoundingBox() {return true;}
+
+    bool getPointIndicesInside2DShape(const CT_AreaShape2DData *area2D, size_t &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const override;
+
+    QString getFormatCode() const override;
 
     bool restoreSettings(SettingsReaderInterface &reader) override;
 

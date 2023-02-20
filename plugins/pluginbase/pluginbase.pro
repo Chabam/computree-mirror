@@ -18,6 +18,7 @@ HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     step/pb_stepapplypointfilters.h \
     step/pb_stepcomputepointmetrics.h \
     step/pb_stepcomputerastermetrics.h \
+#    step/pb_stepcreatepointfileindex.h \
     step/pb_stepexportattributesasascii.h \
     step/pb_stepexportattributesasraster.h \
     step/pb_stepexportattributesasvector.h \
@@ -41,6 +42,7 @@ SOURCES += \
     step/pb_stepapplypointfilters.cpp \
     step/pb_stepcomputepointmetrics.cpp \
     step/pb_stepcomputerastermetrics.cpp \
+#    step/pb_stepcreatepointfileindex.cpp \
     step/pb_stepexportattributesasascii.cpp \
     step/pb_stepexportattributesasraster.cpp \
     step/pb_stepexportattributesasvector.cpp \

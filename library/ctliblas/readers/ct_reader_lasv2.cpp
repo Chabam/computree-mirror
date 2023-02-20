@@ -889,3 +889,128 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
 
     return ok;
 }
+
+
+
+bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* area2D, size_t &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const
+{
+    bool all = true;
+    lastIncludedIndex = -1;
+    indicesAfterLastIncludedIndex.clear();
+
+    QString error;
+
+    CT_LASHeader *header = static_cast<CT_LASHeader*>(internalReadHeader(filepath(), error));
+
+    if(header == nullptr) {
+        PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier %1").arg(filepath()));
+        return false;
+    }
+
+    size_t nPoints = header->getPointsRecordCount();
+
+    if(nPoints == 0) {
+        PS_LOG->addWarningMessage(LogInterface::reader, tr("Aucun points contenu dans le fichier %1").arg(filepath()));
+        delete header;
+        return true;
+    }
+
+    // check bounding boxes
+    double xmin = std::numeric_limits<double>::max();
+    double ymin = std::numeric_limits<double>::max();
+    double xmax = -std::numeric_limits<double>::max();
+    double ymax = -std::numeric_limits<double>::max();
+
+    // Extract and recompute the real bounding box (min/max x/y/z) from header properties
+    Eigen::Vector3d min;
+    Eigen::Vector3d max;
+    header->boundingBox(min, max);
+
+    bool validBB = true;
+    if (min[0] < xmin) {xmin = min[0];} else {validBB = false;}
+    if (max[0] > xmax) {xmax = max[0];} else {validBB = false;}
+    if (min[1] < ymin) {ymin = min[1];} else {validBB = false;}
+    if (max[1] > ymax) {ymax = max[1];} else {validBB = false;}
+
+    if (validBB)
+    {
+        area2D->getBoundingBox(min, max);
+
+        // If area2D is a 2DBox, it is possible to check if all data is included in area2D directly from extent
+        const CT_Box2DData* boxData = dynamic_cast<const CT_Box2DData*>(area2D);
+        if (boxData != nullptr)
+        {
+            if (xmin >= min(0) && xmax <= max(0) && ymin >= min(1) && ymax <= max(1))
+            {
+                lastIncludedIndex = nPoints - 1;
+                return true;
+            }
+        }
+
+        // If bounding boxes not overlapping => no index
+        if (xmax < min(0) || xmin > max(0) || ymax < min(1) || ymin > max(1))
+        {
+            return false;
+        }
+    }
+
+
+    QFile f(filepath());
+
+    if(f.open(QIODevice::ReadOnly))
+    {
+        bool mustTransformPoint = header->mustTransformPoints();
+
+        f.seek(header->m_offsetToPointData);
+
+        QDataStream stream(&f);
+        stream.setByteOrder(QDataStream::LittleEndian);
+
+        qint64 pos = f.pos();
+
+        qint32 x, y, z;
+        double xc = 0;
+        double yc = 0;
+        double zc = 0;
+
+        for (size_t i = 0; i < nPoints; ++i)
+        {
+            // READ ALL ATTRIBUTES
+            stream >> x >> y >> z;
+
+            // CONVERT POINT
+            if(mustTransformPoint)
+            {
+                header->transformPoint(x, y, z, xc, yc, zc);
+            } else
+            {
+                xc = x;
+                yc = y;
+            }
+
+            if (area2D->contains(xc, yc))
+            {
+                if (all)
+                {
+                    lastIncludedIndex = i; // avoid list filling if all points included
+                } else {
+                    indicesAfterLastIncludedIndex.append(i);
+                }
+            } else {
+                all = false;
+            }
+
+            pos += header->m_pointDataRecordLength;
+            f.seek(pos);
+        }
+
+        f.close();
+    }
+
+    return all;
+}
+
+QString CT_Reader_LASV2::getFormatCode() const
+{
+    return "LAS";
+}
