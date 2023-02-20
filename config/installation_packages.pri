@@ -180,7 +180,7 @@ linux {
 
     qt_deploy_cmd0 = mkdir -p $$DESTDIRFULL/languages ; find ../ -type f -name "*_*.qm" -exec cp -n {} $$DESTDIRFULL/languages \; & wait ;
     qt_deploy_cmd1 = mkdir -p $$APPDIR/bin $$APPDIR/lib $$APPDIR/plugins $$APPDIR/languages $$APPDIR/share/applications $$APPDIR/share/icons/hicolor/256x256/apps & wait ;
-    qt_deploy_cmd2 = cp distrib/linux/Computree.desktop $$APPDIR/share/applications/CompuTreeGui.desktop ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/share/icons/hicolor/256x256/apps/CompuTreeGui.png ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/../CompuTreeGui.png & wait ;
+    qt_deploy_cmd2 = cp distrib/linux/CompuTreeGui.desktop $$APPDIR/share/applications/CompuTreeGui.desktop ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/share/icons/hicolor/256x256/apps/CompuTreeGui.png ; cp ComputreeGui/resource/Icones/Icone_256x256.png $$APPDIR/../CompuTreeGui.png & wait ;
     qt_deploy_cmd3 = cp $$LIB/core/*.so $$APPDIR/lib ; cp $$DESTDIRFULL/plugins/*.so $$APPDIR/plugins ; cp $$DESTDIRFULL/CompuTreeGui $$APPDIR/bin/CompuTreeGui & wait ;
     # Update the rpath in the various libraries/plugins we have to make sure they'll be loadable in an Appimage context (if needed : apt install patchelf)
     qt_deploy_cmd4 = cd $$DIR_LIBS    ; for target in $$DIR_LIBS/libctli*     ; do for file in libctli*; do patchelf --replace-needed "\$\$file" "\\\$\$ORIGIN/\$\$file" "\$\$target"; done; done & wait ;
