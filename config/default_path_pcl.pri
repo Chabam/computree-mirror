@@ -2,8 +2,8 @@ linux {
     PCL_BASE_PATH = "/usr/"
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib/x86_64-linux-gnu"
-    PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.10"
-    PCL_INC_PATH = "$${PCL_BASE_PATH}bin"
+    PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.12"
+    PCL_BIN_PATH = "$${PCL_BASE_PATH}bin"
 }
 
 win32 {
@@ -25,5 +25,5 @@ macx {
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
     PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.11"
-    PCL_INC_PATH = "$${PCL_BASE_PATH}bin"
+    PCL_BIN_PATH = "$${PCL_BASE_PATH}bin"
 }

@@ -1,8 +1,8 @@
 linux {
     QHULL_BASE_PATH = "/usr/"
 
-    QHULL_INC_PATH = "$${PCL_BASE_PATH}include"
-    QHULL_LIBS_PATH = "$${PCL_BASE_PATH}lib/x86_64-linux-gnu"
+    QHULL_INC_PATH = "$${QHULL_BASE_PATH}include"
+    QHULL_LIBS_PATH = "$${QHULL_BASE_PATH}lib/x86_64-linux-gnu"
 }
 
 win32 {

@@ -1,4 +1,4 @@
-PCL_LIB_ADD =
+#PCL_LIB_ADD =
 PCL_LIB_ADD += pcl_common
 PCL_LIB_ADD += pcl_features
 PCL_LIB_ADD += pcl_filters
@@ -16,6 +16,13 @@ PCL_LIB_ADD += pcl_segmentation
 PCL_LIB_ADD += pcl_stereo
 PCL_LIB_ADD += pcl_surface
 PCL_LIB_ADD += pcl_tracking
+
+linux | macx {
+PCL_LIB_ADD += pcl_apps
+PCL_LIB_ADD += pcl_outofcore
+PCL_LIB_ADD += pcl_people
+PCL_LIB_ADD += pcl_visualization
+}
 
 PCL_LIBS_FOUND =
 
@@ -85,20 +92,20 @@ isEmpty(USE_PCL_ERROR_MSG) {
                 TMP_LIB_PATH = ""
             }
 
-            INCLUDEPATH += $${TMP_LIB_PATH}$$PCL_INC_PATH
-            TR_EXCLUDE  += $${TMP_LIB_PATH}$$PCL_INC_PATH/*
-            LIBS += -L$${TMP_LIB_PATH}$$PCL_LIBS_PATH
+            INCLUDEPATH *= $${TMP_LIB_PATH}$$PCL_INC_PATH
+            TR_EXCLUDE  *= $${TMP_LIB_PATH}$$PCL_INC_PATH/*
+            LIBS *= -L$${TMP_LIB_PATH}$$PCL_LIBS_PATH
 
             !isEmpty(PCL_BIN_PATH) {
-                LIBS += -L$${TMP_LIB_PATH}$$PCL_BIN_PATH
+                LIBS *= -L$${TMP_LIB_PATH}$$PCL_BIN_PATH
             }
         } else {
-            INCLUDEPATH += $$PCL_INC_PATH
-            TR_EXCLUDE  += $$PCL_INC_PATH/*
-            LIBS += -L$$PCL_LIBS_PATH
+            INCLUDEPATH *= $$PCL_INC_PATH
+            TR_EXCLUDE  *= $$PCL_INC_PATH/*
+            LIBS *= -L$$PCL_LIBS_PATH
         }
 
-        LIBS += $$PCL_LIBS_FOUND
+        LIBS *= $$PCL_LIBS_FOUND
     }
 } else {
     error($$USE_PCL_ERROR_MSG)

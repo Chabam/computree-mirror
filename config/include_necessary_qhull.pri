@@ -1,10 +1,8 @@
-QHULL_LIB_ADD =
+QHULL_LIB_ADD += qhull
 
 QHULL_LIBS_FOUNDED =
 
 linux {
-    QHULL_LIB_ADD += qhull
-
     for(a, QHULL_LIB_ADD) {
         CONFIG(debug, debug|release) {
             !exists($$QHULL_LIBS_PATH/lib$${a}*) {
@@ -23,8 +21,6 @@ linux {
 }
 
 macx {
-    QHULL_LIB_ADD += qhull
-
     for(a, QHULL_LIB_ADD) {
         CONFIG(debug, debug|release) {
             !exists($$QHULL_LIBS_PATH/lib$${a}*) {
@@ -43,21 +39,18 @@ macx {
 }
 
 windows {
-    QHULL_LIB_ADD += qhullstatic
-    #QHULL_LIB_ADD += qhullstatic_d
-
     for(a, QHULL_LIB_ADD) {
         CONFIG(debug, debug|release) {
-            !exists($$QHULL_LIBS_PATH/$${a}_d*) {
-                USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a}_d was not found"
+            !exists($$QHULL_LIBS_PATH/$${a}_rd*) {
+                USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a}_rd was not found"
             } else {
-                QHULL_LIBS_FOUNDED += -l$${a}_d
+                QHULL_LIBS_FOUNDED += -l$${a}_rd
             }
         } else {
-            !exists($$QHULL_LIBS_PATH/$${a}*) {
-                USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a} was not found"
+            !exists($$QHULL_LIBS_PATH/$${a}_r*) {
+                USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a}_r was not found"
             } else {
-                QHULL_LIBS_FOUNDED += -l$${a}
+                QHULL_LIBS_FOUNDED += -l$${a}_r
             }
         }
     }
@@ -75,21 +68,23 @@ isEmpty(USE_QHULL_ERROR_MSG) {
                 TMP_LIB_PATH = ""
             }
 
-            INCLUDEPATH += $$TMP_LIB_PATH$$QHULL_INC_PATH
-            TR_EXCLUDE  += $$TMP_LIB_PATH$$QHULL_INC_PATH/*
-            DEPENDPATH  += $$TMP_LIB_PATH$$QHULL_INC_PATH
-            LIBS += -L$$TMP_LIB_PATH$$QHULL_LIBS_PATH
+            INCLUDEPATH *= $$TMP_LIB_PATH$$QHULL_INC_PATH
+            TR_EXCLUDE  *= $$TMP_LIB_PATH$$QHULL_INC_PATH/*
+            DEPENDPATH  *= $$TMP_LIB_PATH$$QHULL_INC_PATH
+            LIBS *= -L$$TMP_LIB_PATH$$QHULL_LIBS_PATH
 
             !isEmpty(QHULL_BIN_PATH) {
-                LIBS += -L$${TMP_LIB_PATH}$$QHULL_BIN_PATH
+                LIBS *= -L$${TMP_LIB_PATH}$$QHULL_BIN_PATH
             }
         } else {
-            INCLUDEPATH += $$QHULL_INC_PATH
-            TR_EXCLUDE  += $$QHULL_INC_PATH/*
-            DEPENDPATH  += $$QHULL_INC_PATH
-            LIBS += -L$$QHULL_LIBS_PATH
+            INCLUDEPATH *= $$QHULL_INC_PATH
+            TR_EXCLUDE  *= $$QHULL_INC_PATH/*
+            DEPENDPATH  *= $$QHULL_INC_PATH
+            LIBS *= -L$$QHULL_LIBS_PATH
         }
 
-        LIBS += $$QHULL_LIBS_FOUNDED
+        LIBS *= $$QHULL_LIBS_FOUNDED
     }
+} else {
+    error($$USE_QHULL_ERROR_MSG)
 }

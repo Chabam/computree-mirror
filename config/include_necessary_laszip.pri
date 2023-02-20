@@ -10,13 +10,13 @@ isEmpty(USE_LASZIP_ERROR_MSG) {
                 TMP_LIB_PATH = ""
             }
 
-            INCLUDEPATH += $$LIB_PATH$$LASZIP_INC_PATH
-            TR_EXCLUDE  += $$TMP_LIB_PATH$$LASZIP_INC_PATH/*
-            LIBS += -llaszip3 -L$$LIB_PATH$$LASZIP_LIBS_PATH
+            INCLUDEPATH *= $$LIB_PATH$$LASZIP_INC_PATH
+            TR_EXCLUDE  *= $$TMP_LIB_PATH$$LASZIP_INC_PATH/*
+            LIBS *= -llaszip3 -L$$LIB_PATH$$LASZIP_LIBS_PATH
         } else {
-            INCLUDEPATH += $$LASZIP_INC_PATH
-            TR_EXCLUDE  += $$LASZIP_INC_PATH/*
-            LIBS += -llaszip3 -L$$LASZIP_LIBS_PATH
+            INCLUDEPATH *= $$LASZIP_INC_PATH
+            TR_EXCLUDE  *= $$LASZIP_INC_PATH/*
+            LIBS *= -llaszip3 -L$$LASZIP_LIBS_PATH
         }
     }
 } else {

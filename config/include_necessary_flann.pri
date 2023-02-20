@@ -11,18 +11,18 @@ isEmpty(USE_FLANN_ERROR_MSG) {
                 TMP_LIB_PATH = ""
             }
 
-            INCLUDEPATH += $$TMP_LIB_PATH$$FLANN_INC_PATH
-            TR_EXCLUDE  += $$TMP_LIB_PATH$$FLANN_INC_PATH/*
-            LIBS += -L$$TMP_LIB_PATH$$FLANN_LIBS_PATH
+            INCLUDEPATH *= $$TMP_LIB_PATH$$FLANN_INC_PATH
+            TR_EXCLUDE  *= $$TMP_LIB_PATH$$FLANN_INC_PATH/*
+            LIBS *= -L$$TMP_LIB_PATH$$FLANN_LIBS_PATH
 
             !isEmpty(FLANN_BIN_PATH) {
-                LIBS += -L$${TMP_LIB_PATH}$$FLANN_BIN_PATH
+                LIBS *= -L$${TMP_LIB_PATH}$$FLANN_BIN_PATH
             }
 
         } else {
-            INCLUDEPATH += $$FLANN_INC_PATH
-            TR_EXCLUDE  += $$FLANN_INC_PATH/*
-            LIBS += -$$FLANN_LIBS_PATH
+            INCLUDEPATH *= $$FLANN_INC_PATH
+            TR_EXCLUDE  *= $$FLANN_INC_PATH/*
+            LIBS *= -L$$FLANN_LIBS_PATH
         }
     }
 } else {

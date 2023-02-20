@@ -68,20 +68,20 @@ isEmpty(USE_GDAL_ERROR_MSG) {
                 TMP_LIB_PATH = ""
             }
 
-            INCLUDEPATH += $$TMP_LIB_PATH$$GDAL_INC_PATH
-            TR_EXCLUDE  += $$TMP_LIB_PATH$$GDAL_INC_PATH/*
-            LIBS += -L$$TMP_LIB_PATH$$GDAL_LIBS_PATH
+            INCLUDEPATH *= $$TMP_LIB_PATH$$GDAL_INC_PATH
+            TR_EXCLUDE  *= $$TMP_LIB_PATH$$GDAL_INC_PATH/*
+            LIBS *= -L$$TMP_LIB_PATH$$GDAL_LIBS_PATH
 
             !isEmpty(GDAL_BIN_PATH) {
-                LIBS += -L$${TMP_LIB_PATH}$$GDAL_BIN_PATH
+                LIBS *= -L$${TMP_LIB_PATH}$$GDAL_BIN_PATH
             }
         } else {
-            INCLUDEPATH += $$GDAL_INC_PATH
-            TR_EXCLUDE  += $$GDAL_INC_PATH/*
-            LIBS += -L$$GDAL_LIBS_PATH
+            INCLUDEPATH *= $$GDAL_INC_PATH
+            TR_EXCLUDE  *= $$GDAL_INC_PATH/*
+            LIBS *= -L$$GDAL_LIBS_PATH
         }
 
-        LIBS += $$GDAL_LIBS_FOUND
+        LIBS *= $$GDAL_LIBS_FOUND
     }
 } else {
     error($$USE_GDAL_ERROR_MSG)

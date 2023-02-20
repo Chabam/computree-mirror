@@ -18,13 +18,13 @@ isEmpty(USE_BOOST_ERROR_MSG) {
                 TMP_LIB_PATH = ""
             }
 
-            INCLUDEPATH += $$TMP_LIB_PATH$$BOOST_INC_PATH
-            TR_EXCLUDE  += $$TMP_LIB_PATH$$BOOST_INC_PATH/*
-            LIBS += -L$$TMP_LIB_PATH$$BOOST_LIBS_PATH
+            INCLUDEPATH *= $$TMP_LIB_PATH$$BOOST_INC_PATH
+            TR_EXCLUDE  *= $$TMP_LIB_PATH$$BOOST_INC_PATH/*
+            LIBS *= -L$$TMP_LIB_PATH$$BOOST_LIBS_PATH
         } else {
-            INCLUDEPATH += $$BOOST_INC_PATH
-            TR_EXCLUDE  += $$BOOST_INC_PATH/*
-            LIBS += -L$$BOOST_LIBS_PATH
+            INCLUDEPATH *= $$BOOST_INC_PATH
+            TR_EXCLUDE  *= $$BOOST_INC_PATH/*
+            LIBS *= -L$$BOOST_LIBS_PATH
         }
     }
 } else {
