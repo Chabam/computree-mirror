@@ -26,4 +26,6 @@ macx {
     FLANN_LIBS_PATH = "$${FLANN_BASE_PATH}lib"
     FLANN_INC_PATH = "$${FLANN_BASE_PATH}include"
     FLANN_BIN_PATH = "$${FLANN_BASE_PATH}bin"
+
+    LZ4_INC_PATH = "/usr/local/Cellar/lz4/1.9.4/include"
 }
