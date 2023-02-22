@@ -4,7 +4,6 @@ CHECK_LIBS_ONLY = false
 isEmpty(LIB_PATH) : LIB_PATH = # empty
 
 VCPKG_PATH = $$(VCPKG)
-VCPKG_PATH ~= s,/,\\,g
 
 # Check if we can or if we must use the dependency
 !isEmpty(CHECK_CAN_USE_EIGEN)|!isEmpty(MUST_USE_EIGEN) {

@@ -31,7 +31,6 @@ defineTest(checkMandatoryDependence) {
 isEmpty(LIB_PATH) : LIB_PATH = # empty
 
 VCPKG_PATH = $$(VCPKG)
-VCPKG_PATH ~= s,/,\\,g
 
 # Check mandatory libraries
 #checkMandatoryDependence(dgtal)

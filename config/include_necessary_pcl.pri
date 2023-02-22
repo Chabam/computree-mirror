@@ -84,26 +84,9 @@ isEmpty(USE_PCL_ERROR_MSG) {
     equals(CHECK_LIBS_ONLY, false) {
         DEFINES += USE_PCL
 
-        win32 {
-            ABS_PATH = $$absolute_path($$PCL_INC_PATH)
-            TMP_LIB_PATH = $$LIB_PATH/
-
-            equals(ABS_PATH, $$PCL_INC_PATH) {
-                TMP_LIB_PATH = ""
-            }
-
-            INCLUDEPATH *= $${TMP_LIB_PATH}$$PCL_INC_PATH
-            TR_EXCLUDE  *= $${TMP_LIB_PATH}$$PCL_INC_PATH/*
-            LIBS *= -L$${TMP_LIB_PATH}$$PCL_LIBS_PATH
-
-            !isEmpty(PCL_BIN_PATH) {
-                LIBS *= -L$${TMP_LIB_PATH}$$PCL_BIN_PATH
-            }
-        } else {
-            INCLUDEPATH *= $$PCL_INC_PATH
-            TR_EXCLUDE  *= $$PCL_INC_PATH/*
-            LIBS *= -L$$PCL_LIBS_PATH
-        }
+        INCLUDEPATH *= $$PCL_INC_PATH
+        TR_EXCLUDE  *= $$PCL_INC_PATH/*
+        LIBS *= -L$$PCL_LIBS_PATH
 
         LIBS *= $$PCL_LIBS_FOUND
     }
