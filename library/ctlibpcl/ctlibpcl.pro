@@ -22,7 +22,3 @@ TRANSLATIONS += languages/ctlibpcl_fr.ts \
 # c++14 for PCL (for the moment, because of FLANN issues with C++17)
 CONFIG -= c++17
 CONFIG += c++14
-
-macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 11.0
-}

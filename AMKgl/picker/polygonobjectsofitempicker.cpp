@@ -78,7 +78,7 @@ bool PolygonObjectsOfItemPicker::computePoints(const CloudIndex *cloud)
         return false;
 
     int nTriangles = m_triangles.size();
-    bool ok = false;
+    //bool ok = false;
     bool selected = false;
     size_t nPoints = cloud->size();
 
@@ -91,7 +91,7 @@ bool PolygonObjectsOfItemPicker::computePoints(const CloudIndex *cloud)
             CALL_SELECT_OPERATION;
 
             selected = true;
-            ok = false;
+            //ok = false;
 
             if(!CALL_CHECK_OPERATION)
                 return selected;

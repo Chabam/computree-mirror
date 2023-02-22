@@ -37,7 +37,7 @@ class DM_ItemDrawableManagerOptions
 {
 public:
     DM_ItemDrawableManagerOptions();
-    DM_ItemDrawableManagerOptions(const DM_ItemDrawableManagerOptions &options) = default;
+    //DM_ItemDrawableManagerOptions(const DM_ItemDrawableManagerOptions &options) = default;
 
     void filterString(QString text);
     void filterOnNLevel(int nLevel);

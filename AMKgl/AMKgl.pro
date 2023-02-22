@@ -34,7 +34,7 @@ linux|mingw {
 macx {
     QMAKE_CXXFLAGS += -Wno-deprecated-declarations -Wno-inconsistent-missing-override
     QMAKE_RANLIB += -no_warning_for_no_symbols
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 11.0
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 12.0
     # Silent OpenGL warning for MacOS > 10.14
     DEFINES += GL_SILENCE_DEPRECATION
 }

@@ -43,7 +43,7 @@ protected:
             using self_type = InternalIterator;
 
             InternalIterator() : m_currentValue(nullptr) {}
-            InternalIterator(const InternalIterator& other) = default;
+            //InternalIterator(const InternalIterator& other) = default;
             InternalIterator(const CT_AbstractSingularItemDrawable* item) : m_currentValue(const_cast<CT_AbstractSingularItemDrawable*>(item)) {}
 
             self_type& operator++() {

@@ -1151,7 +1151,7 @@ public:
             return;
 
         quint8 j;
-        size_t currentIndex = 0;
+        //size_t currentIndex = 0;
         bool modified = false;
 
         glColor4fv(currentColor);
@@ -1182,10 +1182,10 @@ public:
                         }
                         glEnd();
                         glPopMatrix();
-
-                    } else {
-                        currentIndex += nVertexPerObject;
                     }
+                    //} else {
+                    //    currentIndex += nVertexPerObject;
+                    //}
                 }
                 glColor4fv(currentColor);
                 return;
@@ -1214,10 +1214,10 @@ public:
                     }
                     glEnd();
                     glPopMatrix();
-
-                } else {
-                    currentIndex += nVertexPerObject;
                 }
+                //} else {
+                //    currentIndex += nVertexPerObject;
+                //}
             }
             glColor4fv(currentColor);
             return;
@@ -1245,10 +1245,10 @@ public:
                     }
                     glEnd();
                     glPopMatrix();
-
-                } else {
-                    currentIndex += nVertexPerObject;
                 }
+                //} else {
+                //    currentIndex += nVertexPerObject;
+                //}
             }
             glColor4fv(currentColor);
             return;
@@ -1275,9 +1275,11 @@ public:
                 }
                 glEnd();
                 glPopMatrix();
-            } else {
-                currentIndex += nVertexPerObject;
             }
+            //else
+            //{
+            //    currentIndex += nVertexPerObject;
+            //}
         }
         glColor4fv(currentColor);
     }

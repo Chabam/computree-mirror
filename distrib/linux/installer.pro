@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_LINUX_6.0.334
+INSTALLER = Computree_Installer_LINUX_6.0.338
 # version : Major.Minor.commit
 
 # Usefull definitions of paths
@@ -54,7 +54,7 @@ PREPARE_DATA += cp lib/libQt5*                $$PATH_DST/library.B/data/librarie
 PREPARE_DATA += find ./plugins -type d -maxdepth 1 -mindepth 1                                                            -exec cp -r '{}' $$PATH_DST/library.B/data/libraries/Qt/ \; ;
 PREPARE_DATA += find ./lib     -type f -maxdepth 1 ! \\( -name 'libpcl*' -or -name 'libopencv*' -or -name 'libctlib*' \\) -exec cp '{}' $$PATH_DST/library.C/data/libraries/gdal/ \; ;
 PREPARE_DATA += cp lib/libopencv_*            $$PATH_DST/library.D/data/libraries/opencv/ ;
-#PREPARE_DATA += cp lib/libpcl_*                $$PATH_DST/library.E/data/libraries/pcl/    ;
+#PREPARE_DATA += cp lib/libpcl_*               $$PATH_DST/library.E/data/libraries/pcl/    ;
 PREPARE_DATA += mv $$PATH_DST/library.A/data/libraries/core/libctlibpcl* $$PATH_DST/library.E/data/libraries/core/ ;
 PREPARE_DATA += cd $$PATH_SRC ;
 PREPARE_DATA += cp plugins/libplug_base.*     $$PATH_DST/plugin.A/data/plugins/           ;
@@ -66,7 +66,7 @@ PREPARE_DATA += cp plugins/libplug_mk.*       $$PATH_DST/plugin.G/data/plugins/ 
 PREPARE_DATA += cp plugins/libplug_onfdev.*   $$PATH_DST/plugin.L/data/plugins/           ;
 PREPARE_DATA += cp plugins/libplug_ignlif.*   $$PATH_DST/plugin.M/data/plugins/           ;
 
-GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.1/bin/binarycreator -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/$$INSTALLER ;
+GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.5/bin/binarycreator -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/$$INSTALLER ;
 
 INPUT = $$PWD/config/config.xml $$PWD/packages
 generation.input = INPUT

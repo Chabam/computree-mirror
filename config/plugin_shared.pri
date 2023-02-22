@@ -56,7 +56,8 @@ CONFIG(debug, debug|release) {
 }
 
 macx {
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 11.0
+    QMAKE_CXXFLAGS += -Wno-deprecated-declarations
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 12.0
 }
 
 msvc:DEFINES += _USE_MATH_DEFINES
