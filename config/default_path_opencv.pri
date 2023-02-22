@@ -21,7 +21,7 @@ win32 {
 }
 
 macx {
-    OPENCV_BASE_PATH = "/usr/local/Cellar/opencv/4.5.2_4/"
+    OPENCV_BASE_PATH = "/usr/local/Cellar/opencv/4.7.0_1/"
 
     OPENCV_LIBS_PATH = "$${OPENCV_BASE_PATH}lib"
     OPENCV_INC_PATH = "$${OPENCV_BASE_PATH}include/opencv4"

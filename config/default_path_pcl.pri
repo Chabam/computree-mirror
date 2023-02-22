@@ -21,9 +21,9 @@ win32 {
 }
 
 macx {
-    PCL_BASE_PATH = "/usr/local/Cellar/pcl/1.11.1_8/"
+    PCL_BASE_PATH = "/usr/local/Cellar/pcl/1.13.0_2/"
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}lib"
-    PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.11"
+    PCL_INC_PATH = "$${PCL_BASE_PATH}include/pcl-1.13"
     PCL_BIN_PATH = "$${PCL_BASE_PATH}bin"
 }

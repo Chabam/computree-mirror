@@ -21,7 +21,7 @@ win32 {
 }
 
 macx {
-    FLANN_BASE_PATH = "/usr/local/Cellar/flann/1.9.1_10/"
+    FLANN_BASE_PATH = "/usr/local/Cellar/flann/1.9.2/"
 
     FLANN_LIBS_PATH = "$${FLANN_BASE_PATH}lib"
     FLANN_INC_PATH = "$${FLANN_BASE_PATH}include"

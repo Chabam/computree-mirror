@@ -21,7 +21,7 @@ win32 {
 }
 
 macx {
-    BOOST_BASE_PATH = "/usr/local/Cellar/boost/1.76.0/"
+    BOOST_BASE_PATH = "/usr/local/Cellar/boost/1.81.0_1/"
 
     BOOST_LIBS_PATH = "$${BOOST_BASE_PATH}lib"
     BOOST_INC_PATH = "$${BOOST_BASE_PATH}include"

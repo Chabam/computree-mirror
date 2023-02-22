@@ -21,7 +21,7 @@ win32 {
 }
 
 macx {
-    MUPARSER_BASE_PATH = "/usr/local/Cellar/muparser/2.3.2_2/"
+    MUPARSER_BASE_PATH = "/usr/local/Cellar/muparser/2.3.4/"
 
     MUPARSER_LIBS_PATH = "$${MUPARSER_BASE_PATH}lib"
     MUPARSER_INC_PATH = "$${MUPARSER_BASE_PATH}include"
