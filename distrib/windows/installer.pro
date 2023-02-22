@@ -61,7 +61,7 @@ PREPARE_DATA += xcopy /s /i /y plugins\plug_mk.dll         $$PATH_DST\plugin.G\d
 PREPARE_DATA += xcopy /s /i /y plugins\plug_onfdev.dll     $$PATH_DST\plugin.L\data\plugins\                   &&
 PREPARE_DATA += xcopy /s /i /y plugins\plug_ignlif.dll     $$PATH_DST\plugin.M\data\plugins\                   &&
 
-GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.1/bin/binarycreator.exe -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../$$INSTALLER &&
+GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.5/bin/binarycreator.exe -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../$$INSTALLER &&
 GENERATE_BIN ~= s,/,\\,g
 
 INPUT = $$PWD/config/config.xml $$PWD/packages
