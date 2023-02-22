@@ -66,22 +66,22 @@ QString CT_CloudMetrics::getDetailledDescription() const
               "<li><strong>Mean</strong> : Hauteur moyenne</li>"
               "<li><strong>Mode</strong> : Mode des hauteurs. La gamme de hauteur est divisée en 64 classes, le mode est le centre de la classe avec le plus grand nombre de points. En cas d'égalité, la classe la plus basse est renvoyée.</li>"
               "<li><strong>StdDev</strong> : Ecart-type des hauteurs</li>"
-              "<li><strong>Variance</strong> : Variance des hauteurs</li>"
+              "<li><strong>Var</strong> : Variance des hauteurs</li>"
               "<li><strong>CV</strong> : Coefficient de variation des hauteurs</li>"
               "<li><strong>IQDist</strong> : Distance interquartile des hauteurs</li>"
-              "<li><strong>Skewness</strong> : Skewness des hauteurs</li>"
-              "<li><strong>Kurtosis</strong> : Kurtosis des hauteurs</li>"
+              "<li><strong>Skew</strong> : Skewness des hauteurs</li>"
+              "<li><strong>Kurt</strong> : Kurtosis des hauteurs</li>"
               "<li><strong>AAD</strong> : Moyenne des écarts absolus à la moyenne</li>"
-              "<li><strong>MAD_Median</strong> : Médiane des écarts absolus à la médiane</li>"
-              "<li><strong>MAD_Mode</strong> : Médiane des écarts absolus au mode</li>"
+              "<li><strong>MADMed</strong> : Médiane des écarts absolus à la médiane</li>"
+              "<li><strong>MADMode</strong> : Médiane des écarts absolus au mode</li>"
               "<li><strong>L1 à L4</strong> : L-Moments</li>"
-              "<li><strong>L_CV</strong> : Coefficient de variation L-Moments des hauteurs</li>"
-              "<li><strong>L_Skewness</strong> : Skewness L-Moments des hauteurs</li>"
-              "<li><strong>L_Kurtosis</strong> : Kurtosis L-Moments des hauteurs</li>"
+              "<li><strong>LCV</strong> : Coefficient de variation L-Moments des hauteurs</li>"
+              "<li><strong>LSkew</strong> : Skewness L-Moments des hauteurs</li>"
+              "<li><strong>LKurt</strong> : Kurtosis L-Moments des hauteurs</li>"
               "<li><strong>P01 à P99</strong> : 1er, 5ième, 10ième, 15ième,... 90ième, 95ième et 99ième percentiles de hauteurs (interpolation linéaire entre les observations)</li>"
-              "<li><strong>Canopy_Relief_Ratio</strong> : ((Moyenne - Minimum) / (Maximum – Minimum))</li>"
-              "<li><strong>QuadraticMean</strong> : Moyenne quadratique des hauteurs</li>"
-              "<li><strong>CubicMean</strong> : Moyenne cubique des hauteurs</li>"
+              "<li><strong>CRR</strong> : ((Moyenne - Minimum) / (Maximum – Minimum))</li>"
+              "<li><strong>QuadMean</strong> : Moyenne quadratique des hauteurs</li>"
+              "<li><strong>CubMean</strong> : Moyenne cubique des hauteurs</li>"
               "</ul>");
 }
 
@@ -412,32 +412,32 @@ double CT_CloudMetrics::computeMode(const std::vector<double> &array, const size
 
 void CT_CloudMetrics::declareAttributes()
 {
-    registerAttributeVaB(m_configAndResults.totalNumberOfReturns, CT_AbstractCategory::DATA_NUMBER, tr("N"));
-    registerAttributeVaB(m_configAndResults.minimum, CT_AbstractCategory::DATA_Z, tr("Min"));
-    registerAttributeVaB(m_configAndResults.maximum, CT_AbstractCategory::DATA_Z, tr("Max"));
-    registerAttributeVaB(m_configAndResults.mean, CT_AbstractCategory::DATA_Z, tr("Mean"));
-    registerAttributeVaB(m_configAndResults.mode, CT_AbstractCategory::DATA_Z, tr("Mode"));
-    registerAttributeVaB(m_configAndResults.standardDeviation, CT_AbstractCategory::DATA_Z, tr("StdDev"));
-    registerAttributeVaB(m_configAndResults.variance, CT_AbstractCategory::DATA_Z, tr("Variance"));
-    registerAttributeVaB(m_configAndResults.coeffOfVariation, CT_AbstractCategory::DATA_Z, tr("CV"));
-    registerAttributeVaB(m_configAndResults.interquartileDistance, CT_AbstractCategory::DATA_Z, tr("IQDist"));
-    registerAttributeVaB(m_configAndResults.skewness, CT_AbstractCategory::DATA_Z, tr("Skewness"));
-    registerAttributeVaB(m_configAndResults.kurtosis, CT_AbstractCategory::DATA_Z, tr("Kurtosis"));
-    registerAttributeVaB(m_configAndResults.aad, CT_AbstractCategory::DATA_Z, tr("AAD"));
-    registerAttributeVaB(m_configAndResults.madMedian, CT_AbstractCategory::DATA_Z, tr("MAD_Median"));
-    registerAttributeVaB(m_configAndResults.madMode, CT_AbstractCategory::DATA_Z, tr("MAD_Mode"));
+    registerAttributeVaB(m_configAndResults.totalNumberOfReturns, CT_AbstractCategory::DATA_NUMBER, "N");
+    registerAttributeVaB(m_configAndResults.minimum, CT_AbstractCategory::DATA_Z, "Min");
+    registerAttributeVaB(m_configAndResults.maximum, CT_AbstractCategory::DATA_Z, "Max");
+    registerAttributeVaB(m_configAndResults.mean, CT_AbstractCategory::DATA_Z, "Mean");
+    registerAttributeVaB(m_configAndResults.mode, CT_AbstractCategory::DATA_Z, "Mode");
+    registerAttributeVaB(m_configAndResults.standardDeviation, CT_AbstractCategory::DATA_Z, "StdDev");
+    registerAttributeVaB(m_configAndResults.variance, CT_AbstractCategory::DATA_Z, "Var");
+    registerAttributeVaB(m_configAndResults.coeffOfVariation, CT_AbstractCategory::DATA_Z, "CV");
+    registerAttributeVaB(m_configAndResults.interquartileDistance, CT_AbstractCategory::DATA_Z, "IQDist");
+    registerAttributeVaB(m_configAndResults.skewness, CT_AbstractCategory::DATA_Z, "Skew");
+    registerAttributeVaB(m_configAndResults.kurtosis, CT_AbstractCategory::DATA_Z, "Kurt");
+    registerAttributeVaB(m_configAndResults.aad, CT_AbstractCategory::DATA_Z, "AAD");
+    registerAttributeVaB(m_configAndResults.madMedian, CT_AbstractCategory::DATA_Z, "MADMed");
+    registerAttributeVaB(m_configAndResults.madMode, CT_AbstractCategory::DATA_Z, "MADMode");
 
     for(int i=0; i<CT_CloudMetrics::LMOMENTS_ARRAY_SIZE; ++i)
-        registerAttributeVaB(m_configAndResults.lMoments[i], CT_AbstractCategory::DATA_Z, tr("L%1").arg(i+1));
+        registerAttributeVaB(m_configAndResults.lMoments[i], CT_AbstractCategory::DATA_Z, QString("L%1").arg(i+1));
 
-    registerAttributeVaB(m_configAndResults.lMomentsCoeffOfVariation, CT_AbstractCategory::DATA_Z, tr("L_CV"));
-    registerAttributeVaB(m_configAndResults.lMomentsSkewness, CT_AbstractCategory::DATA_Z, tr("L_Skewness"));
-    registerAttributeVaB(m_configAndResults.lMomentsKurtosis, CT_AbstractCategory::DATA_Z, tr("L_Kurtosis"));
+    registerAttributeVaB(m_configAndResults.lMomentsCoeffOfVariation, CT_AbstractCategory::DATA_Z, "LCV");
+    registerAttributeVaB(m_configAndResults.lMomentsSkewness, CT_AbstractCategory::DATA_Z, "LSkew");
+    registerAttributeVaB(m_configAndResults.lMomentsKurtosis, CT_AbstractCategory::DATA_Z, "LKurt");
 
     for(int i=0; i<CT_CloudMetrics::PERCENTILE_ARRAY_SIZE; ++i)
-        registerAttributeVaB(m_configAndResults.percentileValues[i], CT_AbstractCategory::DATA_Z, tr("P%1%2").arg((PERCENTILE_COEFF[i] < 10 ? "0" : "")).arg(PERCENTILE_COEFF[i]));
+        registerAttributeVaB(m_configAndResults.percentileValues[i], CT_AbstractCategory::DATA_Z, QString("P%1%2").arg((PERCENTILE_COEFF[i] < 10 ? "0" : "")).arg(PERCENTILE_COEFF[i]));
 
-    registerAttributeVaB(m_configAndResults.canopyReliefRatio, CT_AbstractCategory::DATA_Z, tr("Canopy_Relief_Ratio"));
-    registerAttributeVaB(m_configAndResults.elevationQuadraticMean, CT_AbstractCategory::DATA_Z, tr("QuadraticMean"));
-    registerAttributeVaB(m_configAndResults.elevationCubicMean, CT_AbstractCategory::DATA_Z, tr("CubicMean"));
+    registerAttributeVaB(m_configAndResults.canopyReliefRatio, CT_AbstractCategory::DATA_Z, "CRR");
+    registerAttributeVaB(m_configAndResults.elevationQuadraticMean, CT_AbstractCategory::DATA_Z, "QuadMean");
+    registerAttributeVaB(m_configAndResults.elevationCubicMean, CT_AbstractCategory::DATA_Z, "CubMean");
 }
