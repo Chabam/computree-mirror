@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_LINUX_6.0.338
+INSTALLER = Computree_Installer_LINUX_6.0.339
 # version : Major.Minor.commit
 
 # Usefull definitions of paths

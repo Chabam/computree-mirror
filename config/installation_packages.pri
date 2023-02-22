@@ -207,7 +207,7 @@ macx {
 
     # Deployment using MacDeployQt
     qt_deploy_cmd0 = mkdir -p $$DESTDIRFULL/languages ; find ../ -type f -name "*_*.qm" -exec cp {} $$DESTDIRFULL/languages \; & wait ;
-    qt_deploy_cmd1 = mkdir -p $$DIR_FRAMEWORKS $$DIR_PLUGINS  & wait ; cp $$DESTDIRFULL/libraries/core/*.dylib $$DIR_FRAMEWORKS ; cp $$DESTDIRFULL/plugins/*.dylib $$DIR_PLUGINS ; cp $$DESTDIRFULL/languages/*.qm $$DIR_TRANSLATE & wait ;
+    qt_deploy_cmd1 = mkdir -p $$DIR_FRAMEWORKS $$DIR_PLUGINS $$DIR_TRANSLATE & wait ; cp $$DESTDIRFULL/libraries/core/*.dylib $$DIR_FRAMEWORKS ; cp $$DESTDIRFULL/plugins/*.dylib $$DIR_PLUGINS ; cp $$DESTDIRFULL/languages/*.qm $$DIR_TRANSLATE & wait ;
     qt_deploy_cmd2 = cd $$DIR_FRAMEWORKS ; for target in $$DIR_FRAMEWORKS/libctli*; do for file in libctli*; do install_name_tool -change "\$\$file" @executable_path/../Frameworks/"\$\$file" "\$\$target"; done; done & wait ;
     qt_deploy_cmd3 = cd $$DIR_FRAMEWORKS ; for target in $$DIR_PLUGINS/libplug_*  ; do for file in libctli*; do install_name_tool -change "\$\$file" @executable_path/../Frameworks/"\$\$file" "\$\$target"; done; done & wait ;
     qt_deploy_cmd4 = cd $$DIR_PLUGINS    ; for file   in libplug_*  ; do install_name_tool -add_rpath @executable_path/../Frameworks/"\$\$file" $$DIR_FRAMEWORKS/../MacOS/CompuTreeGui; done & wait ;

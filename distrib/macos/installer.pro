@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_MACOS_6.0.338
+INSTALLER = Computree_Installer_MACOS_6.0.339
 # version : Major.Minor.commit
 
 # Usefull definitions of paths
@@ -42,7 +42,7 @@ PREPARE_DATA += mkdir plugin.M/data/    plugin.M/data/CompuTreeGui.app/    plugi
 PREPARE_DATA += cd $$PATH_SRC ;
 PREPARE_DATA += cp -r MacOS Resources        $$PATH_DST/computree.A/data/$$APP/           ;
 PREPARE_DATA += cp Info.plist PkgInfo        $$PATH_DST/computree.A/data/$$APP/           ;
-PREPARE_DATA += cp -r Languages              $$PATH_DST/computree.A/data/$$APP/           ;
+PREPARE_DATA += cp -r languages              $$PATH_DST/computree.A/data/$$APP/           ;
 PREPARE_DATA += cp $$PATH_RCS/charter/*.pdf  $$PATH_DST/computree.A/data/                 ;
 PREPARE_DATA += cp -r $$PATH_RCS/examples    $$PATH_DST/computree.B/data/                 ;
 PREPARE_DATA += cp Frameworks/libctlib*      $$PATH_DST/library.A/data/$$APP/Frameworks/  ;
@@ -60,7 +60,7 @@ PREPARE_DATA += cp PlugIns/libplug_mk.*      $$PATH_DST/plugin.G/data/$$APP/Plug
 PREPARE_DATA += cp PlugIns/libplug_onfdev.*  $$PATH_DST/plugin.L/data/$$APP/PlugIns/      ;
 PREPARE_DATA += cp PlugIns/libplug_ignlif.*  $$PATH_DST/plugin.M/data/$$APP/PlugIns/      ;
 
-GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.0/bin/binarycreator -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../../$$INSTALLER ;
+GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.5/bin/binarycreator -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../../$$INSTALLER ;
 
 INPUT = $$PWD/config/config.xml $$PWD/packages
 generation.input = INPUT
