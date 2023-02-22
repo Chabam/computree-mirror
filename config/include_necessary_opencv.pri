@@ -77,7 +77,7 @@ isEmpty(USE_OPENCV_ERROR_MSG) {
 
         INCLUDEPATH *= $$OPENCV_INC_PATH
         TR_EXCLUDE  *= $$OPENCV_INC_PATH/*
-        LIBS        *= -L$$OPENCV_LIBS_PAT
+        LIBS        *= -L$$OPENCV_LIBS_PATH
 
         LIBS *= $$OPENCV_LIBS_FOUND
     }
