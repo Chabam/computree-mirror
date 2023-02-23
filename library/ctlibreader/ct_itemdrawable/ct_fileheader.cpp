@@ -26,12 +26,40 @@
 *****************************************************************************/
 
 #include "ct_fileheader.h"
+#include "ct_reader/abstract/ct_abstractreader.h"
+
 
 CT_DEFAULT_IA_INIT(CT_FileHeader)
+
+CT_FileHeader::CT_FileHeader() : SuperClass(),
+    m_reader(nullptr),
+    m_mustAutoDeleteReader(false)
+{
+
+}
+
+CT_FileHeader::CT_FileHeader(const CT_FileHeader &other) : SuperClass(other),
+    m_reader((other.m_reader == nullptr) ? nullptr : other.m_reader->copyFull()),
+    m_mustAutoDeleteReader(true)
+{
+
+}
+
+CT_FileHeader::~CT_FileHeader()
+{
+    if(m_mustAutoDeleteReader)
+        delete m_reader;
+}
 
 void CT_FileHeader::setFilePath(const QString& filepath)
 {
     m_fileInfo = QFileInfo(filepath);
+}
+
+void CT_FileHeader::setReader(CT_AbstractReader *reader, bool mustAutoDeleteReader)
+{
+    m_reader = reader;
+    m_mustAutoDeleteReader = mustAutoDeleteReader;
 }
 
 QFileInfo CT_FileHeader::fileInfo() const
@@ -54,5 +82,19 @@ QString CT_FileHeader::directoryPath() const
     return m_fileInfo.path();
 }
 
+CT_AbstractReader* CT_FileHeader::reader()
+{
+    return m_reader;
+}
+
+bool CT_FileHeader::mustAutoDeleteReader() const
+{
+    return m_mustAutoDeleteReader;
+}
+
+QString CT_FileHeader::readerDisplayableName() const
+{
+    return m_reader->displayableName();
+}
 
 

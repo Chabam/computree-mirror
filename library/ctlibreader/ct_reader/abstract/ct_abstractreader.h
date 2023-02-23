@@ -4,7 +4,6 @@
 #include "ctlibreader_global.h"
 #include "ct_view/tools/fileformat.h"
 #include "ct_reader/tools/ct_readeroutmodelstructuremanager.h"
-#include "ct_itemdrawable/ct_fileheader.h"
 #include "ct_itemdrawable/ct_standarditemgroup.h"
 
 #include "ct_handle/ct_handleoutstdgroup.h"
@@ -12,7 +11,11 @@
 #include "ct_handle/ct_handleoutstditemattribute.h"
 #include "ct_handle/ct_handleoutstditemattributewrapper.h"
 
+#include "ct_itemdrawable/ct_fileheader.h"
+
 #include <QObject>
+#include <QFile>
+
 
 #define READER_ALL_COPY_IMP(argClass) CT_AbstractReader* createInstance() const override { return new argClass(); } \
                                       CT_AbstractReader* copyFull() const override { return new argClass(*this); }
@@ -143,7 +146,8 @@ public:
      *                       but must be of type CT_HandleXXXStdGroup
      */
     template<typename HandleGroup>
-    void declareOutputModelsInGroupWithHeader(CT_OutModelStructureManager& manager, HandleGroup& hParentGroup, const QString& displayableName = tr("Entête de fichier")) {
+    void declareOutputModelsInGroupWithHeader(CT_OutModelStructureManager& manager, HandleGroup& hParentGroup, const QString& displayableName = tr("Entête de fichier"))
+    {
         CT_ReaderOutModelStructureManager rManager = CT_ReaderOutModelStructureManager::createFromHandle(manager, hParentGroup);
         this->declareOutputModels(rManager);
 

@@ -2,7 +2,6 @@
 #define PB_STEPLOOPONFILES_H
 
 #include "ct_step/ct_stepbeginloop.h"
-#include "ct_itemdrawable/ct_readeritem.h"
 #include "ct_itemdrawable/ct_fileheader.h"
 
 #include <QDirIterator>
@@ -43,7 +42,6 @@ private:
     CT_HandleOutResultGroup                         m_hOutResultLOF;
     CT_HandleOutStdGroup                            m_hOutRootGroupLOF;
     CT_HandleOutStdGroup                            m_hOutFileGroupLOF;
-    CT_HandleOutSingularItem<CT_ReaderItem>         m_hOutReaderItemLOF;
     CT_HandleOutSingularItem<CT_FileHeader>         m_hOutFileHeaderLOF;
 
     CT_AbstractReader*                              mReader;

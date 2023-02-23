@@ -33,6 +33,9 @@
 
 #include <QFileInfo>
 
+
+class CT_AbstractReader;
+
 /**
   * @brief Represent a file header
   */
@@ -44,7 +47,7 @@ class CTLIBREADER_EXPORT CT_FileHeader : public CT_AbstractSingularItemDrawable
     using SuperClass = CT_AbstractSingularItemDrawable;
 
 public:
-    CT_FileHeader() = default;
+    CT_FileHeader();
 
     /**
      * @brief Copy constructor.
@@ -63,12 +66,20 @@ public:
      *          - isSelected and isDisplayed is set to false
      *          - Document list is not copied
      */
-    CT_FileHeader(const CT_FileHeader& other) = default;
+    CT_FileHeader(const CT_FileHeader& other);
+
+    ~CT_FileHeader() override;
 
     /**
      * @brief Set the filepath
      */
     void setFilePath(const QString& filepath);
+
+    /**
+     * @brief Set the reader
+     */
+    void setReader(CT_AbstractReader* reader, bool mustAutoDeleteReader);
+
 
     /**
      * @brief Returns the file info of the current file path
@@ -90,15 +101,35 @@ public:
      */
     QString directoryPath() const;
 
+    /**
+     * @brief Returns the reader
+     */
+    CT_AbstractReader* reader();
+
+    /**
+     * @brief Returns true if we must auto delete the reader
+     */
+    bool mustAutoDeleteReader() const;
+
+    /**
+     * @brief Returns the displayable name used by the reader
+     */
+    QString readerDisplayableName() const;
+
     CT_ITEM_COPY_IMP(CT_FileHeader)
 
 protected:
     QFileInfo     m_fileInfo;
 
+    CT_AbstractReader*  m_reader;
+    bool                m_mustAutoDeleteReader;
+
 private:
     CT_DEFAULT_IA_BEGIN(CT_FileHeader)
     CT_DEFAULT_IA_V2(CT_FileHeader, CT_AbstractCategory::staticInitDataDisplayableName(), &CT_FileHeader::fileName, QObject::tr("FileName"))
+    CT_DEFAULT_IA_V2(CT_FileHeader, CT_AbstractCategory::staticInitDataFileName(), &CT_FileHeader::filePath, QObject::tr("FilePath"))
     CT_DEFAULT_IA_V2(CT_FileHeader, CT_AbstractCategory::staticInitDataDisplayableName(), &CT_FileHeader::directoryPath, QObject::tr("Directory"))
+    CT_DEFAULT_IA_V2(CT_FileHeader, CT_AbstractCategory::staticInitDataDisplayableName(), &CT_FileHeader::readerDisplayableName, QObject::tr("ReaderType"))
     CT_DEFAULT_IA_END(CT_FileHeader)
 };
 

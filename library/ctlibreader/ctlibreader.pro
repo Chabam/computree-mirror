@@ -16,7 +16,6 @@ HEADERS += \
     ct_reader/abstract/ct_abstractreader.h \
     ct_itemdrawable/ct_fileheader.h \
     ct_reader/tools/ct_readeroutmodelstructuremanager.h \
-    ct_itemdrawable/ct_readeritem.h \
     ct_reader/extensions/ct_readerpointsfilteringextension.h
 
 SOURCES += \
@@ -24,7 +23,6 @@ SOURCES += \
     ct_itemdrawable/ct_fileheader.cpp \
     ct_reader/extensions/ct_indexablepointsreader.cpp \
     ct_reader/tools/ct_readeroutmodelstructuremanager.cpp \
-    ct_itemdrawable/ct_readeritem.cpp \
     ct_reader/extensions/ct_readerpointsfilteringextension.cpp
 
 TRANSLATIONS += languages/ctlibreader_fr.ts \

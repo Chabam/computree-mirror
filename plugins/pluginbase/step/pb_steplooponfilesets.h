@@ -2,7 +2,6 @@
 #define PB_STEPLOOPONFILESSETS_H
 
 #include "ct_step/ct_stepbeginloop.h"
-#include "ct_itemdrawable/ct_readeritem.h"
 #include "ct_itemdrawable/ct_fileheader.h"
 #include "ct_itemdrawable/ct_itemattributelist.h"
 
@@ -51,7 +50,6 @@ private:
     CT_HandleOutSingularItem<CT_ItemAttributeList>  m_hOutSetItemLOFS;
     CT_HandleOutStdStringItemAttribute              m_hOutSetItemAttributeLOFS;
     CT_HandleOutStdGroup                            m_hOutFileGroupLOFS;
-    CT_HandleOutSingularItem<CT_ReaderItem>         m_hOutReaderItemLOFS;
     CT_HandleOutSingularItem<CT_FileHeader>         m_hOutFileHeaderLOFS;
 
     CT_AbstractReader*                              mReader;

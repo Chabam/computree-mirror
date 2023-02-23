@@ -3,6 +3,7 @@
 
 #include "ct_reader/abstract/ct_abstractreader.h"
 #include "ct_itemdrawable/ct_box2d.h"
+#include "ct_itemdrawable/ct_fileheader.h"
 
 #include "ctlibio/ctlibio_global.h"
 

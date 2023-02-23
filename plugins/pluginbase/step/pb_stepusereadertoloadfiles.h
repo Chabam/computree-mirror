@@ -2,10 +2,10 @@
 #define PB_STEPUSEREADERTOLOADFILES_H
 
 #include "ct_step/abstract/ct_abstractstep.h"
-#include "ct_itemdrawable/ct_readeritem.h"
+#include "ct_itemdrawable/ct_fileheader.h"
 
 /**
- * @brief Step that use a result that contains a collection of CT_ReaderItem (in a group) and use
+ * @brief Step that use a result that contains a collection of CT_FileHeader (in a group) and use
  *        it to load multiple files.
  */
 class PB_StepUseReaderToLoadFiles : public CT_AbstractStep
@@ -36,9 +36,8 @@ private:
     CT_HandleInResultGroupCopy<>                                m_hInResultGroupCopy;
     CT_HandleInStdZeroOrMoreGroup                               m_hInRootGroup;
     CT_HandleInStdGroup<>                                       m_hInGroup;
-    CT_HandleInSingularItem<CT_ReaderItem>                      m_hInReaderItem;
+    CT_HandleInSingularItem<CT_FileHeader>                      m_hInReaderItem;
     CT_HandleInSingularItem<>                                   m_hInConditionnalItem;
-    CT_HandleInStdItemAttribute<CT_AbstractCategory::BOOLEAN>   m_hInConditionnalAttribute;
 
     bool                                    _conditionnal;
     int                                     m_readerAutoIndex;

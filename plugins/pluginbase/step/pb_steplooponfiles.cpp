@@ -168,8 +168,6 @@ void PB_StepLoopOnFiles::declareOutputModels(CT_StepOutModelStructureManager& ma
     // if one reader was selected
     if(mReader != nullptr)
     {
-        manager.addItem(m_hOutFileGroupLOF, m_hOutReaderItemLOF, tr("Reader"), "", "", new CT_ReaderItem(mReader, false));
-
         // get the header
         CT_FileHeader* rHeader = mReader->createHeaderPrototype();
 
@@ -218,12 +216,9 @@ void PB_StepLoopOnFiles::compute()
                     Q_ASSERT(header != nullptr);
                     if (header == nullptr) {qDebug() << "PB_StepLoopOnFiles::compute" << ", " << "header == nullptr";}
 
+                    header->setReader(readerCpy, true);
                     grpHeader->addSingularItem(m_hOutFileHeaderLOF, header);
                 }
-
-                // add the reader item
-                CT_ReaderItem* rItem = new CT_ReaderItem(readerCpy, true);
-                grpHeader->addSingularItem(m_hOutReaderItemLOF, rItem);
             }
             else
             {

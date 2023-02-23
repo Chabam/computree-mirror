@@ -2,7 +2,6 @@
 #define PB_STEPCREATEREADERLIST_H
 
 #include "ct_step/abstract/ct_abstractstepcanbeaddedfirst.h"
-#include "ct_itemdrawable/ct_readeritem.h"
 #include "ct_itemdrawable/ct_fileheader.h"
 
 /**
@@ -46,7 +45,6 @@ private:
     CT_HandleOutResultGroup                 m_hOutResult;
     CT_HandleOutStdGroup                    m_hOutRootGroup;
     CT_HandleOutStdGroup                    m_hOutFileGroup;
-    CT_HandleOutSingularItem<CT_ReaderItem> m_hOutReaderItem;
     CT_HandleOutSingularItem<CT_FileHeader> m_hOutFileHeader;
 
     CT_AbstractReader*                      mReader;

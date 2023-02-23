@@ -4,7 +4,6 @@
 #include "ct_step/abstract/ct_abstractstep.h"
 #include "ct_reader/abstract/ct_abstractreader.h"
 
-#include "ct_itemdrawable/ct_readeritem.h"
 #include "ct_itemdrawable/ct_fileheader.h"
 
 class PB_StepLoadFileByName : public CT_AbstractStep
@@ -46,7 +45,6 @@ private:
     CT_HandleInSingularItem<>                               m_hInItem;
     CT_HandleInStdItemAttribute<CT_AbstractCategory::ANY>   m_hInItemAttribute;
 
-    CT_HandleOutSingularItem<CT_ReaderItem>                 m_hOutReaderItem;
     CT_HandleOutSingularItem<CT_FileHeader>                 m_hOutFileHeader;
 
     CT_AbstractReader*                                      mReader;

@@ -64,7 +64,7 @@ void PB_StepUseReaderToLoadFiles::declareOutputModels(CT_StepOutModelStructureMa
 
     if(outReaderItemModel != nullptr)
     {
-        CT_ReaderItem* readerItemPrototype = dynamic_cast<CT_ReaderItem*>(outReaderItemModel->prototype());
+        CT_FileHeader* readerItemPrototype = dynamic_cast<CT_FileHeader*>(outReaderItemModel->prototype());
 
         if((readerItemPrototype != nullptr) && (readerItemPrototype->reader() != nullptr)) {
             m_readerPrototype = readerItemPrototype->reader();
@@ -92,13 +92,13 @@ void PB_StepUseReaderToLoadFiles::compute()
 
         for(CT_StandardItemGroup* group : groupIterator)
         {
-            const CT_ReaderItem* readerItem = group->singularItem(m_hInReaderItem);
+            const CT_FileHeader* readerItem = group->singularItem(m_hInReaderItem);
 
             if(readerItem != nullptr)
             {
                 if(m_readerPrototype != nullptr)
                 {
-                    if(m_readerPrototype->setFilePath(readerItem->readerFilePath()))
+                    if(m_readerPrototype->setFilePath(readerItem->filePath()))
                     {
                         if(m_readerPrototype->readFile(group))
                             STEP_LOG->addInfoMessage(tr("Chargement du fichier %1").arg(m_readerPrototype->filepath()));
