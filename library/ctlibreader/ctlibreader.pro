@@ -11,6 +11,7 @@ TARGET = ctlibreader
 DEFINES += CTLIBREADER_LIBRARY
 
 HEADERS += \
+    ct_itemdrawable/ct_indexablepointfileheader.h \
     ct_reader/extensions/ct_indexablepointsreader.h \
     ctlibreader_global.h \
     ct_reader/abstract/ct_abstractreader.h \
@@ -19,6 +20,7 @@ HEADERS += \
     ct_reader/extensions/ct_readerpointsfilteringextension.h
 
 SOURCES += \
+    ct_itemdrawable/ct_indexablepointfileheader.cpp \
     ct_reader/abstract/ct_abstractreader.cpp \
     ct_itemdrawable/ct_fileheader.cpp \
     ct_reader/extensions/ct_indexablepointsreader.cpp \

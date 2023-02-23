@@ -8,16 +8,12 @@
 /**
  * Class that offer the points filtering extension to your reader
  */
-class CTLIBREADER_EXPORT CT_IndexablePointsReader : public CT_AbstractReader
+class CTLIBREADER_EXPORT CT_IndexablePointsReader
 {
-    Q_OBJECT
 
 public:
 
-    CT_IndexablePointsReader(int subMenuLevel = 0);
-    CT_IndexablePointsReader(const CT_AbstractReader& other);
-
-    virtual bool getPointIndicesInside2DShape(const CT_AreaShape2DData *area2D, size_t &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const = 0;
+    virtual bool getPointIndicesInside2DShape(const CT_AreaShape2DData *area2D, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const = 0;
 
     virtual QString getFormatCode() const = 0;
 };

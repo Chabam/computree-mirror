@@ -1,6 +1,8 @@
 #include "pb_stepusereadertoloadfiles.h"
 
 #include "ct_step/tools/ct_logmanageradapterforstep.h"
+#include "ct_reader/abstract/ct_abstractreader.h"
+
 
 PB_StepUseReaderToLoadFiles::PB_StepUseReaderToLoadFiles() : SuperClass()
 {

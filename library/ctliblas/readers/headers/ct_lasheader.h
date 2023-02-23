@@ -2,16 +2,16 @@
 #define CT_LASHEADER_H
 
 #include "ctliblas/ctliblas_global.h"
-#include "ct_itemdrawable/ct_fileheader.h"
+#include "ct_itemdrawable/ct_indexablepointfileheader.h"
 
 #include <QDataStream>
 
-class CTLIBLAS_EXPORT CT_LASHeader : public CT_FileHeader
+class CTLIBLAS_EXPORT CT_LASHeader : public CT_IndexablePointFileHeader
 {
     Q_OBJECT
-    CT_TYPE_IMPL_MACRO(CT_LASHeader, CT_FileHeader, LAS Header)
+    CT_TYPE_IMPL_MACRO(CT_LASHeader, CT_IndexablePointFileHeader, LAS Header)
 
-    using SuperClass = CT_FileHeader;
+    using SuperClass = CT_IndexablePointFileHeader;
 
 public:
     enum CompareOption {

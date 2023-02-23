@@ -892,7 +892,7 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
 
 
 
-bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* area2D, size_t &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const
+bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* area2D, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const
 {
     bool all = true;
     lastIncludedIndex = -1;

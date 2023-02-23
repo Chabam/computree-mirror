@@ -100,8 +100,10 @@ void PB_StepCreatePointFileIndex::compute()
     // verify if all input readers are in the same format
     QString formatCode;
     int filecount = 0;
-    for (const CT_IndexablePointsReader* reader : _inReader.iterateInputs(_inResultReader))
+    for (const CT_IndexablePointFileHeader* readerHeader : _inReader.iterateInputs(_inResultReader))
     {
+        CT_IndexablePointsReader* reader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
+
         if (formatCode.isEmpty())
         {
             formatCode = reader->getFormatCode();
@@ -140,19 +142,19 @@ void PB_StepCreatePointFileIndex::compute()
 
     int fileNumber = 0;
     // Loop on readers to add indices to index files
-    for (const CT_IndexablePointsReader* reader : _inReader.iterateInputs(_inResultReader))
+    for (const CT_IndexablePointFileHeader* readerHeader : _inReader.iterateInputs(_inResultReader))
     {
+        CT_IndexablePointsReader* reader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
 
-        QFileInfo readerInfo(reader->filepath());
         //if (isStopped()) {return;}
 
         for (AreaIndexFile* file : indexFiles)
         {
-            size_t lastIncludedIndex;
+            qint64 lastIncludedIndex;
             QList<size_t> indicesAfterLastIncludedIndex;
 
             bool all = reader->getPointIndicesInside2DShape(file->_areaData, lastIncludedIndex, indicesAfterLastIncludedIndex);
-            file->writeFileIndices(readerInfo.fileName(), all, lastIncludedIndex, indicesAfterLastIncludedIndex);
+            file->writeFileIndices(readerHeader->fileName(), all, lastIncludedIndex, indicesAfterLastIncludedIndex);
         }
 
         setProgress(100.0f*(float(++fileNumber) / float(filecount)));
@@ -172,7 +174,7 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &out
     const CT_Box2DData* boxData = dynamic_cast<const CT_Box2DData*>(areaData);
     if (boxData != nullptr)
     {
-       outStream << QString("BOX");
+        outStream << QString("BOX");
     }
 
     const CT_Circle2DData* circleData = dynamic_cast<const CT_Circle2DData*>(areaData);
@@ -197,34 +199,38 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &out
     }
 }
 
-void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool all, size_t &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex)
+void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex)
 {
-    if (_file.open(QIODevice :: Append))
+    if (_file.open(QIODevice::Append | QIODevice::Text))
     {
         QDataStream outStream(&_file);
 
-        quint64 n = lastIncludedIndex + 1 + indicesAfterLastIncludedIndex.size();
-        _pointCount += n;
+        qint64 n = lastIncludedIndex + 1 + indicesAfterLastIncludedIndex.size();
 
-        outStream << name;
-        outStream << n;
-        outStream << all;
-
-        if (!all)
+        if (n > 0)
         {
-            for (size_t i = 0 ; i <= lastIncludedIndex ; i++)
+            _pointCount += n;
+
+            outStream << name;
+            outStream << all;
+            outStream << n;
+
+            if (!all)
             {
-                outStream << i;
+                for (qint64 i = 0 ; i <= lastIncludedIndex ; i++)
+                {
+                    outStream << i;
+                }
+
+                for (qint64 i : indicesAfterLastIncludedIndex)
+                {
+                    outStream << i;
+                }
             }
 
-            for (size_t i : indicesAfterLastIncludedIndex)
-            {
-                outStream << i;
-            }
+            _file.seek(0);
+            outStream << _pointCount;
         }
-
-        _file.seek(0);
-        outStream << _pointCount;
 
         _file.close();
     }

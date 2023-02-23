@@ -994,3 +994,146 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
 
     return true;
 }
+
+
+bool CT_Reader_LAZ::getPointIndicesInside2DShape(const CT_AreaShape2DData* area2D, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const
+{
+    bool all = true;
+    lastIncludedIndex = -1;
+    indicesAfterLastIncludedIndex.clear();
+
+    QString error;
+
+    CT_LAZHeader *header = static_cast<CT_LAZHeader*>(internalReadHeader(filepath(), error));
+    if(header == nullptr)
+    {
+        PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier %1").arg(filepath()));
+        return false;
+    }
+
+    size_t nPoints = header->getPointsRecordCount();
+    if(nPoints == 0)
+    {
+        PS_LOG->addWarningMessage(LogInterface::reader, tr("Aucun points contenu dans le fichier %1").arg(filepath()));
+        delete header;
+        return true;
+    }
+
+    // check bounding boxes
+    double xmin = std::numeric_limits<double>::max();
+    double ymin = std::numeric_limits<double>::max();
+    double xmax = -std::numeric_limits<double>::max();
+    double ymax = -std::numeric_limits<double>::max();
+
+    // Extract and recompute the real bounding box (min/max x/y/z) from header properties
+    Eigen::Vector3d min;
+    Eigen::Vector3d max;
+    header->boundingBox(min, max);
+
+    bool validBB = true;
+    if (min[0] < xmin) {xmin = min[0];} else {validBB = false;}
+    if (max[0] > xmax) {xmax = max[0];} else {validBB = false;}
+    if (min[1] < ymin) {ymin = min[1];} else {validBB = false;}
+    if (max[1] > ymax) {ymax = max[1];} else {validBB = false;}
+
+    if (validBB)
+    {
+        area2D->getBoundingBox(min, max);
+
+        // If area2D is a 2DBox, it is possible to check if all data is included in area2D directly from extent
+        const CT_Box2DData* boxData = dynamic_cast<const CT_Box2DData*>(area2D);
+        if (boxData != nullptr)
+        {
+            if (xmin >= min(0) && xmax <= max(0) && ymin >= min(1) && ymax <= max(1))
+            {
+                lastIncludedIndex = nPoints - 1;
+                return true;
+            }
+        }
+
+        // If bounding boxes not overlapping => no index
+        if (xmax < min(0) || xmin > max(0) || ymax < min(1) || ymin > max(1))
+        {
+            return false;
+        }
+    }
+
+
+    // create the reader
+    laszip_POINTER laszip_reader = nullptr;
+    if (laszip_create(&laszip_reader))
+    {
+        PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire le fichier"));
+        delete header;
+        return false;
+    }
+
+    // open the reader
+    auto filepath = CT_AbstractReader::filepath();
+    laszip_BOOL is_compressed = 0;
+    if (laszip_open_reader(laszip_reader, filepath.toStdString().c_str(), &is_compressed))
+    {
+        PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire le fichier"));
+        return false;
+    }
+
+    // get a pointer to the points that will be read
+    laszip_point* point;
+    if (laszip_get_point_pointer(laszip_reader, &point))
+    {
+        PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire le fichier"));
+        delete header;
+        return false;
+    }
+
+    bool mustTransformPoint = header->mustTransformPoints();
+
+    qint32 x, y, z;
+    double xc = 0;
+    double yc = 0;
+    double zc = 0;
+
+    for (size_t i = 0; i < nPoints; ++i)
+    {
+        // READ THE POINT
+        if (laszip_read_point(laszip_reader))
+        {
+            PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire le point"));
+            delete header;
+            return false;
+        }
+
+        x = point->X;
+        y = point->Y;
+        z = point->Z;
+
+        // CONVERT POINT
+        if(mustTransformPoint)
+        {
+            header->transformPoint(x, y, z, xc, yc, zc);
+        } else
+        {
+            xc = x;
+            yc = y;
+        }
+
+        if (area2D->contains(xc, yc))
+        {
+            if (all)
+            {
+                lastIncludedIndex = i; // avoid list filling if all points included
+            } else {
+                indicesAfterLastIncludedIndex.append(i);
+            }
+        } else {
+            all = false;
+        }
+    }
+
+    return all;
+}
+
+QString CT_Reader_LAZ::getFormatCode() const
+{
+    return "LAZ";
+}

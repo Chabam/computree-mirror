@@ -28,11 +28,12 @@
 #include "ct_step/abstract/ct_abstractstep.h"
 
 #include "ct_itemdrawable/abstract/ct_abstractareashape2d.h"
-#include "ct_itemdrawable/ct_readeritem.h"
+#include "ct_itemdrawable/ct_indexablepointfileheader.h"
 #include "ct_reader/extensions/ct_indexablepointsreader.h"
 
 #include <QFile>
 #include <QDataStream>
+#include <QTextStream>
 
 
 class PB_StepCreatePointFileIndex: public CT_AbstractStep
@@ -73,7 +74,8 @@ private:
             _pointCount = 0;
             _areaItem = areaItem;
 
-            QString name = areaItem->name();
+            QFileInfo info(areaItem->displayableName());
+            QString name = info.baseName();
             QString path = outFolder + "/" + name + ".cti";
 
             _areaData = dynamic_cast<const CT_AreaShape2DData*>(areaItem->getPointerData());
@@ -82,6 +84,7 @@ private:
             if (_file.open(QIODevice :: WriteOnly))
             {
                 QDataStream outStream(&_file);
+
                 outStream << _pointCount;
                 outStream << fileFormat;
 
@@ -97,7 +100,7 @@ private:
         quint64                         _pointCount;
 
         void writeAreaShape(QDataStream& outStream, const CT_AreaShape2DData *areaData);
-        void writeFileIndices(QString name, bool all, size_t &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex);
+        void writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex);
 
     };
 
@@ -111,7 +114,7 @@ private:
     CT_HandleInResultGroup<>                                                            _inResultReader;
     CT_HandleInStdZeroOrMoreGroup                                                       _inZeroOrMoreRootGroupReader;
     CT_HandleInStdGroup<>                                                               _inGrpReader;
-    CT_HandleInSingularItem<CT_ReaderItem>                                              _inReader;
+    CT_HandleInSingularItem<CT_IndexablePointFileHeader>                                _inReader;
 
 
 
