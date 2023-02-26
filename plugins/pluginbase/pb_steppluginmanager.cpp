@@ -102,6 +102,7 @@
 #include "ctlibio/readers/ct_reader_points_ascii.h"
 #include "ctlibio/readers/ct_reader_ply.h"
 #include "ctlibio/readers/ct_reader_trajectory.h"
+#include "ctlibio/readers/ct_reader_ctindex.h"
 
 #include "ctlibmetrics/ct_metric/points/ct_cloudmetrics.h"
 #include "ctlibmetrics/ct_metric/abstract/ct_abstractmetric_raster.h"
@@ -362,6 +363,7 @@ bool PB_StepPluginManager::loadReaders()
     sep->addReader(new CT_Reader_Points_ASCII(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_PLY(CT_StepsMenu::LP_Points));
     sep->addReader(new CT_Reader_Trajectory(CT_StepsMenu::LP_Points));
+    sep->addReader(new CT_Reader_CTIndex(CT_StepsMenu::LP_Points));
     //
     //sep->addReader(new CT_Reader_PGM());
     //sep->addReader(new CT_Reader_PBM());

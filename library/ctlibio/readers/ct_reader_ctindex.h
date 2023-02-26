@@ -1,22 +1,21 @@
-#ifndef CT_READER_BUFFER_H
-#define CT_READER_BUFFER_H
+#ifndef CT_READER_CTINDEX_H
+#define CT_READER_CTINDEX_H
 
-#include "ctlibbuffer/ctlibbuffer_global.h"
+#include "ctlibio/ctlibio_global.h"
 #include "ct_reader/abstract/ct_abstractreader.h"
-#include "ct_itemdrawable/ct_scene.h"
 
 /**
  * @brief Reader that can load a cti file (*.cti) that represent a PointCloud index list
  */
-class CTLIBBUFFER_EXPORT CT_Reader_BUFFER : public CT_AbstractReader
+class CTLIBIO_EXPORT CT_Reader_CTIndex : public CT_AbstractReader
 {
     Q_OBJECT
     typedef CT_AbstractReader SuperClass;
 
 public:
-    CT_Reader_BUFFER(int subMenuLevel = 0);
-    CT_Reader_BUFFER(const CT_Reader_BUFFER& other);
-    ~CT_Reader_BUFFER();
+    CT_Reader_CTIndex(int subMenuLevel = 0);
+    CT_Reader_CTIndex(const CT_Reader_CTIndex& other);
+    ~CT_Reader_CTIndex();
 
     /**
      * @brief Returns a displayable name of the reader
@@ -28,7 +27,9 @@ public:
      */
     bool setFilePath(const QString& filepath) override;
 
-    READER_ALL_COPY_IMP(CT_Reader_BUFFER)
+    READER_ALL_COPY_IMP(CT_Reader_CTIndex)
+
+    virtual CT_FileHeader *createHeaderPrototype() const override;
 
 protected:
     void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
@@ -38,10 +39,10 @@ protected:
     bool internalReadFile(CT_StandardItemGroup* group) override;
 
 private:
-    QString            m_data_path;
     QString            m_fileType;
     QList<FileBuffer>  m_fileBufferList;
+
     CT_AbstractReader* m_reader;
 };
 
-#endif // CT_READER_BUFFER_H
+#endif // CT_READER_CTINDEX_H

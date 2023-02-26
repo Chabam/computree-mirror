@@ -70,8 +70,8 @@ public:
     // For buffer including multiples files
     struct FileBuffer {
         QString       filename;
-        size_t        nPoints;
-        QList<size_t> indexList;
+        qint64        nPoints;
+        QList<qint64> indexList;
     };
 
     /**

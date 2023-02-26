@@ -13,7 +13,7 @@ class CTLIBREADER_EXPORT CT_IndexablePointsReader
 
 public:
 
-    virtual bool getPointIndicesInside2DShape(const CT_AreaShape2DData *area2D, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const = 0;
+    virtual bool getPointIndicesInside2DShape(const CT_AreaShape2DData *area2D, bool &all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex) const = 0;
 
     virtual QString getFormatCode() const = 0;
 };

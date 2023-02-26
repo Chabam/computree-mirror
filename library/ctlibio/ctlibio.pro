@@ -19,6 +19,7 @@ HEADERS +=  \
     exporters/polygon2d/pb_polygon2dexporter.h \
     exporters/profile/pb_profileexporter.h \
     readers/ct_reader_ascrgb.h \
+    readers/ct_reader_ctindex.h \
     readers/ct_reader_gdal.h \
     readers/ct_reader_larchitect_grid.h \
     readers/ct_reader_opf.h \
@@ -29,6 +30,7 @@ HEADERS +=  \
     readers/ct_reader_asciigrid3d.h \
     readers/ct_reader_points_ascii.h \
     readers/ct_reader_idxyz.h \
+    readers/headers/ct_ctiheader.h \
     readers/headers/ct_gdalheader.h \
     readers/headers/ct_xybheader.h \
     readers/ct_reader_ptx.h \
@@ -98,6 +100,7 @@ SOURCES += \
     exporters/polygon2d/pb_polygon2dexporter.cpp \
     exporters/profile/pb_profileexporter.cpp \
     readers/ct_reader_ascrgb.cpp \
+    readers/ct_reader_ctindex.cpp \
     readers/ct_reader_gdal.cpp \
     readers/ct_reader_larchitect_grid.cpp \
     readers/ct_reader_opf.cpp \
@@ -107,6 +110,7 @@ SOURCES += \
     readers/ct_reader_asciigrid3d.cpp \
     readers/ct_reader_points_ascii.cpp \
     readers/ct_reader_idxyz.cpp \
+    readers/headers/ct_ctiheader.cpp \
     readers/headers/ct_xybheader.cpp \
     readers/headers/ct_gdalheader.cpp \
     readers/ct_reader_ptx.cpp \

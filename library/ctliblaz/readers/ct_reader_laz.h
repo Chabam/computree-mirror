@@ -60,7 +60,7 @@ public:
 
     virtual bool hasBoundingBox() {return true;}
 
-    bool getPointIndicesInside2DShape(const CT_AreaShape2DData *area2D, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const override;
+    bool getPointIndicesInside2DShape(const CT_AreaShape2DData *area2D, bool &all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex) const override;
 
     QString getFormatCode() const override;
 

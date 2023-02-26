@@ -92,26 +92,36 @@ void PB_StepCreatePointFileIndex::declareOutputModels(CT_StepOutModelStructureMa
 
 void PB_StepCreatePointFileIndex::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
 {
-   postInputConfigDialog->addFileChoice(tr("Répertoire d'export des fichiers d'index"), CT_FileChoiceButton::OneExistingFolder, "", _outFolder);
+   postInputConfigDialog->addFileChoice(tr("Répertoire d'export des fichiers d'index (vide)"), CT_FileChoiceButton::OneExistingFolder, "", _outFolder);
 }
 
 void PB_StepCreatePointFileIndex::compute()
 {
     // verify if all input readers are in the same format
-    QString formatCode;
     int filecount = 0;
+    QString formatCode;
+    QString basePath;
     for (const CT_IndexablePointFileHeader* readerHeader : _inReader.iterateInputs(_inResultReader))
     {
-        CT_IndexablePointsReader* reader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
+        CT_AbstractReader* reader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->reader();
+        CT_IndexablePointsReader* ireader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
+
+        ++filecount;
 
         if (formatCode.isEmpty())
         {
-            formatCode = reader->getFormatCode();
-            ++filecount;
+            formatCode = ireader->getFormatCode();
+            basePath = QFileInfo(reader->filepath()).path();
         } else {
-            if (formatCode != reader->getFormatCode())
+            if (formatCode != ireader->getFormatCode())
             {
                 PS_LOG->addErrorMessage(LogInterface::step, displayableCustomName() + tr("Tous les fichiers d'entrée n'ont pas le même format. Arrêt de l'indexation."));
+                return;
+            }
+
+            if (basePath != QFileInfo(reader->filepath()).path())
+            {
+                PS_LOG->addErrorMessage(LogInterface::step, displayableCustomName() + tr("Tous les fichiers d'entrée ne sont pas dans le même dossier. Arrêt de l'indexation."));
                 return;
             }
         }
@@ -139,6 +149,18 @@ void PB_StepCreatePointFileIndex::compute()
         indexFiles.append(new AreaIndexFile(areaItem, folder, formatCode));
     }
 
+    // Write side File containing source path
+    QString sideFileName = folder + "/" + "sourcePath.txt";
+    QFile fp(sideFileName);
+
+    if(fp.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream stream(&fp);
+
+        stream << basePath;
+        fp.close();
+    }
+
 
     int fileNumber = 0;
     // Loop on readers to add indices to index files
@@ -151,10 +173,14 @@ void PB_StepCreatePointFileIndex::compute()
         for (AreaIndexFile* file : indexFiles)
         {
             qint64 lastIncludedIndex;
-            QList<size_t> indicesAfterLastIncludedIndex;
+            QList<qint64> indicesAfterLastIncludedIndex;
 
-            bool all = reader->getPointIndicesInside2DShape(file->_areaData, lastIncludedIndex, indicesAfterLastIncludedIndex);
-            file->writeFileIndices(readerHeader->fileName(), all, lastIncludedIndex, indicesAfterLastIncludedIndex);
+            bool all;
+
+            if (reader->getPointIndicesInside2DShape(file->_areaData, all, lastIncludedIndex, indicesAfterLastIncludedIndex))
+            {
+                file->writeFileIndices(readerHeader->fileName(), all, lastIncludedIndex, indicesAfterLastIncludedIndex);
+            }
         }
 
         setProgress(100.0f*(float(++fileNumber) / float(filecount)));
@@ -199,7 +225,7 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &out
     }
 }
 
-void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex)
+void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex)
 {
     if (_file.open(QIODevice::Append | QIODevice::Text))
     {
@@ -217,9 +243,12 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, 
 
             if (!all)
             {
-                for (qint64 i = 0 ; i <= lastIncludedIndex ; i++)
+                if (lastIncludedIndex > -1)
                 {
-                    outStream << i;
+                    for (qint64 i = 0 ; i <= lastIncludedIndex ; i++)
+                    {
+                        outStream << i;
+                    }
                 }
 
                 for (qint64 i : indicesAfterLastIncludedIndex)

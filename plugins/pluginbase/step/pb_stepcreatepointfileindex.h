@@ -77,6 +77,7 @@ private:
             QFileInfo info(areaItem->displayableName());
             QString name = info.baseName();
             QString path = outFolder + "/" + name + ".cti";
+            _path = path;
 
             _areaData = dynamic_cast<const CT_AreaShape2DData*>(areaItem->getPointerData());
 
@@ -97,10 +98,11 @@ private:
         const CT_AbstractAreaShape2D*   _areaItem;
         const CT_AreaShape2DData*       _areaData;
         QFile                           _file;
-        quint64                         _pointCount;
+        qint64                          _pointCount;
+        QString                         _path;
 
         void writeAreaShape(QDataStream& outStream, const CT_AreaShape2DData *areaData);
-        void writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex);
+        void writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex);
 
     };
 

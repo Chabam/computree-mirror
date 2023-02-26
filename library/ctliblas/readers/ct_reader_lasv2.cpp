@@ -539,7 +539,7 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
 
     m_fileBufferList = multipleFilepath();
 
-    size_t nPoints = 0;
+    qint64 nPoints = 0;
 
     double xmin = std::numeric_limits<double>::max();
     double ymin = std::numeric_limits<double>::max();
@@ -560,7 +560,7 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
         }
 
         // Compute total nPoints based on total or partial number of point according to the buffer
-        size_t points;
+        qint64 points;
         if(fileBuffer.nPoints == 0)
             points = header->getPointsRecordCount();
         else
@@ -683,17 +683,19 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
         stream.setByteOrder(QDataStream::LittleEndian);
 
         // Loop over points from buffer info (all or partial, using seek)
-        QList<size_t> points_list;
+        QList<qint64> points_list;
         if(fileBuffer.nPoints == 0) // complete list of point
         {
-            for(size_t i=0 ; i<header->getPointsRecordCount() ; i++)
+            for(qint64 i = 0 ; i < header->getPointsRecordCount() ; i++)
+            {
                 points_list.append(i);
+            }
             points_list = qAsConst(points_list);
         }
         else
             points_list = qAsConst(fileBuffer.indexList);
 
-        for(size_t &i: points_list)
+        for(qint64 &i: points_list)
         {
             // Seek to wanted position
             f.seek(head_size + i*header_temp->m_pointDataRecordLength);
@@ -892,9 +894,8 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
 
 
 
-bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* area2D, qint64 &lastIncludedIndex, QList<size_t> &indicesAfterLastIncludedIndex) const
+bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* area2D, bool &all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex) const
 {
-    bool all = true;
     lastIncludedIndex = -1;
     indicesAfterLastIncludedIndex.clear();
 
@@ -904,15 +905,19 @@ bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* are
 
     if(header == nullptr) {
         PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier %1").arg(filepath()));
+        lastIncludedIndex = -1;
+        all = false;
         return false;
     }
 
-    size_t nPoints = header->getPointsRecordCount();
+    qint64 nPoints = qint64(header->getPointsRecordCount());
 
     if(nPoints == 0) {
         PS_LOG->addWarningMessage(LogInterface::reader, tr("Aucun points contenu dans le fichier %1").arg(filepath()));
         delete header;
-        return true;
+        lastIncludedIndex = -1;
+        all = false;
+        return false;
     }
 
     // check bounding boxes
@@ -932,7 +937,7 @@ bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* are
     if (min[1] < ymin) {ymin = min[1];} else {validBB = false;}
     if (max[1] > ymax) {ymax = max[1];} else {validBB = false;}
 
-    if (validBB)
+    if (validBB && nPoints > 0)
     {
         area2D->getBoundingBox(min, max);
 
@@ -943,6 +948,7 @@ bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* are
             if (xmin >= min(0) && xmax <= max(0) && ymin >= min(1) && ymax <= max(1))
             {
                 lastIncludedIndex = nPoints - 1;
+                all = true;
                 return true;
             }
         }
@@ -950,6 +956,8 @@ bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* are
         // If bounding boxes not overlapping => no index
         if (xmax < min(0) || xmin > max(0) || ymax < min(1) || ymin > max(1))
         {
+            lastIncludedIndex = -1;
+            all = false;
             return false;
         }
     }
@@ -957,6 +965,7 @@ bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* are
 
     QFile f(filepath());
 
+    all = true;
     if(f.open(QIODevice::ReadOnly))
     {
         bool mustTransformPoint = header->mustTransformPoints();
@@ -973,7 +982,7 @@ bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* are
         double yc = 0;
         double zc = 0;
 
-        for (size_t i = 0; i < nPoints; ++i)
+        for (qint64 i = 0; i < nPoints; ++i)
         {
             // READ ALL ATTRIBUTES
             stream >> x >> y >> z;
@@ -1007,7 +1016,12 @@ bool CT_Reader_LASV2::getPointIndicesInside2DShape(const CT_AreaShape2DData* are
         f.close();
     }
 
-    return all;
+    if (all || lastIncludedIndex > -1 || indicesAfterLastIncludedIndex.size() > 0)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 QString CT_Reader_LASV2::getFormatCode() const
