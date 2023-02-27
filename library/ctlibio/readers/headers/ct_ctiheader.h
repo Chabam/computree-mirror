@@ -25,7 +25,6 @@ public:
     bool hasBoundingBox() const final {return true;}
     void boundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const final;
 
-    void setNPoints(qint64 nPoints);
     void setFileFormat(const QString& fileFormat);
     void setExtent(double xmin, double ymin, double xmax, double ymax);
 
@@ -37,7 +36,6 @@ public:
 
     void setBasePath(QString path);
 
-    qint64 nPoints() const;
     QString fileFormat() const;
     double xmin() const;
     double ymin() const;
@@ -53,7 +51,6 @@ public:
 
 private:
 
-    qint64              _nPoints;
     QString             _fileFormat;
     double              _xmin;
     double              _ymin;
@@ -70,7 +67,6 @@ private:
 
 
     CT_DEFAULT_IA_BEGIN(CT_CTIHeader)
-    CT_DEFAULT_IA_V2(CT_CTIHeader, CT_AbstractCategory::staticInitDataSize(), &CT_CTIHeader::nPoints, QObject::tr("nPoints"))
     CT_DEFAULT_IA_V2(CT_CTIHeader, CT_AbstractCategory::staticInitDataValue(), &CT_CTIHeader::fileFormat, QObject::tr("fileFormat"))
     CT_DEFAULT_IA_V2(CT_CTIHeader, CT_AbstractCategory::staticInitDataValue(), &CT_CTIHeader::areaShapeType, QObject::tr("areaShapeType"))
     CT_DEFAULT_IA_V2(CT_CTIHeader, CT_AbstractCategory::staticInitDataX(), &CT_CTIHeader::xmin, QObject::tr("xmin"))

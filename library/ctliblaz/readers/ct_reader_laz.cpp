@@ -584,12 +584,6 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
 
     qint64 nPoints = 0;
 
-    double xmin = std::numeric_limits<double>::max();
-    double ymin = std::numeric_limits<double>::max();
-    double zmin = std::numeric_limits<double>::max();
-    double xmax = -std::numeric_limits<double>::max();
-    double ymax = -std::numeric_limits<double>::max();
-    double zmax = -std::numeric_limits<double>::max();
 
     // Loop over file headers
     for(auto &fileBuffer: qAsConst(m_fileBufferList))
@@ -610,17 +604,6 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
             points = fileBuffer.nPoints;
         nPoints += points;
 
-        // Extract and recompute the real bounding box (min/max x/y/z) from header properties
-        Eigen::Vector3d min;
-        Eigen::Vector3d max;
-        header->boundingBox(min, max);
-        if (min[0]<xmin) {xmin = min[0];}
-        if (max[0]>xmax) {xmax = max[0];}
-        if (min[1]<ymin) {ymin = min[1];}
-        if (max[1]>ymax) {ymax = max[1];}
-        if (min[2]<zmin) {zmin = min[2];}
-        if (max[2]>zmax) {zmax = max[2];}
-
         delete header;
     }
 
@@ -635,7 +618,6 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
     CT_LAZHeader *header = static_cast<CT_LAZHeader*>(internalReadHeader(filepath(), error));
 
     setToolTip(header->toString());
-    bool mustTransformPoint = header->mustTransformPoints();
 
     // Create PCIR and associated data
     CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPoints);
@@ -661,18 +643,18 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
     decltype (m_hOutReturnPointWaveformLocation)::SetterPtr rpwlSetter = nullptr;
     decltype (m_hOutNIR)::SetterPtr nirSetter = nullptr;
 
-    if((m_headerFromConfiguration->m_pointDataRecordFormat == 1)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat > 2))
+    if((header->m_pointDataRecordFormat == 1)
+            || (header->m_pointDataRecordFormat > 2))
     {
         gpsTimeSetter = m_hOutGPSTime.createAttributesSetterPtr(pcir);
     }
 
-    if((m_headerFromConfiguration->m_pointDataRecordFormat == 2)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 3)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 5)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 7)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 8)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
+    if((header->m_pointDataRecordFormat == 2)
+            || (header->m_pointDataRecordFormat == 3)
+            || (header->m_pointDataRecordFormat == 5)
+            || (header->m_pointDataRecordFormat == 7)
+            || (header->m_pointDataRecordFormat == 8)
+            || (header->m_pointDataRecordFormat == 10))
     {
         colorSetter = m_hOutColor.createAttributesSetterPtr(pcir);
         redSetter = m_hOutRed.createAttributesSetterPtr(pcir);
@@ -680,16 +662,16 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
         blueSetter = m_hOutBlue.createAttributesSetterPtr(pcir);
     }
 
-    if((m_headerFromConfiguration->m_pointDataRecordFormat == 8)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
+    if((header->m_pointDataRecordFormat == 8)
+            || (header->m_pointDataRecordFormat == 10))
     {
         nirSetter = m_hOutNIR.createAttributesSetterPtr(pcir);
     }
 
-    if((m_headerFromConfiguration->m_pointDataRecordFormat == 4)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 5)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 9)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
+    if((header->m_pointDataRecordFormat == 4)
+            || (header->m_pointDataRecordFormat == 5)
+            || (header->m_pointDataRecordFormat == 9)
+            || (header->m_pointDataRecordFormat == 10))
     {
         wpdiSetter = m_hOutWavePacketDescriptorIndex.createAttributesSetterPtr(pcir);
         botwdSetter = m_hOutByteOffsetToWaveformData.createAttributesSetterPtr(pcir);
@@ -703,19 +685,19 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
     {
         CT_LAZHeader *header_temp = static_cast<CT_LAZHeader*>(internalReadHeader(fileBuffer.filename, error));
 
-        auto head_size = header_temp->m_offsetToPointData;
+        //auto head_size = header_temp->m_offsetToPointData;
 
         // create the reader
         laszip_POINTER laszip_reader = nullptr;
         if (laszip_create(&laszip_reader))
         {
             PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire le fichier"));
-            delete header;
+            delete header_temp;
             return false;
         }
 
         // open the reader
-        auto filepath = CT_AbstractReader::filepath();
+        auto filepath = fileBuffer.filename;
         laszip_BOOL is_compressed = 0;
         if (laszip_open_reader(laszip_reader, filepath.toStdString().c_str(), &is_compressed))
         {
@@ -728,16 +710,21 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
         if (laszip_get_point_pointer(laszip_reader, &point))
         {
             PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire le fichier"));
-            delete header;
+            delete header_temp;
             return false;
         }
 
         // Loop over points from buffer info (all or partial, using seek)
-        QList<qint64> points_list;
+        QVector<qint64> points_list;
         if(fileBuffer.nPoints == 0) // complete list of point
         {
-            for(qint64 i = 0 ;  i < header->getPointsRecordCount() ; i++)
-                points_list.append(i);
+            qint64 nrecords = header_temp->getPointsRecordCount();
+            points_list.resize(nrecords);
+
+            for(qint64 i = 0 ; i < nrecords ; i++)
+            {
+                points_list[i] = i;
+            }
             points_list = qAsConst(points_list);
         }
         else
@@ -746,7 +733,16 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
         for(qint64 &i: points_list)
         {
             // Seek to wanted position
-            laszip_seek_point(&laszip_reader, head_size + i*header_temp->m_pointDataRecordLength);
+            laszip_seek_point(laszip_reader, i);
+
+            // READ THE POINT
+            if (laszip_read_point(laszip_reader))
+            {
+                PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire le point"));
+                delete header_temp;
+                delete header;
+                return false;
+            }
 
             // READ ALL ATTRIBUTES
             qint32 x = point->X;
@@ -756,7 +752,7 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
             intensitySetter.setValueWithLocalIndex(k, point->intensity);
 
             PointCore6_10 valuePointCore6_10;
-            if (header->m_pointDataRecordFormat < 6) // LAS <= 1.3
+            if (header_temp->m_pointDataRecordFormat < 6) // LAS <= 1.3
             {
                 valuePointCore6_10.entire = point->return_number +
                         (point->number_of_returns << 3) +
@@ -775,7 +771,7 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
 
             core6_10Setter.setValueWithLocalIndex(k, valuePointCore6_10);
 
-            if (header->m_pointDataRecordFormat < 6) // LAS <= 1.3
+            if (header_temp->m_pointDataRecordFormat < 6) // LAS <= 1.3
             {
                 classificationSetter.setValueWithLocalIndex(k, point->classification);
             }
@@ -784,7 +780,7 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
                 classificationSetter.setValueWithLocalIndex(k, point->extended_classification);
             }
 
-            if(header->m_pointDataRecordFormat < 6) // LAS <= 1.3
+            if(header_temp->m_pointDataRecordFormat < 6) // LAS <= 1.3
             {
                 scanAngleSetter.setValueWithLocalIndex(k, point->scan_angle_rank);
                 userDataSetter.setValueWithLocalIndex(k, point->user_data);
@@ -851,12 +847,13 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
 
             // CONVERT POINT
             CT_Point pAdded;
-            if(mustTransformPoint)
+            if(header_temp->mustTransformPoints())
             {
                 double xc = 0;
                 double yc = 0;
                 double zc = 0;
-                header->transformPoint(x, y, z, xc, yc, zc);
+                header_temp->transformPoint(x, y, z, xc, yc, zc);
+
                 pAdded(0) = xc;
                 pAdded(1) = yc;
                 pAdded(2) = zc;
@@ -874,12 +871,11 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
             setProgress(int((100.0*k)/nPoints));
         }
 
-        delete header_temp;
-
         // close the reader
         if (laszip_close_reader(laszip_reader))
         {
             PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de fermer le fichier"));
+            delete header_temp;
             delete header;
             return false;
         }
@@ -888,14 +884,17 @@ bool CT_Reader_LAZ::internalReadMultiFile(CT_StandardItemGroup *group)
         if (laszip_destroy(laszip_reader))
         {
             PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de detruire le reader"));
+            delete header_temp;
             delete header;
             return false;
         }
+
+        delete header_temp;
     }
 
     // Finalize attribute assignment between PCIR and values
     CT_Scene *scene = new CT_Scene(pcir);
-    scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
+    scene->updateBoundingBox();
 
     group->addSingularItem(m_hOutScene, scene);
 

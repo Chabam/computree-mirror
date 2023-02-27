@@ -71,7 +71,6 @@ private:
     {
         AreaIndexFile(const CT_AbstractAreaShape2D* areaItem, QString outFolder, QString fileFormat)
         {
-            _pointCount = 0;
             _areaItem = areaItem;
 
             QFileInfo info(areaItem->displayableName());
@@ -82,11 +81,11 @@ private:
             _areaData = dynamic_cast<const CT_AreaShape2DData*>(areaItem->getPointerData());
 
             _file.setFileName(path);
+
             if (_file.open(QIODevice :: WriteOnly))
             {
                 QDataStream outStream(&_file);
 
-                outStream << _pointCount;
                 outStream << fileFormat;
 
                 writeAreaShape(outStream, _areaData);
@@ -98,7 +97,6 @@ private:
         const CT_AbstractAreaShape2D*   _areaItem;
         const CT_AreaShape2DData*       _areaData;
         QFile                           _file;
-        qint64                          _pointCount;
         QString                         _path;
 
         void writeAreaShape(QDataStream& outStream, const CT_AreaShape2DData *areaData);

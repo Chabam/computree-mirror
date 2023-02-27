@@ -196,7 +196,6 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &out
 
     outStream << min(0) << max(0) << min(1) << max(1);
 
-
     const CT_Box2DData* boxData = dynamic_cast<const CT_Box2DData*>(areaData);
     if (boxData != nullptr)
     {
@@ -227,7 +226,7 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &out
 
 void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex)
 {
-    if (_file.open(QIODevice::Append | QIODevice::Text))
+    if (_file.open(QIODevice::Append))
     {
         QDataStream outStream(&_file);
 
@@ -235,8 +234,6 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, 
 
         if (n > 0)
         {
-            _pointCount += n;
-
             outStream << name;
             outStream << all;
             outStream << n;
@@ -256,11 +253,7 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, 
                     outStream << i;
                 }
             }
-
-            _file.seek(0);
-            outStream << _pointCount;
         }
-
         _file.close();
     }
 }

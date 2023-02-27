@@ -6,7 +6,6 @@ CT_DEFAULT_IA_INIT(CT_CTIHeader)
 
 CT_CTIHeader::CT_CTIHeader() : SuperClass()
 {
-    _nPoints = 0;
     _xmin = 0;
     _ymin = 0;
     _xmax = 0;
@@ -21,11 +20,6 @@ void CT_CTIHeader::boundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const
     max(0) = _xmax;
     max(1) = _ymax;
     max(2) = 0;
-}
-
-void CT_CTIHeader::setNPoints(qint64 nPoints)
-{
-    _nPoints = nPoints;
 }
 
 void CT_CTIHeader::setFileFormat(const QString &fileFormat)
@@ -86,11 +80,6 @@ void CT_CTIHeader::setBasePath(QString path)
     {
         _basePath = "..";
     }
-}
-
-qint64 CT_CTIHeader::nPoints() const
-{
-    return _nPoints;
 }
 
 QString CT_CTIHeader::fileFormat() const

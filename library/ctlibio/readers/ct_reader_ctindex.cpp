@@ -90,10 +90,6 @@ CT_FileHeader* CT_Reader_CTIndex::internalReadHeader(const QString& filepath, QS
         {
             QDataStream stream(&f);
 
-            qint64 pointCount;
-            stream >> pointCount;
-            header->setNPoints(pointCount);
-
             QString fileFormat;
             stream >> fileFormat;
             header->setFileFormat(fileFormat);
@@ -203,10 +199,11 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
                     fileBuffer.nPoints = 0;
                 } else
                 {
+                    fileBuffer.indexList.resize(fileBuffer.nPoints);
                     for(qint64 i = 0 ; i < fileBuffer.nPoints; i++)
                     {
                         stream >> index;
-                        fileBuffer.indexList.append(index);
+                        fileBuffer.indexList[i] = index;
                     }
                 }
 
@@ -215,6 +212,7 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
 
                 m_fileBufferList.append(fileBuffer);
             }
+            f.close();
         }
     }
 

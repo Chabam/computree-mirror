@@ -541,12 +541,6 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
 
     qint64 nPoints = 0;
 
-    double xmin = std::numeric_limits<double>::max();
-    double ymin = std::numeric_limits<double>::max();
-    double zmin = std::numeric_limits<double>::max();
-    double xmax = -std::numeric_limits<double>::max();
-    double ymax = -std::numeric_limits<double>::max();
-    double zmax = -std::numeric_limits<double>::max();
 
     // Loop over file headers
     for(auto &fileBuffer: qAsConst(m_fileBufferList))
@@ -567,17 +561,6 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
             points = fileBuffer.nPoints;
         nPoints += points;
 
-        // Extract and recompute the real bounding box (min/max x/y/z) from header properties
-        Eigen::Vector3d min;
-        Eigen::Vector3d max;
-        header->boundingBox(min, max);
-        if (min[0]<xmin) {xmin = min[0];}
-        if (max[0]>xmax) {xmax = max[0];}
-        if (min[1]<ymin) {ymin = min[1];}
-        if (max[1]>ymax) {ymax = max[1];}
-        if (min[2]<zmin) {zmin = min[2];}
-        if (max[2]>zmax) {zmax = max[2];}
-
         delete header;
     }
 
@@ -592,7 +575,6 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
     CT_LASHeader *header = static_cast<CT_LASHeader*>(internalReadHeader(filepath(), error));
 
     setToolTip(header->toString());
-    bool mustTransformPoint = header->mustTransformPoints();
 
     // Create PCIR and associated data
     CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(nPoints);
@@ -618,18 +600,18 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
     decltype (m_hOutReturnPointWaveformLocation)::SetterPtr rpwlSetter = nullptr;
     decltype (m_hOutNIR)::SetterPtr nirSetter = nullptr;
 
-    if((m_headerFromConfiguration->m_pointDataRecordFormat == 1)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat > 2))
+    if((header->m_pointDataRecordFormat == 1)
+            || (header->m_pointDataRecordFormat > 2))
     {
         gpsTimeSetter = m_hOutGPSTime.createAttributesSetterPtr(pcir);
     }
 
-    if((m_headerFromConfiguration->m_pointDataRecordFormat == 2)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 3)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 5)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 7)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 8)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
+    if((header->m_pointDataRecordFormat == 2)
+            || (header->m_pointDataRecordFormat == 3)
+            || (header->m_pointDataRecordFormat == 5)
+            || (header->m_pointDataRecordFormat == 7)
+            || (header->m_pointDataRecordFormat == 8)
+            || (header->m_pointDataRecordFormat == 10))
     {
         colorSetter = m_hOutColor.createAttributesSetterPtr(pcir);
         redSetter = m_hOutRed.createAttributesSetterPtr(pcir);
@@ -637,16 +619,16 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
         blueSetter = m_hOutBlue.createAttributesSetterPtr(pcir);
     }
 
-    if((m_headerFromConfiguration->m_pointDataRecordFormat == 8)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
+    if((header->m_pointDataRecordFormat == 8)
+            || (header->m_pointDataRecordFormat == 10))
     {
         nirSetter = m_hOutNIR.createAttributesSetterPtr(pcir);
     }
 
-    if((m_headerFromConfiguration->m_pointDataRecordFormat == 4)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 5)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 9)
-            || (m_headerFromConfiguration->m_pointDataRecordFormat == 10))
+    if((header->m_pointDataRecordFormat == 4)
+            || (header->m_pointDataRecordFormat == 5)
+            || (header->m_pointDataRecordFormat == 9)
+            || (header->m_pointDataRecordFormat == 10))
     {
         wpdiSetter = m_hOutWavePacketDescriptorIndex.createAttributesSetterPtr(pcir);
         botwdSetter = m_hOutByteOffsetToWaveformData.createAttributesSetterPtr(pcir);
@@ -661,9 +643,6 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
         CT_LASHeader *header_temp = static_cast<CT_LASHeader*>(internalReadHeader(fileBuffer.filename, error));
 
         qint32 x, y, z;
-        double xc = 0;
-        double yc = 0;
-        double zc = 0;
         CT_Point pAdded;
         quint16 valueUint16;
         quint8 valueUint8;
@@ -683,12 +662,15 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
         stream.setByteOrder(QDataStream::LittleEndian);
 
         // Loop over points from buffer info (all or partial, using seek)
-        QList<qint64> points_list;
+        QVector<qint64> points_list;
         if(fileBuffer.nPoints == 0) // complete list of point
         {
-            for(qint64 i = 0 ; i < header->getPointsRecordCount() ; i++)
+            qint64 nrecords = header->getPointsRecordCount();
+            points_list.resize(nrecords);
+
+            for(qint64 i = 0 ; i < nrecords ; i++)
             {
-                points_list.append(i);
+                points_list[i] = i;
             }
             points_list = qAsConst(points_list);
         }
@@ -769,13 +751,24 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
             }
 
             // CONVERT POINT
-
-            if(mustTransformPoint)
+            CT_Point pAdded;
+            if(header_temp->mustTransformPoints())
+            {
+                double xc = 0;
+                double yc = 0;
+                double zc = 0;
                 header_temp->transformPoint(x, y, z, xc, yc, zc);
 
-            pAdded(0) = xc;
-            pAdded(1) = yc;
-            pAdded(2) = zc;
+                pAdded(0) = xc;
+                pAdded(1) = yc;
+                pAdded(2) = zc;
+            }
+            else
+            {
+                pAdded(0) = x;
+                pAdded(1) = y;
+                pAdded(2) = z;
+            }
 
             it.next().replaceCurrentPoint(pAdded);
 
@@ -790,7 +783,7 @@ bool CT_Reader_LASV2::internalReadMultiFile(CT_StandardItemGroup *group)
 
     // Finalize attribute assignment between PCIR and values
     CT_Scene *scene = new CT_Scene(pcir);
-    scene->setBoundingBox(xmin, ymin, zmin, xmax, ymax, zmax);
+    scene->updateBoundingBox();
 
     group->addSingularItem(m_hOutScene, scene);
 
