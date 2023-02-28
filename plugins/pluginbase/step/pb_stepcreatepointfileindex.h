@@ -115,7 +115,7 @@ private:
     CT_HandleInStdZeroOrMoreGroup                                                       _inZeroOrMoreRootGroupArea;
     CT_HandleInStdGroup<>                                                               _inGrpArea;
     CT_HandleInSingularItem<CT_AbstractAreaShape2D>                                     _inArea;
-    CT_HandleInItemAttribute<CT_AbstractItemAttribute, CT_AbstractCategory::ANY>        _inID;
+    CT_HandleInStdItemAttribute<CT_AbstractCategory::ANY>                               _inID;
     CT_HandleInSingularItem<CT_AbstractAreaShape2D, 0, 1>                               _inAreaSmall;
 
     CT_HandleInResultGroup<>                                                            _inResultReader;
