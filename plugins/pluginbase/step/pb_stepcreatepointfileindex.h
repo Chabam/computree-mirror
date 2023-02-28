@@ -69,16 +69,16 @@ private:
 
     struct AreaIndexFile
     {
-        AreaIndexFile(const CT_AbstractAreaShape2D* areaItem, QString outFolder, QString fileFormat)
+        AreaIndexFile(QString id, const CT_AbstractAreaShape2D* areaItem, const CT_AbstractAreaShape2D* areaSmallItem, QString outFolder, QString fileFormat)
         {
             _areaItem = areaItem;
+            _areaSmallItem = areaSmallItem;
 
-            QFileInfo info(areaItem->displayableName());
-            QString name = info.baseName();
-            QString path = outFolder + "/" + name + ".cti";
+            QString path = outFolder + "/" + id + ".cti";
             _path = path;
 
             _areaData = dynamic_cast<const CT_AreaShape2DData*>(areaItem->getPointerData());
+            _areaSmallData = dynamic_cast<const CT_AreaShape2DData*>(_areaSmallItem->getPointerData());
 
             _file.setFileName(path);
 
@@ -88,19 +88,24 @@ private:
 
                 outStream << fileFormat;
 
+                writeExtent(outStream, _areaData, _areaSmallData);
                 writeAreaShape(outStream, _areaData);
+                writeAreaShape(outStream, _areaSmallData);
 
                 _file.close();
             }
         }
 
         const CT_AbstractAreaShape2D*   _areaItem;
+        const CT_AbstractAreaShape2D*   _areaSmallItem;
         const CT_AreaShape2DData*       _areaData;
+        const CT_AreaShape2DData*       _areaSmallData;
         QFile                           _file;
         QString                         _path;
 
+        void writeExtent(QDataStream &outStream, const CT_AreaShape2DData *areaData, const CT_AreaShape2DData *areaSmallData);
         void writeAreaShape(QDataStream& outStream, const CT_AreaShape2DData *areaData);
-        void writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex);
+        void writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, std::list<qint64> &indicesAfterLastIncludedIndex);
 
     };
 
@@ -110,6 +115,8 @@ private:
     CT_HandleInStdZeroOrMoreGroup                                                       _inZeroOrMoreRootGroupArea;
     CT_HandleInStdGroup<>                                                               _inGrpArea;
     CT_HandleInSingularItem<CT_AbstractAreaShape2D>                                     _inArea;
+    CT_HandleInItemAttribute<CT_AbstractItemAttribute, CT_AbstractCategory::ANY>        _inID;
+    CT_HandleInSingularItem<CT_AbstractAreaShape2D, 0, 1>                               _inAreaSmall;
 
     CT_HandleInResultGroup<>                                                            _inResultReader;
     CT_HandleInStdZeroOrMoreGroup                                                       _inZeroOrMoreRootGroupReader;

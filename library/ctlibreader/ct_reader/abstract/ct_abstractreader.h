@@ -69,9 +69,9 @@ public:
 
     // For buffer including multiples files
     struct FileBuffer {
-        QString         filename;
-        qint64          nPoints;
-        QVector<qint64> indexList;
+        QString             filename;
+        qint64              nPoints;
+        std::vector<qint64> indexList;
     };
 
     /**
@@ -83,7 +83,7 @@ public:
     /**
       * @brief Return the multiple files information for buffer
       */
-    QList<FileBuffer> multipleFilepath() const;
+    const QList<FileBuffer>& multipleFilepath() const;
 
     /**
      * @brief Enable/Disable the modification of the filepath

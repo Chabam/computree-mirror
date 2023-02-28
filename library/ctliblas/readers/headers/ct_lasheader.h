@@ -26,6 +26,9 @@ public:
 
     CT_LASHeader(const CT_LASHeader& other) = default;
 
+    size_t nPoints() const override {return getPointsRecordCount();}
+
+
     CT_ITEM_COPY_IMP(CT_LASHeader)
 
     char        m_fileSignature[4];

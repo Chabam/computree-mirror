@@ -78,7 +78,9 @@ void PB_StepCreatePointFileIndex::declareInputModels(CT_StepInModelStructureMana
     manager.addResult(_inResultArea,  tr("Emprises"), tr(""), true);
     manager.setZeroOrMoreRootGroup(_inResultArea, _inZeroOrMoreRootGroupArea);
     manager.addGroup(_inZeroOrMoreRootGroupArea, _inGrpArea, tr("Groupe Emprise"));
-    manager.addItem(_inGrpArea, _inArea, tr("Emprise"));
+    manager.addItem(_inGrpArea, _inAreaSmall, tr("Emprise Réduite"));
+    manager.addItem(_inGrpArea, _inArea, tr("Emprise Complète"));
+    manager.addItemAttribute(_inArea, _inID, CT_AbstractCategory::DATA_VALUE, tr("Identifiant"));
 
     manager.addResult(_inResultReader,  tr("Fichiers"), tr(""), true);
     manager.setZeroOrMoreRootGroup(_inResultReader, _inZeroOrMoreRootGroupReader);
@@ -88,6 +90,7 @@ void PB_StepCreatePointFileIndex::declareInputModels(CT_StepInModelStructureMana
 
 void PB_StepCreatePointFileIndex::declareOutputModels(CT_StepOutModelStructureManager& manager)
 {
+    Q_UNUSED(manager)
 }
 
 void PB_StepCreatePointFileIndex::fillPostInputConfigurationDialog(CT_StepConfigurableDialog* postInputConfigDialog)
@@ -98,6 +101,7 @@ void PB_StepCreatePointFileIndex::fillPostInputConfigurationDialog(CT_StepConfig
 void PB_StepCreatePointFileIndex::compute()
 {
     // verify if all input readers are in the same format
+    PS_LOG->addInfoMessage(LogInterface::step, tr("Vérification des fichiers."));
     int filecount = 0;
     QString formatCode;
     QString basePath;
@@ -142,11 +146,31 @@ void PB_StepCreatePointFileIndex::compute()
         return;
     }
 
+    PS_LOG->addInfoMessage(LogInterface::step, tr("Initialisation des fichiers d'index."));
     QList<AreaIndexFile*> indexFiles;
     // Create one index file per area2D
-    for (const CT_AbstractAreaShape2D* areaItem : _inArea.iterateInputs(_inResultArea))
+    for (const CT_StandardItemGroup* group : _inGrpArea.iterateInputs(_inResultArea))
     {
-        indexFiles.append(new AreaIndexFile(areaItem, folder, formatCode));
+        const CT_AbstractAreaShape2D* areaItem = group->singularItem(_inArea);
+        const CT_AbstractAreaShape2D* areaSmallItem = group->singularItem(_inAreaSmall);
+
+        if (areaItem != nullptr)
+        {
+            QString id = areaItem->displayableName();
+            const CT_AbstractItemAttribute* attID = areaItem->itemAttribute(_inID);
+            if (attID != nullptr)
+            {
+                bool ok;
+                id = attID->toString(areaItem, &ok);
+                if (!ok) {id = areaItem->displayableName();}
+
+                QFileInfo info(id);
+                id = info.baseName();
+            }
+
+            if (areaSmallItem == nullptr) {areaSmallItem = areaItem;}
+            indexFiles.append(new AreaIndexFile(id, areaItem, areaSmallItem, folder, formatCode));
+        }
     }
 
     // Write side File containing source path
@@ -162,57 +186,102 @@ void PB_StepCreatePointFileIndex::compute()
     }
 
 
-    int fileNumber = 0;
+    PS_LOG->addInfoMessage(LogInterface::step, tr("Création des fichiers d'index (%1 fichiers à analyser)").arg(filecount));
+    int fileNumber = 1;
     // Loop on readers to add indices to index files
     for (const CT_IndexablePointFileHeader* readerHeader : _inReader.iterateInputs(_inResultReader))
-    {
-        CT_IndexablePointsReader* reader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
+    {       
+        PS_LOG->addInfoMessage(LogInterface::step, tr("Analyse du fichier %1 (%2/%3)").arg(readerHeader->fileName()).arg(fileNumber).arg(filecount));
+
+        CT_IndexablePointsReader* ireader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
+
+        Eigen::Vector3d min, max;
+        readerHeader->boundingBox(min, max);
 
         //if (isStopped()) {return;}
+
+        QList<CT_IndexablePointsReader::CandidateShape2D> candidateShapes;
+        QMap<const CT_AreaShape2DData*, AreaIndexFile*> corresp;
 
         for (AreaIndexFile* file : indexFiles)
         {
             qint64 lastIncludedIndex;
-            QList<qint64> indicesAfterLastIncludedIndex;
-
+            std::list<qint64> indicesAfterLastIncludedIndex;
             bool all;
 
-            if (reader->getPointIndicesInside2DShape(file->_areaData, all, lastIncludedIndex, indicesAfterLastIncludedIndex))
+            Eigen::Vector3d minArea, maxArea;
+            file->_areaData->getBoundingBox(minArea, maxArea);
+
+            // If area2D is a 2DBox, it is possible to check if all data is included in area2D directly from extent
+            const CT_Box2DData* boxData = dynamic_cast<const CT_Box2DData*>(file->_areaData);
+            if (boxData != nullptr)
             {
-                file->writeFileIndices(readerHeader->fileName(), all, lastIncludedIndex, indicesAfterLastIncludedIndex);
+                if (min(0) >= minArea(0) && max(0) <= maxArea(0) && min(1) >= minArea(1) && max(1) <= maxArea(1))
+                {
+                    all = true;
+                    lastIncludedIndex = readerHeader->nPoints() - 1;
+                    file->writeFileIndices(readerHeader->fileName(), all, lastIncludedIndex, indicesAfterLastIncludedIndex);
+                }
+            }
+
+            // If bounding boxes not overlapping => no index
+            if (minArea(0) <= max(0) && minArea(1) <= max(1) && maxArea(0) >= min(0) && maxArea(1) >= min(1))
+            {
+                candidateShapes.append(CT_IndexablePointsReader::CandidateShape2D(file->_areaData));
+                corresp.insert(file->_areaData, file);
             }
         }
 
-        setProgress(100.0f*(float(++fileNumber) / float(filecount)));
+        if (candidateShapes.size() > 0)
+        {
+            ireader->getPointIndicesInside2DShape(candidateShapes);
+            for (CT_IndexablePointsReader::CandidateShape2D& sh : candidateShapes)
+            {
+                if (sh._asPointsInside)
+                {
+                    AreaIndexFile* file = corresp.value(sh._area2D);
+                    if (file != nullptr)
+                    {
+                        file->writeFileIndices(readerHeader->fileName(), sh._all, sh._lastIncludedIndex, sh._indicesAfterLastIncludedIndex);
+                    }
+                }
+            }
+        }
+
+        setProgress(100.0f*(float(fileNumber++) / float(filecount)));
     }
 
     qDeleteAll(indexFiles);
 }
 
+void PB_StepCreatePointFileIndex::AreaIndexFile::writeExtent(QDataStream &outStream, const CT_AreaShape2DData *areaData, const CT_AreaShape2DData *areaSmallData)
+{
+    Eigen::Vector3d min1, max1, min2, max2;
+    areaData->getBoundingBox(min1, max1);
+    areaSmallData->getBoundingBox(min2, max2);
+
+    if (min2(0) < min1(0)) {min1(0) = min2(0);}
+    if (min2(1) < min1(1)) {min1(1) = min2(1);}
+
+    if (max2(0) > max1(0)) {max1(0) = max2(0);}
+    if (max2(1) > max1(1)) {max1(1) = max2(1);}
+
+    outStream << min1(0) << max1(0) << min1(1) << max1(1);
+}
+
+
 void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &outStream, const CT_AreaShape2DData *areaData)
 {
-    Eigen::Vector3d min, max;
-    areaData->getBoundingBox(min, max);
-
-    outStream << min(0) << max(0) << min(1) << max(1);
-
-    const CT_Box2DData* boxData = dynamic_cast<const CT_Box2DData*>(areaData);
-    if (boxData != nullptr)
-    {
-        outStream << QString("BOX");
-    }
-
     const CT_Circle2DData* circleData = dynamic_cast<const CT_Circle2DData*>(areaData);
-    if (circleData != nullptr)
+    const CT_Polygon2DData* polyData = dynamic_cast<const CT_Polygon2DData*>(areaData);
+
+     if (circleData != nullptr)
     {
         outStream << QString("CIRCLE");
 
         Eigen::Vector2d center = circleData->getCenter();
         outStream << center(0) << center(1) << circleData->getRadius();
-    }
-
-    const CT_Polygon2DData* polyData = dynamic_cast<const CT_Polygon2DData*>(areaData);
-    if (polyData != nullptr)
+    } else if (polyData != nullptr)
     {
         outStream << QString("POLYGON");
         outStream << polyData->getVerticesNumber();
@@ -221,10 +290,16 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &out
         {
             outStream << vert(0) << vert(1);
         }
+    } else {
+        outStream << QString("BOX");
+        Eigen::Vector3d min, max;
+        areaData->getBoundingBox(min, max);
+        outStream << min(0) << min(1) << max(0) << max(1);
     }
+
 }
 
-void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex)
+void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, std::list<qint64> &indicesAfterLastIncludedIndex)
 {
     if (_file.open(QIODevice::Append))
     {

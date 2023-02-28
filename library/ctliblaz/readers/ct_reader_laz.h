@@ -60,7 +60,7 @@ public:
 
     virtual bool hasBoundingBox() {return true;}
 
-    bool getPointIndicesInside2DShape(const CT_AreaShape2DData *area2D, bool &all, qint64 &lastIncludedIndex, QList<qint64> &indicesAfterLastIncludedIndex) const override;
+    void getPointIndicesInside2DShape(QList<CandidateShape2D> &candidateShapes) const override;
 
     QString getFormatCode() const override;
 
@@ -113,7 +113,6 @@ private:
 
     CT_HandleOutPointScalarWithDenseManager<quint16>                m_hOutNIR;
 
-    QList<FileBuffer>                                               m_fileBufferList;
 };
 
 CT_TYPEINFO_MACRO(CT_Reader_LAZ::PointCore0_5, CT_Reader_LAZ::PointCore0_5)

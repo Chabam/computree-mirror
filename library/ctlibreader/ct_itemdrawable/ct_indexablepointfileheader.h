@@ -51,6 +51,8 @@ public:
 
     CT_IndexablePointsReader *indexablePointReader();
 
+    virtual size_t nPoints() const {return 0;}
+
     CT_ITEM_COPY_IMP(CT_IndexablePointFileHeader)
 
 protected:

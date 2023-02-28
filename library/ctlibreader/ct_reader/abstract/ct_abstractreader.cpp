@@ -121,7 +121,7 @@ bool CT_AbstractReader::setMultipleFilePath(const QList<FileBuffer>& fileBufferL
     }
 
     // Now check every file path from the list
-    for(auto &fileBuffer: qAsConst(fileBufferList))
+    for(auto &fileBuffer: fileBufferList)
     {
         if(!allSuffixes.contains("*") && !allSuffixes.contains(QFileInfo(fileBuffer.filename).completeSuffix().toLower()))
             return false;
@@ -154,7 +154,7 @@ bool CT_AbstractReader::setMultipleFilePath(const QList<FileBuffer>& fileBufferL
     m_fileBufferList = fileBufferList;
 
     // Associate the filepath to the first reference file (nPoints = 0) in the list
-    for(auto &fileBuffer: qAsConst(fileBufferList))
+    for(auto &fileBuffer: fileBufferList)
     {
         if(fileBuffer.nPoints == 0)
         {
@@ -170,7 +170,7 @@ bool CT_AbstractReader::setMultipleFilePath(const QList<FileBuffer>& fileBufferL
     return true;
 }
 
-QList<CT_AbstractReader::FileBuffer> CT_AbstractReader::multipleFilepath() const
+const QList<CT_AbstractReader::FileBuffer>& CT_AbstractReader::multipleFilepath() const
 {
     return m_fileBufferList;
 }

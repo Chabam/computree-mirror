@@ -4,6 +4,10 @@
 #include "ctlibio/ctlibio_global.h"
 #include "ct_reader/abstract/ct_abstractreader.h"
 
+#include "ct_itemdrawable/ct_box2d.h"
+#include "ct_itemdrawable/ct_circle2d.h"
+#include "ct_itemdrawable/ct_polygon2d.h"
+
 /**
  * @brief Reader that can load a cti file (*.cti) that represent a PointCloud index list
  */
@@ -43,6 +47,17 @@ private:
     QList<FileBuffer>  m_fileBufferList;
 
     CT_AbstractReader* m_reader;
+    QString            m_areaType;
+    QString            m_areaSmallType;
+
+    CT_HandleOutSingularItem<CT_Box2D>       m_outBox2D;
+    CT_HandleOutSingularItem<CT_Circle2D>    m_outCircle2D;
+    CT_HandleOutSingularItem<CT_Polygon2D>   m_outPolygon2D;
+
+    CT_HandleOutSingularItem<CT_Box2D>       m_outBox2DSmall;
+    CT_HandleOutSingularItem<CT_Circle2D>    m_outCircle2DSmall;
+    CT_HandleOutSingularItem<CT_Polygon2D>   m_outPolygon2DSmall;
+
 };
 
 #endif // CT_READER_CTINDEX_H

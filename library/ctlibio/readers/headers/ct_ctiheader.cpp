@@ -66,6 +66,39 @@ void CT_CTIHeader::setPolygon2DArea(const QVector<Eigen::Vector2d> &vertices)
     _polygon2d = CT_Polygon2DData(vertices);
 }
 
+
+void CT_CTIHeader::setBox2DAreaSmall(double xmin, double ymin, double xmax, double ymax)
+{
+    _areaSmallShapeType = "BOX";
+
+    Eigen::Vector2d min, max;
+    min(0) = xmin;
+    min(1) = ymin;
+    max(0) = xmax;
+    max(1) = ymax;
+
+    _box2dSmall = CT_Box2DData(min, max);
+}
+
+void CT_CTIHeader::setCircle2DAreaSmall(double x, double y, double radius)
+{
+    _areaSmallShapeType = "CIRCLE";
+
+    Eigen::Vector2d center;
+    center(0) = x;
+    center(1) = y;
+
+    _circle2dSmall = CT_Circle2DData(center, radius);
+}
+
+void CT_CTIHeader::setPolygon2DAreaSmall(const QVector<Eigen::Vector2d> &vertices)
+{
+    _areaSmallShapeType = "POLYGON";
+
+    _polygon2dSmall = CT_Polygon2DData(vertices);
+}
+
+
 void CT_CTIHeader::setFirstFileIndexPos(qint64 pos)
 {
     _firstFileIndexPos = pos;
@@ -110,6 +143,11 @@ double CT_CTIHeader::ymax() const
 QString CT_CTIHeader::areaShapeType() const
 {
     return _areaShapeType;
+}
+
+QString CT_CTIHeader::areaSmallShapeType() const
+{
+    return _areaSmallShapeType;
 }
 
 qint64 CT_CTIHeader::firstFileIndexPos() const

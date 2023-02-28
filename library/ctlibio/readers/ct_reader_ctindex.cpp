@@ -61,6 +61,9 @@ bool CT_Reader_CTIndex::setFilePath(const QString& filepath)
             m_reader = new CT_Reader_LAZ();
         }
 
+        m_areaType = header->areaShapeType();
+        m_areaSmallType = header->areaSmallShapeType();
+
         delete header;
         return true;
     }
@@ -122,8 +125,39 @@ CT_FileHeader* CT_Reader_CTIndex::internalReadHeader(const QString& filepath, QS
                 header->setPolygon2DArea(verts);
 
             } else {
+                stream >> xmin >> ymin >> xmax >> ymax;
                 header->setBox2DArea(xmin, ymin, xmax, ymax);
             }
+
+
+            QString areaSmallShapeType;
+            stream >> areaSmallShapeType;
+
+            if (areaSmallShapeType == "CIRCLE") {
+                double x, y, radius;
+                stream >> x >> y >> radius;
+
+                header->setCircle2DAreaSmall(x, y, radius);
+
+            } else if (areaSmallShapeType == "POLYGON") {
+                int nVert;
+                stream >> nVert;
+
+                QVector<Eigen::Vector2d> verts(nVert);
+                for (int i = 0 ; i < nVert ; i++)
+                {
+                    double x, y;
+                    stream >> x >> y;
+                    verts[i](0) = x;
+                    verts[i](1) = y;
+                }
+                header->setPolygon2DAreaSmall(verts);
+
+            } else {
+                stream >> xmin >> ymin >> xmax >> ymax;
+                header->setBox2DAreaSmall(xmin, ymin, xmax, ymax);
+            }
+
 
             header->setFirstFileIndexPos(f.pos());
 
@@ -155,7 +189,32 @@ CT_FileHeader* CT_Reader_CTIndex::internalReadHeader(const QString& filepath, QS
 void CT_Reader_CTIndex::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
     // Return the unique new point cloud (from the specific reader we have loaded)
-    if (m_reader != nullptr) {m_reader->declareOutputModels(manager);}
+    if (m_reader != nullptr)
+    {
+        m_reader->declareOutputModels(manager);
+
+        if (m_areaType == "BOX")
+        {
+            manager.addItem(m_outBox2D, tr("Emprise Complète"));
+        } else if (m_areaType == "CIRCLE")
+        {
+            manager.addItem(m_outCircle2D, tr("Emprise Complète"));
+        } else if (m_areaType == "POLYGON")
+        {
+            manager.addItem(m_outPolygon2D, tr("Emprise Complète"));
+        }
+
+        if (m_areaSmallType == "BOX")
+        {
+            manager.addItem(m_outBox2DSmall, tr("Emprise Réduite"));
+        } else if (m_areaSmallType == "CIRCLE")
+        {
+            manager.addItem(m_outCircle2DSmall, tr("Emprise Réduite"));
+        } else if (m_areaSmallType == "POLYGON")
+        {
+            manager.addItem(m_outPolygon2DSmall, tr("Emprise Réduite"));
+        }
+    }
 }
 
 bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
@@ -193,10 +252,14 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
 
                 fileBuffer.nPoints = tmp;
 
-                // Reference files include all points, and thus have nPoints = 0.
+                // Reference files include all points, and thus create sequential list of indices.
                 if (all)
                 {
-                    fileBuffer.nPoints = 0;
+                    fileBuffer.indexList.resize(fileBuffer.nPoints);
+                    for(qint64 i = 0 ; i < fileBuffer.nPoints; i++)
+                    {
+                        fileBuffer.indexList[i] = i;
+                    }
                 } else
                 {
                     fileBuffer.indexList.resize(fileBuffer.nPoints);
@@ -216,15 +279,36 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
         }
     }
 
-
-    delete header;
-
     // Finally read the data files using the selected reader
     if(m_reader != nullptr)
     {
        if(m_reader->setMultipleFilePath(m_fileBufferList))
         {
             m_reader->readFile(group);
+
+            if (m_areaType == "BOX")
+            {
+                group->addSingularItem(m_outBox2D, new CT_Box2D(new CT_Box2DData(header->box2d())));
+            } else if (m_areaType == "CIRCLE")
+            {
+                group->addSingularItem(m_outCircle2D, new CT_Circle2D(new CT_Circle2DData(header->circle2d())));
+            } else if (m_areaType == "POLYGON")
+            {
+                group->addSingularItem(m_outPolygon2D, new CT_Polygon2D(new CT_Polygon2DData(header->polygon2d())));
+            }
+
+            if (m_areaSmallType == "BOX")
+            {
+                group->addSingularItem(m_outBox2DSmall, new CT_Box2D(new CT_Box2DData(header->box2dSmall())));
+            } else if (m_areaSmallType == "CIRCLE")
+            {
+                group->addSingularItem(m_outCircle2DSmall, new CT_Circle2D(new CT_Circle2DData(header->circle2dSmall())));
+            } else if (m_areaSmallType == "POLYGON")
+            {
+                group->addSingularItem(m_outPolygon2DSmall, new CT_Polygon2D(new CT_Polygon2DData(header->polygon2dSmall())));
+            }
+
+            delete header;
             return true;
         }
     }
@@ -234,6 +318,8 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
         PS_LOG->addWarningMessage(LogInterface::reader, warn);
     }
 
+
     // If anything fails before
+    delete header;
     return false;
 }
