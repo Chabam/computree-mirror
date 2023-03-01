@@ -97,6 +97,10 @@ CT_FileHeader* CT_Reader_CTIndex::internalReadHeader(const QString& filepath, QS
             stream >> fileFormat;
             header->setFileFormat(fileFormat);
 
+            bool bit64;
+            stream >> bit64;
+            header->setBit64(bit64);
+
             double xmin, ymin, xmax, ymax;
             stream >> xmin >> ymin >> xmax >> ymax;
             header->setExtent(xmin, ymin, xmax, ymax);
@@ -241,6 +245,7 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
             bool all;
             qint64 tmp;
             qint64 index;
+            qint32 index32;
 
             while(!stream.atEnd())
             {
@@ -265,8 +270,15 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
                     fileBuffer.indexList.resize(fileBuffer.nPoints);
                     for(qint64 i = 0 ; i < fileBuffer.nPoints; i++)
                     {
-                        stream >> index;
-                        fileBuffer.indexList[i] = index;
+                        if (header->bit64())
+                        {
+                            stream >> index;
+                            fileBuffer.indexList[i] = index;
+                        } else {
+                            stream >> index32;
+                            fileBuffer.indexList[i] = qint64(index32);
+                        }
+
                     }
                 }
 

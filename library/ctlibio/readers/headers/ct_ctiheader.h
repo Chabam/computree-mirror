@@ -26,6 +26,7 @@ public:
     void boundingBox(Eigen::Vector3d &min, Eigen::Vector3d &max) const final;
 
     void setFileFormat(const QString& fileFormat);
+    void setBit64(bool bit64);
     void setExtent(double xmin, double ymin, double xmax, double ymax);
 
     void setBox2DArea(double xmin, double ymin, double xmax, double ymax);
@@ -41,6 +42,7 @@ public:
     void setBasePath(QString path);
 
     QString fileFormat() const;
+    bool bit64() const;
     double xmin() const;
     double ymin() const;
     double xmax() const;
@@ -66,6 +68,7 @@ public:
 private:
 
     QString             _fileFormat;
+    bool                _bit64;
     double              _xmin;
     double              _ymin;
     double              _xmax;

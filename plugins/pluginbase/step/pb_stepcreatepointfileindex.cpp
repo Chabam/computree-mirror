@@ -105,10 +105,14 @@ void PB_StepCreatePointFileIndex::compute()
     int filecount = 0;
     QString formatCode;
     QString basePath;
+    size_t maxNPoints = 0;
     for (const CT_IndexablePointFileHeader* readerHeader : _inReader.iterateInputs(_inResultReader))
     {
         CT_AbstractReader* reader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->reader();
         CT_IndexablePointsReader* ireader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
+
+        size_t nPoints = readerHeader->nPoints();
+        if (nPoints > maxNPoints) {maxNPoints = nPoints;}
 
         ++filecount;
 
@@ -130,6 +134,9 @@ void PB_StepCreatePointFileIndex::compute()
             }
         }
     }
+
+    bool bit64 = (maxNPoints >= std::numeric_limits<qint32>::max());
+    bit64 = true;
 
     if (_outFolder.isEmpty())
     {
@@ -169,7 +176,7 @@ void PB_StepCreatePointFileIndex::compute()
             }
 
             if (areaSmallItem == nullptr) {areaSmallItem = areaItem;}
-            indexFiles.append(new AreaIndexFile(id, areaItem, areaSmallItem, folder, formatCode));
+            indexFiles.append(new AreaIndexFile(id, bit64, areaItem, areaSmallItem, folder, formatCode));
         }
     }
 
@@ -220,7 +227,7 @@ void PB_StepCreatePointFileIndex::compute()
                 {
                     all = true;
                     lastIncludedIndex = readerHeader->nPoints() - 1;
-                    file->writeFileIndices(readerHeader->fileName(), all, lastIncludedIndex, indicesAfterLastIncludedIndex);
+                    file->writeFileIndices(readerHeader->fileName(), bit64, all, lastIncludedIndex, indicesAfterLastIncludedIndex);
                 }
             }
 
@@ -242,7 +249,7 @@ void PB_StepCreatePointFileIndex::compute()
                     AreaIndexFile* file = corresp.value(sh._area2D);
                     if (file != nullptr)
                     {
-                        file->writeFileIndices(readerHeader->fileName(), sh._all, sh._lastIncludedIndex, sh._indicesAfterLastIncludedIndex);
+                        file->writeFileIndices(readerHeader->fileName(), bit64, sh._all, sh._lastIncludedIndex, sh._indicesAfterLastIncludedIndex);
                     }
                 }
             }
@@ -299,7 +306,7 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &out
 
 }
 
-void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool all, qint64 &lastIncludedIndex, std::list<qint64> &indicesAfterLastIncludedIndex)
+void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool bit64, bool all, qint64 &lastIncludedIndex, std::list<qint64> &indicesAfterLastIncludedIndex)
 {
     if (_file.open(QIODevice::Append))
     {
@@ -319,13 +326,25 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, 
                 {
                     for (qint64 i = 0 ; i <= lastIncludedIndex ; i++)
                     {
-                        outStream << i;
+                        if (bit64)
+                        {
+                            outStream << i;
+                        } else {
+                            qint32 i32 = qint32(i);
+                            outStream << i32;
+                        }
                     }
                 }
 
                 for (qint64 i : indicesAfterLastIncludedIndex)
                 {
-                    outStream << i;
+                    if (bit64)
+                    {
+                        outStream << i;
+                    } else {
+                        qint32 i32 = qint32(i);
+                        outStream << i32;
+                    }
                 }
             }
         }
