@@ -22,7 +22,12 @@ CT_Reader_CTIndex::CT_Reader_CTIndex(int subMenuLevel) : SuperClass(subMenuLevel
 
 CT_Reader_CTIndex::CT_Reader_CTIndex(const CT_Reader_CTIndex& other) : SuperClass(other)
 {
-    m_reader = nullptr;
+    if (other.m_reader == nullptr)
+    {
+        m_reader = nullptr;
+    } else {
+        m_reader = other.m_reader->copyFull();
+    }
 }
 
 CT_Reader_CTIndex::~CT_Reader_CTIndex()
@@ -47,18 +52,15 @@ bool CT_Reader_CTIndex::setFilePath(const QString& filepath)
 
     if (CT_AbstractReader::setFilePath(filepath)) {
 
-        if (m_reader != nullptr)
+        if (m_reader == nullptr)
         {
-            delete m_reader;
-            m_reader = nullptr;
-        }
-
-        if (header->fileFormat() == "LAS")
-        {
-            m_reader = new CT_Reader_LASV2();
-        } else if (header->fileFormat() == "LAZ")
-        {
-            m_reader = new CT_Reader_LAZ();
+            if (header->fileFormat() == "LAS")
+            {
+                m_reader = new CT_Reader_LASV2();
+            } else if (header->fileFormat() == "LAZ")
+            {
+                m_reader = new CT_Reader_LAZ();
+            }
         }
 
         m_areaType = header->areaShapeType();
@@ -190,8 +192,16 @@ CT_FileHeader* CT_Reader_CTIndex::internalReadHeader(const QString& filepath, QS
     return header;
 }
 
+bool CT_Reader_CTIndex::restoreSettings(SettingsReaderInterface &reader)
+{
+    return SuperClass::restoreSettings(reader);
+}
+
+
 void CT_Reader_CTIndex::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
+    qDebug() << "aaa cti = " << this;
+    qDebug() << "aaa reader = " << m_reader;
     // Return the unique new point cloud (from the specific reader we have loaded)
     if (m_reader != nullptr)
     {
@@ -290,6 +300,8 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
             f.close();
         }
     }
+    qDebug() << "bbb cti = " << this;
+    qDebug() << "bbb reader = " << m_reader;
 
     // Finally read the data files using the selected reader
     if(m_reader != nullptr)

@@ -136,7 +136,6 @@ void PB_StepCreatePointFileIndex::compute()
     }
 
     bool bit64 = (maxNPoints >= std::numeric_limits<qint32>::max());
-    bit64 = true;
 
     if (_outFolder.isEmpty())
     {

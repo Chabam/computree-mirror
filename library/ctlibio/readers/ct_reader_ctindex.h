@@ -35,6 +35,8 @@ public:
 
     virtual CT_FileHeader *createHeaderPrototype() const override;
 
+    bool restoreSettings(SettingsReaderInterface &reader) override;
+
 protected:
     void internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager) override;
 
@@ -47,6 +49,7 @@ private:
     QList<FileBuffer>  m_fileBufferList;
 
     CT_AbstractReader* m_reader;
+
     QString            m_areaType;
     QString            m_areaSmallType;
 
