@@ -53,7 +53,7 @@ void PB_StepUseReaderToLoadFiles::declareInputModels(CT_StepInModelStructureMana
     manager.addResult(m_hInResultGroupCopy, tr("Fichiers"));
     manager.setZeroOrMoreRootGroup(m_hInResultGroupCopy, m_hInRootGroup);
     manager.addGroup(m_hInRootGroup, m_hInGroup, tr("Fichier"));
-    manager.addItem(m_hInGroup, m_hInReaderItem, tr("Reader"));
+    manager.addItem(m_hInGroup, m_hInReaderItem, tr("Entête"));
 }
 
 void PB_StepUseReaderToLoadFiles::declareOutputModels(CT_StepOutModelStructureManager& manager)

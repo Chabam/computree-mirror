@@ -22,12 +22,16 @@ CT_Reader_CTIndex::CT_Reader_CTIndex(int subMenuLevel) : SuperClass(subMenuLevel
 
 CT_Reader_CTIndex::CT_Reader_CTIndex(const CT_Reader_CTIndex& other) : SuperClass(other)
 {
+    m_fileType = other.m_fileType;
+    m_areaType = other.m_areaType;
+    m_areaSmallType = other.m_areaSmallType;
+
     if (other.m_reader == nullptr)
     {
         m_reader = nullptr;
     } else {
         m_reader = other.m_reader->copyFull();
-    }
+    }    
 }
 
 CT_Reader_CTIndex::~CT_Reader_CTIndex()
@@ -200,8 +204,6 @@ bool CT_Reader_CTIndex::restoreSettings(SettingsReaderInterface &reader)
 
 void CT_Reader_CTIndex::internalDeclareOutputModels(CT_ReaderOutModelStructureManager& manager)
 {
-    qDebug() << "aaa cti = " << this;
-    qDebug() << "aaa reader = " << m_reader;
     // Return the unique new point cloud (from the specific reader we have loaded)
     if (m_reader != nullptr)
     {
@@ -300,8 +302,6 @@ bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
             f.close();
         }
     }
-    qDebug() << "bbb cti = " << this;
-    qDebug() << "bbb reader = " << m_reader;
 
     // Finally read the data files using the selected reader
     if(m_reader != nullptr)

@@ -249,6 +249,8 @@ private:
 
     CT_InStdModelPossibility* findPossibilityBetweenInAndOutModels(const CT_AbstractModel* inOrOutModel1, const CT_AbstractModel* inOrOutModel2) const;
 
+    void resizeColumnsToContents();
+
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 

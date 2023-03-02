@@ -419,13 +419,10 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
     mInTreeWidget->expandAll();
     mOutTreeWidget->expandAll();
 
-    mInTreeWidget->resizeColumnToContents(0);
-    mOutTreeWidget->resizeColumnToContents(0);
-    mInTreeWidget->resizeColumnToContents(1);
-    mOutTreeWidget->resizeColumnToContents(1);
+    resizeColumnsToContents();
 
-    int InWidth  = mInTreeWidget->columnWidth(0)  + mInTreeWidget->columnWidth(1)  + 10;
-    int OutWidth = mOutTreeWidget->columnWidth(0) + mOutTreeWidget->columnWidth(1) + 10;
+    int InWidth  = mInTreeWidget->columnWidth(0)  + mInTreeWidget->columnWidth(1)  + 50;
+    int OutWidth = mOutTreeWidget->columnWidth(0) + mOutTreeWidget->columnWidth(1) + 50;
 
     mInTreeWidget->resize(InWidth, inItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
     mOutTreeWidget->resize(OutWidth, outItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
@@ -771,6 +768,7 @@ void CTG_ModelsLinkConfigurationFlowView::createOrDeleteConnectionWhenPossibilit
             QFont font = outItemParent->font(0);
             font.setBold(true);
             outItemParent->setFont(0, font);
+            resizeColumnsToContents();
         }
     }
     else if((c != nullptr) && (state == false))
@@ -796,6 +794,7 @@ void CTG_ModelsLinkConfigurationFlowView::createOrDeleteConnectionWhenPossibilit
             QFont font = outItemParent->font(0);
             font.setBold(false);
             outItemParent->setFont(0, font);
+            resizeColumnsToContents();
         }
     }
 }
@@ -961,6 +960,7 @@ void CTG_ModelsLinkConfigurationFlowView::unselectPossibilityWhenConnectionIsDel
                     QFont font = outItemParent->font(0);
                     font.setBold(false);
                     outItemParent->setFont(0, font);
+                    resizeColumnsToContents();
                 }
             }
         }
@@ -1069,6 +1069,7 @@ void CTG_ModelsLinkConfigurationFlowView::connectionDoubleClicked(QtNodes::Conne
             QFont font = outItemParent->font(0);
             font.setBold(false);
             outItemParent->setFont(0, font);
+            resizeColumnsToContents();
         }
     }
 }
@@ -1164,11 +1165,21 @@ void CTG_ModelsLinkConfigurationFlowView::removeAllConnections()
                     QFont font = outItemParent->font(0);
                     font.setBold(false);
                     outItemParent->setFont(0, font);
+                    resizeColumnsToContents();
                 }
             }
         }
     }
 }
+
+void CTG_ModelsLinkConfigurationFlowView::resizeColumnsToContents()
+{
+    mInTreeWidget->resizeColumnToContents(0);
+    mOutTreeWidget->resizeColumnToContents(0);
+    mInTreeWidget->resizeColumnToContents(1);
+    mOutTreeWidget->resizeColumnToContents(1);
+}
+
 
 QSize RowDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
