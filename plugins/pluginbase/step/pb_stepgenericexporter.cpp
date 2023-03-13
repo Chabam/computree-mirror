@@ -9,8 +9,8 @@
 PB_StepGenericExporter::PB_StepGenericExporter(CT_AbstractExporter *exporter) : SuperClass()
 {
     _adaptative = false;
-    _multipleExport = false;
-    _multipleExportChoice = CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter;
+    _multipleExport = 0;
+    _multipleExportChoice = CT_AbstractExporter::EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName;
     _exporter = exporter;
     _exportPath = ".";
 
@@ -116,36 +116,43 @@ QString PB_StepGenericExporter::createExportExtensionString() const
 
 void PB_StepGenericExporter::fillPreInputConfigurationDialog(CT_StepConfigurableDialog* preInputConfigDialog)
 {
-    preInputConfigDialog->addBool(tr("Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)"), "", "", _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
-    preInputConfigDialog->addEmpty();
 
     const QString multiExportDesc = tr("Chaque item sera exporté dans un fichier différent\nLe nom du fichier à utiliser sera fonction du choix que vous allez faire ci-dessous.");
 
     if(_exporter->isExportEachItemInSeparateFileOptionnal())
     {
-        preInputConfigDialog->addBool(tr("Exporter un item par fichier"), "", "", _multipleExport, tr("Si coché : \r%1").arg(multiExportDesc));
 
-        preInputConfigDialog->addText(tr("Si coché, comment déterminer le nom du fichier ?"), "", "");
+        CT_ButtonGroup& bgex = preInputConfigDialog->addButtonGroup(_multipleExport);
+
+        preInputConfigDialog->addExcludeValue("", "", tr("Exporter un fichier unique"), bgex, 0, tr("Si coché : \nUn unique ficher de sortie sera créé, contenant toutes le données. "), true);
+        preInputConfigDialog->addExcludeValue("", "", tr("Exporter un fichier par item"), bgex, 1, tr("Si coché : \r%1").arg(multiExportDesc), true);
+
+        preInputConfigDialog->addEmpty();
+        preInputConfigDialog->addText(tr("Dans le cas de l'export d'un fichier par item, comment déterminer le nom du fichier ?"), "", "");
 
     }
     else
     {
         preInputConfigDialog->addText(tr("Un fichier sera créé pour chaque item. Comment déterminer le nom du fichier ?"), "", "");
 
-        _multipleExport = true;
+        _multipleExport = 1;
     }
 
     CT_ButtonGroup& bg = preInputConfigDialog->addButtonGroup(_multipleExportChoice);
-    preInputConfigDialog->addExcludeValue("", "", tr("Choisir un nom du fichier"), bg, CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter, tr("Saisie manuelle d'un nom de base.\nChaque item génére un fichier nommé NomDeBase_xx, avec xx allant de 0 à n. "), true);
-    preInputConfigDialog->addExcludeValue("", "", tr("Nom du fichier contenu dans un attribut"), bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName, tr("Si coché : \nL'attribut à utiliser appartiendra à l'item à exporter"), true);
     preInputConfigDialog->addExcludeValue("", "", tr("Nom du fichier contenu dans un attribut d'un autre item"), bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeFromAnotherItem_InternalCounterIfSameFileName, tr("Si coché : \nL'attribut à utiliser appartiendra à un autre item que celui à exporter"), true);
+    preInputConfigDialog->addExcludeValue("", "", tr("Nom du fichier contenu dans un attribut de l'item"), bg, CT_AbstractExporter::EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName, tr("Si coché : \nL'attribut à utiliser appartiendra à l'item à exporter"), true);
+    preInputConfigDialog->addExcludeValue("", "", tr("Choisir un nom pour le fichier"), bg, CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter, tr("Saisie manuelle d'un nom de base.\nChaque item génére un fichier nommé NomDeBase_xx, avec xx allant de 0 à n. "), true);
+
+    preInputConfigDialog->addEmpty();
+    preInputConfigDialog->addBool(tr("Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)"), "", "", _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
+
 }
 
 void PB_StepGenericExporter::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     CT_AbstractExporter::ExportWithModelsOption option = CT_AbstractExporter::AllItemsInSameFile_OriginalName;
 
-    if(_multipleExport)
+    if(_multipleExport == 1)
         option = CT_AbstractExporter::ExportWithModelsOption(_multipleExportChoice);
 
     _exporter->declareInputModels(manager, option, _adaptative);
@@ -154,7 +161,7 @@ void PB_StepGenericExporter::declareInputModels(CT_StepInModelStructureManager& 
 bool PB_StepGenericExporter::postInputConfigure()
 {
     QString exportFileName;
-    const bool isDir = (_multipleExport && (_multipleExportChoice != CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter));
+    const bool isDir = (_multipleExport == 1 && (_multipleExportChoice != CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter));
 
     if(isDir)
         exportFileName = QFileDialog::getExistingDirectory(nullptr, tr("Exporter dans..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename);

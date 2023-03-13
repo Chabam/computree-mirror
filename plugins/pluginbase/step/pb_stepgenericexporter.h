@@ -74,7 +74,7 @@ private:
     QString             _exportFilename;
 
     bool                _adaptative;
-    bool                _multipleExport;
+    int                 _multipleExport;
     int                 _multipleExportChoice;
 
 private slots:
