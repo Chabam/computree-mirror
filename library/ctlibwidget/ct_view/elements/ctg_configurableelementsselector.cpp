@@ -104,6 +104,15 @@ bool CTG_ConfigurableElementsSelector::readOnly() const
     return m_readOnly;
 }
 
+void CTG_ConfigurableElementsSelector::resizeEvent(QResizeEvent *e)
+{
+    Q_UNUSED(e);
+    if(ui->scrollAreaConfiguration->widget() != nullptr)
+    {
+        ui->scrollAreaConfiguration->widget()->setFixedSize(ui->scrollAreaConfiguration->width(), ui->scrollAreaConfiguration->height());
+    }
+}
+
 void CTG_ConfigurableElementsSelector::addAvailableElementsToUI(const QList<CT_AbstractConfigurableElement *> &elements)
 {
     QListIterator<CT_AbstractConfigurableElement*> it(elements);

@@ -44,6 +44,11 @@ public:
      */
     bool readOnly() const;
 
+
+protected:
+
+    virtual void resizeEvent(QResizeEvent *e) override;
+
 private:
     Ui::CTG_ConfigurableElementsSelector        *ui;
     QList<CT_AbstractConfigurableElement*>      *m_selectedContainerToModify;
