@@ -111,6 +111,11 @@ void PB_StepCreatePointFileIndex::compute()
         CT_AbstractReader* reader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->reader();
         CT_IndexablePointsReader* ireader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
 
+        if (reader == nullptr)
+        {
+            PS_LOG->addErrorMessage(LogInterface::step, displayableCustomName() + tr("Erreur de fichier : pas de reader disponible (le fichier a peut-être déjà été chargé)."));
+        }
+
         size_t nPoints = readerHeader->nPoints();
         if (nPoints > maxNPoints) {maxNPoints = nPoints;}
 
@@ -179,6 +184,7 @@ void PB_StepCreatePointFileIndex::compute()
         }
     }
 
+
     // Write side File containing source path
     QString sideFileName = folder + "/" + "sourcePath.txt";
     QFile fp(sideFileName);
@@ -213,7 +219,7 @@ void PB_StepCreatePointFileIndex::compute()
         {
             qint64 lastIncludedIndex;
             std::list<qint64> indicesAfterLastIncludedIndex;
-            bool all;
+            bool all = false;
 
             Eigen::Vector3d minArea, maxArea;
             file->_areaData->getBoundingBox(minArea, maxArea);
@@ -231,7 +237,7 @@ void PB_StepCreatePointFileIndex::compute()
             }
 
             // If bounding boxes not overlapping => no index
-            if (minArea(0) <= max(0) && minArea(1) <= max(1) && maxArea(0) >= min(0) && maxArea(1) >= min(1))
+            if (!all && minArea(0) <= max(0) && minArea(1) <= max(1) && maxArea(0) >= min(0) && maxArea(1) >= min(1))
             {
                 candidateShapes.append(CT_IndexablePointsReader::CandidateShape2D(file->_areaData));
                 corresp.insert(file->_areaData, file);

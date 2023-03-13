@@ -10,6 +10,7 @@
 #include <QDateTime>
 #include <QWaitCondition>
 #include <QLocale>
+#include <QCoreApplication>
 
 #define CDM_SCRIPT_BACKUP_FILEPATH QDir::toNativeSeparators(".\\backupSteps")+_scripManager->getFileExtensionAccepted().first()
 
@@ -534,6 +535,7 @@ void CDM_StepManager::recursiveClearResult(CT_VirtualAbstractStep &step)
     {
         step.clearOutResult();
     }
+
 }
 
 /*QThread* CDM_StepManager::createThread(CT_VirtualAbstractStep &step)

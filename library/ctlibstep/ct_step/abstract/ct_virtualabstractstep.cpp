@@ -41,6 +41,7 @@
 #include <QCoreApplication>
 #include <QUrl>
 #include <QDir>
+//#include<QTimer>
 
 int CT_VirtualAbstractStep::CURRENT_ID = 1;
 QString CT_VirtualAbstractStep::CURRENT_LANGAGE = "en";
@@ -866,6 +867,13 @@ void CT_VirtualAbstractStep::requestManualMode()
             mutex.lock();
             QWaitCondition().wait(&mutex, 100);
             mutex.unlock();
+
+// Possible alternative to QWaitCondition and QMutex
+//            QEventLoop loop;
+//            QTimer t;
+//            t.connect(&t, &QTimer::timeout, &loop, &QEventLoop::quit);
+//            t.start(100);
+//            loop.exec();
         }
 
         m_inputManager.setResultsBusy(true);
