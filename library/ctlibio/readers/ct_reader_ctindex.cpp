@@ -235,6 +235,7 @@ void CT_Reader_CTIndex::internalDeclareOutputModels(CT_ReaderOutModelStructureMa
 
 bool CT_Reader_CTIndex::internalReadFile(CT_StandardItemGroup* group)
 {    
+    m_fileBufferList.clear();
     QString error;
     CT_CTIHeader *header = static_cast<CT_CTIHeader*>(internalReadHeader(filepath(), error));
 
