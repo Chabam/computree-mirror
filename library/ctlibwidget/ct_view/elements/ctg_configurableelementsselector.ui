@@ -80,6 +80,21 @@
      </item>
      <item row="0" column="3" rowspan="2">
       <widget class="QScrollArea" name="scrollAreaConfiguration">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustIgnored</enum>
+       </property>
        <property name="widgetResizable">
         <bool>true</bool>
        </property>
@@ -89,7 +104,7 @@
           <x>0</x>
           <y>0</y>
           <width>370</width>
-          <height>363</height>
+          <height>364</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2"/>

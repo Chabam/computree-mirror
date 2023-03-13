@@ -370,7 +370,11 @@ void CTG_ConfigurableElementsSelector::on_listWidgetSelected_currentItemChanged(
         ui->scrollAreaConfiguration->setWidget( configurableWidgetFromItem(current) );
 
         if(ui->scrollAreaConfiguration->widget() != nullptr)
+        {
             ui->scrollAreaConfiguration->setMinimumWidth(ui->scrollAreaConfiguration->widget()->width());
+            ui->scrollAreaConfiguration->widget()->setFixedSize(ui->scrollAreaConfiguration->width(), ui->scrollAreaConfiguration->height());
+
+        }
     }
 }
 

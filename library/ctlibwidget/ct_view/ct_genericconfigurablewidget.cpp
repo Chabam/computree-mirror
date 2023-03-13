@@ -36,8 +36,8 @@ CT_GenericConfigurableWidget::CT_GenericConfigurableWidget(bool useScrollArea, Q
     if(useScrollArea) {
         QScrollArea* sc = new QScrollArea();
         sc->setStyleSheet("QScrollArea { border: 0px solid transparent; }");
-        sc->setWidget(m_centralWidget);
         sc->setWidgetResizable(true);
+        sc->setWidget(m_centralWidget);
         lay->addWidget(sc);
     } else {
         lay->addWidget(m_centralWidget);
