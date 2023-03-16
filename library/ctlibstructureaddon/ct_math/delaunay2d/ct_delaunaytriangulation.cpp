@@ -449,7 +449,13 @@ bool CT_DelaunayTriangulation::doInsertion(bool sort, double cellSize)
     if (sort)
     {
         VertexSorter sorter(cellSize);
-        sorter.orderVerticesByXY(_toInsert);
+
+        if (cellSize > 0)
+        {
+            sorter.orderVerticesByXY(_toInsert);
+        } else {
+            sorter.orderVerticesByX(_toInsert);
+        }
     }
 
     // descending order to avoid multiples Time consuming ArrayList compression

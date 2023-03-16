@@ -182,16 +182,29 @@ private:
                 return compare(a, b); });
         }
 
+        void orderVerticesByX(QList<CT_DelaunayVertex*>& pointList)
+        {
+            std::sort(pointList.begin(), pointList.end(), [this] (const CT_DelaunayVertex* a, const CT_DelaunayVertex* b) {
+                return compareX(a, b); });
+        }
+
+
     private:
         bool compare(const CT_DelaunayVertex* p1, const CT_DelaunayVertex* p2)
         {
-            if (std::fmod(p1->x(), _cellsize) == fmod(p2->x(), _cellsize))
+            if (int(std::floor(p1->x() / _cellsize)) == int(std::floor(p2->x() / _cellsize)))
             {
                 return (p1->x() < p2->x());
             } else {
                 return (p1->y() < p2->y());
             }
         }
+
+        bool compareX(const CT_DelaunayVertex* p1, const CT_DelaunayVertex* p2)
+        {
+            return (p1->x() < p2->x());
+        }
+
 
 
         double _cellsize;
