@@ -118,6 +118,8 @@ bool PB_StepCreateReaderList::postInputConfigure()
             accepted = true;
         }
     } else {
+        fileList.clear();
+
         QStringList textFile;
         configDialog.addFileChoice(tr("Choisir le fichier contenant les chemins"), CT_FileChoiceButton::OneExistingFile, tr("Fichier texte, *.*"), textFile);
 
