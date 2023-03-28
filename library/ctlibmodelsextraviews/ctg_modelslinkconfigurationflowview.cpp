@@ -152,8 +152,9 @@ CTG_ModelsLinkConfigurationFlowView::~CTG_ModelsLinkConfigurationFlowView()
 {
     mInDestructor = true;
 
-    mInTreeWidget->disconnect(this);
-    mOutTreeWidget->disconnect(this);
+    mInTreeWidget->disconnect(this); // TODODISCONNECT
+    mOutTreeWidget->disconnect(this); // TODODISCONNECT
+
     mFlowScene->disconnect(this);
     mFlowView->disconnect(this);
 
