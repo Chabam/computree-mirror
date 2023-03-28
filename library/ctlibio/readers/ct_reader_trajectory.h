@@ -4,16 +4,12 @@
 #include "ct_reader/abstract/ct_abstractreader.h"
 #include "ctlibio/ctlibio_global.h"
 
-#include "ct_reader/extensions/ct_readerpointsfilteringextension.h"
 #include "ct_itemdrawable/ct_scanpath.h"
 
 #include <Eigen/Core>
 
-class CT_ColorCloudStdVector;
-class CT_NormalCloudStdVector;
-
 /**
- * @brief Reader that can load a ascii file (*.asc *.xyz *.csv etc...) that contains a point cloud and/or normals and/or colors and/or intensity
+ * @brief Reader that can load a trajectory file (*.asc *.xyz *.csv etc...)
  */
 class CTLIBIO_EXPORT CT_Reader_Trajectory : public CT_AbstractReader
 {

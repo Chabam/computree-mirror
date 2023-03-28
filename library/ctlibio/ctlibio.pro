@@ -24,6 +24,7 @@ HEADERS +=  \
     readers/ct_reader_larchitect_grid.h \
     readers/ct_reader_opf.h \
     readers/ct_reader_terrascanprj.h \
+    readers/ct_reader_trj.h \
     readers/ct_reader_xyb.h \
     ctlibio_global.h \
     readers/ct_reader_obj.h \
@@ -32,6 +33,7 @@ HEADERS +=  \
     readers/ct_reader_idxyz.h \
     readers/headers/ct_ctiheader.h \
     readers/headers/ct_gdalheader.h \
+    readers/headers/ct_trjheader.h \
     readers/headers/ct_xybheader.h \
     readers/ct_reader_ptx.h \
     readers/tools/ply/internal/plyelement.h \
@@ -105,12 +107,14 @@ SOURCES += \
     readers/ct_reader_larchitect_grid.cpp \
     readers/ct_reader_opf.cpp \
     readers/ct_reader_terrascanprj.cpp \
+    readers/ct_reader_trj.cpp \
     readers/ct_reader_xyb.cpp \
     readers/ct_reader_obj.cpp \
     readers/ct_reader_asciigrid3d.cpp \
     readers/ct_reader_points_ascii.cpp \
     readers/ct_reader_idxyz.cpp \
     readers/headers/ct_ctiheader.cpp \
+    readers/headers/ct_trjheader.cpp \
     readers/headers/ct_xybheader.cpp \
     readers/headers/ct_gdalheader.cpp \
     readers/ct_reader_ptx.cpp \
