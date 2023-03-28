@@ -286,6 +286,8 @@ bool CT_AbstractReader::readFile(CT_StandardItemGroup* group)
     if(m_hOutFileHeader.isValid()) {
         CT_FileHeader* header = readHeader();
 
+        header->setReader(this->copyFull(), true);
+
         Q_ASSERT(header != nullptr);
         if (header == nullptr) {qDebug() << "CT_AbstractReader::readFile" << ", " <<  "header == nullptr"; return false;}
 

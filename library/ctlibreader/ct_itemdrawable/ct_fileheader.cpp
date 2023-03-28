@@ -94,6 +94,7 @@ bool CT_FileHeader::mustAutoDeleteReader() const
 
 QString CT_FileHeader::readerDisplayableName() const
 {
+    if (m_reader == nullptr) {return "";}
     return m_reader->displayableName();
 }
 
