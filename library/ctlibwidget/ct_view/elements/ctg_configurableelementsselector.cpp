@@ -183,7 +183,7 @@ QListWidgetItem *CTG_ConfigurableElementsSelector::createItem(CT_AbstractConfigu
 
     QListWidgetItem *item = new QListWidgetItem(el->getShortDisplayableName());
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    item->setToolTip(el->getDetailledDescription());
+    item->setToolTip(el->getShortDescription());
     setConfigurableElementToItem(el, item);
     setConfigurableWidgetToItem(el->createConfigurationWidget(), item);
 
@@ -196,7 +196,7 @@ QListWidgetItem *CTG_ConfigurableElementsSelector::copyItem(QListWidgetItem *ite
 
     QListWidgetItem *copy = new QListWidgetItem(el->getShortDisplayableName());
     copy->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    copy->setToolTip(el->getDetailledDescription());
+    copy->setToolTip(el->getShortDescription());
     setConfigurableElementToItem(el, copy);
     setConfigurableWidgetToItem(el->createConfigurationWidget(), copy);
 
