@@ -93,6 +93,48 @@
     </message>
 </context>
 <context>
+    <name>CT_Reader_CTIndex</name>
+    <message>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="18"/>
+        <source>Fichiers d&apos;indexation de points CTI</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="19"/>
+        <source>Le format CTI indexe des listes de points depuis une liste de fichiers de référence</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="44"/>
+        <source>Index de points, Fichier CTI</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="214"/>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="217"/>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="220"/>
+        <source>Emprise Complète</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="225"/>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="228"/>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="231"/>
+        <source>Emprise Réduite</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="243"/>
+        <source>Impossible de lire l&apos;en-tête du fichier %1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_ctindex.cpp" line="342"/>
+        <source>Reader for %1 wasn&apos;t created properly.</source>
+        <translation>Le Reader pour %1 n&apos;a pas été créé correctement.</translation>
+    </message>
+</context>
+<context>
     <name>CT_Reader_GDAL</name>
     <message>
         <location filename="../readers/ct_reader_gdal.cpp" line="121"/>
@@ -509,6 +551,34 @@
         <location filename="../readers/ct_reader_points_ascii.cpp" line="530"/>
         <source>Error loading normal at line %1</source>
         <translation>Erreur de chargement de la normale à la ligne %1</translation>
+    </message>
+</context>
+<context>
+    <name>CT_Reader_TRJ</name>
+    <message>
+        <location filename="../readers/ct_reader_trj.cpp" line="14"/>
+        <source>Trajectoire TerraScan .trj</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_trj.cpp" line="15"/>
+        <source>Chargement de trajectoires à partir du format binaire TerraScan .trj</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_trj.cpp" line="24"/>
+        <source>Trajectoire TerraScan, Fichier TJR</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_trj.cpp" line="117"/>
+        <source>Trajectoire</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/ct_reader_trj.cpp" line="126"/>
+        <source>Impossible de lire l&apos;en-tête du fichier %1</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1414,6 +1484,96 @@
     <message>
         <location filename="../tools/ct_configurableelementtools.h" line="149"/>
         <source>&lt;br&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_ctiheader.h" line="93"/>
+        <source>fileFormat</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_ctiheader.h" line="94"/>
+        <source>areaShapeType</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_ctiheader.h" line="95"/>
+        <source>areaSmallShapeType</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_ctiheader.h" line="96"/>
+        <source>xmin</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_ctiheader.h" line="97"/>
+        <source>ymin</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_ctiheader.h" line="98"/>
+        <source>xmax</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_ctiheader.h" line="99"/>
+        <source>ymax</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_ctiheader.h" line="100"/>
+        <source>basePath</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="48"/>
+        <source>TSCANTRJ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="49"/>
+        <source>File version</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="50"/>
+        <source>Number of position records</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="51"/>
+        <source>Description</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="52"/>
+        <source>First time stamp</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="53"/>
+        <source>Last time stamp</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="54"/>
+        <source>Original number</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="55"/>
+        <source>Line number</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="56"/>
+        <source>Group</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../readers/headers/ct_trjheader.h" line="57"/>
+        <source>HdrSize</source>
         <translation></translation>
     </message>
 </context>

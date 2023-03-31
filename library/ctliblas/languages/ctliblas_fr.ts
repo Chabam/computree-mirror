@@ -252,6 +252,10 @@
         <source>Attributs LAS</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Aucun points contenu dans les fichiers.</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>

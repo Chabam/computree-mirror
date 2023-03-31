@@ -158,6 +158,89 @@
     </message>
 </context>
 <context>
+    <name>PB_StepCreatePointFileIndex</name>
+    <message>
+        <source>Créer des fichiers d&apos;index de points</source>
+        <translation>Create point index files</translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;&lt;br&gt;</source>
+        <translation>&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Emprises</source>
+        <translation>Extents</translation>
+    </message>
+    <message>
+        <source>Groupe Emprise</source>
+        <translation>Extent group</translation>
+    </message>
+    <message>
+        <source>Emprise Réduite</source>
+        <translation>Reduced extent</translation>
+    </message>
+    <message>
+        <source>Emprise Complète</source>
+        <translation>Full extent</translation>
+    </message>
+    <message>
+        <source>Identifiant</source>
+        <translation>Identifier</translation>
+    </message>
+    <message>
+        <source>Fichiers</source>
+        <translation>Files</translation>
+    </message>
+    <message>
+        <source>Groupe Fichier</source>
+        <translation>File Group</translation>
+    </message>
+    <message>
+        <source>Fichier de points</source>
+        <translation>Points file</translation>
+    </message>
+    <message>
+        <source>Répertoire d&apos;export des fichiers d&apos;index (vide)</source>
+        <translation>Index file export directory (empty)</translation>
+    </message>
+    <message>
+        <source>Vérification des fichiers.</source>
+        <translation>Checking the files.</translation>
+    </message>
+    <message>
+        <source>Erreur de fichier : pas de reader disponible (le fichier a peut-être déjà été chargé).</source>
+        <translation>File error: no reader available (file may have already been loaded).</translation>
+    </message>
+    <message>
+        <source>Tous les fichiers d&apos;entrée n&apos;ont pas le même format. Arrêt de l&apos;indexation.</source>
+        <translation>Not all input files have the same format. Indexing stopped.</translation>
+    </message>
+    <message>
+        <source>Tous les fichiers d&apos;entrée ne sont pas dans le même dossier. Arrêt de l&apos;indexation.</source>
+        <translation>Not all input files are in the same folder. Indexing stopped.</translation>
+    </message>
+    <message>
+        <source>Repertoire d&apos;export non choisi. Arrêt de l&apos;indexation.</source>
+        <translation>Export directory not chosen. Indexing stopped.</translation>
+    </message>
+    <message>
+        <source>Repertoire d&apos;export inexistant. Arrêt de l&apos;indexation.</source>
+        <translation>No export directory. Indexing stopped.</translation>
+    </message>
+    <message>
+        <source>Initialisation des fichiers d&apos;index.</source>
+        <translation>Initialization of index files.</translation>
+    </message>
+    <message>
+        <source>Création des fichiers d&apos;index (%1 fichiers à analyser)</source>
+        <translation>Creation of index files (%1 files to be analysed)</translation>
+    </message>
+    <message>
+        <source>Analyse du fichier %1 (%2/%3)</source>
+        <translation>Analysis of file %1 (%2/%3)</translation>
+    </message>
+</context>
+<context>
     <name>PB_StepCreateReaderList</name>
     <message>
         <source>Choix du type de fichier</source>
@@ -205,7 +288,7 @@
     </message>
     <message>
         <source>Reader</source>
-        <translation>Reader</translation>
+        <translation type="vanished">Reader</translation>
     </message>
     <message>
         <source>Cette étape créer une liste fichiers. Cette étape ne charge pas les fichiers, elle créée juste les entêtes. Il faut ensuite ajouter l&apos;étape &quot;Charger les fichiers d&apos;une liste&quot; pour les charger, soit directement, soit après un début de boucle. </source>
@@ -246,6 +329,307 @@
     <message>
         <source>Fichier texte, *.*</source>
         <translation>Text file, *.*</translation>
+    </message>
+</context>
+<context>
+    <name>PB_StepExportAttributesAsASCII</name>
+    <message>
+        <source>Export d&apos;attributs - ASCII</source>
+        <translation>Attribute export - ASCII</translation>
+    </message>
+    <message>
+        <source>Cette étape permet d&apos;exporter des attributs d&apos;items situés dans un même groupe. Cette étape fonctionne également au sein d&apos;une boucle, en prenant en compte les tours surccessifs. Tout attribut de n&apos;importe quel item peut être exporté.&lt;br&gt;L&apos;export est réalisé sous forme de fichier texte, avec une ligne par item (et par tour de boucle le cas échéant), et une colonne par attribut. Un seul fichier est produit, regroupant les données de tous les tours si on est dans une boucle.</source>
+        <translation>This step allows the export of attributes of items located in the same group. This step also works within a loop, taking into account the successive turns. Any attribute of any item can be exported.&lt;br&gt;The export is done as a text file, with one line per item (and per loop turn if applicable), and one column per attribute. A single file is produced, grouping the data from all the turns if we are in a loop.</translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;&lt;br&gt;Il faut sélectionner les attributs à exporter.&lt;br&gt;Ces attributs peuvent appartenir à plusieurs items, tant que ces items sont dans un même groupe.&lt;br&gt;Lorsque l&apos;export est au sein d&apos;une boucle, il faut également sélectionner le compteur de boucle.</source>
+        <translation>&lt;br&gt;&lt;br&gt;The attributes to be exported must be selected.&lt;br&gt;These attributes can belong to several items, as long as these items are in the same group.&lt;br&gt;When the export is within a loop, the loop counter must also be selected.</translation>
+    </message>
+    <message>
+        <source>Cette étape ne génère pas de nouvelles données.</source>
+        <translation>This step does not generate new data.</translation>
+    </message>
+    <message>
+        <source>N.B. : les noms d&apos;attributs sont simplifiés : suppression des accents, remplacement des espaces et caractères spéciaux par &quot;_&quot;.</source>
+        <translation>N.B.: attribute names are simplified: accents are removed, spaces and special characters are replaced by &quot;_&quot;.</translation>
+    </message>
+    <message>
+        <source>Résultat</source>
+        <translation>Result</translation>
+    </message>
+    <message>
+        <source>Item avec des attributs</source>
+        <translation>Item with attributes</translation>
+    </message>
+    <message>
+        <source>Attribut à exporter</source>
+        <translation>Attribute to be exported</translation>
+    </message>
+    <message>
+        <source>Résultat compteur</source>
+        <translation>Counter result</translation>
+    </message>
+    <message>
+        <source>Compteur</source>
+        <translation>Counter</translation>
+    </message>
+    <message>
+        <source>Export ASCII tabulaire (1 fichier en tout)</source>
+        <translation>Tabular ASCII export (1 file in total)</translation>
+    </message>
+    <message>
+        <source>Choix du fichier</source>
+        <translation>File selection</translation>
+    </message>
+    <message>
+        <source>Fichier texte (*.txt)</source>
+        <translation>Text file (*.txt)</translation>
+    </message>
+    <message>
+        <source>S&apos;il existe déjà, le fichier sera écrasé. Le fichier contiendra les données pour tous les tours de boucle. </source>
+        <translation>If it already exists, the file will be overwritten. The file will contain the data for all loop turns.</translation>
+    </message>
+    <message>
+        <source>Supprimer les caractères spéciaux dans les noms de champs</source>
+        <translation>Delete special characters in field names</translation>
+    </message>
+    <message>
+        <source>Si cette case est cochée tous les caractères accentués seront remplacés par leur version non accentuée, et tous les caractères spéciaux seront remplacés par &quot;_&quot;, dans les noms de métriques</source>
+        <translation>If this box is checked all accented characters will be replaced by their unaccented version, and all special characters will be replaced by &quot;_&quot;, in metric names</translation>
+    </message>
+    <message>
+        <source>Raccourcir les noms de métriques (à 10 caractères)</source>
+        <translation>Shorten metric names (to 10 characters)</translation>
+    </message>
+    <message>
+        <source>Si cette case est cochée les noms de métriques sont raccourcis si nécessaire pour ne pas dépasser 10 caractères. Dans ce cas un fichier texte est produit contenant les correspondances entre noms complets et noms raccourcis. </source>
+        <translation>If this box is checked, the metric names are shortened if necessary to a maximum of 10 characters. In this case a text file is produced containing the correspondence between full names and shortened names.</translation>
+    </message>
+    <message>
+        <source> : Impossible de créer le fichier d&apos;export ASCII. Arrêt des traitements.</source>
+        <translation>: Unable to create the ASCII export file. Processing stopped.</translation>
+    </message>
+    <message>
+        <source> : Impossible d&apos;ouvrir le fichier d&apos;export ASCII. Arrêt des traitements.</source>
+        <translation>: Unable to open the ASCII export file. Processing stopped.</translation>
+    </message>
+</context>
+<context>
+    <name>PB_StepExportAttributesAsRaster</name>
+    <message>
+        <source>Export d&apos;attributs - Raster</source>
+        <translation>Attribute export - Raster</translation>
+    </message>
+    <message>
+        <source>Cette étape permet d&apos;exporter des attributs d&apos;items situés dans un même groupe. Cette étape fonctionne également au sein d&apos;une boucle, en prenant en compte les tours surccessifs. Tout attribut de n&apos;importe quel item peut être exporté.&lt;br&gt;L&apos;export est réalisé sous forme de raster, produisant un fichier raster par attribut (et par tour de boucle le cas échéant). Pour que cet export puisse être utilisé, il faut que les données soient organisées sous forme de grille spatiale.</source>
+        <translation>This step allows the export of attributes of items located in the same group. This step also works within a loop, taking into account successive turns. Any attribute of any item can be exported.&lt;br&gt;The export is performed as a raster, producing one raster file per attribute (and per loop turn if applicable). For this export to be used, the data must be organised in a spatial grid.</translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;&lt;br&gt;Il faut sélectionner les attributs à exporter.&lt;br&gt;Ces attributs peuvent appartenir à plusieurs items, tant que ces items sont dans un même groupe.&lt;br&gt;Il faut également séléctionner des attributs pour les coordonnées (X,Y) auxquelles les attributs seront associés spatialement.&lt;br&gt;Il faut de plus sélectionner un objet &quot;Grille de placettes&quot;, par exemple généré par l&apos;étape &quot;Créer une grille de placettes sur l&apos;emprise&quot;.&lt;br&gt;Enfin, lorsque l&apos;export est au sein d&apos;une boucle, il faut sélectionner le compteur de boucle.</source>
+        <translation>&lt;br&gt;&lt;br&gt;The attributes to be exported must be selected.&lt;br&gt;These attributes can belong to several items, as long as these items are in the same group.&lt;br&gt;Attributes must also be selected for the coordinates (X,Y) to which the attributes will be spatially associated.&lt;br&gt;In addition, a &quot;Plot grid&quot; object must be selected, for example generated by the &quot;Create a plot grid on the extent&quot; step.&lt;br&gt;Finally, when the export is within a loop, the loop counter must be selected.</translation>
+    </message>
+    <message>
+        <source>Cette étape ne génère pas de nouvelles données.</source>
+        <translation>This step does not generate new data.</translation>
+    </message>
+    <message>
+        <source>N.B. : les noms d&apos;attributs sont simplifiés : suppression des accents, remplacement des espaces et caractères spéciaux par &quot;_&quot;.</source>
+        <translation>N.B.: attribute names are simplified: accents are removed, spaces and special characters are replaced by &quot;_&quot;.</translation>
+    </message>
+    <message>
+        <source>Résultat</source>
+        <translation>Result</translation>
+    </message>
+    <message>
+        <source>Grille de placettes</source>
+        <translation>Plot grid</translation>
+    </message>
+    <message>
+        <source>Item de position (avec XY)</source>
+        <translation>Position item (with XY)</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y</translation>
+    </message>
+    <message>
+        <source>Item avec des attributs</source>
+        <translation>Item with attributes</translation>
+    </message>
+    <message>
+        <source>Attribut à exporter</source>
+        <translation>Attribute to be exported</translation>
+    </message>
+    <message>
+        <source>Résultat compteur</source>
+        <translation>Counter result</translation>
+    </message>
+    <message>
+        <source>Compteur</source>
+        <translation>Counter</translation>
+    </message>
+    <message>
+        <source>Export raster (1 fichier / tour / métrique)</source>
+        <translation>Raster export (1 file/turn/metric)</translation>
+    </message>
+    <message>
+        <source>Prefixe pour les fichiers exportés</source>
+        <translation>Prefix for exported files</translation>
+    </message>
+    <message>
+        <source>Un prefixe optionnel peut être ajouté à tous les noms de fichier, pour par exemple identifier différents lancements du script, exportant dans un même répertoire.</source>
+        <translation>An optional prefix can be added to all file names, for example to identify different runs of the script, exporting to the same directory.</translation>
+    </message>
+    <message>
+        <source>Choix du format d&apos;export</source>
+        <translation>Choice of export format</translation>
+    </message>
+    <message>
+        <source>Format raster à utiliser pour les exports.</source>
+        <translation>Raster format to be used for exports.</translation>
+    </message>
+    <message>
+        <source>Répertoire d&apos;export (vide de préférence)</source>
+        <translation>Export directory (preferably empty)</translation>
+    </message>
+    <message>
+        <source>Le contenu du dossier sélectionné ne sera pas effacé. Cependant pour plus de clarté il est préférable de choisir un dossier vide.</source>
+        <translation>The contents of the selected folder will not be deleted. However, for clarity it is better to choose an empty folder.</translation>
+    </message>
+    <message>
+        <source>Créer un sous-dossier par métrique</source>
+        <translation>Create a sub-folder per metric</translation>
+    </message>
+    <message>
+        <source>Si cette case est cochée, un dossier séparé sera créé pour achaque attribut à exporter, contenant chacun un raster par tour de boucle.</source>
+        <translation>If this box is checked, a separate folder will be created for each attribute to be exported, each containing one raster per loop.</translation>
+    </message>
+    <message>
+        <source>Supprimer les caractères spéciaux dans les noms de champs</source>
+        <translation>Delete special characters in field names</translation>
+    </message>
+    <message>
+        <source>Si cette case est cochée tous les caractères accentués seront remplacés par leur version non accentuée, et tous les caractères spéciaux seront remplacés par &quot;_&quot;, dans les noms de métriques</source>
+        <translation>If this box is checked all accented characters will be replaced by their unaccented version, and all special characters will be replaced by &quot;_&quot;, in metric names</translation>
+    </message>
+    <message>
+        <source>Raccourcir les noms de métriques (à 10 caractères)</source>
+        <translation>Shorten metric names (to 10 characters)</translation>
+    </message>
+    <message>
+        <source>Si cette case est cochée les noms de métriques sont raccourcis si nécessaire pour ne pas dépasser 10 caractères. Dans ce cas un fichier texte est produit contenant les correspondances entre noms complets et noms raccourcis. </source>
+        <translation>If this box is checked, the metric names are shortened if necessary to a maximum of 10 characters. In this case a text file is produced containing the correspondence between full names and shortened names.</translation>
+    </message>
+</context>
+<context>
+    <name>PB_StepExportAttributesAsVector</name>
+    <message>
+        <source>Export d&apos;attributs - Vectoriel</source>
+        <translation>Attribute export - Vector</translation>
+    </message>
+    <message>
+        <source>Cette étape permet d&apos;exporter des attributs d&apos;items situés dans un même groupe. Cette étape fonctionne également au sein d&apos;une boucle, en prenant en compte les tours surccessifs. Tout attribut de n&apos;importe quel item peut être exporté.&lt;br&gt;L&apos;export est réalisé sous forme de vecteur (points en 2D avec attributs), produisant un fichier vecteur (par tour de boucle le cas échéant), avec une ligne par item, et une colonne par attribut. Cela nécessite que parmi les attributs figurent des coordonnées (x;y), auquelles assosicer les autres attributs.</source>
+        <translation>This step allows the export of attributes of items located in the same group. This step also works within a loop, taking into account successive turns. Any attribute of any item can be exported.&lt;br&gt;The export is performed as a vector (2D points with attributes), producing a vector file (per loop turn if applicable), with one row per item, and one column per attribute. This requires that the attributes include coordinates (x;y), to which the other attributes are assigned.</translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;&lt;br&gt;Il faut sélectionner les attributs à exporter.&lt;br&gt;Ces attributs peuvent appartenir à plusieurs items, tant que ces items sont dans un même groupe.&lt;br&gt;Il faut également séléctionner des attributs pour les coordonnées (X,Y) auxquelles les attributs seront associés spatialement.&lt;br&gt;Enfin, lorsque l&apos;export est au sein d&apos;une boucle, il faut sélectionner le compteur de boucle.</source>
+        <translation>&lt;br&gt;&lt;br&gt;The attributes to be exported must be selected..&lt;br&gt;These attributes can belong to several items, as long as these items are in the same group.&lt;br&gt;It is also necessary to select attributes for the coordinates (X,Y) to which the attributes will be spatially associated.&lt;br&gt;Finally, when the export is within a loop, the loop counter must be selected.</translation>
+    </message>
+    <message>
+        <source>Cette étape ne génère pas de nouvelles données.</source>
+        <translation>This step does not generate new data.</translation>
+    </message>
+    <message>
+        <source>N.B. : les noms d&apos;attributs sont simplifiés : suppression des accents, remplacement des espaces et caractères spéciaux par &quot;_&quot;.</source>
+        <translation>N.B.: attribute names are simplified: accents are removed, spaces and special characters are replaced by &quot;_&quot;.</translation>
+    </message>
+    <message>
+        <source>Résultat</source>
+        <translation>Result</translation>
+    </message>
+    <message>
+        <source>Item de position (avec XY)</source>
+        <translation>Position item (with XY)</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y</translation>
+    </message>
+    <message>
+        <source>Item avec des attributs</source>
+        <translation>Item with attributes</translation>
+    </message>
+    <message>
+        <source>Attribut à exporter</source>
+        <translation>Attribute to be exported</translation>
+    </message>
+    <message>
+        <source>Résultat compteur</source>
+        <translation>Counter result</translation>
+    </message>
+    <message>
+        <source>Compteur</source>
+        <translation>Counter</translation>
+    </message>
+    <message>
+        <source>Export vectoriel (1 fichier / tour)</source>
+        <translation>Vector export (1 file/tower)</translation>
+    </message>
+    <message>
+        <source>Prefixe pour les fichiers exportés</source>
+        <translation>Prefix for exported files</translation>
+    </message>
+    <message>
+        <source>Un prefixe optionnel peut être ajouté à tous les noms de fichier, pour par exemple identifier différents lancements du script, exportant dans un même répertoire.</source>
+        <translation>An optional prefix can be added to all file names, for example to identify different runs of the script, exporting to the same directory.</translation>
+    </message>
+    <message>
+        <source>Choix du format d&apos;export</source>
+        <translation>Choice of export format</translation>
+    </message>
+    <message>
+        <source>Format vecteur à utiliser pour les exports.</source>
+        <translation>Vector format to be used for exports.</translation>
+    </message>
+    <message>
+        <source>Répertoire d&apos;export (vide de préférence)</source>
+        <translation>Export directory (preferably empty)</translation>
+    </message>
+    <message>
+        <source>Le contenu du dossier sélectionné ne sera pas effacé. Cependant pour plus de clarté il est préférable de choisir un dossier vide.</source>
+        <translation>The contents of the selected folder will not be deleted. However, for clarity it is better to choose an empty folder.</translation>
+    </message>
+    <message>
+        <source>Supprimer les caractères spéciaux dans les noms de champs</source>
+        <translation>Delete special characters in field names</translation>
+    </message>
+    <message>
+        <source>Si cette case est cochée tous les caractères accentués seront remplacés par leur version non accentuée, et tous les caractères spéciaux seront remplacés par &quot;_&quot;, dans les noms de champs</source>
+        <translation>If this box is checked, all accented characters will be replaced by their unaccented version, and all special characters will be replaced by &quot;_&quot;, in the field names</translation>
+    </message>
+    <message>
+        <source>Raccourcir les noms de champs (à 10 caractères)</source>
+        <translation>Shorten field names (to 10 characters)</translation>
+    </message>
+    <message>
+        <source>Si cette case est cochée les noms de champs sont raccourcis si nécessaire pour ne pas dépasser 10 caractères. Dans ce cas un fichier texte est produit contenant les correspondances entre noms complets et noms raccourcis. Cette option est fortement recommandée en cas d&apos;export au format ESRI Shapefile. </source>
+        <translation>If this box is checked, the field names are shortened if necessary to a maximum of 10 characters. In this case a text file is produced containing the correspondence between full names and shortened names. This option is strongly recommended when exporting to ESRI Shapefile format.</translation>
+    </message>
+    <message>
+        <source> : Impossible d&apos;utiliser le format d&apos;export Vectoriel choisi.</source>
+        <translation>: Cannot use the chosen Vector export format.</translation>
+    </message>
+    <message>
+        <source> : Impossible de créer la couche &quot;point&quot;.</source>
+        <translation>: Impossible to create the &quot;point&quot; layer.</translation>
     </message>
 </context>
 <context>
@@ -475,6 +859,37 @@
     </message>
 </context>
 <context>
+    <name>PB_StepExportPointsToBuffer</name>
+    <message>
+        <source>Redallage+Export de buffer dans une boucle</source>
+        <translation type="obsolete">Redraw+Export buffer in a loop</translation>
+    </message>
+    <message>
+        <source>Parmi les points de la scène d&apos;entrée, séléctionne pour chaque emprise la liste des points à exporter sous forme de buffer.Cet étape fonctionne dans une boucle, gardant le même fichier de sortie pour chaque emprise, pour toutes les scènes d&apos;entrée (une par tour de boucle).</source>
+        <translation type="obsolete">This step works in a loop, keeping the same output file for each right-of-way, for all input scenes (one per loop turn).</translation>
+    </message>
+    <message>
+        <source>Résultat compteur</source>
+        <translation type="obsolete">Counter result</translation>
+    </message>
+    <message>
+        <source>Compteur</source>
+        <translation type="obsolete">Counter</translation>
+    </message>
+    <message>
+        <source>Résultat emprise</source>
+        <translation type="obsolete">Result right of way</translation>
+    </message>
+    <message>
+        <source>Emprise</source>
+        <translation type="obsolete">Right of way</translation>
+    </message>
+    <message>
+        <source>Nom</source>
+        <translation type="obsolete">Name</translation>
+    </message>
+</context>
+<context>
     <name>PB_StepGenericExporter</name>
     <message>
         <source>Exporte un(des) fichier(s) de type :</source>
@@ -509,7 +924,7 @@ The name of the file to be used will depend on the choice you make below.</trans
     </message>
     <message>
         <source>Exporter un item par fichier</source>
-        <translation>Exporting an item by file</translation>
+        <translation type="vanished">Exporting an item by file</translation>
     </message>
     <message>
         <source>Si coché : 
@@ -529,7 +944,7 @@ The attribute to be used will belong to another item than the one to be exported
     </message>
     <message>
         <source>Si coché, comment déterminer le nom du fichier ?</source>
-        <translation>If checked, how to determine the file name?</translation>
+        <translation type="vanished">If checked, how to determine the file name?</translation>
     </message>
     <message>
         <source>Un fichier sera créé pour chaque item. Comment déterminer le nom du fichier ?</source>
@@ -537,7 +952,7 @@ The attribute to be used will belong to another item than the one to be exported
     </message>
     <message>
         <source>Choisir un nom du fichier</source>
-        <translation>Choose a file name</translation>
+        <translation type="vanished">Choose a file name</translation>
     </message>
     <message>
         <source>Saisie manuelle d&apos;un nom de base.
@@ -547,11 +962,37 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n. </tra
     </message>
     <message>
         <source>Nom du fichier contenu dans un attribut</source>
-        <translation>Name of the file contained in an attribute</translation>
+        <translation type="vanished">Name of the file contained in an attribute</translation>
     </message>
     <message>
         <source>Nom du fichier contenu dans un attribut d&apos;un autre item</source>
         <translation>Name of the file contained in an attribute of another item</translation>
+    </message>
+    <message>
+        <source>Exporter un fichier unique</source>
+        <translation>Exporting a single file</translation>
+    </message>
+    <message>
+        <source>Si coché : 
+Un unique ficher de sortie sera créé, contenant toutes le données. </source>
+        <translation>If checked :
+A single output file will be created, containing all the data.</translation>
+    </message>
+    <message>
+        <source>Exporter un fichier par item</source>
+        <translation>Export a file by item</translation>
+    </message>
+    <message>
+        <source>Dans le cas de l&apos;export d&apos;un fichier par item, comment déterminer le nom du fichier ?</source>
+        <translation>In the case of exporting a file by item, how do you determine the file name?</translation>
+    </message>
+    <message>
+        <source>Nom du fichier contenu dans un attribut de l&apos;item</source>
+        <translation>Name of the file contained in an attribute of the item</translation>
+    </message>
+    <message>
+        <source>Choisir un nom pour le fichier</source>
+        <translation>Choose a name for the file</translation>
     </message>
 </context>
 <context>
@@ -625,7 +1066,7 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n. </tra
     </message>
     <message>
         <source>Reader</source>
-        <translation>Reader</translation>
+        <translation type="vanished">Reader</translation>
     </message>
     <message>
         <source>Cette étape charge l&apos;entête d&apos;un fichier, dont le nom est déterminé par un attribut choisi.&lt;br&gt;L&apos;utilisateur doit choisir un fichier exemple, qui est utilisé pour définir le répertoire de recherche et vérifier le format utilisé.</source>
@@ -708,7 +1149,7 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n. </tra
     </message>
     <message>
         <source>Reader</source>
-        <translation>Reader</translation>
+        <translation type="vanished">Reader</translation>
     </message>
     <message>
         <source>Ajout du fichier %1 du lot %2</source>
@@ -823,7 +1264,7 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n. </tra
     </message>
     <message>
         <source>Reader</source>
-        <translation>Reader</translation>
+        <translation type="vanished">Reader</translation>
     </message>
     <message>
         <source>Ajout du fichier %1</source>
@@ -870,7 +1311,7 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n. </tra
     </message>
     <message>
         <source>Reader</source>
-        <translation>Reader</translation>
+        <translation type="vanished">Reader</translation>
     </message>
     <message>
         <source>Cette étape permet de charger effectivement un fichier, dont l&apos;entête a préalablement été créée, par exemple avec l&apos;étape &quot;Créer une liste de fichiers&quot;.</source>
@@ -887,6 +1328,10 @@ Each item generates a file named BaseName_xx, with xx ranging from 0 to n. </tra
     <message>
         <source>L&apos;utilisation la plus habituelle de charger un fichier par tour de boucle, à partie d&apos;une liste de fichiers préalablement crée. Dans ce cas, la structure du script est la suivante :&lt;ol&gt;&lt;li&gt;Créer une liste de fichier (séléction de la liste des fichiers à parcourir)&lt;/li&gt;&lt;li&gt;Boucle standard (début de la boucle)&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Charger les fichiers d&apos;une liste&lt;/strong&gt; (chargement du fichier correspondant au tour de boucle courant)&lt;/li&gt;&lt;li&gt;... (étapes de traitement et d&apos;export)&lt;/li&gt;&lt;li&gt;Fin de boucle&lt;/li&gt;&lt;/ol&gt;&lt;br&gt;</source>
         <translation>The most usual use of loading a file per loop turn, from a previously created file list. In this case, the structure of the script is as follows:&lt;ol&gt;&lt;li&gt;Create file list (select list of files to browse)&lt;/li&gt;&lt;li&gt;Standard loop (start of loop)&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Load files from a list&lt;/strong&gt; (load file corresponding to the current loop turn)&lt;/li&gt;&lt;li&gt;... (processing and export steps)&lt;/li&gt;&lt;li&gt;End of loop&lt;/li&gt;&lt;/ol&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Entête</source>
+        <translation>Header</translation>
     </message>
 </context>
 <context>
