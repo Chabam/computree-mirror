@@ -144,7 +144,7 @@ void PB_StepGenericExporter::fillPreInputConfigurationDialog(CT_StepConfigurable
     preInputConfigDialog->addExcludeValue("", "", tr("Choisir un nom pour le fichier"), bg, CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter, tr("Saisie manuelle d'un nom de base.\nChaque item génére un fichier nommé NomDeBase_xx, avec xx allant de 0 à n. "), true);
 
     preInputConfigDialog->addEmpty();
-    preInputConfigDialog->addBool(tr("Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)"), "", "", _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
+    preInputConfigDialog->addBool("", "", tr("Utiliser le nom du tour courant comme nom de fichier (boucles uniquement), ou comme préfixe si export d'un fichier par item"), _adaptative, tr("Si coché vous devrez choisir un item de type \"compteur\" et le nom du fichier contiendra le nom du tour courant."));
 
 }
 
@@ -161,7 +161,7 @@ void PB_StepGenericExporter::declareInputModels(CT_StepInModelStructureManager& 
 bool PB_StepGenericExporter::postInputConfigure()
 {
     QString exportFileName;
-    const bool isDir = (_multipleExport == 1 && (_multipleExportChoice != CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter));
+    const bool isDir = _adaptative || (_multipleExport == 1 && (_multipleExportChoice != CT_AbstractExporter::EachItemInSeparateFile_OriginalName_InternalCounter));
 
     if(isDir)
         exportFileName = QFileDialog::getExistingDirectory(nullptr, tr("Exporter dans..."), _exportFilename.isEmpty() ? _exportPath : _exportFilename);

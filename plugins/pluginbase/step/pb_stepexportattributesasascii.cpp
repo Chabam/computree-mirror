@@ -52,7 +52,7 @@ CT_VirtualAbstractStep* PB_StepExportAttributesAsASCII::createNewInstance() cons
 
 void PB_StepExportAttributesAsASCII::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    manager.addResult(mInResult, tr("Résultat"));
+    manager.addResult(mInResult, tr("Résultat"), "", true);
     manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
     manager.addGroup(mInRootGroup, mInGroupMain);
     manager.addItem(mInGroupMain, mInItemWithAttribute, tr("Item avec des attributs"));

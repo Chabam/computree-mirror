@@ -471,10 +471,10 @@ bool CT_AbstractExporter::exportToFile()
             finalFilepath = fileInfo.path() + "/";
 
             if(!counterTurnName.isEmpty())
-                finalFilepath.append(counterTurnName + "_");
+                finalFilepath.append(counterTurnName);
 
             if(!fileInfo.isDir())
-                finalFilepath.append(fileInfo.baseName());
+                finalFilepath.append("_" + fileInfo.baseName());
         }
 
         const QString backupFilepath = filePath();

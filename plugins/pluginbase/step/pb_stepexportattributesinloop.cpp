@@ -115,7 +115,7 @@ void PB_StepExportAttributesInLoop::fillPreInputConfigurationDialog(CT_StepConfi
 
 void PB_StepExportAttributesInLoop::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    manager.addResult(mInResult, tr("Résultat"));
+    manager.addResult(mInResult, tr("Résultat"), "", true);
     manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
     manager.addGroup(mInRootGroup, mInGroupMain);
 

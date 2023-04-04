@@ -74,7 +74,7 @@ CT_VirtualAbstractStep* PB_StepExportAttributesAsVector::createNewInstance() con
 
 void PB_StepExportAttributesAsVector::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    manager.addResult(mInResult, tr("Résultat"));
+    manager.addResult(mInResult, tr("Résultat"), "", true);
     manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
     manager.addGroup(mInRootGroup, mInGroupMain);
 

@@ -86,7 +86,7 @@ CT_VirtualAbstractStep* PB_StepExportAttributesAsRaster::createNewInstance() con
 
 void PB_StepExportAttributesAsRaster::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    manager.addResult(mInResult, tr("Résultat"));
+    manager.addResult(mInResult, tr("Résultat"), "", true);
     manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
     manager.addGroup(mInRootGroup, mInGroupMain);
 
