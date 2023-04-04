@@ -39,8 +39,8 @@ CT_FileHeader::CT_FileHeader() : SuperClass(),
 }
 
 CT_FileHeader::CT_FileHeader(const CT_FileHeader &other) : SuperClass(other),
-    m_reader((other.m_reader == nullptr) ? nullptr : other.m_reader->copyFull()),
-    m_mustAutoDeleteReader(true)
+    m_reader((other.m_reader == nullptr) ? nullptr : other.m_reader),
+    m_mustAutoDeleteReader(false)
 {
 
 }

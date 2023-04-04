@@ -60,6 +60,24 @@ void PB_StepLoadFileByName::fillPreInputConfigurationDialog(CT_StepConfigurableD
     preInputConfigDialog->addStringChoice(tr("Choix du type de fichier"), "", list_readersList, m_readerSelectedClassName);
 }
 
+void PB_StepLoadFileByName::finalizePreSettings()
+{
+    CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedClassName);
+
+    if(reader == nullptr) {
+        delete mReader;
+        mReader = nullptr;
+        return;
+    }
+
+    if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
+    {
+        delete mReader;
+        mReader = reader->copyFull();
+    }
+}
+
+
 void PB_StepLoadFileByName::declareInputModels(CT_StepInModelStructureManager& manager)
 {
     manager.addResult(m_hInResult, tr("Résultat"));
@@ -71,8 +89,9 @@ void PB_StepLoadFileByName::declareInputModels(CT_StepInModelStructureManager& m
 
 bool PB_StepLoadFileByName::postInputConfigure()
 {
-    CT_AbstractReader* reader = pluginStaticCastT<PB_StepPluginManager>()->readerAvailableByUniqueName(m_readerSelectedClassName);
-    const QString fileFilter = CT_ReadersTools::constructStringForFileDialog(reader);
+    if (mReader == nullptr) {return false;}
+
+    const QString fileFilter = CT_ReadersTools::constructStringForFileDialog(mReader);
 
     if(fileFilter.isEmpty()) {
         QMessageBox::critical(nullptr, tr("Erreur"), tr("Aucun reader sélectionné"));
@@ -92,12 +111,6 @@ bool PB_StepLoadFileByName::postInputConfigure()
 
         if(fileList.isEmpty())
             return false;
-
-        if((mReader == nullptr) || (reader->uniqueName() != mReader->uniqueName()))
-        {
-            if (mReader != nullptr) {delete mReader;}
-            mReader = reader->copyFull();
-        }
 
         if(mReader->setFilePath(fileList.first())) {
             mReader->setFilePathCanBeModified(false);
@@ -150,32 +163,29 @@ void PB_StepLoadFileByName::compute()
 
         if(att != nullptr)
         {
-            CT_AbstractReader* readerCpy = mReader->copyFull();
-
             const QString filename = QFileInfo(att->toString(item, nullptr)).baseName();
             const QString filepath = QString("%1.%2").arg(QString("%1/%2").arg(m_folderPath).arg(filename)).arg(formats.first().suffixes().first());
 
             PS_LOG->addMessage(LogInterface::info, LogInterface::step, tr("Chargement du fichier %1").arg(filepath));
 
             // set the new filepath and check if it is valid
-            if (readerCpy->setFilePath(filepath))
+            if (mReader->setFilePath(filepath))
             {
                 CT_StandardItemGroup* group = b.currentParent();
 
                 // add the header
                 if(m_hOutFileHeader.isValid()) {
-                    CT_FileHeader* header = readerCpy->readHeader();
+                    CT_FileHeader* header = mReader->readHeader();
                     Q_ASSERT(header != nullptr);
                     if (header == nullptr) {qDebug() << "PB_StepLoadFileByName::compute" << ", " << "header == nullptr";}
 
-                    header->setReader(readerCpy, true);
+                    header->setReader(mReader, false);
                     group->addSingularItem(m_hOutFileHeader, header);
                 }
             }
             else
             {
                 PS_LOG->addMessage(LogInterface::warning, LogInterface::step, tr("Fichier %1 inexistant ou non valide").arg(filepath));
-                delete readerCpy;
             }
         }
 

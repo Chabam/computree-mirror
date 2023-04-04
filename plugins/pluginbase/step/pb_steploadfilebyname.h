@@ -32,6 +32,8 @@ protected:
 
     void declareInputModels(CT_StepInModelStructureManager& manager) final;
 
+    void finalizePreSettings() final;
+
     bool postInputConfigure() final;
 
     void declareOutputModels(CT_StepOutModelStructureManager& manager) final;

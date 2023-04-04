@@ -237,11 +237,9 @@ void PB_StepLoopOnFileSets::compute()
             for(const QString& filepath : set.mFilesPath)
             {
                 // for each current file in the list
-                // copy the reader (copyFull = with configuration and models)
-                CT_AbstractReader* readerCpy = mReader->copyFull();
 
                 // set the new filepath and check if it is valid
-                if(readerCpy->setFilePath(filepath))
+                if(mReader->setFilePath(filepath))
                 {
                     PS_LOG->addMessage(LogInterface::info, LogInterface::step, tr("Ajout du fichier %1 du lot %2").arg(filepath).arg(set.mName));
 
@@ -251,18 +249,17 @@ void PB_StepLoopOnFileSets::compute()
 
                     // add the header
                     if(m_hOutFileHeaderLOFS.isValid()) {
-                        CT_FileHeader* header = readerCpy->readHeader();
+                        CT_FileHeader* header = mReader->readHeader();
                         Q_ASSERT(header != nullptr);
                         if (header == nullptr) {qDebug() << "PB_StepLoopOnFileSets::compute" << ", " << "header == nullptr";}
 
-                        header->setReader(readerCpy, true);
+                        header->setReader(mReader, false);
                         grpHeader->addSingularItem(m_hOutFileHeaderLOFS, header);
                     }
                 }
                 else
                 {
                     PS_LOG->addMessage(LogInterface::warning, LogInterface::step, tr("Fichier %1 non valide").arg(filepath));
-                    delete readerCpy;
                 }
 
                 if(isStopped())

@@ -207,11 +207,8 @@ void PB_StepCreateReaderList::compute()
         // for each file in the list
         for(const QString& filePath : m_filepathCollection)
         {
-            // copy the reader (copyFull = with configuration and models)
-            CT_AbstractReader* readerCpy = mReader->copyFull();
-
             // set the new filepath and check if it is valid
-            if (readerCpy->setFilePath(filePath))
+            if (mReader->setFilePath(filePath))
             {
                 // create the group that will contains header and reader (represent a File)
                 CT_StandardItemGroup* grpHeader = new CT_StandardItemGroup();
@@ -219,18 +216,17 @@ void PB_StepCreateReaderList::compute()
 
                 // add the header
                 if(m_hOutFileHeader.isValid()) {
-                    CT_FileHeader* header = readerCpy->readHeader();
+                    CT_FileHeader* header = mReader->readHeader();
                     Q_ASSERT(header != nullptr);
                     if (header == nullptr) {qDebug() << "PB_StepCreateReaderList::compute" << ", " << "header == nullptr";}
 
-                    header->setReader(readerCpy, true);
+                    header->setReader(mReader, false);
                     grpHeader->addSingularItem(m_hOutFileHeader, header);
                 }
             }
             else
             {
                 STEP_LOG->addWarningMessage(tr("Fichier %1 inexistant ou non valide").arg(filePath));
-                delete readerCpy;
             }
 
             if(isStopped())
