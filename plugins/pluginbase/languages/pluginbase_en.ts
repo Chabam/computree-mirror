@@ -940,7 +940,7 @@ The attribute to be used will belong to another item than the one to be exported
     </message>
     <message>
         <source>Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)</source>
-        <translation>Prefix the file name with the name of the current turn (loops only)</translation>
+        <translation type="vanished">Prefix the file name with the name of the current turn (loops only)</translation>
     </message>
     <message>
         <source>Si coché, comment déterminer le nom du fichier ?</source>
@@ -993,6 +993,10 @@ A single output file will be created, containing all the data.</translation>
     <message>
         <source>Choisir un nom pour le fichier</source>
         <translation>Choose a name for the file</translation>
+    </message>
+    <message>
+        <source>Utiliser le nom du tour courant comme nom de fichier (boucles uniquement), ou comme préfixe si export d&apos;un fichier par item</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

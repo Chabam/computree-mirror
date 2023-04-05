@@ -896,10 +896,6 @@ L&apos;attribut à utiliser appartiendra à un autre item que celui à exporter<
         <translation></translation>
     </message>
     <message>
-        <source>Préfixer le nom de fichier par le nom du tour courant (boucles uniquement)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Un fichier sera créé pour chaque item. Comment déterminer le nom du fichier ?</source>
         <translation></translation>
     </message>
@@ -936,6 +932,10 @@ Un unique ficher de sortie sera créé, contenant toutes le données. </source>
     <message>
         <source>Choisir un nom pour le fichier</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Utiliser le nom du tour courant comme nom de fichier (boucles uniquement), ou comme préfixe si export d&apos;un fichier par item</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
