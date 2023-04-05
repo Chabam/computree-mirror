@@ -101,7 +101,7 @@ CT_VirtualAbstractStep* PB_StepComputePointMetrics::createNewInstance() const
 
 void PB_StepComputePointMetrics::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    manager.addResult(mInResult, tr("Points"));
+    manager.addResult(mInResult, tr("Points"), "", true);
     manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
     manager.addGroup(mInRootGroup, mInGroup, tr("Groupe"));
     manager.addItem(mInGroup, mInItem, tr("Scène"));

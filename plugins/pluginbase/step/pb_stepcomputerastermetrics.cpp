@@ -84,7 +84,7 @@ CT_VirtualAbstractStep* PB_StepComputeRasterMetrics::createNewInstance() const
 
 void PB_StepComputeRasterMetrics::declareInputModels(CT_StepInModelStructureManager& manager)
 {
-    manager.addResult(mInResult, tr("Rasters"));
+    manager.addResult(mInResult, tr("Rasters"), "", true);
     manager.setZeroOrMoreRootGroup(mInResult, mInRootGroup);
     manager.addGroup(mInRootGroup, mInGroup, tr("Groupe"));
     manager.addItem(mInGroup, mInRaster, tr("Raster"));
