@@ -83,6 +83,7 @@
 #include "exporters/gdal/pb_gdalexporter.h"
 #include "exporters/ascid/pb_ascidexporter.h"
 #include "exporters/polygon2d/pb_polygon2dexporter.h"
+#include "exporters/asciitrajectory/pb_asciitrajectory.h"
 
 #include "ctlibio/readers/ct_reader_xyb.h"
 #include "ctlibio/readers/ct_reader_ascrgb.h"
@@ -297,6 +298,7 @@ bool PB_StepPluginManager::loadExporters()
     sep->addExporter(new PB_Grid3DAsTableExporter(CT_StepsMenu::LP_Voxels));
     sep->addExporter(new PB_Polygon2DExporter(CT_StepsMenu::LP_Vector));
     sep->addExporter(new PB_ProfileExporter());
+    sep->addExporter(new PB_AsciiTrajectory());
 
     /*
     sep->addExporter(new PB_MultiXYBExporter());

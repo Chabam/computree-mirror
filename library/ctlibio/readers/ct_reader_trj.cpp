@@ -137,7 +137,8 @@ bool CT_Reader_TRJ::internalReadFile(CT_StandardItemGroup* group)
             QDataStream stream(&f);
             stream.setByteOrder(QDataStream::LittleEndian);
 
-            CT_ScanPath* scanPath = new CT_ScanPath();
+            QFileInfo info(filepath());
+            CT_ScanPath* scanPath = new CT_ScanPath(info.baseName());
 
             f.seek(header->getHdrSize());
 
@@ -157,7 +158,7 @@ bool CT_Reader_TRJ::internalReadFile(CT_StandardItemGroup* group)
                 stream >> d_data.Mark;
                 stream >> d_data.Flag;
 
-                scanPath->addPathPoint(d_data.Time, Eigen::Vector3d(d_data.x, d_data.y, d_data.z));
+                scanPath->addPathPoint(d_data.Time, d_data.x, d_data.y, d_data.z, d_data.Head, d_data.Roll, d_data.Pitch);
             }
 
             group->addSingularItem(m_hOutScanPath, scanPath);

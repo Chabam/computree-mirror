@@ -40,14 +40,17 @@ class CTLIBSTRUCTUREADDON_EXPORT CT_ScanPath : public CT_AbstractItemDrawableWit
 public:
 
     struct PathPoint {
-        PathPoint(double gpsTime, Eigen::Vector3d position)
+    public:
+        PathPoint(double gpsTime, Eigen::Vector3d position, Eigen::Vector3d orientation)
         {
             _gpsTime = gpsTime;
             _position = position;
+            _orientation = orientation;
         }
 
-        double _gpsTime;
-        Eigen::Vector3d _position;
+        double          _gpsTime;
+        Eigen::Vector3d _position; // (x;y;z)
+        Eigen::Vector3d _orientation; //(heading, roll, pitch)
     };
 
     static bool sortPathPointsByGPSTime (PathPoint& a, PathPoint& b) {
@@ -55,10 +58,14 @@ public:
     }
 
     CT_ScanPath();
-    CT_ScanPath(const CT_ScanPath& other) = default;
+    CT_ScanPath(QString name);
+    CT_ScanPath(const CT_ScanPath& other);
 
-    void addPathPoint(double gpsTime, double x, double y, double z);
-    void addPathPoint(double gpsTime, const Eigen::Vector3d &point);
+    QString getPathName() const;
+
+    void addPathPoint(double gpsTime, double x, double y, double z, double h = 0, double r = 0, double p = 0);
+    void addPathPoint(double gpsTime, const Eigen::Vector3d &position);
+    void addPathPoint(double gpsTime, const Eigen::Vector3d &position, const Eigen::Vector3d &orientation);
 
     bool isInScanPath(double gpsTime) const;
 
@@ -69,6 +76,7 @@ public:
     CT_ITEM_COPY_IMP(CT_ScanPath)
 
 private:
+    QString                         _name;
     bool                            _sorted;
     QList<PathPoint>                _pathPoints;
     double                          _minGPSTime;

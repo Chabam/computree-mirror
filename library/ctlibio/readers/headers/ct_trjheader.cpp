@@ -13,7 +13,7 @@ CT_TRJHeader::CT_TRJHeader() : SuperClass()
     m_HdrSize = 0;
 }
 
-CT_TRJHeader::CT_TRJHeader(const CT_TRJHeader &other)
+CT_TRJHeader::CT_TRJHeader(const CT_TRJHeader &other) : SuperClass(other)
 {
     m_Recog = other.m_Recog;
     m_Version = other.m_Version;

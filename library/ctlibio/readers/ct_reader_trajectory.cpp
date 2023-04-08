@@ -285,7 +285,8 @@ bool CT_Reader_Trajectory::internalReadFile(CT_StandardItemGroup* group)
             QLocale locale(m_localeName);
             bool error = false;
 
-            CT_ScanPath* scanPath = new CT_ScanPath();
+            QFileInfo info(filepath());
+            CT_ScanPath* scanPath = new CT_ScanPath(info.baseName());
             // While we did not reached the end of file
             while(!stream.atEnd() && !isStopped() && !error) {
                 // Read the currentLine

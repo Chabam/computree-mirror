@@ -33,24 +33,55 @@ const CT_StandardScanPathDrawManager CT_ScanPath::SCANPATH_DRAW_MANAGER;
 
 CT_TYPE_IMPL_INIT_MACRO(CT_ScanPath)
 
-CT_ScanPath::CT_ScanPath() : SuperClass(),
+CT_ScanPath::CT_ScanPath()
+{
+    _sorted = false;
+    _minGPSTime = std::numeric_limits<double>::max();
+    _maxGPSTime = -std::numeric_limits<double>::max();
+}
+
+CT_ScanPath::CT_ScanPath(QString name) : SuperClass(),
     _sorted(false),
     _minGPSTime(std::numeric_limits<double>::max()),
     _maxGPSTime(-std::numeric_limits<double>::max())
 {
-    setBoundingBox(_minGPSTime,
-                   _minGPSTime,
-                   _minGPSTime,
-                   _maxGPSTime,
-                   _maxGPSTime,
-                   _maxGPSTime);
+    _name = name;
+    setDisplayableName(_name);
+    setBoundingBox(std::numeric_limits<double>::max(),
+                   std::numeric_limits<double>::max(),
+                   std::numeric_limits<double>::max(),
+                   -std::numeric_limits<double>::max(),
+                   -std::numeric_limits<double>::max(),
+                   -std::numeric_limits<double>::max());
 
     setBaseDrawManager(&SCANPATH_DRAW_MANAGER);
 }
 
-void CT_ScanPath::addPathPoint(double gpsTime, double x, double y, double z)
+CT_ScanPath::CT_ScanPath(const CT_ScanPath &other)
 {
-    _pathPoints.append(PathPoint(gpsTime, Eigen::Vector3d(x,y,z)));
+    _name = other._name;
+
+    _sorted = other._sorted;
+    _pathPoints = other._pathPoints;
+    _minGPSTime = other._minGPSTime;
+    _maxGPSTime = other._maxGPSTime;
+
+    Eigen::Vector3d min, max;
+    other.boundingBox(min, max);
+
+    setBoundingBox(min(0), min(1), min(2), max(0), max(1), max(2));
+
+    setBaseDrawManager(&SCANPATH_DRAW_MANAGER);
+}
+
+QString CT_ScanPath::getPathName() const
+{
+    return _name;
+}
+
+void CT_ScanPath::addPathPoint(double gpsTime, double x, double y, double z, double h, double r, double p)
+{
+    _pathPoints.append(PathPoint(gpsTime, Eigen::Vector3d(x,y,z), Eigen::Vector3d(h,r,p)));
     _sorted = false;
 
     Eigen::Vector3d min, max;
@@ -69,9 +100,14 @@ void CT_ScanPath::addPathPoint(double gpsTime, double x, double y, double z)
     setBoundingBox(min, max);
 }
 
-void CT_ScanPath::addPathPoint(double gpsTime, const Eigen::Vector3d &point)
+void CT_ScanPath::addPathPoint(double gpsTime, const Eigen::Vector3d &position)
 {
-    addPathPoint(gpsTime, point(0), point(1), point(2));
+    addPathPoint(gpsTime, position(0), position(1), position(2), 0, 0, 0);
+}
+
+void CT_ScanPath::addPathPoint(double gpsTime, const Eigen::Vector3d &position, const Eigen::Vector3d &orientation)
+{
+    addPathPoint(gpsTime, position(0), position(1), position(2), orientation(0), orientation(1), orientation(2));
 }
 
 bool CT_ScanPath::isInScanPath(double gpsTime) const

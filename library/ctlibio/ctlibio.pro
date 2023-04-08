@@ -14,6 +14,7 @@ TARGET = ctlibio
 DEFINES += CTLIBIO_LIBRARY
 
 HEADERS +=  \
+    exporters/asciitrajectory/pb_asciitrajectory.h \
     exporters/grid3d/pb_grid3dastableexporter.h \
     exporters/grid3d/pb_grid3dexporter.h \
     exporters/polygon2d/pb_polygon2dexporter.h \
@@ -97,6 +98,7 @@ HEADERS +=  \
 #    exporters/xyb/pb_multixybexporter.h
 
 SOURCES += \
+    exporters/asciitrajectory/pb_asciitrajectory.cpp \
     exporters/grid3d/pb_grid3dastableexporter.cpp \
     exporters/grid3d/pb_grid3dexporter.cpp \
     exporters/polygon2d/pb_polygon2dexporter.cpp \

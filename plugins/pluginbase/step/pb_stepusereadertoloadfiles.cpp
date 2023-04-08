@@ -107,7 +107,7 @@ void PB_StepUseReaderToLoadFiles::compute()
                     }
                 }
             }
-            
+
             m_currentReaderProgress += readerStepProgress;
 
             if(isStopped())
