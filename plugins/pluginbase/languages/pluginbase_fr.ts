@@ -935,7 +935,7 @@ Un unique ficher de sortie sera créé, contenant toutes le données. </source>
     </message>
     <message>
         <source>Utiliser le nom du tour courant comme nom de fichier (boucles uniquement), ou comme préfixe si export d&apos;un fichier par item</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

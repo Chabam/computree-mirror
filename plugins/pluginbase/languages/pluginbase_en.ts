@@ -996,7 +996,7 @@ A single output file will be created, containing all the data.</translation>
     </message>
     <message>
         <source>Utiliser le nom du tour courant comme nom de fichier (boucles uniquement), ou comme préfixe si export d&apos;un fichier par item</source>
-        <translation type="unfinished"></translation>
+        <translation>Use the name of the current turn as the file name (loops only), or as a prefix if exporting a file by item</translation>
     </message>
 </context>
 <context>

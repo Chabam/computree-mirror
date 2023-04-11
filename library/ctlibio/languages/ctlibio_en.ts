@@ -632,12 +632,12 @@
         <translation>ScanPath</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_trajectory.cpp" line="305"/>
+        <location filename="../readers/ct_reader_trajectory.cpp" line="306"/>
         <source>Error loading at line %1: missing columns.</source>
         <translation>Error loading at line %1: missing columns.</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_trajectory.cpp" line="312"/>
+        <location filename="../readers/ct_reader_trajectory.cpp" line="313"/>
         <source>Error loading point at line %1</source>
         <translation>Error loading point at line %1</translation>
     </message>
@@ -941,14 +941,37 @@
         <translation>Item to be exported</translation>
     </message>
     <message>
-        <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="64"/>
+        <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="61"/>
         <source>Couleurs</source>
         <translation>Colours</translation>
     </message>
     <message>
-        <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="68"/>
+        <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="62"/>
         <source>Normales</source>
         <translation>Normals</translation>
+    </message>
+</context>
+<context>
+    <name>PB_AsciiTrajectory</name>
+    <message>
+        <location filename="../exporters/asciitrajectory/pb_asciitrajectory.cpp" line="12"/>
+        <source>Fichier asc</source>
+        <translation>Asc file</translation>
+    </message>
+    <message>
+        <location filename="../exporters/asciitrajectory/pb_asciitrajectory.cpp" line="14"/>
+        <source>Exporte des trajectoires au format ASCII. Un fichier est créé pour chaque trajectoire, avec les champs suivants :&lt;br&gt;- Easting : Coordonnée X&lt;br&gt;- Northing : Coordonnée Y&lt;br&gt;- Height : Coordonnée Z&lt;br&gt;- Heading : Heading (degrees)&lt;br&gt;- Roll : Roll (degrees)&lt;br&gt;- Pitch : Pith (degrees)&lt;br&gt;</source>
+        <translation>Exports trajectories in ASCII format. A file is created for each trajectory, with the following fields:&lt;br&gt;- Easting : X coordinate&lt;br&gt;- Northing : Y coordinate&lt;br&gt;- Height : Z coordinate&lt;br&gt;- Heading : Heading (degrees)&lt;br&gt;- Roll : Roll (degrees)&lt;br&gt;- Pitch : Pith (degrees)&lt;br&gt;</translation>
+    </message>
+    <message>
+        <location filename="../exporters/asciitrajectory/pb_asciitrajectory.cpp" line="31"/>
+        <source>Trajectoire ASCII (X,Y,Z, Heading, Roll, Pitch)</source>
+        <translation>ASCII Trajectory (X,Y,Z, Heading, Roll, Pitch)</translation>
+    </message>
+    <message>
+        <location filename="../exporters/asciitrajectory/pb_asciitrajectory.cpp" line="48"/>
+        <source>Trajectoire</source>
+        <translation>Trajectory</translation>
     </message>
 </context>
 <context>

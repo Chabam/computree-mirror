@@ -632,12 +632,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_trajectory.cpp" line="305"/>
+        <location filename="../readers/ct_reader_trajectory.cpp" line="306"/>
         <source>Error loading at line %1: missing columns.</source>
         <translation>Erreur de chargement à la ligne %1: colonnes manquantes.</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_trajectory.cpp" line="312"/>
+        <location filename="../readers/ct_reader_trajectory.cpp" line="313"/>
         <source>Error loading point at line %1</source>
         <translation>Erreur de chargement de point à la ligne %1</translation>
     </message>
@@ -941,13 +941,36 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="64"/>
+        <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="61"/>
         <source>Couleurs</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="68"/>
+        <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="62"/>
         <source>Normales</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>PB_AsciiTrajectory</name>
+    <message>
+        <location filename="../exporters/asciitrajectory/pb_asciitrajectory.cpp" line="12"/>
+        <source>Fichier asc</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../exporters/asciitrajectory/pb_asciitrajectory.cpp" line="14"/>
+        <source>Exporte des trajectoires au format ASCII. Un fichier est créé pour chaque trajectoire, avec les champs suivants :&lt;br&gt;- Easting : Coordonnée X&lt;br&gt;- Northing : Coordonnée Y&lt;br&gt;- Height : Coordonnée Z&lt;br&gt;- Heading : Heading (degrees)&lt;br&gt;- Roll : Roll (degrees)&lt;br&gt;- Pitch : Pith (degrees)&lt;br&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../exporters/asciitrajectory/pb_asciitrajectory.cpp" line="31"/>
+        <source>Trajectoire ASCII (X,Y,Z, Heading, Roll, Pitch)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../exporters/asciitrajectory/pb_asciitrajectory.cpp" line="48"/>
+        <source>Trajectoire</source>
         <translation></translation>
     </message>
 </context>
