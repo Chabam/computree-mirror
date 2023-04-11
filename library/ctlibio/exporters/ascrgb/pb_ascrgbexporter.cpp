@@ -58,14 +58,8 @@ void PB_ASCRGBExporter::internalDeclareInputModels(CT_ExporterInModelStructureMa
 {
     manager.addGroupToRootGroup(m_hInGroup);
     manager.addItemToGroup(m_hInGroup, m_hInItem, tr("Item à exporter"));
-
-    // colors can be in an other group than the item or normals
-    manager.addGroupToRootGroup(m_hInColorsGroup);
-    manager.addPointAttributeToGroup(m_hInColorsGroup, m_hInColorsAttribute, tr("Couleurs"));
-
-    // normals can be in an other group than the item or colors
-    manager.addGroupToRootGroup(m_hInNormalsGroup);
-    manager.addPointAttributeToGroup(m_hInNormalsGroup, m_hInNormalsAttribute, tr("Normales"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInColorsAttribute, tr("Couleurs"));
+    manager.addPointAttributeToGroup(m_hInGroup, m_hInNormalsAttribute, tr("Normales"));
 }
 
 CT_AbstractExporter::ExportReturn PB_ASCRGBExporter::internalExportToFile()

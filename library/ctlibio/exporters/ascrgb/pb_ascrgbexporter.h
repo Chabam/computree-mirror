@@ -39,9 +39,7 @@ private:
 
     CT_HandleInStdGroup<>                                           m_hInGroup;
     HandleItemType                                                  m_hInItem;
-    CT_HandleInStdGroup<>                                           m_hInColorsGroup;
     CT_HandleInAbstractPointAttribute<>                             m_hInColorsAttribute;
-    CT_HandleInStdGroup<0>                                          m_hInNormalsGroup; // optionnal
     CT_HandleInPointNormal<0>                                       m_hInNormalsAttribute; // optionnal
 
     HandleItemType::const_iterator                                  mIteratorItemBegin;

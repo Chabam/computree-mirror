@@ -60,6 +60,7 @@ CT_ScanPath::CT_ScanPath(QString name) : SuperClass(),
 CT_ScanPath::CT_ScanPath(const CT_ScanPath &other)
 {
     _name = other._name;
+    setDisplayableName(_name);
 
     _sorted = other._sorted;
     _pathPoints = other._pathPoints;

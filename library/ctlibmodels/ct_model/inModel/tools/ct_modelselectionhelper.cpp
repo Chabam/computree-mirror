@@ -2,6 +2,7 @@
 
 #include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
 #include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
+#include "ct_model/inModel/ct_inzeroormoregroupmodel.h"
 
 #include "ct_model/inModel/tools/ct_instdmodelpossibility.h"
 #include "ct_model/outModel/abstract/ct_outabstractmodel.h"
@@ -88,6 +89,10 @@ bool CT_ModelSelectionHelper::recursiveCanSelectAllPossibilitiesByDefault() cons
     QHash<CT_OutAbstractModel*, int> m_modelChooseCount;
 
     const bool ok = m_rootInResultModel->recursiveVisitInChildrensOrInModelOfPossibilities([&m_modelChooseCount](const CT_InAbstractModel* child) -> bool {
+
+        // If optionnal, return false because there is at least 2 possibilities : check or not optionnal
+        if (dynamic_cast<const CT_InZeroOrMoreGroupModel*>(child) == nullptr && child->minimumNumberOfPossibilityToSelect() == 0)  {return false;}
+
         const int nSaved = child->nPossibilitySaved();
 
         // returns true if there is only one possibility that can be checked

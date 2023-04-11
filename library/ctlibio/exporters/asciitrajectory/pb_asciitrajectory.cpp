@@ -50,6 +50,22 @@ void PB_AsciiTrajectory::internalDeclareInputModels(CT_ExporterInModelStructureM
 
 CT_AbstractExporter::ExportReturn PB_AsciiTrajectory::internalExportToFile()
 {
+    const QFileInfo exportPathInfo = QFileInfo(filePath());
+    const QString path = exportPathInfo.path();
+    const QString baseName = exportPathInfo.baseName();
+    const QString suffix = "txt";
+
+    const QString currentFilePath = QString("%1/%2.%4").arg(path, baseName, suffix);
+
+    QFile file(currentFilePath);
+
+    if(!file.open(QFile::WriteOnly | QFile::Text))
+        return CT_AbstractExporter::ErrorWhenExport;
+
+    QTextStream stream(&file);
+
+    stream << "Time Easting Northing Height Heading Roll Pitch\n";
+
     if(mustUseModels())
     {
         if(mIteratorItemBegin == mIteratorItemEnd)
@@ -57,35 +73,36 @@ CT_AbstractExporter::ExportReturn PB_AsciiTrajectory::internalExportToFile()
             auto iterator = m_traj.iterateInputs(m_handleResultExport);
             mIteratorItemBegin = iterator.begin();
             mIteratorItemEnd = iterator.end();
+            _nExported = 0;
         }
-
-        int nExported = 0;
         const int totalToExport = maximumItemToExportInFile(int(std::distance(mIteratorItemBegin, mIteratorItemEnd)));
 
         // write data
-        while(mIteratorItemBegin != mIteratorItemEnd)
+        if (mIteratorItemBegin != mIteratorItemEnd)
         {
             const CT_ScanPath* item = *mIteratorItemBegin;
 
-            exportItem(item, nExported, totalToExport);
+            exportItem(item, stream, _nExported, totalToExport);
 
-            nExported++;
+            _nExported++;
             ++mIteratorItemBegin;
         }
 
+        file.close();
         return (mIteratorItemBegin == mIteratorItemEnd) ? NoMoreItemToExport : ExportCanContinue;
     }
     else
     {
         const int totalToExport = mItems.size();
-        int nExported = 0;
+        int _nExported = 0;
 
         for(const CT_ScanPath* item : qAsConst(mItems))
         {
-            exportItem(item, nExported, totalToExport);
-            nExported++;
+            exportItem(item, stream, _nExported, totalToExport);
+            _nExported++;
         }
     }
+    file.close();
 
     return NoMoreItemToExport;
 }
@@ -100,23 +117,8 @@ void PB_AsciiTrajectory::clearAttributesClouds()
 {
 }
 
-void PB_AsciiTrajectory::exportItem(const CT_ScanPath *item, const int& nExported, const int& totalToExport)
+void PB_AsciiTrajectory::exportItem(const CT_ScanPath *item, QTextStream &stream, const int& nExported, const int& totalToExport)
 {
-    const QFileInfo exportPathInfo = QFileInfo(filePath());
-    const QString path = exportPathInfo.path();
-    const QString baseName = item->getPathName();
-    const QString suffix = "txt";
-
-    const QString currentFilePath = QString("%1/%2.%4").arg(path, baseName, suffix);
-
-    QFile file(currentFilePath);
-
-    if(!file.open(QFile::WriteOnly | QFile::Text))
-        return;
-
-    QTextStream stream(&file);
-
-    stream << "Time Easting Northing Height Heading Roll Pitch\n";
 
     const QList<CT_ScanPath::PathPoint>& points = item->getPath();
 
@@ -134,6 +136,5 @@ void PB_AsciiTrajectory::exportItem(const CT_ScanPath *item, const int& nExporte
         stream << QString::number(orientation(2), 'f', 4) << "\n";
     }
 
-        setExportProgress(int(100*float(nExported)/float(totalToExport)));
-        file.close();
+    setExportProgress(int(100*float(nExported)/float(totalToExport)));
 }

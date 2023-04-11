@@ -328,6 +328,7 @@ bool CT_AbstractExporter::exportToFile()
         }
     }
 
+    qDebug() << "mExportWithModelsOption=" << mExportWithModelsOption;
     if(mustUseModels()
             && ((mExportWithModelsOption == EachItemInSeparateFile_OriginalName_InternalCounter)
                 || (mExportWithModelsOption == EachItemInSeparateFile_AttributeOfItem_InternalCounterIfSameFileName)

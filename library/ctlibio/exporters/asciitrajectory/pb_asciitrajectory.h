@@ -43,7 +43,9 @@ private:
 
     QList<const CT_ScanPath*>                                       mItems;
 
-    void exportItem(const CT_ScanPath* item, const int& nExported, const int& totalToExport);
+    int                                                             _nExported;
+
+    void exportItem(const CT_ScanPath* item, QTextStream &stream, const int& nExported, const int& totalToExport);
 };
 
 #endif // PB_ASCIITRAJECTORY_H
