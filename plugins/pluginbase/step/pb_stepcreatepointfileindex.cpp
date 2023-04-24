@@ -205,6 +205,8 @@ void PB_StepCreatePointFileIndex::compute()
     {       
         PS_LOG->addInfoMessage(LogInterface::step, tr("Analyse du fichier %1 (%2/%3)").arg(readerHeader->fileName()).arg(fileNumber).arg(filecount));
 
+
+        CT_AbstractReader* realReader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->reader();
         CT_IndexablePointsReader* ireader = const_cast<CT_IndexablePointFileHeader*>(readerHeader)->indexablePointReader();
 
         Eigen::Vector3d min, max;
@@ -246,6 +248,7 @@ void PB_StepCreatePointFileIndex::compute()
 
         if (candidateShapes.size() > 0)
         {
+            realReader->setFilePath(readerHeader->filePath());
             ireader->getPointIndicesInside2DShape(candidateShapes);
             for (CT_IndexablePointsReader::CandidateShape2D& sh : candidateShapes)
             {
