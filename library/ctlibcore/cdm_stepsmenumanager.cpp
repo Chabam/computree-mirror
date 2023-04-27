@@ -49,7 +49,8 @@ void CDM_StepsMenuManager::saveFavoritesTo(const QString &filepath)
 {
     CT_MenuLevel *favorites = m_menuOfSteps->levelFromOperation(CT_StepsMenu::LO_Favorites);
 
-    if(favorites != nullptr) {
+    if(favorites != nullptr) {               
+
         QFile xmlDoc(filepath);
 
         if(xmlDoc.open(QIODevice::WriteOnly)) {

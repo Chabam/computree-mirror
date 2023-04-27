@@ -41,7 +41,7 @@
 
 #include <Eigen/Core>
 
-QString GGraphicsViewImp::DEFAULT_STATE_FILENAME = "3DViewer.config";
+QString GGraphicsViewImp::DEFAULT_STATE_FILENAME = "3DViewer";
 uint GGraphicsViewImp::NUMBER_OF_VIEWS = 0;
 
 GGraphicsViewImp::GGraphicsViewImp(const GDocumentViewForGraphics* parentDocument, QWidget* parent) : AMKglViewer(parentDocument, parent), GGraphicsView()
@@ -1419,20 +1419,24 @@ void GGraphicsViewImp::keyReleaseEvent(QKeyEvent *e)
 
 QString GGraphicsViewImp::stateFileName() const
 {
-    QString name = DEFAULT_STATE_FILENAME;
+    QString name;
 
-    if (!name.isEmpty() && m_uniqueIndex > 0)
+    if (m_uniqueIndex > 0)
     {
-        QFileInfo fi(name);
-        if (fi.suffix().isEmpty())
-            name += QString::number(m_uniqueIndex);
-        else
-            name = fi.absolutePath() + '/' + fi.completeBaseName() + QString::number(m_uniqueIndex) + "." + fi.suffix();
+        name = DEFAULT_STATE_FILENAME + QString::number(m_uniqueIndex) + ".config";
+    } else {
+        name = DEFAULT_STATE_FILENAME + ".config";
     }
 
+    QString currentDir = "config";
 #if defined(__linux__) // Linux
-    name = QDir::homePath() + "/.computree/" + name;
+    currentDir = QDir::homePath() + "/.computree/" + currentDir;
 #endif
+
+    QDir dir(currentDir);
+    if (!dir.exists()) {dir.mkpath(".");}
+
+    name = currentDir + "/" + name;
 
     return name;
 }

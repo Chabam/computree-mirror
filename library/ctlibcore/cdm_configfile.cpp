@@ -17,10 +17,21 @@ CDM_ConfigFile* CDM_ConfigFile::createInstance()
             path = path.left(n);
         }
 
+
 #if defined(__linux__) // Linux
-        _uniqueInstance = new CDM_ConfigFile(QDir::homePath() + "/.computree/config.ini", QSettings::IniFormat);
+
+        QString currentDir = QDir::homePath() + "/.computree/config";
+        QDir dir(currentDir);
+        if (!dir.exists()) {dir.mkpath(".");}
+
+        _uniqueInstance = new CDM_ConfigFile(QDir::homePath() + "/.computree/config/config.ini", QSettings::IniFormat);
 #else
-        _uniqueInstance = new CDM_ConfigFile(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
+
+        QString currentDir = QCoreApplication::applicationDirPath() + "/config";
+        QDir dir(currentDir);
+        if (!dir.exists()) {dir.mkpath(".");}
+
+        _uniqueInstance = new CDM_ConfigFile(QCoreApplication::applicationDirPath() + "/config/config.ini", QSettings::IniFormat);
 #endif
     }
 

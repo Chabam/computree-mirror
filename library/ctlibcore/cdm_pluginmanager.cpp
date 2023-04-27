@@ -10,9 +10,11 @@
 
 #define FAVORITES_FILENAME "favorites."
 #if defined(__linux__) // Linux
-#define FAVORITES_FILEPATH QDir::toNativeSeparators(QDir::homePath() + "/.computree/" + FAVORITES_FILENAME + stepsMenuManager()->favoriteDefaultFileExtension())
+#define FAVORITES_FILEDIR QDir::toNativeSeparators(QDir::homePath() + "/.computree/config")
+#define FAVORITES_FILEPATH QDir::toNativeSeparators(QDir::homePath() + "/.computree/config/" + FAVORITES_FILENAME + stepsMenuManager()->favoriteDefaultFileExtension())
 #else
-#define FAVORITES_FILEPATH QDir::toNativeSeparators(qApp->applicationDirPath() + "/" + FAVORITES_FILENAME + stepsMenuManager()->favoriteDefaultFileExtension())
+#define FAVORITES_FILEDIR QDir::toNativeSeparators(qApp->applicationDirPath() + "/config")
+#define FAVORITES_FILEPATH QDir::toNativeSeparators(qApp->applicationDirPath() + "/config/" + FAVORITES_FILENAME + stepsMenuManager()->favoriteDefaultFileExtension())
 #endif
 
 CDM_PluginManager::CDM_PluginManager()
@@ -32,6 +34,9 @@ CDM_PluginManager::CDM_PluginManager()
 
 CDM_PluginManager::~CDM_PluginManager()
 {
+    QDir dir(FAVORITES_FILEDIR);
+    if (!dir.exists()) {dir.mkpath(".");}
+
     stepsMenuManager()->saveFavoritesTo(FAVORITES_FILEPATH);
 
     stepsMenuManager()->clear();
