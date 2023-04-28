@@ -266,6 +266,12 @@ void PB_StepCreatePointFileIndex::compute()
         setProgress(100.0f*(float(fileNumber++) / float(filecount)));
     }
 
+    // remove empty files
+    for (AreaIndexFile* file : indexFiles)
+    {
+        if (file->_empty) {file->deleteFile();}
+    }
+
     qDeleteAll(indexFiles);
 }
 
@@ -316,7 +322,7 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeAreaShape(QDataStream &out
 
 void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, bool bit64, bool all, qint64 &lastIncludedIndex, std::list<qint64> &indicesAfterLastIncludedIndex)
 {
-    if (_file.open(QIODevice::Append))
+    if (_file.exists() && _file.open(QIODevice::Append))
     {
         QDataStream outStream(&_file);
 
@@ -324,6 +330,7 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, 
 
         if (n > 0)
         {
+            _empty = false;
             outStream << name;
             outStream << all;
             outStream << n;
@@ -357,5 +364,13 @@ void PB_StepCreatePointFileIndex::AreaIndexFile::writeFileIndices(QString name, 
             }
         }
         _file.close();
+    }
+}
+
+void PB_StepCreatePointFileIndex::AreaIndexFile::deleteFile()
+{
+    if (_file.exists())
+    {
+        _file.remove();
     }
 }

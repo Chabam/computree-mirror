@@ -71,6 +71,7 @@ private:
     {
         AreaIndexFile(QString id, bool bit64, const CT_AbstractAreaShape2D* areaItem, const CT_AbstractAreaShape2D* areaSmallItem, QString outFolder, QString fileFormat)
         {
+            _empty = true;
             _bit64 = bit64;
             _areaItem = areaItem;
             _areaSmallItem = areaSmallItem;
@@ -105,10 +106,12 @@ private:
         QFile                           _file;
         QString                         _path;
         bool                            _bit64;
+        bool                            _empty;
 
         void writeExtent(QDataStream &outStream, const CT_AreaShape2DData *areaData, const CT_AreaShape2DData *areaSmallData);
         void writeAreaShape(QDataStream& outStream, const CT_AreaShape2DData *areaData);
         void writeFileIndices(QString name, bool bit64, bool all, qint64 &lastIncludedIndex, std::list<qint64> &indicesAfterLastIncludedIndex);
+        void deleteFile();
 
     };
 

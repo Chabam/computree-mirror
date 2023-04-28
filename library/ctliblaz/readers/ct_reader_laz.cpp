@@ -132,23 +132,14 @@ CT_FileHeader *CT_Reader_LAZ::internalReadHeader(const QString &filepath, QStrin
 
     // Test File validity
     if(QFile::exists(filepath))
-    {
-        QFile f(filepath);
+    {        
+        header = new CT_LAZHeader();
+        header->setFilePath(filepath);
 
-        if(f.open(QIODevice::ReadOnly))
-        {
-            QDataStream stream(&f);
-
-            header = new CT_LAZHeader();
-            header->setFilePath(filepath);
-
-            if(!header->readzip(filepath, error)) {
-                delete header;
-                header = nullptr;
-            }
+        if(!header->readzip(filepath, error)) {
+            delete header;
+            header = nullptr;
         }
-
-        f.close();
     }
 
     return header;
