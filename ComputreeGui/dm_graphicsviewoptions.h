@@ -67,15 +67,15 @@ public:
     virtual ~DM_GraphicsViewOptions();
 
     // TODO : to remove
-    int getFastDrawTime() const { return 0; }
+    int getFastDrawTime() const override { return 0; }
 
-    inline QColor getSelectedColor() const { return _selectedColor; }
-    inline QColor getBackgroundColor() const { return _backgroundColor; }
-    inline float getPointSize() const { return _pointSize; }
-    inline bool drawAxis() const { return _drawAxis; }
+    inline QColor getSelectedColor() const  override { return _selectedColor; }
+    inline QColor getBackgroundColor() const  override { return _backgroundColor; }
+    inline float getPointSize() const override { return _pointSize; }
+    inline bool drawAxis() const override { return _drawAxis; }
     inline bool drawGrid() const { return m_drawGrid; }
-    inline bool useColor() const { return _useColor; }
-    inline bool useTransparency() const { return _useTransparency; }
+    inline bool useColor() const override { return _useColor; }
+    inline bool useTransparency() const override { return _useTransparency; }
     inline bool mustUseLight() const { return _useLight; }
     inline DM_GraphicsViewOptions::CameraInfoDisplayed getCameraInformationDisplayed() const { return _cameraInfoDisplayed; }
     inline DM_GraphicsViewOptions::CameraInfoPosition getCameraInformationPosition() const { return _cameraInfoPosition; }
@@ -83,14 +83,14 @@ public:
     inline QColor normalColor() const { return m_normalColor; }
     inline float normalLength() const { return m_normalLength; }
     inline bool mustShowNormals() const { return m_mustShowNormals; }
-    DrawMode getDrawModeToUse(Scene::ObjectType type) const;
+    DrawMode getDrawModeToUse(Scene::ObjectType type) const override;
     inline bool mustReduceNbrPointsInFastDraw() const { return m_reducePointNbrInFastDraw; }
     inline bool mustReduceNbrPointsInNormalDraw() const { return m_reducePointNbrInNormalDraw; }
     inline int getMaxNbrPointsInFastDraw() const { return m_maxPointInFastDraw; }
 
     void setSelectedColor(QColor &color);
-    void setBackgroudColor(QColor &color);
-    void setPointSize(float size);
+    void setBackgroudColor(QColor &color) override;
+    void setPointSize(float size) override;
     void setDrawAxis(bool draw);
     void setDrawGrid(bool draw);
     void setUseColor(bool enable);
@@ -102,14 +102,14 @@ public:
     void setNormalColor(const QColor &color);
     void setNormalLength(float l);
     void setMustShowNormals(bool enabled);
-    void setDrawModeToUse(DrawMode mode);
-    void setDrawModeToUse(Scene::ObjectType type, DrawMode mode);
+    void setDrawModeToUse(DrawMode mode) override;
+    void setDrawModeToUse(Scene::ObjectType type, DrawMode mode) override;
     void setMustReduceNbrPointsInFastDraw(bool enabled);
     void setMustReduceNbrPointsInNormalDraw(bool enabled);
     void setMaxNbrPointsInFastDraw(int n);
     void updateFromOtherOptions(const DM_GraphicsViewOptions &options);
 
-    DrawModeAccessor& operator =(const DrawModeAccessor& other);
+    DrawModeAccessor& operator =(const DrawModeAccessor& other) override;
 
     bool operator !=(const DM_GraphicsViewOptions& options) const;
 
