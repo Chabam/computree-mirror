@@ -65,102 +65,116 @@ CT_LAZHeader::CT_LAZHeader() : SuperClass()
 bool CT_LAZHeader::readzip(const QString &filepath, QString &error)
 {
     error = "";
+    bool valid = true;
 
     // create the reader
     laszip_POINTER laszip_reader = nullptr;
-    if (laszip_create(&laszip_reader))
+    if (laszip_create(&laszip_reader) == 0)
     {
-        PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier"));
-        return false;
-    }
+        // open the reader
+        laszip_BOOL is_compressed = 0;
+        laszip_header* header = nullptr;
+        if (laszip_open_reader(laszip_reader, filepath.toStdString().c_str(), &is_compressed) == 0)
+        {
+            // get a pointer to the header of the reader that was just populated
+            if (laszip_get_header_pointer(laszip_reader, &header) == 0)
+            {
+                // LASZIP to CT conversion of header data
+                m_fileSourceID = header->file_source_ID;
+                m_globalEncoding = header->global_encoding;
 
-    // open the reader
-    laszip_BOOL is_compressed = 0;
-    if (laszip_open_reader(laszip_reader, filepath.toStdString().c_str(), &is_compressed))
-    {
-        PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier"));
-        return false;
-    }
+                m_projectIDGuidData1 = header->project_ID_GUID_data_1;
+                m_projectIDGuidData2 = header->project_ID_GUID_data_2;
+                m_projectIDGuidData3 = header->project_ID_GUID_data_3;
+                std::memcpy(&m_projectIDGuidData4, header->project_ID_GUID_data_4, 8);
 
-    // get a pointer to the header of the reader that was just populated
-    laszip_header* header;
-    if (laszip_get_header_pointer(laszip_reader, &header))
-    {
-        PS_LOG->addErrorMessage(LogInterface::reader, tr("Impossible de lire l'en-tête du fichier"));
-        return false;
-    }
+                m_versionMajor = header->version_major;
+                m_versionMinor = header->version_minor;
 
-    // LASZIP to CT conversion of header data
-    m_fileSourceID = header->file_source_ID;
-    m_globalEncoding = header->global_encoding;
+                std::memcpy(&m_systemID, header->system_identifier, 32);
+                std::memcpy(&m_sofwareID, header->generating_software, 32);
 
-    m_projectIDGuidData1 = header->project_ID_GUID_data_1;
-    m_projectIDGuidData2 = header->project_ID_GUID_data_2;
-    m_projectIDGuidData3 = header->project_ID_GUID_data_3;
-    std::memcpy(&m_projectIDGuidData4, header->project_ID_GUID_data_4, 8);
+                m_fileCreationDayOfYear = header->file_creation_day;
+                m_fileCreationYear = header->file_creation_year;
 
-    m_versionMajor = header->version_major;
-    m_versionMinor = header->version_minor;
+                m_headerSize = header->header_size;
+                m_offsetToPointData = header->offset_to_point_data;
 
-    std::memcpy(&m_systemID, header->system_identifier, 32);
-    std::memcpy(&m_sofwareID, header->generating_software, 32);
+                if(m_offsetToPointData < m_headerSize)
+                {
+                    error = QObject::tr("The offset to the start of points data (%1) is smaller than the header size (%2).").arg(m_offsetToPointData).arg(m_headerSize);
+                    return false;
+                }
 
-    m_fileCreationDayOfYear = header->file_creation_day;
-    m_fileCreationYear = header->file_creation_year;
+                m_numberOfVariableLengthRecords = header->number_of_variable_length_records;
+                m_pointDataRecordFormat = header->point_data_format;
+                m_pointDataRecordLength = header->point_data_record_length;
+                m_legacyNumberOfPointRecord = header->number_of_point_records;
 
-    m_headerSize = header->header_size;
-    m_offsetToPointData = header->offset_to_point_data;
+                for(int i=0; i<5; ++i)
+                {
+                    m_legacyNumberOfPointsByReturn[i] = header->number_of_points_by_return[i];
+                }
 
-    if(m_offsetToPointData < m_headerSize)
-    {
-        error = QObject::tr("The offset to the start of points data (%1) is smaller than the header size (%2).").arg(m_offsetToPointData).arg(m_headerSize);
-        return false;
-    }
+                m_xScaleFactor = header->x_scale_factor;
+                m_yScaleFactor = header->y_scale_factor;
+                m_zScaleFactor = header->z_scale_factor;
+                m_xOffset = header->x_offset;
+                m_yOffset = header->y_offset;
+                m_zOffset = header->z_offset;
+                m_maxCoordinates(0) = header->max_x;
+                m_minCoordinates(0) = header->min_x;
+                m_maxCoordinates(1) = header->max_y;
+                m_minCoordinates(1) = header->min_y;
+                m_maxCoordinates(2) = header->max_z;
+                m_minCoordinates(2) = header->min_z;
 
-    m_numberOfVariableLengthRecords = header->number_of_variable_length_records;
-    m_pointDataRecordFormat = header->point_data_format;
-    m_pointDataRecordLength = header->point_data_record_length;
-    m_legacyNumberOfPointRecord = header->number_of_point_records;
+                // End of header for LAS <=1.2
+                if((m_versionMajor == 1) && (m_versionMinor <= 2))
+                    return true;
 
-    for(int i=0; i<5; ++i)
-    {
-        m_legacyNumberOfPointsByReturn[i] = header->number_of_points_by_return[i];
-    }
+                m_startOfWaveformDataPacketRecord = header->start_of_waveform_data_packet_record;
 
-    m_xScaleFactor = header->x_scale_factor;
-    m_yScaleFactor = header->y_scale_factor;
-    m_zScaleFactor = header->z_scale_factor;
-    m_xOffset = header->x_offset;
-    m_yOffset = header->y_offset;
-    m_zOffset = header->z_offset;
-    m_maxCoordinates(0) = header->max_x;
-    m_minCoordinates(0) = header->min_x;
-    m_maxCoordinates(1) = header->max_y;
-    m_minCoordinates(1) = header->min_y;
-    m_maxCoordinates(2) = header->max_z;
-    m_minCoordinates(2) = header->min_z;
+                // End of header for LAS 1.3
+                if((m_versionMajor == 1) && (m_versionMinor <= 3))
+                    return true;
 
-    // End of header for LAS <=1.2
-    if((m_versionMajor == 1) && (m_versionMinor <= 2))
-        return true;
+                m_startOfFirstExtendedVariableLengthRecord = header->start_of_first_extended_variable_length_record;
+                m_numberOfExtendedVariableLengthRecords = header->number_of_extended_variable_length_records;
+                m_numberOfPointRecords = header->extended_number_of_point_records;
 
-    m_startOfWaveformDataPacketRecord = header->start_of_waveform_data_packet_record;
+                for(int i=0; i<15; ++i)
+                {
+                    m_numberOfPointsByReturn[i] = header->extended_number_of_points_by_return[i];
+                }
 
-    // End of header for LAS 1.3
-    if((m_versionMajor == 1) && (m_versionMinor <= 3))
-        return true;
+            } else {
+                valid = false;
+                PS_LOG->addErrorMessage(LogInterface::reader, tr("CT_LAZHeader::readzip : header non valide"));
+            }
 
-    m_startOfFirstExtendedVariableLengthRecord = header->start_of_first_extended_variable_length_record;
-    m_numberOfExtendedVariableLengthRecords = header->number_of_extended_variable_length_records;
-    m_numberOfPointRecords = header->extended_number_of_point_records;
+            if (laszip_close_reader(laszip_reader))
+            {
+                PS_LOG->addErrorMessage(LogInterface::reader, tr("CT_LAZHeader::readzip : impossible de fermer le fichier"));
+            }
 
-    for(int i=0; i<15; ++i)
-    {
-        m_numberOfPointsByReturn[i] = header->extended_number_of_points_by_return[i];
+        } else {
+            valid = false;
+            PS_LOG->addErrorMessage(LogInterface::reader, tr("CT_LAZHeader::readzip : impossible d'ouvrir le fichier"));
+        }
+
+        if (laszip_destroy(laszip_reader))
+        {
+            PS_LOG->addErrorMessage(LogInterface::reader, tr("CT_LAZHeader::readzip : impossible de libérer l'accès au fichier"));
+        }
+
+    } else {
+        valid = false;
+        PS_LOG->addErrorMessage(LogInterface::reader, tr("CT_LAZHeader::readzip : impossible d'accéder au fichier)"));
     }
 
     // End of header for LAS 1.4
-    return true;
+    return valid;
 }
 
 bool CT_LAZHeader::writezip(laszip_header &header) const
