@@ -62,12 +62,12 @@ void CT_AbstractItemDrawableWithPointCloud::updateBoundingBox()
     Eigen::Vector3d max;
 
     min(0) = std::numeric_limits<double>::max();
-    min(1) = min(0);
-    min(2) = min(0);
+    min(1) = std::numeric_limits<double>::max();
+    min(2) = std::numeric_limits<double>::max();
 
-    max(0) = -min(0);
-    max(1) = -min(0);
-    max(2) = -min(0);
+    max(0) = -std::numeric_limits<double>::max();
+    max(1) = -std::numeric_limits<double>::max();
+    max(2) = -std::numeric_limits<double>::max();
 
     CT_PointIterator it(pointCloudIndex());
 
