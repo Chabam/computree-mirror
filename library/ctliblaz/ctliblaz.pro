@@ -19,12 +19,14 @@ HEADERS += \
     ctliblaz_global.h \
     exporters/ct_exporter_laz.h \
     exporters/private/ct_lazpiecebypieceprivateexporter.h \
+    readers/ct_laszip_reader.h \
     readers/ct_reader_laz.h \
     readers/headers/ct_lazheader.h
 
 SOURCES += \
     exporters/ct_exporter_laz.cpp \
     exporters/private/ct_lazpiecebypieceprivateexporter.cpp \
+    readers/ct_laszip_reader.cpp \
     readers/ct_reader_laz.cpp \
     readers/headers/ct_lazheader.cpp
 
