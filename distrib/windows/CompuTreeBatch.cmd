@@ -13,4 +13,3 @@ SET PATH=%np%%path%
 
 cd "%~dp0"
 start CompuTreeBatch.exe %*
-exit
