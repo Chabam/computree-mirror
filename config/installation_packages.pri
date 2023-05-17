@@ -156,7 +156,7 @@ win32 {
     CONFIG(debug,   debug|release) : qt_deploy_options += --debug
 
     qt_deploy_cmd1 = $$[QT_INSTALL_BINS]/windeployqt.exe $$DESTDIR $$qt_deploy_options &&
-    qt_deploy_cmd2 = copy "distrib\windows\qt.conf" $$WIN_PATH && copy "distrib\windows\CompuTreeGui.cmd" $$WIN_PATH &&
+    qt_deploy_cmd2 = copy "distrib\windows\qt.conf" $$WIN_PATH && copy "distrib\windows\CompuTreeGui.cmd" $$WIN_PATH && copy "distrib\windows\CompuTreeBatch.cmd" $$WIN_PATH &&
     qt_deploy_cmd3 = move $$WIN_PATH\libraries\Qt\opengl32sw.dll $$WIN_PATH\opengl32.dll &&
     qt_deploy_cmd4 = rmdir /s /q $$WIN_PATH\languages\ && mkdir $$WIN_PATH\languages\ && call lrelease.bat && cd .. &&
     qt_deploy_cmd5 = forfiles /s /m *_*.qm /c \"cmd /c copy @path $$WIN_PATH\languages\" && cd $$PWDC &&
