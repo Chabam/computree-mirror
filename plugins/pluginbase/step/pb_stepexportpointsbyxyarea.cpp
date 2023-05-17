@@ -146,6 +146,7 @@ void PB_StepExportPointsByXYArea::compute()
         qDeleteAll(_areas);
         _areas.clear();
 
+
         // for each area : compute a special filepath, create an exporter, set it the filepath
         // and create the file for piece by piece export
         for(const CT_AbstractAreaShape2D* area : m_hInArea.iterateInputs(m_hInAreaResult))
@@ -166,9 +167,15 @@ void PB_StepExportPointsByXYArea::compute()
                 const CT_AbstractItemAttribute* areaName = area->itemAttribute(m_hInAreaAttribute);
 
                 if (areaName != nullptr)
+                {
                     name = areaName->toString(area, nullptr);
-                else
+                } else
+                {
                     name = area->displayableName();
+                }
+
+                QFileInfo info(name);
+                name = info.baseName();
             }
 
             path.append(name);
@@ -187,7 +194,7 @@ void PB_StepExportPointsByXYArea::compute()
                     return area->contains(point(0), point(1));
                 });
             }
-        }
+        }        
     }
 
     const int nAreas = _areas.size();
@@ -206,7 +213,9 @@ void PB_StepExportPointsByXYArea::compute()
     }
 
     if(!m_exporter->exportOnePieceOfDataToFiles(exporters))
+    {
         PS_LOG->addMessage(LogInterface::error, LogInterface::step, tr("Erreur lors de l'exportation"));
+    }
 
     disconnect(con1);
     disconnect(con2);

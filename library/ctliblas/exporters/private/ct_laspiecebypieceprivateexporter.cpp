@@ -279,7 +279,7 @@ bool CT_LASPieceByPiecePrivateExporter::internalFinalizeFile()
     {
         QStringList filesPath;
 
-        for(const HeaderBackup* b : mHeaders)
+        for(const HeaderBackup* b : qAsConst(mHeaders))
         {
             for(int i=0; i<b->nFiles; ++i)
             {
