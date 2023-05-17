@@ -70,6 +70,17 @@ DocumentInterface* DM_GraphicsView::document() const
     return _document;
 }
 
+void DM_GraphicsView::setOptions(const GraphicsViewOptionsInterface *options)
+{
+    const DM_GraphicsViewOptions *optionsDM = dynamic_cast<const DM_GraphicsViewOptions*>(options);
+    if (optionsDM != nullptr)
+    {
+        setOptions(*optionsDM);
+    } else {
+        qDebug() << "DM_GraphicsView::setOptions - Le dynamic_cast a échoué.";
+    }
+}
+
 void DM_GraphicsView::setOptions(const DM_GraphicsViewOptions &newOptions)
 {
     _options->updateFromOtherOptions(newOptions);

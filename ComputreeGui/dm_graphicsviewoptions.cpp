@@ -147,6 +147,11 @@ void DM_GraphicsViewOptions::setCameraType(CameraInterface::CameraType type)
     _cameraType = type;
 }
 
+void DM_GraphicsViewOptions::setCameraType(QString type)
+{
+    _cameraType = (type == "ORTHOGRAPHIC")? CameraInterface::ORTHOGRAPHIC : CameraInterface::PERSPECTIVE;
+}
+
 void DM_GraphicsViewOptions::setNormalColor(const QColor &color)
 {
     m_normalColor = color;

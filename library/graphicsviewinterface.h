@@ -427,12 +427,22 @@ public:
     virtual QColor getBackgroundColor() const = 0;
     virtual float getPointSize() const = 0;
     virtual bool drawAxis() const = 0;
+    virtual bool drawGrid() const = 0;
     virtual bool useColor() const = 0;
     virtual bool useTransparency() const = 0;
+    virtual bool mustUseLight() const = 0;
+    virtual QString getCameraTypeAsString() const = 0;
     virtual int getFastDrawTime() const = 0;
 
+    virtual void setSelectedColor(QColor &color) { Q_UNUSED(color) }
     virtual void setBackgroudColor(QColor &color) { Q_UNUSED(color) }
     virtual void setPointSize(float size) { Q_UNUSED(size) }
+    virtual void setDrawAxis(bool draw) { Q_UNUSED(draw) }
+    virtual void setDrawGrid(bool draw) { Q_UNUSED(draw) }
+    virtual void setUseColor(bool enable) { Q_UNUSED(enable) }
+    virtual void setUseTransparency(bool use) { Q_UNUSED(use) }
+    virtual void setUseLight(bool use) { Q_UNUSED(use) }
+    virtual void setCameraType(QString type) { Q_UNUSED(type) }
 
 };
 
@@ -529,6 +539,11 @@ public:
      * @brief Return the options of the graphics view
      */
     virtual GraphicsViewOptionsInterface& getOptions() = 0;
+
+    /**
+     * @brief Set the options of the graphics view
+     */
+    virtual void setOptions(const GraphicsViewOptionsInterface* options) = 0;
 
     /**
      * @brief Return the color cloud for the type passed in parameter. Can be nullptr if it was not created.

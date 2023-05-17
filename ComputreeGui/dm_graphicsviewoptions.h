@@ -73,13 +73,14 @@ public:
     inline QColor getBackgroundColor() const  override { return _backgroundColor; }
     inline float getPointSize() const override { return _pointSize; }
     inline bool drawAxis() const override { return _drawAxis; }
-    inline bool drawGrid() const { return m_drawGrid; }
+    inline bool drawGrid() const override{ return m_drawGrid; }
     inline bool useColor() const override { return _useColor; }
     inline bool useTransparency() const override { return _useTransparency; }
-    inline bool mustUseLight() const { return _useLight; }
+    inline bool mustUseLight() const override{ return _useLight; }
     inline DM_GraphicsViewOptions::CameraInfoDisplayed getCameraInformationDisplayed() const { return _cameraInfoDisplayed; }
     inline DM_GraphicsViewOptions::CameraInfoPosition getCameraInformationPosition() const { return _cameraInfoPosition; }
     inline CameraInterface::CameraType getCameraType() const { return _cameraType; }
+    inline QString getCameraTypeAsString() const override {return (_cameraType == CameraInterface::ORTHOGRAPHIC)? "ORTHOGRAPHIC" : "PERSPECTIVE";}
     inline QColor normalColor() const { return m_normalColor; }
     inline float normalLength() const { return m_normalLength; }
     inline bool mustShowNormals() const { return m_mustShowNormals; }
@@ -88,17 +89,18 @@ public:
     inline bool mustReduceNbrPointsInNormalDraw() const { return m_reducePointNbrInNormalDraw; }
     inline int getMaxNbrPointsInFastDraw() const { return m_maxPointInFastDraw; }
 
-    void setSelectedColor(QColor &color);
+    void setSelectedColor(QColor &color) override;
     void setBackgroudColor(QColor &color) override;
     void setPointSize(float size) override;
-    void setDrawAxis(bool draw);
-    void setDrawGrid(bool draw);
-    void setUseColor(bool enable);
-    void setUseTransparency(bool use);
-    void setUseLight(bool use);
+    void setDrawAxis(bool draw) override;
+    void setDrawGrid(bool draw) override;
+    void setUseColor(bool enable) override;
+    void setUseTransparency(bool use) override;
+    void setUseLight(bool use) override;
     void setCameraInformationDisplayed(DM_GraphicsViewOptions::CameraInfoDisplayed info);
     void setCameraInformationPosition(DM_GraphicsViewOptions::CameraInfoPosition pos);
     void setCameraType(CameraInterface::CameraType type);
+    void setCameraType(QString type) override;
     void setNormalColor(const QColor &color);
     void setNormalLength(float l);
     void setMustShowNormals(bool enabled);

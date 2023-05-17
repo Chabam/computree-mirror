@@ -50,10 +50,13 @@ public:
     /**
      * @brief Returns the document that contains this graphics view
      */
-    DocumentInterface* document() const;
+    DocumentInterface* document() const override;
+
+    virtual void setOptions(const GraphicsViewOptionsInterface *options) override;
 
     virtual void setOptions(const DM_GraphicsViewOptions &newOptions);
-    virtual GraphicsViewOptionsInterface& getOptions();
+
+    virtual GraphicsViewOptionsInterface& getOptions() override;
 
     virtual const DM_GraphicsViewOptions& constGetOptionsInternal() const;
 
@@ -77,7 +80,7 @@ public:
     virtual void setVisible(const CT_AbstractItemDrawable *item, bool visible) = 0;
     virtual bool isVisible(const CT_AbstractItemDrawable *item) const = 0;
 
-    QColor intermediateColorFromSelectedGradient(double key);
+    QColor intermediateColorFromSelectedGradient(double key) override;
 
 
 protected:
