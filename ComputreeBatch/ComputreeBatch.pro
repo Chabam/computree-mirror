@@ -1,18 +1,16 @@
-#include(../shared.pri)
-#include($${PLUGIN_SHARED_DIR}/include.pri)
-
-contains ( QT_VERSION, "^5.*" ) {
-    QT *= widgets
-}
 
 CT_PREFIX = ..
 CT_PREFIX_INSTALL = ../..
-CT_LIB_PREFIX = ../library
+CT_PREFIX_LIB = ../library
+CT_LIB_PREFIX = ..
 
-COMPUTREE = ctlibplugin
+COMPUTREE = ctlibcore
 
-include($${CT_PREFIX}/destdir.pri)
-include($${CT_PREFIX}/include_ct_library.pri)
+MUST_USE_EIGEN = 1
+
+include(../config/destdir.pri)
+include(../config/library_include_ct.pri)
+include(../config/include_dependencies.pri)
 
 ##### TODO : remove it to use eigen from pcl or from 3rdparty ######
 
@@ -20,15 +18,13 @@ INCLUDEPATH += $$CT_LIB_PREFIX/3rdparty/eigen
 TR_EXCLUDE  += $$CT_LIB_PREFIX/3rdparty/eigen/*
 
 INCLUDEPATH += .
-INCLUDEPATH += $$CT_LIB_PREFIX
-INCLUDEPATH += $${CT_PREFIX}/ComputreeCore
-INCLUDEPATH += $${CT_PREFIX}/ComputreeCore/src
+INCLUDEPATH += $$CT_PREFIX_LIB
 
 CONFIG -= plugin
 
 TARGET = CompuTreeBatch
 TEMPLATE = app
-QT += network
+QT += widgets network
 CONFIG += console
 
 # pour que l'application recherche les librairies dans son propre dossier
@@ -60,55 +56,19 @@ RESOURCES += \
     systray.qrc
 
 macx {
-    LIBS += $${DESTDIR}/libCompuTreeCore*.dylib
+    # LIBS += $${DESTDIR}/libCompuTreeCore*.dylib
 } else {
     unix{
-        LIBS += $${DESTDIR}/libCompuTreeCore*.so
+        # LIBS += $${DESTDIR}/libCompuTreeCore*.so
     }
 
     win32 {
         win32-g++ {
-        LIBS += $${DESTDIR}/libCompuTreeCore*.a
+        # LIBS += $${DESTDIR}/libCompuTreeCore*.a
         }
 
         win32-msvc* {
-        LIBS += $${DESTDIR}/CompuTreeCore*.lib
+        # LIBS += $${DESTDIR}/CompuTreeCore*.lib
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
