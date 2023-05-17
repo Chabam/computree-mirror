@@ -21,14 +21,18 @@ HEADERS += \
     exporters/private/ct_lazpiecebypieceprivateexporter.h \
     readers/ct_laszip_reader.h \
     readers/ct_reader_laz.h \
-    readers/headers/ct_lazheader.h
+    readers/headers/ct_lazheader.h \
+    mergers/ct_sameheadermerger_laz.h \
+    mergers/ct_sameheaderformatmerger_laz.h
 
 SOURCES += \
     exporters/ct_exporter_laz.cpp \
     exporters/private/ct_lazpiecebypieceprivateexporter.cpp \
     readers/ct_laszip_reader.cpp \
     readers/ct_reader_laz.cpp \
-    readers/headers/ct_lazheader.cpp
+    readers/headers/ct_lazheader.cpp \
+    mergers/ct_sameheadermerger_laz.cpp \
+    mergers/ct_sameheaderformatmerger_laz.cpp
 
 
 TRANSLATIONS += languages/ctliblaz_fr.ts \
