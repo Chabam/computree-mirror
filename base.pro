@@ -2,6 +2,7 @@
 include(config/check_dependencies_base.pri)
 
 TEMPLATE = subdirs
-SUBDIRS += AMKgl library ComputreeGui
+SUBDIRS += AMKgl library ComputreeGui ComputreeBatch
 
 ComputreeGui.depends = AMKgl library
+ComputreeBatch.depends = library
