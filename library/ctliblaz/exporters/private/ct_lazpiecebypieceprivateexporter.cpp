@@ -4,7 +4,8 @@
 #include <QDir>
 #include <QDate>
 
-#include "ctliblas/mergers/ct_sameheaderformatmerger_las.h"
+#include "ctliblaz/mergers/ct_sameheaderformatmerger_laz.h"
+
 #include "ctliblas/tools/las/abstract/ct_abstractlaspointformat.h"
 
 #include "ct_log/ct_logmanager.h"
@@ -457,7 +458,7 @@ bool CT_LAZPieceByPiecePrivateExporter::internalFinalizeFile()
             }
         }
 
-        CT_SameHeaderFormatMerger_LAS merger;
+        CT_SameHeaderFormatMerger_LAZ merger;
         merger.setInputFilesPath(filesPath);
         merger.setOutputFilePath(finalFilePath);
         merger.process();
