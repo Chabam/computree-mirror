@@ -204,6 +204,28 @@ double CT_Polygon2DData::getPerimeter() const
     return perimeter;
 }
 
+double CT_Polygon2DData::getMaxLengthBetweenTwoVertices() const
+{
+    double maxDist = 0;
+    for (int i = 0 ; i < _vertices.size() ; i++)
+    {
+        const Eigen::Vector2d &v1 = _vertices.at(i);
+
+        for (int j = i+1 ; j < _vertices.size() ; j++)
+        {
+            const Eigen::Vector2d &v2 = _vertices.at(j);
+
+            double dist = sqrt(pow(v1(0) - v2(0),2) + pow(v1(1) - v2(1),2));
+            if (dist > maxDist)
+            {
+                maxDist = dist;
+            }
+        }
+    }
+
+    return maxDist;
+}
+
 double CT_Polygon2DData::getArea() const
 {
     return const_cast<CT_Polygon2DData*>(this)->getAreaIfNotSelfIntersecting();

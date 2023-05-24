@@ -54,6 +54,7 @@ public:
     double getAreaIfNotSelfIntersecting();
     double getSignedArea();
     double getPerimeter() const;
+    double getMaxLengthBetweenTwoVertices() const;
     inline int getVerticesNumber() const {return _vertices.size();}
 
     virtual double getArea() const override;
