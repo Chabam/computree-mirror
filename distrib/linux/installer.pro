@@ -49,6 +49,7 @@ PREPARE_DATA += cd $$PATH_PKG ;
 PREPARE_DATA += cp $$PATH_DST/computree/meta/*.sh    $$PATH_DST/computree.A/data/         ;
 PREPARE_DATA += cp $$PATH_DST/computree/meta/qt.conf $$PATH_DST/computree.A/data/bin/     ;
 PREPARE_DATA += cp ../../CompuTreeGui         $$PATH_DST/computree.A/data/bin/            ;
+PREPARE_DATA += cp ../../CompuTreeBatch       $$PATH_DST/computree.A/data/bin/            ;
 PREPARE_DATA += cp ../CompuTreeGui.png        $$PATH_DST/computree.A/data/                ;
 PREPARE_DATA += cp $$PATH_RCS/charter/*.pdf   $$PATH_DST/computree.A/data/                ;
 PREPARE_DATA += cp languages/*                $$PATH_DST/computree.A/data/languages/      ;

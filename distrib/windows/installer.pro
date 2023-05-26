@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_WINDOWS_6.0.387
+INSTALLER = Computree_Installer_WINDOWS_6.0.388
 # version : Major.Minor.commit
 
 # Usefull definitions of paths
@@ -33,6 +33,7 @@ CLEAN_DATA += (if exist plugin.O\data\    rd /s /q plugin.O\data\   )
 
 PREPARE_DATA  = && cd $$PATH_SRC &&
 PREPARE_DATA += xcopy /s /i /y CompuTreeGui.*              $$PATH_DST\computree.A\data\                        &&
+PREPARE_DATA += xcopy /s /i /y CompuTreeBatch.*            $$PATH_DST\computree.A\data\                        &&
 PREPARE_DATA += xcopy /s /i /y qt.conf                     $$PATH_DST\computree.A\data\                        &&
 PREPARE_DATA += xcopy /s /i /y $$PATH_RCS\charter\*eng.pdf $$PATH_DST\computree.A\data\                        &&
 PREPARE_DATA += xcopy /s /i /y $$PATH_RCS\charter\*fr.pdf  $$PATH_DST\computree.A\data\                        &&
