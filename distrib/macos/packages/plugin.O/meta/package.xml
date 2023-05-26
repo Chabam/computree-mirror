@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Plugin AMS3D</DisplayName>
+    <Description>Plugin from UMR AMAP.</Description>
+    <DisplayName xml:lang="fr_fr">Plugin AMS3D</DisplayName>
+    <Description xml:lang="fr">Plugin de l&apos;UMR AMAP.</Description>
+    <Version>6.0.0</Version>
+    <ReleaseDate>2023-05-30</ReleaseDate>
+    <Name>plugin.O</Name>
+	<SortingPriority>3</SortingPriority>
+	<Checkable>true</Checkable>
+</Package>

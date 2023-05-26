@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_WINDOWS_6.0.339
+INSTALLER = Computree_Installer_WINDOWS_6.0.387
 # version : Major.Minor.commit
 
 # Usefull definitions of paths
@@ -27,7 +27,9 @@ CLEAN_DATA += (if exist plugin.D\data\    rd /s /q plugin.D\data\   ) &&
 CLEAN_DATA += (if exist plugin.E\data\    rd /s /q plugin.E\data\   ) &&
 CLEAN_DATA += (if exist plugin.G\data\    rd /s /q plugin.G\data\   ) &&
 CLEAN_DATA += (if exist plugin.L\data\    rd /s /q plugin.L\data\   ) &&
-CLEAN_DATA += (if exist plugin.M\data\    rd /s /q plugin.M\data\   )
+CLEAN_DATA += (if exist plugin.M\data\    rd /s /q plugin.M\data\   ) &&
+CLEAN_DATA += (if exist plugin.N\data\    rd /s /q plugin.N\data\   ) &&
+CLEAN_DATA += (if exist plugin.O\data\    rd /s /q plugin.O\data\   )
 
 PREPARE_DATA  = && cd $$PATH_SRC &&
 PREPARE_DATA += xcopy /s /i /y CompuTreeGui.*              $$PATH_DST\computree.A\data\                        &&
@@ -60,6 +62,8 @@ PREPARE_DATA += xcopy /s /i /y plugins\plug_segma.dll      $$PATH_DST\plugin.E\d
 PREPARE_DATA += xcopy /s /i /y plugins\plug_mk.dll         $$PATH_DST\plugin.G\data\plugins\                   &&
 PREPARE_DATA += xcopy /s /i /y plugins\plug_onfdev.dll     $$PATH_DST\plugin.L\data\plugins\                   &&
 PREPARE_DATA += xcopy /s /i /y plugins\plug_ignlif.dll     $$PATH_DST\plugin.M\data\plugins\                   &&
+PREPARE_DATA += xcopy /s /i /y plugins\plug_lvoxv3.dll     $$PATH_DST\plugin.M\data\plugins\                   &&
+PREPARE_DATA += xcopy /s /i /y plugins\plug_ams3d.dll      $$PATH_DST\plugin.M\data\plugins\                   &&
 
 GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.5/bin/binarycreator.exe -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../$$INSTALLER &&
 GENERATE_BIN ~= s,/,\\,g

@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_MACOS_6.0.369
+INSTALLER = Computree_Installer_MACOS_6.0.387
 # version : Major.Minor.commit
 
 # Usefull definitions of paths
@@ -23,7 +23,9 @@ CLEAN_DATA += rm -rf plugin.D/data/    ;
 CLEAN_DATA += rm -rf plugin.E/data/    ;
 CLEAN_DATA += rm -rf plugin.G/data/    ;
 CLEAN_DATA += rm -rf plugin.L/data/    ;
-CLEAN_DATA += rm -rf plugin.M/data/
+CLEAN_DATA += rm -rf plugin.M/data/    ;
+CLEAN_DATA += rm -rf plugin.N/data/    ;
+CLEAN_DATA += rm -rf plugin.O/data/
 
 PREPARE_DATA  = ; mkdir computree.A/data/ computree.A/data/CompuTreeGui.app/ computree.A/data/$$APP/ computree.A/data/$$APP/Frameworks/ computree.A/data/$$APP/PlugIns/ ;
 PREPARE_DATA += mkdir computree.B/data/ computree.B/data/CompuTreeGui.app/ computree.B/data/$$APP/ computree.B/data/$$APP/Resources/  ;
@@ -39,6 +41,8 @@ PREPARE_DATA += mkdir plugin.E/data/    plugin.E/data/CompuTreeGui.app/    plugi
 PREPARE_DATA += mkdir plugin.G/data/    plugin.G/data/CompuTreeGui.app/    plugin.G/data/$$APP/    plugin.G/data/$$APP/PlugIns/       ;
 PREPARE_DATA += mkdir plugin.L/data/    plugin.L/data/CompuTreeGui.app/    plugin.L/data/$$APP/    plugin.L/data/$$APP/PlugIns/       ;
 PREPARE_DATA += mkdir plugin.M/data/    plugin.M/data/CompuTreeGui.app/    plugin.M/data/$$APP/    plugin.M/data/$$APP/PlugIns/       ;
+PREPARE_DATA += mkdir plugin.N/data/    plugin.N/data/CompuTreeGui.app/    plugin.N/data/$$APP/    plugin.N/data/$$APP/PlugIns/       ;
+PREPARE_DATA += mkdir plugin.O/data/    plugin.O/data/CompuTreeGui.app/    plugin.O/data/$$APP/    plugin.O/data/$$APP/PlugIns/       ;
 PREPARE_DATA += cd $$PATH_SRC ;
 PREPARE_DATA += cp -r MacOS Resources        $$PATH_DST/computree.A/data/$$APP/           ;
 PREPARE_DATA += cp Info.plist PkgInfo        $$PATH_DST/computree.A/data/$$APP/           ;
@@ -59,6 +63,8 @@ PREPARE_DATA += cp PlugIns/libplug_segma.*   $$PATH_DST/plugin.E/data/$$APP/Plug
 PREPARE_DATA += cp PlugIns/libplug_mk.*      $$PATH_DST/plugin.G/data/$$APP/PlugIns/      ;
 PREPARE_DATA += cp PlugIns/libplug_onfdev.*  $$PATH_DST/plugin.L/data/$$APP/PlugIns/      ;
 PREPARE_DATA += cp PlugIns/libplug_ignlif.*  $$PATH_DST/plugin.M/data/$$APP/PlugIns/      ;
+PREPARE_DATA += cp PlugIns/libplug_lvoxv3.*  $$PATH_DST/plugin.N/data/$$APP/PlugIns/      ;
+PREPARE_DATA += cp PlugIns/libplug_ams3d.*   $$PATH_DST/plugin.O/data/$$APP/PlugIns/      ;
 
 GENERATE_BIN  = $$[QT_INSTALL_BINS]/../../../Tools/QtInstallerFramework/4.5/bin/binarycreator -c $$PWD/config/config.xml -r $$PWD/../resources/additional.qrc -p $$PWD/packages $$PATH_SRC/../../$$INSTALLER ;
 
