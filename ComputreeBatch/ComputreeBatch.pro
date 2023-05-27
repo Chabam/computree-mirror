@@ -28,7 +28,9 @@ QT += widgets network
 CONFIG += console
 
 # pour que l'application recherche les librairies dans son propre dossier
-QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
+linux|win32 {
+    QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
+}
 
 DESTDIR = $${EXECUTABLE_DESTDIR}
 
@@ -71,4 +73,11 @@ macx {
         # LIBS += $${DESTDIR}/CompuTreeCore*.lib
         }
     }
+}
+
+macx {
+    QMAKE_CXXFLAGS += -Wno-deprecated-declarations
+    QMAKE_RANLIB += -no_warning_for_no_symbols
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 12.0
+    CONFIG += sdk_no_version_check
 }
