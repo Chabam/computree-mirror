@@ -254,16 +254,16 @@ public:
     template<typename OutHandleType>
     void addSingularItem(const OutHandleType& outItemHandle, CT_AbstractSingularItemDrawable* item) {
         Q_ASSERT(model() != nullptr);
-        if (model() == nullptr) {qDebug() << "CT_StandardItemGroup::addSingularItem" << ", " << "model() == nullptr";}
+        if (this->model() == nullptr) {qDebug() << "CT_StandardItemGroup::addSingularItem" << ", " << "model() == nullptr";}
 
         QMutexLocker locker(m_lockAccessTool.m_mutexAccessItem);
 
         // the handle can have multiple models if it was created with a result copy so we must get the model
         // that his parent match with the model of this group
-        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findAbstractModelWithParent(model());
+        const DEF_CT_AbstractItemDrawableModelOut* outModelToUse = outItemHandle.findAbstractModelWithParent(this->model());
 
         // now we can add the item with the right model
-        addSingularItemWithOutModel(outModelToUse, item);
+        this->addSingularItemWithOutModel(outModelToUse, item);
     }
 
     /**

@@ -137,6 +137,9 @@ bool Batch::handleSignal(int signal)
 
 void Batch::addMessage(const int &severity, const int &type, const QString &s, const QString &filter)
 {
+    Q_UNUSED(severity)
+    Q_UNUSED(type)
+    Q_UNUSED(filter)
     qDebug().noquote() << s;
 }
 

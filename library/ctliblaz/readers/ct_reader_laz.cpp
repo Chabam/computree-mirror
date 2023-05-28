@@ -179,12 +179,10 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
             setToolTip(header->toString());
             bool mustTransformPoint = header->mustTransformPoints();
 
-
             // If filtering function set, do a first scan of the file to count filtered point number
             size_t numberOfFilteredPoints = 0;
             if (filterSet())
             {
-                qint32 x, y, z;
                 double xc = 0;
                 double yc = 0;
                 double zc = 0;
@@ -222,7 +220,6 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
                 // restore first point position for real data reading
                 lasZipReader.seek(0);
             }
-
 
             size_t cloudSize = nPoints - numberOfFilteredPoints;
             CT_NMPCIR pcir = PS_REPOSITORY->createNewPointCloud(cloudSize);
