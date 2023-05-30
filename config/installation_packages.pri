@@ -151,7 +151,7 @@ win32 {
     PWDC = $$PWD
 
     # Deployment using WinDeployQt
-    qt_deploy_options = --force --no-translations --angle --compiler-runtime --plugindir $$LIB/Qt --libdir $$LIB/Qt
+    qt_deploy_options = --xml --concurrent --opengl --force --no-translations --angle --compiler-runtime --plugindir $$LIB/Qt --libdir $$LIB/Qt
     CONFIG(release, debug|release) : qt_deploy_options += --release
     CONFIG(debug,   debug|release) : qt_deploy_options += --debug
 
