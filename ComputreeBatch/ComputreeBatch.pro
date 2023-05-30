@@ -12,11 +12,6 @@ include(../config/destdir.pri)
 include(../config/library_include_ct.pri)
 include(../config/include_dependencies.pri)
 
-##### TODO : remove it to use eigen from pcl or from 3rdparty ######
-
-INCLUDEPATH += $$CT_LIB_PREFIX/3rdparty/eigen
-TR_EXCLUDE  += $$CT_LIB_PREFIX/3rdparty/eigen/*
-
 INCLUDEPATH += .
 INCLUDEPATH += $$CT_PREFIX_LIB
 
@@ -26,11 +21,6 @@ TARGET = CompuTreeBatch
 TEMPLATE = app
 QT += widgets network
 CONFIG += console
-
-# pour que l'application recherche les librairies dans son propre dossier
-linux|win32 {
-    QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
-}
 
 DESTDIR = $${EXECUTABLE_DESTDIR}
 
@@ -73,6 +63,11 @@ macx {
         # LIBS += $${DESTDIR}/CompuTreeCore*.lib
         }
     }
+}
+
+# pour que l'application recherche les librairies dans son propre dossier
+linux {
+    QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
 }
 
 macx {
