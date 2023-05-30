@@ -1,6 +1,6 @@
 TEMPLATE = aux
 
-INSTALLER = Computree_Installer_WINDOWS_6.0.390
+INSTALLER = Computree_Installer_WINDOWS_6.0.392
 # version : Major.Minor.commit
 
 # Usefull definitions of paths
