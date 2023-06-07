@@ -344,10 +344,19 @@ bool CT_AbstractExporter::exportToFile()
             QString path = fileInfo.path() + "/";
 
             if(!counterTurnName.isEmpty())
-                path.append(counterTurnName + "_");
+            {
+                path.append(counterTurnName);
+            }
 
             if(!fileInfo.isDir())
+            {
+                if (!counterTurnName.isEmpty())
+                {
+                    path.append("_");
+
+                }
                 path.append(fileInfo.baseName());
+            }
 
             path.append(mFileNamePrefix);
 
