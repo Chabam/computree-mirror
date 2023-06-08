@@ -55,7 +55,7 @@ void DM_ContextMenuColouristAdder::initContextMenu(QMenu *contextMenu)
     if(m_docManager == nullptr)
         return;
 
-    QMenu *menu = contextMenu->addMenu(tr("Couleur uni"));
+    QMenu *menu = contextMenu->addMenu(tr("Couleur unie"));
 
     int nDocs = m_docManager->nDocuments();
 
