@@ -10,7 +10,7 @@
 
  This file is part of PluginShared library 2.0.
 
- PluginShared is free library: you can redistribute it and/or modify
+ PluginShared is free librardir(1) = you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
@@ -140,6 +140,74 @@ public:
 
         return length * sqrt(den);
     }
+
+    // Constructs a plane from a collection of points
+    // so that the summed squared distance to all points is minimzized
+    inline bool fitPlaneFromPoints(const QList<Eigen::Vector3d> points, Eigen::Vector3d &direction, Eigen::Vector3d &centroid)
+    {
+        if (points.size() < 3)
+        {
+            return false; // At least three points required
+        }
+
+        centroid = Eigen::Vector3d(0,0,0);
+
+        for (const Eigen::Vector3d &p : points)
+        {
+            centroid += p / points.size();
+        }
+
+        // Calc full 3x3 covariance matrix, excluding symmetries:
+        double xx = 0.0;
+        double xy = 0.0;
+        double xz = 0.0;
+        double yy = 0.0;
+        double yz = 0.0;
+        double zz = 0.0;
+
+        for (const Eigen::Vector3d &p : points)
+        {
+            Eigen::Vector3d r = p - centroid;
+            xx += r(0) * r(0);
+            xy += r(0) * r(1);
+            xz += r(0) * r(2);
+            yy += r(1) * r(1);
+            yz += r(1) * r(2);
+            zz += r(2) * r(2);
+        }
+
+        double det_x = yy*zz - yz*yz;
+        double det_y = xx*zz - xz*xz;
+        double det_z = xx*yy - xy*xy;
+
+        double det_max = std::max(std::max(det_x, det_y), det_z);
+
+        if (det_max <= 0.0)
+        {
+            return false; // The points don't span a plane
+        }
+
+        // Pick path with best conditioning:
+        if (det_max == det_x)
+        {
+            direction(0) = det_x;
+            direction(1) = xz*yz - xy*zz;
+            direction(2) = xy*yz - xz*yy;
+        } else if (det_max == det_y)
+        {
+            direction(0) = xz*yz - xy*zz;
+            direction(1) = det_y;
+            direction(2) = xy*xz - yz*xx;
+        } else
+        {
+            direction(0) = xy*yz - xz*yy;
+            direction(1) = xy*xz - yz*xx;
+            direction(2) = det_z;
+        }
+
+        return true;
+    }
+
 
     // *********************************************************** //
     // Rotation
