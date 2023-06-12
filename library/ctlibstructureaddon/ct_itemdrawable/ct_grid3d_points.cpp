@@ -146,122 +146,6 @@ const QList<size_t> *CT_Grid3D_Points::getConstPointIndexList(size_t cellIndex) 
     return &_emptyList;
 }
 
-QList<size_t> CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, int n) const
-{
-    QList<size_t> indices;
-
-    if (n == 0)
-    {
-        indices.append(originIndex);
-    } else {
-
-        int lin = 0, col = 0, levz = 0; // Default value to avoid uninitialized warning
-        this->indexToGrid(originIndex, col, lin, levz);
-
-        // Upper plane
-        int neighbLevz = levz + n;
-        if (neighbLevz < this->_dimz)
-        {
-            for (int xx = col - n ; xx <= col + n ; xx++)
-            {
-                if (xx < this->_dimx)
-                {
-                    for (int yy = lin - n ; yy <= lin + n ; yy++)
-                    {
-                        size_t neighbIndex;
-
-                        if (this->index(xx, yy, neighbLevz, neighbIndex))
-                        {
-                            indices.append(neighbIndex);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Lower plane
-        neighbLevz = levz - n;
-        if (neighbLevz < this->_dimz)
-        {
-            for (int xx = col - n ; xx <= col + n ; xx++)
-            {
-                if (xx < this->_dimx)
-                {
-                    for (int yy = lin - n ; yy <= lin + n ; yy++)
-                    {
-                        size_t neighbIndex;
-                        if (this->index(xx, yy, neighbLevz, neighbIndex))
-                        {
-                            indices.append(neighbIndex);
-                        }
-                    }
-                }
-            }
-        }
-
-        // other levels
-        for (int zz = levz - n + 1 ; zz <= levz + n - 1 ; zz++)
-        {
-            if (zz < this->_dimz)
-            {
-                int yval = lin - n;
-                if (yval < this->_dimy)
-                {
-                    for (int xx = col - n ; xx <= col + n ; xx++)
-                    {
-                        size_t neighbIndex;
-                        if (this->index(xx, yval, zz, neighbIndex))
-                        {
-                            indices.append(neighbIndex);
-                        }
-                    }
-                }
-
-                yval = lin + n;
-                if (yval < this->_dimy)
-                {
-                    for (int xx = col - n ; xx <= col + n ; xx++)
-                    {
-                        size_t neighbIndex;
-                        if (this->index(xx, yval, zz, neighbIndex))
-                        {
-                            indices.append(neighbIndex);
-                        }
-                    }
-                }
-
-                int xval = col - n;
-                if (xval < this->_dimx)
-                {
-                    for (int yy = lin - n + 1; yy <= lin + n - 1; yy++)
-                    {
-                        size_t neighbIndex;
-                        if (this->index(xval, yy, zz, neighbIndex))
-                        {
-                            indices.append(neighbIndex);
-                        }
-                    }
-                }
-
-                xval = col + n;
-                if (xval < this->_dimx)
-                {
-                    for (int yy = lin - n + 1; yy <= lin + n - 1; yy++)
-                    {
-                        size_t neighbIndex;
-                        if (this->index(xval, yy, zz, neighbIndex))
-                        {
-                            indices.append(neighbIndex);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return indices;
-}
-
 int CT_Grid3D_Points::getPointsInCellsIntersectingSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const
 {
     // point number
@@ -338,6 +222,7 @@ int CT_Grid3D_Points::getPointIndicesIncludingKNearestNeighbours(Eigen::Vector3d
 
     return n;
 }
+
 
 void CT_Grid3D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, int n, QList<size_t> &indices) const
 {

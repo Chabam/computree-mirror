@@ -13,7 +13,9 @@ TARGET = ctlibstructureaddon
 DEFINES += CTLIBSTRUCTUREADDON_LIBRARY
 
 HEADERS += \
+    ct_itemdrawable/ct_image2d_points.h \
     ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_pointdrawmanager.h \
+    ct_itemdrawable/tools/drawmanager/ct_standardimage2d_pointdrawmanager.h \
     ct_itemdrawable/tools/gridtools/ct_abstractgrid3dbeamvisitor.h \
     ct_itemdrawable/tools/gridtools/ct_grid3dbeamvisitor_indexlist.h \
     ct_itemdrawable/tools/gridtools/ct_grid3dwootraversalalgorithm.h \
@@ -193,6 +195,7 @@ SOURCES += \
     ct_itemdrawable/abstract/ct_abstractpointsattributescontainer.cpp \
     ct_itemdrawable/abstract/ct_abstractgrid3d.cpp \
     ct_itemdrawable/abstract/ct_abstractgrid4d.cpp \
+    ct_itemdrawable/ct_image2d_points.cpp \
     ct_itemdrawable/ct_scene.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithoutpointclouddrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardabstractitemdrawablewithpointclouddrawmanager.cpp \
@@ -210,6 +213,7 @@ SOURCES += \
     ct_itemdrawable/ct_pointsattributescolor.cpp \
     ct_itemdrawable/ct_pointsattributesnormal.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardgrid3d_pointdrawmanager.cpp \
+    ct_itemdrawable/tools/drawmanager/ct_standardimage2d_pointdrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardscannerdrawmanager.cpp \
     ct_itemdrawable/ct_scanner.cpp \
     ct_itemdrawable/ct_beam.cpp \

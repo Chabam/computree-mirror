@@ -143,7 +143,7 @@ public:
 
     // Constructs a plane from a collection of points
     // so that the summed squared distance to all points is minimzized
-    inline bool fitPlaneFromPoints(const QList<Eigen::Vector3d> points, Eigen::Vector3d &direction, Eigen::Vector3d &centroid)
+    inline static bool fitPlaneFromPoints(const QList<Eigen::Vector3d>& points, Eigen::Vector3d &direction, Eigen::Vector3d &centroid)
     {
         if (points.size() < 3)
         {
@@ -204,6 +204,8 @@ public:
             direction(1) = xy*xz - yz*xx;
             direction(2) = det_z;
         }
+
+        direction.normalize();
 
         return true;
     }
