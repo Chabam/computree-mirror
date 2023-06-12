@@ -89,9 +89,10 @@ public:
 
     void getCellIndicesAtNeighbourhoodN(size_t originIndex, int n, QList<size_t> &indices) const;
 
-    int getPointsInCellsIntersectingCircle(size_t gridIndex, double radius, QList<size_t> *indexList) const;
+    int getPointsInCellsIntersectingCircle(size_t gridIndex, double radius, QList<size_t> &indexList) const;
 
-    size_t getPointsInCellsIntersectingCircle(const Eigen::Vector3d &center, double radius, QList<size_t> *indexList) const;
+    size_t getPointsInCellsIntersectingCircle(const Eigen::Vector3d &center, double radius, QList<size_t> &indexList) const;
+    size_t getPointsInCircle(const Eigen::Vector3d &center, double radius, QList<size_t> &indexList) const;
 
     int getPointIndicesIncludingKNearestNeighbours(const Eigen::Vector3d &position, int k, double maxDist, QList<size_t> &indexList) const;
 

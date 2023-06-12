@@ -126,6 +126,7 @@ bool CT_Image2D_Points::addPoint(size_t pointGlobalIndex)
             _cells.insert(cellIndex, list);
         }
     } else {
+        qDebug() << "ERROR: CT_Image2D_Points::addPoint";
         return false;
     }
     return true;
@@ -146,6 +147,7 @@ bool CT_Image2D_Points::addPoint(size_t pointLocalIndex, double x, double y)
             _cells.insert(cellIndex, list);
         }
     } else {
+        qDebug() << "ERROR: CT_Image2D_Points::addPoint";
         return false;
     }
     return true;
@@ -179,8 +181,10 @@ const QList<size_t> *CT_Image2D_Points::getConstPointIndexList(size_t cellIndex)
 }
 
 
-int CT_Image2D_Points::getPointsInCellsIntersectingCircle(size_t gridIndex, double radius, QList<size_t> *indexList) const
+int CT_Image2D_Points::getPointsInCellsIntersectingCircle(size_t gridIndex, double radius, QList<size_t> &indexList) const
 {
+    indexList.clear();
+
     // point number
     int n = 0;
     double radius2 = radius*radius;
@@ -213,12 +217,9 @@ int CT_Image2D_Points::getPointsInCellsIntersectingCircle(size_t gridIndex, doub
                             const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
                             n += indices->size();
 
-                            if (indexList != nullptr)
+                            if (indices->size() > 0)
                             {
-                                if (indices->size() > 0)
-                                {
-                                    indexList->append(*indices);
-                                }
+                                indexList.append(*indices);
                             }
                         }
                     }
@@ -242,11 +243,11 @@ int CT_Image2D_Points::getPointIndicesIncludingKNearestNeighbours(const Eigen::V
 
         while (n < k && radius < maxDist)
         {
-            n = this->getPointsInCellsIntersectingCircle(index, radius, nullptr);
+            n = this->getPointsInCellsIntersectingCircle(index, radius, indexList);
             radius += this->resolution();
         }
 
-        n = this->getPointsInCellsIntersectingCircle(index, radius, &indexList);
+        n = this->getPointsInCellsIntersectingCircle(index, radius, indexList);
     }
 
     return n;
@@ -290,8 +291,10 @@ void CT_Image2D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, int n
 }
 
 
-size_t CT_Image2D_Points::getPointsInCellsIntersectingCircle(const Eigen::Vector3d& center, double radius, QList<size_t> *indexList) const
+size_t CT_Image2D_Points::getPointsInCellsIntersectingCircle(const Eigen::Vector3d& center, double radius, QList<size_t> &indexList) const
 {
+    indexList.clear();
+
     // point number
     size_t n = 0;
     size_t cellIndex;
@@ -312,13 +315,57 @@ size_t CT_Image2D_Points::getPointsInCellsIntersectingCircle(const Eigen::Vector
             {
                 const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
 
-                if (indexList != nullptr)
+                indexList.append(*indices);
+                n += size_t(indices->size());
+            }
+        }
+    }
+    return n;
+}
+
+size_t CT_Image2D_Points::getPointsInCircle(const Eigen::Vector3d& center, double radius, QList<size_t> &indexList) const
+{
+    qDebug() << "__________aaa____________";
+    indexList.clear();
+
+    // point number
+    size_t n = 0;
+    size_t cellIndex;
+
+    // Compute bounding box for search
+    int minXcol, maxXcol, minYlin, maxYlin;
+
+    if (!this->xcol(center(0) - radius, minXcol)) {minXcol = 0;}
+    if (!this->xcol(center(0) + radius, maxXcol)) {maxXcol = this->xdim() - 1;}
+    if (!this->lin(center(1) - radius, minYlin)) {minYlin = 0;}
+    if (!this->lin(center(1) + radius, maxYlin)) {maxYlin = this->ydim() - 1;}
+
+    for (int xx = minXcol ; xx <= maxXcol ; xx++)
+    {
+        for (int yy = minYlin ; yy <= maxYlin ; yy++)
+        {
+            if (this->index(xx, yy, cellIndex))
+            {
+                const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
+
+                qDebug() << "indices->size()=" << indices->size();
+                for (int i = 0 ; i < indices->size() ; i++)
                 {
-                    indexList->append(*indices);
-                    n += size_t(indices->size());
+                    const CT_Point& point = _pointAccessor.constPointAt(indices->at(i));
+                    double dist = sqrt(pow(point(0) - center(0), 2) + pow(point(1) - center(1), 2));
+
+
+                    if (dist < radius)
+                    {
+                        qDebug() << "append";
+                        indexList.append(indices->at(i));
+                        n++;
+                    }
                 }
             }
         }
     }
+    qDebug() << "__________bbb___________";
+
     return n;
 }
