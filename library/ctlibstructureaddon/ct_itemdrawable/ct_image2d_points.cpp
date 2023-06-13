@@ -36,6 +36,7 @@ CT_TYPE_IMPL_INIT_MACRO(CT_Image2D_Points)
 
 CT_Image2D_Points::CT_Image2D_Points() : SuperClass()
 {
+    _emptyList = new QList<size_t>();
     setBaseDrawManager(&IMAGE2D_POINT_DRAW_MANAGER);
 }
 
@@ -48,13 +49,32 @@ CT_Image2D_Points::CT_Image2D_Points(const CT_Image2D_Points& other) : SuperClas
         _cells.insert(it.key(), new QList<size_t>(*it.value()));
     }
 
-    _emptyList = other._emptyList;
+    _res = other._res;
+    _dimx = other._dimx;
+    _dimy = other._dimy;
+    _minXCoord = other._minXCoord;
+    _minYCoord = other._minYCoord;
+    _level = other._level;
+
+    setBoundingBox(_minXCoord,
+                         _minYCoord,
+                         0,
+                         _minXCoord + _res * _dimx,
+                         _minYCoord + _res * _dimy,
+                         0);
+
+
+    _emptyList = new QList<size_t>();
+
+    setBaseDrawManager(&IMAGE2D_POINT_DRAW_MANAGER);
 }
 
 CT_Image2D_Points::~CT_Image2D_Points()
 {
     qDeleteAll(_cells.begin(), _cells.end());
     _cells.clear();
+
+    delete _emptyList;
 }
 
 CT_Image2D_Points::CT_Image2D_Points(double xmin,
@@ -67,19 +87,19 @@ CT_Image2D_Points::CT_Image2D_Points(double xmin,
     _res = resolution;
     _dimx = dimx;
     _dimy = dimy;
+    _minXCoord = xmin;
+    _minYCoord = ymin;
+    _level = 0;
 
-    this->setBoundingBox(xmin,
-                         ymin,
+    setBoundingBox(_minXCoord,
+                         _minYCoord,
                          0,
-                         xmin + this->_res * this->_dimx,
-                         ymin + this->_res * this->_dimy,
+                         _minXCoord + _res * _dimx,
+                         _minYCoord + _res * _dimy,
                          0);
 
-    this->_minXCoord = xmin;
-    this->_minYCoord = ymin;
 
-    this->_level = 0;
-
+    _emptyList = new QList<size_t>();
     setBaseDrawManager(&IMAGE2D_POINT_DRAW_MANAGER);
 }
 
@@ -87,8 +107,7 @@ CT_Image2D_Points* CT_Image2D_Points::createGrid3DFromXYCoords(double xmin,
                                                               double ymin,
                                                               double xmax,
                                                               double ymax,
-                                                              double resolution,
-                                                              bool extends)
+                                                              double resolution)
 {
     int dimx = int(std::ceil((xmax - xmin)/resolution));
     int dimy = int(std::ceil((ymax - ymin)/resolution));
@@ -115,16 +134,9 @@ bool CT_Image2D_Points::addPoint(size_t pointGlobalIndex)
     const CT_Point& point = _pointAccessor.constPointAt(pointGlobalIndex);
 
     size_t cellIndex;
-    if (this->indexAtCoords(point(0), point(1), cellIndex))
+    if (indexAtCoords(point(0), point(1), cellIndex))
     {
-        if (_cells.contains(cellIndex))
-        {
-            (_cells[cellIndex])->append(pointGlobalIndex);
-        } else {
-            QList<size_t>* list = new QList<size_t>();
-            list->append(pointGlobalIndex);
-            _cells.insert(cellIndex, list);
-        }
+        if (!addPointAtCellIndex(cellIndex, pointGlobalIndex)) {return false;}
     } else {
         qDebug() << "ERROR: CT_Image2D_Points::addPoint";
         return false;
@@ -136,16 +148,9 @@ bool CT_Image2D_Points::addPoint(size_t pointGlobalIndex)
 bool CT_Image2D_Points::addPoint(size_t pointLocalIndex, double x, double y)
 {
     size_t cellIndex;
-    if (this->indexAtCoords(x, y, cellIndex))
+    if (indexAtCoords(x, y, cellIndex))
     {
-        if (_cells.contains(cellIndex))
-        {
-            (_cells[cellIndex])->append(pointLocalIndex);
-        } else {
-            QList<size_t>* list = new QList<size_t>();
-            list->append(pointLocalIndex);
-            _cells.insert(cellIndex, list);
-        }
+        if (!addPointAtCellIndex(cellIndex, pointLocalIndex)) {return false;}
     } else {
         qDebug() << "ERROR: CT_Image2D_Points::addPoint";
         return false;
@@ -154,17 +159,18 @@ bool CT_Image2D_Points::addPoint(size_t pointLocalIndex, double x, double y)
 }
 
 
-bool CT_Image2D_Points::addPointAtIndex(size_t cellIndex, size_t pointLocalIndex)
+bool CT_Image2D_Points::addPointAtCellIndex(size_t cellIndex, size_t pointLocalIndex)
 {
-    if (cellIndex >= this->nCells()) {return false;}
+    if (cellIndex >= nCells()) {return false;}
 
-    if (_cells.contains(cellIndex))
+    QList<size_t>* list = _cells[cellIndex];
+    if (list == nullptr)
     {
-        (_cells[cellIndex])->append(pointLocalIndex);
-    } else {
-        QList<size_t>* list = new QList<size_t>();
+        list = new QList<size_t>();
         list->append(pointLocalIndex);
         _cells.insert(cellIndex, list);
+    } else {
+        list->append(pointLocalIndex);
     }
 
     return true;
@@ -173,15 +179,11 @@ bool CT_Image2D_Points::addPointAtIndex(size_t cellIndex, size_t pointLocalIndex
 
 const QList<size_t> *CT_Image2D_Points::getConstPointIndexList(size_t cellIndex) const
 {
-    if (_cells.contains(cellIndex))
-    {
-        return _cells.value(cellIndex);
-    }
-    return &_emptyList;
+    return _cells.value(cellIndex, _emptyList);
 }
 
 
-int CT_Image2D_Points::getPointsInCellsIntersectingCircle(size_t gridIndex, double radius, QList<size_t> &indexList) const
+int CT_Image2D_Points::getPointsInCellsIntersectingCircle(size_t cellIndex, double radius, QList<size_t> &indexList) const
 {
     indexList.clear();
 
@@ -192,29 +194,36 @@ int CT_Image2D_Points::getPointsInCellsIntersectingCircle(size_t gridIndex, doub
     // center of reference cell (center of the circle)
     Eigen::Vector3d refCenter;
     Eigen::Vector3d currentCenter;
-    size_t cellIndex;
-    if (this->getCellCenterCoordinates(gridIndex, refCenter))
+
+    if (getCellCenterCoordinates(cellIndex, refCenter))
     {
         // Compute bounding box for search
+        double minX = refCenter(0) - radius;
+        double maxX = refCenter(0) + radius;
+        double minY = refCenter(1) - radius;
+        double maxY = refCenter(1) + radius;
+
         int minXcol, maxXcol, minYlin, maxYlin;
-        if (!this->xcol(refCenter(0) - radius, minXcol)) {minXcol = 0;}
-        if (!this->xcol(refCenter(0) + radius, maxXcol)) {maxXcol = this->xdim() - 1;}
-        if (!this->lin(refCenter(1) - radius, minYlin)) {minYlin = 0;}
-        if (!this->lin(refCenter(1) + radius, maxYlin)) {maxYlin = this->ydim() - 1;}
+
+        if (!xcol(minX, minXcol)) {minXcol = 0;}
+        if (!xcol(maxX, maxXcol)) {maxXcol = xdim() - 1;}
+        if (!lin(minY, maxYlin)) {maxYlin = ydim() - 1;}
+        if (!lin(maxY, minYlin)) {minYlin = 0;}
 
         for (int xx = minXcol ; xx <= maxXcol ; xx++)
         {
             for (int yy = minYlin ; yy <= maxYlin ; yy++)
             {
-                if (this->index(xx, yy, cellIndex))
+                size_t currentCellIndex;
+                if (index(xx, yy, currentCellIndex))
                 {
-                    if (this->getCellCenterCoordinates(cellIndex, currentCenter))
+                    if (getCellCenterCoordinates(currentCellIndex, currentCenter))
                     {
-                        double dist2 = pow(currentCenter(0) - refCenter(0), 2) + pow(currentCenter(1) - refCenter(1), 2) + pow(currentCenter(2) - refCenter(2), 2);
+                        double dist2 = pow(currentCenter(0) - refCenter(0), 2) + pow(currentCenter(1) - refCenter(1), 2);
 
                         if (dist2 <= radius2)
                         {
-                            const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
+                            const QList<size_t> *indices = getConstPointIndexList(cellIndex);
                             n += indices->size();
 
                             if (indices->size() > 0)
@@ -237,17 +246,17 @@ int CT_Image2D_Points::getPointIndicesIncludingKNearestNeighbours(const Eigen::V
     int n = 0;
 
     size_t index;
-    if (this->indexAtCoords(position(0), position(1), index))
+    if (indexAtCoords(position(0), position(1), index))
     {
-        double radius = this->resolution() / 100.0;
+        double radius = resolution() / 100.0;
 
         while (n < k && radius < maxDist)
         {
-            n = this->getPointsInCellsIntersectingCircle(index, radius, indexList);
-            radius += this->resolution();
+            n = getPointsInCellsIntersectingCircle(index, radius, indexList);
+            radius += resolution();
         }
 
-        n = this->getPointsInCellsIntersectingCircle(index, radius, indexList);
+        n = getPointsInCellsIntersectingCircle(index, radius, indexList);
     }
 
     return n;
@@ -262,7 +271,7 @@ void CT_Image2D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, int n
     } else {
         int lin, col;
 
-        if (this->indexToGrid(originIndex, col, lin))
+        if (indexToGrid(originIndex, col, lin))
         {
             int minlin, mincol;
             int maxlin, maxcol;
@@ -270,15 +279,15 @@ void CT_Image2D_Points::getCellIndicesAtNeighbourhoodN(size_t originIndex, int n
             if (lin  > n) {minlin  = lin - n;}  else {minlin  = 0;}
             if (col  > n) {mincol  = col - n;}  else {mincol  = 0;}
 
-            maxlin  = lin  + n; if (maxlin  >= this->_dimy) {maxlin  = this->_dimy - 1;}
-            maxcol  = col  + n; if (maxcol  >= this->_dimx) {maxcol  = this->_dimx - 1;}
+            maxlin  = lin  + n; if (maxlin  >= _dimy) {maxlin  = _dimy - 1;}
+            maxcol  = col  + n; if (maxcol  >= _dimx) {maxcol  = _dimx - 1;}
 
             for (int yy = minlin ; yy <= maxlin ; yy++)
             {
                 for (int xx = mincol ; xx <= maxcol ; xx++)
                 {
                     size_t neighbIndex;
-                    if (this->index(xx, yy, neighbIndex))
+                    if (index(xx, yy, neighbIndex))
                     {
                         indices.append(neighbIndex);
                     }
@@ -300,20 +309,25 @@ size_t CT_Image2D_Points::getPointsInCellsIntersectingCircle(const Eigen::Vector
     size_t cellIndex;
 
     // Compute bounding box for search
+    double minX = center(0) - radius;
+    double maxX = center(0) + radius;
+    double minY = center(1) - radius;
+    double maxY = center(1) + radius;
+
     int minXcol, maxXcol, minYlin, maxYlin;
 
-    if (!this->xcol(center(0) - radius, minXcol)) {minXcol = 0;}
-    if (!this->xcol(center(0) + radius, maxXcol)) {maxXcol = this->xdim() - 1;}
-    if (!this->lin(center(1) - radius, minYlin)) {minYlin = 0;}
-    if (!this->lin(center(1) + radius, maxYlin)) {maxYlin = this->ydim() - 1;}
+    if (!xcol(minX, minXcol)) {minXcol = 0;}
+    if (!xcol(maxX, maxXcol)) {maxXcol = xdim() - 1;}
+    if (!lin(minY, maxYlin)) {maxYlin = ydim() - 1;}
+    if (!lin(maxY, minYlin)) {minYlin = 0;}
 
     for (int xx = minXcol ; xx <= maxXcol ; xx++)
     {
         for (int yy = minYlin ; yy <= maxYlin ; yy++)
         {
-            if (this->index(xx, yy, cellIndex))
+            if (index(xx, yy, cellIndex))
             {
-                const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
+                const QList<size_t> *indices = getConstPointIndexList(cellIndex);
 
                 indexList.append(*indices);
                 n += size_t(indices->size());
@@ -325,7 +339,6 @@ size_t CT_Image2D_Points::getPointsInCellsIntersectingCircle(const Eigen::Vector
 
 size_t CT_Image2D_Points::getPointsInCircle(const Eigen::Vector3d& center, double radius, QList<size_t> &indexList) const
 {
-    qDebug() << "__________aaa____________";
     indexList.clear();
 
     // point number
@@ -333,22 +346,27 @@ size_t CT_Image2D_Points::getPointsInCircle(const Eigen::Vector3d& center, doubl
     size_t cellIndex;
 
     // Compute bounding box for search
+    double minX = center(0) - radius;
+    double maxX = center(0) + radius;
+    double minY = center(1) - radius;
+    double maxY = center(1) + radius;
+
     int minXcol, maxXcol, minYlin, maxYlin;
 
-    if (!this->xcol(center(0) - radius, minXcol)) {minXcol = 0;}
-    if (!this->xcol(center(0) + radius, maxXcol)) {maxXcol = this->xdim() - 1;}
-    if (!this->lin(center(1) - radius, minYlin)) {minYlin = 0;}
-    if (!this->lin(center(1) + radius, maxYlin)) {maxYlin = this->ydim() - 1;}
+    if (!xcol(minX, minXcol)) {minXcol = 0;}
+    if (!xcol(maxX, maxXcol)) {maxXcol = xdim() - 1;}
+    if (!lin(minY, maxYlin)) {maxYlin = ydim() - 1;}
+    if (!lin(maxY, minYlin)) {minYlin = 0;}
+
 
     for (int xx = minXcol ; xx <= maxXcol ; xx++)
     {
         for (int yy = minYlin ; yy <= maxYlin ; yy++)
         {
-            if (this->index(xx, yy, cellIndex))
+            if (index(xx, yy, cellIndex))
             {
-                const QList<size_t> *indices = this->getConstPointIndexList(cellIndex);
+                const QList<size_t> *indices = getConstPointIndexList(cellIndex);
 
-                qDebug() << "indices->size()=" << indices->size();
                 for (int i = 0 ; i < indices->size() ; i++)
                 {
                     const CT_Point& point = _pointAccessor.constPointAt(indices->at(i));
@@ -357,7 +375,6 @@ size_t CT_Image2D_Points::getPointsInCircle(const Eigen::Vector3d& center, doubl
 
                     if (dist < radius)
                     {
-                        qDebug() << "append";
                         indexList.append(indices->at(i));
                         n++;
                     }
@@ -365,7 +382,6 @@ size_t CT_Image2D_Points::getPointsInCircle(const Eigen::Vector3d& center, doubl
             }
         }
     }
-    qDebug() << "__________bbb___________";
 
     return n;
 }

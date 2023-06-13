@@ -120,7 +120,7 @@ public:
 private:
     QMap<size_t, QList<size_t>* >    _cells;
 
-    QList<size_t>                   _emptyList;
+    QList<size_t>*                  _emptyList;
     CT_PointAccessor                _pointAccessor;
 
     const static CT_StandardGrid3D_PointDrawManager GRID3D_POINT_DRAW_MANAGER;

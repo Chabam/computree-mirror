@@ -77,19 +77,18 @@ public:
                                                           double ymin,
                                                           double xmax,
                                                           double ymax,
-                                                          double resolution,
-                                                          bool extends = true);
+                                                          double resolution);
 
 
     bool addPoint(size_t pointGlobalIndex);
     bool addPoint(size_t pointLocalIndex, double x, double y);
-    bool addPointAtIndex(size_t cellIndex, size_t pointLocalIndex);
+    bool addPointAtCellIndex(size_t cellIndex, size_t pointLocalIndex);
 
     const QList<size_t>* getConstPointIndexList(size_t cellIndex) const;
 
     void getCellIndicesAtNeighbourhoodN(size_t originIndex, int n, QList<size_t> &indices) const;
 
-    int getPointsInCellsIntersectingCircle(size_t gridIndex, double radius, QList<size_t> &indexList) const;
+    int getPointsInCellsIntersectingCircle(size_t cellIndex, double radius, QList<size_t> &indexList) const;
 
     size_t getPointsInCellsIntersectingCircle(const Eigen::Vector3d &center, double radius, QList<size_t> &indexList) const;
     size_t getPointsInCircle(const Eigen::Vector3d &center, double radius, QList<size_t> &indexList) const;
@@ -115,7 +114,7 @@ public:
 private:
     QMap<size_t, QList<size_t>* >    _cells;
 
-    QList<size_t>                   _emptyList;
+    QList<size_t>*                  _emptyList;
     CT_PointAccessor                _pointAccessor;
 
     const static CT_StandardImage2D_PointDrawManager IMAGE2D_POINT_DRAW_MANAGER;

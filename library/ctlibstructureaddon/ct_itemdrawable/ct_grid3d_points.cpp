@@ -35,6 +35,7 @@ CT_TYPE_IMPL_INIT_MACRO(CT_Grid3D_Points)
 
 CT_Grid3D_Points::CT_Grid3D_Points() : SuperClass()
 {
+    _emptyList = new QList<size_t>();
     setBaseDrawManager(&GRID3D_POINT_DRAW_MANAGER);
 }
 
@@ -47,13 +48,15 @@ CT_Grid3D_Points::CT_Grid3D_Points(const CT_Grid3D_Points& other) : SuperClass(o
         _cells.insert(it.key(), new QList<size_t>(*it.value()));
     }
 
-    _emptyList = other._emptyList;
+    _emptyList = new QList<size_t>();
 }
 
 CT_Grid3D_Points::~CT_Grid3D_Points()
 {
     qDeleteAll(_cells.begin(), _cells.end());
     _cells.clear();
+
+    delete _emptyList;
 }
 
 CT_Grid3D_Points::CT_Grid3D_Points(double xmin,
@@ -64,6 +67,7 @@ CT_Grid3D_Points::CT_Grid3D_Points(double xmin,
                                    int dimz,
                                    double resolution) : SuperClass(xmin, ymin, zmin, dimx, dimy, dimz, resolution)
 {
+    _emptyList = new QList<size_t>();
     setBaseDrawManager(&GRID3D_POINT_DRAW_MANAGER);
 }
 
@@ -86,14 +90,8 @@ bool CT_Grid3D_Points::addPoint(size_t pointGlobalIndex)
     size_t cellIndex;
     if (this->indexAtXYZ(point(0), point(1), point(2), cellIndex))
     {
-        if (_cells.contains(cellIndex))
-        {
-            (_cells[cellIndex])->append(pointGlobalIndex);
-        } else {
-            QList<size_t>* list = new QList<size_t>();
-            list->append(pointGlobalIndex);
-            _cells.insert(cellIndex, list);
-        }
+        if (!addPointAtIndex(cellIndex, pointGlobalIndex)) {return false;}
+
     } else {
         return false;
     }
@@ -105,14 +103,7 @@ bool CT_Grid3D_Points::addPoint(size_t pointLocalIndex, double x, double y, doub
     size_t cellIndex;
     if (this->indexAtXYZ(x, y, z, cellIndex))
     {
-        if (_cells.contains(cellIndex))
-        {
-            (_cells[cellIndex])->append(pointLocalIndex);
-        } else {
-            QList<size_t>* list = new QList<size_t>();
-            list->append(pointLocalIndex);
-            _cells.insert(cellIndex, list);
-        }
+        if (!addPointAtIndex(cellIndex, pointLocalIndex)) {return false;}
     } else {
         return false;
     }
@@ -123,13 +114,14 @@ bool CT_Grid3D_Points::addPointAtIndex(size_t cellIndex, size_t pointLocalIndex)
 {
     if (cellIndex >= this->nCells()) {return false;}
 
-    if (_cells.contains(cellIndex))
+    QList<size_t>* list = _cells[cellIndex];
+    if (list == nullptr)
     {
-        (_cells[cellIndex])->append(pointLocalIndex);
-    } else {
-        QList<size_t>* list = new QList<size_t>();
+        list = new QList<size_t>();
         list->append(pointLocalIndex);
         _cells.insert(cellIndex, list);
+    } else {
+        list->append(pointLocalIndex);
     }
 
     return true;
@@ -139,12 +131,9 @@ bool CT_Grid3D_Points::addPointAtIndex(size_t cellIndex, size_t pointLocalIndex)
 
 const QList<size_t> *CT_Grid3D_Points::getConstPointIndexList(size_t cellIndex) const
 {
-    if (_cells.contains(cellIndex))
-    {
-        return _cells.value(cellIndex);
-    }
-    return &_emptyList;
+    return _cells.value(cellIndex, _emptyList);
 }
+
 
 int CT_Grid3D_Points::getPointsInCellsIntersectingSphere(size_t gridIndex, double radius, QList<size_t> *indexList) const
 {
