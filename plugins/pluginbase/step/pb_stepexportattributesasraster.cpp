@@ -226,17 +226,19 @@ void PB_StepExportAttributesAsRaster::compute()
                 {
                     const QString key = _modelsKeys.at(i);
 
-                    const auto pair = indexedAttributes.value(key);
+                    const auto pair = indexedAttributes.value(key, QPair<const CT_AbstractSingularItemDrawable*, const CT_AbstractItemAttribute*>(nullptr, nullptr));
 
+                    if (pair.first != nullptr && pair.second != nullptr)
+                    {
+                        CT_Image2D<double>* raster = rasters.value(key, nullptr);
 
-                    CT_Image2D<double>* raster = rasters.value(key, nullptr);
+                        const double val = pair.second->toDouble(pair.first, nullptr);
 
-                    const double val = pair.second->toDouble(pair.first, nullptr);
-
-                    if (std::isnan(val))
-                        raster->setValueAtCoords(x, y, DEF_NA);
-                    else
-                        raster->setValueAtCoords(x, y, val);
+                        if (std::isnan(val))
+                            raster->setValueAtCoords(x, y, DEF_NA);
+                        else
+                            raster->setValueAtCoords(x, y, val);
+                    }
                 }
             }
         }
