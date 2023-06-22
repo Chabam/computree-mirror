@@ -56,7 +56,15 @@ public:
     /**
      * @brief Returns first Raster band if exist otherwise returns null
      */
-    CT_Image2D<float> *firstRaster();
+    CT_Image2D<float>  *firstFloatRaster();
+    CT_Image2D<double> *firstDoubleRaster();
+    CT_Image2D<quint8> *firstQuint8Raster();
+    CT_Image2D<qint32> *firstQint32Raster();
+
+    /**
+     * @brief If file is a raster return data type
+     */
+    QString getDataTypeForFirstRaster() const;
 
 protected:
 

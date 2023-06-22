@@ -506,7 +506,40 @@ bool CT_Reader_GDAL::internalReadFile(CT_StandardItemGroup* group)
 }
 
 
-CT_Image2D<float>* CT_Reader_GDAL::firstRaster()
+QString CT_Reader_GDAL::getDataTypeForFirstRaster() const
+{
+    QString type = "none";
+
+#ifdef USE_GDAL
+
+    GDALDataset *data = getDataSet(filepath());
+
+    if(data == nullptr)
+        return nullptr;
+
+    int count = data->GetRasterCount();
+
+
+    if(count > 0) {
+        GDALRasterBand *poBand = data->GetRasterBand(1);
+
+        GDALDataType dataType = poBand->GetRasterDataType();
+
+        if (dataType == GDT_Float32) {type = "float";}
+        if (dataType == GDT_Float64) {type = "double";}
+        if (dataType == GDT_Byte) {type = "quint8";}
+        if (dataType == GDT_Int32) {type = "qint32";}
+    }
+
+    GDALClose(data);
+
+#endif
+
+    return type;
+}
+
+
+CT_Image2D<float>* CT_Reader_GDAL::firstFloatRaster()
 {
 #ifdef USE_GDAL
 
@@ -524,27 +557,31 @@ CT_Image2D<float>* CT_Reader_GDAL::firstRaster()
 
         GDALRasterBand *poBand = data->GetRasterBand(1);
 
-        poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
+        if (poBand->GetRasterDataType() == GDT_Float32)
+        {
+            poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
 
-        const int nXSize = poBand->GetXSize();
-        const int nYSize = poBand->GetYSize();
+            const int nXSize = poBand->GetXSize();
+            const int nYSize = poBand->GetYSize();
 
-        const double xMin = padfTransform[0];
-        const double yMin = padfTransform[3] - nYSize*padfTransform[1];
+            const double xMin = padfTransform[0];
+            const double yMin = padfTransform[3] - nYSize*padfTransform[1];
 
-        const double na = poBand->GetNoDataValue();
+            const double na = poBand->GetNoDataValue();
 
-        raster = new CT_Image2D<float>(xMin,
-                                       yMin,
-                                       nXSize,
-                                       nYSize,
-                                       padfTransform[1], 0, na, na);
+            raster = new CT_Image2D<float>(xMin,
+                                           yMin,
+                                           nXSize,
+                                           nYSize,
+                                           padfTransform[1], 0, na, na);
 
-        float *pafScanline = (float *) CPLMalloc(sizeof(float)*nXSize);
+            float *pafScanline = (float *) CPLMalloc(sizeof(float)*nXSize);
 
-        size_t index = 0;
+            size_t index = 0;
 
-        for(int y=0; y<nYSize; ++y) {
+            for(int y = 0 ; y < nYSize ; ++y)
+            {
+
 #if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
 #pragma GCC diagnostic push
@@ -553,7 +590,7 @@ CT_Image2D<float>* CT_Reader_GDAL::firstRaster()
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
 #endif
-            poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float32, 0, 0 );
+                poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float32, 0, 0 );
 #if defined(_WIN32) && defined(_MSC_VER)
 #elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
 #pragma GCC diagnostic pop
@@ -561,15 +598,260 @@ CT_Image2D<float>* CT_Reader_GDAL::firstRaster()
 #pragma GCC diagnostic pop
 #endif
 
-            for(int x=0; x<nXSize; ++x) {
-                raster->index(x, y, index);
-                raster->setValueAtIndex(index, pafScanline[x]);
+                for(int x = 0 ; x < nXSize ; ++x) {
+                    raster->index(x, y, index);
+                    raster->setValueAtIndex(index, pafScanline[x]);
+                }
             }
+
+            CPLFree(pafScanline);
+
+            raster->computeMinMax();
         }
+    }
 
-        CPLFree(pafScanline);
+    GDALClose(data);
 
-        raster->computeMinMax();
+    return raster;
+
+#else
+    return nullptr;
+#endif
+}
+
+CT_Image2D<double>* CT_Reader_GDAL::firstDoubleRaster()
+{
+#ifdef USE_GDAL
+
+    GDALDataset *data = getDataSet(filepath());
+
+    if(data == nullptr)
+        return nullptr;
+
+    CT_Image2D<double>* raster = nullptr;
+
+    int count = data->GetRasterCount();
+
+    if(count > 0) {
+        double padfTransform[6];
+
+        GDALRasterBand *poBand = data->GetRasterBand(1);
+
+        if (poBand->GetRasterDataType() == GDT_Float64)
+        {
+
+            poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
+
+            const int nXSize = poBand->GetXSize();
+            const int nYSize = poBand->GetYSize();
+
+            const double xMin = padfTransform[0];
+            const double yMin = padfTransform[3] - nYSize*padfTransform[1];
+
+            const double na = poBand->GetNoDataValue();
+
+            raster = new CT_Image2D<double>(xMin,
+                                            yMin,
+                                            nXSize,
+                                            nYSize,
+                                            padfTransform[1], 0, na, na);
+
+            double *pafScanline = (double *) CPLMalloc(sizeof(double)*nXSize);
+
+            size_t index = 0;
+
+            for(int y = 0 ; y < nYSize ; ++y)
+            {
+
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#endif
+                poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Float64, 0, 0 );
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(__APPLE__)
+#pragma GCC diagnostic pop
+#endif
+
+                for(int x = 0 ; x < nXSize ; ++x) {
+                    raster->index(x, y, index);
+                    raster->setValueAtIndex(index, pafScanline[x]);
+                }
+            }
+
+            CPLFree(pafScanline);
+
+            raster->computeMinMax();
+        }
+    }
+
+    GDALClose(data);
+
+    return raster;
+
+#else
+    return nullptr;
+#endif
+}
+
+CT_Image2D<quint8>* CT_Reader_GDAL::firstQuint8Raster()
+{
+#ifdef USE_GDAL
+
+    GDALDataset *data = getDataSet(filepath());
+
+    if(data == nullptr)
+        return nullptr;
+
+    CT_Image2D<quint8>* raster = nullptr;
+
+    int count = data->GetRasterCount();
+
+    if(count > 0) {
+        double padfTransform[6];
+
+        GDALRasterBand *poBand = data->GetRasterBand(1);
+
+        if (poBand->GetRasterDataType() == GDT_Byte)
+        {
+
+            poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
+
+            const int nXSize = poBand->GetXSize();
+            const int nYSize = poBand->GetYSize();
+
+            const double xMin = padfTransform[0];
+            const double yMin = padfTransform[3] - nYSize*padfTransform[1];
+
+            const double na = poBand->GetNoDataValue();
+
+            raster = new CT_Image2D<quint8>(xMin,
+                                            yMin,
+                                            nXSize,
+                                            nYSize,
+                                            padfTransform[1], 0, na, na);
+
+            quint8 *pafScanline = (quint8 *) CPLMalloc(sizeof(quint8)*nXSize);
+
+            size_t index = 0;
+
+            for(int y = 0 ; y < nYSize ; ++y)
+            {
+
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#endif
+                poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Byte, 0, 0 );
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(__APPLE__)
+#pragma GCC diagnostic pop
+#endif
+
+                for(int x = 0 ; x < nXSize ; ++x) {
+                    raster->index(x, y, index);
+                    raster->setValueAtIndex(index, pafScanline[x]);
+                }
+            }
+
+            CPLFree(pafScanline);
+
+            raster->computeMinMax();
+        }
+    }
+
+    GDALClose(data);
+
+    return raster;
+
+#else
+    return nullptr;
+#endif
+}
+
+
+CT_Image2D<qint32>* CT_Reader_GDAL::firstQint32Raster()
+{
+#ifdef USE_GDAL
+
+    GDALDataset *data = getDataSet(filepath());
+
+    if(data == nullptr)
+        return nullptr;
+
+    CT_Image2D<qint32>* raster = nullptr;
+
+    int count = data->GetRasterCount();
+
+    if(count > 0) {
+        double padfTransform[6];
+
+        GDALRasterBand *poBand = data->GetRasterBand(1);
+
+        if (poBand->GetRasterDataType() == GDT_Int32)
+        {
+
+            poBand->GetDataset()->GetGeoTransform(&padfTransform[0]);
+
+            const int nXSize = poBand->GetXSize();
+            const int nYSize = poBand->GetYSize();
+
+            const double xMin = padfTransform[0];
+            const double yMin = padfTransform[3] - nYSize*padfTransform[1];
+
+            const double na = poBand->GetNoDataValue();
+
+            raster = new CT_Image2D<qint32>(xMin,
+                                            yMin,
+                                            nXSize,
+                                            nYSize,
+                                            padfTransform[1], 0, na, na);
+
+            qint32 *pafScanline = (qint32 *) CPLMalloc(sizeof(qint32)*nXSize);
+
+            size_t index = 0;
+
+            for(int y = 0 ; y < nYSize ; ++y)
+            {
+
+#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#elif defined(__APPLE__) // Clang Compiler (Apple)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#endif
+                poBand->RasterIO( GF_Read, 0, y, nXSize, 1, pafScanline, nXSize, 1, GDT_Int32, 0, 0 );
+#if defined(_WIN32) && defined(_MSC_VER)
+#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(__APPLE__)
+#pragma GCC diagnostic pop
+#endif
+
+                for(int x = 0 ; x < nXSize ; ++x) {
+                    raster->index(x, y, index);
+                    raster->setValueAtIndex(index, pafScanline[x]);
+                }
+            }
+
+            CPLFree(pafScanline);
+
+            raster->computeMinMax();
+        }
     }
 
     GDALClose(data);
