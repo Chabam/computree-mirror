@@ -368,6 +368,35 @@ public:
                                        bottom);
     }
 
+    inline void getROIIndices(const double xMin, const double yMin, const double xMax, const double yMax, int &xxMin, int &yyMin, int &xxMax, int &yyMax) const
+    {
+        xcol(xMin, xxMin);
+        xcol(xMax, xxMax);
+
+        lin(yMin, yyMax);
+        lin(yMax, yyMin);
+
+        Eigen::Vector3d center;
+        if (getCellCenterCoordinates(xxMin, yyMin, center))
+        {
+            if (center(0) < xMin) {xxMin++;}
+            if (center(1) < yMin) {yyMax--;}
+        }
+
+        if (getCellCenterCoordinates(xxMax, yyMax, center))
+        {
+            if (center(0) > xMax) {xxMax--;}
+            if (center(1) > yMax) {yyMin++;}
+        }
+
+        if (xMin < minXCoord() || xxMin < 0) {xxMin = 0;}
+        if (xMax > maxXCoord() || xxMax > (_dimx - 1)) {xxMax = _dimx - 1;}
+
+        if (yMin < minYCoord() || yyMax > (_dimy - 1)) {yyMax = _dimy - 1;}
+        if (yMax > maxYCoord() || yyMin < 0) {yyMin = 0;}
+    }
+
+
 protected:
     int          _dimx;        /*!< Nombre de cases selon x du raster*/
     int          _dimy;        /*!< Nombre de cases selon y du raster*/
