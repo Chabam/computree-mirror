@@ -40,6 +40,10 @@ class CTLIBMATH_EXPORT CT_MathFittedLine2D
 public:
     CT_MathFittedLine2D(const QList<Eigen::Vector2d*>& l_p)
     {
+        _a = 0;
+        _b = 0;
+        _ymean = 0;
+
         const int nb_points = l_p.size();
 
         if (nb_points > 1)
