@@ -6,11 +6,17 @@ linux {
 }
 
 win32 {
-    QHULL_BASE_PATH = "../3rdparty/qhull/"
+    QHULL_BASE_PATH = "$${VCPKG_PATH}/"
 
     QHULL_INC_PATH = "$${QHULL_BASE_PATH}include"
-    QHULL_LIBS_PATH = "$${QHULL_BASE_PATH}lib"
-    QHULL_BIN_PATH = "$${QHULL_BASE_PATH}bin"
+
+    CONFIG(debug, debug|release) {
+        QHULL_LIBS_PATH = "$${QHULL_BASE_PATH}debug/lib"
+        QHULL_BIN_PATH = "$${QHULL_BASE_PATH}debug/bin"
+    } else {
+        QHULL_LIBS_PATH = "$${QHULL_BASE_PATH}lib"
+        QHULL_BIN_PATH = "$${QHULL_BASE_PATH}bin"
+    }
 }
 
 macx {

@@ -1,4 +1,5 @@
 QHULL_LIB_ADD += qhull
+QHULL_LIB_ADD += qhullcpp
 
 QHULL_LIBS_FOUNDED =
 
@@ -38,23 +39,55 @@ macx {
     }
 }
 
+
+#windows {
+#    for(a, QHULL_LIB_ADD) {
+#        CONFIG(debug, debug|release) {
+#            !exists($$QHULL_LIBS_PATH/$${a}_rd*) {
+#                USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a}_rd was not found"
+#            } else {
+#                QHULL_LIBS_FOUNDED += -l$${a}_rd
+#            }
+#        } else {
+#            !exists($$QHULL_LIBS_PATH/$${a}_r*) {
+#                USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a}_r was not found"
+#            } else {
+#                QHULL_LIBS_FOUNDED += -l$${a}_r
+#            }
+#        }
+#    }
+#}
+
 windows {
-    for(a, QHULL_LIB_ADD) {
-        CONFIG(debug, debug|release) {
-            !exists($$QHULL_LIBS_PATH/$${a}_rd*) {
-                USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a}_rd was not found"
-            } else {
-                QHULL_LIBS_FOUNDED += -l$${a}_rd
-            }
+    CONFIG(debug, debug|release) {
+        !exists($$QHULL_LIBS_PATH/qhull_rd*) {
+            USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/qhull_rd was not found"
         } else {
-            !exists($$QHULL_LIBS_PATH/$${a}_r*) {
-                USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/$${a}_r was not found"
-            } else {
-                QHULL_LIBS_FOUNDED += -l$${a}_r
-            }
+            QHULL_LIBS_FOUNDED += -lqhull_rd
+        }
+    } else {
+        !exists($$QHULL_LIBS_PATH/qhull_r*) {
+            USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/qhull_r was not found"
+        } else {
+            QHULL_LIBS_FOUNDED += -lqhull_r
+        }
+    }
+
+    CONFIG(debug, debug|release) {
+        !exists($$QHULL_LIBS_PATH/qhullcpp_d*) {
+            USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/qhullcpp_d was not found"
+        } else {
+            QHULL_LIBS_FOUNDED += -lqhullcpp_d
+        }
+    } else {
+        !exists($$QHULL_LIBS_PATH/qhullcpp*) {
+            USE_QHULL_ERROR_MSG += "Library $$QHULL_LIBS_PATH/qhullcpp was not found"
+        } else {
+            QHULL_LIBS_FOUNDED += -lqhullcpp
         }
     }
 }
+
 
 isEmpty(USE_QHULL_ERROR_MSG) {
     equals(CHECK_LIBS_ONLY, false) {
