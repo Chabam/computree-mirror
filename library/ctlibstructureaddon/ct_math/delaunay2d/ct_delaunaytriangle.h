@@ -100,7 +100,7 @@ private:
 
     double _ccX; // triangle defined circle center X coordinates
     double _ccY; // triangle defined circle center Y coordinates
-    double _r;   // triangle defined circle radius (from orthocenter)
+    double _r2;   // triangle defined circle radius (from orthocenter)
 
     bool _toRemove;
 };

@@ -71,8 +71,8 @@ void CT_DelaunayTriangle::init(CT_DelaunayVertex *v1t, CT_DelaunayVertex *v2t, C
 void CT_DelaunayTriangle::setNeighbor(CT_DelaunayVertex *vt1, CT_DelaunayVertex *vt2, CT_DelaunayTriangle *ngb)
 {
 
-    if        (vt1 == _v1) {
-
+    if        (vt1 == _v1)
+    {
         if      (vt2 == _v2) {_n12 = ngb;}
         else if (vt2 == _v3) {_n31 = ngb;}
 
@@ -91,7 +91,6 @@ void CT_DelaunayTriangle::setNeighbor(CT_DelaunayVertex *vt1, CT_DelaunayVertex 
 
 void CT_DelaunayTriangle::calculateCircle()
 {
-
     double dx12 = _v2->x() - _v1->x();
     double dy12 = _v2->y() - _v1->y();
     double dx23 = _v3->x() - _v2->x();
@@ -109,7 +108,7 @@ void CT_DelaunayTriangle::calculateCircle()
         //qDebug() << "Vertices " << _v1 << ", " << _v2 << ", " << _v3 << " aligned";
         _ccX = NAN;
         _ccY = NAN;
-        _r = NAN;
+        _r2 = NAN;
         return;
     }
 
@@ -133,92 +132,127 @@ void CT_DelaunayTriangle::calculateCircle()
     }
 
     // circle radius calculation
-    _r = sqrt (pow(_ccX - _v1->x(),2) + pow(_ccY - _v1->y(),2));
+    _r2 = pow(_ccX - _v1->x(),2) + pow(_ccY - _v1->y(),2);
 }
 
 bool CT_DelaunayTriangle::circleContains(double xt, double yt)
 {
-    return ( _r >= (sqrt (pow(_ccX - xt,2) + pow(_ccY - yt,2))) );
+    return _r2 >= (pow(_ccX - xt,2) + pow(_ccY - yt,2));
 }
+
+//bool CT_DelaunayTriangle::contains(double xt, double yt) const
+//{
+//    CT_DelaunayVertex* max;
+//    CT_DelaunayVertex* med;
+//    CT_DelaunayVertex* min;
+//    double x1, x2;
+
+//    // 1) sorting vertices by y coordinate
+
+//    if (_v1->y() > _v2->y())
+//    {
+//        max = _v1;
+//        med = _v2;
+//    } else
+//    {
+//        max = _v2;
+//        med = _v1;
+//    }
+
+//    if (_v3->y() > max->y())
+//    {
+//        min = med;
+//        med = max;
+//        max = _v3;
+//    } else if (_v3->y() > med->y())
+//    {
+//        min = med;
+//        med = _v3;
+//    } else
+//    {
+//        min = _v3;
+//    }
+
+//    // test if point is in the good y coordinate range
+//    if ((yt > max->y()) || (yt < min->y()))
+//    {
+//        return false;
+//    } else
+//    {
+
+//        // 2) caclulation of the point on max-min which split the triangle : (xs, ys)
+//        double ys = med->y();
+//        double xs = (ys - max->y()) * (max->x() - min->x()) / (max->y() - min->y()) + max->x();
+
+
+//        // 3) top subTriangle analysis
+//        if (yt > ys)
+//        {
+//            // x-bounds calculations for xt to be in subTriangle, with y=yt=constant
+//            x1 = (yt - max->y()) * (max->x() - med->x()) / (max->y() - med->y()) + max->x();
+//            x2 = (yt - max->y()) * (max->x() - xs) / (max->y() - ys) + max->x();
+
+//            // 4) bottom subTriangle analysis
+//        } else if (yt < ys)
+//        {
+//            // x-bounds calculations for xt to be in subTriangle, with y=yt=constant
+//            x1 = (yt - med->y()) * (med->x() - min->x()) / (med->y() - min->y()) + med->x();
+//            x2 = (yt - ys) * (xs - min->x()) / (ys - min->y()) + xs;
+
+//            // 5) yt==ys
+//        } else
+//        {
+//            // x-bounds calculations for xt to be in subTriangle, with y=yt=constant
+//            x1 = xs;
+//            x2 = med->x();
+//        }
+
+//        // test if xt is included between x1 and x2 bounds
+//        if (x1 < x2)
+//        {
+//            return ( (xt >= x1) && (xt <= x2) );
+//        } else
+//        {
+//            return ( (xt>=x2) && (xt<=x1) );
+//        }
+
+//    }
+//}
 
 bool CT_DelaunayTriangle::contains(double xt, double yt) const
 {
-    CT_DelaunayVertex* max;
-    CT_DelaunayVertex* med;
-    CT_DelaunayVertex* min;
-    double x1, x2;
-
-    // 1) sorting vertices by y coordinate
-
-    if (_v1->y() > _v2->y())
-    {
-        max = _v1;
-        med = _v2;
-    } else
-    {
-        max = _v2;
-        med = _v1;
-    }
-
-    if (_v3->y() > max->y())
-    {
-        min = med;
-        med = max;
-        max = _v3;
-    } else if (_v3->y() > med->y())
-    {
-        min = med;
-        med = _v3;
-    } else
-    {
-        min = _v3;
-    }
-
-    // test if point is in the good y coordinate range
-    if ((yt > max->y()) || (yt < min->y()))
+    if ((xt < _v1->x() && xt < _v2->x() && xt < _v3->x()) ||
+        (xt > _v1->x() && xt > _v2->x() && xt > _v3->x()) ||
+        (yt < _v1->y() && yt < _v2->y() && yt < _v3->y()) ||
+        (yt > _v1->y() && yt > _v2->y() && yt > _v3->y()))
     {
         return false;
-    } else
-    {
+    }
 
-        // 2) caclulation of the point on max-min which split the triangle : (xs, ys)
-        double ys = med->y();
-        double xs = (ys - max->y()) * (max->x() - min->x()) / (max->y() - min->y()) + max->x();
+    // Calcul des vecteurs formés par les côtés du triangle
+    Eigen::Vector2d vecAB(_v2->x() - _v1->x(), _v2->y() - _v1->y());
+    Eigen::Vector2d vecBC(_v3->x() - _v2->x(), _v3->y() - _v2->y());
+    Eigen::Vector2d vecCA(_v1->x() - _v3->x(), _v1->y() - _v3->y());
 
+    // Calcul des vecteurs formés par le point vers les sommets du triangle
+    Eigen::Vector2d vecAP(xt - _v1->x(), yt - _v1->y());
+    Eigen::Vector2d vecBP(xt - _v2->x(), yt - _v2->y());
+    Eigen::Vector2d vecCP(xt - _v3->x(), yt - _v3->y());
 
-        // 3) top subTriangle analysis
-        if (yt > ys)
-        {
-            // x-bounds calculations for xt to be in subTriangle, with y=yt=constant
-            x1 = (yt - max->y()) * (max->x() - med->x()) / (max->y() - med->y()) + max->x();
-            x2 = (yt - max->y()) * (max->x() - xs) / (max->y() - ys) + max->x();
+    // Calcul des produits vectoriels
+    double crossABP = vecAB(0) * vecAP(1) - vecAB(1) * vecAP(0);
+    double crossBCP = vecBC(0) * vecBP(1) - vecBC(1) * vecBP(0);
+    double crossCAP = vecCA(0) * vecCP(1) - vecCA(1) * vecCP(0);
 
-            // 4) bottom subTriangle analysis
-        } else if (yt < ys)
-        {
-            // x-bounds calculations for xt to be in subTriangle, with y=yt=constant
-            x1 = (yt - med->y()) * (med->x() - min->x()) / (med->y() - min->y()) + med->x();
-            x2 = (yt - ys) * (xs - min->x()) / (ys - min->y()) + xs;
-
-            // 5) yt==ys
-        } else
-        {
-            // x-bounds calculations for xt to be in subTriangle, with y=yt=constant
-            x1 = xs;
-            x2 = med->x();
-        }
-
-        // test if xt is included between x1 and x2 bounds
-        if (x1 < x2)
-        {
-            return ( (xt >= x1) && (xt <= x2) );
-        } else
-        {
-            return ( (xt>=x2) && (xt<=x1) );
-        }
-
+    // Vérification du sens de rotation
+    if ((crossABP >= 0 && crossBCP >= 0 && crossCAP >= 0) ||
+        (crossABP <= 0 && crossBCP <= 0 && crossCAP <= 0)) {
+        return true;
+    } else {
+        return false;
     }
 }
+
 
 double CT_DelaunayTriangle::getBaryX()
 {
@@ -249,12 +283,8 @@ CT_DelaunayVertex *CT_DelaunayTriangle::getThirdVertex(const QVector<CT_Delaunay
 
 CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt)
 {
-
     double dx, dy;
     double a, b;
-    bool n12ok = false;
-    bool n23ok = false;
-    bool n31ok = false;
 
     if (_n12 != nullptr)
     {
@@ -264,7 +294,7 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
         if (dx == 0) {
             if (((_v3->x() < _v1->x()) && (xt > _v1->x())) || ((_v3->x() > _v1->x()) && (xt < _v1->x())))
             {
-                n12ok = true;
+                return _n12;
             }
 
         } else  {
@@ -273,7 +303,7 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
 
             if (((_v3->y() < a) && (yt > b)) || ((_v3->y() > a) && (yt < b)))
             {
-                n12ok = true;
+                return _n12;
             }
         }
     }
@@ -287,7 +317,7 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
         {
             if (((_v1->x() < _v2->x()) && (xt > _v2->x())) || ((_v1->x() > _v2->x()) && (xt < _v2->x())))
             {
-                n23ok = true;
+                return _n23;
             }
 
         } else
@@ -297,10 +327,11 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
 
             if (((_v1->y() < a) && (yt > b)) || ((_v1->y() > a) && (yt < b)))
             {
-                n23ok = true;
+                return _n23;
             }
         }
     }
+
 
     if (_n31 != nullptr)
     {
@@ -310,7 +341,7 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
         if (dx == 0) {
             if (((_v2->x() < _v3->x()) && (xt > _v3->x())) || ((_v2->x() > _v3->x()) && (xt < _v3->x())))
             {
-                n31ok = true;
+                return _n31;
             }
 
         } else
@@ -320,23 +351,24 @@ CT_DelaunayTriangle* CT_DelaunayTriangle::getNextTriangleTo(double xt, double yt
 
             if (((_v2->y() < a) && (yt > b)) || ((_v2->y() > a) && (yt < b)))
             {
-                n31ok = true;
+                return _n31;
             }
         }
     }
 
 
-    if ((n12ok)  && (!n23ok) && (!n31ok)) {return _n12;}
-    if ((!n12ok) && (n23ok)  && (!n31ok)) {return _n23;}
-    if ((!n12ok) && (!n23ok) && (n31ok))  {return _n31;}
+// The loop case is managed is calling function
 
+//    if ((n12ok)  && (!n23ok) && (!n31ok)) {return _n12;}
+//    if ((!n12ok) && (n23ok)  && (!n31ok)) {return _n23;}
+//    if ((!n12ok) && (!n23ok) && (n31ok))  {return _n31;}
 
     // stochastic process
-    // (to avoid cycles, which normally sould not happen in delaunay triangulation)
+    // (to avoid cycles, which normally should not happen in delaunay triangulation)
 
-    if ((n12ok) && (n23ok)) {if ((std::rand() % 2) == 1) {return _n12;} else {return _n23;}}
-    if ((n23ok) && (n31ok)) {if ((std::rand() % 2) == 1) {return _n23;} else {return _n31;}}
-    if ((n12ok) && (n31ok)) {if ((std::rand() % 2) == 1) {return _n12;} else {return _n31;}}
+//    if ((n12ok) && (n23ok)) {if ((std::rand() % 2) == 1) {return _n12;} else {return _n23;}}
+//    if ((n23ok) && (n31ok)) {if ((std::rand() % 2) == 1) {return _n23;} else {return _n31;}}
+//    if ((n12ok) && (n31ok)) {if ((std::rand() % 2) == 1) {return _n12;} else {return _n31;}}
 
     // if (n12ok==false) && (n23ok==false) && (n31ok==false) :
     // then point (xt,yt) is in the this triangle

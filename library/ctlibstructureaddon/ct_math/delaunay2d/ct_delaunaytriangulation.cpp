@@ -88,7 +88,6 @@ void CT_DelaunayTriangulation::clear(bool clearToInsert)
     qDeleteAll(_outOfBoundsVertices);
     _outOfBoundsVertices.clear();
 
-    getTriangles();
     if (!_triangles.isEmpty())
     {
         qDeleteAll(_triangles);
@@ -125,6 +124,15 @@ void CT_DelaunayTriangulation::init(double x1, double y1, double x2, double y2)
     t2->_n31 = t1;
 
     _refTriangle = t1;
+}
+
+bool CT_DelaunayTriangulation::isInBBox(double x, double y)
+{
+    if (x < _minx) {return false;}
+    if (y < _miny) {return false;}
+    if (x > _maxx) {return false;}
+    if (y > _maxy) {return false;}
+    return true;
 }
 
 bool CT_DelaunayTriangulation::init()
@@ -450,15 +458,21 @@ bool CT_DelaunayTriangulation::doInsertion(bool sort, double cellSize)
 
     if (sort)
     {
-        VertexSorter sorter(cellSize);
+//        VertexSorter sorter(cellSize);
 
-        if (cellSize > 0)
-        {
-            sorter.orderVerticesByXY(_toInsert);
-        } else {
-            sorter.orderVerticesByX(_toInsert);
-        }
+//        if (cellSize > 0)
+//        {
+//            sorter.orderVerticesByXY(_toInsert);
+//        } else {
+//            sorter.orderVerticesByX(_toInsert);
+//        }
+
+        VertexSorterHilbert sorter(_minx, _miny);
+        sorter.orderVerticesByHilbertCurve(_toInsert);
     }
+
+    _insertedVertices.reserve(_toInsert.size());
+    _triangles.reserve(_toInsert.size());
 
     // descending order to avoid multiples Time consuming ArrayList compression
     // so we always remove the last element

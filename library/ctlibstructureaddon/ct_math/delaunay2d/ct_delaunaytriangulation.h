@@ -60,6 +60,7 @@ public:
     // idem but corners are calculated from others points
     bool init ();
 
+    bool isInBBox(double x, double y);
 
     // Accesors:
 
@@ -206,9 +207,70 @@ private:
         }
 
 
-
         double _cellsize;
     };
+
+    class VertexSorterHilbert {
+    public:
+        VertexSorterHilbert(double offsetX, double offsetY)
+        {
+            _offsetX = offsetX;
+            _offsetY = offsetY;
+        }
+
+        void orderVerticesByHilbertCurve(QList<CT_DelaunayVertex*>& pointList)
+        {
+            std::sort(pointList.begin(), pointList.end(), [this] (const CT_DelaunayVertex* a, const CT_DelaunayVertex* b) {
+                return compareHilbert(a, b); });
+        }
+
+
+        bool compareHilbert(const CT_DelaunayVertex* p1, const CT_DelaunayVertex* p2)
+        {
+            int ax = int(100.0*(p1->x() - _offsetX));
+            int ay = int(100.0*(p1->y() - _offsetY));
+
+            int bx = int(100.0*(p2->x() - _offsetX));
+            int by = int(100.0*(p2->y() - _offsetY));
+
+            // Calculate Hilbert order for each point
+            int maxCoord = std::max(ax, ay);
+            int n = std::pow(2, std::ceil(std::log2(maxCoord))); // Calculate nearest power of 2
+            int orderA = 0, orderB = 0;
+
+            for (int s = n / 2; s > 0; s /= 2) {
+                int rx = (ax & s) > 0;
+                int ry = (ay & s) > 0;
+                orderA += s * s * ((3 * rx) ^ ry);
+                std::tie(ax, ay) = rotate(s, ax, ay, rx, ry);
+            }
+
+            for (int s = n / 2; s > 0; s /= 2) {
+                int rx = (bx & s) > 0;
+                int ry = (by & s) > 0;
+                orderB += s * s * ((3 * rx) ^ ry);
+                std::tie(bx, by) = rotate(s, bx, by, rx, ry);
+            }
+
+            return orderA < orderB;
+        }
+
+        std::pair<int, int> rotate(int n, int x, int y, int rx, int ry) {
+            if (ry == 0) {
+                if (rx == 1) {
+                    x = n - 1 - x;
+                    y = n - 1 - y;
+                }
+                std::swap(x, y);
+            }
+            return std::make_pair(x, y);
+        }
+
+        double _offsetX;
+        double _offsetY;
+    };
+
+
 
     static bool compareDelaunayVertices(const CT_DelaunayVertex* p1, const CT_DelaunayVertex* p2)
     {
