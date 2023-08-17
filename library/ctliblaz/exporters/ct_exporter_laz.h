@@ -2,8 +2,10 @@
 #define CT_EXPORTER_LAZ_H
 
 #include "ctliblaz/ctliblaz_global.h"
+
 #include "ctliblas/itemdrawable/las/ct_stdlaspointsattributescontainer.h"
-#include "ctliblas/tools/las/abstract/ct_abstractlaspointformat.h"
+// #include "ctliblas/tools/las/abstract/ct_abstractlaspointformat.h"
+#include "ctliblaz/tools/laz/abstract/ct_abstractlazpointformat.h"
 
 #include "ct_exporter/abstract/ct_abstractexporter.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h"
@@ -45,7 +47,7 @@ private:
     friend class CT_LAZPieceByPiecePrivateExporter;
 
     using HandleItemType = CT_HandleInSingularItem<CT_AbstractItemDrawableWithPointCloud>;
-    using AttributeByTypeCollection = CT_AbstractLASPointFormat::AttributeByTypeCollection;
+    using AttributeByTypeCollection = CT_AbstractLAZPointFormat::AttributeByTypeCollection;
 
     CT_HandleInStdGroup<>                                           m_hInGroup;
     HandleItemType                                                  m_hInItem;
@@ -86,7 +88,7 @@ private:
 
     AttributeByTypeCollection                                       mLasAttributeByType;
     const CT_PointsAttributesColor*                                 mColorAttribute;
-    QSharedPointer<CT_AbstractLASPointFormat>                       mToolsFormat;
+    QSharedPointer<CT_AbstractLAZPointFormat>                       mToolsFormat;
 
     double                                                          mCurrentPieceByPieceProgress;
     double                                                          mPieceByPieceProgressMultiplicator;
@@ -124,7 +126,7 @@ private:
     /**
      * @brief Create a point data format (tools to export)
      */
-    CT_AbstractLASPointFormat* createPointDataFormat(const int &optFormat = -1) const;
+    CT_AbstractLAZPointFormat* createPointDataFormat(const int &optFormat = -1) const;
 
 private slots:
     void setPieceByPieceProgress(int progress);

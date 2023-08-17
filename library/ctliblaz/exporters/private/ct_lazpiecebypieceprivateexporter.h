@@ -1,11 +1,12 @@
 #ifndef CT_LAZPIECEBYPIECEPRIVATEEXPORTER_H
 #define CT_LAZPIECEBYPIECEPRIVATEEXPORTER_H
 
-#include "ctliblaz/exporters/ct_exporter_laz.h"
-#include "ctliblaz/readers/ct_reader_laz.h"
+#include "exporters/ct_exporter_laz.h"
 #include "ct_exporter/abstract/ct_abstractpiecebypieceexporter.h"
 
-class CT_LAZPieceByPiecePrivateExporter final : public CT_AbstractPieceByPieceExporter
+#include "readers/headers/ct_lazheader.h"
+
+class CT_LAZPieceByPiecePrivateExporter : public CT_AbstractPieceByPieceExporter
 {
     Q_OBJECT
 
@@ -59,11 +60,11 @@ private:
 
     /**
      * @brief Write the header of the file
+     * @param stream : the data stream of the file (it will be seek to 0 automatically and set to LittleEndian)
      * @param header : the header to write
-     * @param zipHeader : header object for LASZIP
      */
-    bool writeHeader(CT_LAZHeader *header,
-                     laszip_header &zipHeader);
+    // bool writeHeader(QDataStream& stream,
+    //                  CT_LAZHeader *header);
 
     /**
      * @brief Search an header in the list of header backuped and if has found one return the backup that match with it

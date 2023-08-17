@@ -2,17 +2,17 @@
 
 #include "private/ct_lazpiecebypieceprivateexporter.h"
 
-#include "ctliblas/tools/las/ct_laspointformat0.h"
-#include "ctliblas/tools/las/ct_laspointformat1.h"
-#include "ctliblas/tools/las/ct_laspointformat2.h"
-#include "ctliblas/tools/las/ct_laspointformat3.h"
-#include "ctliblas/tools/las/ct_laspointformat4.h"
-#include "ctliblas/tools/las/ct_laspointformat5.h"
-#include "ctliblas/tools/las/ct_laspointformat6.h"
-#include "ctliblas/tools/las/ct_laspointformat7.h"
-#include "ctliblas/tools/las/ct_laspointformat8.h"
-#include "ctliblas/tools/las/ct_laspointformat9.h"
-#include "ctliblas/tools/las/ct_laspointformat10.h"
+#include "ctliblaz/tools/laz/ct_lazpointformat0.h"
+#include "ctliblaz/tools/laz/ct_lazpointformat1.h"
+#include "ctliblaz/tools/laz/ct_lazpointformat2.h"
+#include "ctliblaz/tools/laz/ct_lazpointformat3.h"
+// #include "ctliblas/tools/las/ct_laspointformat4.h"
+// #include "ctliblas/tools/las/ct_laspointformat5.h"
+#include "ctliblaz/tools/laz/ct_lazpointformat6.h"
+#include "ctliblaz/tools/laz/ct_lazpointformat7.h"
+#include "ctliblaz/tools/laz/ct_lazpointformat8.h"
+// #include "ctliblas/tools/las/ct_laspointformat9.h"
+// #include "ctliblas/tools/las/ct_laspointformat10.h"
 
 CT_Exporter_LAZ::CT_Exporter_LAZ(int subMenuLevel) : SuperClass(subMenuLevel),
     mColorAttribute(nullptr),
@@ -20,7 +20,7 @@ CT_Exporter_LAZ::CT_Exporter_LAZ(int subMenuLevel) : SuperClass(subMenuLevel),
 {
     setCanExportPoints(true);
     addNewExportFormat(FileFormat("laz", tr("Fichiers LAZ .laz")));
-    setToolTip(tr("Exporte tous les points au format LAZ (rapidlasso GmbH)<br>https://laszip.org/"));
+    setToolTip(tr("Exporte tous les points au format LAZ, ASPRS<br>http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html"));
 }
 
 CT_Exporter_LAZ::CT_Exporter_LAZ(const CT_Exporter_LAZ &other) : SuperClass(other)
@@ -369,32 +369,36 @@ quint16 CT_Exporter_LAZ::getPointDataLength(const int &optFormat) const
         format = getPointDataFormat();
 
     if(format == 0)
-        return quint16(CT_LASPointFormat0().sizeInBytes());
+        return quint16(CT_LAZPointFormat0().sizeInBytes());
     else if(format == 1)
-        return quint16(CT_LASPointFormat1().sizeInBytes());
+        return quint16(CT_LAZPointFormat1().sizeInBytes());
     else if(format == 2)
-        return quint16(CT_LASPointFormat2().sizeInBytes());
+        return quint16(CT_LAZPointFormat2().sizeInBytes());
     else if(format == 3)
-        return quint16(CT_LASPointFormat3().sizeInBytes());
+        return quint16(CT_LAZPointFormat3().sizeInBytes());
+#ifdef ZZZ
     else if(format == 4)
         return quint16(CT_LASPointFormat4().sizeInBytes());
     else if(format == 5)
         return quint16(CT_LASPointFormat5().sizeInBytes());
+#endif
     else if(format == 6)
-        return quint16(CT_LASPointFormat6().sizeInBytes());
+        return quint16(CT_LAZPointFormat6().sizeInBytes());
     else if(format == 7)
-        return quint16(CT_LASPointFormat7().sizeInBytes());
+        return quint16(CT_LAZPointFormat7().sizeInBytes());
     else if(format == 8)
-        return quint16(CT_LASPointFormat8().sizeInBytes());
+        return quint16(CT_LAZPointFormat8().sizeInBytes());
+#ifdef ZZZ
     else if(format == 9)
         return quint16(CT_LASPointFormat9().sizeInBytes());
     else if(format == 10)
         return quint16(CT_LASPointFormat10().sizeInBytes());
+#endif
 
     return 0;
 }
 
-CT_AbstractLASPointFormat* CT_Exporter_LAZ::createPointDataFormat(const int &optFormat) const
+CT_AbstractLAZPointFormat* CT_Exporter_LAZ::createPointDataFormat(const int &optFormat) const
 {
     int format = optFormat;
 
@@ -402,27 +406,31 @@ CT_AbstractLASPointFormat* CT_Exporter_LAZ::createPointDataFormat(const int &opt
         format = getPointDataFormat();
 
     if(format == 0)
-        return new CT_LASPointFormat0();
+        return new CT_LAZPointFormat0();
     else if(format == 1)
-        return new CT_LASPointFormat1();
+        return new CT_LAZPointFormat1();
     else if(format == 2)
-        return new CT_LASPointFormat2();
+        return new CT_LAZPointFormat2();
     else if(format == 3)
-        return new CT_LASPointFormat3();
+        return new CT_LAZPointFormat3();
+#ifdef ZZZ
     else if(format == 4)
         return new CT_LASPointFormat4();
     else if(format == 5)
         return new CT_LASPointFormat5();
+#endif
     else if(format == 6)
-        return new CT_LASPointFormat6();
+        return new CT_LAZPointFormat6();
     else if(format == 7)
-        return new CT_LASPointFormat7();
+        return new CT_LAZPointFormat7();
     else if(format == 8)
-        return new CT_LASPointFormat8();
+        return new CT_LAZPointFormat8();
+#ifdef ZZZ
     else if(format == 9)
         return new CT_LASPointFormat9();
     else if(format == 10)
         return new CT_LASPointFormat10();
+#endif
 
     return nullptr;
 }

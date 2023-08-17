@@ -4,9 +4,11 @@
 #include <QDir>
 #include <QDate>
 
-#include "ctliblaz/mergers/ct_sameheaderformatmerger_laz.h"
+#include <QByteArray>
+#include <QDataStream>
+#include <QIODevice>
 
-#include "ctliblas/tools/las/abstract/ct_abstractlaspointformat.h"
+#include "ctliblaz/mergers/ct_sameheaderformatmerger_laz.h"
 
 #include "ct_log/ct_logmanager.h"
 
@@ -151,6 +153,7 @@ bool CT_LAZPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints()
         mHeader->m_legacyNumberOfPointsByReturn[0] = quint32(mHeader->m_numberOfPointRecords);
     }
 
+    QString error;
     QDate date = QDate::currentDate();
 
     mHeader->m_fileSourceID = 1;
@@ -197,44 +200,31 @@ bool CT_LAZPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints()
     // So in the last directory we can have multiple files if it has the same header (same format, version, etc...)
 
     const QString filepath = hBackup->currentFilePath();
-
     QFileInfo fi(filepath);
+
+    QFile file(filepath);
     QDir().mkpath(fi.dir().path());
 
     // create the writer
     laszip_POINTER laszip_writer = nullptr;
-    if (laszip_create(&laszip_writer))
-    {
-        PS_LOG->addErrorMessage(LogInterface::exporter, tr("Impossible de créer le writer LASZIP"));
-        return false;
-    }
+    laszip_create(&laszip_writer);
 
-    // initialize the header for the writer using the header of the reader
-    laszip_header header;
-    if(!writeHeader(mHeader, header))
-    {
-        delete mHeader;
-        mHeader = nullptr;
-    }
-    if (laszip_set_header(laszip_writer, &header))
-    {
-        PS_LOG->addErrorMessage(LogInterface::exporter, tr("Impossible de charger le header LASZIP"));
-        return false;
-    }
+    laszip_header zipHeader;
+
+    // initialize the header for the writer
+    mHeader->finalizeBeforeWrite();
+    mHeader->writezip(zipHeader);
+
+    int cr;
+
+    laszip_set_header(laszip_writer, &zipHeader);
 
     // open the writer
     laszip_BOOL compress = true;
-    if (laszip_open_writer(laszip_writer, filepath.toStdString().c_str(), compress))
-    {
-        PS_LOG->addErrorMessage(LogInterface::exporter, tr("Impossible d'ouvrir le fichier LASZIP en écriture"));
-        return false;
-    }
+    // if (! laszip_open_writer(laszip_writer, filepath.toStdString().c_str(), compress))
+    cr = laszip_open_writer(laszip_writer, filepath.toStdString().c_str(), compress);
 
-    if(mHeader == nullptr)
-    {
-        setErrorMessage(tr("Problème lors de l'écriture de l'en-tête du fichier. %1").arg(errorMessage()));
-    }
-    else
+    if (cr == 0)
     {
         mExporter.mToolsFormat->initWrite(mExporter.mLasAttributeByType, mExporter.mColorAttribute);
 
@@ -243,178 +233,91 @@ bool CT_LAZPieceByPiecePrivateExporter::finalizeHeaderAndWritePoints()
         double progress = 0;
 
         CT_PointIterator itI(&mPointsToWrite);
-        const CT_AbstractPointAttributesScalar* sc;
-        const CT_PointsAttributesColor* colorValues;
 
+        laszip_point* lzPoint;
+        laszip_get_point_pointer(laszip_writer, &lzPoint);
+
+        int nbPoints = 0;
         while(itI.hasNext()
               && !mMustCancel)
         {
             itI.next();
 
-            //QDataStream stream;
-            //stream.setByteOrder(QDataStream::LittleEndian);
-            //mExporter.mToolsFormat->write(stream, mHeader, itI.currentPoint(), itI.cIndex());
+            // QByteArray bytearray(reinterpret_cast<char*>(&point), sizeof(point));
+            // QDataStream stream(&bytearray, QIODevice::WriteOnly);
+            // mExporter.mToolsFormat->write(stream, mHeader, itI.currentPoint(), itI.cIndex());
+            mExporter.mToolsFormat->write(lzPoint, mHeader, itI.currentPoint(), itI.cIndex());
 
-            // Convert CT point to LASZIP point
-            laszip_point point;
-
-            CT_Point p = itI.currentPoint();
-            size_t globalIndex = itI.cIndex();
-
-            if(mHeader->mustTransformPoints())
-            {
-                qint32 m_x, m_y, m_z;
-                mHeader->inverseTransformPoint(p(CT_Point::X), p(CT_Point::Y), p(CT_Point::Z), m_x, m_y, m_z);
-
-                point.X = m_x;
-                point.Y = m_y;
-                point.Z = m_z;
-            }
-            else
-            {
-                point.X = p(CT_Point::X);
-                point.Y = p(CT_Point::Y);
-                point.Z = p(CT_Point::Z);
-            }
-
-            // All other attributes are set to 0 by default in the structure.
-            // Here we save the attributes that are found for the current point/index.
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Intensity);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.intensity = static_cast<quint16>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Return_Number);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.return_number = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Number_of_Returns);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.number_of_returns = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Classification_Flags);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.extended_classification_flags = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Scanner_Channel);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.extended_scanner_channel = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Scan_Direction_Flag);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.scan_direction_flag = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Edge_of_Flight_Line);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.edge_of_flight_line = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Classification);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.classification = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::User_Data);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.user_data = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Scan_Angle_Rank);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.scan_angle_rank = static_cast<quint16>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Point_Source_ID);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.point_source_ID = static_cast<quint16>(sc->scalarAsDoubleAt(globalIndex));
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::GPS_Time);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.gps_time = static_cast<double>(sc->scalarAsDoubleAt(globalIndex));
-
-            colorValues = mExporter.mToolsFormat->colors();
-            // If CT color has been set manually
-            if((colorValues != nullptr) && colorValues->hasBeenSet(globalIndex))
-            {
-                // TODO : *257 ???
-                const CT_Color& color = colorValues->constColorAt(globalIndex);
-                point.rgb[0] = quint16(color.r()*257);
-                point.rgb[1] = quint16(color.g()*257);
-                point.rgb[2] = quint16(color.b()*257);
-            }
-            // Otherwise we use the original point colors
-            else
-            {
-                sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Red);
-                if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                    point.rgb[0] = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-                sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Green);
-                if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                    point.rgb[1] = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-                sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Blue);
-                if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                    point.rgb[2] = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-            }
-
-            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::NIR);
-            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-                point.rgb[3] = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-            // For the moùent, we don't use the wave form.
-//            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Wave_Packet_Descriptor_Index);
-//            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-//                point.wave_packet[0] = static_cast<quint8>(sc->scalarAsDoubleAt(globalIndex));
-
-//            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Byte_offset_to_waveform_data);
-//            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-//                point.wave_packet[1] = static_cast<quint64>(sc->scalarAsDoubleAt(globalIndex));
-
-//            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Waveform_packet_size_in_bytes);
-//            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-//                point.wave_packet[9] = static_cast<quint32>(sc->scalarAsDoubleAt(globalIndex));
-
-//            sc = mExporter.mToolsFormat->scalars(CT_LasDefine::Return_Point_Waveform_Location);
-//            if((sc != nullptr) && sc->hasBeenSet(globalIndex))
-//                point.wave_packet[13] = static_cast<float>(sc->scalarAsDoubleAt(globalIndex));
-
-            // copy the point
-            if (laszip_set_point(laszip_writer, &point))
-            {
-                PS_LOG->addErrorMessage(LogInterface::exporter, tr("Impossible de copier le point vers le writer"));
-                delete mHeader;
-                return false;
-            }
-
-            // write the point
-            if (laszip_write_point(laszip_writer))
-            {
-                PS_LOG->addErrorMessage(LogInterface::exporter, tr("Impossible d'écrire le point dans le fichier"));
-                delete mHeader;
-                return false;
-            }
+            laszip_write_point(laszip_writer);
 
             progress += progressValue;
 
             setProgress(int(progress));
+
+            nbPoints++;
         }
 
         mPointsToWrite.resize(0);
         ok = true;
 
         // close the writer
-        if (laszip_close_writer(laszip_writer))
-        {
-            PS_LOG->addErrorMessage(LogInterface::exporter, tr("Impossible de fermer le fichier"));
+        laszip_close_writer(laszip_writer);
+    } else {
+        setErrorMessage(tr("Erreur lors de l'ouverture en écriture du fichier %1").arg(filepath));
+    }
+
+    // destroy the writer
+    laszip_destroy(laszip_writer);
+
+#ifdef ZZZ
+
+    if(file.open(QFile::WriteOnly))
+    {
+        QDataStream stream(&file);
+        stream.setByteOrder(QDataStream::LittleEndian);
+
+        // write it
+        if(!writeHeader(stream, mHeader)) {
             delete mHeader;
-            return false;
+            mHeader = nullptr;
         }
 
-        // destroy the writer
-        if (laszip_destroy(laszip_writer))
+        if(mHeader == nullptr)
         {
-            PS_LOG->addErrorMessage(LogInterface::exporter, tr("Impossible de détruire le writer"));
-            delete mHeader;
-            return false;
+            setErrorMessage(tr("Problème lors de l'écriture de l'en-tête du fichier. %1").arg(errorMessage()));
         }
+        else
+        {
+            mExporter.mToolsFormat->initWrite(mExporter.mLasAttributeByType, mExporter.mColorAttribute);
+
+            // write points
+            const double progressValue = 100.0 / double(mPointsToWrite.size());
+            double progress = 0;
+
+            CT_PointIterator itI(&mPointsToWrite);
+
+            while(itI.hasNext()
+                  && !mMustCancel)
+            {
+                itI.next();
+
+                mExporter.mToolsFormat->write(stream, mHeader, itI.currentPoint(), itI.cIndex());
+
+                progress += progressValue;
+
+                setProgress(int(progress));
+            }
+
+            mPointsToWrite.resize(0);
+            ok = true;
+        }
+
+        file.close();
+    } else {
+        setErrorMessage(tr("Erreur lors de l'ouverture en écriture du fichier %1").arg(filepath));
     }
+
+#endif
 
     saveOrDeleteHeaderBackup(hBackup, mHeader, (ok && !mMustCancel));
     mHeader = nullptr;
@@ -473,8 +376,10 @@ bool CT_LAZPieceByPiecePrivateExporter::internalFinalizeFile()
     return ok;
 }
 
-bool CT_LAZPieceByPiecePrivateExporter::writeHeader(CT_LAZHeader* header,
-                                                    laszip_header &zipHeader)
+#ifdef ZZZ
+
+bool CT_LAZPieceByPiecePrivateExporter::writeHeader(QDataStream& stream,
+                                                    CT_LAZHeader* header)
 {
     if(header == nullptr)
         return false;
@@ -483,13 +388,15 @@ bool CT_LAZPieceByPiecePrivateExporter::writeHeader(CT_LAZHeader* header,
         return false;
 
     QString error;
-    bool ok = header->writezip(zipHeader);
+    bool ok = header->write(stream, error);
 
     if(!ok)
         setErrorMessage(error);
 
     return ok;
 }
+
+#endif
 
 CT_LAZPieceByPiecePrivateExporter::HeaderBackup* CT_LAZPieceByPiecePrivateExporter::createOrGetHeaderBackupForHeader(const CT_LAZHeader* header) const
 {
@@ -576,3 +483,4 @@ QString CT_LAZPieceByPiecePrivateExporter::HeaderBackup::generateFilePath(int n)
 
     return dirPath + QString().setNum(n) + ".laz";
 }
+

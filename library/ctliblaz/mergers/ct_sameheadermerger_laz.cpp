@@ -1,3 +1,5 @@
+// #include "laszip/laszip_api.h"
+
 #include "ct_sameheadermerger_laz.h"
 
 #include "laszip/laszip_api.h"
