@@ -72,6 +72,12 @@ public:
 
 
     /**
+     * @brief Shortcut to add a separation line
+     */
+    void addSeparationLine();
+
+
+    /**
      * @brief Add an int parameter input to a new line in the dialog
      *
      * The following graphic composants are automatically added to the next line of the dialog :\n
@@ -344,7 +350,8 @@ public:
     /**
      * @brief Returns help text for dialog.
      */
-    QString helpText();
+    QString helpText(bool menuStepData);
+
 
 private:
     QGridLayout                                     *m_gridLayout;
@@ -354,8 +361,12 @@ private:
     QList<CT_GroupBox*>                             m_groupBoxCollection;
     QWidget*                                        m_centralWidget;
 
-    QString                                         m_helpText;
-    bool                                            m_helpTextFirst;
+    QList<CT_WidgetWithValueReferenceInterface*>            m_widgetList;
+    QList<QString>                                          m_paramLab;
+    QList<QString>                                          m_paramDesc;
+
+
+    QString formatToUpdateValue(CT_WidgetWithValueReferenceInterface* widget, QVariant value);
 
 protected:
 

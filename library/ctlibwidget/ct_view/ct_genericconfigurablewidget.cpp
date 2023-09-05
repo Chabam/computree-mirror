@@ -11,9 +11,11 @@
 #include "ct_multilineedit.h"
 #include "ct_groupbox.h"
 
+#include <QFrame>
 #include <QScrollArea>
 #include <QGuiApplication>
 #include <QScreen>
+#include <QDebug>
 
 CT_GenericConfigurableWidget::CT_GenericConfigurableWidget(QWidget *parent) : CT_GenericConfigurableWidget(true, parent)
 {
@@ -45,7 +47,6 @@ CT_GenericConfigurableWidget::CT_GenericConfigurableWidget(bool useScrollArea, Q
 
     m_canEdit = true;
     m_nRow = 0;
-    m_helpTextFirst = true;
 }
 
 CT_GenericConfigurableWidget::~CT_GenericConfigurableWidget()
@@ -87,16 +88,35 @@ bool CT_GenericConfigurableWidget::addText(const QString &firstColumnLabelText,
 
         addRow();
 
-        if (!m_helpTextFirst) {m_helpText.append("</ul>");}
-        m_helpTextFirst = true;
-
-        if (!description.isEmpty()) {m_helpText.append(description + "<br>");}
-        else if (!firstColumnLabelText.isEmpty()) {m_helpText.append(firstColumnLabelText + "<br>");}
+        m_widgetList.append(nullptr);
+        m_paramLab.append("<br>" + firstColumnLabelText + "<br>");
+        m_paramDesc.append("");
 
         return true;
     }
 
     return false;
+}
+
+void CT_GenericConfigurableWidget::addSeparationLine()
+{
+    if(canEdit())
+    {
+        addLabel(nRows(), 0, "");
+        addRow();
+
+        QFrame* line = new QFrame(this);
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        addWidget(nRows(), 0, line, 1, 4);
+        addRow();
+
+        m_widgetList.append(nullptr);
+        m_paramLab.append("<br>");
+        m_paramDesc.append("");
+
+    }
 }
 
 bool CT_GenericConfigurableWidget::addTitle(const QString &text,
@@ -131,13 +151,10 @@ CT_SpinBox* CT_GenericConfigurableWidget::addInt(const QString &beforeLabelText,
             else if (beforeLabelText.back() != " ") {sep = ": ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_widgetList.append(spinBox);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>__VALUE__%1</em>. __DESCRIPTION__</li><br>").arg((afterLabelText.isEmpty()?"":" ") + afterLabelText));
+        m_paramDesc.append("<br>" + description);
 
         return spinBox;
     }
@@ -154,6 +171,7 @@ CT_DoubleSpinBox* CT_GenericConfigurableWidget::addDouble(const QString &beforeL
                                              const double &multValue,
                                              const QString &description)
 {
+
     if(canEdit())
     {
         CT_DoubleSpinBox *spinBox = new CT_DoubleSpinBox(minValue, maxValue, nDecimals, valueToUpdate, multValue, beforeLabelText);
@@ -173,13 +191,10 @@ CT_DoubleSpinBox* CT_GenericConfigurableWidget::addDouble(const QString &beforeL
             else if (beforeLabelText.back() != " ") {sep = ": ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_widgetList.append(spinBox);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>__VALUE__%1</em>. __DESCRIPTION__</li><br>").arg((afterLabelText.isEmpty()?"":" ") + afterLabelText));
+        m_paramDesc.append("<br>" + description);
 
         return spinBox;
     }
@@ -215,13 +230,10 @@ CT_CheckBox* CT_GenericConfigurableWidget::addBool(const QString &beforeLabelTex
             else if (str.back() != " ") {sep = ": ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" <em>valeur par défaut = %1%2.</em> ").arg((valueToUpdate?tr("Activé"):tr("Désactivé"))).arg((afterLabelText.isEmpty()?"":" ") + afterLabelText) + description + "</li><br>");
+        m_widgetList.append(checkBox);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" <em>__VALUE__%1</em>. __DESCRIPTION__</li><br>").arg((afterLabelText.isEmpty()?"":" ") + afterLabelText));
+        m_paramDesc.append("<br>" + description);
 
         return checkBox;
     }
@@ -253,13 +265,10 @@ CT_LineEdit* CT_GenericConfigurableWidget::addString(const QString &beforeLabelT
             else if (beforeLabelText.back() != " ") {sep = ": ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + (valueToUpdate.isEmpty()?". ":tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ")) + afterLabelText) + description + "</li><br>");
+        m_widgetList.append(lineEdit);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>__VALUE__%1</em>. __DESCRIPTION__</li><br>").arg((afterLabelText.isEmpty()?"":" ") + afterLabelText));
+        m_paramDesc.append("<br>" + description);
 
         return lineEdit;
     }
@@ -291,13 +300,11 @@ CT_MultiLineEdit* CT_GenericConfigurableWidget::addMultiString(const QString &be
             else if (beforeLabelText.back() != " ") {sep = ": ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + (valueToUpdate.isEmpty()?". ":tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ")) + afterLabelText) + description + "</li><br>");
+        m_widgetList.append(lineEdit);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>__VALUE__%1</em>. __DESCRIPTION__</li><br>").arg((afterLabelText.isEmpty()?"":" ") + afterLabelText));
+        m_paramDesc.append("<br>" + description);
+
 
         return lineEdit;
     }
@@ -332,13 +339,10 @@ CT_ComboBox* CT_GenericConfigurableWidget::addStringChoice(const QString &before
             else if (beforeLabelText.back() != " ") {sep = ": ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + (valueToUpdate.isEmpty()?". ":tr(" <em>valeur par défaut = %1%2</em>. ").arg(valueToUpdate).arg((afterLabelText.isEmpty()?"":" ")) + afterLabelText) + description + "</li><br>");
+        m_widgetList.append(comboBox);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + beforeLabelText + "</span>" + sep + tr(" <em>__VALUE__%1</em>. __DESCRIPTION__</li><br>").arg((afterLabelText.isEmpty()?"":" ") + afterLabelText));
+        m_paramDesc.append("<br>" + description);
 
 
         if (!valueToUpdate.isEmpty())
@@ -399,13 +403,10 @@ bool CT_GenericConfigurableWidget::addExcludeValue(const QString &beforeLabelTex
             else if (str.back() != " ") {sep = ". ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + description + "</li><br>");
+        m_widgetList.append(radioButton);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" <em>__VALUE__%1</em>. __DESCRIPTION__</li><br>").arg((afterLabelText.isEmpty()?"":" ") + afterLabelText));
+        m_paramDesc.append("<br>" + description);
 
         return true;
     }
@@ -453,18 +454,20 @@ CT_FileChoiceButton* CT_GenericConfigurableWidget::addFileChoice(const QString &
             else if (str.back() != " ") {sep = ": ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
+
+        m_widgetList.append(fileChoiceButton);
 
         if (filetype == CT_FileChoiceButton::OneExistingFolder)
         {
-            m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + description + "</li><br>");
+            m_paramLab.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" __DESCRIPTION__</li><br>"));
         } else {
-            m_helpText.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
+            m_paramLab.append("<li><span class=\"parameterDescr\">" + str + "</span>" + sep + tr(" extension : %1. __DESCRIPTION__</li><br>").arg(fileFilter));
+
         }
+
+        m_paramDesc.append("<br>" + description);
+
+
 
         fileChoiceButton->setWidgetValue(valueToUpdate);
     }
@@ -512,13 +515,11 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
         if (btlab.back() == ":" || btlab.back() == "."  || btlab.back() == ",") {sep = " ";}
         else if (btlab.back() != " ") {sep = ". ";}
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + btlab + "</span>" + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
+        m_widgetList.append(fileChoiceButton);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + btlab + "</span>" + sep + tr(" extension : %1. __DESCRIPTION__</li><br>").arg(fileFilter));
+        m_paramDesc.append("<br>" + description);
+
 
         fileChoiceButton->setWidgetValue(fileName);
     }
@@ -568,13 +569,10 @@ CT_AsciiFileChoiceButton *CT_GenericConfigurableWidget::addAsciiFileChoice(QStri
             else if (btlab.back() != " ") {sep = ": ";}
         }
 
-        if (m_helpTextFirst)
-        {
-            m_helpTextFirst = false;
-            m_helpText.append("<ul>");
-        }
 
-        m_helpText.append("<li><span class=\"parameterDescr\">" + btlab + "</span>" + sep + tr(" extension : %1. ").arg(fileFilter) + description + "</li><br>");
+        m_widgetList.append(fileChoiceButton);
+        m_paramLab.append("<li><span class=\"parameterDescr\">" + btlab + "</span>" + sep + tr(" extension : %1. __DESCRIPTION__</li><br>").arg(fileFilter));
+        m_paramDesc.append("<br>" + description);
 
         fileChoiceButton->setWidgetValue(fileName);
     }
@@ -616,12 +614,113 @@ bool CT_GenericConfigurableWidget::isSettingsModified() const
     return true;
 }
 
-QString CT_GenericConfigurableWidget::helpText()
+QString CT_GenericConfigurableWidget::helpText(bool menuStepData)
 {
-    if (!m_helpTextFirst) {m_helpText.append("</ul>");}
-    m_helpTextFirst = true;
+    QString helpText;
 
-    return m_helpText;
+    bool first = true;
+
+    for (int i = 0 ; i < m_widgetList.size() ; i++)
+    {
+        CT_WidgetWithValueReferenceInterface* widget = m_widgetList.at(i);
+        QString paramLab = m_paramLab.at(i);
+        QString paramDesc = m_paramDesc.at(i);
+
+        QString str;
+        QVariant value;
+
+        if (menuStepData)
+        {
+            str = paramLab.replace("__DESCRIPTION__", paramDesc);
+        } else {
+            str = paramLab.replace("__DESCRIPTION__", "");
+
+        }
+
+
+        if (widget != nullptr)
+        {
+            CT_RadioButton* widgEx = dynamic_cast<CT_RadioButton*>(widget);
+            if (widgEx != nullptr)
+            {
+                value = widgEx->getValue() == widgEx->getId();
+            } else {
+                value = widget->getValue();
+            }
+        }
+
+
+        if (widget == nullptr)
+        {
+            helpText.append("</ul>");
+            first = true;
+        } else
+        {
+            if (first)
+            {
+                helpText.append("<ul>");
+                first = false;
+            }
+
+            str.replace("__VALUE__", formatToUpdateValue(widget, value));
+        }
+
+        helpText.append(str);
+    }
+
+    if (!first)
+    {
+        helpText.append("</ul>");
+    }
+
+    return helpText;
+}
+
+
+QString CT_GenericConfigurableWidget::formatToUpdateValue(CT_WidgetWithValueReferenceInterface *widget, QVariant value)
+{
+    CT_SpinBox* widg0 = dynamic_cast<CT_SpinBox*>(widget);
+    CT_DoubleSpinBox* widg1 = dynamic_cast<CT_DoubleSpinBox*>(widget);
+    CT_CheckBox* widg2 = dynamic_cast<CT_CheckBox*>(widget);
+    CT_LineEdit* widg3 = dynamic_cast<CT_LineEdit*>(widget);
+    CT_MultiLineEdit* widg4 = dynamic_cast<CT_MultiLineEdit*>(widget);
+    CT_ComboBox* widg5 = dynamic_cast<CT_ComboBox*>(widget);
+    CT_RadioButton* widg6 = dynamic_cast<CT_RadioButton*>(widget);
+
+    if (widg0 != nullptr)
+    {
+        return value.toString();
+
+    } else if (widg1 != nullptr)
+    {
+        double val = value.toDouble() * widg1->getMultValue();
+        return QString::number(val, 'f', widg1->getnDecimals());
+
+    } else if (widg2 != nullptr)
+    {
+        return value.toBool()?tr("Activé"):tr("Désactivé");
+
+    } else if (widg3 != nullptr)
+    {
+        QString val = value.toString();
+        return val.isEmpty()?tr("(vide)"):val;
+
+    } else if (widg4 != nullptr)
+    {
+        QString val = value.toString();
+        return val.isEmpty()?tr("(vide)"):val;
+
+    } else if (widg5 != nullptr)
+    {
+        QString val = value.toString();
+        return val.isEmpty()?tr("(vide)"):val;
+
+    } else if (widg6 != nullptr)
+    {
+        return value.toBool()?tr("Activé"):tr("Désactivé");
+    }
+
+    return value.toString();
 }
 
 QList<CT_WidgetWithValueReferenceInterface *> CT_GenericConfigurableWidget::allWidgets() const

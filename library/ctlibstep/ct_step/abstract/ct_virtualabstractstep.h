@@ -191,7 +191,7 @@ public:
      *        Inherit this method if you want to provide a ad-hoc parameters description
      *
      */
-    virtual QString parametersDescription();
+    virtual QString parametersDescription(bool menuStepData = true);
 
     /**
      * @brief Returns description of inputs results for step

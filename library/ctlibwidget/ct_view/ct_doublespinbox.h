@@ -67,7 +67,10 @@ public:
 
     bool isValueAndWidgetValueDifferent() const override;
 
-    QVariant getValue() const;
+    QVariant getValue() const override;
+
+    double getMultValue() const {return _data._multValue;}
+    int getnDecimals() const {return _data._nDecimals;}
 
     bool setWidgetValue(QVariant val);
 

@@ -32,6 +32,7 @@ public:
     CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager);
 
     QString getScriptStepList();
+    QString getScriptStepListParameters();
     QList<CDM_CitationInfo::StepCitationInfo> getScriptTable();
     QString getPluginAndStepCitations();
     QString getPluginRIS();

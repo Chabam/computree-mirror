@@ -71,6 +71,11 @@ public:
     virtual void updateValue() = 0;
 
     /**
+     * @brief return toUpdateValue
+     */
+    virtual QVariant getValue() const = 0;
+
+    /**
      * @brief Must return true if the value of the internal object is different than the value of
      *        the gui widget
      */

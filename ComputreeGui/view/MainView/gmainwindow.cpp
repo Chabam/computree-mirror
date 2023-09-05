@@ -310,7 +310,7 @@ void GMainWindow::citationInfo()
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Description du script") << "</h1>\n";
-                stream << "<h2>" << tr("Informations sur le script") << "</h1>\n";
+                stream << "<h2>" << tr("Informations sur le script") << "</h2>\n";
                 stream << "<p><em>" << tr("Titre du script : ") << "</em><strong>" << scriptName << "</strong></p>";
 
                 if (!author.isEmpty())
@@ -318,7 +318,7 @@ void GMainWindow::citationInfo()
                     stream << "<p><em>" << tr("Auteur : ") << "</em><strong>" << author << "</strong></p>";
                 }
                 stream << "<p><em>" << tr("Fichier script Computree : ") << "</em>" << scriptFileName << ".cts</p>";
-                stream << "<p><em>" << tr("Fichier de citations : ") << "</em>" << scriptFileName << ".ris</p>";
+                stream << "<p><em>" << tr("Fichier de citations : ") << "</em>" << scriptFileName << ".ris (" << "<a target=\"frameContent\" href=\"citations.html\">" << tr("Comment citer ce script") + "</a>)</p>";
                 stream << "<p><em>" << tr("Date d'enregistrement : ") << "</em>" << formattedTime << "</p>";
 
                 if (!description.isEmpty())
@@ -326,9 +326,6 @@ void GMainWindow::citationInfo()
                     stream << "<p><em>" << tr("Description : ") << "</em>" << "</p>";
                     stream << "<p>" << description << "</p>";
                 }
-
-                stream << "<br>\n";
-                stream << "<p>" + tr("Pour savoir comment référencer les travaux utilisés dans ce script, merci de consulter la page ") + "<a target=\"frameContent\" href=\"citations.html\">" + tr("Comment citer ce script.") + "<br><br></a>\n";
 
                 stream << "<br>\n";
                 stream << "<h2>" << tr("Structure du script") << "</h1>\n";
@@ -347,6 +344,31 @@ void GMainWindow::citationInfo()
 
                 fMainContent.close();
             }
+
+            // Create parameters.html file
+            QFile fParametersContent(outDirPath + "/content/parameters.html");
+            if (fParametersContent.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&fParametersContent);
+
+                stream << "<!DOCTYPE html>\n";
+                stream << "<html>\n";
+                stream << "<head>\n";
+                stream << "<metacharset=\"utf-8\">\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
+                stream << "<body>\n";
+                stream << "<div class=\"mainBlock\">\n";
+                stream << "<h1>" << tr("Paramètres des étapes du script") << "</h1>\n";
+                stream << "<br>\n";
+                stream << citationInfo.getScriptStepListParameters();
+                stream << "<br>";
+                stream << "</div>\n";
+                stream << "</body>\n";
+                stream << "</html>\n";
+
+                fParametersContent.close();
+            }
+
 
 
             // Create citation.html file
@@ -382,6 +404,42 @@ void GMainWindow::citationInfo()
                 fcitations.close();
             }
 
+            // Create menu step list
+            QMap<QString, CT_VirtualAbstractStep*> stepList;
+
+            CT_StepsMenu *menu = getPluginManager()->stepsMenu();
+            QList<CT_MenuLevel*> levels = menu->levels();
+            QListIterator<CT_MenuLevel*> it(levels);
+
+            while(it.hasNext())
+            {
+                CT_MenuLevel* level = it.next();
+                const QString favoritesName = CT_StepsMenu::staticOperationToDisplayableName(CT_StepsMenu::LO_Favorites);
+
+                if(level->displayableName() != favoritesName)
+                {
+                    const QList<CT_VirtualAbstractStep*> steps = level->steps();
+
+                    for(CT_VirtualAbstractStep* step : steps)
+                    {
+                        stepList.insert(step->name(), step);
+                    }
+
+                    QList<CT_MenuLevel*> sublevels = level->levels();
+                    QListIterator<CT_MenuLevel*> its(sublevels);
+                    while(its.hasNext())
+                    {
+                        CT_MenuLevel* subLevel = its.next();
+                        const QList<CT_VirtualAbstractStep*> steps = subLevel->steps();
+
+                        for(CT_VirtualAbstractStep* step : steps)
+                        {
+                            stepList.insert(step->name(), step);
+                        }
+                    }
+                }
+            }
+
 
             // Create Summmary and steps documentation pages
             QFile f(outDirPath + "/content/summary.html");
@@ -402,6 +460,7 @@ void GMainWindow::citationInfo()
                 stream << "<div class=\"linksummary01\" >";
                 stream << "<a target=\"frameContent\" href=\"mainContent.html\">" + tr("Description du script") + "<br><br></a>\n";
                 stream << "<a target=\"frameContent\" href=\"citations.html\">" + tr("Comment citer ce script") + "<br><br></a>\n";
+                stream << "<a target=\"frameContent\" href=\"parameters.html\">" + tr("Paramètres des étapes du script") + "<br><br></a>\n";
                 stream << "</div>";
                 stream << "<h1>" << tr("Etapes du script") << "</h1>\n";
 
@@ -410,10 +469,15 @@ void GMainWindow::citationInfo()
                 if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >";}
                 for(CT_VirtualAbstractStep* step : steps)
                 {
-                    stream << "<a target=\"frameContent\" href=\"../steps/" << step->name() << ".html\">" << step->description() << "<br><br></a>\n";
+                    CT_VirtualAbstractStep* stepDoc = stepList.value(step->name());
 
-                    // Create documentation page for this step
-                    step->generateHTMLDocumentation(outDirPath + "/steps", "../css");
+                    if (stepDoc != nullptr)
+                    {
+                        stream << "<a target=\"frameContent\" href=\"../steps/" << stepDoc->name() << ".html\">" << stepDoc->description() << "<br><br></a>\n";
+
+                        // Create documentation page for this step
+                        stepDoc->generateHTMLDocumentation(outDirPath + "/steps", "../css");
+                    }
                 }
                 if (steps.size() > 0) {stream << "</div>";}
 

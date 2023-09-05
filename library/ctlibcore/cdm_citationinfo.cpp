@@ -97,6 +97,40 @@ QString CDM_CitationInfo::getScriptStepList()
     return result;
 }
 
+QString CDM_CitationInfo::getScriptStepListParameters()
+{
+    QString result;
+    for (int i = 0 ; i < _stepList.size() ; i++)
+    {
+        const CT_VirtualAbstractStep *step = _stepList.at(i);
+
+        CT_AbstractStepPlugin* plugin = step->pluginStaticCastT<>();
+        QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
+        QString pluginOfficialName = plugin->getPluginOfficialName();
+
+        if (pluginName.left(5) == "plug_")
+        {
+            pluginName.remove(0, 5);
+        }
+        if (pluginOfficialName != "")
+        {
+            pluginName = pluginOfficialName;
+        }
+
+        result.append("<h2>" + step->description() + " <em>(plugin " + pluginName + ")</em></h2>\n");
+        QString parametersString = const_cast<CT_VirtualAbstractStep*>(step)->parametersDescription(false);
+
+        if (parametersString.isEmpty())
+        {
+            result.append("<div style='margin-left:50px'>\n<em>" + tr("Pas de paramètres pour cette étape.") + "</em>\n</div>\n");
+        } else {
+            result.append("<div style='margin-left:50px'>\n" + parametersString + "\n</div>\n");
+        }
+    }
+
+    return result;
+}
+
 QList<CDM_CitationInfo::StepCitationInfo> CDM_CitationInfo::getScriptTable()
 {
     QList<CDM_CitationInfo::StepCitationInfo> list;

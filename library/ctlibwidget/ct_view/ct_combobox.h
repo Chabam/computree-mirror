@@ -31,7 +31,7 @@ public:
 
     bool isValueAndWidgetValueDifferent() const final;
 
-    QVariant getValue() const;
+    QVariant getValue() const override;
 
     bool setWidgetValueList(QVariant valList);
     bool setWidgetValue(QVariant val);

@@ -32,6 +32,12 @@ public:
     void updateValue() override;
 
     /**
+     * @brief Neutralized
+     */
+    QVariant getValue() const override {return QVariant();};
+
+
+    /**
      * @brief Redefined to check all widgets in this group box
      */
     bool isValueAndWidgetValueDifferent() const override;

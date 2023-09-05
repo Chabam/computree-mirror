@@ -174,7 +174,7 @@ QStringList CT_VirtualAbstractStep::getStepRISCitations() const
     return QStringList();
 }
 
-QString CT_VirtualAbstractStep::parametersDescription()
+QString CT_VirtualAbstractStep::parametersDescription(bool menuStepData)
 {
     QString str;
 
@@ -182,7 +182,7 @@ QString CT_VirtualAbstractStep::parametersDescription()
     if (m_preInputConfigDialog != nullptr)
     {
        str.append(tr("<strong>Paramètres de pré-configuration</strong> (non modifiables une fois l'étape ajoutée) :<br><br>"));
-       str.append(m_preInputConfigDialog->helpText());
+       str.append(m_preInputConfigDialog->helpText(menuStepData));
     }
     delete m_preInputConfigDialog;
     m_preInputConfigDialog = nullptr;
@@ -194,11 +194,11 @@ QString CT_VirtualAbstractStep::parametersDescription()
         if (m_preInputConfigDialog != nullptr) {str.append("<br>");}
 
         str.append(tr("<strong>Paramètres de l'étape</strong> :<br><br>"));
-        str.append(m_postInputConfigDialog->helpText());
+        str.append(m_postInputConfigDialog->helpText(menuStepData));
     }
+
     delete m_postInputConfigDialog;
     m_postInputConfigDialog = nullptr;
-
 
     return str;
 }
@@ -924,7 +924,7 @@ QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QSt
         stream << "</div>";
         stream << "</section>\n";
 
-        QString parameters = this->parametersDescription();
+        QString parameters = this->parametersDescription(true);
         if (!parameters.isEmpty())
         {
             stream << "<section>\n";
