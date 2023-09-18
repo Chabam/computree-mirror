@@ -424,9 +424,9 @@ CT_VirtualAbstractStep* CDM_HRScriptXmlReader::recursiveAddAndLoadStep(QDomEleme
         if(parentStep != nullptr) {
             currentStepEL = currentStepEL.nextSiblingElement("Step");
 
-            while(!currentStepEL.isNull()) {
+            // while(!currentStepEL.isNull()) {
+            if(!currentStepEL.isNull()) {
                 recursiveAddAndLoadStep(currentStepEL, parentStep, loadErrorStrategy);
-                currentStepEL = currentStepEL.nextSiblingElement("Step");
             }
         }
 
