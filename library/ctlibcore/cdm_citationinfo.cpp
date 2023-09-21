@@ -132,6 +132,7 @@ QString CDM_CitationInfo::getScriptStepListParameters()
 }
 
 
+// TESTTUTO
 QString CDM_CitationInfo::getScriptStepListInputConfig()
 {
     QString result;
