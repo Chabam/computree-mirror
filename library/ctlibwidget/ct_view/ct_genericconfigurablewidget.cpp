@@ -614,7 +614,7 @@ bool CT_GenericConfigurableWidget::isSettingsModified() const
     return true;
 }
 
-QString CT_GenericConfigurableWidget::helpText(bool menuStepData)
+QString CT_GenericConfigurableWidget::helpText(bool addDescriptions)
 {
     QString helpText;
 
@@ -629,7 +629,7 @@ QString CT_GenericConfigurableWidget::helpText(bool menuStepData)
         QString str;
         QVariant value;
 
-        if (menuStepData)
+        if (addDescriptions)
         {
             str = paramLab.replace("__DESCRIPTION__", paramDesc);
         } else {

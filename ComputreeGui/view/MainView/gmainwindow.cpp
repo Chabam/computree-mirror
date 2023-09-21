@@ -69,11 +69,15 @@
 
 #include <QSpinBox>
 
+#include "svnrevision.h"
+
 GMainWindow::GMainWindow(QWidget *parent) :
     QMainWindow(parent), DM_MainWindow(),
     ui(new Ui::GMainWindow)
 {
     ui->setupUi(this);
+
+    this->setWindowTitle(QString("Computree - version 6.0.%1").arg(SVN_REVISION));
 }
 
 GMainWindow::~GMainWindow()
@@ -369,6 +373,31 @@ void GMainWindow::citationInfo()
                 fParametersContent.close();
             }
 
+
+            // TESTTUTO
+            // Create inputresults.html file
+            QFile fInputResultsContent(outDirPath + "/content/inputresults.html");
+            if (fInputResultsContent.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&fInputResultsContent);
+
+                stream << "<!DOCTYPE html>\n";
+                stream << "<html>\n";
+                stream << "<head>\n";
+                stream << "<metacharset=\"utf-8\">\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
+                stream << "<body>\n";
+                stream << "<div class=\"mainBlock\">\n";
+                stream << "<h1>" << tr("Configuration des résultats d'entrée des étapes du script") << "</h1>\n";
+                stream << "<br>\n";
+                stream << citationInfo.getScriptStepListParameters();
+                stream << "<br>";
+                stream << "</div>\n";
+                stream << "</body>\n";
+                stream << "</html>\n";
+
+                fInputResultsContent.close();
+            }
 
 
             // Create citation.html file

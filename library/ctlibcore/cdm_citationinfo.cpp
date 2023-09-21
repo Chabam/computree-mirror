@@ -131,6 +131,21 @@ QString CDM_CitationInfo::getScriptStepListParameters()
     return result;
 }
 
+
+QString CDM_CitationInfo::getScriptStepListInputConfig()
+{
+    QString result;
+    for (int i = 0 ; i < _stepList.size() ; i++)
+    {
+        const CT_VirtualAbstractStep *step = _stepList.at(i);
+
+        step->inputDescription();
+    }
+
+    return result;
+}
+
+
 QList<CDM_CitationInfo::StepCitationInfo> CDM_CitationInfo::getScriptTable()
 {
     QList<CDM_CitationInfo::StepCitationInfo> list;

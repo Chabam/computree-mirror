@@ -174,7 +174,7 @@ QStringList CT_VirtualAbstractStep::getStepRISCitations() const
     return QStringList();
 }
 
-QString CT_VirtualAbstractStep::parametersDescription(bool menuStepData)
+QString CT_VirtualAbstractStep::parametersDescription(bool addDescriptions)
 {
     QString str;
 
@@ -182,7 +182,7 @@ QString CT_VirtualAbstractStep::parametersDescription(bool menuStepData)
     if (m_preInputConfigDialog != nullptr)
     {
        str.append(tr("<strong>Paramètres de pré-configuration</strong> (non modifiables une fois l'étape ajoutée) :<br><br>"));
-       str.append(m_preInputConfigDialog->helpText(menuStepData));
+       str.append(m_preInputConfigDialog->helpText(addDescriptions));
     }
     delete m_preInputConfigDialog;
     m_preInputConfigDialog = nullptr;
@@ -194,7 +194,7 @@ QString CT_VirtualAbstractStep::parametersDescription(bool menuStepData)
         if (m_preInputConfigDialog != nullptr) {str.append("<br>");}
 
         str.append(tr("<strong>Paramètres de l'étape</strong> :<br><br>"));
-        str.append(m_postInputConfigDialog->helpText(menuStepData));
+        str.append(m_postInputConfigDialog->helpText(addDescriptions));
     }
 
     delete m_postInputConfigDialog;
@@ -1311,6 +1311,31 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, in
         }
     }
     str.append("<br>");
+
+    // TESTTUTO
+    qDebug() << "___";
+    qDebug() << "iModel->displayableName()=" << iModel->displayableName();
+
+    QList<CT_InStdModelPossibility *> possibilities = iModel->getPossibilitiesSelected();
+    for (CT_InStdModelPossibility* poss : possibilities)
+    {
+        qDebug() << ".";
+        qDebug() << poss->outModel()->displayableName();
+    }
+    qDebug() << "__";
+
+//    const int nResultPossibility = inResultModel->nPossibilitySelected();
+
+//    for(int i=0; i<nResultPossibility; ++i) {
+//        const CT_InStdModelPossibilitySelectionGroup* selectionGroup = this->inModelForSelectedPossibilities(inResult, i)->possibilitiesGroup();
+
+//        outModels.resize(outModels.size() + selectionGroup->nPossibilitySelected());
+
+//        for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
+//            outModels[currentIndex++] = static_cast<OutModelT*>(possibility->outModel());
+//        }
+//    }
+
 
     createHelpStrForChildrens(str, nbTab+1, iModel);
 }

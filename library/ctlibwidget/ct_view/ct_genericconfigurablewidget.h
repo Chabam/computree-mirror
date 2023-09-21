@@ -350,7 +350,7 @@ public:
     /**
      * @brief Returns help text for dialog.
      */
-    QString helpText(bool menuStepData);
+    QString helpText(bool addDescriptions);
 
 
 private:

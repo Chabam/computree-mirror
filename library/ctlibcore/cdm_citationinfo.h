@@ -33,6 +33,7 @@ public:
 
     QString getScriptStepList();
     QString getScriptStepListParameters();
+    QString getScriptStepListInputConfig();
     QList<CDM_CitationInfo::StepCitationInfo> getScriptTable();
     QString getPluginAndStepCitations();
     QString getPluginRIS();
