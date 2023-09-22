@@ -886,12 +886,12 @@ CT_DelaunayTriangle *CT_DelaunayTriangulation::getZCoordForXY(double x, double y
 
     if (triangle == nullptr) {outZ = NAN; return nullptr;} // should not happen
 
-    if (!triangle->contains(x, y))
-    {
-        qDebug() << "Imprécision numérique";
-        qDebug() << "x=" << QString::number(x, 'f', 4);
-        qDebug() << "y=" << QString::number(y, 'f', 4);
-    }
+//    if (!triangle->contains(x, y))
+//    {
+//        qDebug() << "Imprécision numérique";
+//        qDebug() << "x=" << QString::number(x, 'f', 4);
+//        qDebug() << "y=" << QString::number(y, 'f', 4);
+//    }
 
     if (!cornersIncluded && (isCorner(triangle->_v1) || isCorner(triangle->_v2) || isCorner(triangle->_v3))) {outZ = NAN; return nullptr;}
 
