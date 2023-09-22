@@ -1313,16 +1313,16 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, in
     str.append("<br>");
 
     // TESTTUTO
-    qDebug() << "___";
-    qDebug() << "iModel->displayableName()=" << iModel->displayableName();
+//    qDebug() << "___";
+//    qDebug() << "iModel->displayableName()=" << iModel->displayableName();
 
-    QList<CT_InStdModelPossibility *> possibilities = iModel->getPossibilitiesSelected();
-    for (CT_InStdModelPossibility* poss : possibilities)
-    {
-        qDebug() << ".";
-        qDebug() << poss->outModel()->displayableName();
-    }
-    qDebug() << "__";
+//    QList<CT_InStdModelPossibility *> possibilities = iModel->getPossibilitiesSelected();
+//    for (CT_InStdModelPossibility* poss : possibilities)
+//    {
+//        qDebug() << ".";
+//        qDebug() << poss->outModel()->displayableName();
+//    }
+//    qDebug() << "__";
 
 //    const int nResultPossibility = inResultModel->nPossibilitySelected();
 

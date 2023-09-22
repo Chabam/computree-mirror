@@ -323,7 +323,7 @@ void GMainWindow::citationInfo()
                 }
                 stream << "<p><em>" << tr("Fichier script Computree : ") << "</em>" << scriptFileName << ".cts</p>";
                 stream << "<p><em>" << tr("Fichier de citations : ") << "</em>" << scriptFileName << ".ris (" << "<a target=\"frameContent\" href=\"citations.html\">" << tr("Comment citer ce script") + "</a>)</p>";
-                stream << "<p><em>" << tr("Date d'enregistrement : ") << "</em>" << formattedTime << "</p>";
+                stream << "<p><em>" << tr("Création : ") << "</em>" << formattedTime << ", Computree version 6.0." << SVN_REVISION << "</p>";
 
                 if (!description.isEmpty())
                 {
