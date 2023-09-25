@@ -390,7 +390,7 @@ void GMainWindow::citationInfo()
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Configuration des résultats d'entrée des étapes du script") << "</h1>\n";
                 stream << "<br>\n";
-                stream << citationInfo.getScriptStepListParameters();
+                stream << citationInfo.getScriptStepListInputConfig();
                 stream << "<br>";
                 stream << "</div>\n";
                 stream << "</body>\n";

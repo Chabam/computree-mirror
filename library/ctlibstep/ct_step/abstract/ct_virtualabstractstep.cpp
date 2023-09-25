@@ -1313,6 +1313,8 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, in
     str.append("<br>");
 
     // TESTTUTO
+    /// Aller voir ici : CTG_InModelPossibilitiesChoice::constructModel
+
 //    qDebug() << "___";
 //    qDebug() << "iModel->displayableName()=" << iModel->displayableName();
 
