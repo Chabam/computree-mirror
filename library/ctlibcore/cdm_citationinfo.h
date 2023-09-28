@@ -5,6 +5,9 @@
 #include "cdm_stepmanager.h"
 #include "cdm_pluginmanager.h"
 
+#include "ct_model/inModel/ct_inresultmodelgroup.h"
+#include "ct_model/outModel/abstract/ct_outabstractresultmodelgroup.h"
+#include "ct_model/inModel/tools/ct_instdresultmodelpossibility.h"
 
 #include <QObject>
 
@@ -34,6 +37,8 @@ public:
     QString getScriptStepList();
     QString getScriptStepListParameters();
     QString getScriptStepListInputConfig();
+    void recursiveCreateInputTree(QString root, const DEF_CT_AbstractGroupModelOut *group, QList<const CT_OutAbstractModel *> &allPoss, QMultiMap<const CT_OutAbstractModel *, int> &selectedPoss);
+
     QList<CDM_CitationInfo::StepCitationInfo> getScriptTable();
     QString getPluginAndStepCitations();
     QString getPluginRIS();
@@ -57,6 +62,10 @@ private:
     CDM_PluginManager*                      _pluginManager;
 
     QString                                 _computreeCitationRIS;
+
+
+    void recursiveCountHierachicalRank(int &count, const CT_AbstractModel *model);
+    QString getTabsForHierachicalRank(int count);
 };
 
 #endif // CDM_CITATIONINFO_H

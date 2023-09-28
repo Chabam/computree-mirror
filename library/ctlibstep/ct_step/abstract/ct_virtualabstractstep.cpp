@@ -1312,33 +1312,6 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, in
     }
     str.append("<br>");
 
-    // TESTTUTO
-    /// Aller voir ici : CTG_InModelPossibilitiesChoice::constructModel
-
-//    qDebug() << "___";
-//    qDebug() << "iModel->displayableName()=" << iModel->displayableName();
-
-//    QList<CT_InStdModelPossibility *> possibilities = iModel->getPossibilitiesSelected();
-//    for (CT_InStdModelPossibility* poss : possibilities)
-//    {
-//        qDebug() << ".";
-//        qDebug() << poss->outModel()->displayableName();
-//    }
-//    qDebug() << "__";
-
-//    const int nResultPossibility = inResultModel->nPossibilitySelected();
-
-//    for(int i=0; i<nResultPossibility; ++i) {
-//        const CT_InStdModelPossibilitySelectionGroup* selectionGroup = this->inModelForSelectedPossibilities(inResult, i)->possibilitiesGroup();
-
-//        outModels.resize(outModels.size() + selectionGroup->nPossibilitySelected());
-
-//        for(const CT_InStdModelPossibility* possibility : selectionGroup->selectedPossibilities()) {
-//            outModels[currentIndex++] = static_cast<OutModelT*>(possibility->outModel());
-//        }
-//    }
-
-
     createHelpStrForChildrens(str, nbTab+1, iModel);
 }
 

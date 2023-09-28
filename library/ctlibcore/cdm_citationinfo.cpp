@@ -140,10 +140,212 @@ QString CDM_CitationInfo::getScriptStepListInputConfig()
     {
         const CT_VirtualAbstractStep *step = _stepList.at(i);
 
-        step->inputDescription();
+        QList<const CT_InAbstractResultModel*> resultInModels;
+
+        step->visitInResultModels([this, step, &resultInModels](const CT_InAbstractResultModel* child) -> bool {
+            resultInModels.append(child);
+            qDebug();
+            qDebug() << step->displayableName();
+
+            child->visitSelectedPossibilities([this](const CT_InAbstractModel* inModel, const CT_InStdModelPossibility* possibility) -> bool {
+                Q_UNUSED(inModel);
+                const CT_InStdResultModelPossibility* resultPossibility = dynamic_cast<const CT_InStdResultModelPossibility*>(possibility);
+
+
+                if (resultPossibility != nullptr)
+                {
+                    CT_OutAbstractResultModelGroup* outResModel = dynamic_cast<CT_OutAbstractResultModelGroup*>(resultPossibility->outModel());
+                    CT_InResultModelGroup* inResModel = dynamic_cast<CT_InResultModelGroup*>(resultPossibility->inResultModel());
+
+                    QList<const CT_OutAbstractModel*> allPoss;
+                    QMultiMap<const CT_OutAbstractModel*, int> selectedPoss;
+
+                    qDebug() << "------------IN-----------------";
+                    int modelCount = 1;
+                    inResModel->recursiveVisitInChildrens([this, &allPoss, &selectedPoss, &modelCount] (const CT_InAbstractModel* child)-> bool {
+
+                        if (child->displayableName() != "*")
+                        {
+
+                            int count = 0;
+                            this->recursiveCountHierachicalRank(count, child);
+
+                            qDebug() << this->getTabsForHierachicalRank(count) << child->displayableName() << " " << modelCount;
+
+                            child->visitPossibilities([this, &allPoss, &selectedPoss, &modelCount](const CT_InAbstractModel* inModel, const CT_InStdModelPossibility* possibility) -> bool {
+                                Q_UNUSED(inModel);
+                                allPoss.append(possibility->outModel());
+                                if (possibility->isSelected())
+                                {
+                                    selectedPoss.insert(possibility->outModel(), modelCount);
+                                }
+                                return true;
+                            });
+                            modelCount++;
+                        }
+
+                        return true;
+                    });
+
+                    qDebug() << "-----------------------------";
+
+                    if((outResModel != nullptr)
+                        && (inResModel != nullptr)
+                        && (inResModel->rootGroup() != nullptr))
+                    {
+                        QList<QString> retList;
+
+                        // Nom du résultat modèle d'entrée
+                        QString rootName = outResModel->step() == nullptr ? tr("No Step") : static_cast<CT_VirtualAbstractStep *>(outResModel->step())->displayableName();
+                        retList.append(rootName);
+                        qDebug() << rootName;
+
+                        this->recursiveCreateInputTree(rootName, outResModel->rootGroup(), allPoss, selectedPoss);
+                    }
+                } else {
+                    qDebug() << "nullptr";
+                }
+
+
+                return true;
+            });
+
+            return true;
+        });
     }
 
+    // TESTTUTO
+    // Aller voir ici : CTG_InModelPossibilitiesChoice::constructModel
+    // CT_ModelSelectionHelper::recursiveSelectAllPossibilitiesByDefault
+    // CTG_ModelsLinkConfigurationFlowView
+
     return result;
+}
+
+
+void CDM_CitationInfo::recursiveCreateInputTree(QString root, const DEF_CT_AbstractGroupModelOut* group, QList<const CT_OutAbstractModel*> &allPoss, QMultiMap<const CT_OutAbstractModel*, int> &selectedPoss)
+{
+    if(group == nullptr)
+        return;
+
+    QList<QString> list;
+
+    // le nom du modèle de sortie
+    QString rootItem = group->displayableName();
+    list.append(rootItem);
+
+
+    if (allPoss.contains(group))
+    {
+        QList<int> modelCounts = selectedPoss.values(group);
+        std::sort(modelCounts.begin(), modelCounts.end());
+        QString str;
+        for (int i = 0 ; i < modelCounts.size() ; i++)
+        {
+            str.append(QString("%1").arg(modelCounts.at(i)));
+            if (i < modelCounts.size() - 1)
+            {
+                str.append(";");
+            }
+        }
+
+        int count = 0;
+        this->recursiveCountHierachicalRank(count, group);
+
+        QString itemGroup = group->displayableName();
+        qDebug() << this->getTabsForHierachicalRank(count) << itemGroup << ((modelCounts.size() > 0)?QString(" *** %1").arg(str):"");
+
+        group->visitGroups([this, &rootItem, &allPoss, &selectedPoss](const DEF_CT_AbstractGroupModelOut* g) -> bool {
+            this->recursiveCreateInputTree(rootItem, g, allPoss, selectedPoss);
+            return true;
+        });
+    }
+
+    group->visitItems([this, &rootItem, &allPoss, &selectedPoss](const CT_OutAbstractSingularItemModel* item) -> bool {
+
+        QList<QString> list2;
+
+        // le nom du modèle de sortie
+        QString itemItem = item->displayableName();
+        list2.append(itemItem);
+
+        if (allPoss.contains(item))
+        {
+            QList<int> modelCounts = selectedPoss.values(item);
+            std::sort(modelCounts.begin(), modelCounts.end());
+            QString str;
+            for (int i = 0 ; i < modelCounts.size() ; i++)
+            {
+                str.append(QString("%1").arg(modelCounts.at(i)));
+                if (i < modelCounts.size() - 1)
+                {
+                    str.append(";");
+                }
+            }
+
+            int count = 0;
+            this->recursiveCountHierachicalRank(count, item);
+
+            qDebug() << this->getTabsForHierachicalRank(count) << itemItem << ((modelCounts.size() > 0)?QString(" *** %1").arg(str):"");
+        }
+
+        item->visitAttributes([this, &itemItem, &allPoss, &selectedPoss](const CT_OutAbstractItemAttributeModel* itemAtt) -> bool {
+            QList<QString> list3;
+
+            // le nom du modèle de sortie
+            QString itemItemAtt = itemAtt->displayableName();
+            list3.append(itemItemAtt);
+
+            if (allPoss.contains(itemAtt))
+            {
+                QList<int> modelCounts = selectedPoss.values(itemAtt);
+                std::sort(modelCounts.begin(), modelCounts.end());
+                QString str;
+                for (int i = 0 ; i < modelCounts.size() ; i++)
+                {
+                    str.append(QString("%1").arg(modelCounts.at(i)));
+                    if (i < modelCounts.size() - 1)
+                    {
+                        str.append(";");
+                    }
+                }
+
+                int count = 0;
+                this->recursiveCountHierachicalRank(count, itemAtt);
+
+                qDebug() << this->getTabsForHierachicalRank(count) << itemItemAtt << ((modelCounts.size() > 0)?QString(" *** %1").arg(str):"");
+            }
+
+            //itemItem->appendRow(list3);
+
+            return true;
+        });
+
+        //rootItem->appendRow(list2);
+
+        return true;
+    });
+
+    //root->appendRow(list);
+}
+
+void CDM_CitationInfo::recursiveCountHierachicalRank(int &count, const CT_AbstractModel* model)
+{
+    if (model->parentModel() != nullptr)
+    {
+        count++;
+        recursiveCountHierachicalRank(count, model->parentModel());
+    }
+}
+
+QString CDM_CitationInfo::getTabsForHierachicalRank(int count)
+{
+    QString str;
+    for (int i = 0 ; i < count ; i++)
+    {
+        str.append("  ");
+    }
+    return str;
 }
 
 
