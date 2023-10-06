@@ -327,9 +327,12 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
                         if (header->m_pointDataRecordFormat < 6) // LAS <= 1.3
                         {
                             valuePointCore6_10.entire = point->return_number +
-                                                        (point->number_of_returns << 3) +
-                                                        (point->scan_direction_flag << 6) +
-                                                        (point->edge_of_flight_line << 7);
+                                    (point->number_of_returns << 3) +
+                                    (point->scan_direction_flag << 6) +
+                                    (point->edge_of_flight_line << 7) +
+                                    (point->synthetic_flag << 8) +
+                                    (point->keypoint_flag << 9) +
+                                    (point->withheld_flag << 10);
                         }
                         else // LAS 1.4
                         {
@@ -445,10 +448,13 @@ bool CT_Reader_LAZ::internalReadFile(CT_StandardItemGroup *group)
 
             if (header->m_pointDataRecordFormat < 6)
             {
-                /* 0b00000111 */ rn6_10  = m_hOutReturnNumber     .createInstance(  7, 0, pcir, mCore6_10Manager);
-                /* 0b00111000 */ nor6_10 = m_hOutNumberOfReturn   .createInstance( 56, 3, pcir, mCore6_10Manager);
-                /* 0b01000000 */ sdf6_10 = m_hOutScanDirectionFlag.createInstance( 64, 6, pcir, mCore6_10Manager);
-                /* 0b10000000 */ efl6_10 = m_hOutEdgeOfFlightLine .createInstance(128, 7, pcir, mCore6_10Manager);
+                /* 0b 000 0 0 000 111 */ rn6_10  = m_hOutReturnNumber     .createInstance(  7, 0, pcir, mCore6_10Manager);
+                /* 0b 000 0 0 111 000 */ nor6_10 = m_hOutNumberOfReturn   .createInstance( 56, 3, pcir, mCore6_10Manager);
+                /* 0b 000 0 1 000 000 */ sdf6_10 = m_hOutScanDirectionFlag.createInstance( 64, 6, pcir, mCore6_10Manager);
+                /* 0b 000 1 00 00 000 */ efl6_10 = m_hOutEdgeOfFlightLine .createInstance(128, 7, pcir, mCore6_10Manager);
+
+                // set classification flag
+                /* 0b 111 0 0 000 000 */ cf      = m_hOutClassificationFlag.createInstance(1792,  8, pcir, mCore6_10Manager);
             }
             else
             {

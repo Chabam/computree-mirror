@@ -345,20 +345,56 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
 
                 intensitySetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
 
+
                 if (header->m_pointDataRecordFormat < 6)
                 {
                     stream >> valueUint8;
-                    valuePointCore6_10.entire = valueUint8;
-                    core6_10Setter.setValueWithLocalIndex(currentLocalIndex, valuePointCore6_10);
                 }
                 else
                 {
                     stream >> valueUint16;
+                }
+
+                //classificationSetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream); // old  version
+
+                quint8 classificationBase;
+                stream >> classificationBase;
+
+                quint8 classificationFiltered;
+                quint16 classifFlag_0_5 = 0;
+
+                if(header->m_pointDataRecordFormat < 6)
+                {
+                    classificationFiltered = classificationBase & 31;
+
+                    // compute classification scan from 3 left bits
+                    classifFlag_0_5 = classificationBase & 224;
+                    classifFlag_0_5 = classifFlag_0_5 >> 5;
+                    classifFlag_0_5 = classifFlag_0_5 << 8;
+
+                } else {
+                    classificationFiltered = classificationBase;
+                }
+
+                classificationSetter.setValueWithLocalIndex(currentLocalIndex, classificationFiltered);
+
+
+                if (header->m_pointDataRecordFormat < 6)
+                {
+                    valuePointCore6_10.entire = valueUint8;
+
+                    // add classification flag data
+                    valuePointCore6_10.entire = valuePointCore6_10.entire | classifFlag_0_5;
+
+                    core6_10Setter.setValueWithLocalIndex(currentLocalIndex, valuePointCore6_10);
+                }
+                else
+                {
                     valuePointCore6_10.entire = valueUint16;
                     core6_10Setter.setValueWithLocalIndex(currentLocalIndex, valuePointCore6_10);
                 }
 
-                classificationSetter.setValueWithStreamWithLocalIndex(currentLocalIndex, stream);
+
 
                 if(header->m_pointDataRecordFormat < 6)
                 {
@@ -439,19 +475,22 @@ bool CT_Reader_LASV2::internalReadFile(CT_StandardItemGroup *group)
 
         if (header->m_pointDataRecordFormat < 6)
         {
-            /* 0b00000111 */ rn6_10  = m_hOutReturnNumber     .createInstance(  7, 0, pcir, mCore6_10Manager);
-            /* 0b00111000 */ nor6_10 = m_hOutNumberOfReturn   .createInstance( 56, 3, pcir, mCore6_10Manager);
-            /* 0b01000000 */ sdf6_10 = m_hOutScanDirectionFlag.createInstance( 64, 6, pcir, mCore6_10Manager);
-            /* 0b10000000 */ efl6_10 = m_hOutEdgeOfFlightLine .createInstance(128, 7, pcir, mCore6_10Manager);
+            /* 0b 000 0 0 000 111 */ rn6_10  = m_hOutReturnNumber     .createInstance(  7, 0, pcir, mCore6_10Manager);
+            /* 0b 000 0 0 111 000 */ nor6_10 = m_hOutNumberOfReturn   .createInstance( 56, 3, pcir, mCore6_10Manager);
+            /* 0b 000 0 1 000 000 */ sdf6_10 = m_hOutScanDirectionFlag.createInstance( 64, 6, pcir, mCore6_10Manager);
+            /* 0b 000 1 0 000 000 */ efl6_10 = m_hOutEdgeOfFlightLine .createInstance(128, 7, pcir, mCore6_10Manager);
+
+            // set classification flag
+            /* 0b 111 0 0 000 000 */ cf      = m_hOutClassificationFlag.createInstance(1792,  8, pcir, mCore6_10Manager);
         }
         else
         {
-            /* 0b0000 0000 0000 1111 */ rn6_10  = m_hOutReturnNumber      .createInstance(   15,  0, pcir, mCore6_10Manager);
-            /* 0b0000 0000 1111 0000 */ nor6_10 = m_hOutNumberOfReturn    .createInstance(  240,  4, pcir, mCore6_10Manager);
-            /* 0b0000 1111 0000 0000 */ cf      = m_hOutClassificationFlag.createInstance( 3840,  8, pcir, mCore6_10Manager);
-            /* 0b0011 0000 0000 0000 */ sc      = m_hOutScannerChannel    .createInstance(12288, 12, pcir, mCore6_10Manager);
-            /* 0b0100 0000 0000 0000 */ sdf6_10 = m_hOutScanDirectionFlag .createInstance(16384, 14, pcir, mCore6_10Manager);
-            /* 0b1000 0000 0000 0000 */ efl6_10 = m_hOutEdgeOfFlightLine  .createInstance(32768, 15, pcir, mCore6_10Manager);
+            /* 0b 0000 0000 0000 1111 */ rn6_10  = m_hOutReturnNumber      .createInstance(   15,  0, pcir, mCore6_10Manager);
+            /* 0b 0000 0000 1111 0000 */ nor6_10 = m_hOutNumberOfReturn    .createInstance(  240,  4, pcir, mCore6_10Manager);
+            /* 0b 0000 1111 0000 0000 */ cf      = m_hOutClassificationFlag.createInstance( 3840,  8, pcir, mCore6_10Manager);
+            /* 0b 0011 0000 0000 0000 */ sc      = m_hOutScannerChannel    .createInstance(12288, 12, pcir, mCore6_10Manager);
+            /* 0b 0100 0000 0000 0000 */ sdf6_10 = m_hOutScanDirectionFlag .createInstance(16384, 14, pcir, mCore6_10Manager);
+            /* 0b 1000 0000 0000 0000 */ efl6_10 = m_hOutEdgeOfFlightLine  .createInstance(32768, 15, pcir, mCore6_10Manager);
         }
 
         CT_AbstractPointAttributesScalar* attReturnNumber = rn6_10;
