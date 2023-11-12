@@ -404,8 +404,11 @@ void GDocumentViewForGraphics::visitItemsThatColorWasModified(GDocumentViewForGr
 
         DM_ItemInfoForGraphics* infoOfItem = static_cast<DM_ItemInfoForGraphics*>(lastInfoByItem->value((CT_AbstractItemDrawable*)item, nullptr));
 
-        if(infoOfItem->isColorModified())
+        // bool modifie = infoOfItem->isColorModified();
+
+        if((infoOfItem != nullptr) && (infoOfItem->isColorModified())) {
             f(item, infoOfItem->color());
+        }
     }
 }
 
