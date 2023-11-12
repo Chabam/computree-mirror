@@ -1,6 +1,8 @@
 #ifndef CT_ABSTRACTLAZPOINTFORMAT_H
 #define CT_ABSTRACTLAZPOINTFORMAT_H
 
+#include <cstring>
+
 #include "ctliblas/tools/las/ct_laspointinfo.h"
 // #include "ctliblas/readers/headers/ct_lasheader.h"
 #include "ct_itemdrawable/abstract/ct_abstractpointattributesscalar.h"
@@ -27,6 +29,27 @@
             lzPoint->LASZIP_POINT_FIELD = static_cast<CAST_TO>(ATTRIBUTES->scalarAsDoubleAt(globalIndex)); \
         else \
             lzPoint->LASZIP_POINT_FIELD = static_cast<CAST_TO>(0); \
+    }
+
+
+#define LASZIP_POINT_WAVE_PACKET_WPDI 0
+#define LASZIP_POINT_WAVE_PACKET_BOWD (LASZIP_POINT_WAVE_PACKET_WPDI + sizeof(quint8))
+#define LASZIP_POINT_WAVE_PACKET_WPSB (LASZIP_POINT_WAVE_PACKET_BOWD + sizeof(quint64))
+#define LASZIP_POINT_WAVE_PACKET_RPWL (LASZIP_POINT_WAVE_PACKET_WPSB + sizeof(quint32))
+#define LASZIP_POINT_WAVE_PACKET_XT   (LASZIP_POINT_WAVE_PACKET_RPWL + sizeof(float))
+#define LASZIP_POINT_WAVE_PACKET_YT   (LASZIP_POINT_WAVE_PACKET_XT   + sizeof(float))
+#define LASZIP_POINT_WAVE_PACKET_ZT   (LASZIP_POINT_WAVE_PACKET_YT   + sizeof(float))
+
+#define CT_WRITE_LAZ_WAVE_PACKET_ITEM_WITH(ATTRIBUTES, TYPE, LASZIP_POINT_WAVE_PACKET_OFFSET) \
+    { \
+        TYPE itemValue; \
+\
+        if((ATTRIBUTES != nullptr) && ATTRIBUTES->hasBeenSet(globalIndex)) \
+            itemValue = static_cast<TYPE>(ATTRIBUTES->scalarAsDoubleAt(globalIndex)); \
+        else \
+            itemValue = static_cast<TYPE>(0); \
+\
+        memcpy(lzPoint->wave_packet + LASZIP_POINT_WAVE_PACKET_OFFSET, &itemValue, sizeof(TYPE)); \
     }
 
 

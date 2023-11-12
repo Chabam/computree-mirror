@@ -24,13 +24,18 @@ HEADERS += \
     tools/laz/ct_lazgpspacket.h \
     tools/laz/ct_lazcolorpacket.h \
     tools/laz/ct_laznirpacket.h \
+    tools/laz/ct_lazwavepacket.h \
     tools/laz/ct_lazpointformat0.h \
     tools/laz/ct_lazpointformat1.h \
     tools/laz/ct_lazpointformat2.h \
     tools/laz/ct_lazpointformat3.h \
+    tools/laz/ct_lazpointformat4.h \
+    tools/laz/ct_lazpointformat5.h \
     tools/laz/ct_lazpointformat6.h \
     tools/laz/ct_lazpointformat7.h \
     tools/laz/ct_lazpointformat8.h \
+    tools/laz/ct_lazpointformat9.h \
+    tools/laz/ct_lazpointformat10.h \
     exporters/ct_exporter_laz.h \
     exporters/private/ct_lazpiecebypieceprivateexporter.h \
     mergers/ct_sameheadermerger_laz.h \
@@ -44,13 +49,18 @@ SOURCES += \
     tools/laz/ct_lazgpspacket.cpp \
     tools/laz/ct_lazcolorpacket.cpp \
     tools/laz/ct_laznirpacket.cpp \
+    tools/laz/ct_lazwavepacket.cpp \
     tools/laz/ct_lazpointformat0.cpp \
     tools/laz/ct_lazpointformat1.cpp \
     tools/laz/ct_lazpointformat2.cpp \
     tools/laz/ct_lazpointformat3.cpp \
+    tools/laz/ct_lazpointformat4.cpp \
+    tools/laz/ct_lazpointformat5.cpp \
     tools/laz/ct_lazpointformat6.cpp \
     tools/laz/ct_lazpointformat7.cpp \
     tools/laz/ct_lazpointformat8.cpp \
+    tools/laz/ct_lazpointformat9.cpp \
+    tools/laz/ct_lazpointformat10.cpp \
     exporters/ct_exporter_laz.cpp \
     exporters/private/ct_lazpiecebypieceprivateexporter.cpp \
     mergers/ct_sameheadermerger_laz.cpp \
