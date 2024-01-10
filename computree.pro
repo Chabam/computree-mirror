@@ -8,6 +8,9 @@
 # store svn revision
 include(config/generate_revision_h.pri)
 
+# Generate path of Qt commands
+include(config/generate_qtpath.pri)
+
 # Check environment configuration
 include(config/check_environment.pri)
 
