@@ -78,10 +78,24 @@ CT_Image2D<DataT>::CT_Image2D(double xmin,
 template<typename DataT>
 CT_Image2D<DataT>::CT_Image2D(const CT_Image2D<DataT>& other) : SuperClass(other)
 {
+    _res = other._res;
+    _dimx = other._dimx;
+    _dimy = other._dimy;
+
+    Eigen::Vector3d min, max;
+    other.boundingBox(min, max);
+    this->setBoundingBox(min, max);
+
+    _minXCoord = other._minXCoord;
+    _minYCoord = other._minYCoord;
+    _level = other._level;
     _NAdata = other._NAdata;
     _dataMax = other._dataMax;
     _dataMin = other._dataMin;
+
     _data = other._data.clone();
+
+    this->setBaseDrawManager(&IMAGE2D_DRAW_MANAGER);
 }
 
 template< typename DataT>
