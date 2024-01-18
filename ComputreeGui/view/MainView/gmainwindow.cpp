@@ -251,7 +251,7 @@ void GMainWindow::citationInfo()
             CDM_CitationInfo citationInfo(getStepManager(), getPluginManager());
 
             QDateTime date = QDateTime::currentDateTime();
-            QString formattedTime = date.toString("dd/MM/yyyy, hh:mm");
+            QString formattedTime = date.toString("dd/MM/yyyy hh:mm");
 
 
             // export script in subdir
@@ -269,12 +269,13 @@ void GMainWindow::citationInfo()
             }
 
             outDir.mkdir("content");
-            outDir.mkdir("steps");
-            outDir.mkdir("css");
+            outDir.mkdir("content/steps");
+            outDir.mkdir("content/css");
+            outDir.mkdir("content/text");
 
 
             // export css file
-            createCSS(outDirPath + "/css/style.css");
+            createCSS(outDirPath + "/content/css/style.css");
 
 
             // create index html file
@@ -287,7 +288,7 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"content/css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
                 stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"content/summary.html\"  style=\"width:33%; border:none; flex-grow:1;\"></iframe>\n";
@@ -299,6 +300,15 @@ void GMainWindow::citationInfo()
                 findex.close();
             }
 
+            QFile ftitleText(outDirPath + "/content/text/01_title.html");
+            if (ftitleText.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&ftitleText);
+                stream << "<h2>";
+                stream << scriptName;
+                stream << "</h2>";
+                ftitleText.close();
+            }
 
             // Create mainContent.html file
             QFile fMainContent(outDirPath + "/content/mainContent.html");
@@ -310,44 +320,89 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
-                stream << "<h1>" << tr("Description du script") << "</h1>\n";
-                stream << "<h2>" << tr("Informations sur le script") << "</h2>\n";
-                stream << "<p><em>" << tr("Titre du script : ") << "</em><strong>" << scriptName << "</strong></p>";
-
-                if (!author.isEmpty())
-                {
-                    stream << "<p><em>" << tr("Auteur : ") << "</em><strong>" << author << "</strong></p>";
-                }
-                stream << "<p><em>" << tr("Fichier script Computree : ") << "</em>" << scriptFileName << ".cts</p>";
-                stream << "<p><em>" << tr("Fichier de citations : ") << "</em>" << scriptFileName << ".ris (" << "<a target=\"frameContent\" href=\"citations.html\">" << tr("Comment citer ce script") + "</a>)</p>";
-                stream << "<p><em>" << tr("Création : ") << "</em>" << formattedTime << ", Computree version 6.0." << SVN_REVISION << "</p>";
+                stream << "<h1>" << tr("Informations générales") << "</h1>\n";
+                stream << "<br>\n";
+                stream << "<object type=\"text/html\" class=\"insertedobject\" data=\"text/01_title.html\"></object>" << "\n";
 
                 if (!description.isEmpty())
                 {
-                    stream << "<p><em>" << tr("Description : ") << "</em>" << "</p>";
-                    stream << "<p>" << description << "</p>";
+                    stream << "<p>" << description << "</p>\n";
                 }
 
                 stream << "<br>\n";
-                stream << "<h2>" << tr("Structure du script") << "</h1>\n";
-                stream << "<p>" << tr("Le script est composé de l'enchaînement d'étapes suivant :") << "</p>";
-                stream << citationInfo.getScriptStepList();
-                stream << "<br>";
-                stream << "<h2>" << tr("Plugins utilisés") << "</h1>\n";
-                stream << "<p>" << tr("Ce script utilise les plugins Computree suivants :") << "</p>";
-                stream << "<div class=\"linksummary01\" >";
-                stream << citationInfo.getUsedPlugins();
-                stream << "</div>";
-                stream << "<br>";
+                stream << "<h2>" << tr("Version") << "</h2>\n";
+                stream << "<p><em>" << tr("Ce script a été créé le ") << "</em>" << formattedTime << ", avec la version 6.0." << SVN_REVISION << " de Computree</p>\n";
+                if (!author.isEmpty())
+                {
+                    stream << "<p><em>" << tr("Auteur : ") << "</em><strong>" << author << "</strong></p>\n";
+                }
+                stream << "<p><em>" << tr("Fichier script Computree : ") << "</em><strong>" << scriptFileName << ".cts</strong></p>\n";
+
                 stream << "</div>\n";
                 stream << "</body>\n";
                 stream << "</html>\n";
 
                 fMainContent.close();
             }
+
+
+            // Create structure.html file
+            QFile fStructure(outDirPath + "/content/structure.html");
+            if (fStructure.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&fStructure);
+
+                stream << "<!DOCTYPE html>\n";
+                stream << "<html>\n";
+                stream << "<head>\n";
+                stream << "<metacharset=\"utf-8\">\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<body>\n";
+                stream << "<div class=\"mainBlock\">\n";
+                stream << "<h1>" << tr("Structure du script") << "</h1>\n";
+                stream << "<br>\n";
+                stream << "<p>" << tr("Le script est composé de l'enchaînement d'étapes suivant :") << "</p>\n";
+                stream << "<br>";
+                stream << citationInfo.getScriptStepList();
+                stream << "<br>";
+                stream << "</div>\n";
+                stream << "</body>\n";
+                stream << "</html>\n";
+
+                fStructure.close();
+            }
+
+
+            // Create plugins.html file
+            QFile fPlugins(outDirPath + "/content/plugins.html");
+            if (fPlugins.open(QFile::WriteOnly | QFile::Text))
+            {
+                QTextStream stream(&fPlugins);
+
+                stream << "<!DOCTYPE html>\n";
+                stream << "<html>\n";
+                stream << "<head>\n";
+                stream << "<metacharset=\"utf-8\">\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<body>\n";
+                stream << "<div class=\"mainBlock\">\n";
+                stream << "<h1>" << tr("Plugins utilisés") << "</h1>\n";
+                stream << "<br>\n";
+                stream << "<p>" << tr("Ce script utilise les plugins Computree suivants :") << "</p>\n";
+                stream << "<div class=\"linksummary01\">\n";
+                stream << citationInfo.getUsedPlugins();
+                stream << "</div>\n";
+                stream << "<br>\n";
+                stream << "</div>\n";
+                stream << "</body>\n";
+                stream << "</html>\n";
+
+                fPlugins.close();
+            }
+
 
             // Create parameters.html file
             QFile fParametersContent(outDirPath + "/content/parameters.html");
@@ -359,13 +414,13 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
-                stream << "<h1>" << tr("Paramètres des étapes du script") << "</h1>\n";
+                stream << "<h1>" << tr("Configuration des étapes") << "</h1>\n";
                 stream << "<br>\n";
                 stream << citationInfo.getScriptStepListParameters();
-                stream << "<br>";
+                stream << "<br>\n";
                 stream << "</div>\n";
                 stream << "</body>\n";
                 stream << "</html>\n";
@@ -385,13 +440,13 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Configuration des résultats d'entrée des étapes du script") << "</h1>\n";
                 stream << "<br>\n";
                 stream << citationInfo.getScriptStepListInputConfig();
-                stream << "<br>";
+                stream << "<br>\n";
                 stream << "</div>\n";
                 stream << "</body>\n";
                 stream << "</html>\n";
@@ -410,21 +465,22 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Citation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Citation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Comment citer ce script") << "</h1>\n";
-                stream << "<p>" << tr("Pour référencer les travaux utilisés dans ce script, il faut citer :<br>") << "</p>";
-                stream << "<ul>";
-                stream << "<li>" + tr("La plateforme Computree") + "</li>";
-                stream << "<li>" + tr("Les plugins utilisés : <strong>%1</strong>").arg(citationInfo.getPluginListToCite()) + "</li>";
+                stream << "<br>\n";
+                stream << "<p>" << tr("Pour référencer les travaux utilisés dans ce script, il faut citer :<br>") << "</p>\n";
+                stream << "<ul>\n";
+                stream << "<li>" + tr("La plateforme Computree") + "</li>\n";
+                stream << "<li>" + tr("Les plugins utilisés : <strong>%1</strong>").arg(citationInfo.getPluginListToCite()) + "</li>\n";
                 if (citationInfo.hasStepCitation())
                 {
-                    stream << "<li>" + tr("Les citations spécifiques liées à certaines étapes utilisées") + "</li>";
+                    stream << "<li>" + tr("Les citations spécifiques liées à certaines étapes utilisées") + "</li>\n";
                 }
-                stream << "</ul>";
-                stream << "<p>" << tr("L'ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier %1.ris (au format bibliographique standard RIS).").arg(scriptFileName) << "</p>";
-                stream << "<br>";
+                stream << "</ul>\n";
+                stream << "<p>" << tr("L'ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier <strong>%1.ris</strong> (au format bibliographique standard RIS).").arg(scriptFileName) << "</p>\n";
+                stream << "<br>\n";
                 stream << citationInfo.getPluginAndStepCitations();
                 stream << "</div>\n";
                 stream << "</body>\n";
@@ -480,39 +536,46 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Documentation Summary</title>";
-                stream << "<link rel=\"stylesheet\" href=\"../css/style.css\" />";
+                stream << "<title>Documentation Summary</title>\n";
+                stream << "<link rel=\"stylesheet\" href=\"css/style.css\"/>\n";
                 stream << "</head>\n";
-                stream << "<body>";
-                stream << "<div class=\"mainBlock\">";
-                stream << "<h1>" << tr("Documentation du script") << "</h1>\n";
-                stream << "<div class=\"linksummary01\" >";
-                stream << "<a target=\"frameContent\" href=\"mainContent.html\">" + tr("Description du script") + "<br><br></a>\n";
-                stream << "<a target=\"frameContent\" href=\"citations.html\">" + tr("Comment citer ce script") + "<br><br></a>\n";
-                stream << "<a target=\"frameContent\" href=\"parameters.html\">" + tr("Paramètres des étapes du script") + "<br><br></a>\n";
-                stream << "</div>";
-                stream << "<h1>" << tr("Etapes du script") << "</h1>\n";
+                stream << "<body>\n";
+                stream << "<div class=\"mainBlock\">\n";
+                stream << "<h1>" << tr("Utiliser le script") << "</h1>\n";
+                stream << "<div class=\"linksummary01\" >\n";
+                stream << "<a target=\"frameContent\" href=\"mainContent.html\">" + tr("Informations générales") + "<br><br></a>\n";
+                stream << "<a target=\"frameContent\" href=\"scriptConfig.html\">" + tr("Configurer le script") + "<br><br></a>\n";
+                stream << "<a target=\"frameContent\" href=\"citations.html\">" + tr("Citer le script") + "<br><br></a>\n";
+                stream << "</div>\n";
+                stream << "<h1>" << tr("Informations détaillées") << "</h1>\n";
+                stream << "<div class=\"linksummary01\" >\n";
+                stream << "<a target=\"frameContent\" href=\"structure.html\">" + tr("Structure du script") + "<br><br></a>\n";
+                stream << "<a target=\"frameContent\" href=\"plugins.html\">" + tr("Plugins utilisés") + "<br><br></a>\n";
+                stream << "<a target=\"frameContent\" href=\"parameters.html\">" + tr("Tous les paramètres") + "<br><br></a>\n";
+                stream << "<a target=\"frameContent\" href=\"create.html\">" + tr("Création pas à pas") + "<br><br></a>\n";
+                stream << "</div>\n";
+                stream << "<h1>" << tr("Documentation des étapes") << "</h1>\n";
 
                 QList<CT_VirtualAbstractStep*> steps = citationInfo.steps();
 
-                if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >";}
+                if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >\n";}
                 for(CT_VirtualAbstractStep* step : steps)
                 {
                     CT_VirtualAbstractStep* stepDoc = stepList.value(step->name());
 
                     if (stepDoc != nullptr)
                     {
-                        stream << "<a target=\"frameContent\" href=\"../steps/" << stepDoc->name() << ".html\">" << stepDoc->description() << "<br><br></a>\n";
+                        stream << "<a target=\"frameContent\" href=\"steps/" << stepDoc->name() << ".html\">" << stepDoc->description() << "<br><br></a>\n";
 
                         // Create documentation page for this step
-                        stepDoc->generateHTMLDocumentation(outDirPath + "/steps", "../css");
+                        stepDoc->generateHTMLDocumentation(outDirPath + "/content/steps", "css");
                     }
                 }
-                if (steps.size() > 0) {stream << "</div>";}
+                if (steps.size() > 0) {stream << "</div>\n";}
 
                 if (steps.size() > 0) {stream << "</div>\n";}
                 stream << "</body>\n";
-                stream << "</html>";
+                stream << "</html>\n";
                 f.close();
             }
 
@@ -837,6 +900,14 @@ void GMainWindow::createCSS(QString filename)
         stream << ".linksummary02\n";
         stream << "{\n";
         stream << "    margin-left: 40px;\n";
+        stream << "}\n";                
+        stream << ".insertedobject\n";
+        stream << "{\n";
+        stream << "    margin: 0;\n";
+        stream << "    padding: 0;\n";
+        stream << "    overflow-x: hidden;\n";
+        stream << "    overflow-y: hidden;\n";
+        stream << "    border: 0 none;\n";
         stream << "}\n";
         stream << "\n";
         fcss.close();
