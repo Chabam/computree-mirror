@@ -93,7 +93,15 @@ CT_Image2D<DataT>::CT_Image2D(const CT_Image2D<DataT>& other) : SuperClass(other
     _dataMax = other._dataMax;
     _dataMin = other._dataMin;
 
-    _data = other._data.clone();
+    _data = cv::Mat_<DataT>(_dimy, _dimx);
+
+    for (int xx = 0 ; xx < _dimx ; xx++)
+    {
+        for (int yy = 0 ; yy < _dimy ; yy++)
+        {
+            setValue(xx, yy, other.value(xx,yy));
+        }
+    }
 
     this->setBaseDrawManager(&IMAGE2D_DRAW_MANAGER);
 }
