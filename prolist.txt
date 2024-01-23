@@ -28,6 +28,7 @@ plugins/pluginbase/pluginbase.pro
 ../pluginonfdev/pluginonfdev/pluginonfdev.pro
 ../pluginsegma/pluginsegma/pluginsegma.pro
 ../plugintoolkit/plugintoolkit/plugintoolkit.pro
+../pluginams3d/pluginams3d/pluginams3d.pro
 
 # The following project can't be processed by lupdate du to an unexpected endless loop
 # library/ctlibaction/ctlibaction.pro
