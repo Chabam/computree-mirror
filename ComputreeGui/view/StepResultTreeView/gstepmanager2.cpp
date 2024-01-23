@@ -590,7 +590,7 @@ bool GStepManager2::updateResultInTree(QTreeWidgetItem* child)
     if(child->parent() != nullptr)
         child->parent()->removeChild(child);
 
-    delete child;
+    // delete child;
     return false;
 }
 
