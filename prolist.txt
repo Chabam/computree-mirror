@@ -19,16 +19,6 @@ library/ctlibstructure/ctlibstructure.pro
 library/ctlibstructureaddon/ctlibstructureaddon.pro
 library/ctlibstructurewidget/ctlibstructurewidget.pro
 library/ctlibwidget/ctlibwidget.pro
-plugins/pluginbase/pluginbase.pro
-../plugingenerate/plugingenerate/plugingenerate.pro
-../pluginignlif/pluginignlif/pluginignlif.pro
-../pluginmk/pluginmk/pluginmk.pro
-../pluginlvox/pluginlvox/pluginlvox.pro
-../pluginonf/pluginonf/pluginonf.pro
-../pluginonfdev/pluginonfdev/pluginonfdev.pro
-../pluginsegma/pluginsegma/pluginsegma.pro
-../plugintoolkit/plugintoolkit/plugintoolkit.pro
-../pluginams3d/pluginams3d/pluginams3d.pro
 
 # The following project can't be processed by lupdate du to an unexpected endless loop
 # library/ctlibaction/ctlibaction.pro
