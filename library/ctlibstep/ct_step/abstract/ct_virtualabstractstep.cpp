@@ -753,6 +753,11 @@ bool CT_VirtualAbstractStep::configureInputs(bool forceReadOnly)
     return (ret == CT_InManager::HasModification);
 }
 
+bool CT_VirtualAbstractStep::exportViewForINModelConfig(QString exportPath)
+{
+    return m_inputManager.exportViewForINModelConfig(exportPath);
+}
+
 bool CT_VirtualAbstractStep::postInputConfigure()
 {
     if(m_postInputConfigDialog != nullptr)

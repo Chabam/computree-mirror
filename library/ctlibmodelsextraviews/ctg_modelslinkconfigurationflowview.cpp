@@ -21,6 +21,7 @@
 #include "PortType.hpp"
 
 #include <QPushButton>
+#include <QLabel>
 #include <QGraphicsProxyWidget>
 #include <QTreeWidget>
 #include <QHeaderView>
@@ -80,6 +81,14 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QUrl he
 //    hgi->setToolTip(tr("Cette interface permet de faire correspondre à chaque donnée rechechée, une donnée disponible dans les données d'entrée.<br><br>Pour chaque donnée recherchée :<br>1. Séléctionner la donnée recherchée<br>2. Séléctionner la donnée disponible à lui attribuer<br><br>Cela crée un lien entre les deux éléments.<br><br><i>Les données recherchées en italique sont optionnelles.</i><br><br>Les compteurs à droite des données recherchées indiquent :<br>nombre d'éléments séléctionnés / nombre d'éléments nécessaires."));
 //    mFlowScene->addItem(hgi);
 
+    // used to garanty some display buffer at the left of in model box (for screen capture export)
+    QLabel* lbEmpty = new QLabel(" ");
+    lbEmpty->setStyleSheet("border: 0px; background-color: rgba(0,0,0, 0);");
+    QGraphicsProxyWidget* itemLb = mFlowScene->addWidget(lbEmpty);
+    itemLb->setPos(-20,-20);
+    itemLb->setZValue(1);
+
+
     QPushButton* hgi = new QPushButton();
     QPixmap pixmapHgi(":/Icones/Icones/help.png");
     QIcon iconHgi = QIcon(pixmapHgi);
@@ -87,7 +96,7 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QUrl he
     hgi->setIconSize(QSize(48, 48));
     hgi->setStyleSheet("border: 0px; background-color: rgba(0,0,0, 0);");
     QGraphicsProxyWidget* itemHgi = mFlowScene->addWidget(hgi);
-    itemHgi->setPos(870, -90);
+    itemHgi->setPos(900, 0);
     itemHgi->setZValue(1);
     //hgi->setToolTip(tr("Cette interface permet de faire correspondre à chaque donnée rechechée, une donnée disponible dans les données d'entrée.<br><br>Pour chaque donnée recherchée :<br>1. Séléctionner la donnée recherchée<br>2. Séléctionner la donnée disponible à lui attribuer<br><br>Cela crée un lien entre les deux éléments.<br><br><i>Les données recherchées en italique sont optionnelles.</i><br><br>Les compteurs à droite des données recherchées indiquent :<br>nombre d'éléments séléctionnés / nombre d'éléments nécessaires."));
 
@@ -108,10 +117,10 @@ CTG_ModelsLinkConfigurationFlowView::CTG_ModelsLinkConfigurationFlowView(QUrl he
     sizeDown->setStyleSheet("border: 0px; background-color: rgba(0,0,0, 0);");
 
     QGraphicsProxyWidget* itemUp = mFlowScene->addWidget(sizeUp);
-    itemUp->setPos(800,-90);
+    itemUp->setPos(900,50);
     itemUp->setZValue(1);
     QGraphicsProxyWidget* itemDown = mFlowScene->addWidget(sizeDown);
-    itemDown->setPos(800,-40);
+    itemDown->setPos(900,100);
     itemDown->setZValue(1);
 
     connect(sizeUp, &QPushButton::pressed, this, &CTG_ModelsLinkConfigurationFlowView::scaleUp);
@@ -266,6 +275,20 @@ void CTG_ModelsLinkConfigurationFlowView::changeInNodePortType(CTG_PortType port
 CTG_ModelsLinkConfigurationFlowView::CTG_PortType CTG_ModelsLinkConfigurationFlowView::inNodePortType() const
 {
     return mInModelPortType;
+}
+
+int CTG_ModelsLinkConfigurationFlowView::getContentHeight()
+{
+    if (mInNode == nullptr) {return -1;}
+
+    fitViewToScene();
+
+    if (mInNode->nodeGraphicsObject().pos().y() < 0)
+    {
+          return mcontentHeight - mInNode->nodeGraphicsObject().pos().y();
+    }
+
+    return mcontentHeight;
 }
 
 void CTG_ModelsLinkConfigurationFlowView::reset()
@@ -427,6 +450,8 @@ void CTG_ModelsLinkConfigurationFlowView::construct()
 
     mInTreeWidget->resize(InWidth, inItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
     mOutTreeWidget->resize(OutWidth, outItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
+
+    mcontentHeight = std::max(inItems.size() * TREE_WIDGET_ITEM_SPACING + 10, outItems.size() * TREE_WIDGET_ITEM_SPACING + 10);
 
     connect(mInTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);
     connect(mOutTreeWidget, &QTreeWidget::pressed, this, &CTG_ModelsLinkConfigurationFlowView::displayPreviewConnectionsForIndexClicked);

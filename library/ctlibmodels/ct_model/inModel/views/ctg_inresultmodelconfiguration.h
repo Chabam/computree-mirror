@@ -34,6 +34,12 @@ public:
      */
     void setReadOnly(bool enabled);
 
+
+    /**
+     * @brief Export screen capture of IN model configuration dialog
+     */
+    bool exportViewCapture(QString exportPath);
+
 private:
     Ui::CTG_InResultModelConfiguration* ui;
 
@@ -49,6 +55,10 @@ public slots:
      * @brief Overrided to display a message box if somthing is wrong in configuration and to disable the close action of the dialog
      */
     void accept() override;
+
+private slots:
+    void captureView();
+
 };
 
 #endif // CTG_INRESULTMODELCONFIGURATION_H

@@ -119,6 +119,11 @@ CT_InManager::ConfigureReturn CT_InManager::configureInputs(const CT_VirtualAbst
     return ConfigureReturn::NoModification;
 }
 
+bool CT_InManager::exportViewForINModelConfig(QString exportPath)
+{
+    return m_inModelConfigurationManager->exportViewForINModelConfig(exportPath);
+}
+
 bool CT_InManager::hasAllModelsTheMinimumNumberOfSelectedPossibilityRequired() const
 {
     return m_inModelsStructureManager.visitResults([](const CT_InAbstractResultModel* model) -> bool {

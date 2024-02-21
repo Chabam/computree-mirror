@@ -116,6 +116,8 @@ public:
      */
     CTG_PortType inNodePortType() const;
 
+    virtual int getContentHeight() override;
+
 private:
     using ConnectionByPossibilityCollectionType = QHash<const CT_InStdModelPossibility*, QtNodes::Connection*>;
     using InModelByPossibilityCollectionType = QHash<const CT_InStdModelPossibility*, const CT_InAbstractModel*>;
@@ -157,6 +159,8 @@ private:
     bool                                        mInDestructor;
 
     QUrl                                        mhelpPath;
+
+    int                                         mcontentHeight;
 
     /**
      * @brief Reset (clear all) before construct

@@ -121,6 +121,11 @@ public:
      */
     bool restoreSettings(SettingsReaderInterface& reader, QUrl pathHelp);
 
+    /**
+     * @brief Export screen capture of IN model configuration dialog
+     */
+    bool exportViewForINModelConfig(QString exportPath);
+
 private:
 
     CT_InModelStructureManager              m_inModelsStructureManager;

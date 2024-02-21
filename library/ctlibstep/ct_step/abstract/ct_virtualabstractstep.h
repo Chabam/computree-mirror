@@ -1158,6 +1158,12 @@ public:
     QUrl getHelpPageForStepPath() const;
 
     static void setCurrentLangage(QString lang) {CURRENT_LANGAGE = lang;}
+
+    /**
+     * @brief Export screen capture of IN model configuration dialog
+     */
+    bool exportViewForINModelConfig(QString exportPath);
+
 private:
     static QString CURRENT_LANGAGE;
 

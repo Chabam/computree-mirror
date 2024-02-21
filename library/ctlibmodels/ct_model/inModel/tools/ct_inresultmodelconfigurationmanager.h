@@ -130,6 +130,12 @@ public:
      */
     void aboutToBeDeleted();
 
+
+    /**
+     * @brief Export screen capture of IN model configuration dialog
+     */
+    bool exportViewForINModelConfig(QString exportPath);
+
 private:
 
     /**

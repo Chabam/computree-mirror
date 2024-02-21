@@ -31,6 +31,9 @@ public slots:
      * @brief Set to true if you want that the user cannot change anything but just display the treeview
      */
     virtual void setReadOnly(bool enabled) = 0;
+
+    virtual int getContentHeight() {return 0;}
+
 };
 
 #endif // IINMODELPOSSIBILITIESCHOICE_H

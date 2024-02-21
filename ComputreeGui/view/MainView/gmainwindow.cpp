@@ -272,6 +272,7 @@ void GMainWindow::citationInfo()
             outDir.mkdir("content/steps");
             outDir.mkdir("content/css");
             outDir.mkdir("content/text");
+            outDir.mkdir("content/images");
 
 
             // export css file
@@ -291,8 +292,8 @@ void GMainWindow::citationInfo()
                 stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"content/css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
-                stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"content/summary.html\"  style=\"width:33%; border:none; flex-grow:1;\"></iframe>\n";
-                stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"content/mainContent.html\" style=\"width:65%; border:none; flex-grow:1;\"></iframe>\n";
+                stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"content/summary.html\"  style=\"width:20%; border:none; flex-grow:1;\"></iframe>\n";
+                stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"content/mainContent.html\" style=\"width:80%; border:none; flex-grow:1;\"></iframe>\n";
                 stream << "</div>\n";
                 stream << "</body>\n";
                 stream << "</html>\n";
@@ -445,7 +446,9 @@ void GMainWindow::citationInfo()
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Configuration des résultats d'entrée des étapes du script") << "</h1>\n";
                 stream << "<br>\n";
-                stream << citationInfo.getScriptStepListInputConfig();
+
+                //stream << citationInfo.getScriptStepListInputConfig();
+
                 stream << "<br>\n";
                 stream << "</div>\n";
                 stream << "</body>\n";
@@ -558,6 +561,7 @@ void GMainWindow::citationInfo()
 
                 QList<CT_VirtualAbstractStep*> steps = citationInfo.steps();
 
+                int counterStep = 1;
                 if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >\n";}
                 for(CT_VirtualAbstractStep* step : steps)
                 {
@@ -569,6 +573,9 @@ void GMainWindow::citationInfo()
 
                         // Create documentation page for this step
                         stepDoc->generateHTMLDocumentation(outDirPath + "/content/steps", "css");
+
+                        // Create screen captures for IN models config.
+                        step->exportViewForINModelConfig(QString("%1/content/images/etape_%2.png").arg(outDirPath).arg(counterStep++));
                     }
                 }
                 if (steps.size() > 0) {stream << "</div>\n";}
@@ -684,7 +691,7 @@ void GMainWindow::createStepHelp()
         stream << "<body>\n";
         stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
         stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"summary.html\"  style=\"width:33%; border:none; flex-grow:1;\"></iframe>\n";
-        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"steps/current.html\" style=\"width:65%; border:none; flex-grow:1;\"></iframe>\n";
+        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"steps/current.html\" style=\"width:66%; border:none; flex-grow:1;\"></iframe>\n";
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>\n";

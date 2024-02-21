@@ -4,6 +4,10 @@
 #include <QMessageBox>
 #include <QTimer>
 
+#include <QPixmap>
+#include <QPainter>
+#include <QFileDialog>
+
 CTG_InResultModelConfiguration::CTG_InResultModelConfiguration(IInModelPossibilitiesChoice* widgetInModelPossibilities, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CTG_InResultModelConfiguration)
@@ -16,6 +20,7 @@ CTG_InResultModelConfiguration::CTG_InResultModelConfiguration(IInModelPossibili
     ui->horizontalLayout->addWidget(mInModelPossibilities);
 
     connect(ui->inResultModelPossibilities, SIGNAL(showInResultModelPossibility(const CT_InStdResultModelPossibility*)), mInModelPossibilities, SLOT(setInResultModelPossibility(const CT_InStdResultModelPossibility*)), Qt::DirectConnection);
+    connect(ui->pb_capture, SIGNAL(clicked()), this, SLOT(captureView()));
 }
 
 CTG_InResultModelConfiguration::~CTG_InResultModelConfiguration()
@@ -61,3 +66,44 @@ void CTG_InResultModelConfiguration::accept()
 
     QDialog::accept();
 }
+
+void CTG_InResultModelConfiguration::captureView()
+{
+    QString outFile = QFileDialog::getSaveFileName(nullptr, tr("Choix du fichier d'export de la capture d'écran"), "", "Fichier PNG (*.png)");
+
+    if (!outFile.isEmpty())
+    {
+        exportViewCapture(outFile);
+    }
+}
+
+bool CTG_InResultModelConfiguration::exportViewCapture(QString exportPath)
+{
+    if (!exportPath.isEmpty())
+    {
+        int contentHeight = mInModelPossibilities->getContentHeight();
+
+        if (contentHeight >= 0)
+        {
+            QRect rect = this->rect();
+            QRect rect2 = rect;
+
+            rect2.setHeight(std::max(this->size().height(), this->size().height() - mInModelPossibilities->size().height() + contentHeight + 100));
+
+            this->resize(rect2.size());
+
+            QPixmap pixmap(rect2.size());
+            QPainter painter(&pixmap);
+            this->render(&painter);
+
+            this->resize(rect.size());
+
+            QFile file(exportPath);
+            if (file.exists()) {file.remove();}
+
+            return pixmap.save(exportPath);
+        }
+    }
+    return false;
+}
+

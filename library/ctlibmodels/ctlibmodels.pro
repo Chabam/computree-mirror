@@ -138,3 +138,6 @@ FORMS += \
 
 TRANSLATIONS += languages/ctlibmodels_fr.ts \
                 languages/ctlibmodels_en.ts
+
+RESOURCES += \
+    icons.qrc

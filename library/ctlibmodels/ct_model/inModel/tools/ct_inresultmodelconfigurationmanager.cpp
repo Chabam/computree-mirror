@@ -53,6 +53,29 @@ void CT_InResultModelConfigurationManager::showReadOnlyInResultModel()
     }
 }
 
+bool CT_InResultModelConfigurationManager::exportViewForINModelConfig(QString exportPath)
+{
+    if(m_inputModelsConfigurationDialog != nullptr)
+    {
+        m_inputModelsConfigurationDialog->setReadOnly(true);
+        m_inputModelsConfigurationDialog->open();
+
+        QSize size = m_inputModelsConfigurationDialog->rect().size();
+        QSize size2(1400, 400);
+        m_inputModelsConfigurationDialog->resize(size2);
+
+        bool isValid = m_inputModelsConfigurationDialog->exportViewCapture(exportPath);
+
+        m_inputModelsConfigurationDialog->resize(size);
+        m_inputModelsConfigurationDialog->accept();
+
+        m_inputModelsConfigurationDialog->setReadOnly(false);
+
+        return isValid;
+    }
+    return false;
+}
+
 void CT_InResultModelConfigurationManager::saveSettings(SettingsWriterInterface& writer) const
 {
     m_inModelsStructureManager.visitResults([&writer](const CT_InAbstractResultModel* resultModel) -> bool {
