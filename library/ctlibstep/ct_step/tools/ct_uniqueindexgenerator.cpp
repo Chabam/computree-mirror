@@ -23,6 +23,8 @@ void CT_UniqueIndexGenerator::setCurrentObject(const void* object)
 
 void CT_UniqueIndexGenerator::objectWillBeDeleted(const void* object)
 {
+    m_currentIndex = m_startIndexes.value(const_cast<void*>(object));
+
     m_startIndexes.remove(const_cast<void*>(object));
 }
 
