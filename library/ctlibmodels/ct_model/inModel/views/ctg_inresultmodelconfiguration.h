@@ -40,6 +40,17 @@ public:
      */
     bool exportViewCapture(QString exportPath);
 
+    /**
+     * @brief Return the number of results to configure
+     */
+    int getSelectableResultsNumber();
+
+
+    /**
+     * @brief Select result by rank
+     */
+    void selectResultByRank(int rank);
+
 private:
     Ui::CTG_InResultModelConfiguration* ui;
 

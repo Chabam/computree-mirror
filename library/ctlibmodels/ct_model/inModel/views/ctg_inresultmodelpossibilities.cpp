@@ -27,6 +27,9 @@ CTG_InResultModelPossibilities::CTG_InResultModelPossibilities(QWidget *parent) 
                                 "QTreeView::item:has-children:!hover:!selected {"
                                 "background: rgb(172, 226, 169);"
                                 "}"
+                                "QTreeView::item:!has-children:!hover:selected {"
+                                "background: rgb(218, 185, 101);"
+                                "}"
                                 "QTreeView::item:!has-children:!hover:!selected {"
                                 "background: rgb(220, 220, 220);"
                                 "}"));
@@ -60,6 +63,57 @@ void CTG_InResultModelPossibilities::setReadOnly(bool enabled)
 {
     m_readOnly = enabled;
     updateModel();
+}
+
+int CTG_InResultModelPossibilities::resultCount()
+{
+    int nResult = 0;
+
+    QStandardItem* root = m_treeViewModel.invisibleRootItem();
+
+    if(root != nullptr) {
+        nResult = root->rowCount();
+    }
+
+    return nResult;
+}
+
+bool CTG_InResultModelPossibilities::selectResultByRank(int rank)
+{
+    QStandardItem* root = m_treeViewModel.invisibleRootItem();
+
+    if(root != nullptr)
+    {
+        const int nResult = root->rowCount();
+        if (rank < 0 || rank >= nResult) {return false;}
+
+        QStandardItem* result = root->child(rank, 0);
+
+        if (result == nullptr) {return false;}
+
+        const int nChild = result->rowCount();
+
+        bool found = false;
+        for(int i = 0 ; (i < nChild) && !found ; ++i)
+        {
+            QStandardItem* item = result->child(i, 0);
+
+            CT_InStdResultModelPossibility* possibility = static_cast<CT_InStdResultModelPossibility*>(item->data().value<void*>());
+
+            if (possibility->isSelected())
+            {
+                selectChildByRank(result, i);
+
+                found = true;
+                showResultPossibility(possibility);
+            }
+        }
+
+        ui->treeView->update();
+
+    }
+
+    return true;
 }
 
 void CTG_InResultModelPossibilities::clearModel()
@@ -156,6 +210,8 @@ void CTG_InResultModelPossibilities::showFirstSelectedOrFirstResultPossibility()
             const QStandardItem* parent = firstItem->parent();
             const CT_InAbstractResultModel* model = static_cast<CT_InAbstractResultModel*>(parent->data().value<void*>());
             CT_InStdResultModelPossibility* p = static_cast<CT_InStdResultModelPossibility*>(firstItem->data().value<void*>());
+
+            selectChildByRank(parent, 0);
 
             if(!m_readOnly)
             {
@@ -353,3 +409,47 @@ void CTG_InResultModelPossibilities::on_treeView_doubleClicked(const QModelIndex
         }
     }
 }
+
+
+
+void CTG_InResultModelPossibilities::selectChildByRank(const QStandardItem* parent, int rank)
+{
+    clearSelection();
+
+    QModelIndex index = m_treeViewModel.indexFromItem(parent->child(rank, 0));
+    ui->treeView->selectionModel()->select(index, QItemSelectionModel::Select);
+
+    index = m_treeViewModel.indexFromItem(parent->child(rank, 1));
+    ui->treeView->selectionModel()->select(index, QItemSelectionModel::Select);
+
+    index = m_treeViewModel.indexFromItem(parent->child(rank, 2));
+    ui->treeView->selectionModel()->select(index, QItemSelectionModel::Select);
+}
+
+
+void CTG_InResultModelPossibilities::clearSelection()
+{
+    QStandardItem* root = m_treeViewModel.invisibleRootItem();
+
+    const int nResult = root->rowCount();
+
+    for(int r = 0; r < nResult; ++r)
+    {
+        QStandardItem* result = root->child(r, 0);
+
+        const int nChild = result->rowCount();
+
+        for(int i = 0 ; i < nChild ; ++i)
+        {
+            QModelIndex index = m_treeViewModel.indexFromItem(result->child(i, 0));
+            ui->treeView->selectionModel()->select(index, QItemSelectionModel::Deselect);
+
+            index = m_treeViewModel.indexFromItem(result->child(i, 1));
+            ui->treeView->selectionModel()->select(index, QItemSelectionModel::Deselect);
+
+            index = m_treeViewModel.indexFromItem(result->child(i, 2));
+            ui->treeView->selectionModel()->select(index, QItemSelectionModel::Deselect);
+        }
+    }
+}
+

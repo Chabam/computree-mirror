@@ -3,6 +3,11 @@
 #include "ct_model/inModel/abstract/ct_inabstractresultmodel.h"
 #include "ct_model/inModel/tools/ct_modelselectionhelper.h"
 
+#include <QFileInfo>
+#include <QTimer>
+#include <QEventLoop>
+
+
 CT_InResultModelConfigurationManager::CT_InResultModelConfigurationManager(CT_InModelStructureManager& inManager) : m_inModelsStructureManager(inManager)
 {
     m_inputModelsConfigurationDialog = nullptr;
@@ -55,21 +60,38 @@ void CT_InResultModelConfigurationManager::showReadOnlyInResultModel()
 
 bool CT_InResultModelConfigurationManager::exportViewForINModelConfig(QString exportPath)
 {
+    bool isValid = true;
+
     if(m_inputModelsConfigurationDialog != nullptr)
     {
-        m_inputModelsConfigurationDialog->setReadOnly(true);
-        m_inputModelsConfigurationDialog->open();
+        int nresults = m_inputModelsConfigurationDialog->getSelectableResultsNumber();
 
-        QSize size = m_inputModelsConfigurationDialog->rect().size();
-        QSize size2(1400, 400);
-        m_inputModelsConfigurationDialog->resize(size2);
+        for (int i = 0 ; i < nresults ; i++)
+        {
+            m_inputModelsConfigurationDialog->setReadOnly(true);
+            m_inputModelsConfigurationDialog->open();
 
-        bool isValid = m_inputModelsConfigurationDialog->exportViewCapture(exportPath);
+            m_inputModelsConfigurationDialog->selectResultByRank(i);
 
-        m_inputModelsConfigurationDialog->resize(size);
-        m_inputModelsConfigurationDialog->accept();
+            QSize size = m_inputModelsConfigurationDialog->rect().size();
 
-        m_inputModelsConfigurationDialog->setReadOnly(false);
+            QSize size2(1400, 400);
+            m_inputModelsConfigurationDialog->resize(size2);
+
+            QString exportPath2 = exportPath;
+            if (nresults > 1)
+            {
+                QFileInfo finfo(exportPath);
+                exportPath2 = QString("%1/%2_%3.%4").arg(finfo.path()).arg(finfo.baseName()).arg(i+1).arg(finfo.suffix());
+            }
+
+            isValid = isValid && m_inputModelsConfigurationDialog->exportViewCapture(exportPath2);
+
+            m_inputModelsConfigurationDialog->resize(size);
+            m_inputModelsConfigurationDialog->accept();
+
+            m_inputModelsConfigurationDialog->setReadOnly(false);
+        }
 
         return isValid;
     }

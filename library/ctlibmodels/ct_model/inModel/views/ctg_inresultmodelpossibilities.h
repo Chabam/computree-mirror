@@ -35,6 +35,10 @@ public:
      */
     void setReadOnly(bool enabled);
 
+    int resultCount();
+
+    bool selectResultByRank(int rank);
+
 private:
     Ui::CTG_InResultModelPossibilities          *ui;
 
@@ -103,6 +107,10 @@ private:
      * @param possibility : the possibility to display
      */
     void showResultPossibility(const CT_InStdResultModelPossibility* possibility);
+
+    void selectChildByRank(const QStandardItem *parent, int rank);
+
+    void clearSelection();
 
 protected:
     /**

@@ -107,3 +107,12 @@ bool CTG_InResultModelConfiguration::exportViewCapture(QString exportPath)
     return false;
 }
 
+int CTG_InResultModelConfiguration::getSelectableResultsNumber()
+{
+    return ui->inResultModelPossibilities->resultCount();
+}
+
+void CTG_InResultModelConfiguration::selectResultByRank(int rank)
+{
+    ui->inResultModelPossibilities->selectResultByRank(rank);
+}
