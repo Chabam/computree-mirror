@@ -144,6 +144,7 @@ private:
     void saveScript(QString &saveDirectory);
     void saveScriptInDir(QString saveDirectory, QString name);
     void createCSS(QString filename);
+    void createJS(QString dir);
 
 private slots:
 
