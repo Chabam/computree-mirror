@@ -273,6 +273,7 @@ void GMainWindow::citationInfo()
             outDir.mkdir("content/css");
             outDir.mkdir("content/text");
             outDir.mkdir("content/images");
+            outDir.mkdir("content/pages");
 
 
             // export css file
@@ -292,8 +293,8 @@ void GMainWindow::citationInfo()
                 stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"content/css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
-                stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"content/summary.html\"  style=\"width:20%; border:none; flex-grow:1;\"></iframe>\n";
-                stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"content/mainContent.html\" style=\"width:80%; border:none; flex-grow:1;\"></iframe>\n";
+                stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"content/pages/summary.html\"  style=\"width:20%; border:none; flex-grow:1;\"></iframe>\n";
+                stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"content/pages/mainContent.html\" style=\"width:80%; border:none; flex-grow:1;\"></iframe>\n";
                 stream << "</div>\n";
                 stream << "</body>\n";
                 stream << "</html>\n";
@@ -305,14 +306,14 @@ void GMainWindow::citationInfo()
             if (ftitleText.open(QFile::WriteOnly | QFile::Text))
             {
                 QTextStream stream(&ftitleText);
-                stream << "<h2>";
-                stream << scriptName;
-                stream << "</h2>";
+                stream << "<!DOCTYPE html><html><head><link rel=\"stylesheet\" href=\"../css/style.css\" /></head><body>\n";
+                stream << "<h1>" << scriptName << "</h1>\n";
+                stream << "</body></html>\n";
                 ftitleText.close();
             }
 
             // Create mainContent.html file
-            QFile fMainContent(outDirPath + "/content/mainContent.html");
+            QFile fMainContent(outDirPath + "/content/pages/mainContent.html");
             if (fMainContent.open(QFile::WriteOnly | QFile::Text))
             {
                 QTextStream stream(&fMainContent);
@@ -321,12 +322,11 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
-                stream << "<h1>" << tr("Informations générales") << "</h1>\n";
-                stream << "<br>\n";
-                stream << "<object type=\"text/html\" class=\"insertedobject\" data=\"text/01_title.html\"></object>" << "\n";
+                //stream << "<object type=\"text/html\" class=\"insertedhtml\" data=\"../text/01_title.html\"></object>" << "\n";
+                stream << "<h1>" << scriptName << "</h1>\n" << "\n";
 
                 if (!description.isEmpty())
                 {
@@ -351,7 +351,7 @@ void GMainWindow::citationInfo()
 
 
             // Create structure.html file
-            QFile fStructure(outDirPath + "/content/structure.html");
+            QFile fStructure(outDirPath + "/content/pages/structure.html");
             if (fStructure.open(QFile::WriteOnly | QFile::Text))
             {
                 QTextStream stream(&fStructure);
@@ -360,7 +360,7 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Structure du script") << "</h1>\n";
@@ -378,7 +378,7 @@ void GMainWindow::citationInfo()
 
 
             // Create plugins.html file
-            QFile fPlugins(outDirPath + "/content/plugins.html");
+            QFile fPlugins(outDirPath + "/content/pages/plugins.html");
             if (fPlugins.open(QFile::WriteOnly | QFile::Text))
             {
                 QTextStream stream(&fPlugins);
@@ -387,7 +387,7 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Plugins utilisés") << "</h1>\n";
@@ -406,7 +406,7 @@ void GMainWindow::citationInfo()
 
 
             // Create parameters.html file
-            QFile fParametersContent(outDirPath + "/content/parameters.html");
+            QFile fParametersContent(outDirPath + "/content/pages/parameters.html");
             if (fParametersContent.open(QFile::WriteOnly | QFile::Text))
             {
                 QTextStream stream(&fParametersContent);
@@ -415,7 +415,7 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Configuration des étapes") << "</h1>\n";
@@ -432,7 +432,7 @@ void GMainWindow::citationInfo()
 
             // TESTTUTO
             // Create inputresults.html file
-            QFile fInputResultsContent(outDirPath + "/content/inputresults.html");
+            QFile fInputResultsContent(outDirPath + "/content/pages/inputresults.html");
             if (fInputResultsContent.open(QFile::WriteOnly | QFile::Text))
             {
                 QTextStream stream(&fInputResultsContent);
@@ -441,7 +441,7 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Configuration des résultats d'entrée des étapes du script") << "</h1>\n";
@@ -459,7 +459,7 @@ void GMainWindow::citationInfo()
 
 
             // Create citation.html file
-            QFile fcitations(outDirPath + "/content/citations.html");
+            QFile fcitations(outDirPath + "/content/pages/citations.html");
             if (fcitations.open(QFile::WriteOnly | QFile::Text))
             {
                 QTextStream stream(&fcitations);
@@ -468,7 +468,7 @@ void GMainWindow::citationInfo()
                 stream << "<html>\n";
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
-                stream << "<title>Computree Script Citation</title><link rel=\"stylesheet\" href=\"css/style.css\" /></head>\n";
+                stream << "<title>Computree Script Citation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
                 stream << "<h1>" << tr("Comment citer ce script") << "</h1>\n";
@@ -530,7 +530,7 @@ void GMainWindow::citationInfo()
 
 
             // Create Summmary and steps documentation pages
-            QFile f(outDirPath + "/content/summary.html");
+            QFile f(outDirPath + "/content/pages/summary.html");
 
             if (f.open(QFile::WriteOnly | QFile::Text))
             {
@@ -540,7 +540,7 @@ void GMainWindow::citationInfo()
                 stream << "<head>\n";
                 stream << "<metacharset=\"utf-8\">\n";
                 stream << "<title>Documentation Summary</title>\n";
-                stream << "<link rel=\"stylesheet\" href=\"css/style.css\"/>\n";
+                stream << "<link rel=\"stylesheet\" href=\"../css/style.css\"/>\n";
                 stream << "</head>\n";
                 stream << "<body>\n";
                 stream << "<div class=\"mainBlock\">\n";
@@ -569,7 +569,7 @@ void GMainWindow::citationInfo()
 
                     if (stepDoc != nullptr)
                     {
-                        stream << "<a target=\"frameContent\" href=\"steps/" << stepDoc->name() << ".html\">" << stepDoc->description() << "<br><br></a>\n";
+                        stream << "<a target=\"frameContent\" href=\"../steps/" << stepDoc->name() << ".html\">" << stepDoc->description() << "<br><br></a>\n";
 
                         // Create documentation page for this step
                         stepDoc->generateHTMLDocumentation(outDirPath + "/content/steps", "css");
@@ -908,14 +908,19 @@ void GMainWindow::createCSS(QString filename)
         stream << "{\n";
         stream << "    margin-left: 40px;\n";
         stream << "}\n";                
-        stream << ".insertedobject\n";
+        stream << ".insertedhtml\n";
+        stream << "{\n";
+        stream << "    width: 100%;\n";
+        stream << "    margin: 0;\n";
+        stream << "    padding: 0;\n";
+        stream << "    border: 0 none;\n";
+        stream << "}\n";       
+        stream << "body\n";
         stream << "{\n";
         stream << "    margin: 0;\n";
         stream << "    padding: 0;\n";
-        stream << "    overflow-x: hidden;\n";
-        stream << "    overflow-y: hidden;\n";
-        stream << "    border: 0 none;\n";
         stream << "}\n";
+
         stream << "\n";
         fcss.close();
     }
