@@ -134,7 +134,7 @@ public:
     /**
      * @brief Export screen capture of IN model configuration dialog
      */
-    bool exportViewForINModelConfig(QString exportPath);
+    bool exportViewForINModelConfig(QString exportPath, QStringList &exportedFiles);
 
 private:
 

@@ -11,6 +11,8 @@ TARGET = ctlibcore
 DEFINES += COMPUTREECORE_LIBRARY
 
 HEADERS += cdm_configfile.h \
+    cdm_steplistdocexporter.h \
+    cdm_steplistinfomanager.h \
     computreeCore_global.h \
     cdm_stepmanageroptions.h \
     cdm_stepmanager.h \
@@ -31,7 +33,6 @@ HEADERS += cdm_configfile.h \
     cdm_internationalization.h \
     cdm_scriptproblem.h \
     cdm_stepsmenumanager.h \
-    cdm_citationinfo.h \
     cdm_hrscriptmanagerxml.h \
     cdm_hrscriptxmlwriter.h \
     cdm_hrscriptxmlreader.h \
@@ -40,6 +41,8 @@ HEADERS += cdm_configfile.h \
 
 SOURCES += \
     cdm_configfile.cpp \
+    cdm_steplistdocexporter.cpp \
+    cdm_steplistinfomanager.cpp \
     cdm_stepmanageroptions.cpp \
     cdm_stepmanager.cpp \
     cdm_pluginmanager.cpp \
@@ -57,7 +60,6 @@ SOURCES += \
     cdm_internationalization.cpp \
     cdm_scriptproblem.cpp \
     cdm_stepsmenumanager.cpp \
-    cdm_citationinfo.cpp \
     cdm_hrscriptmanagerxml.cpp \
     cdm_hrscriptxmlwriter.cpp \
     cdm_hrscriptxmlreader.cpp \

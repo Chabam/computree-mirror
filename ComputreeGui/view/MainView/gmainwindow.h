@@ -90,7 +90,7 @@ public slots:
     void openFile();
     void openFile(QString &loadDirectory);
     void saveScriptUsingDefaultPath();
-    void citationInfo();
+    void exportDocumentedScript();
     void showAboutDialog();
     void showAboutPluginsDialog();
     void showAboutMemory();
@@ -123,7 +123,7 @@ private:
     QString                                 _defaultSaveDirPath;
 
     QAction                                 *actionSaveScript;
-    QAction                                 *actionGetCitationInfo;
+    QAction                                 *actionExportDocumentedScript;
     QAction                                 *actionAProposPlugin;
 
     QLabel                                  *_permanentLabelForMessage;
@@ -143,8 +143,6 @@ private:
 
     void saveScript(QString &saveDirectory);
     void saveScriptInDir(QString saveDirectory, QString name);
-    void createCSS(QString filename);
-    void createJS(QString dir);
 
 private slots:
 

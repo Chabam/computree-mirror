@@ -20,29 +20,21 @@ GScriptDocInfoDialog::~GScriptDocInfoDialog()
     delete ui;
 }
 
-QString GScriptDocInfoDialog::filename()
+void GScriptDocInfoDialog::getInfo(CDM_StepListDocExporter::DocumentatedScriptInfo &docInfo)
 {
-    return ui->le_filename->text();
-}
+    docInfo._scriptFileName = ui->le_filename->text();
 
-QString GScriptDocInfoDialog::title()
-{
-    return ui->le_title->text();
-}
+    docInfo._scriptName = ui->le_title->text();
+    if (docInfo._scriptName.isEmpty()) {docInfo._scriptName = docInfo._scriptFileName;}
 
-QString GScriptDocInfoDialog::author()
-{
-    return ui->le_author->text();
-}
+    docInfo._description = ui->pt_description->toPlainText();
 
-QString GScriptDocInfoDialog::description()
-{
-    return ui->pt_description->toPlainText();
+    docInfo._author = ui->le_author->text();
 }
 
 void GScriptDocInfoDialog::on_pb_export_clicked()
 {
-    QString fileName = filename();
+    QString fileName = ui->le_filename->text();
     if (fileName.isEmpty())
     {
         QMessageBox msgBox(this);

@@ -58,7 +58,7 @@ void CT_InResultModelConfigurationManager::showReadOnlyInResultModel()
     }
 }
 
-bool CT_InResultModelConfigurationManager::exportViewForINModelConfig(QString exportPath)
+bool CT_InResultModelConfigurationManager::exportViewForINModelConfig(QString exportPath, QStringList &exportedFiles)
 {
     bool isValid = true;
 
@@ -85,7 +85,14 @@ bool CT_InResultModelConfigurationManager::exportViewForINModelConfig(QString ex
                 exportPath2 = QString("%1/%2_%3.%4").arg(finfo.path()).arg(finfo.baseName()).arg(i+1).arg(finfo.suffix());
             }
 
-            isValid = isValid && m_inputModelsConfigurationDialog->exportViewCapture(exportPath2);
+            bool exportOk = m_inputModelsConfigurationDialog->exportViewCapture(exportPath2);
+            isValid = isValid && exportOk;
+
+            if (exportOk)
+            {
+                exportedFiles.append(exportPath2);
+            }
+
 
             m_inputModelsConfigurationDialog->resize(size);
             m_inputModelsConfigurationDialog->accept();

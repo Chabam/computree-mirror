@@ -119,9 +119,9 @@ CT_InManager::ConfigureReturn CT_InManager::configureInputs(const CT_VirtualAbst
     return ConfigureReturn::NoModification;
 }
 
-bool CT_InManager::exportViewForINModelConfig(QString exportPath)
+bool CT_InManager::exportViewForINModelConfig(QString exportPath, QStringList &exportedFiles)
 {
-    return m_inModelConfigurationManager->exportViewForINModelConfig(exportPath);
+    return m_inModelConfigurationManager->exportViewForINModelConfig(exportPath, exportedFiles);
 }
 
 bool CT_InManager::hasAllModelsTheMinimumNumberOfSelectedPossibilityRequired() const

@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "cdm_steplistdocexporter.h"
+
 namespace Ui {
 class GScriptDocInfoDialog;
 }
@@ -15,10 +17,7 @@ public:
     explicit GScriptDocInfoDialog(QString mainPath, QWidget *parent = nullptr);
     ~GScriptDocInfoDialog();
 
-    QString filename();
-    QString title();
-    QString author();
-    QString description();
+    void getInfo(CDM_StepListDocExporter::DocumentatedScriptInfo& docInfo);
 
 private slots:
     void on_pb_export_clicked();

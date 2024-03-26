@@ -753,9 +753,9 @@ bool CT_VirtualAbstractStep::configureInputs(bool forceReadOnly)
     return (ret == CT_InManager::HasModification);
 }
 
-bool CT_VirtualAbstractStep::exportViewForINModelConfig(QString exportPath)
+bool CT_VirtualAbstractStep::exportViewForINModelConfig(QString exportPath, QStringList &exportedFiles)
 {
-    return m_inputManager.exportViewForINModelConfig(exportPath);
+    return m_inputManager.exportViewForINModelConfig(exportPath, exportedFiles);
 }
 
 bool CT_VirtualAbstractStep::postInputConfigure()

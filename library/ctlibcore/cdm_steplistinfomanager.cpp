@@ -1,10 +1,10 @@
-#include "cdm_citationinfo.h"
+#include "cdm_steplistinfomanager.h"
 #include "ct_abstractstepplugin.h"
 #include "ct_step/abstract/ct_virtualabstractstep.h"
 
 #include "ct_risformat/ct_parseris.h"
 
-CDM_CitationInfo::CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager) : QObject(nullptr)
+CDM_StepListInfoManager::CDM_StepListInfoManager(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager) : QObject(nullptr)
 {
     _stepManager = stepManager;
     _pluginManager = pluginManager;
@@ -66,7 +66,7 @@ CDM_CitationInfo::CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManag
 
 }
 
-QString CDM_CitationInfo::getScriptStepList()
+QString CDM_StepListInfoManager::getScriptStepList()
 {
     QString result;
     for (int i = 0 ; i < _stepList.size() ; i++)
@@ -97,7 +97,7 @@ QString CDM_CitationInfo::getScriptStepList()
     return result;
 }
 
-QString CDM_CitationInfo::getScriptStepListParameters()
+QString CDM_StepListInfoManager::getScriptStepListParameters()
 {
     QString result;
     for (int i = 0 ; i < _stepList.size() ; i++)
@@ -133,7 +133,7 @@ QString CDM_CitationInfo::getScriptStepListParameters()
 
 
 // TESTTUTO
-QString CDM_CitationInfo::getScriptStepListInputConfig()
+QString CDM_StepListInfoManager::getScriptStepListInputConfig()
 {
     int cpt = 1;
     QString result;
@@ -224,7 +224,7 @@ QString CDM_CitationInfo::getScriptStepListInputConfig()
 }
 
 
-void CDM_CitationInfo::recursiveCreateInputTree(QString root, const DEF_CT_AbstractGroupModelOut* group, QList<const CT_OutAbstractModel*> &allPoss, QMultiMap<const CT_OutAbstractModel*, int> &selectedPoss)
+void CDM_StepListInfoManager::recursiveCreateInputTree(QString root, const DEF_CT_AbstractGroupModelOut* group, QList<const CT_OutAbstractModel*> &allPoss, QMultiMap<const CT_OutAbstractModel*, int> &selectedPoss)
 {
     if(group == nullptr)
         return;
@@ -330,7 +330,7 @@ void CDM_CitationInfo::recursiveCreateInputTree(QString root, const DEF_CT_Abstr
     //root->appendRow(list);
 }
 
-void CDM_CitationInfo::recursiveCountHierachicalRank(int &count, const CT_AbstractModel* model)
+void CDM_StepListInfoManager::recursiveCountHierachicalRank(int &count, const CT_AbstractModel* model)
 {
     if (model->parentModel() != nullptr)
     {
@@ -339,7 +339,7 @@ void CDM_CitationInfo::recursiveCountHierachicalRank(int &count, const CT_Abstra
     }
 }
 
-QString CDM_CitationInfo::getTabsForHierachicalRank(int count)
+QString CDM_StepListInfoManager::getTabsForHierachicalRank(int count)
 {
     QString str;
     for (int i = 0 ; i < count ; i++)
@@ -350,9 +350,9 @@ QString CDM_CitationInfo::getTabsForHierachicalRank(int count)
 }
 
 
-QList<CDM_CitationInfo::StepCitationInfo> CDM_CitationInfo::getScriptTable()
+QList<CDM_StepListInfoManager::StepInfo> CDM_StepListInfoManager::getScriptTable()
 {
-    QList<CDM_CitationInfo::StepCitationInfo> list;
+    QList<CDM_StepListInfoManager::StepInfo> list;
 
     for (int i = 0 ; i < _stepList.size() ; i++)
     {
@@ -371,12 +371,12 @@ QList<CDM_CitationInfo::StepCitationInfo> CDM_CitationInfo::getScriptTable()
             pluginName = pluginOfficialName;
         }
 
-        list.append(CDM_CitationInfo::StepCitationInfo(currentStep->uniqueID(), currentStep->name(), currentStep->description(), pluginName));
+        list.append(CDM_StepListInfoManager::StepInfo(currentStep->uniqueID(), currentStep->name(), currentStep->description(), pluginName));
     }
     return list;
 }
 
-QString CDM_CitationInfo::getPluginAndStepCitations()
+QString CDM_StepListInfoManager::getPluginAndStepCitations()
 {
     QList<CT_AbstractStepPlugin*> pluginDone;
 
@@ -459,7 +459,7 @@ QString CDM_CitationInfo::getPluginAndStepCitations()
     return str;
 }
 
-bool CDM_CitationInfo::hasStepCitation()
+bool CDM_StepListInfoManager::hasStepCitation()
 {
     for (int i = 0 ; i < _stepList.size() ; i++)
     {
@@ -471,7 +471,7 @@ bool CDM_CitationInfo::hasStepCitation()
     return false;
 }
 
-QString CDM_CitationInfo::getPluginRIS()
+QString CDM_StepListInfoManager::getPluginRIS()
 {
     QString str;
 
@@ -516,7 +516,7 @@ QString CDM_CitationInfo::getPluginRIS()
     return str;
 }
 
-QString CDM_CitationInfo::getUsedPlugins()
+QString CDM_StepListInfoManager::getUsedPlugins()
 {
     QString str;
 
@@ -533,7 +533,7 @@ QString CDM_CitationInfo::getUsedPlugins()
     return str;
 }
 
-QString CDM_CitationInfo::getPluginListToCite()
+QString CDM_StepListInfoManager::getPluginListToCite()
 {
     QString str;
 
@@ -557,7 +557,7 @@ QString CDM_CitationInfo::getPluginListToCite()
 }
 
 
-QString CDM_CitationInfo::getComputreeCoreRis()
+QString CDM_StepListInfoManager::getComputreeCoreRis()
 {
     QString computreeCitationRIS = "TY  - COMP\n"
                             "TI  - Computree platform\n"

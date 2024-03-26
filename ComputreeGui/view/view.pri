@@ -46,7 +46,6 @@ SOURCES += \
     $$PWD/MainView/gstepchooserdialog.cpp \
     $$PWD/MainView/gaboutmemory.cpp \
     $$PWD/Tools/gradient/ggradientmanager.cpp \
-    $$PWD/MainView/gcitationdialog.cpp \
     $$PWD/DocumentView/GraphicsViews/3D/ggraphicsviewimp.cpp \
     $$PWD/Tools/graphicsviewdebugmode.cpp \
     $$PWD/StepResultTreeView/gstepmanager2.cpp
@@ -99,7 +98,6 @@ HEADERS += \
     $$PWD/MainView/gstepchooserdialog.h \
     $$PWD/MainView/gaboutmemory.h \
     $$PWD/Tools/gradient/ggradientmanager.h \
-    $$PWD/MainView/gcitationdialog.h \
     $$PWD/DocumentView/GraphicsViews/3D/ggraphicsviewimp.h \
     $$PWD/Tools/graphicsviewdebugmode.h \
     $$PWD/StepResultTreeView/gstepmanager2.h
@@ -130,7 +128,6 @@ FORMS += view/DocumentView/GraphicsViews/ggraphicsviewoptions.ui \
     $$PWD/MainView/gstepchooserdialog.ui \
     $$PWD/MainView/gaboutmemory.ui \
     $$PWD/Tools/gradient/ggradientmanager.ui \
-    $$PWD/MainView/gcitationdialog.ui \
     $$PWD/StepResultTreeView/gstepmanager2.ui
 
 INCLUDEPATH += view/DocumentView/GraphicsView

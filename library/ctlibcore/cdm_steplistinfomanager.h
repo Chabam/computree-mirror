@@ -1,5 +1,5 @@
-#ifndef CDM_CITATIONINFO_H
-#define CDM_CITATIONINFO_H
+#ifndef CDM_STEPLISTINFOMANAGER_H
+#define CDM_STEPLISTINFOMANAGER_H
 
 #include "computreeCore_global.h"
 #include "cdm_stepmanager.h"
@@ -11,13 +11,13 @@
 
 #include <QObject>
 
-class COMPUTREECORESHARED_EXPORT CDM_CitationInfo : public QObject
+class COMPUTREECORESHARED_EXPORT CDM_StepListInfoManager : public QObject
 {
     Q_OBJECT
 public:
-    struct StepCitationInfo
+    struct StepInfo
     {
-        StepCitationInfo(int num, QString stepName, QString stepDescription, QString pluginName)
+        StepInfo(int num, QString stepName, QString stepDescription, QString pluginName)
         {
             _num = num;
             _stepName = stepName;
@@ -32,14 +32,14 @@ public:
     };
 
 
-    CDM_CitationInfo(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager);
+    CDM_StepListInfoManager(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager);
 
     QString getScriptStepList();
     QString getScriptStepListParameters();
     QString getScriptStepListInputConfig();
     void recursiveCreateInputTree(QString root, const DEF_CT_AbstractGroupModelOut *group, QList<const CT_OutAbstractModel *> &allPoss, QMultiMap<const CT_OutAbstractModel *, int> &selectedPoss);
 
-    QList<CDM_CitationInfo::StepCitationInfo> getScriptTable();
+    QList<CDM_StepListInfoManager::StepInfo> getScriptTable();
     QString getPluginAndStepCitations();
     QString getPluginRIS();
 
@@ -68,4 +68,4 @@ private:
     QString getTabsForHierachicalRank(int count);
 };
 
-#endif // CDM_CITATIONINFO_H
+#endif // CDM_STEPLISTINFOMANAGER_H
