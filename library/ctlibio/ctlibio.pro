@@ -16,6 +16,7 @@ DEFINES += CTLIBIO_LIBRARY
 
 HEADERS +=  \
     exporters/asciitrajectory/pb_asciitrajectory.h \
+    exporters/ascxyz/pb_ascxyzexporter.h \
     exporters/grid3d/pb_grid3dastableexporter.h \
     exporters/grid3d/pb_grid3dexporter.h \
     exporters/polygon2d/pb_polygon2dexporter.h \
@@ -100,6 +101,7 @@ HEADERS +=  \
 
 SOURCES += \
     exporters/asciitrajectory/pb_asciitrajectory.cpp \
+    exporters/ascxyz/pb_ascxyzexporter.cpp \
     exporters/grid3d/pb_grid3dastableexporter.cpp \
     exporters/grid3d/pb_grid3dexporter.cpp \
     exporters/polygon2d/pb_polygon2dexporter.cpp \

@@ -68,6 +68,7 @@
 #include "exporters/grid3d/pb_grid3dastableexporter.h"
 
 #include "exporters/xyb/pb_xybexporter.h"
+#include "exporters/ascxyz/pb_ascxyzexporter.h"
 #include "ctliblas/exporters/ct_exporter_las.h"
 #include "ctliblaz/exporters/ct_exporter_laz.h"
 
@@ -301,6 +302,7 @@ bool PB_StepPluginManager::loadExporters()
     sep->addExporter(new PB_Polygon2DExporter(CT_StepsMenu::LP_Vector));
     sep->addExporter(new PB_ProfileExporter());
     sep->addExporter(new PB_AsciiTrajectory());
+    sep->addExporter(new PB_ASCXYZExporter(CT_StepsMenu::LP_Points));
 
     /*
     sep->addExporter(new PB_MultiXYBExporter());
