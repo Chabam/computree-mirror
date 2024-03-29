@@ -44,5 +44,5 @@ MUST_USE_PCL = 1
 
 !isEmpty(MUST_USE_PCL) {
     SUBDIRS += ctlibpcl
-    ctlibpcl.depends = ctlibclouds
+    ctlibpcl.depends = ctlibplugin ctliblog ctlibclouds ctlibstructureaddon ctlibreader
 }
