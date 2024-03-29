@@ -1,8 +1,9 @@
-COMPUTREE += ctlibplugin ctlibio ctlibaction ctlibstdactions ctliblas ctliblaz ctlibstepaddon ctlibfilters ctlibmetrics
+COMPUTREE += ctlibplugin ctlibio ctlibpcl ctlibaction ctlibstdactions ctliblas ctliblaz ctlibstepaddon ctlibfilters ctlibmetrics
 
 CHECK_CAN_USE_GDAL = 1
 MUST_USE_LASZIP = 1
 MUST_USE_OPENCV = 1
+MUST_USE_PCL = 1
 
 INCLUDED_PLUGIN = yes
 
