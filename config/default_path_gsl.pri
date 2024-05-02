@@ -6,10 +6,17 @@ linux {
 }
 
 win32 {
-    GSL_BASE_PATH = "../3rdparty/gsl/"
+    GSL_BASE_PATH = "$${VCPKG_PATH}/"
 
     GSL_INC_PATH = "$${GSL_BASE_PATH}include"
-    GSL_LIBS_PATH = "$${GSL_BASE_PATH}lib"
+    
+    CONFIG(debug, debug|release) {
+        GSL_LIBS_PATH = "$${GSL_BASE_PATH}debug/lib"
+	GSL_BIN_PATH = "$${GSL_BASE_PATH}debug/bin"
+    } else {
+	GSL_LIBS_PATH = "$${GSL_BASE_PATH}lib"
+	GSL_BIN_PATH = "$${GSL_BASE_PATH}bin"
+    }
 }
 
 macx {

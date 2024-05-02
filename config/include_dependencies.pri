@@ -48,7 +48,7 @@ VCPKG_PATH = $$(VCPKG)
     include(include_necessary_boost.pri)
     message("DEPENDENCY SETUP - BOOST        will be used in $$TARGET")
 }
-!isEmpty(CHECK_CAN_USE_GSL)|!isEmpty(MUST_USE_GSL)|contains( COMPUTREE, ctlibgsl) {
+!isEmpty(CHECK_CAN_USE_GSL)|!isEmpty(MUST_USE_GSL) {
     include(default_path_gsl.pri)
     exists(user_path_gsl.pri) : include(user_path_gsl.pri)
     include(include_necessary_gsl.pri)

@@ -16,6 +16,7 @@ PCL_LIB_ADD += pcl_segmentation
 PCL_LIB_ADD += pcl_stereo
 PCL_LIB_ADD += pcl_surface
 PCL_LIB_ADD += pcl_tracking
+PCL_LIB_ADD += lz4
 
 linux | macx {
 PCL_LIB_ADD += pcl_apps
