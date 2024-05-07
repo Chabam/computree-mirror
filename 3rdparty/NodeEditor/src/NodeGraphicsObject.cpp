@@ -202,6 +202,10 @@ void
 NodeGraphicsObject::
 mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+  /*
+  PLR : 07/05/2024 --- Bug #419 : in results configuration graphic window error
+  Following code is commented out to disable mouse press event
+
   // MK : add read only property check
   if (_locked || _scene.isReadOnly())
     return;
@@ -274,6 +278,9 @@ mousePressEvent(QGraphicsSceneMouseEvent * event)
   {
     state.setResizing(true);
   }
+
+  End PLR : 07/05/2024 --- Bug #419
+  */
 }
 
 
@@ -354,6 +361,10 @@ void
 NodeGraphicsObject::
 mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
+  /*
+  PLR : 07/05/2024 --- Bug #419 : in results configuration graphic window error
+  Following code is commented out to disable mouse release event
+
   auto & state = _node.nodeState();
 
   state.setResizing(false);
@@ -368,6 +379,9 @@ mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
   {
       _scene.nodeSelected(node());
   }
+
+  End PLR : 07/05/2024 --- Bug #419
+  */
 }
 
 
