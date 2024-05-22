@@ -24,8 +24,6 @@ HEADERS += \
     ct_itemdrawable/tools/pointclustertools/ct_polylinesalgorithms.h \
     ct_itemdrawable/tools/scanner/ct_parallelshootingpatternfrompointcloud.h \
     ct_itemdrawable/tools/scanner/ct_shootingpatternfrompointcloud.h \
-    ct_math/ct_delaunay2d/ct_delaunay2dtriangulation.h \
-    ct_math/ct_delaunay2d/ct_delaunay2dvertex.h \
     ctlibstructureaddon_global.h \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithoutpointcloud.h \
     ct_itemdrawable/abstract/ct_abstractitemdrawablewithpointcloud.h \
@@ -295,8 +293,6 @@ SOURCES += \
     ct_itemdrawable/tools/drawmanager/ct_standardscanpathdrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardspheredrawmanager.cpp \
     ct_itemdrawable/tools/drawmanager/ct_standardtriangulation2ddrawmanager.cpp \
-    ct_math/ct_delaunay2d/ct_delaunay2dtriangulation.cpp \
-    ct_math/ct_delaunay2d/ct_delaunay2dvertex.cpp \
     ct_shapedata/ct_boxdata.cpp \
     ct_shapedata/ct_circledata.cpp \
     ct_shapedata/ct_cylinderdata.cpp \
