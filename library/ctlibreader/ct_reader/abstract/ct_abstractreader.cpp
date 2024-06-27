@@ -71,7 +71,7 @@ bool CT_AbstractReader::setFilePath(const QString& filepath)
         allSuffixes.append(suffixes);
     }
 
-    if(!allSuffixes.contains("*") && !allSuffixes.contains(QFileInfo(filepath).completeSuffix().toLower()))
+    if(!allSuffixes.contains("*") && !allSuffixes.contains(QFileInfo(filepath).suffix().toLower()))
         return false;
 
     // Verify that the file exist and can be opened
@@ -123,7 +123,7 @@ bool CT_AbstractReader::setMultipleFilePath(const QList<FileBuffer>& fileBufferL
     // Now check every file path from the list
     for(auto &fileBuffer: fileBufferList)
     {
-        if(!allSuffixes.contains("*") && !allSuffixes.contains(QFileInfo(fileBuffer.filename).completeSuffix().toLower()))
+        if(!allSuffixes.contains("*") && !allSuffixes.contains(QFileInfo(fileBuffer.filename).suffix().toLower()))
             return false;
 
         // Verify that the file exist and can be opened
