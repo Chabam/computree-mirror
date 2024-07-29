@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMutex>
 #include <QTimer>
+#include <QList>
 
 #include "view/Steps/gstepviewdefault.h"
 #include "view/StepResultTreeView/gtreestepcontextmenu.h"
@@ -116,6 +117,8 @@ private:
      */
     GTreeStepContextMenu*                                                       m_contextMenu;
 
+    QList<QTreeWidgetItem*>                                                     m_itemsToDelete;
+
     /**
      * @brief Extract the step from the item. Can be nullptr !
      */
@@ -207,6 +210,8 @@ private:
      * @brief Check/Uncheck the item
      */
     void userCheckItem(QTreeWidgetItem* item, bool checked);
+
+    void deleteItems();
 
 private slots:
     /**

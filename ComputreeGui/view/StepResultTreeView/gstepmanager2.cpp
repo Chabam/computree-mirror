@@ -13,6 +13,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QComboBox>
+#include <QList>
 
 GStepManager2::GStepManager2(CDM_StepManager& stepManager,
                              QWidget *parent) :
@@ -555,12 +556,16 @@ void GStepManager2::resultToBeRemoved(const CT_AbstractResult *result)
 
 void GStepManager2::updateTree()
 {
+    QMutexLocker locker(m_protectTreeMutex);
+
     // GUI thread
     QTreeWidgetItem* workflowRoot = ui->treeWidget->topLevelItem(0);
 
     recursiveUpdateTree(workflowRoot);
 
     addResultsThatMustBe();
+
+    deleteItems();
 }
 
 bool GStepManager2::updateResultInTree(QTreeWidgetItem* child)
@@ -591,6 +596,8 @@ bool GStepManager2::updateResultInTree(QTreeWidgetItem* child)
         child->parent()->removeChild(child);
 
     // delete child;
+    m_itemsToDelete.append(child);
+
     return false;
 }
 
@@ -632,7 +639,9 @@ bool GStepManager2::updateStepInTree(QTreeWidgetItem* child)
     if(child->parent() != nullptr)
         child->parent()->removeChild(child);
 
-    delete child;
+    // delete child;
+    m_itemsToDelete.append(child);
+
     return false;
 }
 
@@ -765,4 +774,17 @@ void GStepManager2::userCheckItem(QTreeWidgetItem *item, bool checked)
                 GUI_MANAGER->asyncRemoveAllItemDrawableOfResultFromView(*result, nullptr);
         }
     }
+}
+
+void GStepManager2::deleteItems()
+{
+    QListIterator<QTreeWidgetItem*> it(m_itemsToDelete);
+
+    while(it.hasNext())
+    {
+        QTreeWidgetItem* item = it.next();
+        delete item;
+    }
+
+    m_itemsToDelete.clear();
 }
