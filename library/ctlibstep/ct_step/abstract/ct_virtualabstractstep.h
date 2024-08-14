@@ -858,6 +858,12 @@ public:
      */
     virtual QString generateHTMLDocumentation(QString directory, QString cssRelativeDirectory);
 
+    /**
+     * @brief Restore first step ID to 1. Must only be used if not step left in steptree
+     */
+    static void resetCurrentID();
+
+
 protected:
     /**
      * @brief Returns the current number of the break point. In other words the number of turn that the debug mode has made.

@@ -41,6 +41,7 @@ private:
 
     void createCSS(QString filename);
     void createJSForIframe(QString dir);
+    void createTextContent(QString outDirPath, QString fileName, QString content);
 
 };
 

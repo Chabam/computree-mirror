@@ -895,6 +895,11 @@ void CT_VirtualAbstractStep::useManualMode(bool)
 {
 }
 
+void CT_VirtualAbstractStep::resetCurrentID()
+{
+    CURRENT_ID = 1;
+}
+
 QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QString cssRelativeDirectory)
 {
     QString outFilename = QString("%1/%2.html").arg(directory, this->name());
@@ -952,7 +957,7 @@ QString CT_VirtualAbstractStep::generateHTMLDocumentation(QString directory, QSt
         }
 
         QString outputResults = this->outputDescription();
-        if (!inputResults.isEmpty())
+        if (!outputResults.isEmpty())
         {
             stream << "<section>\n";
             stream << "<h2>" << tr("Données de sortie") << "</h2>\n";

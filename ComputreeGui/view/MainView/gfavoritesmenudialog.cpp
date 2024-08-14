@@ -133,7 +133,7 @@ void GFavoritesMenuDialog::accept()
             CT_MenuLevel *levelChoosed = levelFromItem(ci);
 
             if(levelChoosed != nullptr)
-                levelChoosed->addStep(m_step->pluginStaticCastT<>()->createNewInstanceOfStep(*m_step, nullptr));
+                levelChoosed->addStep(m_step->pluginStaticCastT<>()->createNewInstanceOfStep(*m_step, nullptr, true));
         }
     }
 

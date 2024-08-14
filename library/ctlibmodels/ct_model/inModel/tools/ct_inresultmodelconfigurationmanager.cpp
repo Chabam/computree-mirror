@@ -79,10 +79,14 @@ bool CT_InResultModelConfigurationManager::exportViewForINModelConfig(QString ex
             m_inputModelsConfigurationDialog->resize(size2);
 
             QString exportPath2 = exportPath;
+
+            QFileInfo finfo(exportPath);
+            QString exportFileName = QString("%1.%2").arg(finfo.baseName(), finfo.suffix());
+
             if (nresults > 1)
             {
-                QFileInfo finfo(exportPath);
                 exportPath2 = QString("%1/%2_%3.%4").arg(finfo.path()).arg(finfo.baseName()).arg(i+1).arg(finfo.suffix());
+                exportFileName = QString("%1_%2.%3").arg(finfo.baseName()).arg(i+1).arg(finfo.suffix());
             }
 
             bool exportOk = m_inputModelsConfigurationDialog->exportViewCapture(exportPath2);
@@ -90,7 +94,7 @@ bool CT_InResultModelConfigurationManager::exportViewForINModelConfig(QString ex
 
             if (exportOk)
             {
-                exportedFiles.append(exportPath2);
+                exportedFiles.append(exportFileName);
             }
 
 

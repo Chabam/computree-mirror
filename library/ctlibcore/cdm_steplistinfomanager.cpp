@@ -9,26 +9,28 @@ CDM_StepListInfoManager::CDM_StepListInfoManager(CDM_StepManager *stepManager, C
     _stepManager = stepManager;
     _pluginManager = pluginManager;
 
-    QList<CT_VirtualAbstractStep *>& thisStepList = _stepList;
+    QList<CT_VirtualAbstractStep *> stepList;
     QHash<const CT_VirtualAbstractStep*, const CT_VirtualAbstractStep*> parents;
 
     const QList<CT_VirtualAbstractStep*> rootList = stepManager->getStepRootList();
 
     for(CT_VirtualAbstractStep* currentStep : rootList)
     {
-        thisStepList.append(currentStep);
+        stepList.append(currentStep);
 
-        currentStep->recursiveVisitChildrens([&thisStepList, &parents](const CT_VirtualAbstractStep* step, const CT_VirtualAbstractStep* child) -> bool {
-            thisStepList.append(const_cast<CT_VirtualAbstractStep*>(child));
+        currentStep->recursiveVisitChildrens([&stepList, &parents](const CT_VirtualAbstractStep* step, const CT_VirtualAbstractStep* child) -> bool {
+            stepList.append(const_cast<CT_VirtualAbstractStep*>(child));
             parents.insert(child, step);
             return true;
         });
     }
 
+
+    QList<int> stepIndent;
     // Compute step indentation and plugin list
-    for (int i = 0 ; i < _stepList.size() ; i++)
+    for (int i = 0 ; i < stepList.size() ; i++)
     {
-        const CT_VirtualAbstractStep *step = _stepList.at(i);
+        const CT_VirtualAbstractStep *step = stepList.at(i);
 
         // Compute plugin list
         CT_AbstractStepPlugin* plugin = step->pluginStaticCastT<>();
@@ -56,26 +58,25 @@ CDM_StepListInfoManager::CDM_StepListInfoManager(CDM_StepManager *stepManager, C
             ++indent;
             step = parents.value(step, nullptr);
         }
-        _stepIndent.append(indent);
+        stepIndent.append(indent);
     }
+
 
     // Create Core plugin list
     _corePluginList.append("Base");
     _corePluginList.append("Toolkit");
     _corePluginList.append("Generate");
 
-}
 
-QString CDM_StepListInfoManager::getScriptStepList()
-{
-    QString result;
-    for (int i = 0 ; i < _stepList.size() ; i++)
+    // Create stepInfos
+    int count = 1;
+    for (int i = 0 ; i < stepList.size() ; i++)
     {
-        const CT_VirtualAbstractStep *step = _stepList.at(i);
+        CT_VirtualAbstractStep* currentStep = stepList.at(i);
 
-        CT_AbstractStepPlugin* plugin = step->pluginStaticCastT<>();
-        QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
+        CT_AbstractStepPlugin* plugin = currentStep->pluginStaticCastT<>();
         QString pluginOfficialName = plugin->getPluginOfficialName();
+        QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
 
         if (pluginName.left(5) == "plug_")
         {
@@ -86,12 +87,40 @@ QString CDM_StepListInfoManager::getScriptStepList()
             pluginName = pluginOfficialName;
         }
 
-        // create indentation
-        int indent = _stepIndent.at(i);
-        QString spaces = "&nbsp;&nbsp;&nbsp;&nbsp;";
-        for (int j = 0 ; j < indent ; j++) {spaces.append("&nbsp;&nbsp;&nbsp;&nbsp;");}
+        _stepInfoList.append(CDM_StepListInfoManager::StepInfo(currentStep, count++, stepIndent.at(i), currentStep->name(), currentStep->description(), currentStep->detailledDescription(), pluginName));
+    }
+}
 
-        result.append(spaces + "<strong>" + step->description() + "</strong> <em>(plugin " + pluginName + ")</em><br><br>\n");
+
+const QList<CDM_StepListInfoManager::StepInfo> &CDM_StepListInfoManager::getStepInfoList() const
+{
+    return _stepInfoList;
+}
+
+
+QList<CT_VirtualAbstractStep *> CDM_StepListInfoManager::steps()
+{
+    QList<CT_VirtualAbstractStep *> list;
+
+    for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
+    {
+        list.append(const_cast<CT_VirtualAbstractStep*>(stepInfo._step));
+    }
+
+    return list;
+}
+
+
+QString CDM_StepListInfoManager::getScriptStepList()
+{
+    QString result;
+    for (const CDM_StepListInfoManager::StepInfo &stepInfo : qAsConst(_stepInfoList))
+    { 
+        // create indentation
+        QString spaces = "&nbsp;&nbsp;&nbsp;&nbsp;";
+        for (int j = 0 ; j < stepInfo._indent ; j++) {spaces.append("&nbsp;&nbsp;&nbsp;&nbsp;");}
+
+        result.append(spaces + "<strong>" + stepInfo._stepDescription + "</strong> <em>(plugin " + stepInfo._pluginName + ")</em><br><br>\n");
     }
 
     return result;
@@ -100,24 +129,11 @@ QString CDM_StepListInfoManager::getScriptStepList()
 QString CDM_StepListInfoManager::getScriptStepListParameters()
 {
     QString result;
-    for (int i = 0 ; i < _stepList.size() ; i++)
+    for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
     {
-        const CT_VirtualAbstractStep *step = _stepList.at(i);
+        const CT_VirtualAbstractStep *step = stepInfo._step;
 
-        CT_AbstractStepPlugin* plugin = step->pluginStaticCastT<>();
-        QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
-        QString pluginOfficialName = plugin->getPluginOfficialName();
-
-        if (pluginName.left(5) == "plug_")
-        {
-            pluginName.remove(0, 5);
-        }
-        if (pluginOfficialName != "")
-        {
-            pluginName = pluginOfficialName;
-        }
-
-        result.append("<h2>" + step->description() + " <em>(plugin " + pluginName + ")</em></h2>\n");
+        result.append("<h2>" + stepInfo._stepDescription + " <em>(plugin " + stepInfo._pluginName + ")</em></h2>\n");
         QString parametersString = const_cast<CT_VirtualAbstractStep*>(step)->parametersDescription(false);
 
         if (parametersString.isEmpty())
@@ -135,11 +151,10 @@ QString CDM_StepListInfoManager::getScriptStepListParameters()
 // TESTTUTO
 QString CDM_StepListInfoManager::getScriptStepListInputConfig()
 {
-    int cpt = 1;
     QString result;
-    for (int i = 0 ; i < _stepList.size() ; i++)
+    for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
     {
-        const CT_VirtualAbstractStep *step = _stepList.at(i);
+        const CT_VirtualAbstractStep *step = stepInfo._step;
 
         QList<const CT_InAbstractResultModel*> resultInModels;
 
@@ -173,7 +188,7 @@ QString CDM_StepListInfoManager::getScriptStepListInputConfig()
 
                             qDebug() << this->getTabsForHierachicalRank(count) << child->displayableName() << " " << modelCount;
 
-                            child->visitPossibilities([this, &allPoss, &selectedPoss, &modelCount](const CT_InAbstractModel* inModel, const CT_InStdModelPossibility* possibility) -> bool {
+                            child->visitPossibilities([&allPoss, &selectedPoss, &modelCount](const CT_InAbstractModel* inModel, const CT_InStdModelPossibility* possibility) -> bool {
                                 Q_UNUSED(inModel);
                                 allPoss.append(possibility->outModel());
                                 if (possibility->isSelected())
@@ -262,7 +277,7 @@ void CDM_StepListInfoManager::recursiveCreateInputTree(QString root, const DEF_C
         });
     }
 
-    group->visitItems([this, &rootItem, &allPoss, &selectedPoss](const CT_OutAbstractSingularItemModel* item) -> bool {
+    group->visitItems([this, &allPoss, &selectedPoss](const CT_OutAbstractSingularItemModel* item) -> bool {
 
         QList<QString> list2;
 
@@ -290,7 +305,7 @@ void CDM_StepListInfoManager::recursiveCreateInputTree(QString root, const DEF_C
             qDebug() << this->getTabsForHierachicalRank(count) << itemItem << ((modelCounts.size() > 0)?QString(" *** %1").arg(str):"");
         }
 
-        item->visitAttributes([this, &itemItem, &allPoss, &selectedPoss](const CT_OutAbstractItemAttributeModel* itemAtt) -> bool {
+        item->visitAttributes([this, &allPoss, &selectedPoss](const CT_OutAbstractItemAttributeModel* itemAtt) -> bool {
             QList<QString> list3;
 
             // le nom du modèle de sortie
@@ -350,32 +365,6 @@ QString CDM_StepListInfoManager::getTabsForHierachicalRank(int count)
 }
 
 
-QList<CDM_StepListInfoManager::StepInfo> CDM_StepListInfoManager::getScriptTable()
-{
-    QList<CDM_StepListInfoManager::StepInfo> list;
-
-    for (int i = 0 ; i < _stepList.size() ; i++)
-    {
-        CT_VirtualAbstractStep* currentStep = _stepList.at(i);
-
-        CT_AbstractStepPlugin* plugin = currentStep->pluginStaticCastT<>();
-        QString pluginOfficialName = plugin->getPluginOfficialName();
-        QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
-
-        if (pluginName.left(5) == "plug_")
-        {
-            pluginName.remove(0, 5);
-        }
-        if (pluginOfficialName != "")
-        {
-            pluginName = pluginOfficialName;
-        }
-
-        list.append(CDM_StepListInfoManager::StepInfo(currentStep->uniqueID(), currentStep->name(), currentStep->description(), pluginName));
-    }
-    return list;
-}
-
 QString CDM_StepListInfoManager::getPluginAndStepCitations()
 {
     QList<CT_AbstractStepPlugin*> pluginDone;
@@ -392,31 +381,19 @@ QString CDM_StepListInfoManager::getPluginAndStepCitations()
     str.append("<h3>" + tr("Citation des plugins") + "</h3>");
     str.append("<p>" + tr("Pour citer les plugins utilisés :") + "</p>");
 
-    for (int i = 0 ; i < _stepList.size() ; i++)
+    for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
     {
-        CT_VirtualAbstractStep* currentStep = _stepList.at(i);
+        const CT_VirtualAbstractStep *currentStep = stepInfo._step;
 
         CT_AbstractStepPlugin* plugin = currentStep->pluginStaticCastT<>();
-        QString pluginOfficialName = plugin->getPluginOfficialName();
-        QString pluginName = _pluginManager->getPluginName(_pluginManager->getPluginIndex(plugin));
-        QString stepName = currentStep->description();
-
-        if (pluginName.left(5) == "plug_")
-        {
-            pluginName.remove(0, 5);
-        }
-        if (pluginOfficialName != "")
-        {
-            pluginName = pluginOfficialName;
-        }
 
         if (!pluginDone.contains(plugin))
         {
             pluginDone.append(plugin);
 
-            if (!_corePluginList.contains(pluginName)) // core plugins don't need to be cite individually
+            if (!_corePluginList.contains(stepInfo._pluginName)) // core plugins don't need to be cite individually
             {
-                str.append(tr("Plugin %1 :<br>").arg(pluginName));
+                str.append(tr("Plugin %1 :<br>").arg(stepInfo._pluginName));
                 QStringList pluginRIS = plugin->getPluginRISCitationList();
                 if (pluginRIS.isEmpty())
                 {
@@ -436,7 +413,7 @@ QString CDM_StepListInfoManager::getPluginAndStepCitations()
         QStringList stepsRis = currentStep->getStepRISCitations();
         if (stepsRis.size() > 0)
         {
-            str2.append(tr("Etape <b>%1</b> <em>(plugin %2)</em> : <br>").arg(stepName, pluginName));
+            str2.append(tr("Etape <b>%1</b> <em>(plugin %2)</em> : <br>").arg(stepInfo._stepDescription, stepInfo._pluginName));
         }
 
         for (int i = 0 ; i < stepsRis.size() ; i++)
@@ -461,9 +438,9 @@ QString CDM_StepListInfoManager::getPluginAndStepCitations()
 
 bool CDM_StepListInfoManager::hasStepCitation()
 {
-    for (int i = 0 ; i < _stepList.size() ; i++)
+    for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
     {
-        CT_VirtualAbstractStep* currentStep = _stepList.at(i);
+        const CT_VirtualAbstractStep *currentStep = stepInfo._step;
 
         QStringList stepsRis = currentStep->getStepRISCitations();
         if (stepsRis.size() > 0) {return true;}
@@ -493,9 +470,9 @@ QString CDM_StepListInfoManager::getPluginRIS()
 
     QList<QString> stepCitations;
 
-    for (int i = 0 ; i < _stepList.size() ; i++)
+    for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
     {
-        CT_VirtualAbstractStep* currentStep = _stepList.at(i);
+        const CT_VirtualAbstractStep *currentStep = stepInfo._step;
 
         QStringList stepsRis = currentStep->getStepRISCitations();
         for (int i = 0 ; i < stepsRis.size() ; i++)
@@ -570,4 +547,123 @@ QString CDM_StepListInfoManager::getComputreeCoreRis()
     return computreeCitationRIS;
 }
 
+
+void CDM_StepListInfoManager::generateHTMLDocForAllSteps(QString baseDirectory, QString cssRelativeDirectory)
+{
+    for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
+    {
+        QString outFileName = generateHTMLDoc(stepInfo, baseDirectory, cssRelativeDirectory);
+        qDebug() << outFileName;
+    }
+}
+
+QString CDM_StepListInfoManager::generateHTMLDoc(CDM_StepListInfoManager::StepInfo stepInfo, QString baseDirectory, QString cssRelativeDirectory)
+{
+    QString outFilename = QString("%1/content/steps/%2.html").arg(baseDirectory, stepInfo._helpFileName);
+    QString pluginURL = stepInfo._step->plugin()->pluginToolForStep()->url();
+
+    QFile f(outFilename);
+    if (f.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream stream(&f);
+        stream << "<!DOCTYPE html>\n";
+        stream << "<html>\n";
+        stream << "<head>\n";
+        stream << "<metacharset=\"utf-8\">\n";
+        stream << "<title>Computree Documentation</title>";
+        stream << "<link rel=\"stylesheet\" href=\"" << cssRelativeDirectory << "/style.css\" />";
+        stream << "</head>\n";
+        stream << "<body>";
+        stream << "<div class=\"mainBlock\">";
+
+        stream << "<h1>" << stepInfo._stepDescription << "</h1>\n";
+
+        stream << "<Strong>" << tr("Plugin : </Strong><a href=\"") << pluginURL << "\" target=\"_blank\" rel=\"noreferrer noopener\">"<< stepInfo._pluginName << "</a>\n";
+        stream << "<br>";
+        stream << "<Strong>" << tr("Nom de classe : </strong>") << stepInfo._stepName << "\n";
+        stream << "<br><br>";
+
+        stream << "<section>\n";
+        stream << "<h2>" << tr("Description") << "</h2>\n";
+        stream << "<div class=\"descBlock\">";
+        stream << stepInfo._stepDetailledDescription << "\n";
+        stream << "</div>";
+        stream << "</section>\n";
+
+        QString parameters = stepInfo._step->parametersDescription(true);
+        if (!parameters.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Paramètres") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
+            stream << parameters;
+            stream << "</div>";
+            stream << "</section>\n";
+        }
+
+        // Create screen captures for IN models config.
+        QStringList exportedFiles;
+        stepInfo._step->exportViewForINModelConfig(QString("%1/content/images/%2.png").arg(baseDirectory, stepInfo._helpFileName), exportedFiles);
+
+        if (!exportedFiles.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Configuration des résultats d'entrée") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
+
+            for (const QString &file : qAsConst(exportedFiles))
+            {
+                stream << "<img src=" << QString("../images/%1").arg(file) << " />\n";
+                stream << "<br>\n";
+            }
+
+            stream << "</div>";
+            stream << "</section>\n";
+        }
+
+        QString outputResults = stepInfo._step->outputDescription();
+        if (!outputResults.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Données de sortie") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
+            stream << outputResults;
+            stream << "</div>";
+            stream << "</section>\n";
+        }
+
+        QString details = stepInfo._step->detailsDescription();
+        if (!details.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Détails") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
+            stream << details;
+            stream << "</div>";
+            stream << "</section>\n";
+        }
+
+        QStringList references = stepInfo._step->getStepRISCitations();
+        if (!references.isEmpty())
+        {
+            stream << "<section>\n";
+            stream << "<h2>" << tr("Références") << "</h2>\n";
+            stream << "<div class=\"descBlock\">";
+            for (int i = 0 ; i < references.size() ; i++)
+            {
+                stream << CT_ParseRIS::parseRIS(references.at(i));
+                stream << "<br>";
+            }
+            stream << "</div>";
+            stream << "</section>\n";
+        }
+
+        stream << "</div>\n";
+        stream << "</body>\n";
+        stream << "</html>";
+        f.close();
+    }
+
+    return outFilename;
+}
 

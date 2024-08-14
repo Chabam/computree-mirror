@@ -154,12 +154,13 @@ CT_VirtualAbstractStep* CT_AbstractStepPlugin::getStepFromKey(QString key) const
     return searchStepFromKeyOfThisPluginInMenuRecursively(menuOfSteps(), key);
 }
 
-CT_VirtualAbstractStep* CT_AbstractStepPlugin::createNewInstanceOfStep(const CT_VirtualAbstractStep& step, CT_VirtualAbstractStep* parent) const
+CT_VirtualAbstractStep* CT_AbstractStepPlugin::createNewInstanceOfStep(const CT_VirtualAbstractStep& step, CT_VirtualAbstractStep* parent, bool isAPrototype) const
 {
     CT_VirtualAbstractStep* myStep = &const_cast<CT_VirtualAbstractStep&>(step);
     CT_VirtualAbstractStep* newStep = myStep->createNewInstance();
     newStep->setParentStep(parent);
     newStep->setPlugin(this);
+    if (isAPrototype) {newStep->setIsAPrototype();}
     newStep->init();
 
     return newStep;

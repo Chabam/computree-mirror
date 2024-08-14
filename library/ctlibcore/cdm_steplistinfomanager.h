@@ -17,55 +17,74 @@ class COMPUTREECORESHARED_EXPORT CDM_StepListInfoManager : public QObject
 public:
     struct StepInfo
     {
-        StepInfo(int num, QString stepName, QString stepDescription, QString pluginName)
+        StepInfo(CT_VirtualAbstractStep* step,
+                 int num,
+                 int indent,
+                 QString stepName,
+                 QString stepDescription,
+                 QString stepDetailledDescription,
+                 QString pluginName)
         {
+            _step = step;
             _num = num;
+            _indent = indent;
             _stepName = stepName;
             _stepDescription = stepDescription;
+            _stepDetailledDescription = stepDetailledDescription;
             _pluginName = pluginName;
+            _helpFileName = QString("Step_%1").arg(_num, 3, 10, QLatin1Char('0'));
         }
 
-        int _num;
-        QString _stepName;
-        QString _stepDescription;
-        QString _pluginName;
+        CT_VirtualAbstractStep *    _step;
+        int                         _num;
+        int                         _indent;
+        QString                     _stepName;
+        QString                     _stepDescription;
+        QString                     _stepDetailledDescription;
+        QString                     _pluginName;
+        QString                     _helpFileName;
     };
 
 
     CDM_StepListInfoManager(CDM_StepManager *stepManager, CDM_PluginManager *pluginManager);
+
+    const QList<StepInfo> &getStepInfoList() const;
+
+    QList<CT_VirtualAbstractStep *> steps();
 
     QString getScriptStepList();
     QString getScriptStepListParameters();
     QString getScriptStepListInputConfig();
     void recursiveCreateInputTree(QString root, const DEF_CT_AbstractGroupModelOut *group, QList<const CT_OutAbstractModel *> &allPoss, QMultiMap<const CT_OutAbstractModel *, int> &selectedPoss);
 
-    QList<CDM_StepListInfoManager::StepInfo> getScriptTable();
     QString getPluginAndStepCitations();
     QString getPluginRIS();
 
     QString getUsedPlugins();
     QString getPluginListToCite();
 
-    QList<CT_VirtualAbstractStep *> steps() {return _stepList;}
 
     static QString getComputreeCoreRis();
 
     bool hasStepCitation();
 
+    void generateHTMLDocForAllSteps(QString baseDirectory, QString cssRelativeDirectory);
+
 private:
-    QList<CT_VirtualAbstractStep *>         _stepList;
-    QList<int>                              _stepIndent;
-    QMap<QString, CT_AbstractStepPlugin*>   _pluginList;
-    QList<QString>                          _corePluginList;
+    QList<CDM_StepListInfoManager::StepInfo>    _stepInfoList;
+    QMap<QString, CT_AbstractStepPlugin*>       _pluginList;
+    QList<QString>                              _corePluginList;
 
-    CDM_StepManager*                        _stepManager;
-    CDM_PluginManager*                      _pluginManager;
+    CDM_StepManager*                            _stepManager;
+    CDM_PluginManager*                          _pluginManager;
 
-    QString                                 _computreeCitationRIS;
+    QString                                     _computreeCitationRIS;
 
 
     void recursiveCountHierachicalRank(int &count, const CT_AbstractModel *model);
     QString getTabsForHierachicalRank(int count);
+
+    QString generateHTMLDoc(CDM_StepListInfoManager::StepInfo stepInfo, QString directory, QString cssRelativeDirectory);
 };
 
 #endif // CDM_STEPLISTINFOMANAGER_H

@@ -219,7 +219,9 @@ void GTreeStepContextMenu::showStepInformations()
 void GTreeStepContextMenu::deleteStepRequired()
 {
     if(selectedStep() != nullptr)
+    {
         GUI_MANAGER->asyncRemoveStep(*selectedStep(), nullptr);
+    }
 }
 
 void GTreeStepContextMenu::locateStepInMenu()

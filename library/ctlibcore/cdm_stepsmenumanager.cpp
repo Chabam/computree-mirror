@@ -203,7 +203,7 @@ void CDM_StepsMenuManager::readStepAndAddItToLevel(CT_MenuLevel *parentLevel, QX
                     CT_VirtualAbstractStep *step = plugin->getStepFromKey(stepKey);
 
                     if(step != nullptr) {
-                        parentLevel->addStep(plugin->createNewInstanceOfStep(*step, nullptr));
+                        parentLevel->addStep(plugin->createNewInstanceOfStep(*step, nullptr, true));
                         added = true;
                     }
                 }

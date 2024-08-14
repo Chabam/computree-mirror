@@ -163,7 +163,7 @@ public:
      * @return nullptr if the copy is impossible
      * @warning If you overload this method remember to call the method of the superclass !
      */
-    virtual CT_VirtualAbstractStep* createNewInstanceOfStep(const CT_VirtualAbstractStep &step, CT_VirtualAbstractStep *parent) const;
+    virtual CT_VirtualAbstractStep* createNewInstanceOfStep(const CT_VirtualAbstractStep &step, CT_VirtualAbstractStep *parent, bool isAPrototype = false) const;
 
     /**
      * @brief Returns true if this plugin can be configured. By default returns false.

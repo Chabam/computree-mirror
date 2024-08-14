@@ -65,8 +65,8 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"content/css/style.css\" /></head>\n";
         stream << "<body>\n";
         stream << "<div class=\"mainBlock\" style = \"display:flex; flex-direction:row; overflow:hidden; min-height:100vh;\">\n";
-        stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"content/pages/summary.html\"  style=\"width:20%; border:none; flex-grow:1;\"></iframe>\n";
-        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"content/pages/mainContent.html\" style=\"width:80%; border:none; flex-grow:1;\"></iframe>\n";
+        stream << "<iframe id=\"frameSummary\" name=\"frameSummary\" src=\"content/pages/summary.html\"  style=\"width:15%; border:none; flex-grow:1;\"></iframe>\n";
+        stream << "<iframe id=\"frameContent\" name=\"frameContent\" src=\"content/pages/mainContent.html\" style=\"width:85%; border:none; flex-grow:1;\"></iframe>\n";
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>\n";
@@ -74,15 +74,19 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         findex.close();
     }
 
-    QFile ftitleText(outDirPath + "/content/text/01_title.html");
-    if (ftitleText.open(QFile::WriteOnly | QFile::Text))
-    {
-        QTextStream stream(&ftitleText);
-        stream << "<!DOCTYPE html><html><head><link rel=\"stylesheet\" href=\"../css/style.css\" /></head><body><script src=\"../js/iframeResizer_child.js\"></script>\n";
-        stream << "<h1>" << docInfo._scriptName << "</h1>\n";
-        stream << "<br></body></html>\n";
-        ftitleText.close();
-    }
+    QString textContent;
+    textContent.append("<h1>" + docInfo._scriptName + "</h1>\n");
+    createTextContent(outDirPath, "01_title", textContent);
+
+    textContent.clear();
+    textContent.append("<p>" + docInfo._description + "</p>\n");
+    createTextContent(outDirPath, "02_description", textContent);
+
+    textContent.clear();
+    textContent.append("<p><em>" + tr("Ce script a été créé le ") + "</em>" + formattedTime + ", " + tr("avec la version 6.0.") + _svnRevision + tr(" de Computree") + "</p>\n");
+    textContent.append("<p><em>" + tr("Auteur : ") + "</em><strong>" + docInfo._author + "</strong></p>\n");
+    textContent.append("<p><em>" + tr("Fichier script Computree : ") + "</em><strong>" + docInfo._scriptFileName + ".cts</strong></p>\n");
+    createTextContent(outDirPath, "03_version", textContent);
 
     // Create mainContent.html file
     QFile fMainContent(outDirPath + "/content/pages/mainContent.html");
@@ -102,21 +106,34 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         stream << "<iframe id=\"title01\" class=\"insertedhtml\" src=\"../text/01_title.html\"></iframe>\n";
         stream << "<script>iFrameResize({ log: true }, '#title01')</script>\n";
 
+        stream << "<h2>" << tr("Description") << "</h2>\n";
         if (!docInfo._description.isEmpty())
         {
-            stream << "<p>" << docInfo._description << "</p>\n";
+            stream << "<iframe id=\"description02\" class=\"insertedhtml\" src=\"../text/02_description.html\"></iframe>\n";
+            stream << "<script>iFrameResize({ log: true }, '#description02')</script>\n";
         }
 
         stream << "<br>\n";
+        stream << "<br>\n";
+
         stream << "<h2>" << tr("Version") << "</h2>\n";
-        stream << "<p><em>" << tr("Ce script a été créé le ") << "</em>" << formattedTime << ", avec la version 6.0." << _svnRevision << " de Computree</p>\n";
         if (!docInfo._author.isEmpty())
         {
-            stream << "<p><em>" << tr("Auteur : ") << "</em><strong>" << docInfo._author << "</strong></p>\n";
+            stream << "<iframe id=\"version03\" class=\"insertedhtml\" src=\"../text/03_version.html\"></iframe>\n";
+            stream << "<script>iFrameResize({ log: true }, '#version03')</script>\n";
         }
-        stream << "<p><em>" << tr("Fichier script Computree : ") << "</em><strong>" << docInfo._scriptFileName << ".cts</strong></p>\n";
 
+        stream << "<br>\n";
+        stream << "<br>\n";
+
+        stream << "<h2>" << tr("Plugins utilisés") << "</h2>\n";
+        stream << "<p>" << tr("Ce script utilise les plugins Computree suivants :") << "</p>\n";
+        stream << "<div class=\"linksummary01\">\n";
+        stream << _stepListInfo->getUsedPlugins();
         stream << "</div>\n";
+
+        stream << "<br>\n";
+
         stream << "</body>\n";
         stream << "</html>\n";
 
@@ -148,34 +165,6 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         stream << "</html>\n";
 
         fStructure.close();
-    }
-
-
-    // Create plugins.html file
-    QFile fPlugins(outDirPath + "/content/pages/plugins.html");
-    if (fPlugins.open(QFile::WriteOnly | QFile::Text))
-    {
-        QTextStream stream(&fPlugins);
-
-        stream << "<!DOCTYPE html>\n";
-        stream << "<html>\n";
-        stream << "<head>\n";
-        stream << "<metacharset=\"utf-8\">\n";
-        stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
-        stream << "<body>\n";
-        stream << "<div class=\"mainBlock\">\n";
-        stream << "<h1>" << tr("Plugins utilisés") << "</h1>\n";
-        stream << "<br>\n";
-        stream << "<p>" << tr("Ce script utilise les plugins Computree suivants :") << "</p>\n";
-        stream << "<div class=\"linksummary01\">\n";
-        stream << _stepListInfo->getUsedPlugins();
-        stream << "</div>\n";
-        stream << "<br>\n";
-        stream << "</div>\n";
-        stream << "</body>\n";
-        stream << "</html>\n";
-
-        fPlugins.close();
     }
 
 
@@ -318,44 +307,43 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         stream << "</head>\n";
         stream << "<body>\n";
         stream << "<div class=\"mainBlock\">\n";
-        stream << "<h1>" << tr("Utiliser le script") << "</h1>\n";
+
+        stream << "<h1>" << tr("Index") << "</h1>\n";
+
         stream << "<div class=\"linksummary01\" >\n";
         stream << "<a target=\"frameContent\" href=\"mainContent.html\">" + tr("Informations générales") + "<br><br></a>\n";
-        stream << "<a target=\"frameContent\" href=\"scriptConfig.html\">" + tr("Configurer le script") + "<br><br></a>\n";
-        stream << "<a target=\"frameContent\" href=\"citations.html\">" + tr("Citer le script") + "<br><br></a>\n";
+        stream << "<a target=\"frameContent\" href=\"structure.html\">" + tr("Utilisation") + "<br><br></a>\n";
+        stream << "<a target=\"frameContent\" href=\"parameters.html\">" + tr("Configuration détaillée") + "<br><br></a>\n";
+        stream << "<a target=\"frameContent\" href=\"citations.html\">" + tr("Références") + "<br><br></a>\n";
         stream << "</div>\n";
-        stream << "<h1>" << tr("Informations détaillées") << "</h1>\n";
-        stream << "<div class=\"linksummary01\" >\n";
-        stream << "<a target=\"frameContent\" href=\"structure.html\">" + tr("Structure du script") + "<br><br></a>\n";
-        stream << "<a target=\"frameContent\" href=\"plugins.html\">" + tr("Plugins utilisés") + "<br><br></a>\n";
-        stream << "<a target=\"frameContent\" href=\"parameters.html\">" + tr("Tous les paramètres") + "<br><br></a>\n";
-        stream << "<a target=\"frameContent\" href=\"create.html\">" + tr("Création pas à pas") + "<br><br></a>\n";
-        stream << "</div>\n";
-        stream << "<h1>" << tr("Documentation des étapes") << "</h1>\n";
 
+        stream << "<h1>" << tr("Documentation des étapes") << "</h1>\n";
         QList<CT_VirtualAbstractStep*> steps = _stepListInfo->steps();
 
-        int counterStep = 1;
-        if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >\n";}
-        for(CT_VirtualAbstractStep* step : steps)
-        {
-            CT_VirtualAbstractStep* stepDoc = stepList.value(step->name());
 
-            if (stepDoc != nullptr)
-            {
-                stream << "<a target=\"frameContent\" href=\"../steps/" << stepDoc->name() << ".html\">" << stepDoc->description() << "<br><br></a>\n";
+        _stepListInfo->generateHTMLDocForAllSteps(outDirPath, "css");
 
-                // Create documentation page for this step
-                stepDoc->generateHTMLDocumentation(outDirPath + "/content/steps", "css");
+//        int counterStep = 1;
+//        if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >\n";}
+//        for(CT_VirtualAbstractStep* step : steps)
+//        {
+//            CT_VirtualAbstractStep* stepDoc = stepList.value(step->name());
 
-                // Create screen captures for IN models config.
-                QStringList exportedFiles;
-                step->exportViewForINModelConfig(QString("%1/content/images/etape_%2.png").arg(outDirPath).arg(counterStep++), exportedFiles);
-            }
-        }
-        if (steps.size() > 0) {stream << "</div>\n";}
+//            if (stepDoc != nullptr)
+//            {
+//                stream << "<a target=\"frameContent\" href=\"../steps/" << stepDoc->name() << ".html\">" << stepDoc->description() << "<br><br></a>\n";
 
-        if (steps.size() > 0) {stream << "</div>\n";}
+//                // Create documentation page for this step
+//                stepDoc->generateHTMLDocumentation(outDirPath + "/content/steps", "css");
+
+//                // Create screen captures for IN models config.
+//                QStringList exportedFiles;
+//                step->exportViewForINModelConfig(QString("%1/content/images/etape_%2.png").arg(outDirPath).arg(counterStep++), exportedFiles);
+//            }
+//        }
+//        if (steps.size() > 0) {stream << "</div>\n";}
+//        if (steps.size() > 0) {stream << "</div>\n";}
+
         stream << "</body>\n";
         stream << "</html>\n";
         f.close();
@@ -674,5 +662,18 @@ void CDM_StepListDocExporter::createJSForIframe(QString dir)
         stream << "//# sourceMappingURL=iframeResizer.contentWindow.map\n";
 
         fjs2.close();
+    }
+}
+
+void CDM_StepListDocExporter::createTextContent(QString outDirPath, QString fileName, QString content)
+{
+    QFile ftitleText(outDirPath + "/content/text/" + fileName + ".html");
+    if (ftitleText.open(QFile::WriteOnly | QFile::Text))
+    {
+        QTextStream stream(&ftitleText);
+        stream << "<!DOCTYPE html><html><head><link rel=\"stylesheet\" href=\"../css/style.css\" /></head><body><script src=\"../js/iframeResizer_child.js\"></script>\n";
+        stream << content;
+        stream << "<br></body></html>\n";
+        ftitleText.close();
     }
 }

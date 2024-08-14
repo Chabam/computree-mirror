@@ -470,6 +470,8 @@ int DM_GuiManager::asyncRemoveAllStep(DM_Context *context)
             _future = QtConcurrent::run(staticClearResultMemoryAndRemoveStep, infoActionStep);
             _futureWatcher.setFuture(_future);
 
+            CT_VirtualAbstractStep::resetCurrentID();
+
             return 1;
         }
 
