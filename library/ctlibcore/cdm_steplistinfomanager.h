@@ -72,7 +72,7 @@ public:
 
     void generateHTMLDocForAllSteps(QString baseDirectory, QString cssRelativeDirectory);
 
-    QString getStepIndex();
+    QString getStepIndex(int num);
 
 
 public slots:

@@ -137,7 +137,7 @@ QString CDM_StepListInfoManager::getScriptStepListToolTip(QList<int> strongSteps
 
         if (strongSteps.contains(stepInfo._num))
         {
-            result.append(spaces + "<strong>" + QString::number(stepInfo._num) + ". " + stepInfo._stepDescription + "</strong><br>\n");
+            result.append(spaces + "<strong style=\"color:#8B0000;\">" + QString::number(stepInfo._num) + ". " + stepInfo._stepDescription + "</strong><br>\n");
         } else {
             result.append(spaces + QString::number(stepInfo._num) + ". " + stepInfo._stepDescription + "<br>\n");
         }
@@ -577,7 +577,7 @@ void CDM_StepListInfoManager::generateHTMLDocForAllSteps(QString baseDirectory, 
     }
 }
 
-QString CDM_StepListInfoManager::getStepIndex()
+QString CDM_StepListInfoManager::getStepIndex(int num)
 {
     QString index;
 
@@ -585,7 +585,13 @@ QString CDM_StepListInfoManager::getStepIndex()
     {
         QString outFilename = QString("../steps/%1.html").arg(stepInfo._helpFileName);
 
-        index.append(QString("<a href=\"%1\" class=\"tooltip\">%2<div class=\"tooltiptext\">%3</div></a>&nbsp;").arg(outFilename).arg(stepInfo._num).arg(getScriptStepListToolTip(QList<int>() << stepInfo._num)));
+        QString className = "tooltip";
+        if (stepInfo._num == num)
+        {
+            className = "tooltipactive";
+        }
+
+        index.append(QString("<a href=\"%1\" class=\"" + className + "\">%2<div class=\"tooltiptext\">%3</div></a>&nbsp;").arg(outFilename).arg(stepInfo._num).arg(getScriptStepListToolTip(QList<int>() << stepInfo._num)));
     }
 
     return index;

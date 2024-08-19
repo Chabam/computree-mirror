@@ -185,7 +185,9 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         stream << "<body>\n";
         stream << "<div class=\"mainBlock\">\n";
 
-        stream << _stepListInfo->getStepIndex() << "\n";
+        stream << "<br>\n";
+        stream << "<br>\n";
+        stream << _stepListInfo->getStepIndex(-1) << "\n";
         stream << "<br>\n";
 
         stream << "<h1>" << tr("Configuration des étapes") << "</h1>\n";
@@ -601,8 +603,7 @@ void CDM_StepListDocExporter::createCSS(QString filename)
         stream << "    margin: 0;\n";
         stream << "    padding: 0;\n";
         stream << "}\n";
-
-
+        stream << "\n";
 
         stream << "/* Style pour la balise <a> */\n";
         stream << ".tooltip\n";
@@ -610,17 +611,50 @@ void CDM_StepListDocExporter::createCSS(QString filename)
         stream << "    position: relative;\n";
         stream << "    display: inline-block;\n";
         stream << "    cursor: pointer;\n";
-        stream << "    color: blue;\n";
-        stream << "    text-decoration: underline;\n";
+        stream << "    color: #333; /* Couleur du texte */\n";
+        stream << "    text-decoration: none; /* Supprimer le soulignement du lien */\n";
+        stream << "    background-color: #f0f0f0; /* Fond gris clair */\n";
+        stream << "    border: 1px solid #4d4d4d; /* Bordure gris très foncé */\n";
+        stream << "    padding: 6px 12px; /* Espacement autour du texte */\n";
+        stream << "    border-radius: 4px; /* Coins légèrement arrondis */\n";
+        stream << "    font-size: 14px; /* Taille de police standard */\n";
+        stream << "    transition: background-color 0.3s ease; /* Transition douce pour l'arrière-plan */\n";
         stream << "}\n";
+        stream << ".tooltip:hover\n";
+        stream << "{\n";
+        stream << "    background-color: #e0e0e0; /* Légèrement plus foncé au survol */\n";
+        stream << "}\n";
+        stream << "\n";
+
+        stream << "/* Style pour la balise active <a> */\n";
+        stream << ".tooltipactive\n";
+        stream << "{\n";
+        stream << "    position: relative;\n";
+        stream << "    display: inline-block;\n";
+        stream << "    cursor: pointer;\n";
+        stream << "    color: #333; /* Couleur du texte */\n";
+        stream << "    text-decoration: none; /* Supprimer le soulignement du lien */\n";
+        stream << "    background-color: #b4e5a2; /* Fond vert pas trop clair */\n";
+        stream << "    border: 1px solid #4d4d4d; /* Bordure gris très foncé */\n";
+        stream << "    padding: 6px 12px; /* Espacement autour du texte */\n";
+        stream << "    border-radius: 4px; /* Coins légèrement arrondis */\n";
+        stream << "    font-size: 14px; /* Taille de police standard */\n";
+        stream << "    font-weight: bold; /* Texte en gras */\n";
+        stream << "    transition: background-color 0.3s ease; /* Transition douce pour l'arrière-plan */\n";
+        stream << "}\n";
+        stream << ".tooltipactive:hover\n";
+        stream << "{\n";
+        stream << "    background-color: #adde9b; /* Légèrement plus foncé au survol */\n";
+        stream << "}\n";
+        stream << "\n";
 
         stream << "/* Style pour le tooltip */\n";
-        stream << ".tooltip .tooltiptext\n";
+        stream << ".tooltip .tooltiptext, .tooltipactive .tooltiptext\n";
         stream << "{\n";
         stream << "    visibility: hidden;\n";
         stream << "    width: 500px;\n";
-        stream << "    background-color: #333;\n";
-        stream << "    color: #fff;\n";
+        stream << "    background-color: #f0f0f0;\n";
+        stream << "    color: #000000;\n";
         stream << "    text-align: left;\n";
         stream << "    border-radius: 4px;\n";
         stream << "    padding: 8px;\n";
@@ -628,16 +662,20 @@ void CDM_StepListDocExporter::createCSS(QString filename)
         stream << "    z-index: 1;\n";
         stream << "    top: 100%; /* Positionne en dessous du lien */\n";
         stream << "    left: 50%;\n";
-        stream << "    transform: translateX(-50%);\n";
         stream << "    margin-top: 8px;\n";
         stream << "    opacity: 0;\n";
         stream << "    transition: opacity 0.3s;\n";
         stream << "    /* Permet d'afficher du contenu HTML dans le tooltip */\n";
         stream << "    white-space: normal;\n";
+        stream << "    overflow-wrap: break-word; /* Gérer les très longues lignes */\n";
+        stream << "    box-sizing: border-box;\n";
+        stream << "    border: 1px solid #ccc;\n";
+        stream << "    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère */\n";
         stream << "}\n";
+        stream << "\n";
 
         stream << "/* Flèche du tooltip */\n";
-        stream << ".tooltip .tooltiptext::after\n";
+        stream << ".tooltip .tooltiptext::after, .tooltipactive .tooltiptext::after\n";
         stream << "{\n";
         stream << "    content: '';\n";
         stream << "    position: absolute;\n";
@@ -648,15 +686,16 @@ void CDM_StepListDocExporter::createCSS(QString filename)
         stream << "    border-style: solid;\n";
         stream << "    border-color: transparent transparent #333 transparent;\n";
         stream << "}\n";
+        stream << "\n";
 
         stream << "/* Affiche le tooltip au survol */\n";
-        stream << ".tooltip:hover .tooltiptext\n";
+        stream << ".tooltip:hover .tooltiptext, .tooltipactive:hover .tooltiptext\n";
         stream << "{\n";
         stream << "    visibility: visible;\n";
         stream << "    opacity: 1;\n";
         stream << "}\n";
-
         stream << "\n";
+
         fcss.close();
     }
 }
