@@ -53,6 +53,8 @@ public:
     QList<CT_VirtualAbstractStep *> steps();
 
     QString getScriptStepList();
+    QString getScriptStepListToolTip(QList<int> strongSteps);
+
     QString getScriptStepListParameters();
     QString getScriptStepListInputConfig();
     void recursiveCreateInputTree(QString root, const DEF_CT_AbstractGroupModelOut *group, QList<const CT_OutAbstractModel *> &allPoss, QMultiMap<const CT_OutAbstractModel *, int> &selectedPoss);
@@ -70,6 +72,10 @@ public:
 
     void generateHTMLDocForAllSteps(QString baseDirectory, QString cssRelativeDirectory);
 
+    QString getStepIndex();
+
+
+public slots:
 private:
     QList<CDM_StepListInfoManager::StepInfo>    _stepInfoList;
     QMap<QString, CT_AbstractStepPlugin*>       _pluginList;

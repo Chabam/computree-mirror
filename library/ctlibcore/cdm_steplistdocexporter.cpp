@@ -167,6 +167,9 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         fStructure.close();
     }
 
+    // create step help pages
+    _stepListInfo->generateHTMLDocForAllSteps(outDirPath, "css");
+
 
     // Create parameters.html file
     QFile fParametersContent(outDirPath + "/content/pages/parameters.html");
@@ -181,6 +184,10 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
         stream << "<body>\n";
         stream << "<div class=\"mainBlock\">\n";
+
+        stream << _stepListInfo->getStepIndex() << "\n";
+        stream << "<br>\n";
+
         stream << "<h1>" << tr("Configuration des étapes") << "</h1>\n";
         stream << "<br>\n";
         stream << _stepListInfo->getScriptStepListParameters();
@@ -316,33 +323,6 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         stream << "<a target=\"frameContent\" href=\"parameters.html\">" + tr("Configuration détaillée") + "<br><br></a>\n";
         stream << "<a target=\"frameContent\" href=\"citations.html\">" + tr("Références") + "<br><br></a>\n";
         stream << "</div>\n";
-
-        stream << "<h1>" << tr("Documentation des étapes") << "</h1>\n";
-        QList<CT_VirtualAbstractStep*> steps = _stepListInfo->steps();
-
-
-        _stepListInfo->generateHTMLDocForAllSteps(outDirPath, "css");
-
-//        int counterStep = 1;
-//        if (steps.size() > 0) {stream << "<div class=\"linksummary01\" >\n";}
-//        for(CT_VirtualAbstractStep* step : steps)
-//        {
-//            CT_VirtualAbstractStep* stepDoc = stepList.value(step->name());
-
-//            if (stepDoc != nullptr)
-//            {
-//                stream << "<a target=\"frameContent\" href=\"../steps/" << stepDoc->name() << ".html\">" << stepDoc->description() << "<br><br></a>\n";
-
-//                // Create documentation page for this step
-//                stepDoc->generateHTMLDocumentation(outDirPath + "/content/steps", "css");
-
-//                // Create screen captures for IN models config.
-//                QStringList exportedFiles;
-//                step->exportViewForINModelConfig(QString("%1/content/images/etape_%2.png").arg(outDirPath).arg(counterStep++), exportedFiles);
-//            }
-//        }
-//        if (steps.size() > 0) {stream << "</div>\n";}
-//        if (steps.size() > 0) {stream << "</div>\n";}
 
         stream << "</body>\n";
         stream << "</html>\n";
@@ -620,6 +600,60 @@ void CDM_StepListDocExporter::createCSS(QString filename)
         stream << "{\n";
         stream << "    margin: 0;\n";
         stream << "    padding: 0;\n";
+        stream << "}\n";
+
+
+
+        stream << "/* Style pour la balise <a> */\n";
+        stream << ".tooltip\n";
+        stream << "{\n";
+        stream << "    position: relative;\n";
+        stream << "    display: inline-block;\n";
+        stream << "    cursor: pointer;\n";
+        stream << "    color: blue;\n";
+        stream << "    text-decoration: underline;\n";
+        stream << "}\n";
+
+        stream << "/* Style pour le tooltip */\n";
+        stream << ".tooltip .tooltiptext\n";
+        stream << "{\n";
+        stream << "    visibility: hidden;\n";
+        stream << "    width: 500px;\n";
+        stream << "    background-color: #333;\n";
+        stream << "    color: #fff;\n";
+        stream << "    text-align: left;\n";
+        stream << "    border-radius: 4px;\n";
+        stream << "    padding: 8px;\n";
+        stream << "    position: absolute;\n";
+        stream << "    z-index: 1;\n";
+        stream << "    top: 100%; /* Positionne en dessous du lien */\n";
+        stream << "    left: 50%;\n";
+        stream << "    transform: translateX(-50%);\n";
+        stream << "    margin-top: 8px;\n";
+        stream << "    opacity: 0;\n";
+        stream << "    transition: opacity 0.3s;\n";
+        stream << "    /* Permet d'afficher du contenu HTML dans le tooltip */\n";
+        stream << "    white-space: normal;\n";
+        stream << "}\n";
+
+        stream << "/* Flèche du tooltip */\n";
+        stream << ".tooltip .tooltiptext::after\n";
+        stream << "{\n";
+        stream << "    content: '';\n";
+        stream << "    position: absolute;\n";
+        stream << "    bottom: 100%;\n";
+        stream << "    left: 50%;\n";
+        stream << "    margin-left: -5px;\n";
+        stream << "    border-width: 5px;\n";
+        stream << "    border-style: solid;\n";
+        stream << "    border-color: transparent transparent #333 transparent;\n";
+        stream << "}\n";
+
+        stream << "/* Affiche le tooltip au survol */\n";
+        stream << ".tooltip:hover .tooltiptext\n";
+        stream << "{\n";
+        stream << "    visibility: visible;\n";
+        stream << "    opacity: 1;\n";
         stream << "}\n";
 
         stream << "\n";

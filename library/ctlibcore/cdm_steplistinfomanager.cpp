@@ -120,11 +120,32 @@ QString CDM_StepListInfoManager::getScriptStepList()
         QString spaces = "&nbsp;&nbsp;&nbsp;&nbsp;";
         for (int j = 0 ; j < stepInfo._indent ; j++) {spaces.append("&nbsp;&nbsp;&nbsp;&nbsp;");}
 
-        result.append(spaces + "<strong>" + stepInfo._stepDescription + "</strong> <em>(plugin " + stepInfo._pluginName + ")</em><br><br>\n");
+        result.append(spaces + "<strong>"  + QString::number(stepInfo._num) + ". " + stepInfo._stepDescription + "</strong> <em>(plugin " + stepInfo._pluginName + ")</em><br><br>\n");
     }
 
     return result;
 }
+
+QString CDM_StepListInfoManager::getScriptStepListToolTip(QList<int> strongSteps)
+{
+    QString result;
+    for (const CDM_StepListInfoManager::StepInfo &stepInfo : qAsConst(_stepInfoList))
+    {
+        // create indentation
+        QString spaces = "&nbsp;&nbsp;&nbsp;&nbsp;";
+        for (int j = 0 ; j < stepInfo._indent ; j++) {spaces.append("&nbsp;&nbsp;&nbsp;&nbsp;");}
+
+        if (strongSteps.contains(stepInfo._num))
+        {
+            result.append(spaces + "<strong>" + QString::number(stepInfo._num) + ". " + stepInfo._stepDescription + "</strong><br>\n");
+        } else {
+            result.append(spaces + QString::number(stepInfo._num) + ". " + stepInfo._stepDescription + "<br>\n");
+        }
+    }
+
+    return result;
+}
+
 
 QString CDM_StepListInfoManager::getScriptStepListParameters()
 {
@@ -552,10 +573,24 @@ void CDM_StepListInfoManager::generateHTMLDocForAllSteps(QString baseDirectory, 
 {
     for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
     {
-        QString outFileName = generateHTMLDoc(stepInfo, baseDirectory, cssRelativeDirectory);
-        qDebug() << outFileName;
+        generateHTMLDoc(stepInfo, baseDirectory, cssRelativeDirectory);
     }
 }
+
+QString CDM_StepListInfoManager::getStepIndex()
+{
+    QString index;
+
+    for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
+    {
+        QString outFilename = QString("../steps/%1.html").arg(stepInfo._helpFileName);
+
+        index.append(QString("<a href=\"%1\" class=\"tooltip\">%2<div class=\"tooltiptext\">%3</div></a>&nbsp;").arg(outFilename).arg(stepInfo._num).arg(getScriptStepListToolTip(QList<int>() << stepInfo._num)));
+    }
+
+    return index;
+}
+
 
 QString CDM_StepListInfoManager::generateHTMLDoc(CDM_StepListInfoManager::StepInfo stepInfo, QString baseDirectory, QString cssRelativeDirectory)
 {
