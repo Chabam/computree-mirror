@@ -53,6 +53,7 @@ public:
     QList<CT_VirtualAbstractStep *> steps();
 
     QString getScriptStepList();
+    QString getScriptClickableStepList(QString stepDir);
     QString getScriptStepListToolTip(QList<int> strongSteps);
 
     QString getScriptStepListParameters();
@@ -70,9 +71,9 @@ public:
 
     bool hasStepCitation();
 
-    void generateHTMLDocForAllSteps(QString baseDirectory, QString cssRelativeDirectory);
+    void generateHTMLDocForAllSteps(QString baseDirectory, QString cssRelativeDirectory, QString parentPage);
 
-    QString getStepIndex(int num);
+    QString getStepIndex(int num, QString parentPage);
 
 
 public slots:
@@ -90,7 +91,7 @@ private:
     void recursiveCountHierachicalRank(int &count, const CT_AbstractModel *model);
     QString getTabsForHierachicalRank(int count);
 
-    QString generateHTMLDoc(CDM_StepListInfoManager::StepInfo stepInfo, QString directory, QString cssRelativeDirectory);
+    QString generateHTMLDoc(CDM_StepListInfoManager::StepInfo stepInfo, QString directory, QString cssRelativeDirectory, QString parentPage);
 };
 
 #endif // CDM_STEPLISTINFOMANAGER_H

@@ -142,7 +142,7 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
 
 
     // Create structure.html file
-    QFile fStructure(outDirPath + "/content/pages/structure.html");
+    QFile fStructure(outDirPath + "/content/pages/use.html");
     if (fStructure.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&fStructure);
@@ -168,11 +168,11 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
     }
 
     // create step help pages
-    _stepListInfo->generateHTMLDocForAllSteps(outDirPath, "css");
+    _stepListInfo->generateHTMLDocForAllSteps(outDirPath, "../css", "../pages/configuration.html");
 
 
     // Create parameters.html file
-    QFile fParametersContent(outDirPath + "/content/pages/parameters.html");
+    QFile fParametersContent(outDirPath + "/content/pages/configuration.html");
     if (fParametersContent.open(QFile::WriteOnly | QFile::Text))
     {
         QTextStream stream(&fParametersContent);
@@ -185,48 +185,16 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
         stream << "<body>\n";
         stream << "<div class=\"mainBlock\">\n";
 
+        stream << "<h1>" << tr("Index des étapes") << "</h1>\n";
         stream << "<br>\n";
-        stream << "<br>\n";
-        stream << _stepListInfo->getStepIndex(-1) << "\n";
+        stream << _stepListInfo->getScriptClickableStepList("../steps") << "\n";
         stream << "<br>\n";
 
-        stream << "<h1>" << tr("Configuration des étapes") << "</h1>\n";
-        stream << "<br>\n";
-        stream << _stepListInfo->getScriptStepListParameters();
-        stream << "<br>\n";
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>\n";
 
         fParametersContent.close();
-    }
-
-
-    // TESTTUTO
-    // Create inputresults.html file
-    QFile fInputResultsContent(outDirPath + "/content/pages/inputresults.html");
-    if (fInputResultsContent.open(QFile::WriteOnly | QFile::Text))
-    {
-        QTextStream stream(&fInputResultsContent);
-
-        stream << "<!DOCTYPE html>\n";
-        stream << "<html>\n";
-        stream << "<head>\n";
-        stream << "<metacharset=\"utf-8\">\n";
-        stream << "<title>Computree Script Documentation</title><link rel=\"stylesheet\" href=\"../css/style.css\" /></head>\n";
-        stream << "<body>\n";
-        stream << "<div class=\"mainBlock\">\n";
-        stream << "<h1>" << tr("Configuration des résultats d'entrée des étapes du script") << "</h1>\n";
-        stream << "<br>\n";
-
-        //stream << _stepListInfo->getScriptStepListInputConfig();
-
-        stream << "<br>\n";
-        stream << "</div>\n";
-        stream << "</body>\n";
-        stream << "</html>\n";
-
-        fInputResultsContent.close();
     }
 
 
@@ -321,8 +289,8 @@ void CDM_StepListDocExporter::exportDocumentedScript(QDir& mainDir, QString outD
 
         stream << "<div class=\"linksummary01\" >\n";
         stream << "<a target=\"frameContent\" href=\"mainContent.html\">" + tr("Informations générales") + "<br><br></a>\n";
-        stream << "<a target=\"frameContent\" href=\"structure.html\">" + tr("Utilisation") + "<br><br></a>\n";
-        stream << "<a target=\"frameContent\" href=\"parameters.html\">" + tr("Configuration détaillée") + "<br><br></a>\n";
+        stream << "<a target=\"frameContent\" href=\"use.html\">" + tr("Utilisation") + "<br><br></a>\n";
+        stream << "<a target=\"frameContent\" href=\"configuration.html\">" + tr("Configuration détaillée") + "<br><br></a>\n";
         stream << "<a target=\"frameContent\" href=\"citations.html\">" + tr("Références") + "<br><br></a>\n";
         stream << "</div>\n";
 

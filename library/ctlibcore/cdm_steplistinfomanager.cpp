@@ -126,6 +126,21 @@ QString CDM_StepListInfoManager::getScriptStepList()
     return result;
 }
 
+QString CDM_StepListInfoManager::getScriptClickableStepList(QString stepDir)
+{
+    QString result;
+    for (const CDM_StepListInfoManager::StepInfo &stepInfo : qAsConst(_stepInfoList))
+    {
+        // create indentation
+        QString spaces;
+        for (int j = 0 ; j < stepInfo._indent ; j++) {spaces.append("&nbsp;&nbsp;&nbsp;&nbsp;");}
+
+        result.append(spaces + QString("<a href=\"%1/%2.html\" class=\"tooltip\" style=\"margin-bottom:5px;\"><strong>").arg(stepDir, stepInfo._helpFileName)  + QString::number(stepInfo._num) + ". " + stepInfo._stepDescription + "</strong></a><br>\n");
+    }
+
+    return result;
+}
+
 QString CDM_StepListInfoManager::getScriptStepListToolTip(QList<int> strongSteps)
 {
     QString result;
@@ -569,17 +584,19 @@ QString CDM_StepListInfoManager::getComputreeCoreRis()
 }
 
 
-void CDM_StepListInfoManager::generateHTMLDocForAllSteps(QString baseDirectory, QString cssRelativeDirectory)
+void CDM_StepListInfoManager::generateHTMLDocForAllSteps(QString baseDirectory, QString cssRelativeDirectory, QString parentPage)
 {
     for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
     {
-        generateHTMLDoc(stepInfo, baseDirectory, cssRelativeDirectory);
+        generateHTMLDoc(stepInfo, baseDirectory, cssRelativeDirectory, parentPage);
     }
 }
 
-QString CDM_StepListInfoManager::getStepIndex(int num)
+QString CDM_StepListInfoManager::getStepIndex(int num, QString parentPage)
 {
     QString index;
+
+    index.append(QString("<a href=\"%1\" class=\"tooltip\">Sommaire</a>&nbsp;&nbsp;").arg(parentPage));
 
     for (const CDM_StepListInfoManager::StepInfo& stepInfo : qAsConst(_stepInfoList))
     {
@@ -598,7 +615,7 @@ QString CDM_StepListInfoManager::getStepIndex(int num)
 }
 
 
-QString CDM_StepListInfoManager::generateHTMLDoc(CDM_StepListInfoManager::StepInfo stepInfo, QString baseDirectory, QString cssRelativeDirectory)
+QString CDM_StepListInfoManager::generateHTMLDoc(CDM_StepListInfoManager::StepInfo stepInfo, QString baseDirectory, QString cssRelativeDirectory, QString parentPage)
 {
     QString outFilename = QString("%1/content/steps/%2.html").arg(baseDirectory, stepInfo._helpFileName);
     QString pluginURL = stepInfo._step->plugin()->pluginToolForStep()->url();
@@ -617,7 +634,13 @@ QString CDM_StepListInfoManager::generateHTMLDoc(CDM_StepListInfoManager::StepIn
         stream << "<body>";
         stream << "<div class=\"mainBlock\">";
 
-        stream << "<h1>" << stepInfo._stepDescription << "</h1>\n";
+        stream << "<h2>" << tr("Index des étapes") << "</h2>\n";
+        stream << getStepIndex(stepInfo._num, parentPage) << "\n";
+        stream << "<br>";
+        stream << "<br>";
+        stream << "<hr />";
+
+        stream << "<h1>" << stepInfo._num << ". " << stepInfo._stepDescription << "</h1>\n";
 
         stream << "<Strong>" << tr("Plugin : </Strong><a href=\"") << pluginURL << "\" target=\"_blank\" rel=\"noreferrer noopener\">"<< stepInfo._pluginName << "</a>\n";
         stream << "<br>";
