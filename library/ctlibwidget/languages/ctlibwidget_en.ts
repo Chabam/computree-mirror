@@ -66,11 +66,11 @@
     </message>
     <message>
         <source> &lt;em&gt;valeur par défaut = %1%2&lt;/em&gt;. </source>
-        <translation> &lt;em&gt;default value = %1%2&lt;/em&gt;. </translation>
+        <translation type="vanished"> &lt;em&gt;default value = %1%2&lt;/em&gt;. </translation>
     </message>
     <message>
         <source> &lt;em&gt;valeur par défaut = %1%2.&lt;/em&gt; </source>
-        <translation> &lt;em&gt;default value = %1%2.&lt;/em&gt; </translation>
+        <translation type="vanished"> &lt;em&gt;default value = %1%2.&lt;/em&gt; </translation>
     </message>
     <message>
         <source>Activé</source>
@@ -82,7 +82,23 @@
     </message>
     <message>
         <source> extension : %1. </source>
-        <translation> extension: %1. </translation>
+        <translation type="vanished"> extension: %1. </translation>
+    </message>
+    <message>
+        <source> &lt;em&gt;__VALUE__%1&lt;/em&gt;. __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> extension : %1. __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(vide)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

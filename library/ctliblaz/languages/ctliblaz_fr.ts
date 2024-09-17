@@ -8,10 +8,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Exporte tous les points au format LAZ (rapidlasso GmbH)&lt;br&gt;https://laszip.org/</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Points, LAZ</source>
         <translation></translation>
     </message>
@@ -111,51 +107,59 @@
         <source>Intensity</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Exporte tous les points au format LAZ, ASPRS&lt;br&gt;http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
-    <name>CT_LAZHeader</name>
+    <name>CT_LASZIP_Reader</name>
     <message>
-        <source>Impossible de lire l&apos;en-tête du fichier</source>
-        <translation></translation>
+        <source>CT_LASZIP_Reader : impossible d&apos;accéder au fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_LASZIP_Reader : impossible d&apos;ouvrir le fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_LASZIP_Reader : header non valide pour le fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_LASZIP_Reader : Impossible de lire les points dans le fichier  le fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_LASZIP_Reader : Impossible de lire le point (laszip_read_point)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_LASZIP_Reader : impossible de fermer le fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_LASZIP_Reader : impossible de clean le fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_LASZIP_Reader : impossible de libérer l&apos;accès au fichier %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CT_LAZPieceByPiecePrivateExporter</name>
     <message>
-        <source>Impossible de créer le writer LASZIP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible de charger le header LASZIP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible d&apos;ouvrir le fichier LASZIP en écriture</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Problème lors de l&apos;écriture de l&apos;en-tête du fichier. %1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible de copier le point vers le writer</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible d&apos;écrire le point dans le fichier</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible de fermer le fichier</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible de détruire le writer</source>
         <translation></translation>
     </message>
     <message>
         <source>Export du fichier %1 terminé</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Erreur lors de l&apos;ouverture en écriture du fichier %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -257,30 +261,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Impossible de lire l&apos;en-tête du fichier %1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Aucun points contenu dans le fichier %1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible de lire le fichier</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible de lire le point</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible de fermer le fichier</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impossible de detruire le reader</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Intensity</source>
         <translation></translation>
     </message>
@@ -292,12 +272,52 @@
         <source>Aucun points contenu dans les fichiers.</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Impossible de lire l&apos;en-tête du fichier (null) %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aucun points contenu dans le fichier (n = 0) %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_Reader_LAZ::internalReadFile : Impossible de lire les points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_Reader_LAZ::getPointIndicesInside2DShape : Impossible de lire l&apos;en-tête du fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT_Reader_LAZ::getPointIndicesInside2DShape : Aucun points contenu dans le fichier %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>The offset to the start of points data (%1) is smaller than the header size (%2).</source>
         <translation>L&apos;offset de début des données points (%1) est inférieur à la taille de l&apos;en-tête (%2).</translation>
+    </message>
+    <message>
+        <source>Impossible d&apos;ouvrir le fichier &quot;%1&quot; en écriture.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Impossible d&apos;écrire l&apos;en-tête dans le fichier &quot;%1&quot;. %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Impossible de lire le fichier &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Impossible de lire l&apos;en-tête du fichier &quot;%1&quot;. %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L&apos;en-tête du fichier &quot;%1&quot; n&apos;est pas compatible avec l&apos;en-tête du fichier &quot;%2&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

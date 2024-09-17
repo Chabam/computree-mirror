@@ -9,6 +9,13 @@
     </message>
 </context>
 <context>
+    <name>CT_Image2D_Points</name>
+    <message>
+        <source>Point grid index does not exist !</source>
+        <translation type="unfinished">Point grid index does not exist !</translation>
+    </message>
+</context>
+<context>
     <name>CT_ReferencePoint</name>
     <message>
         <source>setCenterX n&apos;a aucun aucun effet dans le cas d&apos;un CT_ReferencePoint</source>

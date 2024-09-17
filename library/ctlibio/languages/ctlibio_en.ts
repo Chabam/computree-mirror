@@ -162,27 +162,27 @@
         <translation>Unable to load items of type : </translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="615"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="897"/>
         <source>Reader GDAL de type : %1</source>
         <translation>Reader GDAL type: %1</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="615"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="897"/>
         <source>Inconnu</source>
         <translation>Unknown</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="621"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="903"/>
         <source>Pour plus de détails voir : http://www.gdal.org/formats_list.html</source>
         <translation>For more details see: http://www.gdal.org/formats_list.html</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="626"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="908"/>
         <source>Pour plus de détails voir : http://www.gdal.org/ogr_formats.html</source>
         <translation>For more details see: http://www.gdal.org/ogr_formats.html</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="630"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="912"/>
         <source>Extension : </source>
         <translation>Extension : </translation>
     </message>
@@ -949,6 +949,29 @@
         <location filename="../exporters/ascrgb/pb_ascrgbexporter.cpp" line="62"/>
         <source>Normales</source>
         <translation>Normals</translation>
+    </message>
+</context>
+<context>
+    <name>PB_ASCXYZExporter</name>
+    <message>
+        <location filename="../exporters/ascxyz/pb_ascxyzexporter.cpp" line="12"/>
+        <source>Fichier asc</source>
+        <translation type="unfinished">Asc file</translation>
+    </message>
+    <message>
+        <location filename="../exporters/ascxyz/pb_ascxyzexporter.cpp" line="14"/>
+        <source>Exporte les points au format ASCII. Tous les items contenant des points sont exportés dans le même fichier, avec les champs suivants :&lt;br&gt;- X  : Coordonnée X&lt;br&gt;- Y  : Coordonnée Y&lt;br&gt;- Z  : Coordonnée Z&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/ascxyz/pb_ascxyzexporter.cpp" line="27"/>
+        <source>Points, ASCII(X,Y,Z)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../exporters/ascxyz/pb_ascxyzexporter.cpp" line="39"/>
+        <source>Item à exporter</source>
+        <translation type="unfinished">Item to be exported</translation>
     </message>
 </context>
 <context>

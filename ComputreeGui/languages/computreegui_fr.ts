@@ -12,7 +12,7 @@
     <name>DM_ContextMenuColouristAdder</name>
     <message>
         <source>Couleur uni</source>
-        <translation>Couleur unie</translation>
+        <translation type="vanished">Couleur unie</translation>
     </message>
     <message>
         <source>%1</source>
@@ -53,6 +53,10 @@
     <message>
         <source>Impossible de convertir l&apos;attribut %1 en valeur double ou booléenne</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Couleur unie</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -150,8 +154,16 @@
         <translation></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Computree v6.0&lt;br/&gt;&lt;br/&gt;Site officiel : &lt;/span&gt;&lt;a href=&quot;https://computree.onf.fr&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;computree.onf.fr&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;&lt;br/&gt;Géré par le Groupe Computree :&lt;/span&gt;&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GIP Ecofor&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ONF&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;IGN&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;INRA&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;University of Sherbrooke &lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;br/&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;La plateforme Computree (hors plugins) est sous license LGPL : &lt;/span&gt;&lt;a href=&quot;https://opensource.org/licenses/LGPL-3.0&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://opensource.org/licenses/LGPL-3.0&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;Pour connaître la licence d&apos;un plugin, se référer à sa documentation. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation></translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;&lt;br/&gt;&lt;br/&gt;Computree v6.0&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Site officiel : &lt;/span&gt;&lt;a href=&quot;https://computree.onf.fr&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;computree.onf.fr&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;&lt;br/&gt;Géré par le Groupe Computree :&lt;/span&gt;&lt;/p&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GIP Ecofor&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ONF&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;IGN&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;INRA&lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;University of Sherbrooke &lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;br/&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;La plateforme Computree (hors plugins) est sous license LGPL : &lt;/span&gt;&lt;a href=&quot;https://opensource.org/licenses/LGPL-3.0&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt; text-decoration: underline; color:#0000ff;&quot;&gt;https://opensource.org/licenses/LGPL-3.0&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;Pour connaître la licence d&apos;un plugin, se référer à sa documentation. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;&lt;br/&gt;&lt;br/&gt;Computree v6.0.%1&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -453,72 +465,56 @@
     <name>GCitationDialog</name>
     <message>
         <source>Script citation informations</source>
-        <translation>Informations de citation pour le script</translation>
+        <translation type="vanished">Informations de citation pour le script</translation>
     </message>
     <message>
         <source>Script summary</source>
-        <translation>Résumé du script</translation>
+        <translation type="vanished">Résumé du script</translation>
     </message>
     <message>
         <source>Step Name</source>
-        <translation>Nom de l&apos;étape</translation>
+        <translation type="vanished">Nom de l&apos;étape</translation>
     </message>
     <message>
         <source>Step Description</source>
-        <translation>Description de l&apos;étape</translation>
+        <translation type="vanished">Description de l&apos;étape</translation>
     </message>
     <message>
         <source>Plugin and Step citations</source>
-        <translation>Citations des plugins et des étapes</translation>
+        <translation type="vanished">Citations des plugins et des étapes</translation>
     </message>
     <message>
         <source>Citations in RIS format</source>
-        <translation>Citations au format RIS</translation>
+        <translation type="vanished">Citations au format RIS</translation>
     </message>
     <message>
         <source>Export Script summary</source>
-        <translation>Exporter le résumé du script</translation>
+        <translation type="vanished">Exporter le résumé du script</translation>
     </message>
     <message>
         <source>Export RIS file</source>
-        <translation>Exporter un fichier RIS de citations</translation>
+        <translation type="vanished">Exporter un fichier RIS de citations</translation>
     </message>
     <message>
         <source>Choose export file</source>
-        <translation>Choisir le fichier d&apos;export</translation>
+        <translation type="vanished">Choisir le fichier d&apos;export</translation>
     </message>
     <message>
         <source>Text file (*.txt)</source>
-        <translation>Fichier texte (*.txt)</translation>
+        <translation type="vanished">Fichier texte (*.txt)</translation>
     </message>
     <message>
         <source>Step Name	</source>
-        <translation>Nom de l&apos;étape</translation>
+        <translation type="vanished">Nom de l&apos;étape</translation>
     </message>
     <message>
         <source>Step Description
 </source>
-        <translation>Decription de l&apos;étape</translation>
+        <translation type="vanished">Decription de l&apos;étape</translation>
     </message>
     <message>
         <source>RIS file (*.ris)</source>
-        <translation>Fichier RIS (*.ris)</translation>
-    </message>
-    <message>
-        <source>Num</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Plugin</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Num	</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Plugin	</source>
-        <translation></translation>
+        <translation type="vanished">Fichier RIS (*.ris)</translation>
     </message>
 </context>
 <context>
@@ -1367,22 +1363,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Documentation des étapes Computree</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Utiliser l&apos;index sur la gauche pour séléctionner l&apos;étape pour laquelle afficher la documentation. </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Site internet officiel de Computree</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Index des étapes</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Documentation des étapes</source>
         <translation></translation>
     </message>
@@ -1403,99 +1383,11 @@
         <translation></translation>
     </message>
     <message>
-        <source>Documentation du script</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Informations sur le script</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Titre du script : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Auteur : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Fichier script Computree : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Fichier de citations : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Date d&apos;enregistrement : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Description : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Structure du script</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Le script est composé de l&apos;enchaînement d&apos;étapes suivant :</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Etapes du script</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Exporter script (CTRL+S)</source>
         <translation></translation>
     </message>
     <message>
         <source>Exporter script documenté (dont citations)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Description du script</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Pour savoir comment référencer les travaux utilisés dans ce script, merci de consulter la page </source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Comment citer ce script.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Plugins utilisés</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ce script utilise les plugins Computree suivants :</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Comment citer ce script</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Pour référencer les travaux utilisés dans ce script, il faut citer :&lt;br&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>La plateforme Computree</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Les plugins utilisés : &lt;strong&gt;%1&lt;/strong&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Les citations spécifiques liées à certaines étapes utilisées</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>L&apos;ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier %1.ris (au format bibliographique standard RIS).</source>
         <translation></translation>
     </message>
 </context>
