@@ -166,28 +166,6 @@ win32 {
     qt_deploy.extra = $$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5 $$qt_deploy_cmd6
 
     INSTALLS += qt_deploy
-
-message("qt_deploy_cmd1")
-message($$qt_deploy_cmd1)
-
-message("qt_deploy_cmd2")
-message($$qt_deploy_cmd2)
-
-message("qt_deploy_cmd3")
-message($$qt_deploy_cmd3)
-
-message("qt_deploy_cmd4")
-message($$qt_deploy_cmd4)
-
-message("qt_deploy_cmd5")
-message($$qt_deploy_cmd5)
-
-message("qt_deploy_cmd6")
-message($$qt_deploy_cmd6)
-
-message("FULL")
-message($$qt_deploy_cmd1 $$qt_deploy_cmd2 $$qt_deploy_cmd3 $$qt_deploy_cmd4 $$qt_deploy_cmd5 $$qt_deploy_cmd6)
-
 }
 
 linux {
