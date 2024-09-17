@@ -86,19 +86,19 @@
     </message>
     <message>
         <source> &lt;em&gt;__VALUE__%1&lt;/em&gt;. __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation> &lt;em&gt;__VALUE__%1&lt;/em&gt;. __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <source> __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation> __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <source> extension : %1. __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation> extension : %1. __DESCRIPTION__&lt;/li&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <source>(vide)</source>
-        <translation type="unfinished"></translation>
+        <translation>(empty)</translation>
     </message>
 </context>
 <context>

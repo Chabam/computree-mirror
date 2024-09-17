@@ -12,7 +12,7 @@
     <name>CT_Image2D_Points</name>
     <message>
         <source>Point grid index does not exist !</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

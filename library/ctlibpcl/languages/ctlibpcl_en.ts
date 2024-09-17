@@ -5,23 +5,23 @@
     <name>CT_Reader_PCD</name>
     <message>
         <source>Fichiers de points PCD (Librairie PCL)</source>
-        <translation type="unfinished"></translation>
+        <translation>PCD point files (PCL library)</translation>
     </message>
     <message>
         <source>Charge un fichier de points au format PCD</source>
-        <translation type="unfinished"></translation>
+        <translation>Loads a point file in PCD format</translation>
     </message>
     <message>
         <source>Points, fichier PCD</source>
-        <translation type="unfinished"></translation>
+        <translation>Points, PCD file</translation>
     </message>
     <message>
         <source>Scène</source>
-        <translation type="unfinished"></translation>
+        <translation>Scene</translation>
     </message>
     <message>
         <source>Echec de la lecture du fichier PCD.</source>
-        <translation type="unfinished"></translation>
+        <translation>Failed to read PCD file.</translation>
     </message>
 </context>
 </TS>

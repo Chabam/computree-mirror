@@ -113,42 +113,42 @@
     </message>
     <message>
         <source>Exporte tous les points au format LAZ, ASPRS&lt;br&gt;http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html</source>
-        <translation type="unfinished"></translation>
+        <translation>Exports all points in LAZ, ASPRS format&lt;br&gt;http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html</translation>
     </message>
 </context>
 <context>
     <name>CT_LASZIP_Reader</name>
     <message>
         <source>CT_LASZIP_Reader : impossible d&apos;accéder au fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_LASZIP_Reader: unable to access file %1</translation>
     </message>
     <message>
         <source>CT_LASZIP_Reader : impossible d&apos;ouvrir le fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_LASZIP_Reader: unable to open file %1</translation>
     </message>
     <message>
         <source>CT_LASZIP_Reader : header non valide pour le fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_LASZIP_Reader: invalid header for file %1</translation>
     </message>
     <message>
         <source>CT_LASZIP_Reader : Impossible de lire les points dans le fichier  le fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_LASZIP_Reader: Unable to read points in file %1</translation>
     </message>
     <message>
         <source>CT_LASZIP_Reader : Impossible de lire le point (laszip_read_point)</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_LASZIP_Reader: unable to read the point (laszip_read_point)</translation>
     </message>
     <message>
         <source>CT_LASZIP_Reader : impossible de fermer le fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_LASZIP_Reader: unable to close file %1</translation>
     </message>
     <message>
         <source>CT_LASZIP_Reader : impossible de clean le fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_LASZIP_Reader: unable to clean file %1</translation>
     </message>
     <message>
         <source>CT_LASZIP_Reader : impossible de libérer l&apos;accès au fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_LASZIP_Reader: unable to release access to file %1</translation>
     </message>
 </context>
 <context>
@@ -198,7 +198,7 @@
     </message>
     <message>
         <source>Erreur lors de l&apos;ouverture en écriture du fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Error opening file %1 for writing</translation>
     </message>
 </context>
 <context>
@@ -337,23 +337,23 @@
     </message>
     <message>
         <source>Impossible de lire l&apos;en-tête du fichier (null) %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Unable to read file header (null) %1</translation>
     </message>
     <message>
         <source>Aucun points contenu dans le fichier (n = 0) %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No points contained in the file (n = 0) %1</translation>
     </message>
     <message>
         <source>CT_Reader_LAZ::internalReadFile : Impossible de lire les points</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_Reader_LAZ::internalReadFile : Unable to read points</translation>
     </message>
     <message>
         <source>CT_Reader_LAZ::getPointIndicesInside2DShape : Impossible de lire l&apos;en-tête du fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_Reader_LAZ::getPointIndicesInside2DShape : Unable to read file header %1</translation>
     </message>
     <message>
         <source>CT_Reader_LAZ::getPointIndicesInside2DShape : Aucun points contenu dans le fichier %1</source>
-        <translation type="unfinished"></translation>
+        <translation>CT_Reader_LAZ::getPointIndicesInside2DShape : No points contained in file %1</translation>
     </message>
 </context>
 <context>
@@ -364,23 +364,23 @@
     </message>
     <message>
         <source>Impossible d&apos;ouvrir le fichier &quot;%1&quot; en écriture.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unable to write to file &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>Impossible d&apos;écrire l&apos;en-tête dans le fichier &quot;%1&quot;. %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Unable to write header to file &quot;%1&quot;. %2</translation>
     </message>
     <message>
         <source>Impossible de lire le fichier &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unable to read file &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>Impossible de lire l&apos;en-tête du fichier &quot;%1&quot;. %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Unable to read the header of file &quot;%1&quot;. %2</translation>
     </message>
     <message>
         <source>L&apos;en-tête du fichier &quot;%1&quot; n&apos;est pas compatible avec l&apos;en-tête du fichier &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>The header of file &quot;%1&quot; is not compatible with the header of file &quot;%2&quot;.</translation>
     </message>
 </context>
 </TS>

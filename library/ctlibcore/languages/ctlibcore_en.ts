@@ -59,194 +59,194 @@
     <name>CDM_StepListDocExporter</name>
     <message>
         <source>Ce script a été créé le </source>
-        <translation type="unfinished"></translation>
+        <translation>This script was created on</translation>
     </message>
     <message>
         <source>avec la version 6.0.</source>
-        <translation type="unfinished"></translation>
+        <translation>with version 6.0.</translation>
     </message>
     <message>
         <source> de Computree</source>
-        <translation type="unfinished"></translation>
+        <translation> from Computree</translation>
     </message>
     <message>
         <source>Auteur : </source>
-        <translation type="unfinished"></translation>
+        <translation>Author:</translation>
     </message>
     <message>
         <source>Fichier script Computree : </source>
-        <translation type="unfinished"></translation>
+        <translation>Computree script file :</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Description</translation>
     </message>
     <message>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <source>Plugins utilisés</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins used</translation>
     </message>
     <message>
         <source>Ce script utilise les plugins Computree suivants :</source>
-        <translation type="unfinished"></translation>
+        <translation>This script uses the following Computree plugins:</translation>
     </message>
     <message>
         <source>Structure du script</source>
-        <translation type="unfinished"></translation>
+        <translation>Script structure</translation>
     </message>
     <message>
         <source>Le script est composé de l&apos;enchaînement d&apos;étapes suivant :</source>
-        <translation type="unfinished"></translation>
+        <translation>The script consists of the following sequence of steps:</translation>
     </message>
     <message>
         <source>Index des étapes</source>
-        <translation type="unfinished"></translation>
+        <translation>Index of steps</translation>
     </message>
     <message>
         <source>Comment citer ce script</source>
-        <translation type="unfinished"></translation>
+        <translation>How to quote this script</translation>
     </message>
     <message>
         <source>Pour référencer les travaux utilisés dans ce script, il faut citer :&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>To reference the works used in this script, please quote:&lt;br&gt;</translation>
     </message>
     <message>
         <source>La plateforme Computree</source>
-        <translation type="unfinished"></translation>
+        <translation>The Computree platform</translation>
     </message>
     <message>
         <source>Les plugins utilisés : &lt;strong&gt;%1&lt;/strong&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins used: &lt;strong&gt;%1&lt;/strong&gt;</translation>
     </message>
     <message>
         <source>Les citations spécifiques liées à certaines étapes utilisées</source>
-        <translation type="unfinished"></translation>
+        <translation>Specific quotes linked to certain steps used</translation>
     </message>
     <message>
         <source>L&apos;ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier &lt;strong&gt;%1.ris&lt;/strong&gt; (au format bibliographique standard RIS).</source>
-        <translation type="unfinished"></translation>
+        <translation>All the bibliographic references provided on this page are available in the file &lt;strong&gt;%1.ris&lt;/strong&gt; (in standard RIS bibliographic format).</translation>
     </message>
     <message>
         <source>Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Index</translation>
     </message>
     <message>
         <source>Informations générales</source>
-        <translation type="unfinished"></translation>
+        <translation>General information</translation>
     </message>
     <message>
         <source>Utilisation</source>
-        <translation type="unfinished"></translation>
+        <translation>Use</translation>
     </message>
     <message>
         <source>Configuration détaillée</source>
-        <translation type="unfinished"></translation>
+        <translation>Detailed configuration</translation>
     </message>
     <message>
         <source>Références</source>
-        <translation type="unfinished"></translation>
+        <translation>References</translation>
     </message>
     <message>
         <source>Documentation des étapes Computree</source>
-        <translation type="unfinished"></translation>
+        <translation>Documentation of Computree steps</translation>
     </message>
     <message>
         <source>Utiliser l&apos;index sur la gauche pour séléctionner l&apos;étape pour laquelle afficher la documentation. </source>
-        <translation type="unfinished"></translation>
+        <translation>Use the index on the left to select the step for which to display the documentation.</translation>
     </message>
     <message>
         <source>Site internet officiel de Computree</source>
-        <translation type="unfinished"></translation>
+        <translation>Official Computree website</translation>
     </message>
 </context>
 <context>
     <name>CDM_StepListInfoManager</name>
     <message>
         <source>Pas de paramètres pour cette étape.</source>
-        <translation type="unfinished"></translation>
+        <translation>No parameters for this stage.</translation>
     </message>
     <message>
         <source>No Step</source>
-        <translation type="unfinished"></translation>
+        <translation>No Step</translation>
     </message>
     <message>
         <source>Citation de la plateforme Computree</source>
-        <translation type="unfinished">Citation for the Computree platform</translation>
+        <translation>Quote from the Computree platform</translation>
     </message>
     <message>
         <source>Pour citer la plateforme Computree :</source>
-        <translation type="unfinished">To cite the Computree platform:</translation>
+        <translation>To quote the Computree platform:</translation>
     </message>
     <message>
         <source>Citation des plugins</source>
-        <translation type="unfinished">Citation of plugins</translation>
+        <translation>Citing plugins</translation>
     </message>
     <message>
         <source>Pour citer les plugins utilisés :</source>
-        <translation type="unfinished">To cite the plugins used:</translation>
+        <translation>To cite used plugins:</translation>
     </message>
     <message>
         <source>Plugin %1 :&lt;br&gt;</source>
-        <translation type="unfinished">Plugin %1:&lt;br&gt;</translation>
+        <translation>Plugin %1 :&lt;br&gt;</translation>
     </message>
     <message>
         <source>&lt;em&gt;No official citation was provided&lt;/em&gt;&lt;br&gt;</source>
-        <translation type="unfinished">&lt;em&gt;No official citation was provided&lt;/em&gt;&lt;br&gt;</translation>
+        <translation>&lt;em&gt;No official citation was provided&lt;/em&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <source>Etape &lt;b&gt;%1&lt;/b&gt; &lt;em&gt;(plugin %2)&lt;/em&gt; : &lt;br&gt;</source>
-        <translation type="unfinished">Step &lt;b&gt;%1&lt;/b&gt; &lt;em&gt;(plugin %2)&lt;/em&gt; : &lt;br&gt;</translation>
+        <translation>Step &lt;b&gt;%1&lt;/b&gt; &lt;em&gt;(plugin %2)&lt;/em&gt; : &lt;br&gt;</translation>
     </message>
     <message>
         <source>Citations spécifiques pour les étapes</source>
-        <translation type="unfinished">Specific citations for the steps</translation>
+        <translation>Specific quotes for stages</translation>
     </message>
     <message>
         <source>Ci-dessous, la liste des étapes fournissant des références bibliographiques spécifiques (une même référence peut être liée à plusieurs étapes) :</source>
-        <translation type="unfinished">Below is the list of steps providing specific bibliographic references (the same reference can be linked to several steps):</translation>
+        <translation>Below is the list of steps providing specific bibliographic references (the same reference may be linked to several steps):</translation>
     </message>
     <message>
         <source>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href=&quot;%2&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="unfinished">&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href=&quot;%2&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</translation>
+        <translation>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href=&quot;%2&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <source>Index des étapes</source>
-        <translation type="unfinished"></translation>
+        <translation>Index of steps</translation>
     </message>
     <message>
         <source>Plugin : &lt;/Strong&gt;&lt;a href=&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin : &lt;/Strong&gt;&lt;a href=&quot;</translation>
     </message>
     <message>
         <source>Nom de classe : &lt;/strong&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Class name: &lt;/strong&gt;</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Description</translation>
     </message>
     <message>
         <source>Paramètres</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameters</translation>
     </message>
     <message>
         <source>Configuration des résultats d&apos;entrée</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration of input results</translation>
     </message>
     <message>
         <source>Données de sortie</source>
-        <translation type="unfinished"></translation>
+        <translation>Output data</translation>
     </message>
     <message>
         <source>Détails</source>
-        <translation type="unfinished"></translation>
+        <translation>Details</translation>
     </message>
     <message>
         <source>Références</source>
-        <translation type="unfinished"></translation>
+        <translation>References</translation>
     </message>
 </context>
 <context>

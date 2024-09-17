@@ -956,22 +956,22 @@
     <message>
         <location filename="../exporters/ascxyz/pb_ascxyzexporter.cpp" line="12"/>
         <source>Fichier asc</source>
-        <translation type="unfinished">Asc file</translation>
+        <translation>asc file</translation>
     </message>
     <message>
         <location filename="../exporters/ascxyz/pb_ascxyzexporter.cpp" line="14"/>
         <source>Exporte les points au format ASCII. Tous les items contenant des points sont exportés dans le même fichier, avec les champs suivants :&lt;br&gt;- X  : Coordonnée X&lt;br&gt;- Y  : Coordonnée Y&lt;br&gt;- Z  : Coordonnée Z&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Exports points in ASCII format. All items containing points are exported to the same file, with the following fields:&lt;br&gt;- X: X coordinate&lt;br&gt;- Y: Y coordinate&lt;br&gt;- Z: Z coordinate&lt;br&gt;.</translation>
     </message>
     <message>
         <location filename="../exporters/ascxyz/pb_ascxyzexporter.cpp" line="27"/>
         <source>Points, ASCII(X,Y,Z)</source>
-        <translation type="unfinished"></translation>
+        <translation>Points, ASCII(X,Y,Z)</translation>
     </message>
     <message>
         <location filename="../exporters/ascxyz/pb_ascxyzexporter.cpp" line="39"/>
         <source>Item à exporter</source>
-        <translation type="unfinished">Item to be exported</translation>
+        <translation>Item to be exported</translation>
     </message>
 </context>
 <context>
