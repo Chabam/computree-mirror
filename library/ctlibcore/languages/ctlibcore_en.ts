@@ -59,7 +59,7 @@
     <name>CDM_StepListDocExporter</name>
     <message>
         <source>Ce script a été créé le </source>
-        <translation>This script was created on</translation>
+        <translation type="unfinished">This script was created on </translation>
     </message>
     <message>
         <source>avec la version 6.0.</source>
@@ -71,11 +71,11 @@
     </message>
     <message>
         <source>Auteur : </source>
-        <translation>Author:</translation>
+        <translation type="unfinished">Author: </translation>
     </message>
     <message>
         <source>Fichier script Computree : </source>
-        <translation>Computree script file :</translation>
+        <translation type="unfinished">Computree script file: </translation>
     </message>
     <message>
         <source>Description</source>
