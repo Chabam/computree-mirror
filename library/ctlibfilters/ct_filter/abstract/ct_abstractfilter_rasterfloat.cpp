@@ -10,7 +10,16 @@ CT_AbstractFilter_RasterFloat::CT_AbstractFilter_RasterFloat(QString pluginName)
 CT_AbstractFilter_RasterFloat::CT_AbstractFilter_RasterFloat(const CT_AbstractFilter_RasterFloat &other) : CT_AbstractFilter(other)
 {
     _inRaster = other._inRaster;
-    _outRaster = dynamic_cast<CT_Image2D<float>*>(other._outRaster->copy());
+    _outRaster = nullptr;
+
+    if (other._outRaster != nullptr)
+    {
+        _outRaster = new CT_Image2D<float>(_inRaster->minX(), _inRaster->minY(), _inRaster->xdim(), _inRaster->ydim(), _inRaster->resolution(), _inRaster->level(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+        for (size_t c = 0 ; c < _inRaster->nCells() ; c++)
+        {
+            _outRaster->setValueAtIndex(c, other._outRaster->valueAtIndex(c));
+        }
+    }
 }
 
 CT_AbstractFilter_RasterFloat::~CT_AbstractFilter_RasterFloat()
@@ -46,6 +55,7 @@ bool CT_AbstractFilter_RasterFloat::computeOutputRaster()
         _outRaster->setValueAtIndex(c, _inRaster->valueAtIndex(c));
     }
 
+    _outRaster->computeMinMax();
     return true;
 }
 
@@ -62,7 +72,7 @@ const CT_Image2D<float> *CT_AbstractFilter_RasterFloat::inputRaster() const
     return _inRaster;
 }
 
-CT_Image2D<float> *CT_AbstractFilter_RasterFloat::outputRaster() const
+const CT_Image2D<float> *CT_AbstractFilter_RasterFloat::outputRaster() const
 {
     return _outRaster;
 }

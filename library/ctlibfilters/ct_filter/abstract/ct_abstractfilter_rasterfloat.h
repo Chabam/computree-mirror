@@ -34,19 +34,20 @@ public:
     /**
      * @brief Return the output cloud generated in method "filterPointCloudIndex".
      */
-    CT_Image2D<float>* outputRaster() const;
+    const CT_Image2D<float> *outputRaster() const;
 
     /**
      * @brief Take the output raster generated in method "filterPointCloudIndex". You will be the owner of the raster and must manage is life in memory.
      */
     CT_Image2D<float>* takeOutputRaster();
 
+    virtual void finalizeConfiguration() override {}
 
-private:
-    const CT_Image2D<float>*            _inRaster;
-    CT_Image2D<float>*                  _outRaster;
 
 protected:
+
+    const CT_Image2D<float>*            _inRaster;
+    CT_Image2D<float>*                  _outRaster;
 
     /**
      * @brief Redefine to implement filter
