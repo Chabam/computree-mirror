@@ -70,6 +70,11 @@ public:
     const QList<CT_AbstractConfigurableElement *>& xyzFiltersAvailable() const;
 
     /**
+     * @brief Returns a collection that contains a copy of float raster filters available in all plugins
+     */
+    const QList<CT_AbstractConfigurableElement *> &floatRasterFiltersAvailable() const;
+
+    /**
      * @brief Returns a collection that contains a copy of readers available in all plugins
      */
     const QList<CT_AbstractReader *>& readersAvailable() const;
@@ -115,6 +120,7 @@ private:
     QList<CT_AbstractConfigurableElement *> m_rasterMetricsOfAllPlugins;
     QList<CT_AbstractConfigurableElement *> m_xyzMetricsOfAllPlugins;
     QList<CT_AbstractConfigurableElement *> m_xyzFiltersOfAllPlugins;
+    QList<CT_AbstractConfigurableElement *> m_floatRasterFiltersOfAllPlugins;
     QList<CT_AbstractReader*>               m_readersOfAllPlugins;
     QMap<QString, CT_AbstractExporter*>     m_exportersOfAllPlugins;
     QMap<QString, CT_AbstractExporter*>     m_exportersOfAllPluginsForPointsWithPieceByPieceAvailable;
@@ -138,6 +144,10 @@ private:
      */
     void initXyzFiltersCollection();
 
+    /**
+     * @brief Search in all plugins float raster filters available and add it to the collection
+     */
+    void initFloatRasterFiltersCollection();
     /**
      * @brief Search in all plugins readers available and add it to the collection
      */

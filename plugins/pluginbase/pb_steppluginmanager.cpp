@@ -48,6 +48,7 @@
 #include "ct_step/ct_stependloop.h"
 #include "step/pb_stepbeginloopthroughgroups02.h"
 #include "step/pb_stepapplypointfilters.h"
+#include "step/pb_stepapplyfloatrasterfilters.h"
 #include "step/pb_stepexportpointsbyxyarea.h"
 #include "step/pb_stepexportattributesinloop.h"
 #include "step/pb_stepexportattributesasascii.h"
@@ -112,6 +113,7 @@
 #include "ctlibmetrics/ct_metric/abstract/ct_abstractmetric_raster.h"
 
 #include "ct_filter/abstract/ct_abstractfilter_xyz.h"
+#include "ct_filter/abstract/ct_abstractfilter_rasterfloat.h"
 
 #include "tools/ct_configurableelementtools.h"
 #include "tools/ct_readerstools.h"
@@ -177,6 +179,11 @@ const QList<CT_AbstractConfigurableElement *> &PB_StepPluginManager::xyzFiltersA
     return m_xyzFiltersOfAllPlugins;
 }
 
+const QList<CT_AbstractConfigurableElement *> &PB_StepPluginManager::floatRasterFiltersAvailable() const
+{
+    return m_floatRasterFiltersOfAllPlugins;
+}
+
 const QList<CT_AbstractReader *> &PB_StepPluginManager::readersAvailable() const
 {
     return m_readersOfAllPlugins;
@@ -229,6 +236,7 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewPointsStep<PB_StepApplyPointFilters>(CT_StepsMenu::LP_Filter);
     addNewMetricStep<PB_StepComputePointMetrics>(); // doc ok
     addNewMetricStep<PB_StepComputeRasterMetrics>(); // doc ok
+    addNewRastersStep<PB_StepApplyFloatRasterFilters>(CT_StepsMenu::LP_Filter);
 
     addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter); // doc ok
 
@@ -428,6 +436,7 @@ bool PB_StepPluginManager::loadAfterAllPluginsLoaded()
     initRasterMetricsCollection();
     initXyzMetricsCollection();
     initXyzFiltersCollection();
+    initFloatRasterFiltersCollection();
     initReadersCollection();
     initExportersCollection();
 
@@ -502,6 +511,18 @@ void PB_StepPluginManager::initXyzFiltersCollection()
                                                                    },
                                                                    [](const CT_AbstractConfigurableElement* filter) -> bool {
                                                                         return dynamic_cast<const CT_AbstractFilter_XYZ*>(filter) != nullptr;
+                                                                   });
+}
+
+
+void PB_StepPluginManager::initFloatRasterFiltersCollection()
+{
+    CT_ConfigurableElementTools::initAvailableConfigurableElements<QList<CT_AbstractConfigurableElement *>, QList<CT_AbstractFilter*>>(m_floatRasterFiltersOfAllPlugins,
+                                                                   [](const CT_AbstractStepPlugin* plugin) -> QList<CT_AbstractFilter*> {
+                                                                        return plugin->getFiltersAvailable();
+                                                                   },
+                                                                   [](const CT_AbstractConfigurableElement* filter) -> bool {
+                                                                        return dynamic_cast<const CT_AbstractFilter_RasterFloat*>(filter) != nullptr;
                                                                    });
 }
 

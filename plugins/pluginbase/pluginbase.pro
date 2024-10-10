@@ -16,6 +16,7 @@ QT += concurrent
 HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     pb_pluginentry.h \
     pb_steppluginmanager.h \
+    step/pb_stepapplyfloatrasterfilters.h \
     step/pb_stepapplypointfilters.h \
     step/pb_stepcomputepointmetrics.h \
     step/pb_stepcomputerastermetrics.h \
@@ -39,6 +40,7 @@ HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
 SOURCES += \
     pb_pluginentry.cpp \
     pb_steppluginmanager.cpp \
+    step/pb_stepapplyfloatrasterfilters.cpp \
     step/pb_stepapplypointfilters.cpp \
     step/pb_stepcomputepointmetrics.cpp \
     step/pb_stepcomputerastermetrics.cpp \
