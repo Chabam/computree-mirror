@@ -29,7 +29,7 @@ public:
      * @brief Call to filter input raster.
      * @return false if the input rester was not set or another error is occured
      */
-    bool filterRaster();
+    virtual bool filterRaster();
 
     /**
      * @brief Return the output cloud generated in method "filterPointCloudIndex".
