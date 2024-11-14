@@ -154,7 +154,7 @@ public:
     {
         if (yCoord < minYCoord() || yCoord > maxYCoord()) {return false;}
 
-        yrow = int(floor((maxYCoord() - yCoord) / _res));
+        yrow = _dimy - 1 - int(floor((yCoord - minYCoord()) / _res));
 
         if (yrow < 0) {return false;}
         if (yrow > (_dimy - 1)) {return false;}
