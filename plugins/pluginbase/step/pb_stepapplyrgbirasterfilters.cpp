@@ -16,8 +16,8 @@ PB_StepApplyRGBIRasterFilters::~PB_StepApplyRGBIRasterFilters()
     qDeleteAll(mOutHandles.begin(), mOutHandles.end());
     mOutHandles.clear();
 
-    qDeleteAll(m_selectedFloatRasterFilters);
-    m_selectedFloatRasterFilters.clear();
+    qDeleteAll(m_selectedRGBIRasterFilters);
+    m_selectedRGBIRasterFilters.clear();
 }
 
 // Step description (tooltip of contextual menu)
@@ -29,14 +29,14 @@ QString PB_StepApplyRGBIRasterFilters::description() const
 // Step detailled description
 QString PB_StepApplyRGBIRasterFilters::detailledDescription() const
 {
-    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->floatRasterFiltersAvailable());
+    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rgbiRasterFiltersAvailable());
 }
 
 void PB_StepApplyRGBIRasterFilters::savePostSettings(SettingsWriterInterface &writer) const
 {
     SuperClass::savePostSettings(writer);
 
-    CT_ConfigurableElementTools::saveSettingsOfACollectionOfConfigurableElement(m_selectedFloatRasterFilters,
+    CT_ConfigurableElementTools::saveSettingsOfACollectionOfConfigurableElement(m_selectedRGBIRasterFilters,
                                                                                 this,
                                                                                 "Filter",
                                                                                 writer);
@@ -44,8 +44,8 @@ void PB_StepApplyRGBIRasterFilters::savePostSettings(SettingsWriterInterface &wr
 
 bool PB_StepApplyRGBIRasterFilters::restorePostSettings(SettingsReaderInterface &reader)
 {
-    if (!CT_ConfigurableElementTools::restoreSettingsOfConfigurableElementAndSaveItInACollection(m_selectedFloatRasterFilters,
-                                                                                               pluginStaticCastT<PB_StepPluginManager>()->floatRasterFiltersAvailable(),
+    if (!CT_ConfigurableElementTools::restoreSettingsOfConfigurableElementAndSaveItInACollection(m_selectedRGBIRasterFilters,
+                                                                                               pluginStaticCastT<PB_StepPluginManager>()->rgbiRasterFiltersAvailable(),
                                                                                                this,
                                                                                                "Filter",
                                                                                                reader))
@@ -78,8 +78,8 @@ bool PB_StepApplyRGBIRasterFilters::postInputConfigure()
 {
     CTG_ConfigurableElementsSelector cd(nullptr, hasChildrens());
     cd.setWindowTitle("Filtres séléctionnés");
-    cd.setElementsAvailable(pluginStaticCastT<PB_StepPluginManager>()->floatRasterFiltersAvailable());
-    cd.setElementsSelected(&m_selectedFloatRasterFilters);
+    cd.setElementsAvailable(pluginStaticCastT<PB_StepPluginManager>()->rgbiRasterFiltersAvailable());
+    cd.setElementsSelected(&m_selectedRGBIRasterFilters);
 
     if(cd.exec() == QDialog::Accepted)
     {
@@ -92,7 +92,7 @@ bool PB_StepApplyRGBIRasterFilters::postInputConfigure()
 
 void PB_StepApplyRGBIRasterFilters::finalizePostSettings()
 {
-    for(CT_AbstractConfigurableElement* f : m_selectedFloatRasterFilters)
+    for(CT_AbstractConfigurableElement* f : m_selectedRGBIRasterFilters)
     {
         static_cast<CT_AbstractFilter_RasterRGBI*>(f)->finalizeConfiguration();
     }
@@ -105,7 +105,7 @@ void PB_StepApplyRGBIRasterFilters::declareOutputModels(CT_StepOutModelStructure
 
     manager.addResultCopy(mInResult);
 
-    for(CT_AbstractConfigurableElement* f : m_selectedFloatRasterFilters)
+    for(CT_AbstractConfigurableElement* f : m_selectedRGBIRasterFilters)
     {
         CT_HandleOutSingularItem<CT_Image2D<float> >* outHandle = new CT_HandleOutSingularItem<CT_Image2D<float> >();
         manager.addItem(mInGroup, *outHandle, f->getDetailledDisplayableName());
@@ -128,7 +128,7 @@ void PB_StepApplyRGBIRasterFilters::compute()
         {
             int i = 0;
 
-            for(CT_AbstractConfigurableElement* element : m_selectedFloatRasterFilters)
+            for(CT_AbstractConfigurableElement* element : m_selectedRGBIRasterFilters)
             {
                 CT_AbstractFilter_RasterRGBI* filter = static_cast<CT_AbstractFilter_RasterRGBI*>(element->copy());
 

@@ -56,7 +56,7 @@ private:
     /**
      * @brief The collection of selected filters to use in the compute method
      */
-    QList<CT_AbstractConfigurableElement *> m_selectedFloatRasterFilters;
+    QList<CT_AbstractConfigurableElement *> m_selectedRGBIRasterFilters;
 
 };
 
