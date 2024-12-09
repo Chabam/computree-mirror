@@ -18,6 +18,7 @@ HEADERS += $$CT_PREFIX_LIB/ctlibplugin/pluginentryinterface.h\
     pb_steppluginmanager.h \
     step/pb_stepapplyfloatrasterfilters.h \
     step/pb_stepapplypointfilters.h \
+    step/pb_stepapplyrgbirasterfilters.h \
     step/pb_stepcomputepointmetrics.h \
     step/pb_stepcomputerastermetrics.h \
     step/pb_stepcreatepointfileindex.h \
@@ -42,6 +43,7 @@ SOURCES += \
     pb_steppluginmanager.cpp \
     step/pb_stepapplyfloatrasterfilters.cpp \
     step/pb_stepapplypointfilters.cpp \
+    step/pb_stepapplyrgbirasterfilters.cpp \
     step/pb_stepcomputepointmetrics.cpp \
     step/pb_stepcomputerastermetrics.cpp \
     step/pb_stepcreatepointfileindex.cpp \
