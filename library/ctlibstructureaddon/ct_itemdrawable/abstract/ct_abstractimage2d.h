@@ -396,6 +396,17 @@ public:
         if (yMax > maxYCoord() || yyMin < 0) {yyMin = 0;}
     }
 
+    inline bool compare(const CT_AbstractImage2D* other) const
+    {
+        if (other->xdim() != xdim()) {return false;}
+        if (other->ydim() != ydim()) {return false;}
+        if (other->minXCoord() != minXCoord()) {return false;}
+        if (other->minYCoord() != minYCoord()) {return false;}
+        if (other->resolution() != resolution()) {return false;}
+
+        return true;
+    }
+
 
 protected:
     int          _dimx;        /*!< Nombre de cases selon x du raster*/

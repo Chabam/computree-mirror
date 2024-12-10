@@ -69,10 +69,11 @@ bool CT_AbstractFilter_RasterRGBI::filterRaster()
     if (_inRasterNIR == nullptr) {return false;}
 
     // TO DO : improve tests
-    if     (_inRasterR->resolution() != _inRasterG->resolution() ||
-            _inRasterR->resolution() != _inRasterG->resolution() ||
-            _inRasterR->resolution() != _inRasterB->resolution() ||
-            _inRasterR->resolution() != _inRasterNIR->resolution()) {return false;}
+    if (!(_inRasterR->compare(_inRasterG))) {return false;}
+    if (!(_inRasterR->compare(_inRasterB))) {return false;}
+    if (!(_inRasterR->compare(_inRasterNIR))) {return false;}
+    if (_inRasterRE != nullptr && !_inRasterR->compare(_inRasterRE)) {return false;}
+    if (_inRasterMIR != nullptr && !_inRasterR->compare(_inRasterMIR)) {return false;}
 
     delete _outRaster;
     _outRaster = new CT_Image2D<float>(_inRasterR->minX(), _inRasterR->minY(), _inRasterR->xdim(), _inRasterR->ydim(), _inRasterR->resolution(), _inRasterR->level(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
