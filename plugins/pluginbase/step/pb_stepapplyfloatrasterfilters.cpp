@@ -23,14 +23,44 @@ PB_StepApplyFloatRasterFilters::~PB_StepApplyFloatRasterFilters()
 // Step description (tooltip of contextual menu)
 QString PB_StepApplyFloatRasterFilters::description() const
 {
-    return tr("Création de rasters dérivés (float)");
+    return tr("Indicateurs topographiques *");
 }
 
 // Step detailled description
 QString PB_StepApplyFloatRasterFilters::detailledDescription() const
-{
-    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->floatRasterFiltersAvailable());
+{    
+
+    if (this->isAPrototype())
+    {
+        return tr("Cette étape regroupe un ensemble d'indicateurs topographiques disponibles dans les différents plugins actifs.<br><br>"
+                  "A partir d'une raster d'entrée (en général un MNT), un ensemble de rasters correspondants à différents produits dérivés peuvent être calculés en bloc.<br><br>"
+                  "Une partie de ces indicateurs sont aussi disponibles sous forme d'étapes autonomes (facilitant les tests de paramétrage).<br>Les étapes concernées sont suivies d'une *."
+                  "<br><br>"
+                  "<strong><a href=\"#metricsList\">La liste des indicateurs disponibles</a> est fournie en dernière partie de cette page.</strong>"
+                  "<br><br>");
+    }
+    return tr("Cette étape regroupe un ensemble d'indicateurs topographiques disponibles dans les différents plugins actifs.<br><br>"
+              "A partir d'une raster d'entrée (en général un MNT), un ensemble de rasters correspondants à différents produits dérivés peuvent être calculés en bloc.<br><br>"
+              "Une partie de ces indicateurs sont aussi disponibles sous forme d'étapes autonomes (facilitant les tests de paramétrage).<br>Les étapes concernées sont suivies d'une *."
+              "<br><br>"
+              "<strong><a href=\"#metricsList\">La liste des indicateurs calculés</a> est fournie en dernière partie de cette page.</strong>"
+              "<br><br>");
 }
+
+QString PB_StepApplyFloatRasterFilters::detailsDescription() const
+{
+    if (this->isAPrototype())
+    {
+        return tr("Chaque indicateur séléctionné génèrera un raster en sortie.<br><br>"
+                  "</div><div><h2 id=\"metricsList\">Liste des indicateurs disponibles :</h2>%1")
+                .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->floatRasterFiltersAvailable()));
+    }
+
+    return tr("Chaque indicateur séléctionné génèrera un raster en sortie.<br><br>"
+              "</div><div><h2 id=\"metricsList\">Liste des indicateurs calculés :</h2>%1")
+            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(m_selectedFloatRasterFilters));
+}
+
 
 void PB_StepApplyFloatRasterFilters::savePostSettings(SettingsWriterInterface &writer) const
 {

@@ -67,7 +67,9 @@ public:
         LP_GDALOthers,
         LP_Voxels,
         LP_Meshes,
-        LP_ItemAttributes
+        LP_ItemAttributes,
+        LP_Topography,
+        LP_Radiometry
     };
     Q_ENUMS(LevelPredefined)
 

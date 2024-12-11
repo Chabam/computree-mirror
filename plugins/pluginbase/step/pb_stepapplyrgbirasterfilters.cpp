@@ -23,14 +23,46 @@ PB_StepApplyRGBIRasterFilters::~PB_StepApplyRGBIRasterFilters()
 // Step description (tooltip of contextual menu)
 QString PB_StepApplyRGBIRasterFilters::description() const
 {
-    return tr("Indicateurs radiométriques (raster float)");
+    return tr("Indicateurs radiométriques (rasters)");
 }
 
 // Step detailled description
 QString PB_StepApplyRGBIRasterFilters::detailledDescription() const
 {
-    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rgbiRasterFiltersAvailable());
+
+    if (this->isAPrototype())
+    {
+        return tr("Cette étape regroupe un ensemble d'indicateurs radiométriques disponibles dans les différents plugins actifs.<br><br>"
+                  "A partir d'un ensemble de canaux rasters d'entrée, un ensemble de rasters correspondants à différents produits dérivés peuvent être calculés en bloc.<br>"
+                  "Les canaux Rouge (R), Vert (G), Bleu (B) et Proche Infra-Rouge (NIR) sont obligatoire. "
+                  "Les canaux Red Edge (RE) et Infra-Rouge Moyen (MIR) sont optionnels, car utilisés dans une petite partie des indicateurs seulement."
+                  "<br><br>"
+                  "<strong><a href=\"#metricsList\">La liste des indicateurs disponibles</a> est fournie en dernière partie de cette page.</strong>"
+                  "<br><br>");
+    }
+    return tr("Cette étape regroupe un ensemble d'indicateurs radiométriques disponibles dans les différents plugins actifs.<br><br>"
+              "A partir d'un ensemble de canaux rasters d'entrée, un ensemble de rasters correspondants à différents produits dérivés peuvent être calculés en bloc.<br>"
+              "Les canaux Rouge (R), Vert (G), Bleu (B) et Proche Infra-Rouge (NIR) sont obligatoire. "
+              "Les canaux Red Edge (RE) et Infra-Rouge Moyen (MIR) sont optionnels, car utilisés dans une petite partie des indicateurs seulement."
+              "<br><br>"
+              "<strong><a href=\"#metricsList\">La liste des indicateurs calculés</a> est fournie en dernière partie de cette page.</strong>"
+              "<br><br>");
 }
+
+QString PB_StepApplyRGBIRasterFilters::detailsDescription() const
+{
+    if (this->isAPrototype())
+    {
+        return tr("Chaque indicateur séléctionné génèrera un raster en sortie.<br><br>"
+                  "</div><div><h2 id=\"metricsList\">Liste des indicateurs disponibles :</h2>%1")
+                .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rgbiRasterFiltersAvailable()));
+    }
+
+    return tr("Chaque indicateur séléctionné génèrera un raster en sortie.<br><br>"
+              "</div><div><h2 id=\"metricsList\">Liste des indicateurs calculés :</h2>%1")
+            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(m_selectedRGBIRasterFilters));
+}
+
 
 void PB_StepApplyRGBIRasterFilters::savePostSettings(SettingsWriterInterface &writer) const
 {

@@ -86,6 +86,8 @@ QList<CT_MenuLevel *> CT_MenuLevel::levels() const
     QList<CT_MenuLevel*> levelsCustomSorted = m_levelsCustom;
 
     static const auto sortLevelsByDisplayableName = [](const CT_MenuLevel* l1, const CT_MenuLevel* l2) -> bool {
+        if (l1->displayableName().endsWith(" ") && !l2->displayableName().endsWith(" ")) {return false;}
+        if (l2->displayableName().endsWith(" ") && !l1->displayableName().endsWith(" ")) {return true;}
         return l1->displayableName().toLower() < l2->displayableName().toLower();
     };
 
@@ -268,6 +270,9 @@ void CT_MenuLevel::defineHighPriorityStepsOrder()
     CT_MenuLevel::STEPORDER.append("ONF_StepCreatePlotManagerFromFile");
     CT_MenuLevel::STEPORDER.append("ONF_StepExtractPointsForPlots");
     CT_MenuLevel::STEPORDER.append("ONF_StepAddLASDataToPlots");
+
+    CT_MenuLevel::STEPORDER.append("PB_StepApplyFloatRasterFilters");
+    CT_MenuLevel::STEPORDER.append("PB_StepApplyRGBIRasterFilters");
 
     CT_MenuLevel::STEPORDER.append("PB_StepComputePointMetrics");
     CT_MenuLevel::STEPORDER.append("PB_StepComputeRasterMetrics");

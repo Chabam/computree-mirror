@@ -32,8 +32,36 @@ QString PB_StepApplyPointFilters::description() const
 // Step detailled description
 QString PB_StepApplyPointFilters::detailledDescription() const
 {
-    return CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzFiltersAvailable());
+
+    if (this->isAPrototype())
+    {
+        return tr("Cette étape regroupe un ensemble de filtres de points disponibles dans les différents plugins actifs.<br><br>"
+                  "A partir d'un nuage de points d'entrée, chaque filtre génère un nuage de points filtré en sortie."
+                  "<br><br>"
+                  "<strong><a href=\"#metricsList\">La liste des filtres disponibles</a> est fournie en dernière partie de cette page.</strong>"
+                  "<br><br>");
+    }
+    return tr("Cette étape regroupe un ensemble de filtres de points disponibles dans les différents plugins actifs.<br><br>"
+              "A partir d'un nuage de points d'entrée, chaque filtre génère un nuage de points filtré en sortie"
+              "<br><br>"
+              "<strong><a href=\"#metricsList\">La liste des filtres calculés</a> est fournie en dernière partie de cette page.</strong>"
+              "<br><br>");
 }
+
+QString PB_StepApplyPointFilters::detailsDescription() const
+{
+    if (this->isAPrototype())
+    {
+        return tr("Chaque filtre séléctionné génèrera un nuage de points filtré en sortie.<br><br>"
+                  "</div><div><h2 id=\"metricsList\">Liste des filtres disponibles :</h2>%1")
+                .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzFiltersAvailable()));
+    }
+
+    return tr("Chaque filtre séléctionné génèrera un nuage de points filtré en sortie.<br><br>"
+              "</div><div><h2 id=\"metricsList\">Liste des filtres calculés :</h2>%1")
+            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(m_selectedXYZFilters));
+}
+
 
 void PB_StepApplyPointFilters::savePostSettings(SettingsWriterInterface &writer) const
 {

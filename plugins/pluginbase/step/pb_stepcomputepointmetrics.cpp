@@ -27,14 +27,27 @@ QString PB_StepComputePointMetrics::description() const
 
 QString PB_StepComputePointMetrics::detailledDescription() const
 {
-    return tr("Cette étape regroupe toutes les métriques de points disponibles dans les différents plugins actifs.<br><br>"
+    if (this->isAPrototype())
+    {
+        return tr("Cette étape regroupe toutes les métriques de points disponibles dans les différents plugins actifs.<br><br>"
+                  "Dans Computree une \"métrique\" est un indicateur calculé sur un type de données précis. "
+                  "Les métriques de points sont calculées à partir d'un nuage de points. "
+                  "A minima les coordonnées (x,y,z) des points, et dans certains cas d'autres attributs issus du format standard LAS. "
+                  "De plus, une emprise peut optionnellement être fournie pour sélectionner les points à prendre en compte."
+                  "<br><br>"
+                  "<strong><a href=\"#metricsList\">La liste des métriques de points disponibles</a> est fournie en dernière partie de cette page.</strong>"
+                  "<br><br>");
+    }
+
+    return tr("Cette étape calcule les métriques de points séléctionnées.<br><br>"
               "Dans Computree une \"métrique\" est un indicateur calculé sur un type de données précis. "
               "Les métriques de points sont calculées à partir d'un nuage de points. "
               "A minima les coordonnées (x,y,z) des points, et dans certains cas d'autres attributs issus du format standard LAS. "
               "De plus, une emprise peut optionnellement être fournie pour sélectionner les points à prendre en compte."
               "<br><br>"
-              "<strong><a href=\"#metricsList\">La liste des métriques de points disponibles</a> est fournie en dernière partie de cette page.</strong>"
+              "<strong><a href=\"#metricsList\">La description des métriques de points calculées</a> est fournie en dernière partie de cette page.</strong>"
               "<br><br>");
+
 }
 
 QString PB_StepComputePointMetrics::inputDescription() const
@@ -49,11 +62,34 @@ QString PB_StepComputePointMetrics::inputDescription() const
 
 QString PB_StepComputePointMetrics::outputDescription() const
 {
-    return tr("Cette étape ajoute au résultat d'entrée un conteneur \"métriques\", contenant toutes les métriques calculées. ");
+    if (this->isAPrototype())
+    {
+        return tr("Cette étape ajoute au résultat d'entrée un conteneur \"métriques\", contenant toutes les métriques calculées. ");
+    }
+    return SuperClass::outputDescription();
 }
 
 QString PB_StepComputePointMetrics::detailsDescription() const
 {
+    if (this->isAPrototype())
+    {
+        return tr("Il faut prendre garde à deux aspects lors de l'utilisation des métriques de points.<br><br>"
+                  "Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d'entrée, sous peine d'obtenir la valeur par défaut pour la métrique systématiquement.<br>"
+                  "Les métriques utilisant les attributs LAS, ont le mot clé LAS dans leur intitulé.<br><br>"
+                  "Deuxièmement, les nuages de points sont originellement codés en altitude absolue. Mais il est fréquent de modifier ces nuages en soutrayant l'altitude du sol, afin d'obtenir des nuages de points en hauteur, où le relief est \"retiré\".<br>"
+                  "Il est donc important de savoir si un nuage des points est en Altitude (Alti) ou en Hauteur (Ht).<br>"
+                  "<ul>"
+                  "<li>Certaines métriques sont indifférentes, et fonctionnent dans les deux cas.</li>"
+                  "<li>D'autres n'ont de sens que pour un nuage en altitude</li>"
+                  "<li>D'autres n'ont de sens que pour un nuage en hauteur</li>"
+                  "</ul>"
+                  "C'est à l'utilisateur de vérifier les métriques adaptées au nuage de points fourni. <br>"
+                  "Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alti, Ht ou les deux. S'il n'y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus)."
+                  "<br>"
+                  "</div><div><h2 id=\"metricsList\">Liste des métriques de points disponibles :</h2>%1")
+                .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable()));
+    }
+
     return tr("Il faut prendre garde à deux aspects lors de l'utilisation des métriques de points.<br><br>"
               "Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d'entrée, sous peine d'obtenir la valeur par défaut pour la métrique systématiquement.<br>"
               "Les métriques utilisant les attributs LAS, ont le mot clé LAS dans leur intitulé.<br><br>"
@@ -67,8 +103,10 @@ QString PB_StepComputePointMetrics::detailsDescription() const
               "C'est à l'utilisateur de vérifier les métriques adaptées au nuage de points fourni. <br>"
               "Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alti, Ht ou les deux. S'il n'y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus)."
               "<br>"
-              "</div><div><h2 id=\"metricsList\">Liste des métriques de points disponibles :</h2>%1")
-            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->xyzMetricsAvailable()));
+              "</div><div><h2 id=\"metricsList\">Liste des métriques de points calculées :</h2>%1")
+            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(m_selectedXYZMetrics));
+
+
 }
 
 

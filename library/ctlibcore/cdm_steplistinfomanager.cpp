@@ -722,6 +722,9 @@ QString CDM_StepListInfoManager::generateHTMLDoc(CDM_StepListInfoManager::StepIn
             stream << "</section>\n";
         }
 
+        stream << "<br>";
+        stream << "<br>";
+        stream << "<br>";
         stream << "</div>\n";
         stream << "</body>\n";
         stream << "</html>";

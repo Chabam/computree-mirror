@@ -243,8 +243,9 @@ bool PB_StepPluginManager::loadGenericsStep()
     addNewPointsStep<PB_StepApplyPointFilters>(CT_StepsMenu::LP_Filter);
     addNewMetricStep<PB_StepComputePointMetrics>(); // doc ok
     addNewMetricStep<PB_StepComputeRasterMetrics>(); // doc ok
-    addNewRastersStep<PB_StepApplyFloatRasterFilters>(CT_StepsMenu::LP_Filter);
-    addNewRastersStep<PB_StepApplyRGBIRasterFilters>(CT_StepsMenu::LP_Filter);
+
+    addNewRastersStep<PB_StepApplyFloatRasterFilters>(CT_StepsMenu::LP_Topography);
+    addNewRastersStep<PB_StepApplyRGBIRasterFilters>(CT_StepsMenu::LP_Radiometry);
 
     addNewGeometricalShapesStep<PB_StepUserItemSelection>(CT_StepsMenu::LP_Filter); // doc ok
 

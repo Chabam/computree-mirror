@@ -114,6 +114,8 @@ QString CT_StepsMenu::staticPredefinedToString(CT_StepsMenu::LevelPredefined pre
     case LP_Voxels: return QObject::tr("Voxels");
     case LP_Meshes: return QObject::tr("Maillages");
     case LP_ItemAttributes: return QObject::tr("Attributs");
+    case LP_Topography: return QObject::tr("Topographie ");
+    case LP_Radiometry: return QObject::tr("Radiométrie ");
     case LP_Others: return QObject::tr("Autres");
     }
 

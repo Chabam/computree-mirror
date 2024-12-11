@@ -26,13 +26,24 @@ QString PB_StepComputeRasterMetrics::description() const
 
 QString PB_StepComputeRasterMetrics::detailledDescription() const
 {
-    return tr("Cette étape regroupe toutes les métriques de raster disponibles dans les différents plugins actifs.<br><br>"
+    if (this->isAPrototype())
+    {
+        return tr("Cette étape regroupe toutes les métriques de raster disponibles dans les différents plugins actifs.<br><br>"
+                  "Dans Computree une \"métrique\" est un indicateur calculé sur un type de données précis. "
+                  "Les métriques de raster sont calculées à partir d'un raster (image 2D, où chaque pixel contient une valeur). "
+                  "Une emprise peut optionnellement être fournie pour sélectionner la partie du raster à prendre en compte."
+                  "<br><br>"
+                  "<strong><a href=\"#metricsList\">La liste des métriques de raster disponibles</a> est fournie en dernière partie de cette page.</strong>"
+                  "<br><br>");
+    }
+    return tr("Cette étape calcule les métriques de raster séléctionnées.<br><br>"
               "Dans Computree une \"métrique\" est un indicateur calculé sur un type de données précis. "
-              "Les métriques de raster sont calculées à partir raster (image 2D, où chaque pixel contient une valeur). "
+              "Les métriques de raster sont calculées à partir d'un raster (image 2D, où chaque pixel contient une valeur). "
               "Une emprise peut optionnellement être fournie pour sélectionner la partie du raster à prendre en compte."
               "<br><br>"
-              "<strong><a href=\"#metricsList\">La liste des métriques de raster disponibles</a> est fournie en dernière partie de cette page.</strong>"
+              "<strong><a href=\"#metricsList\">La description des métriques de raster calculées</a> est fournie en dernière partie de cette page.</strong>"
               "<br><br>");
+
 }
 
 QString PB_StepComputeRasterMetrics::inputDescription() const
@@ -46,14 +57,26 @@ QString PB_StepComputeRasterMetrics::inputDescription() const
 
 QString PB_StepComputeRasterMetrics::outputDescription() const
 {
-    return tr("Cette étape ajoute au résultat d'entrée un conteneur \"métriques\", contenant toutes les métriques calculées. ");
+    if (this->isAPrototype())
+    {
+        return tr("Cette étape ajoute au résultat d'entrée un conteneur \"métriques\", contenant toutes les métriques calculées. ");
+    }
+    return SuperClass::outputDescription();
 }
 
 QString PB_StepComputeRasterMetrics::detailsDescription() const
 {
+    if (this->isAPrototype())
+    {
+        return tr("Attention : le comportement des métriques peut être influencé par la résolution des rasters fournis.<br>"
+                  "</div><div><h2 id=\"metricsList\">Liste des métriques de raster disponibles :</h2>%1")
+                .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rasterMetricsAvailable()));
+    }
+
     return tr("Attention : le comportement des métriques peut être influencé par la résolution des rasters fournis.<br>"
-              "</div><div><h2 id=\"metricsList\">Liste des métriques de raster disponibles :</h2>%1")
-            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(pluginStaticCastT<PB_StepPluginManager>()->rasterMetricsAvailable()));
+              "</div><div><h2 id=\"metricsList\">Description des métriques de raster calculées :</h2>%1")
+            .arg(CT_ConfigurableElementTools::formatHtmlStepDetailledDescription(m_selectedRasterMetrics));
+
 }
 
 void PB_StepComputeRasterMetrics::savePostSettings(SettingsWriterInterface &writer) const

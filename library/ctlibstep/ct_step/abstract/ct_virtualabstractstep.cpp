@@ -30,6 +30,7 @@
 #include "ct_result/abstract/ct_abstractresult.h"
 #include "ct_itemdrawable/abstract/ct_abstractitemdrawable.h"
 #include "ct_itemattributes/abstract/ct_abstractitemattribute.h"
+#include "ct_itemdrawable/ct_standarditemgroup.h"
 
 #include "ct_view/tools/ct_configurablewidgettodialog.h"
 #include "ct_risformat/ct_parseris.h"
@@ -230,7 +231,7 @@ QString CT_VirtualAbstractStep::outputDescription() const
 
     if (!str.isEmpty())
     {
-        str = tr("Structure des nouvelles données produites :<br>") + str;
+        str = tr("Données en sortie (nouvelles données en <strong>gras</strong>) :<br>") + str;
     }
 
     return str;
@@ -1299,11 +1300,22 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForResultModel(QString &str, 
 
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, int nbTab, const CT_OutAbstractItemModel *iModel) const
 {
+    QString bold1 = "";
+    QString bold2 = "";
+    if (iModel == iModel->originalModel())
+    {
+        bold1 = "<strong>";
+        bold2 = "</strong>";
+    }
+
     for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
-    str.append(iModel->displayableName() + " (" + iModel->itemDrawableStaticCastT<>()->name() + ")");
+    str.append(bold1 + iModel->displayableName() + bold2 + " <span style=\"color:grey;font-weight:lighter;\">(" + iModel->itemDrawableStaticCastT<>()->name() + ")</span>");
     str.append("<br>");
 
-    createHelpStrForChildrens(str, nbTab+1, iModel);
+    if (dynamic_cast<CT_StandardItemGroup*>(iModel->prototype()) != nullptr || iModel == iModel->originalModel())
+    {
+        createHelpStrForChildrens(str, nbTab+1, iModel);
+    }
 }
 
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, int nbTab, const CT_InAbstractItemModel *iModel) const
@@ -1315,9 +1327,9 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, in
     } else {
         if (iModel->isOptionnal())
         {
-            str.append("<em>" + iModel->displayableName() + " [" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + "] - " + tr("Optionnel") + "</em>");
+            str.append("<em>" + iModel->displayableName() + " <span style=\"color:grey;font-weight:lighter;\">(" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + ")</span> - " + tr("Optionnel") + "</em>");
         } else {
-            str.append(iModel->displayableName() + " [" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + "]");
+            str.append(iModel->displayableName() + " <span style=\"color:grey;font-weight:lighter;\">(" + CT_AbstractItemDrawable::nameFromType(iModel->itemType()) + ")</span>");
         }
     }
     str.append("<br>");
@@ -1327,11 +1339,17 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemModel(QString &str, in
 
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemAttributesModel(QString &str, int nbTab, const CT_OutAbstractItemAttributeModel *iaModel) const
 {
-    for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
-    str.append(iaModel->itemAttributeStaticCastT<>()->displayableName() + " [" + iaModel->itemAttributeStaticCastT<>()->valueTypeToString() + "]");
-    str.append("<br>");
+    QString bold1 = "<strong>";
+    QString bold2 = "</strong>";
 
-    createHelpStrForChildrens(str, nbTab+1, iaModel);
+    if (iaModel == iaModel->originalModel() && !iaModel->isADefaultItemAttributeModel())
+    {
+        for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
+        str.append(bold1 + iaModel->itemAttributeStaticCastT<>()->displayableName() + bold2 + " <span style=\"color:grey;font-weight:lighter;\">(" + iaModel->itemAttributeStaticCastT<>()->valueTypeToString().toLower() + ")</span>");
+        str.append("<br>");
+
+        createHelpStrForChildrens(str, nbTab+1, iaModel);
+    }
 }
 
 void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemAttributesModel(QString &str, int nbTab, const CT_InAbstractItemAttributeModel *iaModel) const
@@ -1339,9 +1357,9 @@ void CT_VirtualAbstractStep::recursiveCreateHelpStrForItemAttributesModel(QStrin
     for (int i = 0 ; i < nbTab ; i++) {str.append("&nbsp;&nbsp;");}
     if (iaModel->isOptionnal())
     {
-        str.append("<em>" + iaModel->displayableName() + " [" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + "] - " + tr("Optionnel") + "</em>");
+        str.append("<em>" + iaModel->displayableName() + " <span style=\"color:grey;font-weight:lighter;\">(" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + ")</span> - " + tr("Optionnel") + "</em>");
     } else {
-        str.append(iaModel->displayableName() + " [" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + "]");
+        str.append(iaModel->displayableName() + " <span style=\"color:grey;font-weight:lighter;\">(" + CT_AbstractCategory::valueTypeToString(CT_AbstractCategory::ValueType(iaModel->valueType())) + ")</span>");
     }
     str.append("<br>");
 

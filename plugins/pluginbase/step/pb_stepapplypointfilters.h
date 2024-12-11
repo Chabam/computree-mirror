@@ -22,6 +22,8 @@ public:
 
     QString detailledDescription() const final;
 
+    QString detailsDescription() const final;
+
     void savePostSettings(SettingsWriterInterface& writer) const override;
     bool restorePostSettings(SettingsReaderInterface &reader) override;
 
