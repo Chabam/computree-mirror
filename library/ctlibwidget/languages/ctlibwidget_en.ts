@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -132,11 +132,11 @@
         <translation>px</translation>
     </message>
     <message>
-        <source>Pas de ligne d'entête dans le fichier</source>
+        <source>Pas de ligne d&apos;entête dans le fichier</source>
         <translation>No header line in the file</translation>
     </message>
     <message>
-        <source>Nombre de lignes à ignorer avant la ligne d'entêtes : </source>
+        <source>Nombre de lignes à ignorer avant la ligne d&apos;entêtes : </source>
         <translation>Number of lines to be ignored before the header line: </translation>
     </message>
     <message>
@@ -208,7 +208,7 @@
 %1<byte value="xd"/>
 <byte value="xd"/>
 </source>
-        <translation/>
+        <translation></translation>
     </message>
     <message>
         <source>.</source>
