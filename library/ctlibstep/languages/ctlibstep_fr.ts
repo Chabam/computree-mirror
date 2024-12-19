@@ -98,15 +98,15 @@
         <translation></translation>
     </message>
     <message>
-        <source>Structure des nouvelles données produites :&lt;br&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Optionnel</source>
         <translation></translation>
     </message>
     <message>
         <source>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Aucune donnée nécessaire en entrée.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Données en sortie (nouvelles données en &lt;strong&gt;gras&lt;/strong&gt;) :&lt;br&gt;</source>
         <translation></translation>
     </message>
 </context>

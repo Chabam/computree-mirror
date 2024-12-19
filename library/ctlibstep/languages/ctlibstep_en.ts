@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -15,7 +15,7 @@
         <translation>Daughter steps use the output models of this step.</translation>
     </message>
     <message>
-        <source>Un des résultats de l'étape est affiché dans un document.</source>
+        <source>Un des résultats de l&apos;étape est affiché dans un document.</source>
         <translation>One of the results of the step is displayed in a document.</translation>
     </message>
 </context>
@@ -54,8 +54,8 @@
         <translation> - Computing completed, elapsed time: %1h:%2m:%3s:%4ms</translation>
     </message>
     <message>
-        <source>Plugin : &lt;/Strong&gt;&lt;a href="</source>
-        <translation>Plugin: &lt;/Strong&gt;&lt;a href="</translation>
+        <source>Plugin : &lt;/Strong&gt;&lt;a href=&quot;</source>
+        <translation>Plugin: &lt;/Strong&gt;&lt;a href=&quot;</translation>
     </message>
     <message>
         <source>Nom de classe : &lt;/strong&gt;</source>
@@ -70,7 +70,7 @@
         <translation>Parameters</translation>
     </message>
     <message>
-        <source>Données d'entrée</source>
+        <source>Données d&apos;entrée</source>
         <translation>Input data</translation>
     </message>
     <message>
@@ -86,20 +86,20 @@
         <translation>References</translation>
     </message>
     <message>
-        <source>&lt;strong&gt;Paramètres de pré-configuration&lt;/strong&gt; (non modifiables une fois l'étape ajoutée) :&lt;br&gt;&lt;br&gt;</source>
+        <source>&lt;strong&gt;Paramètres de pré-configuration&lt;/strong&gt; (non modifiables une fois l&apos;étape ajoutée) :&lt;br&gt;&lt;br&gt;</source>
         <translation>&lt;strong&gt;Pre-configuration settings&lt;/strong&gt; (cannot be changed once the step is added):&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <source>&lt;strong&gt;Paramètres de l'étape&lt;/strong&gt; :&lt;br&gt;&lt;br&gt;</source>
+        <source>&lt;strong&gt;Paramètres de l&apos;étape&lt;/strong&gt; :&lt;br&gt;&lt;br&gt;</source>
         <translation>&lt;strong&gt;Step parameters&lt;/strong&gt;:&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <source>Structure des données d'entrée recherchées :&lt;br&gt;</source>
+        <source>Structure des données d&apos;entrée recherchées :&lt;br&gt;</source>
         <translation>Structure of the input searched data:&lt;br&gt;</translation>
     </message>
     <message>
         <source>Structure des nouvelles données produites :&lt;br&gt;</source>
-        <translation>Structure of the new data produced:&lt;br</translation>
+        <translation type="vanished">Structure of the new data produced:&lt;br</translation>
     </message>
     <message>
         <source>Optionnel</source>
@@ -109,12 +109,16 @@
         <source>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Aucune donnée nécessaire en entrée.</source>
         <translation>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;No input data required.</translation>
     </message>
+    <message>
+        <source>Données en sortie (nouvelles données en &lt;strong&gt;gras&lt;/strong&gt;) :&lt;br&gt;</source>
+        <translation>Output data (new data in &lt;strong&gt;bold&lt;/strong&gt;) :&lt;br&gt;</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <source> de l'étape "%1"</source>
-        <translation> of step "%1"</translation>
+        <source> de l&apos;étape &quot;%1&quot;</source>
+        <translation> of step &quot;%1&quot;</translation>
     </message>
 </context>
 </TS>

@@ -135,5 +135,13 @@
         <source>Inconnu (TODO)</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Topographie </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Radiométrie </source>
+        <translation></translation>
+    </message>
 </context>
 </TS>

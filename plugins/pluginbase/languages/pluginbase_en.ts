@@ -2,6 +2,41 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>PB_StepApplyFloatRasterFilters</name>
+    <message>
+        <source>Indicateurs topographiques *</source>
+        <translation>Topographic indicators *</translation>
+    </message>
+    <message>
+        <source>Cette étape regroupe un ensemble d&apos;indicateurs topographiques disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;A partir d&apos;une raster d&apos;entrée (en général un MNT), un ensemble de rasters correspondants à différents produits dérivés peuvent être calculés en bloc.&lt;br&gt;&lt;br&gt;Une partie de ces indicateurs sont aussi disponibles sous forme d&apos;étapes autonomes (facilitant les tests de paramétrage).&lt;br&gt;Les étapes concernées sont suivies d&apos;une *.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des indicateurs disponibles&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This step groups together a set of topographic indicators available in the various active plugins.&lt;br&gt;&lt;br&gt;From an input raster (generally a DTM), a set of rasters corresponding to different derived products can be calculated as a whole.&lt;br&gt;&lt;br&gt;Some of these indicators are also available in the form of autonomous steps (facilitating parameterisation tests).&lt;br&gt;The steps concerned are followed by a *.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of available indicators&lt;/a&gt; is provided in the last part of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Cette étape regroupe un ensemble d&apos;indicateurs topographiques disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;A partir d&apos;une raster d&apos;entrée (en général un MNT), un ensemble de rasters correspondants à différents produits dérivés peuvent être calculés en bloc.&lt;br&gt;&lt;br&gt;Une partie de ces indicateurs sont aussi disponibles sous forme d&apos;étapes autonomes (facilitant les tests de paramétrage).&lt;br&gt;Les étapes concernées sont suivies d&apos;une *.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des indicateurs calculés&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This step groups together a set of topographic indicators available in the various active plugins.&lt;br&gt;&lt;br&gt;From an input raster (generally a DTM), a set of rasters corresponding to different derived products can be calculated as a whole.&lt;br&gt;&lt;br&gt;Some of these indicators are also available in the form of stand-alone steps (facilitating parameterisation tests).&lt;br&gt;The steps concerned are followed by a *.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of calculated indicators&lt;/a&gt; is provided in the last part of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Chaque indicateur séléctionné génèrera un raster en sortie.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des indicateurs disponibles :&lt;/h2&gt;%1</source>
+        <translation>Each indicator selected will generate an output raster.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of available indicators:&lt;/h2&gt;%1</translation>
+    </message>
+    <message>
+        <source>Chaque indicateur séléctionné génèrera un raster en sortie.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des indicateurs calculés :&lt;/h2&gt;%1</source>
+        <translation>Each selected indicator will generate a raster output.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of calculated indicators:&lt;/h2&gt;%1</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>Points</translation>
+    </message>
+    <message>
+        <source>Groupe</source>
+        <translation>Group</translation>
+    </message>
+    <message>
+        <source>Raster (float)</source>
+        <translation>Raster (float)</translation>
+    </message>
+</context>
+<context>
     <name>PB_StepApplyPointFilters</name>
     <message>
         <source>Filtres de points</source>
@@ -22,6 +57,77 @@
     <message>
         <source>Points</source>
         <translation>Points</translation>
+    </message>
+    <message>
+        <source>Cette étape regroupe un ensemble de filtres de points disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;A partir d&apos;un nuage de points d&apos;entrée, chaque filtre génère un nuage de points filtré en sortie.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des filtres disponibles&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This stage groups together a set of point filters available in the various active plugins.&lt;br&gt;&lt;br&gt;From an input point cloud, each filter generates a filtered output point cloud.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of available filters&lt;/a&gt; is provided in the last part of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Cette étape regroupe un ensemble de filtres de points disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;A partir d&apos;un nuage de points d&apos;entrée, chaque filtre génère un nuage de points filtré en sortie&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des filtres calculés&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This stage groups together a set of point filters available in the various active plugins.&lt;br&gt;&lt;br&gt;From an input point cloud, each filter generates a filtered output point cloud&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of calculated filters&lt;/a&gt; is provided in the last part of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Chaque filtre séléctionné génèrera un nuage de points filtré en sortie.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des filtres disponibles :&lt;/h2&gt;%1</source>
+        <translation>Each filter selected will generate a filtered scatterplot as output.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of available filters:&lt;/h2&gt;%1</translation>
+    </message>
+    <message>
+        <source>Chaque filtre séléctionné génèrera un nuage de points filtré en sortie.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des filtres calculés :&lt;/h2&gt;%1</source>
+        <translation>Each filter selected will generate a filtered scatterplot as output.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of filters calculated:&lt;/h2&gt;%1</translation>
+    </message>
+</context>
+<context>
+    <name>PB_StepApplyRGBIRasterFilters</name>
+    <message>
+        <source>Indicateurs radiométriques (rasters)</source>
+        <translation>Radiometric indicators (rasters)</translation>
+    </message>
+    <message>
+        <source>Cette étape regroupe un ensemble d&apos;indicateurs radiométriques disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;A partir d&apos;un ensemble de canaux rasters d&apos;entrée, un ensemble de rasters correspondants à différents produits dérivés peuvent être calculés en bloc.&lt;br&gt;Les canaux Rouge (R), Vert (G), Bleu (B) et Proche Infra-Rouge (NIR) sont obligatoire. Les canaux Red Edge (RE) et Infra-Rouge Moyen (MIR) sont optionnels, car utilisés dans une petite partie des indicateurs seulement.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des indicateurs disponibles&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This step groups together a set of radiometric indicators available in the various active plugins.&lt;br&gt;&lt;br&gt;From a set of input raster channels, a set of rasters corresponding to different derived products can be calculated as a whole.&lt;br&gt;The Red (R), Green (G), Blue (B) and Near Infra-Red (NIR) channels are mandatory. The Red Edge (RE) and Mid Infra-Red (MIR) channels are optional, as they are used in only a small proportion of the indicators.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of available indicators&lt;/a&gt; is provided at the end of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Cette étape regroupe un ensemble d&apos;indicateurs radiométriques disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;A partir d&apos;un ensemble de canaux rasters d&apos;entrée, un ensemble de rasters correspondants à différents produits dérivés peuvent être calculés en bloc.&lt;br&gt;Les canaux Rouge (R), Vert (G), Bleu (B) et Proche Infra-Rouge (NIR) sont obligatoire. Les canaux Red Edge (RE) et Infra-Rouge Moyen (MIR) sont optionnels, car utilisés dans une petite partie des indicateurs seulement.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des indicateurs calculés&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This step groups together a set of radiometric indicators available in the various active plugins.&lt;br&gt;&lt;br&gt;From a set of input raster channels, a set of rasters corresponding to different derived products can be calculated as a whole.&lt;br&gt;The Red (R), Green (G), Blue (B) and Near Infra-Red (NIR) channels are mandatory. The Red Edge (RE) and Mid Infrared (MIR) channels are optional, as they are used in only a small proportion of the indicators.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of indicators calculated&lt;/a&gt; is provided at the end of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Chaque indicateur séléctionné génèrera un raster en sortie.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des indicateurs disponibles :&lt;/h2&gt;%1</source>
+        <translation>Each indicator selected will generate an output raster.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of available indicators:&lt;/h2&gt;%1</translation>
+    </message>
+    <message>
+        <source>Chaque indicateur séléctionné génèrera un raster en sortie.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des indicateurs calculés :&lt;/h2&gt;%1</source>
+        <translation>Each selected indicator will generate a raster output.&lt;br&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of calculated indicators:&lt;/h2&gt;%1</translation>
+    </message>
+    <message>
+        <source>Points</source>
+        <translation>Points</translation>
+    </message>
+    <message>
+        <source>Groupe</source>
+        <translation>Group</translation>
+    </message>
+    <message>
+        <source>Raster Rouge</source>
+        <translation>Red raster</translation>
+    </message>
+    <message>
+        <source>Raster Vert</source>
+        <translation>Green Raster</translation>
+    </message>
+    <message>
+        <source>Raster Bleu</source>
+        <translation>Blue Raster</translation>
+    </message>
+    <message>
+        <source>Raster PIR</source>
+        <translation>NIR raster</translation>
+    </message>
+    <message>
+        <source>Raster Red Edge (optionnel)</source>
+        <translation>Red Edge raster (optional)</translation>
+    </message>
+    <message>
+        <source>Raster MIR (optionnel)</source>
+        <translation>MIR raster (optional)</translation>
     </message>
 </context>
 <context>
@@ -109,6 +215,14 @@
         <source>Il faut prendre garde à deux aspects lors de l&apos;utilisation des métriques de points.&lt;br&gt;&lt;br&gt;Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d&apos;entrée, sous peine d&apos;obtenir la valeur par défaut pour la métrique systématiquement.&lt;br&gt;Les métriques utilisant les attributs LAS, ont le mot clé LAS dans leur intitulé.&lt;br&gt;&lt;br&gt;Deuxièmement, les nuages de points sont originellement codés en altitude absolue. Mais il est fréquent de modifier ces nuages en soutrayant l&apos;altitude du sol, afin d&apos;obtenir des nuages de points en hauteur, où le relief est &quot;retiré&quot;.&lt;br&gt;Il est donc important de savoir si un nuage des points est en Altitude (Alti) ou en Hauteur (Ht).&lt;br&gt;&lt;ul&gt;&lt;li&gt;Certaines métriques sont indifférentes, et fonctionnent dans les deux cas.&lt;/li&gt;&lt;li&gt;D&apos;autres n&apos;ont de sens que pour un nuage en altitude&lt;/li&gt;&lt;li&gt;D&apos;autres n&apos;ont de sens que pour un nuage en hauteur&lt;/li&gt;&lt;/ul&gt;C&apos;est à l&apos;utilisateur de vérifier les métriques adaptées au nuage de points fourni. &lt;br&gt;Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alti, Ht ou les deux. S&apos;il n&apos;y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus).&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des métriques de points disponibles :&lt;/h2&gt;%1</source>
         <translation>There are two aspects to be aware of when using point metrics.&lt;br&gt;&lt;br&gt;Firstly, does the metric require the LAS attributes for its calculation? If so, these attributes must be selected in the input data, otherwise the default value for the metric will be obtained systematically.&lt;br&gt;The metrics using LAS attributes, have the keyword LAS in their title.&lt;br&gt;&lt;br&gt;Secondly, point clouds are originally coded in absolute altitude. But it is common to modify these clouds by substracting the ground elevation, in order to obtain point clouds in height, where the relief is &quot;removed&quot;.&lt;br&gt;It is therefore important to know whether a point cloud is in Altitude (Alti) or in Height (Ht).&lt;br&gt;&lt;ul&gt;&lt;li&gt;Some metrics are indifferent, and work in both cases.&lt;/li&gt;&lt;li&gt;Other metrics only make sense for an Altitude cloud&lt;/li&gt;&lt;li&gt;Other metrics only make sense for a Height cloud&lt;/li&gt;&lt;/ul&gt;It is up to the user to check which metrics are suitable for the point cloud provided. &lt;br&gt;To inform this choice, metric titles usually contain the keywords Alti, Ht or both. If there is no precision, the metric works a priori for both cases (in case of doubt refer to its description above).&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of available point metrics:&lt;/h2&gt;%1</translation>
     </message>
+    <message>
+        <source>Cette étape calcule les métriques de points séléctionnées.&lt;br&gt;&lt;br&gt;Dans Computree une &quot;métrique&quot; est un indicateur calculé sur un type de données précis. Les métriques de points sont calculées à partir d&apos;un nuage de points. A minima les coordonnées (x,y,z) des points, et dans certains cas d&apos;autres attributs issus du format standard LAS. De plus, une emprise peut optionnellement être fournie pour sélectionner les points à prendre en compte.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La description des métriques de points calculées&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This step calculates the selected point metrics.&lt;br&gt;&lt;br&gt;In Computree a &quot;metric&quot; is an indicator calculated on a specific type of data. Point metrics are calculated from a point cloud. At a minimum, the coordinates (x,y,z) of the points, and in some cases other attributes from the standard LAS format. In addition, an extent can optionally be provided to select the points to be taken into account.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The description of the point metrics calculated&lt;/a&gt; is provided at the end of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Il faut prendre garde à deux aspects lors de l&apos;utilisation des métriques de points.&lt;br&gt;&lt;br&gt;Premièrement, est-ce que la métrique nécessite les attributs LAS pour son calcul ? Si oui, il faut impérativement sélectionner ces attributs dans les données d&apos;entrée, sous peine d&apos;obtenir la valeur par défaut pour la métrique systématiquement.&lt;br&gt;Les métriques utilisant les attributs LAS, ont le mot clé LAS dans leur intitulé.&lt;br&gt;&lt;br&gt;Deuxièmement, les nuages de points sont originellement codés en altitude absolue. Mais il est fréquent de modifier ces nuages en soutrayant l&apos;altitude du sol, afin d&apos;obtenir des nuages de points en hauteur, où le relief est &quot;retiré&quot;.&lt;br&gt;Il est donc important de savoir si un nuage des points est en Altitude (Alti) ou en Hauteur (Ht).&lt;br&gt;&lt;ul&gt;&lt;li&gt;Certaines métriques sont indifférentes, et fonctionnent dans les deux cas.&lt;/li&gt;&lt;li&gt;D&apos;autres n&apos;ont de sens que pour un nuage en altitude&lt;/li&gt;&lt;li&gt;D&apos;autres n&apos;ont de sens que pour un nuage en hauteur&lt;/li&gt;&lt;/ul&gt;C&apos;est à l&apos;utilisateur de vérifier les métriques adaptées au nuage de points fourni. &lt;br&gt;Pour éclairer ce choix, les titres de métriques contiennent généralement les mots clé Alti, Ht ou les deux. S&apos;il n&apos;y a pas de précision, la métrique fonctionne a priori pour les deux cas (en cas de doute se reporter à sa description ci-dessus).&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des métriques de points calculées :&lt;/h2&gt;%1</source>
+        <translation>There are two aspects to be aware of when using point metrics.&lt;br&gt;&lt;br&gt;Firstly, does the metric require LAS attributes for its calculation? If so, it is essential to select these attributes in the input data, otherwise the default value for the metric will be obtained systematically.&lt;br&gt;The metrics using the LAS attributes have the keyword LAS in their title.&lt;br&gt;&lt;br&gt;Secondly, point clouds are originally coded in absolute altitude. But it is common to modify these clouds by supporting the altitude of the ground, in order to obtain point clouds in height, where the relief is &quot;removed&quot;.&lt;br&gt;It is therefore important to know whether a point cloud is in Altitude (Alti) or in Height (Ht).&lt;br&gt;&lt;ul&gt;&lt;li&gt;Some metrics do not matter, and work in both cases.&lt;/li&gt;&lt;li&gt;Others only make sense for a cloud in altitude&lt;/li&gt;&lt;li&gt;Others only make sense for a cloud in height&lt;/li&gt;&lt;/ul&gt;It is up to the user to check which metrics are suitable for the point cloud provided. &lt;br&gt;To help with this choice, metric titles generally contain the keywords Alti, Ht or both. If there is no precision, the metric works a priori for both cases (if in doubt, refer to its description above).&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of calculated point metrics:&lt;/h2&gt;%1</translation>
+    </message>
 </context>
 <context>
     <name>PB_StepComputeRasterMetrics</name>
@@ -142,7 +256,7 @@
     </message>
     <message>
         <source>Cette étape regroupe toutes les métriques de raster disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;Dans Computree une &quot;métrique&quot; est un indicateur calculé sur un type de données précis. Les métriques de raster sont calculées à partir raster (image 2D, où chaque pixel contient une valeur). Une emprise peut optionnellement être fournie pour sélectionner la partie du raster à prendre en compte.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des métriques de raster disponibles&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation>This step provides all the raster metrics available in the different active plugins.&lt;br&gt;&lt;br&gt;In Computree a &quot;metric&quot; is an indicator calculated on a specific type of data. Raster metrics are calculated from raster (2D image, where each pixel contains a value). An extent can optionally be provided to select the part of the raster to be considered.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of available raster metrics&lt;/a&gt; is provided in the last part of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+        <translation type="vanished">This step provides all the raster metrics available in the different active plugins.&lt;br&gt;&lt;br&gt;In Computree a &quot;metric&quot; is an indicator calculated on a specific type of data. Raster metrics are calculated from raster (2D image, where each pixel contains a value). An extent can optionally be provided to select the part of the raster to be considered.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of available raster metrics&lt;/a&gt; is provided in the last part of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <source>&lt;br&gt;&lt;br&gt;Toutes les métriques de raster prennent les mêmes données en entrée :&lt;br&gt;&lt;ul&gt;&lt;li&gt;Un raster à partir duquel les métriques sont calculées.&lt;/li&gt;&lt;li&gt;Optionnellement une emprise. Si elle est sélectionnée, seule la partie du raster incluse dans cette emprise est prise en compte pour le calcul.&lt;/li&gt;&lt;/ul&gt;</source>
@@ -155,6 +269,18 @@
     <message>
         <source>Attention : le comportement des métriques peut être influencé par la résolution des rasters fournis.&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Liste des métriques de raster disponibles :&lt;/h2&gt;%1</source>
         <translation>Warning: the behaviour of the metrics may be influenced by the resolution of the rasters provided.&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;List of available raster metrics:&lt;/h2&gt;%1</translation>
+    </message>
+    <message>
+        <source>Cette étape regroupe toutes les métriques de raster disponibles dans les différents plugins actifs.&lt;br&gt;&lt;br&gt;Dans Computree une &quot;métrique&quot; est un indicateur calculé sur un type de données précis. Les métriques de raster sont calculées à partir d&apos;un raster (image 2D, où chaque pixel contient une valeur). Une emprise peut optionnellement être fournie pour sélectionner la partie du raster à prendre en compte.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La liste des métriques de raster disponibles&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This step groups together all the raster metrics available in the various active plugins.&lt;br&gt;&lt;br&gt;In Computree a &quot;metric&quot; is an indicator calculated on a specific type of data. Raster metrics are calculated from a raster (2D image, where each pixel contains a value). An extent can optionally be provided to select the part of the raster to be taken into account.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The list of available raster metrics&lt;/a&gt; is provided at the end of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Cette étape calcule les métriques de raster séléctionnées.&lt;br&gt;&lt;br&gt;Dans Computree une &quot;métrique&quot; est un indicateur calculé sur un type de données précis. Les métriques de raster sont calculées à partir d&apos;un raster (image 2D, où chaque pixel contient une valeur). Une emprise peut optionnellement être fournie pour sélectionner la partie du raster à prendre en compte.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;La description des métriques de raster calculées&lt;/a&gt; est fournie en dernière partie de cette page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>This step calculates the selected raster metrics.&lt;br&gt;&lt;br&gt;In Computree a &quot;metric&quot; is an indicator calculated on a specific type of data. Raster metrics are calculated from a raster (2D image, where each pixel contains a value). An extent can optionally be provided to select the part of the raster to be taken into account.&lt;br&gt;&lt;br&gt;&lt;strong&gt;&lt;a href=&quot;#metricsList&quot;&gt;The description of the raster metrics calculated&lt;/a&gt; is provided in the last part of this page.&lt;/strong&gt;&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <source>Attention : le comportement des métriques peut être influencé par la résolution des rasters fournis.&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Description des métriques de raster calculées :&lt;/h2&gt;%1</source>
+        <translation>Warning: the behaviour of the metrics may be influenced by the resolution of the rasters supplied.&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;h2 id=&quot;metricsList&quot;&gt;Description of raster metrics calculated:&lt;/h2&gt;%1</translation>
     </message>
 </context>
 <context>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -27,7 +27,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <source> de l'exporteur %1</source>
+        <source> de l&apos;exporteur %1</source>
         <translation> of the exporter %1</translation>
     </message>
 </context>
