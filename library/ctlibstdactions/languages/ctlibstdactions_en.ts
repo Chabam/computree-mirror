@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -8,7 +8,7 @@
         <translation>Selection</translation>
     </message>
     <message>
-        <source>Sélection d&apos;éléments</source>
+        <source>Sélection d'éléments</source>
         <translation>Elements selection</translation>
     </message>
 </context>
@@ -27,11 +27,11 @@
         <translation>...</translation>
     </message>
     <message>
-        <source>Sélectionner de multiple éléments à l&apos;aide d&apos;un rectangle</source>
+        <source>Sélectionner de multiple éléments à l'aide d'un rectangle</source>
         <translation>Selecting multiple elements with a rectangle</translation>
     </message>
     <message>
-        <source>Sélectionner de multiple éléments à l&apos;aide d&apos;un polygon</source>
+        <source>Sélectionner de multiple éléments à l'aide d'un polygon</source>
         <translation>Selecting multiple elements using a polygon</translation>
     </message>
     <message>
@@ -86,7 +86,7 @@
 <context>
     <name>PB_ActionPickItemsInList</name>
     <message>
-        <source>Picking d&apos;item</source>
+        <source>Picking d'item</source>
         <translation>Item Picking</translation>
     </message>
 </context>
@@ -136,11 +136,11 @@
         <translation>Item Information</translation>
     </message>
     <message>
-        <source>Action qui affiche les données de l&apos;Item sélectionné.</source>
+        <source>Action qui affiche les données de l'Item sélectionné.</source>
         <translation>Action that displays the data of the selected item.</translation>
     </message>
     <message>
-        <source>Informations sur l&apos;item sélectionné :&lt;br&gt;</source>
+        <source>Informations sur l'item sélectionné :&lt;br&gt;</source>
         <translation>Information on the selected item:&lt;br&gt;</translation>
     </message>
     <message>
@@ -160,7 +160,7 @@
         <translation>Number of selected faces = %1</translation>
     </message>
     <message>
-        <source>Nombre d&apos;arêtes sélectionnés = %1</source>
+        <source>Nombre d'arêtes sélectionnés = %1</source>
         <translation>Number of selected edges = %1</translation>
     </message>
 </context>

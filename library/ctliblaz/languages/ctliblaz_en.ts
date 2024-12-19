@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -24,7 +24,7 @@
         <translation>Item to be exported</translation>
     </message>
     <message>
-        <source>Conteneur d&apos;attributs LAS</source>
+        <source>Conteneur d'attributs LAS</source>
         <translation>LAS attribute container</translation>
     </message>
     <message>
@@ -119,11 +119,11 @@
 <context>
     <name>CT_LASZIP_Reader</name>
     <message>
-        <source>CT_LASZIP_Reader : impossible d&apos;accéder au fichier %1</source>
+        <source>CT_LASZIP_Reader : impossible d'accéder au fichier %1</source>
         <translation>CT_LASZIP_Reader: unable to access file %1</translation>
     </message>
     <message>
-        <source>CT_LASZIP_Reader : impossible d&apos;ouvrir le fichier %1</source>
+        <source>CT_LASZIP_Reader : impossible d'ouvrir le fichier %1</source>
         <translation>CT_LASZIP_Reader: unable to open file %1</translation>
     </message>
     <message>
@@ -147,14 +147,14 @@
         <translation>CT_LASZIP_Reader: unable to clean file %1</translation>
     </message>
     <message>
-        <source>CT_LASZIP_Reader : impossible de libérer l&apos;accès au fichier %1</source>
+        <source>CT_LASZIP_Reader : impossible de libérer l'accès au fichier %1</source>
         <translation>CT_LASZIP_Reader: unable to release access to file %1</translation>
     </message>
 </context>
 <context>
     <name>CT_LAZHeader</name>
     <message>
-        <source>Impossible de lire l&apos;en-tête du fichier</source>
+        <source>Impossible de lire l'en-tête du fichier</source>
         <translation type="vanished">Unable to read the file header</translation>
     </message>
 </context>
@@ -169,11 +169,11 @@
         <translation type="vanished">Unable to load the LASZIP header</translation>
     </message>
     <message>
-        <source>Impossible d&apos;ouvrir le fichier LASZIP en écriture</source>
+        <source>Impossible d'ouvrir le fichier LASZIP en écriture</source>
         <translation type="vanished">Unable to open LASZIP file for writing</translation>
     </message>
     <message>
-        <source>Problème lors de l&apos;écriture de l&apos;en-tête du fichier. %1</source>
+        <source>Problème lors de l'écriture de l'en-tête du fichier. %1</source>
         <translation>Problem writing the file header. %1</translation>
     </message>
     <message>
@@ -181,7 +181,7 @@
         <translation type="vanished">Unable to copy the point to the writer</translation>
     </message>
     <message>
-        <source>Impossible d&apos;écrire le point dans le fichier</source>
+        <source>Impossible d'écrire le point dans le fichier</source>
         <translation type="vanished">Unable to write the point to the file</translation>
     </message>
     <message>
@@ -197,7 +197,7 @@
         <translation>Export of file %1 completed</translation>
     </message>
     <message>
-        <source>Erreur lors de l&apos;ouverture en écriture du fichier %1</source>
+        <source>Erreur lors de l'ouverture en écriture du fichier %1</source>
         <translation>Error opening file %1 for writing</translation>
     </message>
 </context>
@@ -300,7 +300,7 @@
         <translation>NIR</translation>
     </message>
     <message>
-        <source>Impossible de lire l&apos;en-tête du fichier %1</source>
+        <source>Impossible de lire l'en-tête du fichier %1</source>
         <translation type="vanished">Unable to read file header %1</translation>
     </message>
     <message>
@@ -336,7 +336,7 @@
         <translation>No points contained in the files.</translation>
     </message>
     <message>
-        <source>Impossible de lire l&apos;en-tête du fichier (null) %1</source>
+        <source>Impossible de lire l'en-tête du fichier (null) %1</source>
         <translation>Unable to read file header (null) %1</translation>
     </message>
     <message>
@@ -348,7 +348,7 @@
         <translation>CT_Reader_LAZ::internalReadFile : Unable to read points</translation>
     </message>
     <message>
-        <source>CT_Reader_LAZ::getPointIndicesInside2DShape : Impossible de lire l&apos;en-tête du fichier %1</source>
+        <source>CT_Reader_LAZ::getPointIndicesInside2DShape : Impossible de lire l'en-tête du fichier %1</source>
         <translation>CT_Reader_LAZ::getPointIndicesInside2DShape : Unable to read file header %1</translation>
     </message>
     <message>
@@ -363,24 +363,24 @@
         <translation>The offset to the start of points data (%1) is smaller than the header size (%2).</translation>
     </message>
     <message>
-        <source>Impossible d&apos;ouvrir le fichier &quot;%1&quot; en écriture.</source>
-        <translation>Unable to write to file &quot;%1&quot;.</translation>
+        <source>Impossible d'ouvrir le fichier "%1" en écriture.</source>
+        <translation>Unable to write to file "%1".</translation>
     </message>
     <message>
-        <source>Impossible d&apos;écrire l&apos;en-tête dans le fichier &quot;%1&quot;. %2</source>
-        <translation>Unable to write header to file &quot;%1&quot;. %2</translation>
+        <source>Impossible d'écrire l'en-tête dans le fichier "%1". %2</source>
+        <translation>Unable to write header to file "%1". %2</translation>
     </message>
     <message>
-        <source>Impossible de lire le fichier &quot;%1&quot;.</source>
-        <translation>Unable to read file &quot;%1&quot;.</translation>
+        <source>Impossible de lire le fichier "%1".</source>
+        <translation>Unable to read file "%1".</translation>
     </message>
     <message>
-        <source>Impossible de lire l&apos;en-tête du fichier &quot;%1&quot;. %2</source>
-        <translation>Unable to read the header of file &quot;%1&quot;. %2</translation>
+        <source>Impossible de lire l'en-tête du fichier "%1". %2</source>
+        <translation>Unable to read the header of file "%1". %2</translation>
     </message>
     <message>
-        <source>L&apos;en-tête du fichier &quot;%1&quot; n&apos;est pas compatible avec l&apos;en-tête du fichier &quot;%2&quot;</source>
-        <translation>The header of file &quot;%1&quot; is not compatible with the header of file &quot;%2&quot;.</translation>
+        <source>L'en-tête du fichier "%1" n'est pas compatible avec l'en-tête du fichier "%2"</source>
+        <translation>The header of file "%1" is not compatible with the header of file "%2".</translation>
     </message>
 </context>
 </TS>

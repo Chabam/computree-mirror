@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -20,7 +20,7 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_ascrgb.cpp" line="131"/>
-        <source>Le fichier %1 n&apos;a pas le bon format (colonnes manquantes).</source>
+        <source>Le fichier %1 n'a pas le bon format (colonnes manquantes).</source>
         <translation>The %1 file has the wrong format (missing columns).</translation>
     </message>
     <message>
@@ -40,12 +40,12 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_ascrgb.cpp" line="226"/>
-        <source>Le fichier %1 n&apos;est pas accessible.</source>
+        <source>Le fichier %1 n'est pas accessible.</source>
         <translation>The file %1 is not accessible.</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_ascrgb.cpp" line="229"/>
-        <source>Le fichier %1 n&apos;existe pas.</source>
+        <source>Le fichier %1 n'existe pas.</source>
         <translation>The file %1 does not exist.</translation>
     </message>
 </context>
@@ -58,7 +58,7 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_asciigrid3d.cpp" line="33"/>
-        <source>Chargement d&apos;une grille 3D depuis un fichier ASCII (format inspiré du format raster ESRI GRID).</source>
+        <source>Chargement d'une grille 3D depuis un fichier ASCII (format inspiré du format raster ESRI GRID).</source>
         <translation>Loading a 3D grid from an ASCII file (format inspired by the ESRI GRID raster format).</translation>
     </message>
     <message>
@@ -73,30 +73,30 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_asciigrid3d.cpp" line="264"/>
-        <source>Read header of file &quot;%1&quot;</source>
-        <translation>Read header of file &quot;%1&quot;</translation>
+        <source>Read header of file "%1"</source>
+        <translation>Read header of file "%1"</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_asciigrid3d.cpp" line="299"/>
-        <source>Data type &quot;%1&quot; founded in header</source>
-        <translation>Data type &quot;%1&quot; founded in header</translation>
+        <source>Data type "%1" founded in header</source>
+        <translation>Data type "%1" founded in header</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_asciigrid3d.cpp" line="301"/>
-        <source>Unable to read the data type &quot;%1&quot; founded at line %2. Create a grid of &quot;float&quot; by default.</source>
-        <translation>Unable to read the data type &quot;%1&quot; founded at line %2. Create a grid of type &quot;float&quot; by default.</translation>
+        <source>Unable to read the data type "%1" founded at line %2. Create a grid of "float" by default.</source>
+        <translation>Unable to read the data type "%1" founded at line %2. Create a grid of type "float" by default.</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_asciigrid3d.cpp" line="313"/>
-        <source>Data type defined as &quot;%1&quot; (by intuition). If you want to force the data type you must insert the string &quot;datatype XXXX&quot; at line %2 (line after the NODATA_value). XXXX must be replaced by &quot;%3&quot; for int, &quot;%4&quot; for float, &quot;%5&quot; for bool, etc...</source>
-        <translation>Data type defined as &quot;%1&quot; (by intuition). If you want to force the data type you must insert the string &quot;datatype XXXX&quot; at line %2 (line after the NODATA_value). XXXX must be replaced by &quot;%3&quot; for int, &quot;%4&quot; for float, &quot;%5&quot; for bool, etc...</translation>
+        <source>Data type defined as "%1" (by intuition). If you want to force the data type you must insert the string "datatype XXXX" at line %2 (line after the NODATA_value). XXXX must be replaced by "%3" for int, "%4" for float, "%5" for bool, etc...</source>
+        <translation>Data type defined as "%1" (by intuition). If you want to force the data type you must insert the string "datatype XXXX" at line %2 (line after the NODATA_value). XXXX must be replaced by "%3" for int, "%4" for float, "%5" for bool, etc...</translation>
     </message>
 </context>
 <context>
     <name>CT_Reader_CTIndex</name>
     <message>
         <location filename="../readers/ct_reader_ctindex.cpp" line="18"/>
-        <source>Fichiers d&apos;indexation de points CTI</source>
+        <source>Fichiers d'indexation de points CTI</source>
         <translation>CTI point index files</translation>
     </message>
     <message>
@@ -125,13 +125,13 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_ctindex.cpp" line="243"/>
-        <source>Impossible de lire l&apos;en-tête du fichier %1</source>
+        <source>Impossible de lire l'en-tête du fichier %1</source>
         <translation>Unable to read file header %1</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_ctindex.cpp" line="342"/>
-        <source>Reader for %1 wasn&apos;t created properly.</source>
-        <translation>Reader for %1 wasn&apos;t created properly.</translation>
+        <source>Reader for %1 wasn't created properly.</source>
+        <translation>Reader for %1 wasn't created properly.</translation>
     </message>
 </context>
 <context>
@@ -206,7 +206,7 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_idxyz.cpp" line="45"/>
-        <source>Le fichier %1 n&apos;a pas le bon format (colonnes manquantes).</source>
+        <source>Le fichier %1 n'a pas le bon format (colonnes manquantes).</source>
         <translation>The %1 file has the wrong format (missing columns).</translation>
     </message>
     <message>
@@ -231,12 +231,12 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_idxyz.cpp" line="176"/>
-        <source>Le fichier %1 n&apos;est pas accessible.</source>
+        <source>Le fichier %1 n'est pas accessible.</source>
         <translation>The file %1 is not accessible.</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_idxyz.cpp" line="179"/>
-        <source>Le fichier %1 n&apos;existe pas.</source>
+        <source>Le fichier %1 n'existe pas.</source>
         <translation>The file %1 does not exist.</translation>
     </message>
 </context>
@@ -294,12 +294,12 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_larchitect_grid.cpp" line="155"/>
-        <source>Pas d&apos;index bois dans le fichier</source>
+        <source>Pas d'index bois dans le fichier</source>
         <translation>No wood index in the file</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_larchitect_grid.cpp" line="156"/>
-        <source>Pas d&apos;index feuille dans le fichier</source>
+        <source>Pas d'index feuille dans le fichier</source>
         <translation>No leaf index in the file</translation>
     </message>
     <message>
@@ -360,7 +360,7 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_opf.cpp" line="23"/>
-        <source>Charge un fichier décrivant l&apos;architecture de végétaux au format OPF, créé par le logiciel AMAPStudio.&lt;br&gt;http://amapstudio.cirad.fr</source>
+        <source>Charge un fichier décrivant l'architecture de végétaux au format OPF, créé par le logiciel AMAPStudio.&lt;br&gt;http://amapstudio.cirad.fr</source>
         <translation>Loads a file describing the plant architecture in OPF format, created by the AMAPStudio software.&lt;br&gt;https://amapstudio.cirad.fr</translation>
     </message>
     <message>
@@ -413,8 +413,8 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_ply.cpp" line="71"/>
-        <source>L&apos;en-tête du fichier &quot;%1&quot; n&apos;est pas formé correctement.</source>
-        <translation>The header of file &quot;%1&quot; is not formed correctly.</translation>
+        <source>L'en-tête du fichier "%1" n'est pas formé correctement.</source>
+        <translation>The header of file "%1" is not formed correctly.</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_ply.cpp" line="216"/>
@@ -499,7 +499,7 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_points_ascii.cpp" line="57"/>
-        <source>Chargement d&apos;un fichier de points au format ASCII.&lt;br&gt;L&apos;import est configurable, le fichier devant contenir les champs suivants :&lt;br&gt;- X      : Coordonnée X du points&lt;br&gt;- Y      : Coordonnée Y du point&lt;br&gt;- Z      : Coordonnée Y du point&lt;br&gt;&lt;br&gt;De plus les champs suivants peuvent être fournis mais sont optionnels :&lt;br&gt;- Intensité      : Intensité du point&lt;br&gt;- Rouge          : Composante rouge du point&lt;br&gt;- Vert           : Composante verte du point&lt;br&gt;- Bleu           : Composante bleue du point&lt;br&gt;- Normale X      : Coordonnée Y de la normale au point&lt;br&gt;- Normale Y      : Coordonnée Y de la normale au point&lt;br&gt;- Normale Z      : Coordonnée Y de la normale au point&lt;br&gt;</source>
+        <source>Chargement d'un fichier de points au format ASCII.&lt;br&gt;L'import est configurable, le fichier devant contenir les champs suivants :&lt;br&gt;- X      : Coordonnée X du points&lt;br&gt;- Y      : Coordonnée Y du point&lt;br&gt;- Z      : Coordonnée Y du point&lt;br&gt;&lt;br&gt;De plus les champs suivants peuvent être fournis mais sont optionnels :&lt;br&gt;- Intensité      : Intensité du point&lt;br&gt;- Rouge          : Composante rouge du point&lt;br&gt;- Vert           : Composante verte du point&lt;br&gt;- Bleu           : Composante bleue du point&lt;br&gt;- Normale X      : Coordonnée Y de la normale au point&lt;br&gt;- Normale Y      : Coordonnée Y de la normale au point&lt;br&gt;- Normale Z      : Coordonnée Y de la normale au point&lt;br&gt;</source>
         <translation>Loading a point file in ASCII format.&lt;br&gt;The import is configurable, the file must contain the following fields:&lt;br&gt;- X: X coordinate of the point&lt;br&gt;- Y: Y coordinate of the point&lt;br&gt;- Z: Y coordinate of the point&lt;br&gt;&lt;br&gt;In addition the following fields can be provided but are optional:&lt;br&gt;- Intensity: Intensity of the point&lt;br&gt;- Red: Red component of the point&lt;br&gt;- Green: Green component of the point&lt;br&gt;- Blue: Blue component of the point&lt;br&gt;- X-normal: Y-coordinate of the point normal&lt;br&gt;- Y-normal: Y-coordinate of the point normal&lt;br&gt;- Z-normal: Y-coordinate of the point normal&lt;br&gt;</translation>
     </message>
     <message>
@@ -577,7 +577,7 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_trj.cpp" line="126"/>
-        <source>Impossible de lire l&apos;en-tête du fichier %1</source>
+        <source>Impossible de lire l'en-tête du fichier %1</source>
         <translation>Unable to read file header %1</translation>
     </message>
 </context>
@@ -590,7 +590,7 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_terrascanprj.cpp" line="11"/>
-        <source>Charge un fichier d&apos;emprises de dalles (LIDAR), au format TerraScan PRJ</source>
+        <source>Charge un fichier d'emprises de dalles (LIDAR), au format TerraScan PRJ</source>
         <translation>Loads a footprint file (LIDAR), in TerraScan PRJ format</translation>
     </message>
     <message>
@@ -618,7 +618,7 @@
     </message>
     <message>
         <location filename="../readers/ct_reader_trajectory.cpp" line="29"/>
-        <source>Chargement d&apos;un fichier de trajectoire au format ASCII.&lt;br&gt;L&apos;import est configurable, le fichier devant contenir les champs suivants :&lt;br&gt;- X          : Coordonnée X du points&lt;br&gt;- Y          : Coordonnée Y du point&lt;br&gt;- Z          : Coordonnée Y du point&lt;br&gt;&lt;br&gt;- GPSTime    : Temps GPS du point&lt;br&gt;</source>
+        <source>Chargement d'un fichier de trajectoire au format ASCII.&lt;br&gt;L'import est configurable, le fichier devant contenir les champs suivants :&lt;br&gt;- X          : Coordonnée X du points&lt;br&gt;- Y          : Coordonnée Y du point&lt;br&gt;- Z          : Coordonnée Y du point&lt;br&gt;&lt;br&gt;- GPSTime    : Temps GPS du point&lt;br&gt;</source>
         <translation>Loading a trajectory file in ASCII format.&lt;br&gt;The import is configurable, the file must contain the following fields:&lt;br&gt;- X: X coordinate of the point&lt;br&gt;- Y: Y coordinate of the point&lt;br&gt;- Z: Y coordinate of the point&lt;br&gt;&lt;br&gt;- GPSTime: GPS time of the point&lt;br&gt;</translation>
     </message>
     <message>
@@ -855,7 +855,7 @@
     <name>PBG_CSVConfigurationDialog</name>
     <message>
         <location filename="../views/exporters/csv/pbg_csvconfigurationdialog.ui" line="14"/>
-        <source>Configuration de l&apos;exportation</source>
+        <source>Configuration de l'exportation</source>
         <translation>Export configuration</translation>
     </message>
 </context>
@@ -899,7 +899,7 @@
     </message>
     <message>
         <location filename="../exporters/ascid/pb_ascidexporter.cpp" line="14"/>
-        <source>Exporte les points au format ASCII. Tous les items contenant des points sont exportés dans le même fichier, avec les champs suivants :&lt;br&gt;- ID : ID Computree de l&apos;item contenant le point&lt;br&gt;- X  : Coordonnée X&lt;br&gt;- Y  : Coordonnée Y&lt;br&gt;- Z  : Coordonnée Z&lt;br&gt;</source>
+        <source>Exporte les points au format ASCII. Tous les items contenant des points sont exportés dans le même fichier, avec les champs suivants :&lt;br&gt;- ID : ID Computree de l'item contenant le point&lt;br&gt;- X  : Coordonnée X&lt;br&gt;- Y  : Coordonnée Y&lt;br&gt;- Z  : Coordonnée Z&lt;br&gt;</source>
         <translation>Exports points in ASCII format. All items containing points are exported in the same file, with the following fields:&lt;br&gt;- ID: Computree ID of the item containing the point&lt;br&gt;- X: X coordinate&lt;br&gt;- Y: Y coordinate&lt;br&gt;- Z: Z coordinate&lt;br&gt;</translation>
     </message>
     <message>
@@ -1006,18 +1006,18 @@
     </message>
     <message>
         <location filename="../exporters/csv/pb_csvexporter.cpp" line="22"/>
-        <source>Exporte tous les attributs d&apos;un niveau d&apos;items (une ligne pour chaque instance d&apos;item)</source>
+        <source>Exporte tous les attributs d'un niveau d'items (une ligne pour chaque instance d'item)</source>
         <translation>Exports all attributes of an item level (one row for each item instance)</translation>
     </message>
     <message>
         <location filename="../exporters/csv/pb_csvexporter.cpp" line="40"/>
-        <source>Export d&apos;attributs (csv)</source>
+        <source>Export d'attributs (csv)</source>
         <translation>Export of attributes (csv)</translation>
     </message>
     <message>
         <location filename="../exporters/csv/pb_csvexporter.cpp" line="98"/>
-        <source>La méthode &quot;setItemsToExport(...)&quot; n&apos;a pas été appelée avant de restaurer la configuration de l&apos;exporter CSV.</source>
-        <translation>The &quot;setItemsToExport(...)&quot; method was not called before restoring the CSV export configuration.</translation>
+        <source>La méthode "setItemsToExport(...)" n'a pas été appelée avant de restaurer la configuration de l'exporter CSV.</source>
+        <translation>The "setItemsToExport(...)" method was not called before restoring the CSV export configuration.</translation>
     </message>
     <message>
         <location filename="../exporters/csv/pb_csvexporter.cpp" line="138"/>
@@ -1168,12 +1168,12 @@
     </message>
     <message>
         <location filename="../exporters/groupdata/pb_groupdataexporter.cpp" line="13"/>
-        <source>Exporte tous les attributs de TOUS LES ITEMS d&apos;un niveau ou plusieurs niveaux de groupes.&lt;br&gt;Un fichier table ASCII est produit pour chaque niveau de groupe séléctionné.&lt;br&gt;Dans chaque table, il y a une ligne par instance de groupe.&lt;br&gt;Dans chaque table :&lt;br&gt;- une première ligne d&apos;entête donne le nom des items contenus dans le groupe,&lt;br&gt;- une seconde  ligne d&apos;entête donne le nom de l&apos;attribut dans l&apos;item.&lt;br&gt;De plus les deux premières colonnes de chaque table permettent de faire des jointures entre niveaux de groupes :&lt;br&gt;- GroupID  : identifiant Computree des groupes décris dans la table en cours,&lt;br&gt;- ParentID : identifiant Computree des groupes parents, contenant les groupes de la table.</source>
+        <source>Exporte tous les attributs de TOUS LES ITEMS d'un niveau ou plusieurs niveaux de groupes.&lt;br&gt;Un fichier table ASCII est produit pour chaque niveau de groupe séléctionné.&lt;br&gt;Dans chaque table, il y a une ligne par instance de groupe.&lt;br&gt;Dans chaque table :&lt;br&gt;- une première ligne d'entête donne le nom des items contenus dans le groupe,&lt;br&gt;- une seconde  ligne d'entête donne le nom de l'attribut dans l'item.&lt;br&gt;De plus les deux premières colonnes de chaque table permettent de faire des jointures entre niveaux de groupes :&lt;br&gt;- GroupID  : identifiant Computree des groupes décris dans la table en cours,&lt;br&gt;- ParentID : identifiant Computree des groupes parents, contenant les groupes de la table.</source>
         <translation>Exports all attributes of ALL ITEMS of one or more group levels.&lt;br&gt;An ASCII table file is produced for each selected group level.&lt;br&gt;In each table, there is one row per group instance.&lt;br&gt;In each table:&lt;br&gt;- a first header row gives the name of the items contained in the group,&lt;br&gt;- a second header row gives the name of the attribute in the item.&lt;br&gt;In addition, the first two columns of each table allow joins to be made between levels of groups:&lt;br&gt;- GroupID: Computree identifier of the groups described in the current table,&lt;br&gt;- ParentID: Computree identifier of the parent groups, containing the groups in the table.</translation>
     </message>
     <message>
         <location filename="../exporters/groupdata/pb_groupdataexporter.cpp" line="31"/>
-        <source>Export des attributs des items d&apos;un groupe</source>
+        <source>Export des attributs des items d'un groupe</source>
         <translation>Export of attributes of items in a group</translation>
     </message>
     <message>
@@ -1214,7 +1214,7 @@
     </message>
     <message>
         <location filename="../exporters/topology/pb_opfexporter.cpp" line="27"/>
-        <source>Exporte une topologie décrivant l&apos;architecture de végétaux dans un fichier au format OPF, pour utilisation par le logiciel AMAPStudio.&lt;br&gt;http://amapstudio.cirad.fr</source>
+        <source>Exporte une topologie décrivant l'architecture de végétaux dans un fichier au format OPF, pour utilisation par le logiciel AMAPStudio.&lt;br&gt;http://amapstudio.cirad.fr</source>
         <translation>Exports a topology describing the plant architecture to an OPF file for use by AMAPStudio software.http://amapstudio.cirad.fr</translation>
     </message>
     <message>
@@ -1260,7 +1260,7 @@
     </message>
     <message>
         <location filename="../exporters/profile/pb_profileexporter.cpp" line="8"/>
-        <source>Export de profils au format ASCII (1 fichier par profil).&lt;br&gt;Le fichier comporte d&apos;abord une entête inspirée du format ASCII ESRI GRID pour les rasters, décrivant l&apos;origine, la direction et la résolution du profil.&lt;br&gt;Ensuite, une table fournit les champs suivants :&lt;br&gt;- Level : Numéro de la cellule dans le profil&lt;br&gt;- Length : Longueur correspondant au centre de la cellule le long du profil&lt;br&gt;- Xc : Coordonnée X du centre de la cellule&lt;br&gt;- Yc : Coordonnée Y du centre de la cellule&lt;br&gt;- Zc : Coordonnée Z du centre de la cellule&lt;br&gt;- Value : Valeur de la cellule</source>
+        <source>Export de profils au format ASCII (1 fichier par profil).&lt;br&gt;Le fichier comporte d'abord une entête inspirée du format ASCII ESRI GRID pour les rasters, décrivant l'origine, la direction et la résolution du profil.&lt;br&gt;Ensuite, une table fournit les champs suivants :&lt;br&gt;- Level : Numéro de la cellule dans le profil&lt;br&gt;- Length : Longueur correspondant au centre de la cellule le long du profil&lt;br&gt;- Xc : Coordonnée X du centre de la cellule&lt;br&gt;- Yc : Coordonnée Y du centre de la cellule&lt;br&gt;- Zc : Coordonnée Z du centre de la cellule&lt;br&gt;- Value : Valeur de la cellule</source>
         <translation>Export of profiles in ASCII format (1 file per profile).&lt;br&gt;The file first includes a header inspired by the ESRI GRID ASCII format for rasters, describing the origin, direction and resolution of the profile.&lt;br&gt;Next, a table provides the following fields:&lt;br&gt;- Level : Number of the cell in the profile&lt;br&gt;- Length : Length corresponding to the centre of the cell along the profile&lt;br&gt;- Xc : X coordinate of the cell centre&lt;br&gt;- Yc : Y coordinate of the cell centre&lt;br&gt;- Zc : Z coordinate of the cell centre&lt;br&gt;- Value : Value of the cell</translation>
     </message>
     <message>
@@ -1324,8 +1324,8 @@
     <name>QObject</name>
     <message>
         <location filename="../readers/ct_reader_asciigrid3d.cpp" line="5"/>
-        <source>Line %1 must begin with &quot;%2&quot; but we read : &quot;%3&quot;</source>
-        <translation>Line %1 must begin with &quot;%2&quot; but we read : &quot;%3&quot;</translation>
+        <source>Line %1 must begin with "%2" but we read : "%3"</source>
+        <translation>Line %1 must begin with "%2" but we read : "%3"</translation>
     </message>
     <message>
         <location filename="../readers/ct_reader_asciigrid3d.cpp" line="6"/>
@@ -1519,8 +1519,8 @@
     </message>
     <message>
         <location filename="../tools/ct_configurableelementtools.h" line="132"/>
-        <source>&lt;h3&gt;%2&lt;/h3&gt;&lt;div class=&quot;descBlocklvl2&quot;&gt;&lt;strong&gt;Plugin&lt;/strong&gt; : %5, &lt;strong&gt;Nom de classe&lt;/strong&gt; : %1&lt;br&gt;&lt;br&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;br&gt;&lt;br&gt;%3&lt;br&gt;&lt;br&gt;%6%4&lt;/div&gt;</source>
-        <translation>&lt;h3&gt;%2&lt;/h3&gt;&lt;div class=&quot;descBlocklvl2&quot;&gt;&lt;strong&gt;Plugin&lt;/strong&gt;: %5, &lt;strong&gt;Class name&lt;/strong&gt;: %1&lt;br&gt;&lt;br&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;br&gt;&lt;br&gt;%3&lt;br&gt;&lt;br&gt;%6%4&lt;/div&gt;</translation>
+        <source>&lt;h3&gt;%2&lt;/h3&gt;&lt;div class="descBlocklvl2"&gt;&lt;strong&gt;Plugin&lt;/strong&gt; : %5, &lt;strong&gt;Nom de classe&lt;/strong&gt; : %1&lt;br&gt;&lt;br&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;br&gt;&lt;br&gt;%3&lt;br&gt;&lt;br&gt;%6%4&lt;/div&gt;</source>
+        <translation>&lt;h3&gt;%2&lt;/h3&gt;&lt;div class="descBlocklvl2"&gt;&lt;strong&gt;Plugin&lt;/strong&gt;: %5, &lt;strong&gt;Class name&lt;/strong&gt;: %1&lt;br&gt;&lt;br&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;br&gt;&lt;br&gt;%3&lt;br&gt;&lt;br&gt;%6%4&lt;/div&gt;</translation>
     </message>
     <message>
         <location filename="../tools/ct_configurableelementtools.h" line="146"/>

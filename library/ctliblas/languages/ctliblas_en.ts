@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
     <name>CT_AbstractFilter_LAS</name>
     <message>
-        <source>Pas d&apos;informations LAS pour %1 points : points non conservés</source>
+        <source>Pas d'informations LAS pour %1 points : points non conservés</source>
         <translation>No LAS information for %1 points: points not retained</translation>
     </message>
 </context>
@@ -31,7 +31,7 @@
         <translation>Item to be exported</translation>
     </message>
     <message>
-        <source>Conteneur d&apos;attributs LAS</source>
+        <source>Conteneur d'attributs LAS</source>
         <translation>LAS attribute container</translation>
     </message>
     <message>
@@ -122,11 +122,11 @@
 <context>
     <name>CT_LASPieceByPiecePrivateExporter</name>
     <message>
-        <source>Problème lors de l&apos;écriture de l&apos;en-tête du fichier. %1</source>
+        <source>Problème lors de l'écriture de l'en-tête du fichier. %1</source>
         <translation>Problem writing the file header. %1</translation>
     </message>
     <message>
-        <source>Erreur lors de l&apos;ouverture en écriture du fichier %1</source>
+        <source>Erreur lors de l'ouverture en écriture du fichier %1</source>
         <translation>Error opening file %1 for writing</translation>
     </message>
     <message>
@@ -233,7 +233,7 @@
         <translation>NIR</translation>
     </message>
     <message>
-        <source>Impossible de lire l&apos;en-tête du fichier %1</source>
+        <source>Impossible de lire l'en-tête du fichier %1</source>
         <translation>Unable to read file header %1</translation>
     </message>
     <message>
@@ -260,32 +260,32 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Impossible de lire le fichier &quot;%1&quot;.</source>
-        <translation>Unable to read file &quot;%1&quot;.</translation>
+        <source>Impossible de lire le fichier "%1".</source>
+        <translation>Unable to read file "%1".</translation>
     </message>
     <message>
-        <source>Impossible d&apos;écrire l&apos;en-tête dans le fichier &quot;%1&quot;. %2</source>
-        <translation>Unable to write header to file &quot;%1&quot;. %2</translation>
+        <source>Impossible d'écrire l'en-tête dans le fichier "%1". %2</source>
+        <translation>Unable to write header to file "%1". %2</translation>
     </message>
     <message>
-        <source>Impossible d&apos;ouvrir le fichier &quot;%1&quot; en écriture.</source>
-        <translation>Unable to open file &quot;%1&quot; for writing.</translation>
+        <source>Impossible d'ouvrir le fichier "%1" en écriture.</source>
+        <translation>Unable to open file "%1" for writing.</translation>
     </message>
     <message>
-        <source>(Impossible de lire l&apos;en-tête du fichier &quot;%1&quot;. %2</source>
-        <translation>(Unable to read the header of file &quot;%1&quot;. %2</translation>
+        <source>(Impossible de lire l'en-tête du fichier "%1". %2</source>
+        <translation>(Unable to read the header of file "%1". %2</translation>
     </message>
     <message>
-        <source>Impossible d&apos;ouvrir le fichier &quot;%1&quot;</source>
-        <translation>Unable to open file &quot;%1&quot;</translation>
+        <source>Impossible d'ouvrir le fichier "%1"</source>
+        <translation>Unable to open file "%1"</translation>
     </message>
     <message>
-        <source>L&apos;en-tête du fichier &quot;%1&quot; n&apos;est pas compatible avec l&apos;en-tête du fichier &quot;%2&quot;</source>
-        <translation>The header of file &quot;%1&quot; is not compatible with the header of file &quot;%2</translation>
+        <source>L'en-tête du fichier "%1" n'est pas compatible avec l'en-tête du fichier "%2"</source>
+        <translation>The header of file "%1" is not compatible with the header of file "%2</translation>
     </message>
     <message>
-        <source>Impossible de lire l&apos;en-tête du fichier &quot;%1&quot;. %2</source>
-        <translation>Unable to read the header of file &quot;%1&quot;. %2</translation>
+        <source>Impossible de lire l'en-tête du fichier "%1". %2</source>
+        <translation>Unable to read the header of file "%1". %2</translation>
     </message>
     <message>
         <source>File Signature invalid</source>

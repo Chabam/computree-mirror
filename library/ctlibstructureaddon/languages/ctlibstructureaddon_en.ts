@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -18,23 +18,23 @@
 <context>
     <name>CT_ReferencePoint</name>
     <message>
-        <source>setCenterX n&apos;a aucun aucun effet dans le cas d&apos;un CT_ReferencePoint</source>
+        <source>setCenterX n'a aucun aucun effet dans le cas d'un CT_ReferencePoint</source>
         <translation>setCenterX has no effect in the case of a CT_ReferencePoint</translation>
     </message>
     <message>
-        <source>setCenterY n&apos;a aucun aucun effet dans le cas d&apos;un CT_ReferencePoint</source>
+        <source>setCenterY n'a aucun aucun effet dans le cas d'un CT_ReferencePoint</source>
         <translation>setCenterY has no effect in the case of a CT_ReferencePoint</translation>
     </message>
     <message>
-        <source>setCenterZ n&apos;a aucun aucun effet dans le cas d&apos;un CT_ReferencePoint</source>
+        <source>setCenterZ n'a aucun aucun effet dans le cas d'un CT_ReferencePoint</source>
         <translation>setCenterZ has no effect in the case of a CT_ReferencePoint</translation>
     </message>
     <message>
-        <source>setCenterCoordinate n&apos;a aucun aucun effet dans le cas d&apos;un CT_ReferencePoint</source>
+        <source>setCenterCoordinate n'a aucun aucun effet dans le cas d'un CT_ReferencePoint</source>
         <translation>setCenterCoordinate has no effect in the case of a CT_ReferencePoint</translation>
     </message>
     <message>
-        <source>setBoundingBox n&apos;a aucun aucun effet dans le cas d&apos;un CT_ReferencePoint</source>
+        <source>setBoundingBox n'a aucun aucun effet dans le cas d'un CT_ReferencePoint</source>
         <translation>setBoundingBox has no effect in the case of a CT_ReferencePoint</translation>
     </message>
 </context>
@@ -113,7 +113,7 @@
         <translation>Draw the cylinder</translation>
     </message>
     <message>
-        <source>Dessiner l&apos;axe</source>
+        <source>Dessiner l'axe</source>
         <translation>Draw the axis</translation>
     </message>
     <message>
@@ -249,7 +249,7 @@
         <translation>Radius of the circle</translation>
     </message>
     <message>
-        <source>Erreur d&apos;ajustement du cercle</source>
+        <source>Erreur d'ajustement du cercle</source>
         <translation>Circle fitting error</translation>
     </message>
     <message>
@@ -273,11 +273,11 @@
         <translation>Length</translation>
     </message>
     <message>
-        <source>RMSE d&apos;ajustement du cercle</source>
+        <source>RMSE d'ajustement du cercle</source>
         <translation>RMSE of circle fit</translation>
     </message>
     <message>
-        <source>RMSE d&apos;ajustement de la ligne</source>
+        <source>RMSE d'ajustement de la ligne</source>
         <translation>RMSE of line fit</translation>
     </message>
     <message>
@@ -341,7 +341,7 @@
         <translation>Major axis length</translation>
     </message>
     <message>
-        <source>Erreur d&apos;ajustement de l&apos;ellipse</source>
+        <source>Erreur d'ajustement de l'ellipse</source>
         <translation>Ellipse fitting error</translation>
     </message>
     <message>
@@ -445,7 +445,7 @@
         <translation>Z2</translation>
     </message>
     <message>
-        <source>Erreur d&apos;ajustement de la ligne</source>
+        <source>Erreur d'ajustement de la ligne</source>
         <translation>Line fitting error</translation>
     </message>
     <message>
@@ -613,15 +613,15 @@
         <translation>3D mode: Viewing the terrain</translation>
     </message>
     <message>
-        <source>Mode 3D    : Mettre à l&apos;échelle</source>
+        <source>Mode 3D    : Mettre à l'échelle</source>
         <translation>3D Mode: Scaling</translation>
     </message>
     <message>
-        <source>Mode 3D    : Z min de l&apos;échelle (m)</source>
+        <source>Mode 3D    : Z min de l'échelle (m)</source>
         <translation>3D mode: Z min of the scale (m)</translation>
     </message>
     <message>
-        <source>Mode 3D    : Z max de l&apos;échelle (m)</source>
+        <source>Mode 3D    : Z max de l'échelle (m)</source>
         <translation>3D mode: Z max of the scale (m)</translation>
     </message>
     <message>
@@ -665,11 +665,11 @@
         <translation>Graphic orientation</translation>
     </message>
     <message>
-        <source>Mise à l&apos;échelle</source>
+        <source>Mise à l'échelle</source>
         <translation>Scaling</translation>
     </message>
     <message>
-        <source>Coefficient d&apos;échelle (m)</source>
+        <source>Coefficient d'échelle (m)</source>
         <translation>Scale coefficient (m)</translation>
     </message>
     <message>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -40,8 +40,8 @@
         <translation type="vanished">Below is the list of steps providing specific bibliographic references (the same reference can be linked to several steps):</translation>
     </message>
     <message>
-        <source>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href=&quot;%2&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation type="vanished">&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href=&quot;%2&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</translation>
+        <source>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href="%2" target="_blank" rel="noreferrer noopener"&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation type="vanished">&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href="%2" target="_blank" rel="noreferrer noopener"&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
 </context>
 <context>
@@ -59,7 +59,7 @@
     <name>CDM_StepListDocExporter</name>
     <message>
         <source>Ce script a été créé le </source>
-        <translation type="unfinished">This script was created on </translation>
+        <translation type="unfinished">This script was created on</translation>
     </message>
     <message>
         <source>avec la version 6.0.</source>
@@ -71,11 +71,11 @@
     </message>
     <message>
         <source>Auteur : </source>
-        <translation type="unfinished">Author: </translation>
+        <translation type="unfinished">Author:</translation>
     </message>
     <message>
         <source>Fichier script Computree : </source>
-        <translation type="unfinished">Computree script file: </translation>
+        <translation type="unfinished">Computree script file :</translation>
     </message>
     <message>
         <source>Description</source>
@@ -98,7 +98,7 @@
         <translation>Script structure</translation>
     </message>
     <message>
-        <source>Le script est composé de l&apos;enchaînement d&apos;étapes suivant :</source>
+        <source>Le script est composé de l'enchaînement d'étapes suivant :</source>
         <translation>The script consists of the following sequence of steps:</translation>
     </message>
     <message>
@@ -126,7 +126,7 @@
         <translation>Specific quotes linked to certain steps used</translation>
     </message>
     <message>
-        <source>L&apos;ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier &lt;strong&gt;%1.ris&lt;/strong&gt; (au format bibliographique standard RIS).</source>
+        <source>L'ensemble des références bibliographiques fournies dans cette page, sont disponibles dans le fichier &lt;strong&gt;%1.ris&lt;/strong&gt; (au format bibliographique standard RIS).</source>
         <translation>All the bibliographic references provided on this page are available in the file &lt;strong&gt;%1.ris&lt;/strong&gt; (in standard RIS bibliographic format).</translation>
     </message>
     <message>
@@ -154,7 +154,7 @@
         <translation>Documentation of Computree steps</translation>
     </message>
     <message>
-        <source>Utiliser l&apos;index sur la gauche pour séléctionner l&apos;étape pour laquelle afficher la documentation. </source>
+        <source>Utiliser l'index sur la gauche pour séléctionner l'étape pour laquelle afficher la documentation. </source>
         <translation>Use the index on the left to select the step for which to display the documentation.</translation>
     </message>
     <message>
@@ -209,16 +209,16 @@
         <translation>Below is the list of steps providing specific bibliographic references (the same reference may be linked to several steps):</translation>
     </message>
     <message>
-        <source>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href=&quot;%2&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</source>
-        <translation>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href=&quot;%2&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</translation>
+        <source>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href="%2" target="_blank" rel="noreferrer noopener"&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</source>
+        <translation>&lt;strong&gt;Plugin %1&lt;/strong&gt; : &lt;a href="%2" target="_blank" rel="noreferrer noopener"&gt;%2&lt;/a&gt;&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <source>Index des étapes</source>
         <translation>Index of steps</translation>
     </message>
     <message>
-        <source>Plugin : &lt;/Strong&gt;&lt;a href=&quot;</source>
-        <translation>Plugin : &lt;/Strong&gt;&lt;a href=&quot;</translation>
+        <source>Plugin : &lt;/Strong&gt;&lt;a href="</source>
+        <translation>Plugin : &lt;/Strong&gt;&lt;a href="</translation>
     </message>
     <message>
         <source>Nom de classe : &lt;/strong&gt;</source>
@@ -233,7 +233,7 @@
         <translation>Parameters</translation>
     </message>
     <message>
-        <source>Configuration des résultats d&apos;entrée</source>
+        <source>Configuration des résultats d'entrée</source>
         <translation>Configuration of input results</translation>
     </message>
     <message>
@@ -264,67 +264,67 @@
         <translation>Error reading path %1::%2</translation>
     </message>
     <message>
-        <source>Erreur lors de la lecture de l&apos;information %1::%2</source>
+        <source>Erreur lors de la lecture de l'information %1::%2</source>
         <translation>Error reading information %1::%2</translation>
     </message>
     <message>
-        <source>Erreur lors de l&apos;ajout de l&apos;étape &quot;%1&quot; du plugin &quot;%2&quot; au gestionnaire d&apos;étapes.</source>
-        <translation>Error adding step &quot;%1&quot; of plugin &quot;%2&quot; to the step manager.</translation>
+        <source>Erreur lors de l'ajout de l'étape "%1" du plugin "%2" au gestionnaire d'étapes.</source>
+        <translation>Error adding step "%1" of plugin "%2" to the step manager.</translation>
     </message>
     <message>
-        <source>Erreur lors de la lecture du paramètre &quot;id&quot; de l&apos;étape &quot;%1&quot;.</source>
-        <translation>Error when reading the &quot;id&quot; parameter of step &quot;%1&quot;.</translation>
+        <source>Erreur lors de la lecture du paramètre "id" de l'étape "%1".</source>
+        <translation>Error when reading the "id" parameter of step "%1".</translation>
     </message>
     <message>
-        <source>Le plugin &quot;%1&quot; pour l&apos;étape &quot;%2&quot; ne semble pas être chargé.</source>
-        <translation>The plugin &quot;%1&quot; for step &quot;%2&quot; does not seem to be loaded.</translation>
+        <source>Le plugin "%1" pour l'étape "%2" ne semble pas être chargé.</source>
+        <translation>The plugin "%1" for step "%2" does not seem to be loaded.</translation>
     </message>
     <message>
-        <source>L&apos;étape &quot;%1&quot; n&apos;a pas été trouvée dans le plugin &quot;%2&quot;.</source>
-        <translation>The step &quot;%1&quot; was not found in the plugin &quot;%2&quot;.</translation>
+        <source>L'étape "%1" n'a pas été trouvée dans le plugin "%2".</source>
+        <translation>The step "%1" was not found in the plugin "%2".</translation>
     </message>
     <message>
-        <source>Erreur lors de la copie de l&apos;étape &quot;%1&quot; du plugin &quot;%2&quot;.</source>
-        <translation>Error when copying step &quot;%1&quot; from plugin &quot;%2&quot;.</translation>
+        <source>Erreur lors de la copie de l'étape "%1" du plugin "%2".</source>
+        <translation>Error when copying step "%1" from plugin "%2".</translation>
     </message>
     <message>
-        <source>Erreur lors de l&apos;affectation des paramètres de pré-configuration à l&apos;étape &quot;%1&quot; du plugin &quot;%2&quot;. %3</source>
-        <translation>Error when assigning pre-configuration parameters to step &quot;%1&quot; of plugin &quot;%2&quot;. %3</translation>
+        <source>Erreur lors de l'affectation des paramètres de pré-configuration à l'étape "%1" du plugin "%2". %3</source>
+        <translation>Error when assigning pre-configuration parameters to step "%1" of plugin "%2". %3</translation>
     </message>
     <message>
-        <source>Erreur lors de l&apos;affectation des paramètres d&apos;entrée à l&apos;étape &quot;%1&quot; du plugin &quot;%2&quot;. %3</source>
-        <translation>Error when assigning input parameters to step &quot;%1&quot; of plugin &quot;%2&quot;. %3</translation>
+        <source>Erreur lors de l'affectation des paramètres d'entrée à l'étape "%1" du plugin "%2". %3</source>
+        <translation>Error when assigning input parameters to step "%1" of plugin "%2". %3</translation>
     </message>
     <message>
-        <source>Erreur lors de l&apos;affectation des paramètres de post-configuration à l&apos;étape &quot;%1&quot; du plugin &quot;%2&quot;. %3</source>
-        <translation>Error when assigning post-configuration parameters to step &quot;%1&quot; of plugin &quot;%2&quot;. %3</translation>
+        <source>Erreur lors de l'affectation des paramètres de post-configuration à l'étape "%1" du plugin "%2". %3</source>
+        <translation>Error when assigning post-configuration parameters to step "%1" of plugin "%2". %3</translation>
     </message>
     <message>
-        <source>Erreur lors de l&apos;affectation d&apos;autres paramètres à l&apos;étape &quot;%1&quot; du plugin &quot;%2&quot;. %3</source>
-        <translation>Error when assigning other parameters to step &quot;%1&quot; of plugin &quot;%2&quot;. %3</translation>
+        <source>Erreur lors de l'affectation d'autres paramètres à l'étape "%1" du plugin "%2". %3</source>
+        <translation>Error when assigning other parameters to step "%1" of plugin "%2". %3</translation>
     </message>
     <message>
-        <source>(optionnel) Plugins utilisés (seulement à titre indicatif pour l&apos;utilisateur). La section est ignorée à la lecture !</source>
-        <translation>(optional) Plugins used (only for the user&apos;s information). The section is ignored when reading!</translation>
+        <source>(optionnel) Plugins utilisés (seulement à titre indicatif pour l'utilisateur). La section est ignorée à la lecture !</source>
+        <translation>(optional) Plugins used (only for the user's information). The section is ignored when reading!</translation>
     </message>
     <message>
         <source>(optionnel) Pré-chemins. Utilisés lors de la lecture des paramètres du type chemin (Path) pour compléter les chemins relatifs.</source>
         <translation>(optional) Pre-paths. Used when reading path type parameters to complete relative paths.</translation>
     </message>
     <message>
-        <source>(obligatoire) Paramètres de chaque étape modifiables par l&apos;utilisateur.</source>
+        <source>(obligatoire) Paramètres de chaque étape modifiables par l'utilisateur.</source>
         <translation>(required) Parameters of each step can be modified by the user.</translation>
     </message>
     <message>
-        <source>(optionnel) Choix multiples des paramètres (seulement à titre indicatif pour l&apos;utilisateur). Certains paramètres peuvent avoir la valeur de l&apos;un des choix ci-dessous. La section est ignorée à la lecture !</source>
+        <source>(optionnel) Choix multiples des paramètres (seulement à titre indicatif pour l'utilisateur). Certains paramètres peuvent avoir la valeur de l'un des choix ci-dessous. La section est ignorée à la lecture !</source>
         <translation>(optional) Multiple choices of parameters (for user guidance only). Some parameters may have the value of one of the choices below. The section is ignored when reading!</translation>
     </message>
     <message>
-        <source>(obligatoire) Flux des étapes. Contient l&apos;enchainement des étapes ainsi que les informations permettant de re-créer les étapes du bon type et charger leurs paramètres.</source>
+        <source>(obligatoire) Flux des étapes. Contient l'enchainement des étapes ainsi que les informations permettant de re-créer les étapes du bon type et charger leurs paramètres.</source>
         <translation>(required) Step flow. Contains the sequence of steps as well as the information allowing to re-create the steps of the right type and to load their parameters.</translation>
     </message>
     <message>
-        <source>Paramètres non modifiable. Contient des paramètres non modifiables par l&apos;utilisateur. Si cette section n&apos;est pas présente chaque étape devra être configurée manuellement.</source>
+        <source>Paramètres non modifiable. Contient des paramètres non modifiables par l'utilisateur. Si cette section n'est pas présente chaque étape devra être configurée manuellement.</source>
         <translation>Non-modifiable parameters. Contains parameters that cannot be modified by the user. If this section is not present each step will have to be configured manually.</translation>
     </message>
     <message>
@@ -334,7 +334,7 @@
     <message>
         <source><byte value="xd"/>
 </source>
-        <translation></translation>
+        <translation/>
     </message>
 </context>
 <context>

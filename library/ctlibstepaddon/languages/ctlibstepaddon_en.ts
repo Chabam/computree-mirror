@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
@@ -19,7 +19,7 @@
         <translation>Requires a CT_StepEndLoop to end the loop</translation>
     </message>
     <message>
-        <source>Nombre d&apos;itérations</source>
+        <source>Nombre d'itérations</source>
         <translation>Number of iterations</translation>
     </message>
     <message>
@@ -58,11 +58,11 @@
         <translation>&lt;br&gt;&lt;br&gt;The chosen counter result determines to which loop begin, this loop end corresponds to.</translation>
     </message>
     <message>
-        <source>Cette étape génère une simple copie du résultat d&apos;entrée, sans créer de nouvelle donnée. Cela permet de continuer le script après la boucle. </source>
+        <source>Cette étape génère une simple copie du résultat d'entrée, sans créer de nouvelle donnée. Cela permet de continuer le script après la boucle. </source>
         <translation>This step generates a simple copy of the input result, without creating any new data. This allows the script to continue after the loop. </translation>
     </message>
     <message>
-        <source>Il est possible d&apos;emboîter plusieurs boucles. Pour cela il faut bien séléctionner les bon résultats compteurs pour faire correspondre deux à deux les étapes d&apos;ouverture et de fermeture de boucle.</source>
+        <source>Il est possible d'emboîter plusieurs boucles. Pour cela il faut bien séléctionner les bon résultats compteurs pour faire correspondre deux à deux les étapes d'ouverture et de fermeture de boucle.</source>
         <translation>It is possible to nest several loops. To do this, it is necessary to select the right counter results to match the loop begin and the loop end steps.</translation>
     </message>
 </context>
