@@ -68,24 +68,24 @@ private:
             m_triangles = triangles;
         }
 
-//        ToCompute& operator=(const ToCompute& other)
-//        {
-//            m_indices = other.m_indices;
-//            m_pointsPicker = other.m_pointsPicker;
+        ToCompute& operator=(const ToCompute& other)
+        {
+            m_indices = other.m_indices;
+            m_pointsPicker = other.m_pointsPicker;
 
-//            m_begin = other.m_begin;
-//            m_end = other.m_end;
+            m_begin = other.m_begin;
+            m_end = other.m_end;
 
-//            m_firstPoint = other.m_firstPoint;
-//            m_firstSelectInfo = other.m_firstSelectInfo;
+            m_firstPoint = other.m_firstPoint;
+            m_firstSelectInfo = other.m_firstSelectInfo;
 
-//            m_selectionOperation = other.m_selectionOperation;
-//            m_checkOperation = other.m_checkOperation;
+            m_selectionOperation = other.m_selectionOperation;
+            m_checkOperation = other.m_checkOperation;
 
-//            m_triangles = other.m_triangles;
+            m_triangles = other.m_triangles;
 
-//            return *this;
-//        }
+            return *this;
+        }
 
         PolygonPointsPicker*            m_pointsPicker;
         std::vector<GLuint>&            m_indices;
