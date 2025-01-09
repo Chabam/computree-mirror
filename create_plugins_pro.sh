@@ -14,4 +14,5 @@ SUBDIRS += ../pluginignlif/pluginignlif
 SUBDIRS += ../plugintoolkit/plugintoolkit
 SUBDIRS += ../plugingenerate/plugingenerate
 SUBDIRS += ../pluginonfdev/pluginonfdev
+SUBDIRS += ../pluginlvox/pluginlvox
 " > plugins.pro
