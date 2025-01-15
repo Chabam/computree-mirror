@@ -39,9 +39,9 @@ bool DM_SortFilterMathProxyModel::canSetMathExpression(const QString &expression
     tmp.replace(m_var, "1");
 
     #if defined(_UNICODE)
-    mu::string_type expression_buffer = wide_string_to_string(tmp.toStdWString());
+        mu::string_type expression_buffer = tmp.toStdWString();
     #else
-    mu::string_type expression_buffer = tmp.toStdString();
+        mu::string_type expression_buffer = tmp.toStdString();
     #endif
 
     try
@@ -52,7 +52,11 @@ bool DM_SortFilterMathProxyModel::canSetMathExpression(const QString &expression
     }
     catch(mu::Parser::exception_type &e)
     {
-        QString msg = QString::fromStdString(e.GetMsg());
+        #if defined(_UNICODE)
+            QString msg = QString::fromStdString(wide_string_to_string(e.GetMsg()));
+        #else
+            QString msg = QString::fromStdString(e.GetMsg());
+        #endif
 
         if(verbose)
             GUI_LOG->addMessage(LogInterface::debug, LogInterface::gui, tr("Erreur dans l'expression mathématique : ") + msg);
@@ -123,9 +127,9 @@ bool DM_SortFilterMathProxyModel::filterAcceptsRow(int source_row, const QModelI
     tmp.replace(',', QLocale::system().decimalPoint());
 
     #if defined(_UNICODE)
-    mu::string_type expression_buffer = wide_string_to_string(tmp.toStdWString());
+        mu::string_type expression_buffer = tmp.toStdWString();
     #else
-    mu::string_type expression_buffer = tmp.toStdString();
+        mu::string_type expression_buffer = tmp.toStdString();
     #endif
 
     try
@@ -137,8 +141,11 @@ bool DM_SortFilterMathProxyModel::filterAcceptsRow(int source_row, const QModelI
     }
     catch(mu::Parser::exception_type &e)
     {
-        QString msg = QString::fromStdString(e.GetMsg());
-
+        #if defined(_UNICODE)
+            QString msg = QString::fromStdString(wide_string_to_string(e.GetMsg()));
+        #else
+            QString msg = QString::fromStdString(e.GetMsg());
+        #endif
         GUI_LOG->addErrorMessage(LogInterface::gui, tr("Exception muParser : %1").arg(msg));
         return false;
     }
