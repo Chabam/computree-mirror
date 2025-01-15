@@ -39,20 +39,10 @@ macx {
 }
 
 windows {
-    for(a, GDAL_LIB_ADD) {
-        CONFIG(debug, debug|release) {
-            !exists($$GDAL_LIBS_PATH/$${a}d*) {
-                USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/$${a}d was not found"
-            } else {
-                GDAL_LIBS_FOUND += -l$${a}d
-            }
-        } else {
-            !exists($$GDAL_LIBS_PATH/$${a}*) {
-                USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/$${a} was not found"
-            } else {
-                GDAL_LIBS_FOUND += -l$${a}
-            }
-        }
+    !exists($$GDAL_LIBS_PATH/lib$${a}*) {
+        USE_GDAL_ERROR_MSG += "Library $$GDAL_LIBS_PATH/$${a} was not found"
+    } else {
+        GDAL_LIBS_FOUND += -l$${a}
     }
 }
 

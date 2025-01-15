@@ -65,18 +65,10 @@ macx {
 
 windows {
     for(a, PCL_LIB_ADD) {
-        CONFIG(debug, debug|release) {
-            !exists($$PCL_LIBS_PATH/$${a}d*) {
-                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a}d was not found"
-            } else {
-                PCL_LIBS_FOUND += -l$${a}d
-            }
+        !exists($$PCL_LIBS_PATH/lib$${a}*) {
+            USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a} was not found"
         } else {
-            !exists($$PCL_LIBS_PATH/$${a}*) {
-                USE_PCL_ERROR_MSG += "Library $$PCL_LIBS_PATH/$${a} was not found"
-            } else {
-                PCL_LIBS_FOUND += -l$${a}
-            }
+            PCL_LIBS_FOUND += -l$${a}
         }
     }
 }

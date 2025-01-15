@@ -55,18 +55,10 @@ macx {
 
 windows {
     for(a, OPENCV_LIB_ADD) {
-        CONFIG(debug, debug|release) {
-            !exists($$OPENCV_LIBS_PATH/$${a}4d*) {
-                USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/$${a}4d was not found"
-            } else {
-                OPENCV_LIBS_FOUND += -l$${a}4d
-            }
+        !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
+            USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/$${a} was not found"
         } else {
-            !exists($$OPENCV_LIBS_PATH/$${a}4*) {
-                USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/$${a}4 was not found"
-            } else {
-                OPENCV_LIBS_FOUND += -l$${a}4
-            }
+            OPENCV_LIBS_FOUND += -l$${a}
         }
     }
 }
