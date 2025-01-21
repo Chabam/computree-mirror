@@ -1,10 +1,10 @@
 
-win32 {
-    system(cd $$PWD/revision && rev.bat)
+linux|mingw {
+    system(cd $$PWD/revision && $$PWD/revision/rev.sh)
 }
 
-linux {
-    system(cd $$PWD/revision && $$PWD/revision/rev.sh)
+win32&!mingw{
+    system(cd $$PWD/revision && rev.bat)
 }
 
 macx {
