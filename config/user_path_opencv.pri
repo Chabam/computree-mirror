@@ -1,9 +1,7 @@
 linux {
-    OPENCV_BASE_PATH = "/usr/"
-
-    OPENCV_LIBS_PATH = "$${OPENCV_BASE_PATH}lib/x86_64-linux-gnu"
-    OPENCV_INC_PATH = "$${OPENCV_BASE_PATH}include/opencv4"
-    OPENCV_BIN_PATH = "$${OPENCV_BASE_PATH}bin"
+    OPENCV_LIBS_PATH = "/lib64/"
+    OPENCV_INC_PATH = "/usr/include/opencv4"
+    OPENCV_BIN_PATH = "/usr/bin"
 }
 
 win32 {
