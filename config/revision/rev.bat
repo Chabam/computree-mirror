@@ -2,7 +2,7 @@
 cd ..
 cd ..
 
-for /f %%a in ('svnversion -n .') do set SVN_REVISION=%%a
+for /f %%a in ('git rev-parse HEAD') do set SVN_REVISION=%%a
 
 set svnRevisionFile="ComputreeGui\svnrevision.h"
 

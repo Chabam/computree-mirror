@@ -3,7 +3,7 @@
 cd ..
 cd ..
 
-SVN_REVISION=$(svnversion -n .)
+SVN_REVISION=$(git rev-parse HEAD)
 
 svnRevisionFile="ComputreeGui/svnrevision.h"
 
