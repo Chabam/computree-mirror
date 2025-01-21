@@ -58,7 +58,7 @@ windows {
         !exists($$OPENCV_LIBS_PATH/lib$${a}*) {
             USE_OPENCV_ERROR_MSG += "Library $$OPENCV_LIBS_PATH/$${a} was not found"
         } else {
-            OPENCV_LIBS_FOUND += -l$${a}
+            OPENCV_LIBS_FOUND += -l$${a}4100
         }
     }
 }
@@ -69,9 +69,11 @@ isEmpty(USE_OPENCV_ERROR_MSG) {
 
         INCLUDEPATH *= $$OPENCV_INC_PATH
         TR_EXCLUDE  *= $$OPENCV_INC_PATH/*
-        LIBS        *= -L$$OPENCV_LIBS_PATH
+        LIBS        = -L$$OPENCV_LIBS_PATH
 
         LIBS *= $$OPENCV_LIBS_FOUND
+
+        message("YOYOYOOYYO $$LIBS")
     }
 } else {
     error($$USE_OPENCV_ERROR_MSG)

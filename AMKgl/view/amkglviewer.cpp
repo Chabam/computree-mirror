@@ -15,7 +15,7 @@
 #elif defined(Q_OS_LINUX)
 #include <GL/glu.h>
 #else
-#include <gl/GLU.h>
+#include <GL/glu.h>
 #endif
 
 AMKglViewer::AMKglViewer(QWidget* parent) : AMKglViewer(nullptr, parent)

@@ -7,7 +7,7 @@ linux {
 }
 
 win32 {
-    LASZIP_BASE_PATH = "/usr/lib/mxe/usr/x86_64-w64-mingw32.shared"
+    LASZIP_BASE_PATH = "/usr/x86_64-w64-mingw32/sys-root/mingw/"
 
     LASZIP_INC_PATH = "$${LASZIP_BASE_PATH}/include"
 

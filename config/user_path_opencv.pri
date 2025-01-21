@@ -7,9 +7,9 @@ linux {
 }
 
 win32 {
-    OPENCV_BASE_PATH = "/usr/lib/mxe/usr/x86_64-w64-mingw32.shared"
+    OPENCV_BASE_PATH = "/usr/x86_64-w64-mingw32/sys-root/mingw"
 
-    OPENCV_INC_PATH = "$${OPENCV_BASE_PATH}/include/opencv2" # it indicates '2', but it's OpenCV4
+    OPENCV_INC_PATH = "$${OPENCV_BASE_PATH}/include/opencv4"
 
     OPENCV_LIBS_PATH = "$${OPENCV_BASE_PATH}/lib"
     OPENCV_BIN_PATH = "$${OPENCV_BASE_PATH}/bin"

@@ -7,7 +7,7 @@ linux {
 }
 
 win32 {
-    BOOST_BASE_PATH = "/usr/lib/mxe/usr/x86_64-w64-mingw32.shared"
+    BOOST_BASE_PATH = "/usr/x86_64-w64-mingw32/sys-root/mingw/"
 
     BOOST_INC_PATH = "$${BOOST_BASE_PATH}/include"
 

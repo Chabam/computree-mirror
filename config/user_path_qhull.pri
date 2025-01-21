@@ -6,7 +6,7 @@ linux {
 }
 
 win32 {
-    QHULL_BASE_PATH = "/usr/lib/mxe/usr/x86_64-w64-mingw32.shared"
+    QHULL_BASE_PATH = "/usr/x86_64-w64-mingw32/sys-root/mingw/"
 
     QHULL_INC_PATH = "$${QHULL_BASE_PATH}/include"
     QHULL_LIBS_PATH = "$${QHULL_BASE_PATH}/lib"

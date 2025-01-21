@@ -7,9 +7,9 @@ linux {
 }
 
 win32 {
-    PCL_BASE_PATH = "/usr/lib/mxe/usr/x86_64-w64-mingw32.shared"
+    PCL_BASE_PATH = "/usr/x86_64-w64-mingw32/sys-root/mingw/"
 
-    PCL_INC_PATH = "$${PCL_BASE_PATH}/include/pcl-1.9"
+    PCL_INC_PATH = "$${PCL_BASE_PATH}/include/pcl-1.13"
 
     PCL_LIBS_PATH = "$${PCL_BASE_PATH}/lib"
     PCL_BIN_PATH = "$${PCL_BASE_PATH}/bin"
