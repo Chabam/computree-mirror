@@ -85,6 +85,7 @@ CT_Grid4D_Dense<DataT>::CT_Grid4D_Dense(double wmin,
 {
     int ncells[1];
     ncells[0] = this->nCells();
+    this->_data.create(1, ncells);
     initGridWithValue(initValue);
 }
 

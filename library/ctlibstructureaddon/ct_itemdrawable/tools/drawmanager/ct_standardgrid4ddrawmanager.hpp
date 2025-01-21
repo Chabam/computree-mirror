@@ -88,7 +88,7 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
     double xmin, ymin, zmin, xmax, ymax, zmax;
 
     // If w val > wwMax, do not display
-    if ( ww <= item.wdim() )
+    if ( ww < item.wdim() && ww >= 0 )
     {
         // For each voxel of the grid
         for (int xx = nXinf ; xx < (xdim - nXsup) ; xx++)
@@ -97,15 +97,14 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
             {
                 for (int zz = nZinf ; zz < (zdim - nZsup); zz++)
                 {
-                    size_t index;
-                    if (item.index(ww, xx, yy, zz, index))
+                    if( ww < item.wdim() && xx < item.xdim() && yy < item.ydim() && zz < item.zdim() &&
+                        ww >= 0 && xx >= 0 && yy >= 0 && zz >= 0 )
                     {
-                        DataT data = item.valueAtIndex(index);
+                        DataT data = item.value(ww, xx, yy, zz);
 
                         // Draw a cube if the value it contains is between the two thresholds
                         if ( data >= lowThresh && data <= highThresh )
                         {
-
                             if (drawAsMap && !itemDrawable.isSelected())
                             {
                                 double h = double(qRound((data*scaling) + offset));
@@ -123,11 +122,6 @@ void CT_StandardGrid4DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pain
 
                             painter.drawCube( xmin, ymin, zmin, xmax, ymax, zmax, GL_FRONT_AND_BACK, drawingMode );
                         }
-                    }
-
-                    else
-                    {
-                        qDebug() << "Probleme d'index (drawmanager)";
                     }
                 }
             }

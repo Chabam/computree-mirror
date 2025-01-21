@@ -19,6 +19,8 @@ class   CT_Grid4D_Sparse  : public CT_Grid4D<DataT>
     CT_TYPE_TEMPLATED_IMPL_MACRO(CT_Grid4D_Sparse, DataT, CT_Grid4D<DataT>, 4D sparse grid)
     using SuperClass = CT_Grid4D<DataT>;
 
+    using Vec4i = Eigen::Vector4i;
+
 public:
     //**********************************************//
     //           Constructors/Destructors           //
@@ -187,6 +189,58 @@ public:
         int idx[4] = { static_cast<int>(levw), static_cast<int>(levx), static_cast<int>(levy), static_cast<int>(levz) };
 
         _data.ref( idx ) = value;
+
+        return true;
+    }
+
+    DataT value(const int levw, const int levx, const int levy, const int levz) const override
+    {
+        int idx[4] = {levw, levx, levy, levz};
+        return _data(idx);
+    }
+
+    DataT value(const Vec4i& pix) const
+    {
+        return value(pix[0], pix[1], pix[2], pix[3]);
+    }
+
+    bool setValue(const Vec4i& pix, DataT value)
+    {
+        return setValue(pix[0], pix[1], pix[2], pix[3], value);
+    }
+
+    bool setValue(const int levw, const int levx, const int levy, const int levz, DataT value) override
+    {
+        if( (levw < 0) || (levx < 0) || (levy < 0) || (levz < 0) )
+        {
+            return false;
+        }
+
+        if( (levw >= _dimw) || (levx >= _dimx) || (levy >= _dimy) || (levz >= _dimz) )
+        {
+            return false;
+        }
+
+        int idx[4] = {levw, levx, levy, levz};
+        _data.ref(idx) = value;
+
+        return true;
+    }
+
+    bool addValue(int levw, int levx, int levy, int levz, DataT value ) override
+    {
+        if( (levw < 0) || (levx < 0) || (levy < 0) || (levz < 0) )
+        {
+            return false;
+        }
+
+        if( (levw >= _dimw) || (levx >= _dimx) || (levy >= _dimy) || (levz >= _dimz) )
+        {
+            return false;
+        }
+
+        int idx[4] = {levw, levx, levy, levz};
+        _data.ref(idx) += value;
 
         return true;
     }

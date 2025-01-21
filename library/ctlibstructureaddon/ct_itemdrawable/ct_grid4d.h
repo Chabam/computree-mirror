@@ -164,7 +164,7 @@ public:
      * \param levz z level (0 is the first)
      * \return Value at (levw, levx, levy, levz)
      */
-    DataT value(const int levw, const int levx, const int levy, const int levz) const;
+    virtual DataT value(const int levw, const int levx, const int levy, const int levz) const;
 
     /**
       * \brief Gives the value of the cell containing (w,x,y,z) coordinate (in cartesian space)
@@ -232,7 +232,7 @@ public:
     bool addValueAtWXYZ(const double w, const double x, const double y, const double z, const DataT value);
 
 
-    bool addValue(int levw, int levx, int levy, int levz, DataT value );
+    virtual bool addValue(int levw, int levx, int levy, int levz, DataT value );
 
     /**
       * \brief Gives neighbours values
@@ -290,7 +290,7 @@ public:
      * \param value Value
      * \return True if the value has actually been set
      */
-    inline bool setValue(const int levw, const int levx, const int levy, const int levz, DataT value)
+    inline virtual bool setValue(const int levw, const int levx, const int levy, const int levz, DataT value)
     {
         size_t i;
         if( index(levw, levx, levy, levz, i) )
@@ -329,6 +329,7 @@ public:
     inline int ydim() const {return SuperClass::ydim();}
     inline int zdim() const {return SuperClass::zdim();}
     inline double minW() const {return SuperClass::minW();}
+    inline double maxW() const {return SuperClass::maxW();}
     inline double wres() const {return SuperClass::wres();}
     inline double xres() const {return SuperClass::xres();}
     inline double yres() const {return SuperClass::yres();}
@@ -351,7 +352,8 @@ private:
     CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataXDimension(), &CT_Grid4D<DataT>::xdim, QObject::tr("X dimension"))
     CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataYDimension(), &CT_Grid4D<DataT>::ydim, QObject::tr("Y dimension"))
     CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataZDimension(), &CT_Grid4D<DataT>::zdim, QObject::tr("Z dimension"))
-    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataCoordinate(), &CT_Grid4D<DataT>::minW, QObject::tr("W min"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataCoordinate(), &CT_Grid4D<DataT>::minW, QObject::tr("Min W"))
+    CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataCoordinate(), &CT_Grid4D<DataT>::maxW, QObject::tr("Max W"))
     CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataResolution(), &CT_Grid4D<DataT>::wres, QObject::tr("Resolution W"))
     CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataXResolution(), &CT_Grid4D<DataT>::xres, QObject::tr("Resolution X"))
     CT_DEFAULT_IA_V2(CT_Grid4D<DataT>, CT_AbstractCategory::staticInitDataYResolution(), &CT_Grid4D<DataT>::yres, QObject::tr("Resolution Y"))
