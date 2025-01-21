@@ -72,8 +72,6 @@ isEmpty(USE_OPENCV_ERROR_MSG) {
         LIBS        = -L$$OPENCV_LIBS_PATH
 
         LIBS *= $$OPENCV_LIBS_FOUND
-
-        message("YOYOYOOYYO $$LIBS")
     }
 } else {
     error($$USE_OPENCV_ERROR_MSG)
