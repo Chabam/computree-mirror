@@ -105,7 +105,7 @@ bool CDM_PluginManager::load()
 
         emit beginLoading();
 
-        QDir dir(qApp->applicationDirPath());
+        QDir dir(_defaultPluginDirPath);
 
         QStringList nameFilters;
 
