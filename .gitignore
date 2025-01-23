@@ -40,3 +40,4 @@ library/ctlibmodelsextraviews/qmake_qmake_immediate.qrc
 library/ctlibmodelsextraviews/qrc_nodeeditor.cpp
 library/ctlibmodelsextraviews/qrc_qmake_qmake_immediate.cpp
 library/ctlibstdactions/qrc_icons.cpp
+object_script.*
