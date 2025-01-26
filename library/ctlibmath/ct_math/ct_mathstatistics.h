@@ -15,6 +15,7 @@ class CTLIBMATH_EXPORT CT_MathStatistics
 {
 public:
     static double computeQuantile(QList<double> &values, double quantile, bool sort = false);
+    static float computeQuantile(QList<float> &values, double quantile, bool sort = false);
 };
 
 #endif // CT_MATHSTATISTICS_H

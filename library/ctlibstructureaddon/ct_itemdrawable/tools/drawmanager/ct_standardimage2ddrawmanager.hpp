@@ -136,6 +136,11 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                                 cr2 = (z2 - double(item.dataMin())) / amplitude;
                                 cr3 = (z3 - double(item.dataMin())) / amplitude;
 
+                                if (cr0 < 0) {cr0 = 0;} else if (cr0 > 1) {cr0 = 1;}
+                                if (cr1 < 0) {cr1 = 0;} else if (cr1 > 1) {cr1 = 1;}
+                                if (cr2 < 0) {cr2 = 0;} else if (cr2 > 1) {cr2 = 1;}
+                                if (cr3 < 0) {cr3 = 0;} else if (cr3 > 1) {cr3 = 1;}
+
                                 if (echelle)
                                 {
                                     z0 = (z0 - double(item.dataMin())) * scaling + zmin;
@@ -332,9 +337,11 @@ void CT_StandardImage2DDrawManager<DataT>::draw(GraphicsViewInterface &view, Pai
                     } else {
                         double cr = (value - double(item.dataMin())) / amplitude;
 
+                        if (cr < 0) {cr = 0;} else if (cr > 1) {cr = 1;}
+
                         if (useSelectedGradient)
                         {
-                            painter.setColor(colors.value(value, view.intermediateColorFromSelectedGradient(cr)));
+                            painter.setColor(view.intermediateColorFromSelectedGradient(cr));
                         } else {
                             int colorLevel = cr*255;
                             if (colorLevel < 0) {colorLevel = 0;}
