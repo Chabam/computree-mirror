@@ -105,7 +105,9 @@ void CT_Reader_GDAL::internalDeclareOutputModels(CT_ReaderOutModelStructureManag
 
         if(n != 0) {
             for(int i=0; i<n; ++i) {
-                const QString name = GDALGetColorInterpretationName(data->GetRasterBand(i+1)->GetColorInterpretation());
+
+                QFileInfo info(filepath());
+                const QString name = QString("%1 %2").arg(info.baseName()).arg(GDALGetColorInterpretationName(data->GetRasterBand(i+1)->GetColorInterpretation()));
 
                 RasterHandleType* handle = new RasterHandleType();
                 registerHandlePtr(QString("r%1").arg(i), handle);
