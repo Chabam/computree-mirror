@@ -401,10 +401,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>W min</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Resolution W</source>
         <translation>Résolution W</translation>
     </message>
@@ -686,6 +682,14 @@
     </message>
     <message>
         <source>Utiliser gradient actif</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Min W</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Max W</source>
         <translation></translation>
     </message>
 </context>
