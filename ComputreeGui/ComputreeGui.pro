@@ -98,7 +98,7 @@ HEADERS += \
     dm_graphicsviewcamera.h \
     dm_context.h \
     dm_colorpicker.h
-    
+
 TRANSLATIONS += languages/computreegui_fr.ts \
                 languages/computreegui_en.ts
 
@@ -120,7 +120,7 @@ macx  : LIBS += -framework OpenGL
 # Other specific compiler options
 linux {
     # add your own with quoting gyrations to make sure $ORIGIN gets to the command line unexpanded
-    QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\'"
+    QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN\'/libraries/core"
     QMAKE_CXXFLAGS += -Wno-c++11-compat
 }
 
