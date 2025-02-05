@@ -1,7 +1,5 @@
 project(AMKgl)
 
-find_package(OpenGL)
-
 set(AMKGL_HEADERS
     renderer/pointcloud/chunkedpointcloud.h
     tools/opengl/openglinfo.h
@@ -345,4 +343,5 @@ target_link_libraries(AMKgl
     Qt5::Gui
     Qt5::OpenGL
     Qt5::Xml
+	Qt5::Concurrent
 )
