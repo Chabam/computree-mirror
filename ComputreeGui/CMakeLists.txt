@@ -1,5 +1,6 @@
 project(ComputreeGui)
-
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 set(COMPUTREEGUI_HEADERS
     ${ctlibcommon_SOURCE_DIR}/include/documentinterface.h
     ${ctlibcommon_SOURCE_DIR}/include/graphicsviewinterface.h
@@ -340,7 +341,7 @@ target_include_directories(ComputreeGui PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/view/StepConfigurationView
 )
 
-target_link_libraries(ComputreeGui
+target_link_libraries(ComputreeGui PUBLIC
     ctlibcommon
     ctlibcore
     ctliblog
@@ -352,4 +353,9 @@ target_link_libraries(ComputreeGui
     Qt5::Widgets
     OpenGL::GL
     OpenGL::GLU
+)
+
+add_custom_command(TARGET ComputreeGui POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ComputreeGui> $<TARGET_RUNTIME_DLLS:ComputreeGui>
+  COMMAND_EXPAND_LISTS
 )
