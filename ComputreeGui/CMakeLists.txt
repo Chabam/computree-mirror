@@ -1,6 +1,5 @@
 project(ComputreeGui)
-set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
-set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+
 set(COMPUTREEGUI_HEADERS
     ${ctlibcommon_SOURCE_DIR}/include/documentinterface.h
     ${ctlibcommon_SOURCE_DIR}/include/graphicsviewinterface.h
