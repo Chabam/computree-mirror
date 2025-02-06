@@ -355,6 +355,15 @@ target_link_libraries(ComputreeGui PUBLIC
     OpenGL::GLU
 )
 
+execute_process(
+    COMMAND git rev-parse HEAD
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_VARIABLE COMPUTREE_REVISION
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/svnrevision.h.in ${CMAKE_CURRENT_SOURCE_DIR}/svnrevision.h)
+
 add_custom_command(TARGET ComputreeGui POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ComputreeGui> $<TARGET_RUNTIME_DLLS:ComputreeGui>
   COMMAND_EXPAND_LISTS
