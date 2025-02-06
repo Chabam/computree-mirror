@@ -1,0 +1,7 @@
+CompileFlags:
+  CompilationDatabase: build/
+  Add:
+    - "-Ibuild/_deps/ctlibs-src/ctlibs"
+    - "-Ibuild/_deps/ctlibs-src/ctlibs/ctlibplugin"
+    - "-Ibuild/_deps/nodeseditor-src/include"
+    - "-Iplugins/pluginneolvox/lvox"
