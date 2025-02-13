@@ -137,52 +137,52 @@
 <context>
     <name>CT_Reader_GDAL</name>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="121"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="123"/>
         <source>Layer %1</source>
         <translation>Layer %1</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="253"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="255"/>
         <source>Points</source>
         <translation>Points</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="265"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="267"/>
         <source>Polygones</source>
         <translation>Polygons</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="277"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="279"/>
         <source>Polylignes</source>
         <translation>Polylines</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="309"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="311"/>
         <source>Impossible de charger des éléments du type : </source>
         <translation>Unable to load items of type : </translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="897"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="899"/>
         <source>Reader GDAL de type : %1</source>
         <translation>Reader GDAL type: %1</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="897"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="899"/>
         <source>Inconnu</source>
         <translation>Unknown</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="903"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="905"/>
         <source>Pour plus de détails voir : http://www.gdal.org/formats_list.html</source>
         <translation>For more details see: http://www.gdal.org/formats_list.html</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="908"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="910"/>
         <source>Pour plus de détails voir : http://www.gdal.org/ogr_formats.html</source>
         <translation>For more details see: http://www.gdal.org/ogr_formats.html</translation>
     </message>
     <message>
-        <location filename="../readers/ct_reader_gdal.cpp" line="912"/>
+        <location filename="../readers/ct_reader_gdal.cpp" line="914"/>
         <source>Extension : </source>
         <translation>Extension : </translation>
     </message>

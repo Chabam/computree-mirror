@@ -4,6 +4,8 @@ contains ( QT_VERSION, "^5.*" ) {
     QT *= widgets
 }
 
+CHECK_CAN_USE_PCL = 1
+
 include(../../config/library_shared.pri)
 
 TARGET = ctlibclouds

@@ -10,6 +10,7 @@
 #include <pcl/point_cloud.h>
 
 #include <pcl/common/common.h>
+#include <pcl/common/io.h>
 #include <pcl/features/normal_3d_omp.h>
 #include <pcl/features/boost.h>
 #include <boost/graph/graph_traits.hpp>

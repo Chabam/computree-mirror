@@ -23,6 +23,8 @@ public:
     static boost::shared_ptr< CT_PCLCloud > staticConvertToPCLCloud(const CT_AbstractPointCloudIndex *pci);
     static boost::shared_ptr< CT_PCLCloud > staticConvertToPCLCloud(const CT_AbstractCloudT<CT_PointData> *ipc);
 
+    static boost::shared_ptr<CT_PCLCloud> staticConvertToPCLCloud(const CT_AbstractPointCloudIndex *pci, double offsetX, double offsetY, double offsetZ);
+
     /**
      * @brief Convert a cloud index to a pcl cloud index
      */

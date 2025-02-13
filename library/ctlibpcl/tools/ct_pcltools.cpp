@@ -70,6 +70,40 @@ boost::shared_ptr< CT_PCLCloud > CT_PCLTools::staticConvertToPCLCloud(const CT_A
     return collection;
 }
 
+boost::shared_ptr< CT_PCLCloud > CT_PCLTools::staticConvertToPCLCloud(const CT_AbstractPointCloudIndex *pci, double offsetX, double offsetY, double offsetZ)
+{
+    size_t size = 0;
+
+    if(pci != NULL)
+        size = pci->size();
+
+    boost::shared_ptr< CT_PCLCloud > collection = boost::shared_ptr< CT_PCLCloud >(new CT_PCLCloud());
+    collection->width = size;
+    collection->height = 1;
+
+    if(size > 0) {
+        collection->points.resize(size);
+
+        size_t i = 0;
+        CT_PointIterator it(pci);
+
+        while(it.hasNext()) {
+            const CT_Point& pt = it.next().currentPoint();
+
+            CT_PointData ptData;
+
+            ptData(0) = static_cast<float>(pt(0) - offsetX);
+            ptData(1) = static_cast<float>(pt(1) - offsetY);
+            ptData(2) = static_cast<float>(pt(2) - offsetZ);
+
+            collection->points[i] = convertCTPointDataToPCL(ptData);
+            ++i;
+        }
+    }
+
+    return collection;
+}
+
 boost::shared_ptr<CT_PCLCloud> CT_PCLTools::staticConvertToPCLCloud(const CT_AbstractCloudT<CT_PointData> *ipc)
 {
     size_t size = 0;
