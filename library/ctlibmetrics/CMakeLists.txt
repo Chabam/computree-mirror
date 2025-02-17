@@ -34,7 +34,7 @@ target_include_directories(ctlibmetrics PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
     $<INSTALL_INTERFACE:include/ctlibs/ctlibmetrics>
     # TODO: fix the actual include
-    $<BUILD_INTERFACE:${ctlibs_SOURCE_DIR}/ctlibs>
+    $<BUILD_INTERFACE:${computree_SOURCE_DIR}/library>
     $<INSTALL_INTERFACE:include/ctlibs/>
 )
 
