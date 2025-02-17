@@ -1,6 +1,8 @@
 # NOTE: using find_package for the moment, may be fallback to
 # fetchContent in the future?
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/modules")
+
 # Qt settings
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
