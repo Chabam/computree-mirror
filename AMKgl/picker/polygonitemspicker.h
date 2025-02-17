@@ -56,6 +56,5 @@ private:
     static void staticTestItems(const ToCompute &params);
 };
 
-#include "polygonitemspicker.cpp"
 
 #endif // POLYGONITEMSPICKER_H
