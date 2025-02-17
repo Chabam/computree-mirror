@@ -1,3 +1,4 @@
 [submodule "plugins/pluginneolvox"]
 	path = plugins/pluginneolvox
 	url = git@github.com:Chabam/neolvox.git
+	branch = master

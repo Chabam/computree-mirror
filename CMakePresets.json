@@ -1,5 +1,5 @@
 {
-    "version": 10,
+    "version": 9,
     "cmakeMinimumRequired": {
         "major": 3,
         "minor": 23,
@@ -8,8 +8,8 @@
     "configurePresets": [
         {
             "name": "base",
-            "hidden": true,
             "binaryDir": "${sourceDir}/build",
+            "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
