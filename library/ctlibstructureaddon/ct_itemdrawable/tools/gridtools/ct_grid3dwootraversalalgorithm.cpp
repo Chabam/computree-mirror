@@ -159,6 +159,11 @@ void CT_Grid3DWooTraversalAlgorithm::compute(CT_Beam &data, Eigen::Vector3d *end
             if (_currentLin >= _calibrationGrid->ydim()) {return;}
             if (_currentLevz >= _calibrationGrid->zdim()) {return;}
 
+
+            if (_currentCol < 0) {return;}
+            if (_currentLin < 0) {return;}
+            if (_currentLevz < 0) {return;}
+
             // Check if optionnal ending cell has been reached
             if (hasEndPoint && _currentCol == _endPtCol && _currentLin == _endPtLin && _currentLevz == _endPtLevz) {return;}
 
