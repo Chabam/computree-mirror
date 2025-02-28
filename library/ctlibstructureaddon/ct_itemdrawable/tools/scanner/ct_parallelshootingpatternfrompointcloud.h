@@ -46,11 +46,11 @@ public:
      */
     CT_ParallelShootingPatternFromPointCloud(const CT_ParallelShootingPatternFromPointCloud& other);
 
-    const Eigen::Vector3d& centerCoordinate() const { return m_point; }
-    size_t numberOfShots() const;
-    CT_Shot shotAt(const size_t& index);
-    CT_Shot shotForPoint(const CT_Point& pt);
-    CT_ShootingPattern* clone() const;
+    const Eigen::Vector3d& centerCoordinate() const override { return m_point; }
+    size_t numberOfShots() const override;
+    CT_Shot shotAt(const size_t& index) const override;
+    CT_Shot shotForPoint(const CT_Point& pt) const override;
+    CT_ShootingPattern* clone() const override;
 
 private:
     Eigen::Vector3d     m_point;

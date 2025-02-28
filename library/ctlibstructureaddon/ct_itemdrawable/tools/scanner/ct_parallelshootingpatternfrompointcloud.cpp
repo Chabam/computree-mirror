@@ -47,7 +47,7 @@ size_t CT_ParallelShootingPatternFromPointCloud::numberOfShots() const
     return m_pcir->abstractCloudIndexT()->size();
 }
 
-CT_Shot CT_ParallelShootingPatternFromPointCloud::shotAt( const size_t& index)
+CT_Shot CT_ParallelShootingPatternFromPointCloud::shotAt( const size_t& index) const
 {
     auto idx = m_pcir->abstractCloudIndexT()->constIndexAt(index);
     const CT_Point& p = m_pAccessor.pointAt(idx);
@@ -56,7 +56,7 @@ CT_Shot CT_ParallelShootingPatternFromPointCloud::shotAt( const size_t& index)
     return CT_Shot(origin, m_normal);
 }
 
-CT_Shot CT_ParallelShootingPatternFromPointCloud::shotForPoint(const CT_Point &pt)
+CT_Shot CT_ParallelShootingPatternFromPointCloud::shotForPoint(const CT_Point &pt) const
 {
     auto origin = m_plane.projection(pt);
     return CT_Shot(origin, m_normal);

@@ -54,56 +54,22 @@ CT_ThetaPhiShootingPattern::CT_ThetaPhiShootingPattern(const Eigen::Vector3d &or
         m_initPhi = qDegreesToRadians(m_initPhi);
     }
 
-    updateNumberOfRays();
-    resetCache();
-}
 
-void CT_ThetaPhiShootingPattern::resetCache()
-{
-    m_cacheI = std::numeric_limits<size_t>::max();
-    m_cacheJ = std::numeric_limits<size_t>::max();
+    computeShots();
+
 }
 
 size_t CT_ThetaPhiShootingPattern::numberOfShots() const
 {
-    return size_t(m_nHRays)*size_t(m_nVRays);
+    return m_shots.size();
 }
 
-CT_Shot CT_ThetaPhiShootingPattern::shotAt(const size_t& index)
+CT_Shot CT_ThetaPhiShootingPattern::shotAt(const size_t& index) const
 {
-    size_t i = size_t(index/nVRays());
-    size_t j = size_t(index - (i*nVRays()));
-    return shotAt(i, j);
+   return m_shots.at(index);
 }
 
-CT_Shot CT_ThetaPhiShootingPattern::shotAt(const size_t& i, const size_t& j)
-{
-    if (i != m_cacheI) {
-        double theta = initTheta() + (i * hRes());
-        // If clockwise, then real theta equals opposite to initial
-        if(isClockWise()) {
-            theta = -theta;
-        }
-        m_cacheSinTheta = std::sin(theta);
-        m_cacheCosTheta = std::cos(theta);
-        m_cacheI = i;
-    }
-    if (j != m_cacheJ) {
-        double phi = initPhi() + (j * vRes());
-        m_cacheSinPhi = std::sin(phi);
-        m_cacheCosPhi = std::cos(phi);
-        m_cacheJ = j;
-    }
-
-    // The direction is calculated using spherical coordinates
-    Eigen::Vector3d direction;
-    direction.x() = m_cacheSinPhi*m_cacheCosTheta;
-    direction.y() = m_cacheSinPhi*m_cacheSinTheta;
-    direction.z() = m_cacheCosPhi;
-    return CT_Shot(m_origin, direction);
-}
-
-CT_Shot CT_ThetaPhiShootingPattern::shotForPoint(const CT_Point& pt)
+CT_Shot CT_ThetaPhiShootingPattern::shotForPoint(const CT_Point& pt) const
 {
     return CT_Shot(m_origin, pt - m_origin);
 }
@@ -113,10 +79,11 @@ CT_ShootingPattern* CT_ThetaPhiShootingPattern::clone() const
     return new CT_ThetaPhiShootingPattern(*this);
 }
 
-void CT_ThetaPhiShootingPattern::updateNumberOfRays()
+void CT_ThetaPhiShootingPattern::computeShots()
 {
     m_nHRays = 0;
     m_nVRays = 0;
+    m_shots.clear();
 
     // Calculates the number of horizontal and vertical rays
     if (!qFuzzyIsNull(m_hRes))
@@ -127,5 +94,32 @@ void CT_ThetaPhiShootingPattern::updateNumberOfRays()
     if (!qFuzzyIsNull(m_vRes))
     {
         m_nVRays = int(ceil(fabs(m_vFov/m_vRes)));
+    }
+
+
+    for (size_t i = 0; i < m_nHRays; ++i)
+    {
+        double theta = m_initTheta + (i * m_hRes);
+
+        if (isClockWise()) {
+            theta = -theta;
+        }
+
+        const double cosTheta = std::cos(theta);
+        const double sinTheta = std::sin(theta);
+        for (size_t j = 0; j < m_nVRays; ++j)
+        {
+            const double phi = m_initPhi + (j * m_vRes);
+
+            const double sinPhi = std::sin(phi);
+            const double cosPhi = std::cos(phi);
+
+            // The direction is calculated using spherical coordinates
+            Eigen::Vector3d direction;
+            direction.x() = sinPhi * cosTheta;
+            direction.y() = sinPhi * sinTheta;
+            direction.z() = cosPhi;
+            m_shots.append(CT_Shot(m_origin, direction));
+        }
     }
 }

@@ -31,12 +31,12 @@ public:
     /**
      * @brief Returns the shot at index specified
      */
-    virtual CT_Shot shotAt(const size_t& index) = 0;
+    virtual CT_Shot shotAt(const size_t& index) const = 0;
 
     /**
      * @brief Returns the shot for a given point
      */
-    virtual CT_Shot shotForPoint(const CT_Point& pt) = 0;
+    virtual CT_Shot shotForPoint(const CT_Point& pt) const = 0;
 
     /**
      * @brief Copy this pattern
