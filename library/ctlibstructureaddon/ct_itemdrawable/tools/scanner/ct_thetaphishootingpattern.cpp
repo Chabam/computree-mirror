@@ -54,9 +54,7 @@ CT_ThetaPhiShootingPattern::CT_ThetaPhiShootingPattern(const Eigen::Vector3d &or
         m_initPhi = qDegreesToRadians(m_initPhi);
     }
 
-
     computeShots();
-
 }
 
 size_t CT_ThetaPhiShootingPattern::numberOfShots() const
@@ -96,6 +94,7 @@ void CT_ThetaPhiShootingPattern::computeShots()
         m_nVRays = int(ceil(fabs(m_vFov/m_vRes)));
     }
 
+    m_shots.reserve(m_nHRays * m_nVRays);
 
     for (size_t i = 0; i < m_nHRays; ++i)
     {
