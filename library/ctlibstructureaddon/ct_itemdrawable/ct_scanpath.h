@@ -69,7 +69,7 @@ public:
 
     bool isInScanPath(double gpsTime) const;
 
-    Eigen::Vector3d getPathPointForGPSTime(double gpsTime);
+    Eigen::Vector3d getPathPointForGPSTime(double gpsTime) const;
 
     const QList<CT_ScanPath::PathPoint>& getPath() const {return _pathPoints;}
 
@@ -77,7 +77,6 @@ public:
 
 private:
     QString                         _name;
-    bool                            _sorted;
     QList<PathPoint>                _pathPoints;
     double                          _minGPSTime;
     double                          _maxGPSTime;
