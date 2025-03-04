@@ -15,6 +15,21 @@
             }
         },
         {
+            "name": "linux",
+            "inherits": [
+                "base"
+            ],
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fdiagnostics-color=always",
+                "CMAKE_C_FLAGS": "-fdiagnostics-color=always"
+            }
+        },
+        {
             "name": "windows-vcpkg",
             "inherits": [
                 "base"
@@ -25,7 +40,6 @@
                 "rhs": "Windows"
             },
             "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "C:/Qt/5.15.2/msvc2019_64",
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
             }
         }
