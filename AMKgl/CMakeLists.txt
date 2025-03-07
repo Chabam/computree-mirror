@@ -334,6 +334,10 @@ target_include_directories(AMKgl PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/poly2tri/poly2tri
 )
 
+if (WIN32)
+    target_compile_definitions(AMKgl PRIVATE _USE_MATH_DEFINES)
+endif()
+
 target_link_libraries(AMKgl
     ctlibplugin
     OpenGL::GL

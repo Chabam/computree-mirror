@@ -26,6 +26,7 @@ find_package(Qhull REQUIRED)
 find_package(flann REQUIRED)
 find_package(GSL REQUIRED)
 find_package(LASzip REQUIRED)
+find_package(OpenGL REQUIRED)
 
 include(FetchContent)
 
