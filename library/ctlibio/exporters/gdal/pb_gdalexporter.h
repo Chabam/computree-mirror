@@ -14,7 +14,7 @@
 #include "ct_itemdrawable/abstract/ct_abstractimage2d.h"
 
 #ifdef USE_GDAL
-#include "gdal_priv.h"
+#include <gdal/gdal_priv.h>
 
 class OGRFeature;
 #endif

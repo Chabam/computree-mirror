@@ -1,8 +1,8 @@
 #include "pb_gdalexporter.h"
 
 #ifdef USE_GDAL
-#include "gdal.h"
-#include "ogrsf_frmts.h"
+#include <gdal/gdal.h>
+#include <gdal/ogrsf_frmts.h>
 #endif
 
 #include "readers/tools/gdal/ct_gdaltools.h"

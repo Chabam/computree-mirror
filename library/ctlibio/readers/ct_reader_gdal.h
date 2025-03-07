@@ -12,9 +12,9 @@
 #include "ct_itemdrawable/ct_polyline2d.h"
 #include "ctlibio/readers/headers/ct_gdalheader.h"
 
-#include "gdal_priv.h"
-#include "ogr_geometry.h"
-#include "ogr_feature.h"
+#include <gdal/gdal_priv.h>
+#include <gdal/ogr_geometry.h>
+#include <gdal/ogr_feature.h>
 #endif
 
 /**
