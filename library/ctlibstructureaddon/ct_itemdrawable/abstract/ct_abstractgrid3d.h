@@ -130,7 +130,20 @@ public:
      */
     inline bool colX(const double x, int &colx) const
     {
-        if (x < minX() || x > maxX()) {return false;}
+        if (x < minX() || x > maxX()) {
+            return false;
+        }
+        else if (x == minX())
+        {
+
+            colx = 0;
+            return true;
+        }
+        else if (x == maxX())
+        {
+            colx = (_dimx - 1);
+            return true;
+        }
 
         colx = int(floor((x - minX()) / _res));
 
@@ -148,7 +161,18 @@ public:
      */
     inline bool linY(const double y, int &liny) const
     {
-        if (y < minY() || y > maxY()) {return false;}
+        if (y < minY() || y > maxY()) {
+            return false;
+        }
+        else if (y == minY())
+        {
+            liny = 0;
+            return true;
+        } else if (y == maxY())
+        {
+            liny = (_dimy - 1);
+            return true;
+        }
 
         liny = int(floor((y - minY()) / _res));
 
@@ -166,7 +190,18 @@ public:
      */
     inline bool levelZ(const double z, int &levz) const
     {
-        if (z < minZ() || z > maxZ()) {return false;}
+        if (z < minZ() || z > maxZ()) {
+            return false;
+        }
+        else if (z == minZ())
+        {
+            levz = 0;
+            return true;
+        } else if (z == maxZ())
+        {
+            levz = (_dimz - 1);
+            return true;
+        }
 
         levz = int(floor((z - minZ()) / _res));
 
