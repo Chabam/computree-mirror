@@ -19,13 +19,7 @@
 
 CDM_PluginManager::CDM_PluginManager()
 {
-#if defined(_WIN32) && defined(_MSC_VER) // Microsoft Visual Studio Compiler
-    _defaultPluginDirPath = "/plugins";
-#elif (defined(__linux__) || defined(_WIN32)) && defined(__GNUC__) // GNU Compiler (gcc,g++) for Linux, Unix, and MinGW (Windows)
-    _defaultPluginDirPath = "/../plugins";
-#elif defined(__APPLE__) // Clang Compiler (Apple)
-    _defaultPluginDirPath = "/../PlugIns";
-#endif
+    _defaultPluginDirPath = qApp->applicationDirPath();
     m_guiManager = nullptr;
     m_stepsMenuManager.setPluginManager(this);
 

@@ -1,0 +1,12 @@
+find_file(WINDEPLOYQT_EXE
+    "windeployqt.exe"
+    PATHS "$ENV{QT_INSTALL_DIR}/bin" "C:/Qt/5.15.2/msvc2019_64/bin"
+    REQUIRED
+)
+
+foreach(EXEC @COMPUTREE_EXECS@)
+    execute_process(
+    COMMAND ${WINDEPLOYQT_EXE} "${EXEC}@CMAKE_EXECUTABLE_SUFFIX@"
+        WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}/@CMAKE_INSTALL_BINDIR@/"
+    )
+endforeach()

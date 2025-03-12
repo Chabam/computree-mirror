@@ -40,3 +40,9 @@ FetchContent_Declare(NodeEditor
 )
 FetchContent_MakeAvailable(NodeEditor)
 find_package(nodes)
+
+install(TARGETS nodes
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
