@@ -95,10 +95,6 @@ set_target_properties(plug_base
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-add_custom_command(TARGET plug_base POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:plug_base> $<TARGET_RUNTIME_DLLS:plug_base>
-  COMMAND_EXPAND_LISTS
-)
 install(TARGETS plug_base
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib

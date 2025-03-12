@@ -70,6 +70,11 @@ if (WIN32)
             $<TARGET_RUNTIME_DLLS:${tgt}>
             DESTINATION bin
         )
+
+        add_custom_command(TARGET ${tgt} POST_BUILD
+          COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${tgt}> $<TARGET_RUNTIME_DLLS:${tgt}>
+          COMMAND_EXPAND_LISTS
+        )
     endforeach()
 
     configure_file(
@@ -77,8 +82,9 @@ if (WIN32)
         ${CMAKE_CURRENT_BINARY_DIR}/BundleQTDlls.cmake
         @ONLY
     )
-    
+
     install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/BundleQTDlls.cmake)
+
 endif()
 
 set(CPACK_PACKAGE_NAME "Computree")
