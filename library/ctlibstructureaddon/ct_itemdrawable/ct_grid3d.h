@@ -153,8 +153,6 @@ public:
      */
     void initGridWithValue(const DataT val);
 
-    void translateOriginToCoords(double x, double y, double z);
-
     CT_ITEM_COPY_IMP(CT_Grid3D<DataT>)
 
     /*!

@@ -80,7 +80,7 @@ private:
     std::vector<ct_index_type>                          _vector;
     CT_CloudIndexStdVectorTMethodImpl<ct_index_type>    *m_impl;
 
-    typename std::vector<ct_index_type>::iterator vectorFindIf(FindIfFunction findIf, void *context) const;
+    typename std::vector<ct_index_type>::const_iterator vectorFindIf(FindIfFunction findIf, void *context) const;
 
 protected:
 
