@@ -43,3 +43,10 @@ target_link_libraries(ComputreeBatch
     ctliblog
     Eigen3::Eigen
 )
+
+install(TARGETS
+    ComputreeBatch
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

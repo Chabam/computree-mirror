@@ -28,9 +28,13 @@ target_include_directories(ctlibpcl PUBLIC
     $<INSTALL_INTERFACE:include/ctlibs/ctlibpcl>
 )
 
-if(WIN32)
+if (WIN32)
+    if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     # NOTE: Disable exceptions, it's causing linking error on Windows
-    set(CMAKE_CXX_FLAGS "/EHsc")
+        set(CMAKE_CXX_FLAGS "/EHsc")
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS-fno-cxx-exceptions)
+    endif()
 endif()
 
 target_compile_definitions(ctlibpcl PRIVATE CTLIBPCL_LIBRARY)
