@@ -41,11 +41,6 @@ target_link_libraries(ctlibmath
      Qt5::Widgets
 )
 
-set_target_properties(ctlibmath
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctlibmath>
@@ -55,6 +50,11 @@ if (WIN32)
     add_custom_command(TARGET ctlibmath POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ctlibmath> ${CMAKE_BINARY_DIR}
         COMMAND_EXPAND_LISTS
+    )
+
+    set_target_properties(ctlibmath
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 endif()
 

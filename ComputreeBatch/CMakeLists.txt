@@ -44,11 +44,6 @@ target_link_libraries(ComputreeBatch
     Eigen3::Eigen
 )
 
-set_target_properties(ComputreeBatch
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ComputreeBatch>
@@ -69,6 +64,11 @@ if (WIN32)
     add_custom_command(TARGET ComputreeBatch POST_BUILD
         COMMAND ${WINDEPLOYQT_EXE} "ComputreeBatch${CMAKE_EXECUTABLE_SUFFIX}"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    )
+
+    set_target_properties(ComputreeBatch
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 endif()
 

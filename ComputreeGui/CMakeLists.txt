@@ -366,7 +366,7 @@ if (WIN32)
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ComputreeGui> ${CMAKE_BINARY_DIR}
         COMMAND_EXPAND_LISTS
     )
-    
+
     find_file(WINDEPLOYQT_EXE
         "windeployqt.exe"
         PATHS "$ENV{QT_INSTALL_DIR}/bin" "C:/Qt/5.15.2/msvc2019_64/bin"
@@ -377,12 +377,12 @@ if (WIN32)
         COMMAND ${WINDEPLOYQT_EXE} "ComputreeGui${CMAKE_EXECUTABLE_SUFFIX}"
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     )
-endif()
 
-set_target_properties(ComputreeGui
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
+    set_target_properties(ComputreeGui
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
+endif()
 
 install(TARGETS
     ComputreeGui

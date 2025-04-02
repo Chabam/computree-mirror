@@ -39,11 +39,6 @@ target_link_libraries(ctliblog
 	Qt5::Core
 )
 
-set_target_properties(ctliblog
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctliblog>
@@ -53,6 +48,11 @@ if (WIN32)
     add_custom_command(TARGET ctliblog POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ctliblog> ${CMAKE_BINARY_DIR}
         COMMAND_EXPAND_LISTS
+    )
+
+    set_target_properties(ctliblog
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 endif()
 

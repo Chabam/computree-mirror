@@ -72,11 +72,6 @@ target_link_libraries(ctlibwidget
 	Qt5::Widgets
 )
 
-set_target_properties(ctlibwidget
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctlibwidget>
@@ -86,6 +81,11 @@ if (WIN32)
     add_custom_command(TARGET ctlibwidget POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ctlibwidget> ${CMAKE_BINARY_DIR}
         COMMAND_EXPAND_LISTS
+    )
+
+    set_target_properties(ctlibwidget
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 endif()
 

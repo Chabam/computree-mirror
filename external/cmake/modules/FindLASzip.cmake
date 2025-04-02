@@ -7,7 +7,7 @@ find_path(LASzip_INCLUDE_DIRS
     /include
     /usr/include
     /usr/local/include
-  NO_DEFAULT_PATH)
+)
 
 if(UNIX)
   find_library(LASzip_SHARED_LIBRARY
