@@ -78,7 +78,7 @@ GMainWindow::GMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowTitle(QString("Computree - version 6.0.%1").arg(SVN_REVISION));
+    this->setWindowTitle(QString("Computree - version 6 %1").arg(SVN_REVISION));
 }
 
 GMainWindow::~GMainWindow()

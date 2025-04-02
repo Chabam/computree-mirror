@@ -38,7 +38,7 @@ GAboutDialog::GAboutDialog(QWidget *parent) :
     ui->setupUi(this);
 
     setFixedSize(size());
-    ui->lb_version->setText(tr("<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\"><br/><br/>Computree v6.0.%1<br/></span></p></body></html>").arg(SVN_REVISION));
+    ui->lb_version->setText(tr("<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\"><br/><br/>Computree v6 commit hash: %1<br/></span></p></body></html>").arg(SVN_REVISION));
 }
 
 GAboutDialog::~GAboutDialog()
