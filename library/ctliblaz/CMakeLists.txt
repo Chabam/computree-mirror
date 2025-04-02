@@ -93,7 +93,7 @@ if (WIN32)
     )
 
     add_custom_command(TARGET ctliblaz POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctliblaz> $<TARGET_RUNTIME_DLLS:ctliblaz>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ctliblaz> ${CMAKE_BINARY_DIR}
         COMMAND_EXPAND_LISTS
     )
 endif()

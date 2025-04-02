@@ -29,7 +29,7 @@
 #include "gaboutdialog.h"
 #include "ui_gaboutdialog.h"
 
-#include "svnrevision.h"
+#include "gitrevision.h"
 
 GAboutDialog::GAboutDialog(QWidget *parent) :
     QDialog(parent),
@@ -38,7 +38,7 @@ GAboutDialog::GAboutDialog(QWidget *parent) :
     ui->setupUi(this);
 
     setFixedSize(size());
-    ui->lb_version->setText(tr("<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\"><br/><br/>Computree v6 commit hash: %1<br/></span></p></body></html>").arg(SVN_REVISION));
+    ui->lb_version->setText(tr("<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\"><br/><br/>Computree v6 branch %1 commit hash: %2<br/></span></p></body></html>").arg(GIT_BRANCH, GIT_REVISION));
 }
 
 GAboutDialog::~GAboutDialog()

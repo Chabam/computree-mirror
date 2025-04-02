@@ -167,7 +167,7 @@ if (WIN32)
     )
 
     add_custom_command(TARGET ctlibmodels POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibmodels> $<TARGET_RUNTIME_DLLS:ctlibmodels>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ctlibmodels> ${CMAKE_BINARY_DIR}
         COMMAND_EXPAND_LISTS
     )
 endif()

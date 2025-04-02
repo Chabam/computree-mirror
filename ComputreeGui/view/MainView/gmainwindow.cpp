@@ -70,7 +70,7 @@
 
 #include <QSpinBox>
 
-#include "svnrevision.h"
+#include "gitrevision.h"
 
 GMainWindow::GMainWindow(QWidget *parent) :
     QMainWindow(parent), DM_MainWindow(),
@@ -78,7 +78,7 @@ GMainWindow::GMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowTitle(QString("Computree - version 6 %1").arg(SVN_REVISION));
+    this->setWindowTitle(QString("Computree - version 6 %1 %2").arg(GIT_BRANCH, GIT_REVISION));
 }
 
 GMainWindow::~GMainWindow()
@@ -250,7 +250,7 @@ void GMainWindow::exportDocumentedScript()
             saveScriptInDir(outDirPath, docInfo._scriptFileName);
 
             // export script documentation
-            CDM_StepListDocExporter docExporter(getStepManager(), getPluginManager(), SVN_REVISION);
+            CDM_StepListDocExporter docExporter(getStepManager(), getPluginManager(), GIT_REVISION);
             docExporter.exportDocumentedScript(mainDir, outDirPath, docInfo);
 
             // open script documentation
@@ -320,7 +320,7 @@ void GMainWindow::createStepHelp()
     progressDialog.setValue(1);
 
     // generate help files
-    CDM_StepListDocExporter docExporter(getStepManager(), getPluginManager(), SVN_REVISION);
+    CDM_StepListDocExporter docExporter(getStepManager(), getPluginManager(), GIT_REVISION);
     docExporter.createStepHelp(currentLanguageDir, progressDialog);
 
     progressDialog.setValue(progressDialog.maximum());

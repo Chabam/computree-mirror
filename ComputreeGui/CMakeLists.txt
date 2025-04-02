@@ -354,7 +354,30 @@ target_link_libraries(ComputreeGui PUBLIC
     OpenGL::GLU
 )
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/svnrevision.h.in ${CMAKE_CURRENT_SOURCE_DIR}/svnrevision.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gitrevision.h.in ${CMAKE_CURRENT_SOURCE_DIR}/gitrevision.h)
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ComputreeGui>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ComputreeGui POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ComputreeGui> ${CMAKE_BINARY_DIR}
+        COMMAND_EXPAND_LISTS
+    )
+    
+    find_file(WINDEPLOYQT_EXE
+        "windeployqt.exe"
+        PATHS "$ENV{QT_INSTALL_DIR}/bin" "C:/Qt/5.15.2/msvc2019_64/bin"
+        REQUIRED
+    )
+
+    add_custom_command(TARGET ComputreeGui POST_BUILD
+        COMMAND ${WINDEPLOYQT_EXE} "ComputreeGui${CMAKE_EXECUTABLE_SUFFIX}"
+        WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    )
+endif()
 
 set_target_properties(ComputreeGui
     PROPERTIES

@@ -57,7 +57,7 @@ if (WIN32)
     )
 
     add_custom_command(TARGET ctlibreader POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibreader> $<TARGET_RUNTIME_DLLS:ctlibreader>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:ctlibreader> ${CMAKE_BINARY_DIR}
         COMMAND_EXPAND_LISTS
     )
 endif()

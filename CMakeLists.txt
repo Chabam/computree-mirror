@@ -8,7 +8,14 @@ execute_process(
 )
 
 execute_process(
-    COMMAND git rev-list --count --all
+    COMMAND git branch --show-current
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_VARIABLE COMPUTREE_BRANCH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+execute_process(
+    COMMAND git rev-list --count HEAD
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     OUTPUT_VARIABLE COMPUTREE_REVISION_COUNT
     OUTPUT_STRIP_TRAILING_WHITESPACE
