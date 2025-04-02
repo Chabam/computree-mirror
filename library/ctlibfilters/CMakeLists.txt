@@ -41,3 +41,22 @@ target_link_libraries(ctlibfilters
     Qt5::Core
     Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibfilters>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibfilters POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibfilters> $<TARGET_RUNTIME_DLLS:ctlibfilters>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibfilters
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

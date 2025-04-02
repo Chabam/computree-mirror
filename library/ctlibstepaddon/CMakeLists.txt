@@ -40,3 +40,22 @@ target_link_libraries(ctlibstepaddon
     Qt5::Core
     Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibstepaddon>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibstepaddon POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibstepaddon> $<TARGET_RUNTIME_DLLS:ctlibstepaddon>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibstepaddon
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

@@ -49,3 +49,22 @@ target_link_libraries(ctlibstep
     Qt5::Core
     Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibstep>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibstep POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibstep> $<TARGET_RUNTIME_DLLS:ctlibstep>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibstep
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

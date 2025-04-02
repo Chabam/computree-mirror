@@ -46,3 +46,22 @@ target_link_libraries(ctlibpcl
     pcl_common
     pcl_io
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibpcl>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibpcl POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibpcl> $<TARGET_RUNTIME_DLLS:ctlibpcl>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibpcl
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

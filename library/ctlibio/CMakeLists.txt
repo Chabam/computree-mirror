@@ -173,3 +173,22 @@ target_link_libraries(ctlibio
     Qt5::Core
     Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibio>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibio POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibio> $<TARGET_RUNTIME_DLLS:ctlibio>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibio
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

@@ -38,3 +38,22 @@ target_link_libraries(ctliblog
 	ctlibcommon
 	Qt5::Core
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctliblog>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctliblog POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctliblog> $<TARGET_RUNTIME_DLLS:ctliblog>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctliblog
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

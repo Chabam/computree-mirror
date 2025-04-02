@@ -42,3 +42,22 @@ target_link_libraries(ctlibactionaddon
     Qt5::Core
     Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibactionaddon>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibactionaddon POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibactionaddon> $<TARGET_RUNTIME_DLLS:ctlibactionaddon>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibactionaddon
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

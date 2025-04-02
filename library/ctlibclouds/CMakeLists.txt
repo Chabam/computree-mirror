@@ -211,3 +211,22 @@ target_link_libraries(ctlibclouds
     Qt5::Widgets
     Eigen3::Eigen
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibclouds>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibclouds POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibclouds> $<TARGET_RUNTIME_DLLS:ctlibclouds>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibclouds
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

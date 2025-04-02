@@ -39,3 +39,22 @@ target_link_libraries(ctlibexporter
 	Qt5::Core
 	Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibexporter>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibexporter POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibexporter> $<TARGET_RUNTIME_DLLS:ctlibexporter>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibexporter
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

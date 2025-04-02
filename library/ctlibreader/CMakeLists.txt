@@ -44,3 +44,22 @@ target_link_libraries(ctlibreader
     Qt5::Core
     Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibreader>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibreader POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibreader> $<TARGET_RUNTIME_DLLS:ctlibreader>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibreader
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

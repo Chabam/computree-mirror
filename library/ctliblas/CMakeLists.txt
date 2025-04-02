@@ -92,3 +92,22 @@ target_link_libraries(ctliblas
     Qt5::Core
     Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctliblas>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctliblas POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctliblas> $<TARGET_RUNTIME_DLLS:ctliblas>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctliblas
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

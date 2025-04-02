@@ -47,3 +47,22 @@ target_link_libraries(ctlibmetrics
     Qt5::Core
     Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibmetrics>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibmetrics POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibmetrics> $<TARGET_RUNTIME_DLLS:ctlibmetrics>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibmetrics
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

@@ -45,3 +45,22 @@ target_link_libraries(ctlibmodelsextraviews
     nodes
     Qt5::Core
     Qt5::Widgets)
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibmodelsextraviews>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibmodelsextraviews POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibmodelsextraviews> $<TARGET_RUNTIME_DLLS:ctlibmodelsextraviews>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibmodelsextraviews
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

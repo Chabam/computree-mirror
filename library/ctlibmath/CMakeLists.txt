@@ -40,3 +40,22 @@ target_link_libraries(ctlibmath
      Qt5::Core
      Qt5::Widgets
 )
+
+if (WIN32)
+    install(FILES
+        $<TARGET_RUNTIME_DLLS:ctlibmath>
+        DESTINATION bin
+    )
+
+    add_custom_command(TARGET ctlibmath POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ctlibmath> $<TARGET_RUNTIME_DLLS:ctlibmath>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+install(TARGETS
+    ctlibmath
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
