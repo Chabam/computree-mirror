@@ -51,6 +51,11 @@ target_link_libraries(ctlibpcl
     pcl_io
 )
 
+set_target_properties(ctlibpcl
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctlibpcl>

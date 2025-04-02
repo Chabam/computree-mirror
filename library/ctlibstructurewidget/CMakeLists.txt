@@ -45,6 +45,11 @@ target_link_libraries(ctlibstructurewidget
     Qt5::Widgets
 )
 
+set_target_properties(ctlibstructurewidget
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctlibstructurewidget>

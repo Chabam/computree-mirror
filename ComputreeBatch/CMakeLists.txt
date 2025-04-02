@@ -44,6 +44,11 @@ target_link_libraries(ComputreeBatch
     Eigen3::Eigen
 )
 
+set_target_properties(ComputreeBatch
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 install(TARGETS
     ComputreeBatch
     RUNTIME DESTINATION bin

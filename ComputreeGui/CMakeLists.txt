@@ -356,6 +356,11 @@ target_link_libraries(ComputreeGui PUBLIC
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/svnrevision.h.in ${CMAKE_CURRENT_SOURCE_DIR}/svnrevision.h)
 
+set_target_properties(ComputreeGui
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 install(TARGETS
     ComputreeGui
     RUNTIME DESTINATION bin

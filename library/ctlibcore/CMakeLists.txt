@@ -83,6 +83,11 @@ target_link_libraries(ctlibcore
     Qt5::Widgets
 )
 
+set_target_properties(ctlibcore
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctlibcore>

@@ -41,6 +41,11 @@ target_link_libraries(ctlibstepaddon
     Qt5::Widgets
 )
 
+set_target_properties(ctlibstepaddon
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctlibstepaddon>

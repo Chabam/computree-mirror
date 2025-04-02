@@ -53,6 +53,11 @@ target_link_libraries(ctlibplugin
     Qt5::Xml
 )
 
+set_target_properties(ctlibplugin
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctlibplugin>

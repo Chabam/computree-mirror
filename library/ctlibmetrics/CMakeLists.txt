@@ -48,6 +48,11 @@ target_link_libraries(ctlibmetrics
     Qt5::Widgets
 )
 
+set_target_properties(ctlibmetrics
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 if (WIN32)
     install(FILES
         $<TARGET_RUNTIME_DLLS:ctlibmetrics>
