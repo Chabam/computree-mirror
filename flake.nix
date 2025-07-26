@@ -8,6 +8,7 @@
   outputs = { self, nixpkgs, ... }@inputs:
     let system = "x86_64-linux";
         pkgs = nixpkgs.legacyPackages.${system};
+        qt = pkgs.qt5.qtbase;
     in {
       devShells.x86_64-linux.default = pkgs.mkShell {
         nativeBuildInputs = with pkgs; [
@@ -17,7 +18,7 @@
           ninja
 
           # Dependencies
-          qt5Full
+          qt
           libGLU
           eigen
           gdal
@@ -30,6 +31,7 @@
           flann
           laszip
         ];
+        QT_QPA_PLATFORM_PLUGIN_PATH = "${qt.bin}/lib/qt-${qt.version}/plugins/platforms";
       };
     };
 }
