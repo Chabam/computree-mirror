@@ -21,7 +21,7 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
-project(computree VERSION 6.0.${COMPUTREE_REVISION_COUNT} LANGUAGES CXX)
+project(computree VERSION 6.0.${COMPUTREE_REVISION_COUNT} LANGUAGES CXX C)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/external/dependencies.cmake)
 
