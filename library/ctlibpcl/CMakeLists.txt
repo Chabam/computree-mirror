@@ -25,6 +25,10 @@ add_library(ctlibpcl SHARED
 
 target_include_directories(ctlibpcl PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
+    ${pcl_BINARY_DIR}/include
+    ${pcl_SOURCE_DIR}/filters/include
+    ${pcl_SOURCE_DIR}/search/include
+    ${pcl_SOURCE_DIR}/kdtree/include
     $<INSTALL_INTERFACE:include/ctlibs/ctlibpcl>
 )
 
