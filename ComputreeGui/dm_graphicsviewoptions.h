@@ -33,6 +33,7 @@
 #include "renderer/drawmodeaccessor.h"
 
 #include <QtGlobal>
+#include <QHash>
 
 #include <QColor>
 #include <QDomElement>

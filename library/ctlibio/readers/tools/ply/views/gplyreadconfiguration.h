@@ -2,6 +2,7 @@
 #define GPLYREADCONFIGURATION_H
 
 #include <QWidget>
+#include <QHash>
 #include "readers/tools/ply/views/sub/iplygenericconfiguration.h"
 #include "readers/tools/ply/plyreadconfiguration.h"
 

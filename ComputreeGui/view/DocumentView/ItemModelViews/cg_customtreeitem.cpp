@@ -222,7 +222,7 @@ void CG_CustomTreeItem::setCheckable(bool e)
 
 void CG_CustomTreeItem::setTristate(bool e)
 {
-    changeFlags(e, Qt::ItemIsTristate);
+    changeFlags(e, Qt::ItemIsAutoTristate);
 }
 
 void CG_CustomTreeItem::setDragEnabled(bool e)

@@ -28,6 +28,7 @@
 #include <QPointF>
 #include <QLineF>
 #include <QPainter>
+#include <QtCore/qalgorithms.h>
 
 #include <limits>
 
@@ -333,7 +334,7 @@ namespace AMKgl {
 
         QVector<QPoint> vec = m_polygon;
 
-        qSort(vec.begin(), vec.end(), customSort);
+        std::sort(vec.begin(), vec.end(), customSort);
 
         foreach (const QPoint &p, vec) {
             PolygonForPicking::ClosestResult r;

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMutex>
 #include <QTimer>
+#include <QHash>
 
 class CT_VirtualAbstractStep;
 class CT_AbstractResult;
